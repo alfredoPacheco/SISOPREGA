@@ -1,0 +1,8 @@
+INDEX VERSION 1.126+C:\Users\torresfu\Documents\projects\SISOPREGA\GitRepo\SISOPREGA\backEnd\.metadata\.plugins\org.eclipse.jdt.core
+1592096342.index
+3189733512.index
+469845906.index
+3563355801.index
+1764212402.index
+562299517.index
+423083809.index

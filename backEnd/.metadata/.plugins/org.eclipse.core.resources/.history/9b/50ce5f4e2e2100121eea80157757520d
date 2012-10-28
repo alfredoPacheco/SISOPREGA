@@ -1,0 +1,24 @@
+package com.tramex.sisoprega.dto;
+
+import java.util.Date;
+
+public class Rancher {
+	
+	private long rancher_id;
+	private String aka;
+	private String first_name;
+	private String last_name;
+	private String mother_name;
+	private Date birt_date;
+	private String email_address;
+	
+	
+	/*`rancher_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+	  `aka` varchar(100) DEFAULT NULL,
+	  `first_name` varchar(50) NOT NULL,
+	  `last_name` varchar(50) NOT NULL,
+	  `mother_name` varchar(50) DEFAULT NULL,
+	  `birth_date` date NOT NULL,
+	  `email_add` varchar(150) NOT NULL,
+	  `job_title` varchar(150) NOT NULL,*/
+}

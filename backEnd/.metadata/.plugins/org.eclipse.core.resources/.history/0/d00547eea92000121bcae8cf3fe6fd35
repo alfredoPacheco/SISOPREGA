@@ -1,0 +1,64 @@
+/**
+ * THIS IS A COMMERCIAL PROGRAM PROVIDED FOR TRAMEX AND IT'S ASSOCIATES
+ * BUILT BY EXTERNAL SOFTWARE PROVIDERS.
+ * THE SOFTWARE COMPRISING THIS SYSTEM IS THE PROPERTY OF TRAMEX OR ITS
+ * LICENSORS.
+ * 
+ * ALL COPYRIGHT, PATENT, TRADE SECRET, AND OTHER INTELLECTUAL PROPERTY RIGHTS
+ * IN THE SOFTWARE COMPRISING THIS SYSTEM ARE, AND SHALL REMAIN, THE VALUABLE
+ * PROPERTY OF TRAMEX OR ITS LICENSORS.
+ * 
+ * USE, DISCLOSURE, OR REPRODUCTION OF THIS SOFTWARE IS STRICTLY PROHIBITED,
+ * EXCEPT UNDER WRITTEN LICENSE FROM TRAMEX OR ITS LICENSORS.
+ * 
+ * &copy; COPYRIGHT 2012 TRAMEX. ALL RIGHTS RESERVED.
+ */
+package com.tramex.sisoprega.gateway.ws;
+
+import javax.jws.WebService;
+
+import com.tramex.sisoprega.common.Exception;
+import com.tramex.sisoprega.common.gateway.request.CreateGatewayRequest;
+import com.tramex.sisoprega.common.gateway.response.CreateGatewayResponse;
+
+/**
+ * OperationsGateway provides the web service and the web methods
+ * that will be consumed by the UI applications.<BR/>
+ * 
+ * <B>Revision History:</B>
+ * 
+ * <PRE>
+ * ====================================================================================
+ * Date        By                           Description
+ * MM/DD/YYYY
+ * ----------  ---------------------------  -------------------------------------------
+ * 10/27/2012  Diego Torres                 Initial Version.
+ * ====================================================================================
+ * </PRE>
+ * 
+ * @author Diego Torres
+ *
+ */
+@WebService
+public class OperationsGateway {
+	
+	/**
+	 * 
+	 * Provides an interface to create entities.
+	 * 
+	 * @param request
+	 * @return
+	 */
+	public CreateGatewayResponse CreateGateway(CreateGatewayRequest request){
+		CreateGatewayResponse cgr = new CreateGatewayResponse();
+		cgr.setGeneratedId("testId");
+		
+		Exception e = new Exception();
+		e.setExceptionId("0");
+		e.setExceptionDescription("Success");
+		cgr.setException(e);
+		
+		return cgr;
+	}
+	
+}

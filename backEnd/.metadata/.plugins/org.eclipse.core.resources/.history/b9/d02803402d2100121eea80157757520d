@@ -1,0 +1,39 @@
+package com.tramex.sisoprega.proxy.bean;
+
+import com.tramex.sisoprega.common.CreateGatewayResponse;
+import com.tramex.sisoprega.common.Exception;
+import com.tramex.sisoprega.common.GatewayRequest;
+import com.tramex.sisoprega.common.ReadGatewayResponse;
+import com.tramex.sisoprega.common.UpdateGatewayResponse;
+import com.tramex.sisoprega.proxy.Cruddable;
+
+public class Rancher implements Cruddable {
+
+	@Override
+	public CreateGatewayResponse Create(GatewayRequest request) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ReadGatewayResponse Read(GatewayRequest request) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public UpdateGatewayResponse Update(GatewayRequest request) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Exception Delete(GatewayRequest request) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	private boolean validateRancher(com.tramex.sisoprega.dto.Rancher rancher){
+		
+	}
+}
