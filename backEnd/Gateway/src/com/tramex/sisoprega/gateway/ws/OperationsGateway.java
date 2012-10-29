@@ -48,7 +48,7 @@ import com.tramex.sisoprega.common.UpdateGatewayResponse;
  * @author Diego Torres
  *
  */
-@WebService
+@WebService(serviceName="GatewayService")
 public class OperationsGateway {
 	
 	private Logger log = Logger.getLogger(OperationsGateway.class);
@@ -68,8 +68,8 @@ public class OperationsGateway {
 	 * @param request
 	 * @return
 	 */
-	@WebMethod
-	public CreateGatewayResponse CreateGateway(@WebParam(name="request") GatewayRequest request){
+	@WebMethod(operationName="Create")
+	public CreateGatewayResponse CreateGateway(@WebParam(name="request") final GatewayRequest request){
 		log.info("BEGIN|CreateGateway|Entity:[" + request.getEntityName()+"]|RequestId:["+request.getRequestId()+"]");
 		// TODO: Define a proxy that returns a CreateGatewayResponse
 		CreateGatewayResponse cgr = new CreateGatewayResponse();
@@ -91,7 +91,7 @@ public class OperationsGateway {
 	 * @param request
 	 * @return
 	 */
-	@WebMethod
+	@WebMethod(operationName="Read")
 	public ReadGatewayResponse ReadGateway(@WebParam(name="request")GatewayRequest request){
 		log.info("BEGIN|ReadGateway|Entity:[" + request.getEntityName()+"]|RequestId:["+request.getRequestId()+"]");
 		ReadGatewayResponse rgr = new ReadGatewayResponse();
@@ -111,7 +111,7 @@ public class OperationsGateway {
 	 * @param request
 	 * @return
 	 */
-	@WebMethod
+	@WebMethod(operationName="Update")
 	public UpdateGatewayResponse UpdateGateway(@WebParam(name="request") GatewayRequest request){
 		log.info("BEGIN|UpdateGateway|Entity:[" + request.getEntityName()+"]|RequestId:["+request.getRequestId()+"]");
 		UpdateGatewayResponse ugr = new UpdateGatewayResponse();
@@ -121,7 +121,7 @@ public class OperationsGateway {
 		return ugr;
 	}
 	
-	@WebMethod
+	@WebMethod(operationName="Delete")
 	public Exception DeleteGateway(@WebParam(name="request") GatewayRequest request){
 		log.info("BEGIN|DeleteGateway|Entity:[" + request.getEntityName()+"]|RequestId:["+request.getRequestId()+"]");
 		Exception e = new Exception("0", "Success", "DeleteGateway");

@@ -8,7 +8,7 @@
 	<entity class="com.tramex.sisoprega.dto.Rancher">
 		<table name="cat_ranchers"/>
 		<attributes>
-			<id name="rancher_id">
+			<id name="rancherId">
 				<generated-value strategy="TABLE"/>
 			</id>
 		</attributes>
