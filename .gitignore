@@ -2,4 +2,4 @@ bin/
 *.class
 build/
 dist/
-.matadata
+.metadata
