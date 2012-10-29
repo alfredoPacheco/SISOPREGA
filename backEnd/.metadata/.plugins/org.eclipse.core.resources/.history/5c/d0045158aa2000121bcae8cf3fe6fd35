@@ -1,5 +1,0 @@
-package com.tramex.sisoprega.common.gateway.request;
-
-public class ReadGatewayRequest {
-
-}

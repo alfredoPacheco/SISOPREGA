@@ -1,9 +1,0 @@
-package com.tramex.sisoprega.common;
-
-public class UpdateGatewayResponse {
-	private String entityName;
-	private GatewayContent updatedRecord;
-	private com.tramex.sisoprega.common.Exception exception;
-	
-	
-}
