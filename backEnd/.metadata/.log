@@ -1,0 +1,136 @@
+!SESSION 2012-10-28 20:33:58.369 -----------------------------------------------
+eclipse.buildId=M20120914-1800
+java.version=1.7.0_06
+java.vendor=Oracle Corporation
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_US
+Framework arguments:  -product org.eclipse.epp.package.jee.product
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.eclipse.epp.package.jee.product
+
+!ENTRY org.eclipse.jface 4 2 2012-10-28 21:48:24.830
+!MESSAGE Problems occurred when invoking code from plug-in: "org.eclipse.jface".
+!STACK 0
+org.eclipse.core.runtime.AssertionFailedException: assertion failed: 
+	at org.eclipse.core.runtime.Assert.isTrue(Assert.java:110)
+	at org.eclipse.core.runtime.Assert.isTrue(Assert.java:96)
+	at org.eclipse.ui.texteditor.EditorStatusLine$StatusLineClearer.selectionChanged(EditorStatusLine.java:41)
+	at org.eclipse.jface.viewers.Viewer$2.run(Viewer.java:164)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:42)
+	at org.eclipse.ui.internal.JFaceUtil$1.run(JFaceUtil.java:49)
+	at org.eclipse.jface.util.SafeRunnable.run(SafeRunnable.java:175)
+	at org.eclipse.jface.viewers.Viewer.fireSelectionChanged(Viewer.java:162)
+	at org.eclipse.jface.text.TextViewer.fireSelectionChanged(TextViewer.java:2738)
+	at org.eclipse.jface.text.TextViewer.selectionChanged(TextViewer.java:2717)
+	at org.eclipse.jface.text.TextViewer.setSelectedRange(TextViewer.java:2402)
+	at org.eclipse.jface.text.link.LinkedModeUI.select(LinkedModeUI.java:933)
+	at org.eclipse.jface.text.link.LinkedModeUI.switchPosition(LinkedModeUI.java:851)
+	at org.eclipse.jface.text.link.LinkedModeUI.next(LinkedModeUI.java:798)
+	at org.eclipse.jface.text.link.LinkedModeUI.enter(LinkedModeUI.java:717)
+	at org.eclipse.jdt.internal.ui.text.java.ParameterGuessingProposal.apply(ParameterGuessingProposal.java:174)
+	at org.eclipse.jdt.internal.ui.text.java.AbstractJavaCompletionProposal.apply(AbstractJavaCompletionProposal.java:477)
+	at org.eclipse.jdt.internal.ui.text.java.LazyJavaCompletionProposal.apply(LazyJavaCompletionProposal.java:488)
+	at org.eclipse.jface.text.contentassist.CompletionProposalPopup.insertProposal(CompletionProposalPopup.java:940)
+	at org.eclipse.jface.text.contentassist.CompletionProposalPopup.insertSelectedProposalWithMask(CompletionProposalPopup.java:891)
+	at org.eclipse.jface.text.contentassist.CompletionProposalPopup.verifyKey(CompletionProposalPopup.java:1323)
+	at org.eclipse.jface.text.contentassist.ContentAssistant$InternalListener.verifyKey(ContentAssistant.java:808)
+	at org.eclipse.jface.text.TextViewer$VerifyKeyListenersManager.verifyKey(TextViewer.java:491)
+	at org.eclipse.swt.custom.StyledTextListener.handleEvent(StyledTextListener.java:65)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:84)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1053)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1077)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1062)
+	at org.eclipse.swt.widgets.Widget.notifyListeners(Widget.java:774)
+	at org.eclipse.swt.custom.StyledText.handleKeyDown(StyledText.java:5932)
+	at org.eclipse.swt.custom.StyledText$7.handleEvent(StyledText.java:5629)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:84)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1053)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1077)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1062)
+	at org.eclipse.swt.widgets.Widget.sendKeyEvent(Widget.java:1104)
+	at org.eclipse.swt.widgets.Widget.sendKeyEvent(Widget.java:1100)
+	at org.eclipse.swt.widgets.Widget.wmChar(Widget.java:1521)
+	at org.eclipse.swt.widgets.Control.WM_CHAR(Control.java:4640)
+	at org.eclipse.swt.widgets.Canvas.WM_CHAR(Canvas.java:345)
+	at org.eclipse.swt.widgets.Control.windowProc(Control.java:4528)
+	at org.eclipse.swt.widgets.Canvas.windowProc(Canvas.java:341)
+	at org.eclipse.swt.widgets.Display.windowProc(Display.java:4976)
+	at org.eclipse.swt.internal.win32.OS.DispatchMessageW(Native Method)
+	at org.eclipse.swt.internal.win32.OS.DispatchMessage(OS.java:2546)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3756)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine$9.run(PartRenderingEngine.java:1029)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:332)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.run(PartRenderingEngine.java:923)
+	at org.eclipse.e4.ui.internal.workbench.E4Workbench.createAndRunUI(E4Workbench.java:86)
+	at org.eclipse.ui.internal.Workbench$5.run(Workbench.java:588)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:332)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:543)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:149)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:124)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:196)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:110)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:79)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:353)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:180)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:629)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:584)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1438)
+	at org.eclipse.equinox.launcher.Main.main(Main.java:1414)
+
+!ENTRY oracle.eclipse.tools.glassfish 4 1 2012-10-28 22:14:30.527
+!MESSAGE GlassFish: derbyJar =C:\glassfish\glassfish3\glassfish
+
+!ENTRY oracle.eclipse.tools.glassfish 4 1 2012-10-28 22:14:30.529
+!MESSAGE GlassFish: derbyJar =C:\glassfish\glassfish3\glassfish
+
+!ENTRY oracle.eclipse.tools.glassfish 4 150 2012-10-28 22:14:35.358
+!MESSAGE GlassFish v3 requires a JDK 1.6 and not a JRE. Please add/select the correct JDK in the Server properties 'Runtime Environment' section.
+
+!ENTRY oracle.eclipse.tools.glassfish 4 150 2012-10-28 22:17:25.674
+!MESSAGE GlassFish v3 requires a JDK 1.6 and not a JRE. Please add/select the correct JDK in the Server properties 'Runtime Environment' section.
+!SESSION 2012-10-28 22:18:34.979 -----------------------------------------------
+eclipse.buildId=M20120914-1800
+java.version=1.7.0_06
+java.vendor=Oracle Corporation
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_US
+Framework arguments:  -product org.eclipse.epp.package.jee.product
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.eclipse.epp.package.jee.product
+
+!ENTRY oracle.eclipse.tools.glassfish 4 150 2012-10-28 22:19:03.514
+!MESSAGE GlassFish v3 requires a JDK 1.6 and not a JRE. Please add/select the correct JDK in the Server properties 'Runtime Environment' section.
+
+!ENTRY oracle.eclipse.tools.glassfish 4 1 2012-10-28 22:34:23.998
+!MESSAGE GlassFish: deploy is failing=
+!STACK 1
+org.eclipse.core.runtime.CoreException: Deployment Error for module: Gateway: Error occurred during deployment: Exception while loading the app : java.lang.IllegalStateException: ContainerBase.addChild: start: org.apache.catalina.LifecycleException: java.lang.RuntimeException: Servlet web service endpoint '' failure. Please see server.log for more details.
+	at com.sun.enterprise.jst.server.sunappsrv.SunAppServerBehaviour.publishDeployedDirectory(SunAppServerBehaviour.java:859)
+	at com.sun.enterprise.jst.server.sunappsrv.SunAppServerBehaviour.publishModuleForGlassFishV3(SunAppServerBehaviour.java:629)
+	at com.sun.enterprise.jst.server.sunappsrv.SunAppServerBehaviour.publishModule(SunAppServerBehaviour.java:277)
+	at org.eclipse.wst.server.core.model.ServerBehaviourDelegate.publishModule(ServerBehaviourDelegate.java:1046)
+	at org.eclipse.wst.server.core.model.ServerBehaviourDelegate.publishModules(ServerBehaviourDelegate.java:1138)
+	at org.eclipse.wst.server.core.model.ServerBehaviourDelegate.publish(ServerBehaviourDelegate.java:955)
+	at org.eclipse.wst.server.core.model.ServerBehaviourDelegate.publish(ServerBehaviourDelegate.java:774)
+	at org.eclipse.wst.server.core.internal.Server.publishImpl(Server.java:3108)
+	at org.eclipse.wst.server.core.internal.Server$PublishJob.run(Server.java:345)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:53)
+!SUBENTRY 1 oracle.eclipse.tools.glassfish 4 0 2012-10-28 22:34:24.000
+!MESSAGE Deployment Error for module: Gateway: Error occurred during deployment: Exception while loading the app : java.lang.IllegalStateException: ContainerBase.addChild: start: org.apache.catalina.LifecycleException: java.lang.RuntimeException: Servlet web service endpoint '' failure. Please see server.log for more details.
+
+!ENTRY oracle.eclipse.tools.glassfish 4 0 2012-10-28 22:34:24.023
+!MESSAGE cannot Deploy Gateway
+!STACK 1
+org.eclipse.core.runtime.CoreException: Deployment Error for module: Gateway: Error occurred during deployment: Exception while loading the app : java.lang.IllegalStateException: ContainerBase.addChild: start: org.apache.catalina.LifecycleException: java.lang.RuntimeException: Servlet web service endpoint '' failure. Please see server.log for more details.
+	at com.sun.enterprise.jst.server.sunappsrv.SunAppServerBehaviour.publishDeployedDirectory(SunAppServerBehaviour.java:859)
+	at com.sun.enterprise.jst.server.sunappsrv.SunAppServerBehaviour.publishModuleForGlassFishV3(SunAppServerBehaviour.java:629)
+	at com.sun.enterprise.jst.server.sunappsrv.SunAppServerBehaviour.publishModule(SunAppServerBehaviour.java:277)
+	at org.eclipse.wst.server.core.model.ServerBehaviourDelegate.publishModule(ServerBehaviourDelegate.java:1046)
+	at org.eclipse.wst.server.core.model.ServerBehaviourDelegate.publishModules(ServerBehaviourDelegate.java:1138)
+	at org.eclipse.wst.server.core.model.ServerBehaviourDelegate.publish(ServerBehaviourDelegate.java:955)
+	at org.eclipse.wst.server.core.model.ServerBehaviourDelegate.publish(ServerBehaviourDelegate.java:774)
+	at org.eclipse.wst.server.core.internal.Server.publishImpl(Server.java:3108)
+	at org.eclipse.wst.server.core.internal.Server$PublishJob.run(Server.java:345)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:53)
+!SUBENTRY 1 oracle.eclipse.tools.glassfish 4 0 2012-10-28 22:34:24.023
+!MESSAGE Deployment Error for module: Gateway: Error occurred during deployment: Exception while loading the app : java.lang.IllegalStateException: ContainerBase.addChild: start: org.apache.catalina.LifecycleException: java.lang.RuntimeException: Servlet web service endpoint '' failure. Please see server.log for more details.

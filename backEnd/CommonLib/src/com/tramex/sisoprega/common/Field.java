@@ -36,6 +36,10 @@ public class Field {
 	private String name;
 	private String value;
 	
+	public Field(){
+		// empty constructor for JaxB.
+	}
+	
 	public Field(String name, String value){
 		this.name = name;
 		this.value = value;

@@ -1,0 +1,3 @@
+#GlassFish 3
+#Sun Oct 28 22:40:33 MDT 2012
+org.eclipse.jst.jee.server\:Gateway=C\:\\glassfish\\glassfish3\\glassfish\\domains\\domain1\\eclipseApps\\Gateway

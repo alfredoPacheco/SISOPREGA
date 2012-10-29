@@ -1,27 +1,59 @@
+/**
+ * THIS IS A COMMERCIAL PROGRAM PROVIDED FOR TRAMEX AND IT'S ASSOCIATES
+ * BUILT BY EXTERNAL SOFTWARE PROVIDERS.
+ * THE SOFTWARE COMPRISING THIS SYSTEM IS THE PROPERTY OF TRAMEX OR ITS
+ * LICENSORS.
+ * 
+ * ALL COPYRIGHT, PATENT, TRADE SECRET, AND OTHER INTELLECTUAL PROPERTY RIGHTS
+ * IN THE SOFTWARE COMPRISING THIS SYSTEM ARE, AND SHALL REMAIN, THE VALUABLE
+ * PROPERTY OF TRAMEX OR ITS LICENSORS.
+ * 
+ * USE, DISCLOSURE, OR REPRODUCTION OF THIS SOFTWARE IS STRICTLY PROHIBITED,
+ * EXCEPT UNDER WRITTEN LICENSE FROM TRAMEX OR ITS LICENSORS.
+ * 
+ * &copy; COPYRIGHT 2012 TRAMEX. ALL RIGHTS RESERVED.
+ */
 package com.tramex.sisoprega.dto;
 
 import java.util.Date;
 
+/**
+ * Defines the model for the Rancher entity.<BR/>
+ * 
+ * <B>Revision History:</B>
+ * 
+ * <PRE>
+ * ====================================================================================
+ * Date        By                           Description
+ * MM/DD/YYYY
+ * ----------  ---------------------------  -------------------------------------------
+ * 10/27/2012  Diego Torres                 Initial Version.
+ * ====================================================================================
+ * </PRE>
+ * 
+ * @author Diego Torres
+ *
+ */
 public class Rancher {
-	private long rancher_id;
+	private long rancherId;
 	private String aka;
-	private String first_name;
-	private String last_name;
-	private String mother_name;
-	private Date birt_date;
-	private String email_address;
+	private String firstName;
+	private String lastName;
+	private String motherName;
+	private Date birthDate;
+	private String emailAddress;
 	
 	/**
 	 * @return the rancher_id
 	 */
-	public long getRancher_id() {
-		return rancher_id;
+	public long getRancherId() {
+		return rancherId;
 	}
 	/**
-	 * @param rancher_id the rancher_id to set
+	 * @param rancherId the rancher_id to set
 	 */
-	public void setRancher_id(long rancher_id) {
-		this.rancher_id = rancher_id;
+	public void setRancherId(long rancherId) {
+		this.rancherId = rancherId;
 	}
 	/**
 	 * @return the aka
@@ -38,62 +70,62 @@ public class Rancher {
 	/**
 	 * @return the first_name
 	 */
-	public String getFirst_name() {
-		return first_name;
+	public String getFirstName() {
+		return firstName;
 	}
 	/**
-	 * @param first_name the first_name to set
+	 * @param firstName the first_name to set
 	 */
-	public void setFirst_name(String first_name) {
-		this.first_name = first_name;
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
 	}
 	/**
 	 * @return the last_name
 	 */
-	public String getLast_name() {
-		return last_name;
+	public String getLastName() {
+		return lastName;
 	}
 	/**
-	 * @param last_name the last_name to set
+	 * @param lastName the last_name to set
 	 */
-	public void setLast_name(String last_name) {
-		this.last_name = last_name;
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 	/**
 	 * @return the mother_name
 	 */
-	public String getMother_name() {
-		return mother_name;
+	public String getMotherName() {
+		return motherName;
 	}
 	/**
-	 * @param mother_name the mother_name to set
+	 * @param motherName the mother_name to set
 	 */
-	public void setMother_name(String mother_name) {
-		this.mother_name = mother_name;
+	public void setMotherName(String motherName) {
+		this.motherName = motherName;
 	}
 	/**
 	 * @return the birt_date
 	 */
-	public Date getBirt_date() {
-		return birt_date;
+	public Date getBirthDate() {
+		return birthDate;
 	}
 	/**
-	 * @param birt_date the birt_date to set
+	 * @param birthDate the birt_date to set
 	 */
-	public void setBirt_date(Date birt_date) {
-		this.birt_date = birt_date;
+	public void setBirthDate(Date birthDate) {
+		this.birthDate = birthDate;
 	}
 	/**
 	 * @return the email_address
 	 */
-	public String getEmail_address() {
-		return email_address;
+	public String getEmailAddress() {
+		return emailAddress;
 	}
 	/**
-	 * @param email_address the email_address to set
+	 * @param emailAddress the email_address to set
 	 */
-	public void setEmail_address(String email_address) {
-		this.email_address = email_address;
+	public void setEmailAddress(String emailAddress) {
+		this.emailAddress = emailAddress;
 	}
 	
 	

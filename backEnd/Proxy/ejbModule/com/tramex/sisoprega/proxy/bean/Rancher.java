@@ -15,6 +15,10 @@
  */
 package com.tramex.sisoprega.proxy.bean;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import javax.ejb.Stateless;
 
 import com.tramex.sisoprega.common.CreateGatewayResponse;
@@ -22,6 +26,7 @@ import com.tramex.sisoprega.common.Exception;
 import com.tramex.sisoprega.common.GatewayRequest;
 import com.tramex.sisoprega.common.ReadGatewayResponse;
 import com.tramex.sisoprega.common.UpdateGatewayResponse;
+import com.tramex.sisoprega.common.Utils;
 import com.tramex.sisoprega.proxy.Cruddable;
 
 /**
@@ -89,12 +94,36 @@ public class Rancher implements Cruddable {
 	
 	private boolean validateRancher(com.tramex.sisoprega.dto.Rancher rancher){
 		// TODO: Provide validation method
-		error_description="Unimplemented validation method";
-		return false;
+		
+		return true;
 	}
 	
 	private com.tramex.sisoprega.dto.Rancher rancherFromRequest(GatewayRequest request){
 		// TODO: Create rancher from request
+		com.tramex.sisoprega.dto.Rancher rancher = new com.tramex.sisoprega.dto.Rancher();
+		
+		// TODO: Use reflection to infer data from request.
+		String sRancherId = Utils.valueFromRequest(request, "rancherId");
+		if(sRancherId != null){
+			rancher.setRancherId(Long.parseLong(sRancherId));
+		}
+		
+		String sBirthDate = Utils.valueFromRequest(request, "birthDate");
+		if(sBirthDate != null){
+			try{
+				Date dBirthDate = new SimpleDateFormat("MM/dd/yyyy").parse(sBirthDate);
+				rancher.setBirthDate(dBirthDate);
+			}catch(ParseException e){
+				// TODO: Log error
+			}
+		}
+		
+		rancher.setAka(Utils.valueFromRequest(request, "aka"));
+		rancher.setEmailAddress(Utils.valueFromRequest(request, "emailAddress"));
+		rancher.setFirstName(Utils.valueFromRequest(request, "firstName"));
+		rancher.setLastName(Utils.valueFromRequest(request, "lastName"));
+		rancher.setMotherName(Utils.valueFromRequest(request, "motherName"));
+				
 		return new com.tramex.sisoprega.dto.Rancher();
 	} 
 	

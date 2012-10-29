@@ -37,6 +37,10 @@ public class Exception {
 	private String exceptionDescription;
 	private String origin;
 	
+	public Exception(){
+		//Empty constructor for JaxB.
+	}
+	
 	public Exception(String exceptionId, String exceptionDescription, String origin){
 		this.exceptionId = exceptionId;
 		this.exceptionDescription = exceptionDescription;

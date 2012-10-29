@@ -34,7 +34,7 @@ import com.tramex.sisoprega.common.UpdateGatewayResponse;
  * that will be consumed by the UI applications.<BR/>
  * The OperationsGateway must decide which proxy will attend the request.
  * 
- * <B>Revision History:</B>
+ * <B>Revision History:</B> 
  * 
  * <PRE>
  * ====================================================================================
