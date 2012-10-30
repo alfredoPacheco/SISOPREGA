@@ -15,9 +15,8 @@
  */
 package com.tramex.sisoprega.proxy.bean;
 
+import java.lang.reflect.Field;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import javax.ejb.Stateless;
 
@@ -31,8 +30,8 @@ import com.tramex.sisoprega.proxy.Cruddable;
 
 /**
  * This proxy knows the logic to evaluate Ranchers and the way to the database
- * in order to save their data. Also, it is contained in EJB container, 
- * we can apply security and life cycle methods for resources.<BR/>
+ * in order to save their data. Also, it is contained in EJB container, we can
+ * apply security and life cycle methods for resources.<BR/>
  * 
  * <B>Revision History:</B>
  * 
@@ -46,23 +45,33 @@ import com.tramex.sisoprega.proxy.Cruddable;
  * </PRE>
  * 
  * @author Diego Torres
- *
+ * 
  */
 
 @Stateless
 public class Rancher implements Cruddable {
 
 	private String error_description;
-	
+
 	@Override
 	public CreateGatewayResponse Create(GatewayRequest request) {
 		CreateGatewayResponse response = new CreateGatewayResponse();
-		com.tramex.sisoprega.dto.Rancher rancher = rancherFromRequest(request);
-		if(validateRancher(rancher)){
-			// TODO: Persist rancher object
-		}else{
-			response.setException(new Exception("R001", "Validation Exception:[" + error_description + "]", "proxy.Rancher.Create"));
+		com.tramex.sisoprega.dto.Rancher rancher = null;
+		try {
+			rancher = rancherFromRequest(request);
+			if (validateRancher(rancher)) {
+				// TODO: Persist rancher object
+			} else {
+				response.setException(new Exception("R001",
+						"Validation Exception:[" + error_description + "]",
+						"proxy.Rancher.Create"));
+			}
+		} catch (java.lang.Exception e) {
+			response.setException(new Exception("R002",
+					"Validation Exception:[" + error_description + "]",
+					"proxy.Rancher.Create"));
 		}
+
 		return response;
 	}
 
@@ -70,61 +79,72 @@ public class Rancher implements Cruddable {
 	public ReadGatewayResponse Read(GatewayRequest request) {
 		// TODO Query the persistence with the requested filter.
 		ReadGatewayResponse response = new ReadGatewayResponse();
-		response.setException(new Exception("R999", "Unimplemented functionality", "proxy.Rancher.Read"));
+		response.setException(new Exception("R999",
+				"Unimplemented functionality", "proxy.Rancher.Read"));
 		return response;
 	}
 
 	@Override
 	public UpdateGatewayResponse Update(GatewayRequest request) {
 		UpdateGatewayResponse response = new UpdateGatewayResponse();
-		com.tramex.sisoprega.dto.Rancher rancher = rancherFromRequest(request);
-		if(validateRancher(rancher)){
-			// TODO: Persist rancher object
-		}else{
-			response.setException(new Exception("R001", "Validation Exception:[" + error_description + "]", "proxy.Rancher.Create"));
+		com.tramex.sisoprega.dto.Rancher rancher = null;
+		try {
+			rancher = rancherFromRequest(request);
+			if (validateRancher(rancher)) {
+				// TODO: Persist rancher object
+			} else {
+				response.setException(new Exception("R001",
+						"Validation Exception:[" + error_description + "]",
+						"proxy.Rancher.Create"));
+			}
+		} catch (java.lang.Exception e) {
+			response.setException(new Exception("R002",
+					"Validation Exception:[" + error_description + "]",
+					"proxy.Rancher.Create"));
 		}
+
 		return response;
 	}
 
 	@Override
 	public Exception Delete(GatewayRequest request) {
 		// TODO Auto-generated method stub
-		return new Exception("R999", "Unimplemented functionality", "proxy.Rancher.Delete");
+		return new Exception("R999", "Unimplemented functionality",
+				"proxy.Rancher.Delete");
 	}
-	
-	private boolean validateRancher(com.tramex.sisoprega.dto.Rancher rancher){
-		// TODO: Provide validation method
+
+	private boolean validateRancher(com.tramex.sisoprega.dto.Rancher rancher) {
+		boolean result = true;
 		
-		return true;
-	}
-	
-	private com.tramex.sisoprega.dto.Rancher rancherFromRequest(GatewayRequest request){
-		// TODO: Create rancher from request
-		com.tramex.sisoprega.dto.Rancher rancher = new com.tramex.sisoprega.dto.Rancher();
-		
-		// TODO: Use reflection to infer data from request.
-		String sRancherId = Utils.valueFromRequest(request, "rancherId");
-		if(sRancherId != null){
-			rancher.setRancherId(Long.parseLong(sRancherId));
+		if(rancher==null){
+			result = false;
 		}
 		
-		String sBirthDate = Utils.valueFromRequest(request, "birthDate");
-		if(sBirthDate != null){
-			try{
-				Date dBirthDate = new SimpleDateFormat("MM/dd/yyyy").parse(sBirthDate);
-				rancher.setBirthDate(dBirthDate);
-			}catch(ParseException e){
-				// TODO: Log error
+		return result;
+	}
+
+	private com.tramex.sisoprega.dto.Rancher rancherFromRequest(
+			GatewayRequest request) throws IllegalArgumentException,
+			IllegalAccessException, ParseException {
+		// Create rancher from request
+		com.tramex.sisoprega.dto.Rancher rancher = new com.tramex.sisoprega.dto.Rancher();
+
+		// Use reflection to retrieve values from request
+		Class<com.tramex.sisoprega.dto.Rancher> cls = com.tramex.sisoprega.dto.Rancher.class;
+		Field[] clsField = cls.getDeclaredFields();
+		for (Field field : clsField) {
+			field.setAccessible(true);
+			String fieldName = field.getName();
+			if (field.getType() == String.class) {
+				field.set(rancher, Utils.valueFromRequest(request, fieldName));
+			} else {
+				Object val = Utils.valueFromRequest(request, fieldName,
+						field.getType());
+				field.set(rancher, val);
 			}
 		}
 		
-		rancher.setAka(Utils.valueFromRequest(request, "aka"));
-		rancher.setEmailAddress(Utils.valueFromRequest(request, "emailAddress"));
-		rancher.setFirstName(Utils.valueFromRequest(request, "firstName"));
-		rancher.setLastName(Utils.valueFromRequest(request, "lastName"));
-		rancher.setMotherName(Utils.valueFromRequest(request, "motherName"));
-				
 		return new com.tramex.sisoprega.dto.Rancher();
-	} 
-	
+	}
+
 }

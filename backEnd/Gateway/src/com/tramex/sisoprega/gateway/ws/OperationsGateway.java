@@ -21,6 +21,7 @@ import javax.jws.WebService;
 
 import org.apache.log4j.Logger;
 
+import com.tramex.sisoprega.common.BaseResponse;
 import com.tramex.sisoprega.common.CreateGatewayResponse;
 import com.tramex.sisoprega.common.Exception;
 import com.tramex.sisoprega.common.Field;
@@ -94,6 +95,7 @@ public class OperationsGateway {
 	@WebMethod(operationName="Read")
 	public ReadGatewayResponse ReadGateway(@WebParam(name="request")GatewayRequest request){
 		log.info("BEGIN|ReadGateway|Entity:[" + request.getEntityName()+"]|RequestId:["+request.getRequestId()+"]");
+		// TODO: Define a proxy that returns a ReadGatewayResponse
 		ReadGatewayResponse rgr = new ReadGatewayResponse();
 		rgr.setEntityName(request.getEntityName());
 		
@@ -114,6 +116,7 @@ public class OperationsGateway {
 	@WebMethod(operationName="Update")
 	public UpdateGatewayResponse UpdateGateway(@WebParam(name="request") GatewayRequest request){
 		log.info("BEGIN|UpdateGateway|Entity:[" + request.getEntityName()+"]|RequestId:["+request.getRequestId()+"]");
+		// TODO: Define a proxy that returns a UpdateGatewayResponse
 		UpdateGatewayResponse ugr = new UpdateGatewayResponse();
 		ugr.setEntityName(request.getEntityName());
 		ugr.getUpdatedRecord().getFields().add(new Field("nombre", "valor"));
@@ -122,10 +125,13 @@ public class OperationsGateway {
 	}
 	
 	@WebMethod(operationName="Delete")
-	public Exception DeleteGateway(@WebParam(name="request") GatewayRequest request){
+	public BaseResponse DeleteGateway(@WebParam(name="request") GatewayRequest request){
 		log.info("BEGIN|DeleteGateway|Entity:[" + request.getEntityName()+"]|RequestId:["+request.getRequestId()+"]");
+		// TODO: Define a proxy that returns a BaseResponse (from delete action).
+		BaseResponse br = new BaseResponse();
 		Exception e = new Exception("0", "Success", "DeleteGateway");
+		br.setException(e);
 		log.info("END|DeleteGateway|Entity:[" + request.getEntityName()+"]|RequestId:["+request.getRequestId()+"]");
-		return e;
+		return br;
 	}
 }

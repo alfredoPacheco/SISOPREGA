@@ -15,9 +15,8 @@
  */
 package com.tramex.sisoprega.common;
 
-
 /**
- * Defines the model to be implemented by the Create Gateway Response.<BR/>
+ * Defines a common model for all responses.<BR/>
  * 
  * <B>Revision History:</B>
  * 
@@ -26,27 +25,25 @@ package com.tramex.sisoprega.common;
  * Date        By                           Description
  * MM/DD/YYYY
  * ----------  ---------------------------  -------------------------------------------
- * 10/27/2012  Diego Torres                 Initial Version.
+ * 10/29/2012  Diego Torres                 Initial Version.
  * ====================================================================================
  * </PRE>
  * 
  * @author Diego Torres
  *
  */
-public class CreateGatewayResponse extends BaseResponse {
-	private String generatedId;
+public class BaseResponse {
+	private Exception exception;
 	/**
-	 * @return the generatedId
+	 * @return the exception
 	 */
-	public String getGeneratedId() {
-		return generatedId;
+	public Exception getException() {
+		return exception;
 	}
 	/**
-	 * @param generatedId the generatedId to set
+	 * @param exception the exception to set
 	 */
-	public void setGeneratedId(String generatedId) {
-		this.generatedId = generatedId;
+	public void setException(Exception exception) {
+		this.exception = exception;
 	}
-	
-	
 }

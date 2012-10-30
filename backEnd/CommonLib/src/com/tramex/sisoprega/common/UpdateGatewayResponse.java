@@ -33,10 +33,9 @@ package com.tramex.sisoprega.common;
  * @author Diego Torres
  *
  */
-public class UpdateGatewayResponse {
+public class UpdateGatewayResponse extends BaseResponse {
 	private String entityName;
 	private GatewayContent updatedRecord;
-	private com.tramex.sisoprega.common.Exception exception;
 	/**
 	 * @return the entityName
 	 */
@@ -60,17 +59,5 @@ public class UpdateGatewayResponse {
 	 */
 	public void setUpdatedRecord(GatewayContent updatedRecord) {
 		this.updatedRecord = updatedRecord;
-	}
-	/**
-	 * @return the exception
-	 */
-	public com.tramex.sisoprega.common.Exception getException() {
-		return exception;
-	}
-	/**
-	 * @param exception the exception to set
-	 */
-	public void setException(com.tramex.sisoprega.common.Exception exception) {
-		this.exception = exception;
 	}
 }

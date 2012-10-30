@@ -15,6 +15,10 @@
  */
 package com.tramex.sisoprega.common;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Common utilities that will be used across the back end solution.<BR/>
  * 
@@ -30,34 +34,58 @@ package com.tramex.sisoprega.common;
  * </PRE>
  * 
  * @author Diego Torres
- *
+ * 
  */
 public class Utils {
-	
+
 	/**
-	 * Retrieves a value from a GatewayRequest.Content, given a field name.
-	 * Will return null if no field name is found that match the field name.
-	 * Will return the first field value found if many field names are in the content
-	 * with the same name.
-	 * There is no difference in lower and upper case, so var and VAR are declared
-	 * as the same name. This method will also trim the contents of both, the
-	 * given fieldName and the provided names in the request model.
+	 * Retrieves a value from a GatewayRequest.Content, given a field name. Will
+	 * return null if no field name is found that match the field name. Will
+	 * return the first field value found if many field names are in the content
+	 * with the same name. There is no difference in lower and upper case, so
+	 * var and VAR are declared as the same name. This method will also trim the
+	 * contents of both, the given fieldName and the provided names in the
+	 * request model.
+	 * 
 	 * @param request
 	 * @param fieldName
 	 * @return
 	 */
-	public static String valueFromRequest(GatewayRequest request, String fieldName){
-		
+	public static String valueFromRequest(GatewayRequest request,
+			String fieldName) {
+
 		String result = null;
-		
-		for(Field field : request.getContent().getFields()){
+
+		for (Field field : request.getContent().getFields()) {
 			String fName = field.getName().toUpperCase().trim();
-			if(fName.equals(fieldName.toUpperCase().trim())){
+			if (fName.equals(fieldName.toUpperCase().trim())) {
 				result = field.getValue();
 				break;
 			}
 		}
-		
+
+		return result;
+	}
+
+	public static Object valueFromRequest(GatewayRequest request,
+			String fieldName, Class<?> type) throws ParseException {
+		Object result = null;
+
+		String sValue = valueFromRequest(request, fieldName);
+		if (sValue != null) {
+
+			if (type == Integer.class) {
+				result = Integer.parseInt(sValue);
+			}
+			if (type == Long.class) {
+				result = Long.parseLong(sValue);
+			}
+			if (type == Date.class) {
+				Date dValue = new SimpleDateFormat("MM/dd/yyyy").parse(sValue);
+				result = dValue;
+			}
+		}
+
 		return result;
 	}
 }

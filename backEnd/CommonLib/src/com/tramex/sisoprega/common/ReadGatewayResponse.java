@@ -35,23 +35,10 @@ import java.util.List;
  * @author Diego Torres
  *
  */
-public class ReadGatewayResponse {
+public class ReadGatewayResponse extends BaseResponse{
 	private String entityName;
 	private List<GatewayContent> record = new ArrayList<GatewayContent>();
-	private com.tramex.sisoprega.common.Exception exception;
 	
-	/**
-	 * @return the exception
-	 */
-	public com.tramex.sisoprega.common.Exception getException() {
-		return exception;
-	}
-	/**
-	 * @param exception the exception to set
-	 */
-	public void setException(com.tramex.sisoprega.common.Exception exception) {
-		this.exception = exception;
-	}
 	/**
 	 * @return the entityName
 	 */
