@@ -54,14 +54,6 @@ public class OperationsGateway {
 	
 	private Logger log = Logger.getLogger(OperationsGateway.class);
 	
-	
-	
-	public OperationsGateway(){
-		log.info("BEGIN|OperationsGateway|ServiceInit");
-		
-		log.info("END|OperationsGateway|ServiceInit");
-	}
-	
 	/**
 	 * 
 	 * Provides an interface to create entities.
