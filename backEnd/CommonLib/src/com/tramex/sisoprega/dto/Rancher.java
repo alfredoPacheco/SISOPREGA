@@ -128,5 +128,9 @@ public class Rancher {
 		this.emailAddress = emailAddress;
 	}
 	
+	@Override
+	public String toString(){
+		return "Racher [" + rancherId + "], name[" + lastName + ", " + firstName + "]";
+	}
 	
 }

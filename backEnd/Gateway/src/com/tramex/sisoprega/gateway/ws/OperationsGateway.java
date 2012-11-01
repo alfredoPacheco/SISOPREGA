@@ -15,9 +15,13 @@
  */
 package com.tramex.sisoprega.gateway.ws;
 
+import java.util.Properties;
+
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
+import javax.naming.Context;
+import javax.naming.InitialContext;
 
 import org.apache.log4j.Logger;
 
@@ -29,6 +33,7 @@ import com.tramex.sisoprega.common.GatewayContent;
 import com.tramex.sisoprega.common.GatewayRequest;
 import com.tramex.sisoprega.common.ReadGatewayResponse;
 import com.tramex.sisoprega.common.UpdateGatewayResponse;
+import com.tramex.sisoprega.common.crud.Cruddable;
 
 /**
  * OperationsGateway provides the web service and the web methods
@@ -64,15 +69,20 @@ public class OperationsGateway {
 	@WebMethod(operationName="Create")
 	public CreateGatewayResponse CreateGateway(@WebParam(name="request") final GatewayRequest request){
 		log.info("BEGIN|CreateGateway|Entity:[" + request.getEntityName()+"]|RequestId:["+request.getRequestId()+"]");
-		// TODO: Define a proxy that returns a CreateGatewayResponse
-		CreateGatewayResponse cgr = new CreateGatewayResponse();
-		cgr.setGeneratedId("testId");
-		
-		Exception e = new Exception("0", "Success", "CreateGateway");
-		cgr.setException(e);
+		CreateGatewayResponse result = null;
+		Exception cgrEx = null;
+		try{
+			Cruddable crud = getCruddable(request.getEntityName());
+			result = crud.Create(request);
+		}catch(java.lang.Exception e){
+			log.error("Error while creating entity [" + request.getEntityName() + "]", e);
+			result = new CreateGatewayResponse();
+			cgrEx = new Exception("CG001", "Error on Creation", "CreateGateway");
+			result.setException(cgrEx);
+		}
 		
 		log.info("END|CreateGateway|Entity:[" + request.getEntityName()+"]|RequestId:["+request.getRequestId()+"]");
-		return cgr;
+		return result;
 	}
 	
 	/**
@@ -126,4 +136,20 @@ public class OperationsGateway {
 		log.info("END|DeleteGateway|Entity:[" + request.getEntityName()+"]|RequestId:["+request.getRequestId()+"]");
 		return br;
 	}
+	
+	private Cruddable getCruddable(String cruddableName){
+		Context jndiContext = null;
+		Cruddable crud = null;
+		String commonPrefix = "java:global/Proxy/";
+		String commonSuffix = "Proxy";
+		try{
+			jndiContext = new InitialContext();
+			crud = (Cruddable)jndiContext.lookup(commonPrefix + cruddableName + commonSuffix);
+			log.debug("Cruddable instance created for entity [" + cruddableName + "]");
+		} catch(java.lang.Exception e){
+			log.error("Unable to load jndi context component", e);
+		}
+		return crud;
+	}
+	
 }

@@ -19,6 +19,10 @@ import java.lang.reflect.Field;
 import java.text.ParseException;
 
 import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
+import org.apache.log4j.Logger;
 
 import com.tramex.sisoprega.common.CreateGatewayResponse;
 import com.tramex.sisoprega.common.Exception;
@@ -26,7 +30,7 @@ import com.tramex.sisoprega.common.GatewayRequest;
 import com.tramex.sisoprega.common.ReadGatewayResponse;
 import com.tramex.sisoprega.common.UpdateGatewayResponse;
 import com.tramex.sisoprega.common.Utils;
-import com.tramex.sisoprega.proxy.Cruddable;
+import com.tramex.sisoprega.common.crud.Cruddable;
 
 /**
  * This proxy knows the logic to evaluate Ranchers and the way to the database
@@ -45,33 +49,54 @@ import com.tramex.sisoprega.proxy.Cruddable;
  * </PRE>
  * 
  * @author Diego Torres
- * 
+ *  
  */
 
 @Stateless
 public class Rancher implements Cruddable {
-
+	private Logger log = Logger.getLogger(Rancher.class);
+	
+	@PersistenceContext
+	private EntityManager em;
+	
 	private String error_description;
 
 	@Override
 	public CreateGatewayResponse Create(GatewayRequest request) {
+		log.info("BEGIN|proxy.Rancher.Create|RequestId:["+request.getRequestId()+"]");
+		
 		CreateGatewayResponse response = new CreateGatewayResponse();
 		com.tramex.sisoprega.dto.Rancher rancher = null;
 		try {
 			rancher = rancherFromRequest(request);
+			
+			log.debug("Received rancher in request:{" + rancher.toString() + "}");
+			
 			if (validateRancher(rancher)) {
-				// TODO: Persist rancher object
+				log.debug("Rancher succesfully validated");
+				em.persist(rancher);
+				log.debug("Rancher persisted on database");
+				em.flush();
+				
+				String sId = String.valueOf(rancher.getRancherId());
+				log.debug("Setting rancher id in response [" + sId + "]");
+				response.setGeneratedId(sId);
+				response.setException(new Exception("0", "Success", "proxy.Rancher.Create"));
+				log.debug("built successfull response");
 			} else {
+				log.error("Built validation exception response with no persistence of rancher.");
 				response.setException(new Exception("R001",
 						"Validation Exception:[" + error_description + "]",
 						"proxy.Rancher.Create"));
 			}
 		} catch (java.lang.Exception e) {
+			log.error("Exception found while creating rancher", e);
 			response.setException(new Exception("R002",
 					"Validation Exception:[" + error_description + "]",
 					"proxy.Rancher.Create"));
 		}
 
+		log.info("END|proxy.Rancher.Create|RequestId:["+request.getRequestId()+"]");
 		return response;
 	}
 

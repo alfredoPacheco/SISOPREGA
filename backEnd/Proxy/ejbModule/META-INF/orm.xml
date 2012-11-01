@@ -11,6 +11,9 @@
 			<id name="rancherId">
 				<generated-value strategy="TABLE"/>
 			</id>
+			<basic name="birthDate">
+				<temporal>DATE</temporal>
+			</basic>
 		</attributes>
 	</entity>
 </entity-mappings>
