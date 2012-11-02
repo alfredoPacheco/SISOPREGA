@@ -32,7 +32,7 @@ import java.util.Date;
  * </PRE>
  * 
  * @author Diego Torres
- *
+ * 
  */
 public class Rancher {
 	private long rancherId;
@@ -42,95 +42,117 @@ public class Rancher {
 	private String motherName;
 	private Date birthDate;
 	private String emailAddress;
-	
+
 	/**
 	 * @return the rancher_id
 	 */
 	public long getRancherId() {
 		return rancherId;
 	}
+
 	/**
-	 * @param rancherId the rancher_id to set
+	 * @param rancherId
+	 *            the rancher_id to set
 	 */
 	public void setRancherId(long rancherId) {
 		this.rancherId = rancherId;
 	}
+
 	/**
 	 * @return the aka
 	 */
 	public String getAka() {
 		return aka;
 	}
+
 	/**
-	 * @param aka the aka to set
+	 * @param aka
+	 *            the aka to set
 	 */
 	public void setAka(String aka) {
 		this.aka = aka;
 	}
+
 	/**
 	 * @return the first_name
 	 */
 	public String getFirstName() {
 		return firstName;
 	}
+
 	/**
-	 * @param firstName the first_name to set
+	 * @param firstName
+	 *            the first_name to set
 	 */
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
+
 	/**
 	 * @return the last_name
 	 */
 	public String getLastName() {
 		return lastName;
 	}
+
 	/**
-	 * @param lastName the last_name to set
+	 * @param lastName
+	 *            the last_name to set
 	 */
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
+
 	/**
 	 * @return the mother_name
 	 */
 	public String getMotherName() {
 		return motherName;
 	}
+
 	/**
-	 * @param motherName the mother_name to set
+	 * @param motherName
+	 *            the mother_name to set
 	 */
 	public void setMotherName(String motherName) {
 		this.motherName = motherName;
 	}
+
 	/**
 	 * @return the birt_date
 	 */
 	public Date getBirthDate() {
 		return birthDate;
 	}
+
 	/**
-	 * @param birthDate the birt_date to set
+	 * @param birthDate
+	 *            the birt_date to set
 	 */
 	public void setBirthDate(Date birthDate) {
 		this.birthDate = birthDate;
 	}
+
 	/**
 	 * @return the email_address
 	 */
 	public String getEmailAddress() {
 		return emailAddress;
 	}
+
 	/**
-	 * @param emailAddress the email_address to set
+	 * @param emailAddress
+	 *            the email_address to set
 	 */
 	public void setEmailAddress(String emailAddress) {
 		this.emailAddress = emailAddress;
 	}
-	
+
 	@Override
-	public String toString(){
-		return "Racher [" + rancherId + "], name[" + lastName + ", " + firstName + "]";
+	public String toString() {
+		return "rancherId:" + rancherId + "; name:" + lastName + " "
+				+ motherName + ", " + firstName + ";alias:" + aka + ";email:"
+				+ emailAddress + ";birthDate:" + birthDate + ";";
 	}
-	
+
 }

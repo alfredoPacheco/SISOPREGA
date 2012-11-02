@@ -1,23 +1,29 @@
 /*
+ * The database script is executed in mysql command line:
+ * ./ /path/to/sisoprega.sql
+ * 
+ * Revision History:
+ * 
+ * ====================================================================================
+ * Date        By                           Description
+ * MM/DD/YYYY
+ * ----------  ---------------------------  -------------------------------------------
+ * 10/20/2012  Alan del Rios                 Initial Version.
+ * 11/01/2012  Diego Torres                  Adaptable for script execution in command
+ *                                           line.
+ * ====================================================================================
+ * 
+ * Author: Alan del Rio
+ *  
+ */
 
-*********************************************************************
-*/
 
-/*!40101 SET NAMES utf8 */;
+CREATE DATABASE IF NOT EXISTS sisoprega;
 
-/*!40101 SET SQL_MODE=''*/;
+USE sisoprega;
 
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-CREATE DATABASE /*!32312 IF NOT EXISTS*/`sisoprega` /*!40100 DEFAULT CHARACTER SET utf8 */;
-
-USE `sisoprega`;
-
-/*Table structure for table `cat_banyard_capacity` */
-
-DROP TABLE IF EXISTS `cat_banyard_capacity`;
+/*Table structure for table cat_banyard_capacity */
+DROP TABLE IF EXISTS cat_banyard_capacity;
 
 CREATE TABLE `cat_banyard_capacity` (
   `capacity_id` int(10) unsigned NOT NULL AUTO_INCREMENT,

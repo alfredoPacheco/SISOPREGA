@@ -32,16 +32,16 @@ package com.tramex.sisoprega.common;
  * @author Diego Torres
  *
  */
-public class Exception {
+public class Error {
 	private String exceptionId;
 	private String exceptionDescription;
 	private String origin;
 	
-	public Exception(){
+	public Error(){
 		//Empty constructor for JaxB.
 	}
 	
-	public Exception(String exceptionId, String exceptionDescription, String origin){
+	public Error(String exceptionId, String exceptionDescription, String origin){
 		this.exceptionId = exceptionId;
 		this.exceptionDescription = exceptionDescription;
 		this.origin = origin;

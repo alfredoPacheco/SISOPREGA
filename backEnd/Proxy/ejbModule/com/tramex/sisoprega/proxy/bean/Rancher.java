@@ -25,7 +25,7 @@ import javax.persistence.PersistenceContext;
 import org.apache.log4j.Logger;
 
 import com.tramex.sisoprega.common.CreateGatewayResponse;
-import com.tramex.sisoprega.common.Exception;
+import com.tramex.sisoprega.common.Error;
 import com.tramex.sisoprega.common.GatewayRequest;
 import com.tramex.sisoprega.common.ReadGatewayResponse;
 import com.tramex.sisoprega.common.UpdateGatewayResponse;
@@ -81,17 +81,17 @@ public class Rancher implements Cruddable {
 				String sId = String.valueOf(rancher.getRancherId());
 				log.debug("Setting rancher id in response [" + sId + "]");
 				response.setGeneratedId(sId);
-				response.setException(new Exception("0", "Success", "proxy.Rancher.Create"));
+				response.setError(new Error("0", "Success", "proxy.Rancher.Create"));
 				log.debug("built successfull response");
 			} else {
 				log.error("Built validation exception response with no persistence of rancher.");
-				response.setException(new Exception("R001",
+				response.setError(new Error("R001",
 						"Validation Exception:[" + error_description + "]",
 						"proxy.Rancher.Create"));
 			}
 		} catch (java.lang.Exception e) {
 			log.error("Exception found while creating rancher", e);
-			response.setException(new Exception("R002",
+			response.setError(new Error("R002",
 					"Validation Exception:[" + error_description + "]",
 					"proxy.Rancher.Create"));
 		}
@@ -104,7 +104,7 @@ public class Rancher implements Cruddable {
 	public ReadGatewayResponse Read(GatewayRequest request) {
 		// TODO Query the persistence with the requested filter.
 		ReadGatewayResponse response = new ReadGatewayResponse();
-		response.setException(new Exception("R999",
+		response.setError(new Error("R999",
 				"Unimplemented functionality", "proxy.Rancher.Read"));
 		return response;
 	}
@@ -118,12 +118,12 @@ public class Rancher implements Cruddable {
 			if (validateRancher(rancher)) {
 				// TODO: Persist rancher object
 			} else {
-				response.setException(new Exception("R001",
+				response.setError(new Error("R001",
 						"Validation Exception:[" + error_description + "]",
 						"proxy.Rancher.Create"));
 			}
 		} catch (java.lang.Exception e) {
-			response.setException(new Exception("R002",
+			response.setError(new Error("R002",
 					"Validation Exception:[" + error_description + "]",
 					"proxy.Rancher.Create"));
 		}
@@ -132,9 +132,9 @@ public class Rancher implements Cruddable {
 	}
 
 	@Override
-	public Exception Delete(GatewayRequest request) {
+	public Error Delete(GatewayRequest request) {
 		// TODO Auto-generated method stub
-		return new Exception("R999", "Unimplemented functionality",
+		return new Error("R999", "Unimplemented functionality",
 				"proxy.Rancher.Delete");
 	}
 
@@ -151,6 +151,7 @@ public class Rancher implements Cruddable {
 	private com.tramex.sisoprega.dto.Rancher rancherFromRequest(
 			GatewayRequest request) throws IllegalArgumentException,
 			IllegalAccessException, ParseException {
+		log.debug("BEGIN|rancherFromRequest|Request{" + request + "}");
 		// Create rancher from request
 		com.tramex.sisoprega.dto.Rancher rancher = new com.tramex.sisoprega.dto.Rancher();
 
@@ -160,16 +161,22 @@ public class Rancher implements Cruddable {
 		for (Field field : clsField) {
 			field.setAccessible(true);
 			String fieldName = field.getName();
+			log.debug("Identified field in Rancher entity:{" + fieldName + "}");
 			if (field.getType() == String.class) {
+				log.debug("The field is an String, setting value from request.");
 				field.set(rancher, Utils.valueFromRequest(request, fieldName));
 			} else {
+				log.debug("The field is not an String, is a [" + field.getType() + "]");
 				Object val = Utils.valueFromRequest(request, fieldName,
 						field.getType());
-				field.set(rancher, val);
+				if(val != null){
+					field.set(rancher, val);
+				}
 			}
 		}
 		
-		return new com.tramex.sisoprega.dto.Rancher();
+		log.debug("END|rancherFromRequest|Rancher{" + rancher.toString() + "}");
+		return rancher;
 	}
 
 }

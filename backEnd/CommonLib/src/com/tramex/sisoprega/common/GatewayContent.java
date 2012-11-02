@@ -47,4 +47,15 @@ public class GatewayContent {
 	public List<Field> getFields(){
 		return fields;
 	}
+	
+	@Override
+	public String toString(){
+		String result = "Fields[";
+		
+		for(Field field : fields){
+			result += field.getName() + ":" + field.getValue() + ";";
+		}
+		
+		return result +"]";
+	}
 }

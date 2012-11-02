@@ -33,17 +33,22 @@ package com.tramex.sisoprega.common;
  *
  */
 public class BaseResponse {
-	private Exception exception;
+	private Error error;
 	/**
 	 * @return the exception
 	 */
-	public Exception getException() {
-		return exception;
+	public Error getError() {
+		return error;
 	}
 	/**
-	 * @param exception the exception to set
+	 * @param error the exception to set
 	 */
-	public void setException(Exception exception) {
-		this.exception = exception;
+	public void setError(Error error) {
+		this.error = error;
+	}
+	
+	@Override
+	public String toString(){
+		return "Error:{" + error.toString() + "};";
 	}
 }

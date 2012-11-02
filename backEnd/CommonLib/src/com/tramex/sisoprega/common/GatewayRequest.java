@@ -76,4 +76,8 @@ public class GatewayRequest {
 		this.requestId = requestId;
 	}
 	
+	@Override
+	public String toString(){
+		return "entityName:" + entityName + ";requestId:" + requestId + ";GatewayContet[" + content.toString() + "]";
+	}
 }

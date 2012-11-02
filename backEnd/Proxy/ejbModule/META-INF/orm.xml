@@ -9,7 +9,7 @@
 		<table name="cat_ranchers"/>
 		<attributes>
 			<id name="rancherId">
-				<generated-value strategy="TABLE"/>
+				<generated-value strategy="AUTO"/>
 			</id>
 			<basic name="birthDate">
 				<temporal>DATE</temporal>

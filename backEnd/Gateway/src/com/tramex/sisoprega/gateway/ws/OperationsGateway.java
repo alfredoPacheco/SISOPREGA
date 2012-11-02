@@ -27,7 +27,7 @@ import org.apache.log4j.Logger;
 
 import com.tramex.sisoprega.common.BaseResponse;
 import com.tramex.sisoprega.common.CreateGatewayResponse;
-import com.tramex.sisoprega.common.Exception;
+import com.tramex.sisoprega.common.Error;
 import com.tramex.sisoprega.common.Field;
 import com.tramex.sisoprega.common.GatewayContent;
 import com.tramex.sisoprega.common.GatewayRequest;
@@ -70,15 +70,15 @@ public class OperationsGateway {
 	public CreateGatewayResponse CreateGateway(@WebParam(name="request") final GatewayRequest request){
 		log.info("BEGIN|CreateGateway|Entity:[" + request.getEntityName()+"]|RequestId:["+request.getRequestId()+"]");
 		CreateGatewayResponse result = null;
-		Exception cgrEx = null;
+		Error cgrEx = null;
 		try{
 			Cruddable crud = getCruddable(request.getEntityName());
 			result = crud.Create(request);
 		}catch(java.lang.Exception e){
 			log.error("Error while creating entity [" + request.getEntityName() + "]", e);
 			result = new CreateGatewayResponse();
-			cgrEx = new Exception("CG001", "Error on Creation", "CreateGateway");
-			result.setException(cgrEx);
+			cgrEx = new Error("CG001", "Error on Creation", "CreateGateway");
+			result.setError(cgrEx);
 		}
 		
 		log.info("END|CreateGateway|Entity:[" + request.getEntityName()+"]|RequestId:["+request.getRequestId()+"]");
@@ -131,8 +131,8 @@ public class OperationsGateway {
 		log.info("BEGIN|DeleteGateway|Entity:[" + request.getEntityName()+"]|RequestId:["+request.getRequestId()+"]");
 		// TODO: Define a proxy that returns a BaseResponse (from delete action).
 		BaseResponse br = new BaseResponse();
-		Exception e = new Exception("0", "Success", "DeleteGateway");
-		br.setException(e);
+		Error e = new Error("0", "Success", "DeleteGateway");
+		br.setError(e);
 		log.info("END|DeleteGateway|Entity:[" + request.getEntityName()+"]|RequestId:["+request.getRequestId()+"]");
 		return br;
 	}

@@ -9,5 +9,5 @@ public interface Cruddable {
 	CreateGatewayResponse Create(GatewayRequest request);
 	ReadGatewayResponse Read(GatewayRequest request);
 	UpdateGatewayResponse Update(GatewayRequest request);
-	com.tramex.sisoprega.common.Exception Delete(GatewayRequest request);
+	com.tramex.sisoprega.common.Error Delete(GatewayRequest request);
 }
