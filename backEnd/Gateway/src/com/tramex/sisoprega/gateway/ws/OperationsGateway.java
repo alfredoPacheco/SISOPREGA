@@ -35,11 +35,11 @@ import com.tramex.sisoprega.common.UpdateGatewayResponse;
 import com.tramex.sisoprega.common.crud.Cruddable;
 
 /**
- * OperationsGateway provides the web service and the web methods
- * that will be consumed by the UI applications.<BR/>
+ * OperationsGateway provides the web service and the web methods that will be
+ * consumed by the UI applications.<BR/>
  * The OperationsGateway must decide which proxy will attend the request.
  * 
- * <B>Revision History:</B> 
+ * <B>Revision History:</B>
  * 
  * <PRE>
  * ====================================================================================
@@ -51,115 +51,266 @@ import com.tramex.sisoprega.common.crud.Cruddable;
  * </PRE>
  * 
  * @author Diego Torres
- *
+ * 
  */
-@WebService(serviceName="GatewayService")
+@WebService(serviceName = "GatewayService")
 public class OperationsGateway {
-	
-	private Logger log = Logger.getLogger(OperationsGateway.class.getCanonicalName());
-	
-	
-	/**
-	 * 
-	 * Provides an interface to create entities.
-	 * 
-	 * @param request
-	 * @return
-	 */
-	@WebMethod(operationName="Create")
-	public CreateGatewayResponse CreateGateway(@WebParam(name="requestId") String requestId, @WebParam(name="entityName") String entityName, @WebParam(name="field") List<Field> content){
-		log.entering(this.getClass().getCanonicalName(), "CreateGateway");
-		log.info("CreateGateway|Request{requestId:" + requestId + ";entityName:" + requestId + ";content:{" + content.toString() + "};}");
-		GatewayRequest request = new GatewayRequest();
-		request.setRequestId(requestId);
-		request.setEntityName(entityName);
-		GatewayContent gContent = new GatewayContent();
-		gContent.setFields(content);
-		request.setContent(gContent);
-		log.fine("Casted Request:" + request.toString());
-		CreateGatewayResponse result = null;
-		Error cgrEx = null;
-		try{
-			Cruddable crud = getCruddable(request.getEntityName());
-			result = crud.Create(request);
-		}catch(java.lang.Exception e){
-			log.severe("Error while creating cruddable entity [" + entityName + "]");
-			log.throwing(OperationsGateway.class.getName(), "CreateGateway", e);
-			result = new CreateGatewayResponse();
-			cgrEx = new Error("CG001", "Error on Creation", "CreateGateway");
-			result.setError(cgrEx);
-		}
-		
-		log.exiting(this.getClass().getCanonicalName(), "CreateGateway");
-		return result;
+
+    private Logger log = Logger.getLogger(OperationsGateway.class
+	    .getCanonicalName());
+
+    /**
+     * 
+     * Provides an interface to create entities.
+     * 
+     * @param requestId
+     * @param entityName
+     * @param content
+     * @return
+     */
+    @WebMethod(operationName = "Create")
+    public CreateGatewayResponse CreateGateway(
+	    @WebParam(name = "requestId") String requestId,
+	    @WebParam(name = "entityName") String entityName,
+	    @WebParam(name = "field") List<Field> content) {
+	log.entering(this.getClass().getCanonicalName(), "CreateGateway");
+	log.info("CreateGateway|Request{requestId:" + requestId
+		+ ";entityName:" + requestId + ";content:{"
+		+ content.toString() + "};}");
+
+	// Generate request from input parameters
+	GatewayRequest request = new GatewayRequest();
+	request.setRequestId(requestId);
+	request.setEntityName(entityName);
+
+	// Generate request content from list of fields
+	GatewayContent gContent = new GatewayContent();
+	gContent.setFields(content);
+	request.setContent(gContent);
+	log.fine("Casted Request:" + request.toString());
+
+	CreateGatewayResponse result = null;
+	Error cgrEx = null;
+	try {
+	    // Retrieve a cruddable instance from an EJB in the glassfish
+	    // context
+	    Cruddable crud = getCruddable(request.getEntityName());
+
+	    // Generate the result from the cruddable operation
+	    result = crud.Create(request);
+
+	} catch (Exception e) {
+	    // Something went wrong, log the severe message
+	    log.severe("Error while creating cruddable entity [" + entityName
+		    + "]");
+
+	    // Log details about the failure
+	    log.throwing(OperationsGateway.class.getName(), "CreateGateway", e);
+
+	    // Create the failure result message for web service
+	    result = new CreateGatewayResponse();
+	    cgrEx = new Error("CG001", "Error on Creation", "CreateGateway");
+	    result.setError(cgrEx);
 	}
-	
-	/**
-	 * 
-	 * Provides an interface to read entities.
-	 * Use id in parameters to get only one record representing the requested
-	 * entity by id.
-	 * 
-	 * @param request
-	 * @return
-	 */
-	@WebMethod(operationName="Read")
-	public ReadGatewayResponse ReadGateway(@WebParam(name="request")GatewayRequest request){
-		log.info("BEGIN|ReadGateway|Entity:[" + request.getEntityName()+"]|RequestId:["+request.getRequestId()+"]");
-		// TODO: Define a proxy that returns a ReadGatewayResponse
-		ReadGatewayResponse rgr = new ReadGatewayResponse();
-		rgr.setEntityName(request.getEntityName());
-		
-		GatewayContent gc = new GatewayContent();
-		gc.getFields().add(new Field("nombre", "valor"));
-		
-		rgr.getRecord().add(gc);
-		log.info("END|ReadGateway|Entity:[" + request.getEntityName()+"]|RequestId:["+request.getRequestId()+"]");
-		return rgr;
+
+	// Log ending of method and respond to web service.
+	log.exiting(this.getClass().getCanonicalName(), "CreateGateway");
+	return result;
+    }
+
+    /**
+     * 
+     * Provides an interface to read entities. Use id in parameters to get only
+     * one record representing the requested entity by id.
+     * 
+     * @param requestId
+     * @param entityName
+     * @param content
+     * @return
+     */
+    @WebMethod(operationName = "Read")
+    public ReadGatewayResponse ReadGateway(
+	    @WebParam(name = "requestId") String requestId,
+	    @WebParam(name = "entityName") String entityName,
+	    @WebParam(name = "field") List<Field> content) {
+	log.entering(this.getClass().getCanonicalName(), "ReadGateway");
+	log.info("ReadGateway|Request{requestId:" + requestId + ";entityName:"
+		+ requestId + ";content:{" + content.toString() + "};}");
+
+	// Generate request from input parameters
+	GatewayRequest request = new GatewayRequest();
+	request.setRequestId(requestId);
+	request.setEntityName(entityName);
+
+	// Generate request content from list of fields
+	GatewayContent gContent = new GatewayContent();
+	gContent.setFields(content);
+	request.setContent(gContent);
+	log.fine("Casted Request:" + request.toString());
+
+	ReadGatewayResponse result = null;
+	Error rge = null;
+
+	try {
+	    // Retrieve a cruddable instance from an EJB in the glassfish
+	    // context
+	    Cruddable crud = getCruddable(entityName);
+
+	    // Generate the result from the cruddable operation
+	    result = crud.Read(request);
+	} catch (Exception e) {
+	    // Something went wrong, log the severe message
+	    log.severe("Error while creating cruddable entity [" + entityName
+		    + "]");
+
+	    // Log details about the failure
+	    log.throwing(OperationsGateway.class.getName(), "ReadGateway", e);
+
+	    // Create the failure result message for web service
+	    result = new ReadGatewayResponse();
+	    rge = new Error("RG001", "Error on Creation", "ReadGateway");
+	    result.setError(rge);
 	}
-	
-	/**
-	 * Provides an interface to update entities.
-	 * will return the updated entity.
-	 * @param request
-	 * @return
-	 */
-	@WebMethod(operationName="Update")
-	public UpdateGatewayResponse UpdateGateway(@WebParam(name="request") GatewayRequest request){
-		log.info("BEGIN|UpdateGateway|Entity:[" + request.getEntityName()+"]|RequestId:["+request.getRequestId()+"]");
-		// TODO: Define a proxy that returns a UpdateGatewayResponse
-		UpdateGatewayResponse ugr = new UpdateGatewayResponse();
-		ugr.setEntityName(request.getEntityName());
-		ugr.getUpdatedRecord().getFields().add(new Field("nombre", "valor"));
-		log.info("END|UpdateGateway|Entity:[" + request.getEntityName()+"]|RequestId:["+request.getRequestId()+"]");
-		return ugr; 
+
+	// Log ending of method and respond to web service.
+	log.exiting(this.getClass().getCanonicalName(), "ReadGateway");
+	return result;
+    }
+
+    /**
+     * Provides an interface to update entities. will return the updated entity.
+     * 
+     * @param requestId
+     * @param entityName
+     * @param content
+     * @return
+     */
+    @WebMethod(operationName = "Update")
+    public UpdateGatewayResponse UpdateGateway(
+	    @WebParam(name = "requestId") String requestId,
+	    @WebParam(name = "entityName") String entityName,
+	    @WebParam(name = "field") List<Field> content) {
+
+	log.entering(this.getClass().getCanonicalName(), "UpdateGateway");
+	log.info("UpdateGateway|Request{requestId:" + requestId
+		+ ";entityName:" + requestId + ";content:{"
+		+ content.toString() + "};}");
+
+	// Generate request from input parameters
+	GatewayRequest request = new GatewayRequest();
+	request.setRequestId(requestId);
+	request.setEntityName(entityName);
+
+	// Generate request content from list of fields
+	GatewayContent gContent = new GatewayContent();
+	gContent.setFields(content);
+	request.setContent(gContent);
+	log.fine("Casted Request:" + request.toString());
+
+	UpdateGatewayResponse result = null;
+	Error uge = null;
+
+	try {
+	    // Retrieve a cruddable instance from an EJB in the glassfish
+	    // context
+	    Cruddable crud = getCruddable(entityName);
+
+	    // Generate the result from the cruddable operation
+	    result = crud.Update(request);
+	} catch (Exception e) {
+	    // Something went wrong, log the severe message
+	    log.severe("Error while creating cruddable entity [" + entityName
+		    + "]");
+
+	    // Log details about the failure
+	    log.throwing(OperationsGateway.class.getName(), "UpdateGateway", e);
+
+	    // Create the failure result message for web service
+	    result = new UpdateGatewayResponse();
+	    uge = new Error("RG001", "Error on Creation", "UpdateGateway");
+	    result.setError(uge);
 	}
-	
-	@WebMethod(operationName="Delete")
-	public BaseResponse DeleteGateway(@WebParam(name="request") GatewayRequest request){
-		log.info("BEGIN|DeleteGateway|Entity:[" + request.getEntityName()+"]|RequestId:["+request.getRequestId()+"]");
-		// TODO: Define a proxy that returns a BaseResponse (from delete action).
-		BaseResponse br = new BaseResponse();
-		Error e = new Error("0", "Success", "DeleteGateway");
-		br.setError(e);
-		log.info("END|DeleteGateway|Entity:[" + request.getEntityName()+"]|RequestId:["+request.getRequestId()+"]");
-		return br;
+
+	// Log ending of method and respond to web service.
+	log.exiting(this.getClass().getCanonicalName(), "UpdateGateway");
+	return result;
+    }
+
+    /**
+     * Provides an interface to delete entities, should provide as field the id
+     * of the entity to be deleted.
+     * 
+     * @param requestId
+     * @param entityName
+     * @param content
+     * @return
+     */
+    @WebMethod(operationName = "Delete")
+    public BaseResponse DeleteGateway(
+	    @WebParam(name = "requestId") String requestId,
+	    @WebParam(name = "entityName") String entityName,
+	    @WebParam(name = "field") List<Field> content) {
+	log.entering(this.getClass().getCanonicalName(), "DeleteGateway");
+	log.info("DeleteGateway|Request{requestId:" + requestId
+		+ ";entityName:" + requestId + ";content:{"
+		+ content.toString() + "};}");
+
+	// Generate request from input parameters
+	GatewayRequest request = new GatewayRequest();
+	request.setRequestId(requestId);
+	request.setEntityName(entityName);
+
+	// Generate request content from list of fields
+	GatewayContent gContent = new GatewayContent();
+	gContent.setFields(content);
+	request.setContent(gContent);
+	log.fine("Casted Request:" + request.toString());
+
+	BaseResponse result = null;
+	Error uge = null;
+
+	try {
+	    // Retrieve a cruddable instance from an EJB in the glassfish
+	    // context
+	    Cruddable crud = getCruddable(entityName);
+
+	    // Generate the result from the cruddable operation
+	    result = crud.Delete(request);
+	} catch (Exception e) {
+	    // Something went wrong, log the severe message
+	    log.severe("Error while creating cruddable entity [" + entityName
+		    + "]");
+
+	    // Log details about the failure
+	    log.throwing(OperationsGateway.class.getName(), "DeleteGateway", e);
+
+	    // Create the failure result message for web service
+	    result = new UpdateGatewayResponse();
+	    uge = new Error("RG001", "Error on Creation", "DeleteGateway");
+	    result.setError(uge);
 	}
-	
-	private Cruddable getCruddable(String cruddableName){
-		Context jndiContext = null;
-		Cruddable crud = null;
-		String commonPrefix = "java:global/Proxy/";
-		String commonSuffix = "Proxy";
-		try{
-			jndiContext = new InitialContext();
-			crud = (Cruddable)jndiContext.lookup(commonPrefix + cruddableName + commonSuffix);
-			log.fine("Cruddable instance created for entity [" + cruddableName + "]");
-		} catch(java.lang.Exception e){
-			log.severe("Unable to load jndi context component");
-			log.throwing(this.getClass().getName(), "getCruddable", e);
-		}
-		return crud;
+
+	// Log ending of method and respond to web service.
+	log.exiting(this.getClass().getCanonicalName(), "DeleteGateway");
+	return result;
+    }
+
+    private Cruddable getCruddable(String cruddableName) {
+	Context jndiContext = null;
+	Cruddable crud = null;
+	String commonPrefix = "java:global/Proxy/";
+	String commonSuffix = "Proxy";
+	try {
+	    jndiContext = new InitialContext();
+	    crud = (Cruddable) jndiContext.lookup(commonPrefix + cruddableName
+		    + commonSuffix);
+	    log.fine("Cruddable instance created for entity [" + cruddableName
+		    + "]");
+	} catch (java.lang.Exception e) {
+	    log.severe("Unable to load jndi context component");
+	    log.throwing(this.getClass().getName(), "getCruddable", e);
 	}
-	
+	return crud;
+    }
+
 }

@@ -29,10 +29,18 @@ CREATE TABLE cat_rancher (
   first_name VARCHAR(50) NOT NULL,
   last_name VARCHAR(50) NOT NULL,
   mother_name VARCHAR(50),
-  birth_date date NOT NULL,
-  email_add VARCHAR(150) NOT NULL,
-  telephone VARCHAR(20) NOT NULL
+  birth_date date,
+  email_add VARCHAR(150),
+  telephone VARCHAR(20),
+  UNIQUE KEY U_cat_rancher (first_name, last_name, mother_name)
 );
+
+-- SAMPLE DATA FOR RANCHERS
+INSERT INTO cat_rancher(aka, first_name, last_name, mother_name, email_add, telephone) 
+VALUES('El Vato', 'Alfredo', 'Pacheco', 'Figueroa', 'j.alfredo.pacheco@gmail.com', '044 (656) 305-0450');
+INSERT INTO cat_rancher(first_name, last_name, mother_name, birth_date, email_add, telephone)
+VALUES('Diego A.', 'Torres', 'Fuerte', '04/13/1982', 'diego.torres.fuerte@gmail.com', '044 (656) 217-1598');
+
 
 DROP TABLE IF EXISTS cat_enterprise_rancher;
 
@@ -63,6 +71,7 @@ CREATE TABLE cat_rancher_legal (
 );
 
 
+
 /*Table structure for table cat_ranchers_addresses */
 
 DROP TABLE IF EXISTS cat_ranchers_addresses;
@@ -81,8 +90,10 @@ CREATE TABLE cat_ranchers_addresses (
   CONSTRAINT FK_cat_ranchers_addresses_cat_countries_states_cities FOREIGN KEY (city_id) REFERENCES cat_countries_states_cities (city_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-/*Table structure for table cat_ranchers_phones */
 
+
+
+/*Table structure for table cat_ranchers_phones */
 DROP TABLE IF EXISTS cat_ranchers_phones;
 
 CREATE TABLE cat_ranchers_phones (
@@ -481,8 +492,3 @@ CREATE TABLE ctrl_transactions_log_entity (
   CONSTRAINT FK_ctrl_transactions_log_entity_ctrl_transactions_log FOREIGN KEY (log_id) REFERENCES ctrl_transactions_log (log_id) ON DELETE CASCADE,
   CONSTRAINT FK_ctrl_transactions_log_entity_cat_entity_actions FOREIGN KEY (action_id) REFERENCES cat_entity_actions (action_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
