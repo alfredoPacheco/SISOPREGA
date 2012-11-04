@@ -1,36 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<entity-mappings version="2.0" xmlns="http://java.sun.com/xml/ns/persistence/orm" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm http://java.sun.com/xml/ns/persistence/orm_2_0.xsd">
-  <persistence-unit-metadata>
-    <persistence-unit-defaults>
-      <access>PROPERTY</access>
-    </persistence-unit-defaults>
-  </persistence-unit-metadata>
-  <entity class="com.tramex.sisoprega.dto.Rancher">
-	<table name="cat_rancher"/>
-	<attributes>
-      <id name="rancherId">
-        <column name="rancher_id"/>
-		<generated-value strategy="IDENTITY"/>
-	  </id>
-      <basic name="birthDate">
-		<column name="birth_date"/>
-		<temporal>DATE</temporal>
-      </basic>
-      <basic name="emailAddress">
-        <column name="email_add"/>
-      </basic>
-      <basic name="firstName">
-        <column name="first_name"/>
-      </basic>
-      <basic name="lastName">
-        <column name="last_name"/>
-      </basic>
-      <basic name="motherName">
-        <column name="mother_name"/>
-      </basic>
-      <basic name="phone">
-      	<column name="telephone" />
-      </basic>
-    </attributes>
-  </entity>
+<entity-mappings version="2.0"
+	xmlns="http://java.sun.com/xml/ns/persistence/orm" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm http://java.sun.com/xml/ns/persistence/orm_2_0.xsd">
+	<persistence-unit-metadata>
+		<persistence-unit-defaults>
+			<access>PROPERTY</access>
+		</persistence-unit-defaults>
+	</persistence-unit-metadata>
+	<entity class="com.tramex.sisoprega.dto.Rancher">
+		<table name="cat_rancher" />
+		<named-query name="RANCHER_BY_ID">
+			<description>Get a single rancher by rancherId</description>
+			<query>SELECT r FROM Rancher r WHERE r.rancherId = :rancherId</query>
+		</named-query>
+		<named-query name="ALL_RANCHERS">
+			<description>Get all ranchers in database</description>
+			<query>SELECT r FROM Rancher r ORDER BY r.lastName, r.motherName, r.firstName, r.rancherId</query>
+		</named-query>
+		<attributes>
+			<id name="rancherId">
+				<column name="rancher_id" />
+				<generated-value strategy="IDENTITY" />
+			</id>
+			<basic name="birthDate">
+				<column name="birth_date" />
+				<temporal>DATE</temporal>
+			</basic>
+			<basic name="emailAddress">
+				<column name="email_add" />
+			</basic>
+			<basic name="firstName">
+				<column name="first_name" />
+			</basic>
+			<basic name="lastName">
+				<column name="last_name" />
+			</basic>
+			<basic name="motherName">
+				<column name="mother_name" />
+			</basic>
+			<basic name="phone">
+				<column name="telephone" />
+			</basic>
+		</attributes>
+	</entity>
 </entity-mappings>

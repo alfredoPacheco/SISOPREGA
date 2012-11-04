@@ -33,28 +33,47 @@ import java.util.List;
  * </PRE>
  * 
  * @author Diego Torres
- *
+ * 
  */
-public class ReadGatewayResponse extends BaseResponse{
-	private String entityName;
-	private List<GatewayContent> record = new ArrayList<GatewayContent>();
-	
-	/**
-	 * @return the entityName
-	 */
-	public String getEntityName() {
-		return entityName;
+public class ReadGatewayResponse extends BaseResponse {
+    private String entityName;
+    private List<GatewayContent> record;
+
+    /**
+     * @return the entityName
+     */
+    public String getEntityName() {
+	return entityName;
+    }
+
+    /**
+     * @param entityName
+     *            the entityName to set
+     */
+    public void setEntityName(String entityName) {
+	this.entityName = entityName;
+    }
+
+    /**
+     * @return the record
+     */
+    public List<GatewayContent> getRecord() {
+	if(this.record == null){
+	    this.record  = new ArrayList<GatewayContent>();
 	}
-	/**
-	 * @param entityName the entityName to set
-	 */
-	public void setEntityName(String entityName) {
-		this.entityName = entityName;
+	return record;
+    }
+
+    public void setRecord(List<GatewayContent> record) {
+	this.record = record;
+    }
+    
+    public String toString(){
+	String recordsString = "Content:{";
+	for(GatewayContent r : record){
+	    recordsString += r.toString();
 	}
-	/**
-	 * @return the record
-	 */
-	public List<GatewayContent> getRecord() {
-		return record;
-	}
+	recordsString +="}";
+	return "ReadGatewayResponse:{entityName:" + entityName + ";" + recordsString + "}";
+    }
 }

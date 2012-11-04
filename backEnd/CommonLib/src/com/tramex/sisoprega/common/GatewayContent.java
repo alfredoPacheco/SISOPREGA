@@ -18,7 +18,6 @@ package com.tramex.sisoprega.common;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * This is the expected content in the Create gateway interface.<BR/>
  * 
@@ -34,34 +33,35 @@ import java.util.List;
  * </PRE>
  * 
  * @author Diego Torres
- *
+ * 
  */
 public class GatewayContent {
-	private List<Field> fields = new ArrayList<Field>();
-	
-	/**
-	 * Returns the whole list of fields, which you can use to add and
-	 * retrieve fields in the model.
-	 * @return List of fields
-	 */
-	public List<Field> getFields(){
-		return fields;
+    private List<Field> fields;
+
+    /**
+     * Returns the whole list of fields, which you can use to add and retrieve
+     * fields in the model.
+     * 
+     * @return List of fields
+     */
+    public List<Field> getFields() {
+	if (this.fields == null)
+	    this.fields = new ArrayList<Field>();
+	return fields;
+    }
+
+    public void setFields(List<Field> fields) {
+	this.fields = fields;
+    }
+
+    @Override
+    public String toString() {
+	String result = "Fields[";
+
+	for (Field field : fields) {
+	    result += field.getName() + ":" + field.getValue() + ";";
 	}
-	
-	public void setFields(List<Field> fields){
-		this.fields.clear();
-		this.fields.addAll(fields);
-	}
-	
-	
-	@Override
-	public String toString(){
-		String result = "Fields[";
-		
-		for(Field field : fields){
-			result += field.getName() + ":" + field.getValue() + ";";
-		}
-		
-		return result +"]";
-	}
+
+	return result + "]";
+    }
 }

@@ -35,133 +35,133 @@ import java.util.Date;
  * 
  */
 public class Rancher {
-	private long rancherId;
-	private String aka;
-	private String firstName;
-	private String lastName;
-	private String motherName;
-	private Date birthDate;
-	private String emailAddress;
-	private String phone;
+    private long rancherId;
+    private String aka;
+    private String firstName;
+    private String lastName;
+    private String motherName;
+    private Date birthDate;
+    private String emailAddress;
+    private String phone;
 
-	/**
-	 * @return the rancher_id
-	 */
-	public long getRancherId() {
-		return rancherId;
-	}
+    /**
+     * @return the rancher_id
+     */
+    public long getRancherId() {
+	return rancherId;
+    }
 
-	/**
-	 * @param rancherId
-	 *            the rancher_id to set
-	 */
-	public void setRancherId(long rancherId) {
-		this.rancherId = rancherId;
-	}
+    /**
+     * @param rancherId
+     *            the rancher_id to set
+     */
+    public void setRancherId(long rancherId) {
+	this.rancherId = rancherId;
+    }
 
-	/**
-	 * @return the aka
-	 */
-	public String getAka() {
-		return aka;
-	}
+    /**
+     * @return the aka
+     */
+    public String getAka() {
+	return aka;
+    }
 
-	/**
-	 * @param aka
-	 *            the aka to set
-	 */
-	public void setAka(String aka) {
-		this.aka = aka;
-	}
+    /**
+     * @param aka
+     *            the aka to set
+     */
+    public void setAka(String aka) {
+	this.aka = aka;
+    }
 
-	/**
-	 * @return the first_name
-	 */
-	public String getFirstName() {
-		return firstName;
-	}
+    /**
+     * @return the first_name
+     */
+    public String getFirstName() {
+	return firstName;
+    }
 
-	/**
-	 * @param firstName
-	 *            the first_name to set
-	 */
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
+    /**
+     * @param firstName
+     *            the first_name to set
+     */
+    public void setFirstName(String firstName) {
+	this.firstName = firstName;
+    }
 
-	/**
-	 * @return the last_name
-	 */
-	public String getLastName() {
-		return lastName;
-	}
+    /**
+     * @return the last_name
+     */
+    public String getLastName() {
+	return lastName;
+    }
 
-	/**
-	 * @param lastName
-	 *            the last_name to set
-	 */
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
+    /**
+     * @param lastName
+     *            the last_name to set
+     */
+    public void setLastName(String lastName) {
+	this.lastName = lastName;
+    }
 
-	/**
-	 * @return the mother_name
-	 */
-	public String getMotherName() {
-		return motherName;
-	}
+    /**
+     * @return the mother_name
+     */
+    public String getMotherName() {
+	return motherName;
+    }
 
-	/**
-	 * @param motherName
-	 *            the mother_name to set
-	 */
-	public void setMotherName(String motherName) {
-		this.motherName = motherName;
-	}
+    /**
+     * @param motherName
+     *            the mother_name to set
+     */
+    public void setMotherName(String motherName) {
+	this.motherName = motherName;
+    }
 
-	/**
-	 * @return the birt_date
-	 */
-	public Date getBirthDate() {
-		return birthDate;
-	}
+    /**
+     * @return the birt_date
+     */
+    public Date getBirthDate() {
+	return birthDate;
+    }
 
-	/**
-	 * @param birthDate
-	 *            the birt_date to set
-	 */
-	public void setBirthDate(Date birthDate) {
-		this.birthDate = birthDate;
-	}
+    /**
+     * @param birthDate
+     *            the birt_date to set
+     */
+    public void setBirthDate(Date birthDate) {
+	this.birthDate = birthDate;
+    }
 
-	/**
-	 * @return the email_address
-	 */
-	public String getEmailAddress() {
-		return emailAddress;
-	}
+    /**
+     * @return the email_address
+     */
+    public String getEmailAddress() {
+	return emailAddress;
+    }
 
-	/**
-	 * @param emailAddress
-	 *            the email_address to set
-	 */
-	public void setEmailAddress(String emailAddress) {
-		this.emailAddress = emailAddress;
-	}
-	
-	public String getPhone() {
-		return phone;
-	}
+    /**
+     * @param emailAddress
+     *            the email_address to set
+     */
+    public void setEmailAddress(String emailAddress) {
+	this.emailAddress = emailAddress;
+    }
 
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
+    public String getPhone() {
+	return phone;
+    }
 
-	@Override
-	public String toString() {
-		return "rancherId:" + rancherId + "; name:" + lastName + " "
-				+ motherName + ", " + firstName + ";alias:" + aka + ";email:"
-				+ emailAddress + ";birthDate:" + birthDate + ";";
-	}
+    public void setPhone(String phone) {
+	this.phone = phone;
+    }
+
+    @Override
+    public String toString() {
+	return "rancherId:" + rancherId + "; name:" + lastName + " "
+		+ motherName + ", " + firstName + ";alias:" + aka + ";email:"
+		+ emailAddress + ";birthDate:" + birthDate + ";";
+    }
 
 }
