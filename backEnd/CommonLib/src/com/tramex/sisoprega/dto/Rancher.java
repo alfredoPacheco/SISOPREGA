@@ -42,6 +42,7 @@ public class Rancher {
 	private String motherName;
 	private Date birthDate;
 	private String emailAddress;
+	private String phone;
 
 	/**
 	 * @return the rancher_id
@@ -146,6 +147,14 @@ public class Rancher {
 	 */
 	public void setEmailAddress(String emailAddress) {
 		this.emailAddress = emailAddress;
+	}
+	
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 
 	@Override

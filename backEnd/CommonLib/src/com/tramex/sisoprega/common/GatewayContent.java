@@ -48,6 +48,12 @@ public class GatewayContent {
 		return fields;
 	}
 	
+	public void setFields(List<Field> fields){
+		this.fields.clear();
+		this.fields.addAll(fields);
+	}
+	
+	
 	@Override
 	public String toString(){
 		String result = "Fields[";

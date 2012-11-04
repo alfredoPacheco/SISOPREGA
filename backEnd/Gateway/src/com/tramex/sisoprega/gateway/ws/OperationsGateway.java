@@ -15,15 +15,14 @@
  */
 package com.tramex.sisoprega.gateway.ws;
 
-import java.util.Properties;
+import java.util.List;
+import java.util.logging.Logger;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
 import javax.naming.Context;
 import javax.naming.InitialContext;
-
-import org.apache.log4j.Logger;
 
 import com.tramex.sisoprega.common.BaseResponse;
 import com.tramex.sisoprega.common.CreateGatewayResponse;
@@ -57,7 +56,8 @@ import com.tramex.sisoprega.common.crud.Cruddable;
 @WebService(serviceName="GatewayService")
 public class OperationsGateway {
 	
-	private Logger log = Logger.getLogger(OperationsGateway.class);
+	private Logger log = Logger.getLogger(OperationsGateway.class.getCanonicalName());
+	
 	
 	/**
 	 * 
@@ -67,21 +67,30 @@ public class OperationsGateway {
 	 * @return
 	 */
 	@WebMethod(operationName="Create")
-	public CreateGatewayResponse CreateGateway(@WebParam(name="request") final GatewayRequest request){
-		log.info("BEGIN|CreateGateway|Entity:[" + request.getEntityName()+"]|RequestId:["+request.getRequestId()+"]");
+	public CreateGatewayResponse CreateGateway(@WebParam(name="requestId") String requestId, @WebParam(name="entityName") String entityName, @WebParam(name="field") List<Field> content){
+		log.entering(this.getClass().getCanonicalName(), "CreateGateway");
+		log.info("CreateGateway|Request{requestId:" + requestId + ";entityName:" + requestId + ";content:{" + content.toString() + "};}");
+		GatewayRequest request = new GatewayRequest();
+		request.setRequestId(requestId);
+		request.setEntityName(entityName);
+		GatewayContent gContent = new GatewayContent();
+		gContent.setFields(content);
+		request.setContent(gContent);
+		log.fine("Casted Request:" + request.toString());
 		CreateGatewayResponse result = null;
 		Error cgrEx = null;
 		try{
 			Cruddable crud = getCruddable(request.getEntityName());
 			result = crud.Create(request);
 		}catch(java.lang.Exception e){
-			log.error("Error while creating entity [" + request.getEntityName() + "]", e);
+			log.severe("Error while creating cruddable entity [" + entityName + "]");
+			log.throwing(OperationsGateway.class.getName(), "CreateGateway", e);
 			result = new CreateGatewayResponse();
 			cgrEx = new Error("CG001", "Error on Creation", "CreateGateway");
 			result.setError(cgrEx);
 		}
 		
-		log.info("END|CreateGateway|Entity:[" + request.getEntityName()+"]|RequestId:["+request.getRequestId()+"]");
+		log.exiting(this.getClass().getCanonicalName(), "CreateGateway");
 		return result;
 	}
 	
@@ -123,7 +132,7 @@ public class OperationsGateway {
 		ugr.setEntityName(request.getEntityName());
 		ugr.getUpdatedRecord().getFields().add(new Field("nombre", "valor"));
 		log.info("END|UpdateGateway|Entity:[" + request.getEntityName()+"]|RequestId:["+request.getRequestId()+"]");
-		return ugr;
+		return ugr; 
 	}
 	
 	@WebMethod(operationName="Delete")
@@ -145,9 +154,10 @@ public class OperationsGateway {
 		try{
 			jndiContext = new InitialContext();
 			crud = (Cruddable)jndiContext.lookup(commonPrefix + cruddableName + commonSuffix);
-			log.debug("Cruddable instance created for entity [" + cruddableName + "]");
+			log.fine("Cruddable instance created for entity [" + cruddableName + "]");
 		} catch(java.lang.Exception e){
-			log.error("Unable to load jndi context component", e);
+			log.severe("Unable to load jndi context component");
+			log.throwing(this.getClass().getName(), "getCruddable", e);
 		}
 		return crud;
 	}
