@@ -98,7 +98,7 @@ public class Rancher implements Cruddable {
 	    log.throwing(this.getClass().getName(), "Create", e);
 
 	    response.setError(new Error("RC02", "Create Exception:["
-		    + error_description + "]", "proxy.Rancher.Create"));
+		    + e.getMessage() + "]", "proxy.Rancher.Create"));
 	}
 
 	log.exiting(Rancher.class.getCanonicalName(), "Create");
@@ -113,13 +113,13 @@ public class Rancher implements Cruddable {
 
 	ReadGatewayResponse response = new ReadGatewayResponse();
 	response.setEntityName(request.getEntityName());
-	
+
 	com.tramex.sisoprega.dto.Rancher rancher = null;
 	try {
 	    rancher = rancherFromRequest(request);
 
 	    log.fine("Got rancher from request: [" + rancher.toString() + "]");
-	    
+
 	    TypedQuery<com.tramex.sisoprega.dto.Rancher> readQuery = null;
 
 	    if (rancher.getRancherId() != 0) {
@@ -133,43 +133,64 @@ public class Rancher implements Cruddable {
 			com.tramex.sisoprega.dto.Rancher.class);
 	    }
 
+	    // Query the results through the persistence
+	    // Using a typedQuery to retrieve a list of Ranchers.
 	    List<com.tramex.sisoprega.dto.Rancher> queryResults = readQuery
 		    .getResultList();
-	    
+
+	    // Add query results to response
 	    response.getRecord().addAll(contentFromRanchersList(queryResults));
-	    
+
+	    // Add success message to response
 	    response.setError(new Error("0", "SUCCESS", "proxy.Rancher.Read"));
 	} catch (Exception e) {
+	    // something went wrong, alert the server and respond the client
 	    log.severe("Exception found while reading rancher filter");
 	    log.throwing(this.getClass().getName(), "Read", e);
 
 	    response.setError(new Error("RR01", "Read Exception:["
-		    + error_description + "]", "proxy.Rancher.Read"));
+		    + e.getMessage() + "]", "proxy.Rancher.Read"));
 	}
-	
+
+	// end and response.
 	log.exiting(Rancher.class.getCanonicalName(), "Read");
 	return response;
     }
 
     @Override
     public UpdateGatewayResponse Update(GatewayRequest request) {
+	log.entering(Rancher.class.getCanonicalName(), "Update");
 	UpdateGatewayResponse response = new UpdateGatewayResponse();
 	com.tramex.sisoprega.dto.Rancher rancher = null;
 	try {
 	    rancher = rancherFromRequest(request);
-	    if (validateRancher(rancher)) {
-		// TODO: Set functionality
-		response.setError(new Error("U999",
-			"Unimplemented functionality", "proxy.Rancher.Create"));
+	    if (rancher.getRancherId() == 0) {
+		log.warning("RU01 - Invalid rancherId.");
+		response.setError(new Error("RU01", "Invalid rancherId",
+			"proxy.Rancher.Update"));
 	    } else {
-		response.setError(new Error("R001", "Validation Exception:["
-			+ error_description + "]", "proxy.Rancher.Create"));
+		if (validateRancher(rancher)) {
+		    em.merge(rancher);
+
+		    response.setUpdatedRecord(getContenFromRancher(rancher));
+		    response.setEntityName(request.getEntityName());
+		    response.setError(new Error("0", "SUCCESS",
+			    "proxy.Rancher.Update"));
+		} else {
+		    response.setError(new Error("RU01",
+			    "Validation Exception:[" + error_description + "]",
+			    "proxy.Rancher.Create"));
+		}
 	    }
-	} catch (java.lang.Exception e) {
-	    response.setError(new Error("R002", "Validation Exception:["
-		    + error_description + "]", "proxy.Rancher.Create"));
+	} catch (Exception e) {
+	    log.severe("Exception found while updating rancher");
+	    log.throwing(this.getClass().getName(), "Update", e);
+
+	    response.setError(new Error("RU03", "Update exception",
+		    "proxy.Rancher.Update"));
 	}
 
+	log.exiting(Rancher.class.getCanonicalName(), "Update");
 	return response;
     }
 
@@ -226,29 +247,35 @@ public class Rancher implements Cruddable {
 	return rancher;
     }
 
+    private GatewayContent getContenFromRancher(
+	    com.tramex.sisoprega.dto.Rancher rancher)
+	    throws IllegalArgumentException, IllegalAccessException {
+	GatewayContent content = new GatewayContent();
+	Class<com.tramex.sisoprega.dto.Rancher> cls = com.tramex.sisoprega.dto.Rancher.class;
+	Field[] clsField = cls.getDeclaredFields();
+	for (Field field : clsField) {
+	    field.setAccessible(true);
+	    String fieldName = field.getName();
+	    log.fine("Identified field in Rancher entity:{" + fieldName + "}");
+
+	    com.tramex.sisoprega.common.Field contentField = new com.tramex.sisoprega.common.Field();
+	    contentField.setName(fieldName);
+	    if (field.get(rancher) != null)
+		contentField.setValue(field.get(rancher).toString());
+
+	    content.getFields().add(contentField);
+	}
+	return content;
+    }
+
     private List<GatewayContent> contentFromRanchersList(
-	    List<com.tramex.sisoprega.dto.Rancher> ranchers) throws IllegalArgumentException, IllegalAccessException {
+	    List<com.tramex.sisoprega.dto.Rancher> ranchers)
+	    throws IllegalArgumentException, IllegalAccessException {
 	List<GatewayContent> result = new ArrayList<GatewayContent>();
 	for (com.tramex.sisoprega.dto.Rancher rancher : ranchers) {
-	    GatewayContent content = new GatewayContent();
-	    Class<com.tramex.sisoprega.dto.Rancher> cls = com.tramex.sisoprega.dto.Rancher.class;
-	    Field[] clsField = cls.getDeclaredFields();
-	    for (Field field : clsField) {
-		field.setAccessible(true);
-		String fieldName = field.getName();
-		log.fine("Identified field in Rancher entity:{" + fieldName + "}");
-		
-		com.tramex.sisoprega.common.Field contentField = new com.tramex.sisoprega.common.Field();
-		contentField.setName(fieldName);
-		if(field.get(rancher)!=null)
-		    contentField.setValue(field.get(rancher).toString());
-		
-		content.getFields().add(contentField);
-	    }
-
-	    result.add(content);
+	    result.add(getContenFromRancher(rancher));
 	}
-	log.info("contentFromRanchersList Result: " +  result.toString());
+	log.info("contentFromRanchersList Result: " + result.toString());
 	return result;
     }
 }
