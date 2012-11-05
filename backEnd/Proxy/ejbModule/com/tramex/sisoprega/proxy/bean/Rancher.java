@@ -171,6 +171,7 @@ public class Rancher implements Cruddable {
 	    } else {
 		if (validateRancher(rancher)) {
 		    em.merge(rancher);
+		    em.flush();
 
 		    response.setUpdatedRecord(getContenFromRancher(rancher));
 		    response.setEntityName(request.getEntityName());
@@ -186,7 +187,7 @@ public class Rancher implements Cruddable {
 	    log.severe("Exception found while updating rancher");
 	    log.throwing(this.getClass().getName(), "Update", e);
 
-	    response.setError(new Error("RU03", "Update exception",
+	    response.setError(new Error("RU03", "Update exception" + e.getMessage(),
 		    "proxy.Rancher.Update"));
 	}
 
@@ -196,11 +197,34 @@ public class Rancher implements Cruddable {
 
     @Override
     public BaseResponse Delete(GatewayRequest request) {
-	// TODO Auto-generated method stub
+	log.entering(Rancher.class.getCanonicalName(), "Delete");
 	BaseResponse response = new BaseResponse();
-	Error e = new Error("R999", "Unimplemented functionality",
-		"proxy.Rancher.Delete");
-	response.setError(e);
+	try{
+	    com.tramex.sisoprega.dto.Rancher rancher = rancherFromRequest(request);
+	    if(rancher.getRancherId()==0){
+		log.warning("RD01 - Invalid rancherId.");
+		response.setError(new Error("RD01", "Invalid rancherId",
+			"proxy.Rancher.Delete"));
+	    }else{
+		TypedQuery<com.tramex.sisoprega.dto.Rancher> readQuery = em.createNamedQuery("RANCHER_BY_ID",
+			com.tramex.sisoprega.dto.Rancher.class);
+		readQuery.setParameter("rancherId", rancher.getRancherId());
+		rancher = readQuery.getSingleResult();
+		em.merge(rancher);
+		em.remove(rancher);
+		em.flush();
+		
+		response.setError(new Error("0", "Success", "proxy.Rancher.Delete"));
+	    }
+	}catch(Exception e){
+	    log.severe("Exception found while deleting rancher");
+	    log.throwing(this.getClass().getName(), "Update", e);
+
+	    response.setError(new Error("RU03", "Delete exception: " + e.getMessage(),
+		    "proxy.Rancher.Delete"));
+	}
+	
+	log.exiting(Rancher.class.getCanonicalName(), "Delete");
 	return response;
     }
 

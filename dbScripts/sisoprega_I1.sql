@@ -1,6 +1,6 @@
 /*
  * The database script is executed in mysql command line:
- * ./ /path/to/sisoprega_I1.sql
+ * \. /path/to/sisoprega_I1.sql
  *
  * This script is intended to create only the necesary structure to accomplish iteration 1.
  * 
@@ -39,7 +39,7 @@ CREATE TABLE cat_rancher (
 INSERT INTO cat_rancher(aka, first_name, last_name, mother_name, email_add, telephone) 
 VALUES('El Vato', 'Alfredo', 'Pacheco', 'Figueroa', 'j.alfredo.pacheco@gmail.com', '044 (656) 305-0450');
 INSERT INTO cat_rancher(first_name, last_name, mother_name, birth_date, email_add, telephone)
-VALUES('Diego A.', 'Torres', 'Fuerte', '04/13/1982', 'diego.torres.fuerte@gmail.com', '044 (656) 217-1598');
+VALUES('Diego A.', 'Torres', 'Fuerte', '1982-04-13', 'diego.torres.fuerte@gmail.com', '044 (656) 217-1598');
 
 
 DROP TABLE IF EXISTS cat_enterprise_rancher;
@@ -166,8 +166,8 @@ CREATE TABLE cat_cattle_class (
   catclass_name VARCHAR(50) NOT NULL
 );
 
-INSERT INTO cat_cattle_class(catclass_name) VALUES('Vacuno');
 INSERT INTO cat_cattle_class(catclass_name) VALUES('Bobino');
+INSERT INTO cat_cattle_class(catclass_name) VALUES('Equino');
 
 
 /* 
