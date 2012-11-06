@@ -223,7 +223,7 @@
          </field>
          <field>
             <name>firstName</name>
-            <value>Jaime</value>
+            <value>Jaime X.</value>
          </field>
          <field>
             <name>lastName</name>
@@ -299,7 +299,7 @@
          <requestId>testRequest</requestId>
          <field>
             <name>rancherId</name>
-            <value>1</value>
+            <value>4</value>
          </field>
       </ws:Read>
    </soapenv:Body>
