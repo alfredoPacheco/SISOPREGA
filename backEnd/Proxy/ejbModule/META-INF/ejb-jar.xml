@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ejb-jar version="3.1" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/ejb-jar_3_1.xsd">
+<ejb-jar xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:ejb="http://java.sun.com/xml/ns/javaee/ejb-jar_3_0.xsd" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/ejb-jar_3_1.xsd" version="3.1">
   <display-name>Proxy</display-name>
   <enterprise-beans>
     <session>
-    	<ejb-name>RancherProxy</ejb-name>
-    	<ejb-class>com.tramex.sisoprega.proxy.bean.Rancher</ejb-class>
+      <ejb-name>RancherProxy</ejb-name>
+      <ejb-class>com.tramex.sisoprega.proxy.bean.Rancher</ejb-class>
     </session>
-  </enterprise-beans> 
- </ejb-jar>
+    <session>
+    	<ejb-name>EnterpriseRancherProxy</ejb-name>
+    	<ejb-class>com.tramex.sisoprega.proxy.bean.EnterpriseRancher</ejb-class>
+    </session>
+  </enterprise-beans>
+</ejb-jar>

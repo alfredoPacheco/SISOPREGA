@@ -50,10 +50,12 @@ CREATE TABLE cat_enterprise_rancher(
   address_one VARCHAR(100) NOT NULL,
   address_two VARCHAR(100),
   city VARCHAR(80) NOT NULL,
-  fed_entity VARCHAR(80) NOT NULL,
+  address_state VARCHAR(80) NOT NULL,
   zip_code VARCHAR(9) NOT NULL,
   legal_id VARCHAR(13) NOT NULL,
-  telephone	VARCHAR(20)
+  telephone	VARCHAR(20),
+  UNIQUE KEY U_enterprise_rancher_legal_id(legal_id),
+  UNIQUE KEY U_enterprise_rancher_legal_name(legal_name)
 );
 
 DROP TABLE IF EXISTS cat_rancher_legal;

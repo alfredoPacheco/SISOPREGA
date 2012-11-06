@@ -27,19 +27,60 @@
 				<temporal>DATE</temporal>
 			</basic>
 			<basic name="emailAddress">
-				<column name="email_add" />
+				<column name="email_add" length="150" />
 			</basic>
 			<basic name="firstName">
-				<column name="first_name" />
+				<column name="first_name" length="50" nullable="false" />
 			</basic>
 			<basic name="lastName">
-				<column name="last_name" />
+				<column name="last_name" length="50" nullable="false" />
 			</basic>
 			<basic name="motherName">
-				<column name="mother_name" />
+				<column name="mother_name" length="50" />
 			</basic>
 			<basic name="phone">
-				<column name="telephone" />
+				<column name="telephone" length="20" />
+			</basic>
+		</attributes>
+	</entity>
+	<entity class="com.tramex.sisoprega.dto.EnterpriseRancher">
+		<table name="cat_enterprise_rancher"/>
+		<named-query name="ENTERPRISE_RANCHER_BY_ID">
+			<description>Get a single enterprise rancher by enterpriseId</description>
+			<query>SELECT er FROM EnterpriseRancher er WHERE er.enterpriseId = :enterpriseId</query>
+		</named-query>
+		<named-query name="ALL_ENTERPRISE_RANCHERS">
+			<description>Get all enterprise ranchers in database</description>
+			<query>SELECT er FROM EnterpriseRancher er ORDER BY er.legalName, er.legalId, er.state, er.enterpriseId</query>
+		</named-query>
+		<attributes>
+			<id name="enterpriseId">
+				<column name="enterprise_id"/>
+				<generated-value strategy="IDENTITY"/>
+			</id>
+			<basic name="addressOne">
+				<column name="address_one" nullable="false" length="100"/>
+			</basic>
+			<basic name="addressTwo">
+				<column name="address_two" length="100"/>
+			</basic>
+			<basic name="city">
+				<column name="city" length="80" nullable="false"/>
+			</basic>
+			<basic name="legalId">
+				<column name="legal_id" length="13" nullable="false" unique="true" />
+			</basic>
+			<basic name="legalName">
+				<column name="legal_name" length="100" nullable="false" unique="true"/>
+			</basic>
+			<basic name="state">
+				<column name="address_state" length="80" nullable="false"/>
+			</basic>
+			<basic name="telephone">
+				<column name="telephone" length="20"/>
+			</basic>
+			<basic name="zipCode">
+				<column name="zip_code" length="9" nullable="false" />
 			</basic>
 		</attributes>
 	</entity>
