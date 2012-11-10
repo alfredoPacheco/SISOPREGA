@@ -21,7 +21,7 @@
             	ganadero = {aka:			"aka_Freddy",
             				birthDate:		"04/12/1982",
             				emailAddress:	"j.alfredo.pacheco@gmail.com",
-            				firstName:		"El Uddfsadfltimo",
+            				firstName:		"El Uddfsad fltimo",
             				lastName: 		"Pacheco",
             				motherName: 	"Figueroa",
             				phone: 			"3050450"
@@ -29,10 +29,10 @@
             	
             	consumirCreate = Create("Rancher", "test", ganadero);
             	
-            	$("#seccion").append(consumirCreate.origin + "<br />");
-            	$("#seccion").append(consumirCreate.exceptionId + "<br />");
-            	$("#seccion").append(consumirCreate.exceptionDescription + "<br />");
-            	$("#seccion").append(consumirCreate.generatedId + "<br />");            	
+            	$("#seccion").append("<b>origin: </b>" + consumirCreate.origin + "<br />");
+            	$("#seccion").append("<b>exceptionID: </b>" + consumirCreate.exceptionId + "<br />");
+            	$("#seccion").append("<b>exceptionDescription: </b>" + consumirCreate.exceptionDescription + "<br />");
+            	$("#seccion").append("<b>generatedID: </b>" + consumirCreate.generatedId + "<br />");            	
             	
             	//########################################################################################
             	
@@ -43,13 +43,13 @@
             	
             	consumirRead = Read("Rancher", "testRequest", miEntidad);
             	
-                $("#seccion").append("Entity Name: " + consumirRead.entityName + "<br />");
-            	$("#seccion").append("Exception ID: " + consumirRead.exceptionId + "<br />");
-            	$("#seccion").append("Exception Description: " + consumirRead.exceptionDescription + "<br />");
-            	$("#seccion").append("Origin: " + consumirRead.origin + "<br />");
+                $("#seccion").append("<b>Entity Name: </b>" + consumirRead.entityName + "<br />");
+            	$("#seccion").append("<b>Exception ID: </b>" + consumirRead.exceptionId + "<br />");
+            	$("#seccion").append("<b>Exception Description: </b>" + consumirRead.exceptionDescription + "<br />");
+            	$("#seccion").append("<b>Origin: </b>" + consumirRead.origin + "<br /><br />");
             	$.each(consumirRead.records, function() {            		
     	    		$.each(this, function(key, value){
-    	    			$("#seccion").append(key + " " + value + "<br />");
+    	    			$("#seccion").append("<b>" + key + "</b> " + value + "<br />");
     	    		});
     	    		$("#seccion").append("<br />");
     	    	});            	
@@ -58,22 +58,22 @@
             	
 				$("#seccion").append("<h1>Consumir Update</h1>");
             	
-            	ganadero2 = {rancherID:		30,
+            	ganadero2 = {rancherId:		3,
             				aka:			"aka_Freddy",
             				birthDate:		"04/12/1982",
             				emailAddress:	"j.alfredo.pacheco@gmail.com",
-            				firstName:		"FreddyFreddy",
+            				firstName:		"Freddy Freddy",
             				lastName: 		"Pacheco",
             				motherName: 	"Figueroa",
             				phone: 			"1234567"
             			};
             	
-            	consumirUpdate = Update("Rancher", "test", ganadero2);
+            	consumirUpdate = Update("Rancher", "test", ganadero2);            	
             	
-            	$("#seccion").append(consumirUpdate.origin + "<br />");
-            	$("#seccion").append(consumirUpdate.exceptionId + "<br />");
-            	$("#seccion").append(consumirUpdate.exceptionDescription + "<br />");
-            	$("#seccion").append(consumirUpdate.entityName + "<br />");
+            	$("#seccion").append("<b>origin: </b>" + consumirUpdate.origin + "<br />");
+            	$("#seccion").append("<b>exceptionID: </b>" + consumirUpdate.exceptionId + "<br />");
+            	$("#seccion").append("<b>exceptionDescription: </b>" + consumirUpdate.exceptionDescription + "<br />");
+            	$("#seccion").append("<b>entityName: </b>" + consumirUpdate.entityName + "<br />");
             	            	
             	
             	//########################################################################################
@@ -81,15 +81,13 @@
             	
             	$("#seccion").append("<h1>Consumir Read All</h1>");
             	
+            	consumirRead = Read("Rancher", "testRequest", {});
             	
-            	miEntidad = {}; 
+            	$("#seccion").append("<b>Entity Name: </b>" + consumirRead.entityName + "<br />");
+            	$("#seccion").append("<b>Exception ID: </b>" + consumirRead.exceptionId + "<br />");
+            	$("#seccion").append("<b>Exception Description: </b>" + consumirRead.exceptionDescription + "<br />");
+            	$("#seccion").append("<b>Origin: </b>" + consumirRead.origin + "<br /><br />");
             	
-            	consumirRead = Read("Rancher", "testRequest", miEntidad);
-            	
-                $("#seccion").append("Entity Name: " + consumirRead.entityName + "<br />");
-            	$("#seccion").append("Exception ID: " + consumirRead.exceptionId + "<br />");
-            	$("#seccion").append("Exception Description: " + consumirRead.exceptionDescription + "<br />");
-            	$("#seccion").append("Origin: " + consumirRead.origin + "<br />");
             	$.each(consumirRead.records, function() {            		
     	    		$.each(this, function(key, value){
     	    			$("#seccion").append(key + " " + value + "<br />");
@@ -98,15 +96,17 @@
     	    	});
             	
             	
+            	//########################################################################################
             	
-            	/*
-            	consumirDelete = Delete("Alfredo", 20);
             	$("#seccion").append("<h1>Consumir Delete</h1>");
-                $("#seccion").append(consumirDelete.origin + "<br />");
-            	$("#seccion").append(consumirDelete.exceptionID + "<br />");
-            	$("#seccion").append(consumirDelete.exceptionDescription + "<br />");
-            	*/
             	
+            	ganadero2.rancherId = 7;
+            	
+            	consumirDelete = Delete("Rancher", "testRequest", ganadero2);
+            	
+                $("#seccion").append("<b>origin: </b>" + consumirDelete.origin + "<br />");
+            	$("#seccion").append("<b>exceptionID: </b>" + consumirDelete.exceptionId + "<br />");
+            	$("#seccion").append("<b>exceptionDescription: </b>" + consumirDelete.exceptionDescription + "<br />");
             	
             	
             }); //$(document).ready(function()
