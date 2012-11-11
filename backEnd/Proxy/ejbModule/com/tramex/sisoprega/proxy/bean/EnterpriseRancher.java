@@ -47,7 +47,7 @@ import com.tramex.sisoprega.common.crud.Cruddable;
  * @author Diego Torres
  * 
  */
-@Stateless(mappedName = "EnterpriseRancherProxy")
+@Stateless
 public class EnterpriseRancher extends BaseBean implements Cruddable {
 
     /**
@@ -175,7 +175,7 @@ public class EnterpriseRancher extends BaseBean implements Cruddable {
 		    em.merge(enterpriseRancher);
 		    em.flush();
 
-		    response.setUpdatedRecord(getContenFromEntity(
+		    response.setUpdatedRecord(getContentFromEntity(
 			    enterpriseRancher,
 			    com.tramex.sisoprega.dto.EnterpriseRancher.class));
 		    response.setEntityName(request.getEntityName());

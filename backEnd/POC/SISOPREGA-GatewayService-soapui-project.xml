@@ -279,6 +279,48 @@
          </field>
       </ws:Create>
    </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://ws.gateway.sisoprega.tramex.com/OperationsGateway/CreateRequest"/><con:wsrmConfig version="1.2"/></con:call><con:call name="RancherInvoice"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/Gateway/GatewayService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="http://ws.gateway.sisoprega.tramex.com/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <ws:Create>
+         <requestId>test</requestId>
+         <entityName>RancherInvoice</entityName>
+         <requestId>test</requestId>
+         <entityName>EnterpriseRancher</entityName>
+         <field>
+            <name>addressOne</name>
+            <value>Calle Valle Grande Sur #1528</value>
+         </field>
+         <field>
+            <name>addressTwo</name>
+            <value>Frac. Parajes del Valle</value>
+         </field>
+         <field>
+            <name>city</name>
+            <value>Ciudad Juárez</value>
+         </field>
+         <field>
+            <name>legalId</name>
+            <value>TOFD820413502</value>
+         </field>
+         <field>
+            <name>legalName</name>
+            <value>Diego Alejandro Torres Fuerte</value>
+         </field>
+         <field>
+            <name>addressState</name>
+            <value>Chihuahua</value>
+         </field>
+         <field>
+            <name>rancherId</name>
+            <value>4</value>
+         </field>
+         <field>
+            <name>zipCode</name>
+            <value>32590</value>
+         </field>
+      </ws:Create>
+   </soapenv:Body>
 </soapenv:Envelope>]]></con:request><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://ws.gateway.sisoprega.tramex.com/OperationsGateway/CreateRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation isOneWay="false" action="" name="Delete" bindingOperationName="Delete" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Rancher"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/Gateway/GatewayService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="http://ws.gateway.sisoprega.tramex.com/">
    <soapenv:Header/>
    <soapenv:Body>

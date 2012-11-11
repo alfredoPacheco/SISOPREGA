@@ -92,8 +92,6 @@ public class Rancher extends BaseBean implements Cruddable {
 	}
 
 	log.exiting(Rancher.class.getCanonicalName(), "Create");
-	log.info("END|proxy.Rancher.Create|RequestId:["
-		+ request.getRequestId() + "]");
 	return response;
     }
 
@@ -179,7 +177,7 @@ public class Rancher extends BaseBean implements Cruddable {
 		    em.merge(rancher);
 		    em.flush();
 
-		    response.setUpdatedRecord(getContenFromEntity(rancher,
+		    response.setUpdatedRecord(getContentFromEntity(rancher,
 			    com.tramex.sisoprega.dto.Rancher.class));
 		    response.setEntityName(request.getEntityName());
 		    response.setError(new Error("0", "SUCCESS",
@@ -187,7 +185,7 @@ public class Rancher extends BaseBean implements Cruddable {
 		} else {
 		    log.warning("Validation error: " + error_description);
 		    response.setError(new Error("RU02", "Validation error: "
-			    + error_description, "proxy.Rancher.Create"));
+			    + error_description, "proxy.Rancher.Update"));
 		}
 	    }
 	} catch (Exception e) {
