@@ -103,11 +103,22 @@
 			<description>Get a single rancher invoice record using the rancherId</description>
 			<query>SELECT invoice FROM RancherInvoice invoice WHERE invoice.rancherId = :rancherId</query>
 		</named-query>
+		<named-query name="RANCHER_INVOICE_BY_RFC">
+			<description>Get a single rancher invoicing record by legal_id</description>
+			<query>SELECT invoice FROM RancherInvoice invoice WHERE invoice.legalId = :rfc</query>
+		</named-query>
+		<named-query name="RANCHER_INVOICE_BY_LEGAL_NAME">
+			<description>Get a single rancher invoicing record by legal_name</description>
+			<query>SELECT invoice FROM RancherInvoice invoice WHERE invoice.legalName = :legalName</query>
+		</named-query>
 		<attributes>
 			<id name="rancherInvoiceId">
 				<column name="rancher_invoice_id" />
 				<generated-value strategy="IDENTITY" />
 			</id>
+			<basic name="rancherId">
+				<column name="rancher_id" nullable="false" unique="true" updatable="false" />
+			</basic>
 			<basic name="addressOne">
 				<column name="address_one" length="100" nullable="false" />
 			</basic>
@@ -126,9 +137,6 @@
 			<basic name="legalName">
 				<column name="legal_name" length="100" nullable="false"
 					unique="true" />
-			</basic>
-			<basic name="rancherId">
-				<column name="rancher_id" nullable="false" unique="true" />
 			</basic>
 			<basic name="zipCode">
 				<column name="zip_code" nullable="false" />
@@ -201,7 +209,7 @@
 			</query>
 		</named-query>
 		<named-query name="ENTERPRISE_CONTACT_BY_ENTERPRISE_ID">
-			<description> Get all enteprise contact by enterprise id</description>
+			<description> Get all enterprise contact by enterprise id</description>
 			<query>
 				SELECT contact
 				FROM ContactEnterprise contact

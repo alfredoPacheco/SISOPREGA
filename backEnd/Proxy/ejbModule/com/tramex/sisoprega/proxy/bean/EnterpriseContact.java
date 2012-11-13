@@ -18,7 +18,6 @@ package com.tramex.sisoprega.proxy.bean;
 import java.util.List;
 
 import javax.ejb.Stateless;
-import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
 import com.tramex.sisoprega.common.BaseResponse;
@@ -29,12 +28,13 @@ import com.tramex.sisoprega.common.GatewayRequest;
 import com.tramex.sisoprega.common.ReadGatewayResponse;
 import com.tramex.sisoprega.common.UpdateGatewayResponse;
 import com.tramex.sisoprega.common.crud.Cruddable;
-import com.tramex.sisoprega.dto.ContactRancher;
+import com.tramex.sisoprega.dto.ContactEnterprise;
 
 /**
- * This proxy knows the logic to evaluate Rancher's Contact information and the
- * way to the database in order to save their data. Also, it is contained in EJB
- * container, we can apply security and life cycle methods for resources.<BR/>
+ * This proxy knows the logic to evaluate Enterprise rancher's Contact
+ * information and the way to the database in order to save their data. Also, it
+ * is contained in EJB container, we can apply security and life cycle methods
+ * for resources.<BR/>
  * 
  * <B>Revision History:</B>
  * 
@@ -51,7 +51,7 @@ import com.tramex.sisoprega.dto.ContactRancher;
  * 
  */
 @Stateless
-public class RancherContact extends BaseBean implements Cruddable {
+public class EnterpriseContact extends BaseBean implements Cruddable {
 
     /*
      * (non-Javadoc)
@@ -65,10 +65,10 @@ public class RancherContact extends BaseBean implements Cruddable {
 	log.entering(this.getClass().getCanonicalName(), "Create");
 
 	CreateGatewayResponse response = new CreateGatewayResponse();
-	ContactRancher contact = null;
+	ContactEnterprise contact = null;
 
 	try {
-	    contact = entityFromRequest(request, ContactRancher.class);
+	    contact = entityFromRequest(request, ContactEnterprise.class);
 
 	    log.fine("Received contact in request: {" + contact + "}");
 
@@ -79,18 +79,18 @@ public class RancherContact extends BaseBean implements Cruddable {
 		String sId = String.valueOf(contact.getContactId());
 		response.setGeneratedId(sId);
 		response.setError(new Error("0", "SUCCESS",
-			"proxy.RancherContact.Create"));
+			"proxy.EnterpriseContact.Create"));
 	    } else {
 		log.warning("Validation error: " + error_description);
-		response.setError(new Error("RCC1", "Validation error: "
-			+ error_description, "proxy.RancherContact.Create"));
+		response.setError(new Error("ECC1", "Validation error: "
+			+ error_description, "proxy.EnterpriseContact.Create"));
 	    }
 	} catch (Exception e) {
-	    log.severe("Exception found while creating rancher contact");
+	    log.severe("Exception found while creating enterprise contact");
 	    log.throwing(this.getClass().getName(), "Create", e);
 
-	    response.setError(new Error("RCC2", "Create exception"
-		    + e.getMessage(), "proxy.RancherContact.Create"));
+	    response.setError(new Error("ECC2", "Create exception"
+		    + e.getMessage(), "proxy.EnterpriseContact.Create"));
 	}
 
 	log.exiting(this.getClass().getCanonicalName(), "Create");
@@ -111,49 +111,52 @@ public class RancherContact extends BaseBean implements Cruddable {
 	ReadGatewayResponse response = new ReadGatewayResponse();
 	response.setEntityName(request.getEntityName());
 
-	ContactRancher contact = null;
+	ContactEnterprise contact = null;
 	try {
-	    contact = entityFromRequest(request, ContactRancher.class);
+	    contact = entityFromRequest(request, ContactEnterprise.class);
 
 	    log.fine("Got contact from request: " + contact);
+	    TypedQuery<ContactEnterprise> readQuery = null;
 
-	    TypedQuery<ContactRancher> readQuery = null;
-
-	    if (contact.getRancherId() != 0) {
+	    if (contact.getEnterpriseId() != 0) {
 		readQuery = em.createNamedQuery(
-			"RANCHER_CONTACT_BY_RANCHER_ID", ContactRancher.class);
-		readQuery.setParameter("rancherId", contact.getRancherId());
+			"ENTERPRISE_CONTACT_BY_ENTERPRISE_ID",
+			ContactEnterprise.class);
+		readQuery.setParameter("enterpriseId",
+			contact.getEnterpriseId());
 	    } else if (contact.getContactId() != 0) {
-		readQuery = em.createNamedQuery("RANCHER_CONTACT_BY_ID",
-			ContactRancher.class);
+		readQuery = em.createNamedQuery("ENTERPRISE_CONTACT_BY_ID",
+			ContactEnterprise.class);
 		readQuery.setParameter("contactId", contact.getContactId());
 	    } else {
-		response.setError(new Error("RCR1",
+		response.setError(new Error("ECR1",
 			"Invalid filter for contact query",
-			"proxy.RancherContact.Read"));
+			"proxy.EnterpriseContact.Read"));
 		return response;
 	    }
 
-	    List<ContactRancher> queryResults = readQuery.getResultList();
+	    List<ContactEnterprise> queryResults = readQuery.getResultList();
 
 	    if (queryResults.isEmpty()) {
-		response.setError(new Error("RCR2", "No data found",
-			"proxy.RancherContact.Read"));
+		Error error = new Error();
+		error.setExceptionId("ECR2");
+		error.setExceptionDescription("No data found");
+		error.setOrigin("proxy.EnterpriseContact.Read");
+		response.setError(error);
 	    } else {
 		List<GatewayContent> records = contentFromList(queryResults,
-			ContactRancher.class);
+			ContactEnterprise.class);
 		response.getRecord().addAll(records);
-
 		response.setError(new Error("0", "SUCCESS",
-			"proxy.RancherContact.Read"));
+			"proxy.EnterpriseContact.Read"));
+
 	    }
 
 	} catch (Exception e) {
-	    // something went wrong, alert the server and respond the client
-	    log.severe("Exception found while reading rancher contact");
+	    log.severe("Exception found while reading enterprise contact");
 	    log.throwing(this.getClass().getCanonicalName(), "Read", e);
 
-	    response.setError(new Error("RCR3", "Read exception: "
+	    response.setError(new Error("ECR3", "Read exception: "
 		    + e.getMessage(), "proxy.RancherContact.Read"));
 	}
 
@@ -172,39 +175,40 @@ public class RancherContact extends BaseBean implements Cruddable {
     public UpdateGatewayResponse Update(GatewayRequest request) {
 	log.entering(this.getClass().getCanonicalName(), "Update");
 	UpdateGatewayResponse response = new UpdateGatewayResponse();
-	ContactRancher contact = null;
+	ContactEnterprise contact = null;
 	try {
-	    contact = entityFromRequest(request, ContactRancher.class);
+	    contact = entityFromRequest(request, ContactEnterprise.class);
 
 	    if (contact.getContactId() == 0) {
-		log.warning("RCU1 - Invalid rancher contact id");
-		response.setError(new Error("RCU1",
-			"Invalid rancher contact id",
-			"proxy.RancherContact.Update"));
+		log.warning("ECU1 - Invalid enterprise contact id");
+		response.setError(new Error("ECU1",
+			"Invalid enterprise contact id",
+			"proxy.EnterpriceContact.Update"));
 	    } else {
-		// Received Id.
 		if (validateEntity(contact)) {
 		    em.merge(contact);
 		    em.flush();
 
 		    GatewayContent content = getContentFromEntity(contact,
-			    ContactRancher.class);
+			    ContactEnterprise.class);
 		    response.setUpdatedRecord(content);
 
 		    response.setError(new Error("0", "SUCCESS",
-			    "proxy.RancherContact.Update"));
+			    "proxy.EnterpriseContact.Update"));
 		} else {
 		    log.warning("Validation error: " + error_description);
-		    response.setError(new Error("RCU2", "Validation error: "
-			    + error_description, "proxy.RancherContact.Update"));
+		    response.setError(new Error("ECU2", "Validation error: "
+			    + error_description,
+			    "proxy.EnterpriseContact.Update"));
 		}
 	    }
+
 	} catch (Exception e) {
-	    log.severe("Exception found while updating RanacherContact");
+	    log.severe("Exception found while updating EnterpriseContact");
 	    log.throwing(this.getClass().getName(), "Update", e);
 
 	    response.setError(new Error("RCU3", "Update exception "
-		    + e.getMessage(), "proxy.RancherContact.Update"));
+		    + e.getMessage(), "proxy.EnterpriseContact.Update"));
 	}
 
 	log.exiting(this.getClass().getCanonicalName(), "Update");
@@ -224,67 +228,34 @@ public class RancherContact extends BaseBean implements Cruddable {
 	BaseResponse response = new BaseResponse();
 
 	try {
-	    ContactRancher contact = entityFromRequest(request,
-		    ContactRancher.class);
+	    ContactEnterprise contact = entityFromRequest(request,
+		    ContactEnterprise.class);
 	    if (contact.getContactId() == 0) {
-		log.warning("RCD1 - Invalid RancherContact");
-		response.setError(new Error("RCD1", "Invalid RancherContactId",
-			"proxy.Rancher.Delete"));
+		log.warning("ECD1 - Invalid EnterpriseContact");
+		response.setError(new Error("RCD1",
+			"Invalid EnterpriseContactId",
+			"proxy.EnterpriseContact.Delete"));
 	    } else {
-		TypedQuery<ContactRancher> readQuery = em.createNamedQuery(
-			"RANCHER_CONTACT_BY_ID", ContactRancher.class);
+		TypedQuery<ContactEnterprise> readQuery = em.createNamedQuery(
+			"ENTERPRISE_CONTACT_BY_ID", ContactEnterprise.class);
 		readQuery.setParameter("contactId", contact.getContactId());
 		contact = readQuery.getSingleResult();
 		em.merge(contact);
 		em.remove(contact);
 		em.flush();
 
-		response.setError(new Error("0", "SUCCES",
-			"proxy.RancherContact.Delete"));
+		response.setError(new Error("0", "SUCCESS",
+			"proxy.EnterpriseContact.Delete"));
 	    }
 	} catch (Exception e) {
 	    log.severe("Exception found while deleting contact");
 	    log.throwing(this.getClass().getName(), "Delete", e);
 
-	    response.setError(new Error("RCD2", "Delete exception: "
-		    + e.getMessage(), "proxy.RancherContant.Delete"));
+	    response.setError(new Error("ECD2", "Delete exception: "
+		    + e.getMessage(), "proxy.EnterpriseContact.Delete"));
 	}
 
 	log.exiting(this.getClass().getCanonicalName(), "Delete");
 	return response;
     }
-
-    @Override
-    protected boolean validateEntity(Object entity) {
-	boolean result = true;
-	if (super.validateEntity(entity)) {
-	    result = rancherExists((ContactRancher)entity);
-	} else {
-	    result = false;
-	}
-	return result;
-    }
-
-    private boolean rancherExists(ContactRancher contact) {
-	boolean exists = true;
-
-	TypedQuery<com.tramex.sisoprega.dto.Rancher> readQuery = null;
-
-	readQuery = em.createNamedQuery("RANCHER_BY_ID",
-		com.tramex.sisoprega.dto.Rancher.class);
-	readQuery.setParameter("rancherId", contact.getRancherId());
-
-	try {
-	    com.tramex.sisoprega.dto.Rancher enterprise = readQuery
-		    .getSingleResult();
-	    exists = enterprise != null;
-	} catch (NoResultException e) {
-	    exists = false;
-	    error_description = "RancherId " + contact.getRancherId()
-		    + " does not exists on database";
-	}
-
-	return exists;
-    }
-
 }

@@ -18,5 +18,9 @@
     	<ejb-name>RancherContactProxy</ejb-name>
     	<ejb-class>com.tramex.sisoprega.proxy.bean.RancherContact</ejb-class>
     </session>
+    <session>
+    	<ejb-name>EnterpriseContactProxy</ejb-name>
+    	<ejb-class>com.tramex.sisoprega.proxy.bean.EnterpriseContact</ejb-class>
+    </session>
   </enterprise-beans>
 </ejb-jar>

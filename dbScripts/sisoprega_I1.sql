@@ -91,7 +91,8 @@ CREATE TABLE cat_rancher_contact(
   address_two VARCHAR(100),
   city VARCHAR(80),
   address_state VARCHAR(80),
-  zip_code VARCHAR(9)
+  zip_code VARCHAR(9),
+  UNIQUE KEY U_rancher_contact(rancher_id, first_name, last_name, mother_name)
 );
 
 DROP TABLE IF EXISTS cat_enterprise_contact;
