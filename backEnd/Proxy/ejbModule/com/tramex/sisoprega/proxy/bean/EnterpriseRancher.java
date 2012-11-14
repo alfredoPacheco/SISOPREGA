@@ -18,6 +18,7 @@ package com.tramex.sisoprega.proxy.bean;
 import java.util.List;
 
 import javax.ejb.Stateless;
+import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
 import com.tramex.sisoprega.common.BaseResponse;
@@ -47,7 +48,7 @@ import com.tramex.sisoprega.common.crud.Cruddable;
  * @author Diego Torres
  * 
  */
-@Stateless(mappedName = "EnterpriseRancherProxy")
+@Stateless
 public class EnterpriseRancher extends BaseBean implements Cruddable {
 
     /**
@@ -175,7 +176,7 @@ public class EnterpriseRancher extends BaseBean implements Cruddable {
 		    em.merge(enterpriseRancher);
 		    em.flush();
 
-		    response.setUpdatedRecord(getContenFromEntity(
+		    response.setUpdatedRecord(getContentFromEntity(
 			    enterpriseRancher,
 			    com.tramex.sisoprega.dto.EnterpriseRancher.class));
 		    response.setEntityName(request.getEntityName());
@@ -248,4 +249,75 @@ public class EnterpriseRancher extends BaseBean implements Cruddable {
 	log.exiting(EnterpriseRancher.class.getCanonicalName(), "Create");
 	return response;
     }
+    
+    /**
+     * Override functionality, evaluating over EnterpriseRancher for
+     * duplicates.
+     */
+    @Override
+    protected boolean validateEntity(Object entity) {
+	boolean result = super.validateEntity(entity);
+	com.tramex.sisoprega.dto.EnterpriseRancher rancher = (com.tramex.sisoprega.dto.EnterpriseRancher) entity;
+	if (result) {
+	    result = !duplicateRancher(rancher);
+	}
+	
+	return result;
+    }
+
+    private boolean duplicateRancher(
+	    com.tramex.sisoprega.dto.EnterpriseRancher rancher) {
+
+	boolean duplicate = false;
+
+	duplicate = duplicateRFC(rancher);
+	if (!duplicate) {
+	    duplicate = duplicateLegalName(rancher);
+	}
+
+	return duplicate;
+    }
+
+    private boolean duplicateRFC(com.tramex.sisoprega.dto.EnterpriseRancher rancher) {
+	boolean duplicate = false;
+
+	TypedQuery<com.tramex.sisoprega.dto.RancherInvoice> readQuery = null;
+
+	readQuery = em.createNamedQuery("RANCHER_INVOICE_BY_RFC",
+		com.tramex.sisoprega.dto.RancherInvoice.class);
+	readQuery.setParameter("rfc", rancher.getLegalId());
+
+	try {
+	    com.tramex.sisoprega.dto.RancherInvoice enterprise = readQuery
+		    .getSingleResult();
+	    duplicate = enterprise != null;
+	    error_description = "RFC (legal_id) is already in use by a rancher";
+	} catch (NoResultException e) {
+	    duplicate = false;
+	}
+
+	return duplicate;
+    }
+
+    private boolean duplicateLegalName(
+	    com.tramex.sisoprega.dto.EnterpriseRancher rancher) {
+	boolean duplicate = false;
+
+	TypedQuery<com.tramex.sisoprega.dto.RancherInvoice> readQuery = null;
+
+	readQuery = em.createNamedQuery("RANCHER_INVOICE_BY_LEGAL_NAME",
+		com.tramex.sisoprega.dto.RancherInvoice.class);
+	readQuery.setParameter("legalName", rancher.getLegalName());
+
+	try {
+	    com.tramex.sisoprega.dto.RancherInvoice enterprise = readQuery
+		    .getSingleResult();
+	    duplicate = enterprise != null;
+	    error_description = "Legal name is already in use by a rancher";
+	} catch (NoResultException e) {
+	    duplicate = false;
+	}
+
+	return duplicate;
+    }    
 }

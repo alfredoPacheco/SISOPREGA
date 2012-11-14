@@ -52,7 +52,7 @@ public class BaseBean {
     
     @PersistenceContext
     protected EntityManager em;
-
+    
     /**
      * Validates the entity, default validation includes only null, will need to
      * override when complex validation is required in entity.
@@ -80,7 +80,7 @@ public class BaseBean {
      * @throws IllegalArgumentException
      * @throws IllegalAccessException
      */
-    protected GatewayContent getContenFromEntity(Object entity, Class<?> type)
+    protected GatewayContent getContentFromEntity(Object entity, Class<?> type)
 	    throws IllegalArgumentException, IllegalAccessException {
 	GatewayContent content = new GatewayContent();
 
@@ -115,7 +115,7 @@ public class BaseBean {
 
 	List<GatewayContent> result = new ArrayList<GatewayContent>();
 	for (Object entity : entities) {
-	    result.add(getContenFromEntity(entity, type));
+	    result.add(getContentFromEntity(entity, type));
 	}
 
 	log.finest("contentFromList Result: " + result.toString());

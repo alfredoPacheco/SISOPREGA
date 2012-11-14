@@ -58,60 +58,61 @@ CREATE TABLE cat_enterprise_rancher(
   UNIQUE KEY U_enterprise_rancher_legal_name(legal_name)
 );
 
-DROP TABLE IF EXISTS cat_rancher_legal;
+DROP TABLE IF EXISTS cat_rancher_invoice;
 
-CREATE TABLE cat_rancher_legal (
-  rancher_id SMALLINT UNSIGNED NOT NULL PRIMARY KEY REFERENCES cat_rancher(rancher_id),
+CREATE TABLE cat_rancher_invoice (
+  rancher_invoice_id  SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  rancher_id SMALLINT UNSIGNED NOT NULL REFERENCES cat_rancher(rancher_id),
   legal_name VARCHAR(100) NOT NULL,
   address_one VARCHAR(100) NOT NULL,
   address_two VARCHAR(100),
   city VARCHAR(80) NOT NULL,
-  fed_entity VARCHAR(80) NOT NULL,
+  address_state VARCHAR(80) NOT NULL,
   zip_code VARCHAR(9) NOT NULL,
   legal_id VARCHAR(13) NOT NULL,
-  telephone	VARCHAR(20)
+  UNIQUE KEY U_rancher_invoice_rancher_id(rancher_id),
+  UNIQUE KEY U_rancher_invoice_legal_name(legal_name),
+  UNIQUE KEY U_rancher_invoice_legal_id(legal_id)
 );
 
+DROP TABLE IF EXISTS cat_rancher_contact;
 
+CREATE TABLE cat_rancher_contact(
+  contact_id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  rancher_id SMALLINT UNSIGNED NOT NULL REFERENCES cat_rancher(rancher_id),
+  aka VARCHAR(100),
+  first_name VARCHAR(50) NOT NULL,
+  last_name VARCHAR(50) NOT NULL,
+  mother_name VARCHAR(50),
+  birth_date date,
+  email_add VARCHAR(150),
+  telephone VARCHAR(20),
+  address_one VARCHAR(100),
+  address_two VARCHAR(100),
+  city VARCHAR(80),
+  address_state VARCHAR(80),
+  zip_code VARCHAR(9),
+  UNIQUE KEY U_rancher_contact(rancher_id, first_name, last_name, mother_name)
+);
 
-/*Table structure for table cat_ranchers_addresses */
+DROP TABLE IF EXISTS cat_enterprise_contact;
 
-DROP TABLE IF EXISTS cat_ranchers_addresses;
-
-CREATE TABLE cat_ranchers_addresses (
-  address_id int(10) unsigned NOT NULL AUTO_INCREMENT,
-  rancher_id int(10) unsigned NOT NULL,
-  city_id int(10) unsigned NOT NULL,
-  address_one varchar(50) NOT NULL,
-  address_two varchar(50) NOT NULL,
-  zip_code int(5) unsigned NOT NULL,
-  PRIMARY KEY (address_id),
-  KEY FK_cat_ranchers_addresses_cat_countries_states_cities (city_id),
-  KEY FK_cat_ranchers_addresses_ctrl_ranchers (rancher_id),
-  CONSTRAINT FK_cat_ranchers_addresses_ctrl_ranchers FOREIGN KEY (rancher_id) REFERENCES cat_ranchers (rancher_id) ON DELETE CASCADE,
-  CONSTRAINT FK_cat_ranchers_addresses_cat_countries_states_cities FOREIGN KEY (city_id) REFERENCES cat_countries_states_cities (city_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
-
-
-/*Table structure for table cat_ranchers_phones */
-DROP TABLE IF EXISTS cat_ranchers_phones;
-
-CREATE TABLE cat_ranchers_phones (
-  phone_id int(10) unsigned NOT NULL AUTO_INCREMENT,
-  rancher_id int(10) unsigned NOT NULL,
-  phone_number int(7) unsigned NOT NULL,
-  city_id int(10) unsigned NOT NULL,
-  phone_type int(10) unsigned NOT NULL,
-  PRIMARY KEY (phone_id),
-  KEY FK_cat_ranchers_phones_cat_phone_types (phone_type),
-  KEY FK_cat_ranchers_phones_cat_ranchers (rancher_id),
-  CONSTRAINT FK_cat_ranchers_phones_cat_ranchers FOREIGN KEY (rancher_id) REFERENCES cat_ranchers (rancher_id) ON DELETE CASCADE,
-  CONSTRAINT FK_cat_ranchers_phones_cat_phone_types FOREIGN KEY (phone_type) REFERENCES cat_phone_types (phtype_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
+CREATE TABLE cat_enterprise_contact(
+  contact_id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  enterprise_id SMALLINT UNSIGNED NOT NULL REFERENCES cat_enterprise_rancher(enterprise_id),
+  aka VARCHAR(100),
+  first_name VARCHAR(50) NOT NULL,
+  last_name VARCHAR(50) NOT NULL,
+  mother_name VARCHAR(50),
+  birth_date date,
+  email_add VARCHAR(150),
+  telephone VARCHAR(20),
+  address_one VARCHAR(100),
+  address_two VARCHAR(100),
+  city VARCHAR(80),
+  address_state VARCHAR(80),
+  zip_code VARCHAR(9)
+);
 
 /*
   Table structure for table cat_location 
@@ -239,17 +240,6 @@ CREATE TABLE cat_measurement_unit_equivalence(
 
 INSERT INTO cat_measurement_unit_equivalence VALUES(1, 2, 2.2);
 INSERT INTO cat_measurement_unit_equivalence VALUES(2, 1, 0.4546);
-
-/*
- Table structure for table cat_phone_types
- */
-DROP TABLE IF EXISTS cat_phone_types;
-
-CREATE TABLE cat_phone_types (
-  phtype_id int(10) unsigned NOT NULL AUTO_INCREMENT,
-  phone_type varchar(50) NOT NULL,
-  PRIMARY KEY (phtype_id)
-);
 
 /*Table structure for table cat_transactions */
 

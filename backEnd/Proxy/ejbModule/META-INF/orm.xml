@@ -44,44 +44,216 @@
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.EnterpriseRancher">
-		<table name="cat_enterprise_rancher"/>
+		<table name="cat_enterprise_rancher" />
 		<named-query name="ENTERPRISE_RANCHER_BY_ID">
 			<description>Get a single enterprise rancher by enterpriseId</description>
-			<query>SELECT er FROM EnterpriseRancher er WHERE er.enterpriseId = :enterpriseId</query>
+			<query>SELECT enterprise FROM EnterpriseRancher enterprise WHERE enterprise.enterpriseId = :enterpriseId</query>
 		</named-query>
 		<named-query name="ALL_ENTERPRISE_RANCHERS">
 			<description>Get all enterprise ranchers in database</description>
-			<query>SELECT er FROM EnterpriseRancher er ORDER BY er.legalName, er.legalId, er.state, er.enterpriseId</query>
+			<query>SELECT enterprise FROM EnterpriseRancher enterprise ORDER BY enterprise.legalName, enterprise.legalId, enterprise.state</query>
+		</named-query>
+		<named-query name="ENTERPRISE_RANCHER_BY_RFC">
+			<description>Get a single enterprise rancher record by legal_id</description>
+			<query>SELECT enterprise FROM EnterpriseRancher enterprise WHERE enterprise.legalId = :rfc</query>
+		</named-query>
+		<named-query name="ENTERPRISE_RANCHER_BY_LEGAL_NAME">
+			<description>Get a single enterprise rancher record by legal_name</description>
+			<query>SELECT enterprise FROM EnterpriseRancher enterprise WHERE enterprise.legalName = :legalName</query>
 		</named-query>
 		<attributes>
 			<id name="enterpriseId">
-				<column name="enterprise_id"/>
-				<generated-value strategy="IDENTITY"/>
+				<column name="enterprise_id" />
+				<generated-value strategy="IDENTITY" />
 			</id>
 			<basic name="addressOne">
-				<column name="address_one" nullable="false" length="100"/>
+				<column name="address_one" nullable="false" length="100" />
 			</basic>
 			<basic name="addressTwo">
-				<column name="address_two" length="100"/>
+				<column name="address_two" length="100" />
 			</basic>
 			<basic name="city">
-				<column name="city" length="80" nullable="false"/>
+				<column name="city" length="80" nullable="false" />
 			</basic>
 			<basic name="legalId">
 				<column name="legal_id" length="13" nullable="false" unique="true" />
 			</basic>
 			<basic name="legalName">
-				<column name="legal_name" length="100" nullable="false" unique="true"/>
+				<column name="legal_name" length="100" nullable="false"
+					unique="true" />
 			</basic>
 			<basic name="state">
-				<column name="address_state" length="80" nullable="false"/>
+				<column name="address_state" length="80" nullable="false" />
 			</basic>
 			<basic name="telephone">
-				<column name="telephone" length="20"/>
+				<column name="telephone" length="20" />
 			</basic>
 			<basic name="zipCode">
 				<column name="zip_code" length="9" nullable="false" />
 			</basic>
 		</attributes>
 	</entity>
+	<entity class="com.tramex.sisoprega.dto.RancherInvoice">
+		<table name="cat_rancher_invoice" />
+		<named-query name="RANCHER_INVOICE_BY_ID">
+			<description>Get a single rancher invoice record using it's id</description>
+			<query>SELECT invoice FROM RancherInvoice invoice WHERE invoice.rancherInvoiceId = :rancherInvoiceId</query>
+		</named-query>
+		<named-query name="RANCHER_INVOICE_BY_RANCHER_ID">
+			<description>Get a single rancher invoice record using the rancherId</description>
+			<query>SELECT invoice FROM RancherInvoice invoice WHERE invoice.rancherId = :rancherId</query>
+		</named-query>
+		<named-query name="RANCHER_INVOICE_BY_RFC">
+			<description>Get a single rancher invoicing record by legal_id</description>
+			<query>SELECT invoice FROM RancherInvoice invoice WHERE invoice.legalId = :rfc</query>
+		</named-query>
+		<named-query name="RANCHER_INVOICE_BY_LEGAL_NAME">
+			<description>Get a single rancher invoicing record by legal_name</description>
+			<query>SELECT invoice FROM RancherInvoice invoice WHERE invoice.legalName = :legalName</query>
+		</named-query>
+		<attributes>
+			<id name="rancherInvoiceId">
+				<column name="rancher_invoice_id" />
+				<generated-value strategy="IDENTITY" />
+			</id>
+			<basic name="rancherId">
+				<column name="rancher_id" nullable="false" unique="true" updatable="false" />
+			</basic>
+			<basic name="addressOne">
+				<column name="address_one" length="100" nullable="false" />
+			</basic>
+			<basic name="addressState">
+				<column name="address_state" length="80" nullable="false" />
+			</basic>
+			<basic name="addressTwo">
+				<column name="address_two" length="100" />
+			</basic>
+			<basic name="city">
+				<column name="city" length="80" nullable="false" />
+			</basic>
+			<basic name="legalId">
+				<column name="legal_id" length="13" nullable="false" unique="true" />
+			</basic>
+			<basic name="legalName">
+				<column name="legal_name" length="100" nullable="false"
+					unique="true" />
+			</basic>
+			<basic name="zipCode">
+				<column name="zip_code" nullable="false" />
+			</basic>
+		</attributes>
+	</entity>
+	<entity class="com.tramex.sisoprega.dto.ContactRancher">
+		<table name="cat_rancher_contact" />
+		<named-query name="RANCHER_CONTACT_BY_ID">
+			<description>Get a rancher contact by its contact Id</description>
+			<query>
+			SELECT contact 
+			FROM ContactRancher contact 
+			WHERE contact.contactId = :contactId</query>
+		</named-query>
+		<named-query name="RANCHER_CONTACT_BY_RANCHER_ID">
+			<description>Get all rancher contacts by rancher id</description>
+			<query>
+			SELECT contact 
+			FROM ContactRancher contact 
+			WHERE contact.rancherId = :rancherId 
+			ORDER BY contact.firstName, contact.lastName, contact.motherName</query>
+		</named-query>
+		<attributes>
+			<id name="contactId">
+				<column name="contact_id" />
+				<generated-value strategy="IDENTITY" />
+			</id>
+			<basic name="rancherId">
+				<column name="rancher_id" nullable="false" />
+			</basic>
+			<basic name="firstName">
+				<column name="first_name" nullable="false" length="50" />
+			</basic>
+			<basic name="lastName">
+				<column name="last_name" nullable="false" length="50" />
+			</basic>
+			<basic name="motherName">
+				<column name="mother_name" length="50" />
+			</basic>
+			<basic name="birthDate">
+				<column name="birth_date" />
+				<temporal>DATE</temporal>
+			</basic>
+			<basic name="emailAdd">
+				<column name="email_add" length="150" />
+			</basic>
+			<basic name="addressOne">
+				<column name="address_one" length="100" />
+			</basic>
+			<basic name="addressTwo">
+				<column name="address_two" length="100" />
+			</basic>
+			<basic name="addressState">
+				<column name="address_state" length="80" />
+			</basic>
+			<basic name="zipCode">
+				<column name="zip_code" />
+			</basic>
+		</attributes>
+	</entity>
+	<entity class="com.tramex.sisoprega.dto.ContactEnterprise">
+		<table name="cat_enterprise_contact" />
+		<named-query name="ENTERPRISE_CONTACT_BY_ID">
+			<description>Get an enterprise contact by its contact id</description>
+			<query>
+			SELECT contact
+			FROM ContactEnterprise contact
+			WHERE contact.contactId = :contactId
+			</query>
+		</named-query>
+		<named-query name="ENTERPRISE_CONTACT_BY_ENTERPRISE_ID">
+			<description> Get all enterprise contact by enterprise id</description>
+			<query>
+				SELECT contact
+				FROM ContactEnterprise contact
+				WHERE contact.enterpriseId = :enterpriseId
+				ORDER BY contact.firstName, contact.lastName, contact.motherName
+			</query>
+		</named-query>
+		<attributes>
+			<id name="contactId">
+				<column name="contact_id" />
+				<generated-value strategy="IDENTITY" />
+			</id>
+			<basic name="enterpriseId">
+				<column name="enterprise_id" nullable="false" />
+			</basic>
+			<basic name="firstName">
+				<column name="first_name" nullable="false" length="50" />
+			</basic>
+			<basic name="lastName">
+				<column name="last_name" nullable="false" length="50" />
+			</basic>
+			<basic name="motherName">
+				<column name="mother_name" length="50" />
+			</basic>
+			<basic name="birthDate">
+				<column name="birth_date" />
+				<temporal>DATE</temporal>
+			</basic>
+			<basic name="emailAdd">
+				<column name="email_add" length="150" />
+			</basic>
+			<basic name="addressOne">
+				<column name="address_one" length="100" />
+			</basic>
+			<basic name="addressTwo">
+				<column name="address_two" length="100" />
+			</basic>
+			<basic name="addressState">
+				<column name="address_state" length="80" />
+			</basic>
+			<basic name="zipCode">
+				<column name="zip_code" />
+			</basic>
+		</attributes>
+	</entity>
+
 </entity-mappings>
