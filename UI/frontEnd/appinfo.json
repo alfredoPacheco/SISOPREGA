@@ -1,0 +1,10 @@
+{
+	"id": "com.hptraining.hpstore",
+	"version": "1.0.0",
+	"vendor": "HP",
+	"type": "web",
+	"main": "index.html",
+	"title": "HP Store",
+	"icon": "./images/mainMenu_logo.png",
+  	"uiRevision": "2"
+}
