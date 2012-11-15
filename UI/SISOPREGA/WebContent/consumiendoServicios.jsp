@@ -27,7 +27,7 @@
             				phone: 			"3050450"
             			};
             	
-            	consumirCreate = Create("Rancher", "test", ganadero);
+            	consumirCreate = consumingGateway.Create("Rancher", "test", ganadero);
             	
             	$("#seccion").append("<b>origin: </b>" + consumirCreate.origin + "<br />");
             	$("#seccion").append("<b>exceptionID: </b>" + consumirCreate.exceptionId + "<br />");
@@ -41,7 +41,7 @@
             	miEntidad = {rancherId:consumirCreate.generatedId};
             	//miEntidad = {}; NO BORRAR, ejemplo para traer todos los records
             	
-            	consumirRead = Read("Rancher", "testRequest", miEntidad);
+            	consumirRead = consumingGateway.Read("Rancher", "testRequest", miEntidad);
             	
                 $("#seccion").append("<b>Entity Name: </b>" + consumirRead.entityName + "<br />");
             	$("#seccion").append("<b>Exception ID: </b>" + consumirRead.exceptionId + "<br />");
@@ -68,7 +68,7 @@
             				phone: 			"1234567"
             			};
             	
-            	consumirUpdate = Update("Rancher", "test", ganadero2);            	
+            	consumirUpdate = consumingGateway.Update("Rancher", "test", ganadero2);            	
             	
             	$("#seccion").append("<b>origin: </b>" + consumirUpdate.origin + "<br />");
             	$("#seccion").append("<b>exceptionID: </b>" + consumirUpdate.exceptionId + "<br />");
@@ -81,7 +81,7 @@
             	
             	$("#seccion").append("<h1>Consumir Read All</h1>");
             	
-            	consumirRead = Read("Rancher", "testRequest", {});
+            	consumirRead = consumingGateway.Read("Rancher", "testRequest", {});
             	
             	$("#seccion").append("<b>Entity Name: </b>" + consumirRead.entityName + "<br />");
             	$("#seccion").append("<b>Exception ID: </b>" + consumirRead.exceptionId + "<br />");
@@ -100,9 +100,11 @@
             	
             	$("#seccion").append("<h1>Consumir Delete</h1>");
             	
-            	ganadero2.rancherId = 7;
+            	ganadero2.rancherId = 2;
             	
-            	consumirDelete = Delete("Rancher", "testRequest", ganadero2);
+            	
+            	$("#seccion").append("rancherId a eliminar: " + ganadero2.rancherId + "<br />");
+            	consumirDelete = consumingGateway.Delete("Rancher", "testRequest", ganadero2);
             	
                 $("#seccion").append("<b>origin: </b>" + consumirDelete.origin + "<br />");
             	$("#seccion").append("<b>exceptionID: </b>" + consumirDelete.exceptionId + "<br />");
