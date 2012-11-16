@@ -18,6 +18,7 @@ package com.tramex.sisoprega.proxy.bean;
 import java.util.List;
 
 import javax.ejb.Stateless;
+import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
 import com.tramex.sisoprega.common.BaseResponse;
@@ -258,4 +259,38 @@ public class EnterpriseContact extends BaseBean implements Cruddable {
 	log.exiting(this.getClass().getCanonicalName(), "Delete");
 	return response;
     }
+    
+    @Override
+    protected boolean validateEntity(Object entity) {
+	boolean result = true;
+	if (super.validateEntity(entity)) {
+	    result = enterpriseExists((ContactEnterprise)entity);
+	} else {
+	    result = false;
+	}
+	return result;
+    }
+    
+    private boolean enterpriseExists(ContactEnterprise contact) {
+	boolean exists = true;
+
+	TypedQuery<com.tramex.sisoprega.dto.EnterpriseRancher> readQuery = null;
+
+	readQuery = em.createNamedQuery("ENTERPRISE_RANCHER_BY_ID",
+		com.tramex.sisoprega.dto.EnterpriseRancher.class);
+	readQuery.setParameter("enterpriseId", contact.getEnterpriseId());
+
+	try {
+	    com.tramex.sisoprega.dto.EnterpriseRancher enterprise = readQuery
+		    .getSingleResult();
+	    exists = enterprise != null;
+	} catch (NoResultException e) {
+	    exists = false;
+	    error_description = "enterpriseId " + contact.getEnterpriseId()
+		    + " does not exists on database";
+	}
+
+	return exists;
+    }
+    
 }

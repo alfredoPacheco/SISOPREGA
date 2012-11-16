@@ -97,7 +97,7 @@ CREATE TABLE cat_rancher_contact(
 
 DROP TABLE IF EXISTS cat_enterprise_contact;
 
-CREATE TABLE cat_enterprise_contact(
+CREATE TABLE cat_enterprise_contact (
   contact_id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   enterprise_id SMALLINT UNSIGNED NOT NULL REFERENCES cat_enterprise_rancher(enterprise_id),
   aka VARCHAR(100),
@@ -166,7 +166,8 @@ DROP TABLE IF EXISTS cat_cattle_class;
 
 CREATE TABLE cat_cattle_class (
   catclass_id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  catclass_name VARCHAR(50) NOT NULL
+  catclass_name VARCHAR(50) NOT NULL,
+  UNIQUE KEY U_catclass_name (catclass_name)
 );
 
 INSERT INTO cat_cattle_class(catclass_name) VALUES('Bobino');

@@ -22,5 +22,9 @@
     	<ejb-name>EnterpriseContactProxy</ejb-name>
     	<ejb-class>com.tramex.sisoprega.proxy.bean.EnterpriseContact</ejb-class>
     </session>
+    <session>
+    	<ejb-name>CattleClassProxy</ejb-name>
+    	<ejb-class>com.tramex.sisoprega.proxy.bean.CattleClassBean</ejb-class>
+    </session>
   </enterprise-beans>
 </ejb-jar>
