@@ -1,0 +1,13 @@
+iptables -P INPUT DROP
+iptables -P FORWARD DROP
+iptables -P OUTPUT ACCEPT
+iptables -A INPUT -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A INPUT -m state --state NEW -m tcp -p tcp --dport 2202 -j ACCEPT
+iptables -A INPUT -s 198.61.225.0/24 -m state --state NEW -p tcp --dport 2202 -j ACCEPT
+iptables -A INPUT -s 10.177.22.0/24 -m state --state NEW -p tcp --dport 2202 -j ACCEPT
+iptables -A INPUT -s 198.61.225.0/24 -m state --state NEW -p udp --dport 123 -j ACCEPT
+iptables -A INPUT -s 10.177.22.0/24 -m state --state NEW -p udp --dport 123 -j ACCEPT
+iptables -A INPUT -m state --state NEW -p udp --dport 53 -j ACCEPT
+iptables -A INPUT -m state --state NEW -p tcp --dport 53 -j ACCEPT
+iptables -A INPUT -m state --state NEW -p tcp --dport 443 -j ACCEPT
+iptables -A INPUT -m state --state NEW -p tcp --dport 80 -j ACCEPT
