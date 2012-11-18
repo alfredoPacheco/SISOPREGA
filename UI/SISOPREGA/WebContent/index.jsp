@@ -7,11 +7,14 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
 <script src="scripts/jquery-1.8.2/jquery.js" ></script>
 <script src="scripts/enyo/framework/enyo.js"></script>
+<script src="scripts/webServicesConsuming/consumingGateway.js"></script>
 <title>SISOPREGA</title>
 </head>
 <body>
 	<script type="text/javascript">
-	
+	jQuery.noConflict();
+	jQuery(document).ready(function() {
+        
 	
 		enyo.create({
 			kind : "sisoprega"
@@ -20,7 +23,7 @@
 		//enyo.create({kind: "receptions.main"}).renderInto(document.body);	
 		//enyo.create({kind: "receptions.create"}).renderInto(document.body);
 	
-		
+	});
 	</script>
 </body>
 </html>

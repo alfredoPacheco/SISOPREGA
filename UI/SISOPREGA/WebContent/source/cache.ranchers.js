@@ -9,18 +9,29 @@ enyo.kind({
 	},
 	create:function(objRan,cbObj,cbMethod){
 		//AJAX
-		this.arrObj.push(objRan);
+		cgCreate = consumingGateway.Create("Rancher", "test", objRan);
+		if (cgCreate.exceptionId == 0){ //Created successfully			
+			objRan.rancher_id = cgCreate.generatedId;
+			this.arrObj.push(objRan);
+			return true;
+		}
+		else{ //Error
+			alert("Exception ID: " + cgCreate.exceptionId + "\nException Description: " + cgCreate.exceptionDescription);
+			return false;
+		}		
+		/*
 		if(cbMethod){
 			cbObj[cbMethod]();
 		}				
 		return true;
+		*/
 	},
 	upd:function(objOld,objNew,cbObj,cbMethod){
 		//AJAX
-		//Update Internal Object
+		cgUpdate= consumingGateway.Update("Rancher", "test", objNew);
 		for (var sKey in objNew){
 			if(objOld[sKey]!=null){
-				objOld[sKey]=objNew[sKey]
+				objOld[sKey]=objNew[sKey];
 			}
 		}
 		if(cbMethod){
@@ -78,7 +89,7 @@ enyo.kind({
 		//AJAX
 		//Update Local		
 		for (var sKey in objNew){
-			objOld[sKey]=objNew[sKey]
+			objOld[sKey]=objNew[sKey];
 		}
 		if(cbMethod){
 			cbObj[cbMethod]();
@@ -104,7 +115,7 @@ enyo.kind({
 	updateBilling:function(objRancher,objBill,cbObj,cbMethod){
 		for (var sKey in objBill){
 			if(objBill[sKey]!=null){
-				objRancher.billing[sKey]=objBill[sKey]
+				objRancher.billing[sKey]=objBill[sKey];
 			}
 		}		
 		if(cbMethod){
