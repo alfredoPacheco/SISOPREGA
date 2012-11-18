@@ -58,28 +58,29 @@ enyo.kind({
 		cacheRanchers.upd(this.objRan,this.getRancher(),this,"doUpdateRancher");
 	},
 	getRancher:function(){				
-		var fmt = new enyo.g11n.DateFmt({format: "MM/dd/yyyy"});
+	
+		var fmt = new enyo.g11n.DateFmt({format: "yyyy/MM/dd"});
 		var objRan={
 						rancher_id:		"",
 						aka:			"",	
-						birthDate:		"",
-						emailAddress:	"",
-						firstName:		"",
-						lastName:		"",
-						motherName:		"",
-						phone:			"",						
+						birth_date:		"",
+						email_add:		"",
+						first_name:		"",
+						last_name:		"",
+						mother_name:	"",
+						phone_number:	"",						
 						contacts:		[],
 						billing:		{},
 						rancher_type:	1,
 					};
 		
 		objRan.aka			=	this.$.aka.getValue();
-		objRan.birthDate	=	fmt.format(this.$.birth_date.getValue());
-		objRan.emailAddress	=	this.$.email_add.getValue();
-		objRan.firstName	=	this.$.first_name.getValue();
-		objRan.lastName		=	this.$.last_name.getValue();
-		objRan.motherName	=	this.$.mother_name.getValue();
-		objRan.phone		=	this.$.phone_number.getValue();
+		objRan.birth_date	=	fmt.format(this.$.birth_date.getValue());
+		objRan.email_add	=	this.$.email_add.getValue();
+		objRan.first_name	=	this.$.first_name.getValue();
+		objRan.last_name	=	this.$.last_name.getValue();
+		objRan.mother_name	=	this.$.mother_name.getValue();
+		objRan.phone_number	=	this.$.phone_number.getValue();
 		
 		return objRan;
 	},
@@ -90,14 +91,14 @@ enyo.kind({
 		this.resetValues();		
 		this.objRan=objVar;
 		this.$.aka.setValue(this.objRan.aka);
-		/*this.$.birth_date.setValue(new Date(this.objRan.birthDate.substring(0,4),
+		this.$.birth_date.setValue(new Date(this.objRan.birthDate.substring(0,4),
 				this.objRan.birthDate.substring(5,7)-1,
 				this.objRan.birthDate.substring(8,10)																
-		));*/
-		this.$.birth_date.setValue(new Date(this.objRan.birthDate.substring(0,2),
+		));
+		/*this.$.birth_date.setValue(new Date(this.objRan.birthDate.substring(0,2),
 				this.objRan.birthDate.substring(3,5)-1,
 				this.objRan.birthDate.substring(6,10)																
-		));
+		));*/
 		this.$.email_add.setValue(this.objRan.emailAddress);
 		this.$.first_name.setValue(this.objRan.firstName);
 		this.$.last_name.setValue(this.objRan.lastName);

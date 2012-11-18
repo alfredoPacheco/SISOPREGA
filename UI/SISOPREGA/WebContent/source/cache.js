@@ -1,19 +1,47 @@
 var _arrCities=[{city_id:1,city_name:"LOCAL"},{city_id:2,city_name:"FORANEA"}];
 
 var _arrRancherList =[
-					{rancher_id:1,aka:"BALDOR", first_name:"ALAN", last_name:"DEL RIO", mother_name:"MENDEZ",
-					 email_add:"alan.delrio@hotmail.com", birth_date:"1985-09-15",rfc:"RIMA850915",
-					 contacts:[],billing:{},rancher_type:1,phone_number:"6561234567",},		
-					
-					{rancher_id:2,aka:"FUERTE", first_name:"DIEGO", last_name:"TORRES", mother_name:"FUERTE",
-					 email_add:"diego.torees.fuerte@gmail.com",birth_date:"1982-04-13",rfc:"TOFD820413",
-					 contacts:[],billing:{},rancher_type:1,phone_number:"6561234567",},	
-					 
-					{rancher_id:3,aka:"SI", company_name:"VACA Y POLLITO",					 
-					 contacts:[],billing:{},rancher_type:2,address_one:"",address_two:"",city_id:1,
-					 zip_code:"UNZIP",rfc:"UNARFC",phone_number:"6561234567"},	
-				];
-
+  					{	rancher_id:1,
+  						aka:"BALDOR",  						
+  						first_name:"ALAN", 
+  						last_name:"DEL RIO", 
+  						mother_name:"MENDEZ",
+  						email_add:"alan.delrio@hotmail.com", 
+  						birth_date:"1985-09-15",
+  						rfc:"RIMA850915",
+  						contacts:[],
+  						billing:{},
+  						rancher_type:1,
+  						phone_number:"6561234567"
+  					},		
+  					
+  					{	rancher_id:2,
+  						aka:"FUERTE", 
+  						first_name:"DIEGO", 
+  						last_name:"TORRES", 
+  						mother_name:"FUERTE",
+  						email_add:"diego.torees.fuerte@gmail.com",
+  						birth_date:"1982-04-13",
+  						rfc:"TOFD820413",
+  						contacts:[],
+  						billing:{},
+  						rancher_type:1,
+  						phone_number:"6561234567"
+  					},	
+  					 
+  					{	rancher_id:3,
+  						aka:"SI", 
+  						company_name:"VACA Y POLLITO",					 
+  						contacts:[],
+  						billing:{},
+  						rancher_type:2,
+  						address_one:"",
+  						address_two:"",
+  						city_id:1,
+  						zip_code:"UNZIP",
+  						rfc:"UNARFC",
+  						phone_number:"6561234567"}	
+  				];
 
 _arrRancherList[0].contacts.push(enyo.clone(_arrRancherList[1]));
 _arrRancherList[0].contacts.push(enyo.clone(_arrRancherList[1]));
@@ -86,7 +114,7 @@ enyo.kind({
 	setGlobalToaster:function(objVar){
 		this.gblToaster=objVar;
 	},
-	setMessage:function(iType,sMsg){
+	setMessage:function(iType,sTitle, sMsg){
 		this.gblToaster.msgMain.setContent(sMsg);
 		this.gblToaster.toastMain.open();
 	},

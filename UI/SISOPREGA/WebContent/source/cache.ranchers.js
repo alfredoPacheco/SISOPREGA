@@ -7,24 +7,40 @@ enyo.kind({
 	get:function(){
 		return this.arrObj;
 	},
+	adapter:function(objRan){
+		var objNew = {
+				rancher_id:		objRan.rancher_id,
+				aka:			objRan.aka,
+				birthDate:		objRan.birth_date,
+				emailAddress:	objRan.email_add,
+				firstName:		objRan.first_name,
+				lastName:		objRan.last_name,
+				motherName:		objRan.mother_name,
+				phone:			objRan.phone_number,						
+				rfc:			objRan.rfc,
+				contacts:		objRan.contacts,
+				billing:		objRan.billing,
+				rancher_type:	objRan.rancher_type
+			};
+		return objNew;
+	},
 	create:function(objRan,cbObj,cbMethod){
 		//AJAX
-		cgCreate = consumingGateway.Create("Rancher", "test", objRan);
+		
+		cgCreate = consumingGateway.Create("Rancher", "test", this.adapter(objRan));
 		if (cgCreate.exceptionId == 0){ //Created successfully			
 			objRan.rancher_id = cgCreate.generatedId;
 			this.arrObj.push(objRan);
+			if(cbMethod){
+				cbObj[cbMethod]();
+			}
 			return true;
 		}
 		else{ //Error
-			alert("Exception ID: " + cgCreate.exceptionId + "\nException Description: " + cgCreate.exceptionDescription);
+			//cacheMan.setMessage("", "","[Exception ID: " + cgCreate.exceptionId + "] Error al intentar crear Ganadero.");
+			cacheMan.setMessage("", "","[Exception ID: " + cgCreate.exceptionId + "] Descripcion: " + cgCreate.exceptionDescription);
 			return false;
-		}		
-		/*
-		if(cbMethod){
-			cbObj[cbMethod]();
-		}				
-		return true;
-		*/
+		}
 	},
 	upd:function(objOld,objNew,cbObj,cbMethod){
 		//AJAX
