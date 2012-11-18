@@ -15,11 +15,15 @@
  */
 package com.tramex.sisoprega.proxy.bean;
 
+import java.util.List;
+
 import javax.ejb.Stateless;
+import javax.persistence.TypedQuery;
 
 import com.tramex.sisoprega.common.BaseResponse;
 import com.tramex.sisoprega.common.CreateGatewayResponse;
 import com.tramex.sisoprega.common.Error;
+import com.tramex.sisoprega.common.GatewayContent;
 import com.tramex.sisoprega.common.GatewayRequest;
 import com.tramex.sisoprega.common.ReadGatewayResponse;
 import com.tramex.sisoprega.common.UpdateGatewayResponse;
@@ -104,8 +108,55 @@ public class CattleClassBean extends BaseBean implements Cruddable {
      */
     @Override
     public ReadGatewayResponse Read(GatewayRequest request) {
-	// TODO Auto-generated method stub
-	return null;
+	log.entering(this.getClass().getCanonicalName(), "Read");
+
+	ReadGatewayResponse response = new ReadGatewayResponse();
+	response.setEntityName(request.getEntityName());
+
+	CattleClass cattle = null;
+	try {
+	    cattle = entityFromRequest(request, CattleClass.class);
+
+	    log.fine("Got contact from request: " + cattle);
+	    TypedQuery<CattleClass> readQuery = null;
+
+	    if (cattle.getCatclassId() != 0) {
+		readQuery = em.createNamedQuery("CATTLE_CLASS_BY_ID",
+			CattleClass.class);
+		readQuery.setParameter("catclassId", cattle.getCatclassId());
+	    } else {
+		readQuery = em.createNamedQuery("ALL_CATTLE_CLASSES",
+			CattleClass.class);
+
+	    }
+
+	    List<CattleClass> queryResults = readQuery.getResultList();
+
+	    if (queryResults.isEmpty()) {
+		Error error = new Error();
+		error.setExceptionId("CCR1");
+		error.setExceptionDescription("No data found");
+		error.setOrigin("proxy.CattleClass.Read");
+		response.setError(error);
+	    } else {
+		List<GatewayContent> records = contentFromList(queryResults,
+			CattleClass.class);
+		response.getRecord().addAll(records);
+		response.setError(new Error("0", "SUCCESS",
+			"proxy.CattleClass.Read"));
+
+	    }
+
+	} catch (Exception e) {
+	    log.severe("Exception found while reading Cattle Class");
+	    log.throwing(this.getClass().getCanonicalName(), "Read", e);
+
+	    response.setError(new Error("CCR2", "Read exception: "
+		    + e.getMessage(), "proxy.CattleClass.Read"));
+	}
+
+	log.exiting(this.getClass().getCanonicalName(), "Read");
+	return response;
     }
 
     /*
@@ -117,8 +168,46 @@ public class CattleClassBean extends BaseBean implements Cruddable {
      */
     @Override
     public UpdateGatewayResponse Update(GatewayRequest request) {
-	// TODO Auto-generated method stub
-	return null;
+	log.entering(this.getClass().getCanonicalName(), "Update");
+	UpdateGatewayResponse response = new UpdateGatewayResponse();
+	CattleClass cattle = null;
+	try {
+	    cattle = entityFromRequest(request, CattleClass.class);
+
+	    if (cattle.getCatclassId() == 0) {
+		log.warning("CCU1 - Invalid Cattle Class id");
+		response.setError(new Error("CCU1",
+			"Invalid Cattle Class id",
+			"proxy.CattleClass.Update"));
+	    } else {
+		if (validateEntity(cattle)) {
+		    em.merge(cattle);
+		    em.flush();
+
+		    GatewayContent content = getContentFromEntity(cattle,
+			    CattleClass.class);
+		    response.setUpdatedRecord(content);
+
+		    response.setError(new Error("0", "SUCCESS",
+			    "proxy.CattleClass.Update"));
+		} else {
+		    log.warning("Validation error: " + error_description);
+		    response.setError(new Error("CCU2", "Validation error: "
+			    + error_description,
+			    "proxy.CattleClass.Update"));
+		}
+	    }
+
+	} catch (Exception e) {
+	    log.severe("Exception found while updating CattleClass");
+	    log.throwing(this.getClass().getName(), "Update", e);
+
+	    response.setError(new Error("CCU3", "Update exception "
+		    + e.getMessage(), "proxy.CattleClass.Update"));
+	}
+
+	log.exiting(this.getClass().getCanonicalName(), "Update");
+	return response;
     }
 
     /*
@@ -130,8 +219,40 @@ public class CattleClassBean extends BaseBean implements Cruddable {
      */
     @Override
     public BaseResponse Delete(GatewayRequest request) {
-	// TODO Auto-generated method stub
-	return null;
+	log.entering(this.getClass().getCanonicalName(), "Delete");
+	BaseResponse response = new BaseResponse();
+
+	try {
+	    CattleClass contact = entityFromRequest(request,
+		    CattleClass.class);
+	    if (contact.getCatclassId() == 0) {
+		log.warning("CCD1 - Invalid CattleClass");
+		response.setError(new Error("CCD1",
+			"Invalid CattleClassId",
+			"proxy.CattleClass.Delete"));
+	    } else {
+		TypedQuery<CattleClass> readQuery = em.createNamedQuery(
+			"CATTLE_CLASS_BY_ID", CattleClass.class);
+		readQuery.setParameter("catclassId", contact.getCatclassId());
+		contact = readQuery.getSingleResult();
+		em.merge(contact);
+		em.remove(contact);
+		em.flush();
+
+		response.setError(new Error("0", "SUCCESS",
+			"proxy.CattleClass.Delete"));
+	    }
+	} catch (Exception e) {
+	    log.severe("Exception found while deleting contact");
+	    log.throwing(this.getClass().getName(), "Delete", e);
+
+	    response.setError(new Error("CCD2", "Delete exception: "
+		    + e.getMessage(), "proxy.CattleClass.Delete"));
+	}
+
+	log.exiting(this.getClass().getCanonicalName(), "Delete");
+	return response;
     }
+   
 
 }
