@@ -1,13 +1,37 @@
 enyo.kind({
 	name: "cache.ranchers",
-	arrObj:_arrRancherList,
+	arrObj:[],
+	wasReadFromGateway: false,
 	reloadme:function(){
 		//AJAX
 	},	
 	get:function(){
+		if (this.wasReadFromGateway == false){
+			this.wasReadFromGateway = true;
+			objAux = {};
+			arrAux = [];
+			selfCacheRancher = this;		
+			cgReadAll = consumingGateway.Read("Rancher", "testRequest", {});
+			
+			if (cgReadAll.exceptionId == 0){ //Read successfully			
+				jQuery.each(cgReadAll.records, function() {            		
+		    		jQuery.each(this, function(key, value){
+		    			objAux[key] = value;	    			
+		    		});
+		    		arrAux.push(selfCacheRancher.adapterInside(objAux));	
+		    	});		
+			}
+			else{ //Error
+				//cacheMan.setMessage("", "","[Exception ID: " + cgCreate.exceptionId + "] Error al intentar crear Ganadero.");
+				cacheMan.setMessage("", "","[Exception ID: " + cgCreate.exceptionId + "] Descripcion: " + cgCreate.exceptionDescription);			
+			}			
+			this.arrObj =  arrAux;			
+		}
+		
 		return this.arrObj;
 	},
-	adapter:function(objRan){
+	adapterOutside:function(objRan){
+		
 		var objNew = {
 				rancher_id:		objRan.rancher_id,
 				aka:			objRan.aka,
@@ -24,10 +48,41 @@ enyo.kind({
 			};
 		return objNew;
 	},
+	adapterInside:function(objRan){
+		
+		var objNew = {
+				rancher_id:		objRan.rancher_id,
+				aka:			objRan.aka,				
+				birth_date:		objRan.birthDate,				
+				email_add:		objRan.emailAddress,				
+				first_name:		objRan.firstName,				
+				last_name:		objRan.lastName,				
+				mother_name:	objRan.motherName,				
+				phone_number:	objRan.phone,	
+				rfc:			objRan.rfc,
+				contacts:		objRan.contacts,
+				billing:		objRan.billing,
+				rancher_type:	1
+			};
+		
+		/*,
+		
+		company_name:	"",					 
+		address_one:	"",
+		address_two:	"",
+		city_id:		1,
+		zip_code:		"UNZIP",
+		rfc:			"UNARFC",
+		phone_number:	"6561234567"
+	*/
+		
+		
+		return objNew;
+	},
 	create:function(objRan,cbObj,cbMethod){
 		//AJAX
 		
-		cgCreate = consumingGateway.Create("Rancher", "test", this.adapter(objRan));
+		cgCreate = consumingGateway.Create("Rancher", "test", this.adapterOutside(objRan));
 		if (cgCreate.exceptionId == 0){ //Created successfully			
 			objRan.rancher_id = cgCreate.generatedId;
 			this.arrObj.push(objRan);
