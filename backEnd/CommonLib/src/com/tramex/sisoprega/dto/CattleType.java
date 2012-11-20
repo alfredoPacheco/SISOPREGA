@@ -16,7 +16,7 @@
 package com.tramex.sisoprega.dto;
 
 /**
- * Defines the model for the Rancher Contact entity.<BR/>
+ * Defines the model for the Cattle Type entity.<BR/>
  * 
  * <B>Revision History:</B>
  * 
@@ -25,51 +25,56 @@ package com.tramex.sisoprega.dto;
  * Date        By                           Description
  * MM/DD/YYYY
  * ----------  ---------------------------  -------------------------------------------
- * 11/11/2012  Diego Torres                 Initial Version.
+ * 18/11/2012  Jaime Figueroa                 Initial Version.
  * ====================================================================================
  * </PRE>
  * 
- * @author Diego Torres
+ * @author Jaime Figueroa
  * 
  */
 
-public class CattleClass {
+public class CattleType {
+    private long cattypeId;
     private long catclassId;
-    private String catclassName;
-
+    private String cattypeName;
+    /**
+     * @return the cattypeId
+     */
+    public long getCattypeId() {
+        return cattypeId;
+    }
+    /**
+     * @param cattypeId the cattypeId to set
+     */
+    public void setCattypeId(long cattypeId) {
+        this.cattypeId = cattypeId;
+    }
     /**
      * @return the catclassId
      */
     public long getCatclassId() {
-	return catclassId;
+        return catclassId;
     }
-
     /**
-     * @param catclassId
-     *            the catclassId to set
+     * @param catclassId the catclassId to set
      */
     public void setCatclassId(long catclassId) {
-	this.catclassId = catclassId;
+        this.catclassId = catclassId;
     }
-
     /**
-     * @return the catclassName
+     * @return the cattypeName
      */
-    public String getCatclassName() {
-	return catclassName;
+    public String getCattypeName() {
+        return cattypeName;
     }
-
     /**
-     * @param catclassName
-     *            the catclassName to set
+     * @param cattypeName the cattypeName to set
      */
-    public void setCatclassName(String catclassName) {
-	this.catclassName = catclassName;
+    public void setCattypeName(String cattypeName) {
+        this.cattypeName = cattypeName;
     }
+    
 
-    @Override
-    public String toString() {
-	return "catclassId:" + catclassId + ";catclassName:" + catclassName
-		+ ";";
-    }
+
+    
 }

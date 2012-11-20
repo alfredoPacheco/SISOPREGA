@@ -419,7 +419,19 @@
          <entityName>CattleClass</entityName>
          <field>
             <name>catclassName</name>
-            <value>marranos</value>
+            <value>vacunos</value>
+         </field>
+      </ws:Create>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://ws.gateway.sisoprega.tramex.com/OperationsGateway/CreateRequest"/><con:wsrmConfig version="1.2"/></con:call><con:call name="CattleType"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/Gateway/GatewayService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="http://ws.gateway.sisoprega.tramex.com/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <ws:Create>
+         <requestId>test</requestId>
+         <entityName>CattleType</entityName>
+         <field>
+            <name>catclassName</name>
+            <value>vacunos</value>
          </field>
       </ws:Create>
    </soapenv:Body>
@@ -483,7 +495,19 @@
          </field>
       </ws:Delete>
    </soapenv:Body>
-</soapenv:Envelope>]]></con:request><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://ws.gateway.sisoprega.tramex.com/OperationsGateway/DeleteRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation isOneWay="false" action="" name="Read" bindingOperationName="Read" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Ranchers-Id"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/Gateway/GatewayService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="http://ws.gateway.sisoprega.tramex.com/">
+</soapenv:Envelope>]]></con:request><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://ws.gateway.sisoprega.tramex.com/OperationsGateway/DeleteRequest"/><con:wsrmConfig version="1.2"/></con:call><con:call name="CattleClass"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/Gateway/GatewayService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="http://ws.gateway.sisoprega.tramex.com/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <ws:Delete>
+         <entityName>CattleClass</entityName>
+         <requestId>testRequest</requestId>
+         <field>
+            <name>catclassId</name>
+            <value>1</value>
+         </field>
+      </ws:Delete>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://ws.gateway.sisoprega.tramex.com/OperationsGateway/DeleteRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation isOneWay="false" action="" name="Read" bindingOperationName="Read" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Ranchers-Id"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/Gateway/GatewayService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="http://ws.gateway.sisoprega.tramex.com/">
    <soapenv:Header/>
    <soapenv:Body>
       <ws:Read>
@@ -611,7 +635,7 @@
          <requestId>testRequest</requestId>
          <field>
             <name>catclassId</name>
-            <value>4</value>
+            <value>3</value>
          </field>
       </ws:Read>
    </soapenv:Body>
@@ -847,4 +871,20 @@
          </field>
       </ws:Update>
    </soapenv:Body>
-</soapenv:Envelope>]]></con:request><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://ws.gateway.sisoprega.tramex.com/OperationsGateway/UpdateRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:properties/><con:wssContainer/></con:soapui-project>
+</soapenv:Envelope>]]></con:request><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://ws.gateway.sisoprega.tramex.com/OperationsGateway/UpdateRequest"/><con:wsrmConfig version="1.2"/></con:call><con:call name="CattleClass"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/Gateway/GatewayService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="http://ws.gateway.sisoprega.tramex.com/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <ws:Update>
+         <requestId>test</requestId>
+         <entityName>CattleClass</entityName>
+         <field>
+            <name>catclassId</name>
+            <value>1</value>
+         </field>
+         <field>
+            <name>catclassName</name>
+            <value>vacunos</value>
+         </field>
+      </ws:Update>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://ws.gateway.sisoprega.tramex.com/OperationsGateway/UpdateRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:properties/><con:wssContainer/></con:soapui-project>
