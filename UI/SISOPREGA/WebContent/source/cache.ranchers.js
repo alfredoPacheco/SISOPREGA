@@ -22,10 +22,13 @@ enyo.kind({
 		    	});		
 			}
 			else{ //Error
-				//cacheMan.setMessage("", "","[Exception ID: " + cgCreate.exceptionId + "] Error al intentar crear Ganadero.");
-				cacheMan.setMessage("", "","[Exception ID: " + cgCreate.exceptionId + "] Descripcion: " + cgCreate.exceptionDescription);			
+				//cacheMan.setMessage("", "","[Exception ID: " + cgCreate.exceptionId + "] Error al intentar crear Ganadero.");				
+				if (cgReadAll.exceptionId != "RR02"){
+					cacheMan.setMessage("", "","[Exception ID: " + cgReadAll.exceptionId + "] Descripcion: " + cgReadAll.exceptionDescription);	
+				}			
 			}			
 			this.arrObj =  arrAux;			
+			_arrRancherList = arrAux;
 		}
 		
 		return this.arrObj;
@@ -33,9 +36,10 @@ enyo.kind({
 	adapterOutside:function(objRan){
 		
 		var objNew = {
-				rancher_id:		objRan.rancher_id,
+				rancherId:		objRan.rancher_id,
 				aka:			objRan.aka,
-				birthDate:		objRan.birth_date,
+//				birthDate:		objRan.birth_date,
+				birthDate:		"04/12/1982",
 				emailAddress:	objRan.email_add,
 				firstName:		objRan.first_name,
 				lastName:		objRan.last_name,
@@ -51,9 +55,10 @@ enyo.kind({
 	adapterInside:function(objRan){
 		
 		var objNew = {
-				rancher_id:		objRan.rancher_id,
+				rancher_id:		objRan.rancherId,
 				aka:			objRan.aka,				
-				birth_date:		objRan.birthDate,				
+//				birth_date:		objRan.birthDate,				
+				birth_date:		"" + "1985/09/15",
 				email_add:		objRan.emailAddress,				
 				first_name:		objRan.firstName,				
 				last_name:		objRan.lastName,				
@@ -81,11 +86,13 @@ enyo.kind({
 	},
 	create:function(objRan,cbObj,cbMethod){
 		//AJAX
-		
-		cgCreate = consumingGateway.Create("Rancher", "test", this.adapterOutside(objRan));
+		objToSend = this.adapterOutside(objRan);
+		delete objToSend.rancherId;
+		cgCreate = consumingGateway.Create("Rancher", "test", objToSend);
 		if (cgCreate.exceptionId == 0){ //Created successfully			
 			objRan.rancher_id = cgCreate.generatedId;
 			this.arrObj.push(objRan);
+			_arrRancherList = this.arrObj;
 			if(cbMethod){
 				cbObj[cbMethod]();
 			}
@@ -98,33 +105,66 @@ enyo.kind({
 		}
 	},
 	upd:function(objOld,objNew,cbObj,cbMethod){
-		//AJAX
-		cgUpdate= consumingGateway.Update("Rancher", "test", objNew);
-		for (var sKey in objNew){
-			if(objOld[sKey]!=null){
-				objOld[sKey]=objNew[sKey];
+		
+		objToSend = this.adapterOutside(objNew);
+		objToSend.rancherId = objOld.rancher_id;
+		cgUpdate = consumingGateway.Update("Rancher", "test", objToSend);
+		if (cgUpdate.exceptionId == 0){ //Updated successfully
+			var tamanio = this.get().length;
+			for(var i=0;i<tamanio;i++){
+				if (this.arrObj[i].rancher_id == objOld.rancher_id){
+					this.arrObj[i] = objNew;
+					_arrRancherList = this.arrObj;
+					cbObj.objRan = objNew;
+					if(cbMethod){
+						cbObj[cbMethod]();
+					}
+					return true;					
+				}
 			}
+			return false;
 		}
-		if(cbMethod){
-			cbObj[cbMethod]();
+		else{ //Error			
+			cacheMan.setMessage("", "","[Exception ID: " + cgUpdate.exceptionId + "] Descripcion: " + cgUpdate.exceptionDescription);
+			return false;
 		}		
-		return true;
-		//return false;		
 	},
-	del:function(delObj,cbObj,cbMethod){
+	del:function(delObj,cbObj,cbMethod){		
 		//AJAX
-		//Update Internal Object	
-		for(var i=0;i<this.get().length;i++){
-			if(this.get()[i]===delObj){
-				this.arrObj.splice(i, 1);	
-				if(cbMethod){
-					cbObj[cbMethod]();
-				}		
-				return true;								
-				break;
+		//Update Internal Object
+		objToSend = this.adapterOutside(delObj);
+		delete objToSend.aka;
+		delete objToSend.birthDate;
+		delete objToSend.emailAddress;
+		delete objToSend.firstName;
+		delete objToSend.lastName;
+		delete objToSend.motherName;
+		delete objToSend.phone;
+		delete objToSend.rfc;
+		delete objToSend.contacts;
+		delete objToSend.billing;
+		delete objToSend.rancher_type;
+		
+		
+		cgDelete = consumingGateway.Delete("Rancher", "testRequest", objToSend);
+		if (cgDelete.exceptionId == 0){ //Deleted successfully
+			var tamanio = this.get().length;
+			for(var i=0;i<tamanio;i++){
+				if (this.arrObj[i].rancher_id == delObj.rancher_id){
+					this.arrObj.splice(i, 1);
+					_arrRancherList = this.arrObj;
+					if(cbMethod){
+						cbObj[cbMethod]();
+					}
+					return true;					
+				}
 			}
+			return false;
 		}
-		return false;			
+		else{ //Error
+			cacheMan.setMessage("", "","[Exception ID: " + cgUpdate.exceptionId + "] Descripcion: " + cgUpdate.exceptionDescription);
+			return false;
+		}
 	},
 	ls:function(){
 		var _arrRancherListLS=[];

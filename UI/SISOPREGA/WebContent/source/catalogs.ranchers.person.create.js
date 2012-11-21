@@ -91,19 +91,19 @@ enyo.kind({
 		this.resetValues();		
 		this.objRan=objVar;
 		this.$.aka.setValue(this.objRan.aka);
-		this.$.birth_date.setValue(new Date(this.objRan.birthDate.substring(0,4),
-				this.objRan.birthDate.substring(5,7)-1,
-				this.objRan.birthDate.substring(8,10)																
+		this.$.birth_date.setValue(new Date(this.objRan.birth_date.substring(0,4),
+				this.objRan.birth_date.substring(5,7)-1,
+				this.objRan.birth_date.substring(8,10)																
 		));
 		/*this.$.birth_date.setValue(new Date(this.objRan.birthDate.substring(0,2),
 				this.objRan.birthDate.substring(3,5)-1,
 				this.objRan.birthDate.substring(6,10)																
 		));*/
-		this.$.email_add.setValue(this.objRan.emailAddress);
-		this.$.first_name.setValue(this.objRan.firstName);
-		this.$.last_name.setValue(this.objRan.lastName);
-		this.$.mother_name.setValue(this.objRan.motherName);
-		this.$.phone_number.setValue(this.objRan.phone);
+		this.$.email_add.setValue(this.objRan.email_add);
+		this.$.first_name.setValue(this.objRan.first_name);
+		this.$.last_name.setValue(this.objRan.last_name);
+		this.$.mother_name.setValue(this.objRan.mother_name);
+		this.$.phone_number.setValue(this.objRan.phone_number);
 		this.toggleUpdate();
 	},
 	toggleUpdate:function(){

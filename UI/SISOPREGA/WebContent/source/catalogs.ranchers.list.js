@@ -55,19 +55,24 @@ enyo.kind({
 		return this.objList[this.iSelected];
 	},
 	getGroupName: function(inIndex) {
-		// get previous record
-		var r0 = this.objList[inIndex -1];
-		// get (and memoized) first letter of last name
-		if (r0) {
-			r0.letter = r0.sortStr.substr(0,1).toUpperCase();
+		try{
+			// get previous record
+			var r0 = this.objList[inIndex -1];
+			// get (and memoized) first letter of last name
+			if (r0) {
+				r0.letter = r0.sortStr.substr(0,1).toUpperCase();
+			}
+			var a = r0 && r0.letter;
+			// get record
+			var r1 = this.objList[inIndex];
+			r1.letter = r1.sortStr.substr(0,1).toUpperCase();
+			var b = r1.letter;
+			// new group if first letter of last name has changed
+			return a != b ? b : null;
+		}catch(e){
+			return null;
 		}
-		var a = r0 && r0.letter;
-		// get record
-		var r1 = this.objList[inIndex];
-		r1.letter = r1.sortStr.substr(0,1).toUpperCase();
-		var b = r1.letter;
-		// new group if first letter of last name has changed
-		return a != b ? b : null;
+
 	},
 	setupDivider: function(inIndex) {
 		// use group divider at group transition, otherwise use item border for divider

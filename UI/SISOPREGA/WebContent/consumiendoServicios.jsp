@@ -111,6 +111,30 @@
             	$("#seccion").append("<b>exceptionDescription: </b>" + consumirDelete.exceptionDescription + "<br />");
             	
             	
+            	
+            	var obj = new Object();
+            	obj.propiedad1 = "propiedad1";
+            	obj.propiedad2 = "propiedad2";
+            	obj.propiedad3 = "propiedad3";
+            	obj.propiedad4 = "propiedad4";
+            	obj.propiedad5 = "propiedad5";
+            	obj.propiedad6 = "propiedad6";
+            	
+            	var cadena = "";
+            	for (prop in obj){
+            		cadena = cadena + " " + prop + " " + obj[prop];
+            	}
+            	
+            	$("#seccion").append(cadena + "<br />");
+            	
+            	delete obj.propiedad5;
+            	cadena = "";
+            	for (prop in obj){
+            		cadena = cadena + " " + prop + " " + obj[prop];
+            	}
+            	
+            	$("#seccion").append(cadena + "<br />");
+            	
             }); //$(document).ready(function()
         </script>
   </body>
