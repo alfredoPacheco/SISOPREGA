@@ -38,8 +38,7 @@ enyo.kind({
 		var objNew = {
 				rancherId:		objRan.rancher_id,
 				aka:			objRan.aka,
-//				birthDate:		objRan.birth_date,
-				birthDate:		"04/12/1982",
+				birthDate:		"" + DateOut(objRan.birth_date),
 				emailAddress:	objRan.email_add,
 				firstName:		objRan.first_name,
 				lastName:		objRan.last_name,
@@ -57,8 +56,7 @@ enyo.kind({
 		var objNew = {
 				rancher_id:		objRan.rancherId,
 				aka:			objRan.aka,				
-//				birth_date:		objRan.birthDate,				
-				birth_date:		"" + "1985/09/15",
+				birth_date:		"" + UTCtoNormalDate(objRan.birthDate),
 				email_add:		objRan.emailAddress,				
 				first_name:		objRan.firstName,				
 				last_name:		objRan.lastName,				
@@ -105,9 +103,8 @@ enyo.kind({
 		}
 	},
 	upd:function(objOld,objNew,cbObj,cbMethod){
-		
+		objNew.rancher_id = objOld.rancher_id;
 		objToSend = this.adapterOutside(objNew);
-		objToSend.rancherId = objOld.rancher_id;
 		cgUpdate = consumingGateway.Update("Rancher", "test", objToSend);
 		if (cgUpdate.exceptionId == 0){ //Updated successfully
 			var tamanio = this.get().length;
@@ -116,6 +113,7 @@ enyo.kind({
 					this.arrObj[i] = objNew;
 					_arrRancherList = this.arrObj;
 					cbObj.objRan = objNew;
+					
 					if(cbMethod){
 						cbObj[cbMethod]();
 					}
@@ -235,3 +233,25 @@ enyo.kind({
 	}
 });
 var cacheRanchers= new cache.ranchers();
+
+
+function UTCtoNormalDate(strUTC){
+	var dateFmt = "";
+	if (strUTC != "" && strUTC !== undefined){
+		strAux = strUTC.split(" ");
+		var fmt = new enyo.g11n.DateFmt({format: "yyyy/MM/dd"});
+		var dateFromUTC = new Date(strUTC);			
+		dateFmt = fmt.format(dateFromUTC);
+	}
+	return dateFmt;
+}
+
+function DateOut(normalDate){
+	var dateFmt = "";
+	if (normalDate != "" && normalDate !== undefined){
+		var fmt = new enyo.g11n.DateFmt({format: "MM/dd/yyyy"});
+		var dateNew= new Date(normalDate);
+		dateFmt = fmt.format(dateNew);
+	}
+	return dateFmt;
+}
