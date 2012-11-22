@@ -2,24 +2,31 @@ enyo.kind({
 	name: "cache.ranchers",
 	arrObj:[],
 	wasReadFromGateway: false,
+	contactsReadFromGateway:[],
 	reloadme:function(){
 		//AJAX
 	},	
 	get:function(){
+		
 		if (this.wasReadFromGateway == false){
+			//cacheMan.showScrim();
 			this.wasReadFromGateway = true;
 			objAux = {};
 			arrAux = [];
 			selfCacheRancher = this;		
 			cgReadAll = consumingGateway.Read("Rancher", "testRequest", {});
 			
-			if (cgReadAll.exceptionId == 0){ //Read successfully			
-				jQuery.each(cgReadAll.records, function() {            		
+			if (cgReadAll.exceptionId == 0){ //Read successfully
+				jQuery.each(cgReadAll.records, function() {       		
 		    		jQuery.each(this, function(key, value){
-		    			objAux[key] = value;	    			
+		    			objAux[key] = value;	
 		    		});
-		    		arrAux.push(selfCacheRancher.adapterInside(objAux));	
-		    	});		
+		    		arrAux.push(selfCacheRancher.rancherAdapterToIn(objAux));
+		    	});
+//				//loading contacts from webservice:
+//				cgReadAllContacts = consumingGateway.Read();
+//				
+				
 			}
 			else{ //Error
 				//cacheMan.setMessage("", "","[Exception ID: " + cgCreate.exceptionId + "] Error al intentar crear Ganadero.");				
@@ -27,13 +34,15 @@ enyo.kind({
 					cacheMan.setMessage("", "","[Exception ID: " + cgReadAll.exceptionId + "] Descripcion: " + cgReadAll.exceptionDescription);	
 				}			
 			}			
-			this.arrObj =  arrAux;			
+			
+			this.arrObj =  arrAux;
 			_arrRancherList = arrAux;
+//			cacheMan.hideScrim();
 		}
 		
 		return this.arrObj;
 	},
-	adapterOutside:function(objRan){
+	rancherAdapterToOut:function(objRan){
 		
 		var objNew = {
 				rancherId:		objRan.rancher_id,
@@ -51,7 +60,26 @@ enyo.kind({
 			};
 		return objNew;
 	},
-	adapterInside:function(objRan){
+	rancherContactAdapterToOut:function(objCli){
+		var objNew = {
+				contactId:		objCli.contact_id,
+				rancherId:		objCli.rancher_id,
+				aka:			objCli.aka,
+				firstName:		objCli.first_name,
+				lastName:		objCli.last_name,
+				motherName:		objCli.mother_name,
+				birthDate:		"" + DateOut(objCli.birth_date),
+				emailAddress:	objCli.email_add,
+				telephone:		objCli.telephone,
+				addressOne:		objCli.address_one,						
+				addressTwo:		objCli.address_two,
+				city:			objCli.city,
+				addressState:	objCli.address_state,
+				zipCode:		objCli.zip_code				
+			};
+		return objNew;		   
+	},
+	rancherAdapterToIn:function(objRan){
 		
 		var objNew = {
 				rancher_id:		objRan.rancherId,
@@ -61,30 +89,39 @@ enyo.kind({
 				first_name:		objRan.firstName,				
 				last_name:		objRan.lastName,				
 				mother_name:	objRan.motherName,				
-				phone_number:	objRan.phone,	
-				rfc:			objRan.rfc,
-				contacts:		objRan.contacts,
-				billing:		objRan.billing,
-				rancher_type:	1
+				phone_number:	objRan.phone
 			};
 		
-		/*,
-		
-		company_name:	"",					 
-		address_one:	"",
-		address_two:	"",
-		city_id:		1,
-		zip_code:		"UNZIP",
-		rfc:			"UNARFC",
-		phone_number:	"6561234567"
-	*/
-		
+//		Fields out of web service:		
+		objNew.rfc = "";
+		objNew.contacts=[];
+		objNew.billing={};
+		objNew.rancher_type=1;
 		
 		return objNew;
 	},
+	rancherContactAdapterToIn:function(objCli){
+		var objNew = {
+				contact_id:		objCli.contactId,
+				rancher_id:		objCli.rancherId,
+				aka:			objCli.aka,
+				first_name:		objCli.firstName,
+				last_name:		objCli.lastName,
+				mother_name:	objCli.motherName,
+				birth_date:		"" + UTCtoNormalDate(objCli.birthDate),
+				email_add:		objCli.emailAddress,
+				telephone:		objCli.telephone,
+				address_one:	objCli.addressOne,
+				address_two:	objCli.addressTwo,
+				city:			objCli.city,
+				address_state:	objCli.addressState,
+				zip_code:		objCli.zipCode								
+			};
+		return objNew;	
+	},
 	create:function(objRan,cbObj,cbMethod){
 		//AJAX
-		objToSend = this.adapterOutside(objRan);
+		objToSend = this.rancherAdapterToOut(objRan);
 		delete objToSend.rancherId;
 		cgCreate = consumingGateway.Create("Rancher", "test", objToSend);
 		if (cgCreate.exceptionId == 0){ //Created successfully			
@@ -104,7 +141,7 @@ enyo.kind({
 	},
 	upd:function(objOld,objNew,cbObj,cbMethod){
 		objNew.rancher_id = objOld.rancher_id;
-		objToSend = this.adapterOutside(objNew);
+		objToSend = this.rancherAdapterToOut(objNew);
 		cgUpdate = consumingGateway.Update("Rancher", "test", objToSend);
 		if (cgUpdate.exceptionId == 0){ //Updated successfully
 			var tamanio = this.get().length;
@@ -113,7 +150,6 @@ enyo.kind({
 					this.arrObj[i] = objNew;
 					_arrRancherList = this.arrObj;
 					cbObj.objRan = objNew;
-					
 					if(cbMethod){
 						cbObj[cbMethod]();
 					}
@@ -130,7 +166,7 @@ enyo.kind({
 	del:function(delObj,cbObj,cbMethod){		
 		//AJAX
 		//Update Internal Object
-		objToSend = this.adapterOutside(delObj);
+		objToSend = this.rancherAdapterToOut(delObj);
 		delete objToSend.aka;
 		delete objToSend.birthDate;
 		delete objToSend.emailAddress;
@@ -186,13 +222,70 @@ enyo.kind({
 			}
 		}
 	},
+	getContacts:function(objRan){
+//		if (this.wasReadFromGateway == false){
+			//cacheMan.showScrim();
+//			this.wasReadFromGateway = true;
+		
+		for (i in this.contactsReadFromGateway){
+			if (this.contactsReadFromGateway[i]==objRan.rancher_id){
+				return objRan.contacts;
+			}
+		}
+		
+		this.contactsReadFromGateway.push(objRan.rancher_id);
+		var objAux = {};
+		var arrAux = [];
+		var selfCacheRancher = this;		
+		var objToSend = new Object();
+		objToSend.rancherId = objRan.rancher_id;
+		var cgReadAllContacts = consumingGateway.Read("RancherContact", "testRequest", objToSend);
+		
+		if (cgReadAllContacts.exceptionId == 0){ //Read successfully
+			jQuery.each(cgReadAllContacts.records, function() {       		
+	    		jQuery.each(this, function(key, value){
+	    			objAux[key] = value;	
+	    		});		    		
+	    		arrAux.push(selfCacheRancher.rancherContactAdapterToIn(objAux));	    		
+	    	});
+		}
+//			else{ //Error
+//				//cacheMan.setMessage("", "","[Exception ID: " + cgCreate.exceptionId + "] Error al intentar crear Ganadero.");				
+//				if (cgReadAll.exceptionId != "RR02"){
+//					cacheMan.setMessage("", "","[Exception ID: " + cgReadAll.exceptionId + "] Descripcion: " + cgReadAll.exceptionDescription);	
+//				}			
+//			}			
+			
+//			this.arrObj =  arrAux;
+//			_arrRancherList = arrAux;
+//			cacheMan.hideScrim();
+//		}
+		
+		return objRan.contacts = arrAux;
+	},
 	addContact:function(objRancher,objCon,cbObj,cbMethod){
 		//AJAX
-		//Update Local
-		objRancher.contacts.push(objCon);
-		if(cbMethod){
-			cbObj[cbMethod]();
-		}			
+		objCon.rancher_id = objRancher.rancher_id;
+		objToSend = this.rancherContactAdapterToOut(objCon);
+		delete objToSend.contactId;
+		
+		cgCreate = consumingGateway.Create("RancherContact", "test", objToSend);
+		if (cgCreate.exceptionId == 0){ //Created successfully			
+			objCon.contact_id = cgCreate.generatedId;
+			objRancher.contacts.push(objCon);
+			
+//			this.arrObj.push(objCon);
+//			_arrRancherList = this.arrObj;
+			if(cbMethod){
+				cbObj[cbMethod]();
+			}
+			return true;
+		}
+		else{ //Error
+			//cacheMan.setMessage("", "","[Exception ID: " + cgCreate.exceptionId + "] Error al intentar crear Ganadero.");
+			cacheMan.setMessage("", "","[Exception ID: " + cgCreate.exceptionId + "] Descripcion: " + cgCreate.exceptionDescription);
+			return false;
+		}
 	},
 	updateContact:function(objRancher,objOld,objNew,cbObj,cbMethod){
 		//AJAX

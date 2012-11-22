@@ -129,10 +129,11 @@ enyo.kind({
 	filterRanchers:function(){
 		this.objList=[];
 		var objRan;
-		for(var i=0;i<cacheRanchers.get().length;i++){
-			objRan=cacheRanchers.get()[i];
+		var arrRanchersAux = cacheRanchers.get();
+		for(var i=0;i<arrRanchersAux.length;i++){
+			objRan=arrRanchersAux[i];
 			if(this.$.filter_id.getValue() ==3 || objRan.rancher_type==this.$.filter_id.getValue()){
-				this.objList.push(cacheRanchers.get()[i]);
+				this.objList.push(arrRanchersAux[i]);
 			}
 		}
 		this.updateList();

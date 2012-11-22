@@ -95,10 +95,6 @@ enyo.kind({
 				this.objRan.birth_date.substring(5,7)-1,
 				this.objRan.birth_date.substring(8,10)																
 		));
-		/*this.$.birth_date.setValue(new Date(this.objRan.birthDate.substring(0,2),
-				this.objRan.birthDate.substring(3,5)-1,
-				this.objRan.birthDate.substring(6,10)																
-		));*/
 		this.$.email_add.setValue(this.objRan.email_add);
 		this.$.first_name.setValue(this.objRan.first_name);
 		this.$.last_name.setValue(this.objRan.last_name);

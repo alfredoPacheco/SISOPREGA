@@ -60,8 +60,18 @@ enyo.kind({
 	},
 	getContact:function(){
 		var fmt = new enyo.g11n.DateFmt({format: "yyyy-MM-dd"});		
-		var objContact={rancher_id:"",aka:"", first_name:"", last_name:"", mother_name:"",
-					 email_add:"",contacts:[],billing:{},rancher_type:1,phone_number:""};
+		var objContact={	
+							rancher_id:		"",
+							aka:			"", 
+							first_name:		"", 
+							last_name:		"", 
+							mother_name:	"",
+							email_add:		"",
+							contacts:		[],
+							billing:		{},
+							rancher_type:	1,
+							phone_number:	""
+						};
 		objContact.aka=this.$.aka.getValue();
 		objContact.first_name=this.$.first_name.getValue();
 		objContact.last_name=this.$.last_name.getValue();

@@ -82,8 +82,20 @@ enyo.kind({
 		return cacheRanchers.deleteContact(this.objRancher,this.objRancher.contacts[inIndex],this,"updateList");		
 	},
 	updateList:function(){
+//Original Alan's sourece:		
+//		if(this.objRancher!=null){
+//			if(this.objRancher.contacts.length>=0){
+//				this.objRancher.contacts.sort(function(inA, inB) {
+//					return [inA.last_name.toLowerCase()] < 
+//						   [inB.last_name.toLowerCase()] ? -1 : 1;
+//				});							
+//				this.$.productList.render();					
+//			}
+//		}
+		
 		if(this.objRancher!=null){
-			if(this.objRancher.contacts.length>=0){
+			var arrContactsAux = cacheRanchers.getContacts(this.objRancher);
+			if(arrContactsAux.length>0){
 				this.objRancher.contacts.sort(function(inA, inB) {
 					return [inA.last_name.toLowerCase()] < 
 						   [inB.last_name.toLowerCase()] ? -1 : 1;
