@@ -13,7 +13,14 @@ body {
 	background-position:50% 0%;
 	background-repeat: repeat no-repeat;
 }
-	
+
+a {
+	text-decoration: none;
+}
+
+a img{ 
+	border: 0px;
+}	
 
 #background{
 	background: url("../images/header-bg2.gif"); 
@@ -68,7 +75,6 @@ body {
 }
 
 #pageContainer #page #menuBar #menuItems a{
-	text-decoration: none;
 	color: #DABD8B;
 }
 #pageContainer #page #menuBar #menuItems a:hover{
@@ -107,9 +113,6 @@ body {
 	text-decoration:none;
 }
 
-a img{ 
-	border: 0px;
-}
 
 #pageContainer #page #footer{
 	width:982px;
