@@ -60,9 +60,14 @@
 				<div>
 					<table style="width:98%;text-align:center;">
 						<tr>
-							<td style="width:640px;">
-								<div comp="wysiwyg.viewer.components.ContactForm" id="CntctFrm0" dataquery="#c1shq" class="wysiwyg_viewer_skins_contactform_BasicContactFormSkincf1 " x="35" y="500" width="595" height="180" style="visibility: visible; min-height: 180px; left: 35px; top: 500px; width: 595px; position: absolute;" styleid="cf1" state="editing"><label skinpart="nameLabel">Name</label><input skinpart="name" type="text" placeholder="Name"><label skinpart="emailLabel">Email</label><input skinpart="email" type="text" placeholder="Email"><label skinpart="subjectLabel">Subject</label><input skinpart="subject" type="text" placeholder="Subject"><label skinpart="messageLabel">Message</label><textarea skinpart="message"></textarea><label skinpart="notifications" class="wysiwyg_viewer_skins_contactform_BasicContactFormSkincf1-notifications"></label><button skinpart="send">Enviar</button></div>
-								<iframe width="425" height="350" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q=31.733432,-106.49975&amp;num=1&amp;t=h&amp;ie=UTF8&amp;z=14&amp;ll=31.733058,-106.49919&amp;output=embed"></iframe><br /><small><a href="https://maps.google.com/maps?q=31.733432,-106.49975&amp;num=1&amp;t=h&amp;ie=UTF8&amp;z=14&amp;ll=31.733058,-106.49919&amp;source=embed" style="color:#0000FF;text-align:left">View Larger Map</a></small>
+							<td style="width:610px;padding-right:30px;padding-left:35px;">
+								<form name="frmContact" id="frmContact">
+									<input type="text" placeholder="Nombre" name="name" />
+									<input type="text" placeholder="Email" name="email" />
+									<input type="text" placeholder="Título" name="subject" />
+									<textarea name="message"></textarea>
+									<button name="send">Enviar</button>
+								</form>
 							</td>
 							<td style="text-align:left;">
 								<span style="font: normal normal bold 30px/1.2em 'Noticia Text', serif;color: #AC0909;">
@@ -75,7 +80,7 @@
 									<span style="font: normal normal bold 20px/1.3em 'Noticia Text', serif;color: #AC0909;">
 										Llámanos
 									</span><br/><br/>
-									<span style="font: normal normal bold 30px/1.2em 'Noticia Text', serif;color:#5F0712;">
+									<span style="font: normal normal bold 25px/1.2em 'Noticia Text', serif;color:#5F0712;">
 										044-656-000-0000
 									</span>
 								</div>

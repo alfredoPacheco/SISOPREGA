@@ -20,7 +20,46 @@ a {
 
 a img{ 
 	border: 0px;
-}	
+}
+
+input {
+	border-radius: 5px;
+	background-color: #381402;
+	font: normal normal bold 18px/1.3em 'Noticia Text', serif;
+	color: #F3DEBA;
+	padding: 5px;
+	margin: 0px 0px 5px;
+	border: 0px solid #5F0712;
+	border-image: initial;
+	width: 100%;
+}
+
+textarea {
+	border-radius: 5px;
+	background-color: #381402;
+	font: normal normal bold 18px/1.3em 'Noticia Text', serif;
+	color: #F3DEBA;
+	padding: 5px;
+	margin: 0px 0px 5px;
+	border: 0px solid #5F0712;
+	border-image: initial;
+	width: 100%;
+	height: 130px;
+	resize: none;
+}
+
+button{
+	border-radius: 5px;
+	background-color: #AC0909;
+	font: normal normal bold 18px/1.3em 'Noticia Text', serif;
+	color: #F3DEBA;
+	padding: 5px;
+	margin: 0px 0px 0px 10px;
+	border: none;
+	border-image: initial;
+	float: right;
+	cursor: pointer;
+}
 
 #background{
 	background: url("../images/header-bg2.gif"); 
