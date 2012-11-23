@@ -205,6 +205,7 @@ public class Rancher extends BaseBean implements Cruddable {
      */
     @Override
     public BaseResponse Delete(GatewayRequest request) {
+   	// TODO: Restrict deletion when child records exists
 	log.entering(Rancher.class.getCanonicalName(), "Delete");
 	BaseResponse response = new BaseResponse();
 	try {

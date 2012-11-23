@@ -28,6 +28,7 @@ import java.util.Date;
  * MM/DD/YYYY
  * ----------  ---------------------------  -------------------------------------------
  * 11/11/2012  Diego Torres                 Initial Version.
+ * 11/22/2012  Alfredo Pacheco				Edited emailAdd to emailAddress.				
  * ====================================================================================
  * </PRE>
  * 
