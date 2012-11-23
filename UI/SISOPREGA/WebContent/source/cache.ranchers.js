@@ -60,22 +60,22 @@ enyo.kind({
 			};
 		return objNew;
 	},
-	rancherContactAdapterToOut:function(objCli){
+	rancherContactAdapterToOut:function(objCon){
 		var objNew = {
-				contactId:		objCli.contact_id,
-				rancherId:		objCli.rancher_id,
-				aka:			objCli.aka,
-				firstName:		objCli.first_name,
-				lastName:		objCli.last_name,
-				motherName:		objCli.mother_name,
-				birthDate:		"" + DateOut(objCli.birth_date),
-				emailAddress:	objCli.email_add,
-				telephone:		objCli.phone_number,
-				addressOne:		objCli.address_one,						
-				addressTwo:		objCli.address_two,
-				city:			objCli.city,
-				addressState:	objCli.address_state,
-				zipCode:		objCli.zip_code				
+				contactId:		objCon.contact_id,
+				rancherId:		objCon.rancher_id,
+				aka:			objCon.aka,
+				firstName:		objCon.first_name,
+				lastName:		objCon.last_name,
+				motherName:		objCon.mother_name,
+				birthDate:		"" + DateOut(objCon.birth_date),
+				emailAddress:	objCon.email_add,
+				telephone:		objCon.phone_number,
+				addressOne:		objCon.address_one,						
+				addressTwo:		objCon.address_two,
+				city:			objCon.city,
+				addressState:	objCon.address_state,
+				zipCode:		objCon.zip_code				
 			};
 		return objNew;		   
 	},
@@ -100,22 +100,22 @@ enyo.kind({
 		
 		return objNew;
 	},
-	rancherContactAdapterToIn:function(objCli){
+	rancherContactAdapterToIn:function(objCon){
 		var objNew = {
-				contact_id:		objCli.contactId,
-				rancher_id:		objCli.rancherId,
-				aka:			objCli.aka,
-				first_name:		objCli.firstName,
-				last_name:		objCli.lastName,
-				mother_name:	objCli.motherName,
-				birth_date:		"" + UTCtoNormalDate(objCli.birthDate),
-				email_add:		objCli.emailAddress,
-				phone_number:	objCli.telephone,
-				address_one:	objCli.addressOne,
-				address_two:	objCli.addressTwo,
-				city:			objCli.city,
-				address_state:	objCli.addressState,
-				zip_code:		objCli.zipCode								
+				contact_id:		objCon.contactId,
+				rancher_id:		objCon.rancherId,
+				aka:			objCon.aka,
+				first_name:		objCon.firstName,
+				last_name:		objCon.lastName,
+				mother_name:	objCon.motherName,
+				birth_date:		"" + UTCtoNormalDate(objCon.birthDate),
+				email_add:		objCon.emailAddress,
+				phone_number:	objCon.telephone,
+				address_one:	objCon.addressOne,
+				address_two:	objCon.addressTwo,
+				city:			objCon.city,
+				address_state:	objCon.addressState,
+				zip_code:		objCon.zipCode								
 			};
 		return objNew;	
 	},
@@ -226,10 +226,6 @@ enyo.kind({
 		}
 	},
 	getContacts:function(objRan){
-//		if (this.wasReadFromGateway == false){
-			//cacheMan.showScrim();
-//			this.wasReadFromGateway = true;
-		
 		for (i in this.contactsReadFromGateway){
 			if (this.contactsReadFromGateway[i]==objRan.rancher_id){
 				return objRan.contacts;
@@ -318,19 +314,38 @@ enyo.kind({
 	},
 	deleteContact:function(objRancher,objCon,cbObj,cbMethod){
 		//AJAX
-		//Update Local
-		for(var i=0;i<objRancher.contacts.length;i++){
-			if(objRancher.contacts[i]===objCon){
-				objRancher.contacts.splice(i, 1);	
-				if(cbMethod){
-					cbObj[cbMethod]();
-				}		
-				return true;								
-				break;
+		var objToSend = this.rancherContactAdapterToOut(objCon);
+		delete objToSend.aka;
+		delete objToSend.rancherId;
+		delete objToSend.firstName;
+		delete objToSend.lastName;
+		delete objToSend.motherName;
+		delete objToSend.birthDate;
+		delete objToSend.emailAddress;
+		delete objToSend.telephone;
+		delete objToSend.addressOne;
+		delete objToSend.addressTwo;
+		delete objToSend.city;
+		delete objToSend.addressState;
+		delete objToSend.zipCode;
+		
+		var cgDeleteContact = consumingGateway.Delete("RancherContact", "testRequest", objToSend);
+		if (cgDeleteContact.exceptionId == 0){ //Deleted successfully
+			var tamanio = objRancher.contacts.length;
+			for(var i=0;i<tamanio;i++){
+				if (objRancher.contacts[i].contact_id == objCon.contact_id){
+					objRancher.contacts.splice(i, 1);
+					if(cbMethod){
+						cbObj[cbMethod]();
+					}
+					return true;					
+				}
 			}
-		}			
-		if(cbMethod){
-			cbObj[cbMethod]();
+			return false;
+		}
+		else{ //Error
+			cacheMan.setMessage("", "","[Exception ID: " + cgDeleteContact.exceptionId + "] Descripcion: " + cgDeleteContact.exceptionDescription);
+			return false;
 		}			
 	},	
 	updateBilling:function(objRancher,objBill,cbObj,cbMethod){

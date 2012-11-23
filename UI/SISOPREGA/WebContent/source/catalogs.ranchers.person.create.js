@@ -71,7 +71,7 @@ enyo.kind({
 						phone_number:	"",						
 //						contacts:		[],
 //						billing:		{},
-//						rancher_type:	1,
+						rancher_type:	1,
 					};
 		
 		objRan.aka			=	this.$.aka.getValue();
