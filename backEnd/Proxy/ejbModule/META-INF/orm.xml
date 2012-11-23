@@ -182,7 +182,7 @@
 				<column name="birth_date" />
 				<temporal>DATE</temporal>
 			</basic>
-			<basic name="emailAdd">
+			<basic name="emailAddress">
 				<column name="email_add" length="150" />
 			</basic>
 			<basic name="addressOne">
@@ -239,7 +239,7 @@
 				<column name="birth_date" />
 				<temporal>DATE</temporal>
 			</basic>
-			<basic name="emailAdd">
+			<basic name="emailAddress">
 				<column name="email_add" length="150" />
 			</basic>
 			<basic name="addressOne">
