@@ -43,6 +43,7 @@ import com.tramex.sisoprega.dto.CattleType;
  * MM/DD/YYYY
  * ----------  ---------------------------  -------------------------------------------
  * 18/11/2012  Jaime Figueroa                 Initial Version.
+ * 23/11/2012  Diego Torres		      Fixing Read operation.
  * ====================================================================================
  * </PRE>
  * @author Jaime Figueroa
