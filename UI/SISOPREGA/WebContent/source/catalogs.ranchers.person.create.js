@@ -69,9 +69,9 @@ enyo.kind({
 						last_name:		"",
 						mother_name:	"",
 						phone_number:	"",						
-						contacts:		[],
-						billing:		{},
-						rancher_type:	1,
+//						contacts:		[],
+//						billing:		{},
+//						rancher_type:	1,
 					};
 		
 		objRan.aka			=	this.$.aka.getValue();

@@ -11,10 +11,10 @@ enyo.kind({
 		if (this.wasReadFromGateway == false){
 			//cacheMan.showScrim();
 			this.wasReadFromGateway = true;
-			objAux = {};
-			arrAux = [];
-			selfCacheRancher = this;		
-			cgReadAll = consumingGateway.Read("Rancher", "testRequest", {});
+			var objAux = {};
+			var arrAux = [];
+			var selfCacheRancher = this;		
+			var cgReadAll = consumingGateway.Read("Rancher", "testRequest", {});
 			
 			if (cgReadAll.exceptionId == 0){ //Read successfully
 				jQuery.each(cgReadAll.records, function() {       		
@@ -43,7 +43,7 @@ enyo.kind({
 		return this.arrObj;
 	},
 	rancherAdapterToOut:function(objRan){
-		
+		//only with fields as webservice has
 		var objNew = {
 				rancherId:		objRan.rancher_id,
 				aka:			objRan.aka,
@@ -53,10 +53,10 @@ enyo.kind({
 				lastName:		objRan.last_name,
 				motherName:		objRan.mother_name,
 				phone:			objRan.phone_number,						
-				rfc:			objRan.rfc,
-				contacts:		objRan.contacts,
-				billing:		objRan.billing,
-				rancher_type:	objRan.rancher_type
+//				rfc:			objRan.rfc,
+//				contacts:		objRan.contacts,
+//				billing:		objRan.billing,
+//				rancher_type:	objRan.rancher_type
 			};
 		return objNew;
 	},
@@ -70,7 +70,7 @@ enyo.kind({
 				motherName:		objCli.mother_name,
 				birthDate:		"" + DateOut(objCli.birth_date),
 				emailAddress:	objCli.email_add,
-				telephone:		objCli.telephone,
+				telephone:		objCli.phone_number,
 				addressOne:		objCli.address_one,						
 				addressTwo:		objCli.address_two,
 				city:			objCli.city,
@@ -110,7 +110,7 @@ enyo.kind({
 				mother_name:	objCli.motherName,
 				birth_date:		"" + UTCtoNormalDate(objCli.birthDate),
 				email_add:		objCli.emailAddress,
-				telephone:		objCli.telephone,
+				phone_number:	objCli.telephone,
 				address_one:	objCli.addressOne,
 				address_two:	objCli.addressTwo,
 				city:			objCli.city,
@@ -121,9 +121,9 @@ enyo.kind({
 	},
 	create:function(objRan,cbObj,cbMethod){
 		//AJAX
-		objToSend = this.rancherAdapterToOut(objRan);
+		var objToSend = this.rancherAdapterToOut(objRan);
 		delete objToSend.rancherId;
-		cgCreate = consumingGateway.Create("Rancher", "test", objToSend);
+		var cgCreate = consumingGateway.Create("Rancher", "test", objToSend);
 		if (cgCreate.exceptionId == 0){ //Created successfully			
 			objRan.rancher_id = cgCreate.generatedId;
 			this.arrObj.push(objRan);
@@ -141,15 +141,18 @@ enyo.kind({
 	},
 	upd:function(objOld,objNew,cbObj,cbMethod){
 		objNew.rancher_id = objOld.rancher_id;
-		objToSend = this.rancherAdapterToOut(objNew);
-		cgUpdate = consumingGateway.Update("Rancher", "test", objToSend);
+		var objToSend = this.rancherAdapterToOut(objNew);
+		var cgUpdate = consumingGateway.Update("Rancher", "test", objToSend);
 		if (cgUpdate.exceptionId == 0){ //Updated successfully
+			for(prop in objNew){
+				objOld[prop]=objNew[prop];
+			}
 			var tamanio = this.get().length;
 			for(var i=0;i<tamanio;i++){
 				if (this.arrObj[i].rancher_id == objOld.rancher_id){
-					this.arrObj[i] = objNew;
+					this.arrObj[i] = objOld;
 					_arrRancherList = this.arrObj;
-					cbObj.objRan = objNew;
+					cbObj.objRan = objOld;
 					if(cbMethod){
 						cbObj[cbMethod]();
 					}
@@ -166,7 +169,7 @@ enyo.kind({
 	del:function(delObj,cbObj,cbMethod){		
 		//AJAX
 		//Update Internal Object
-		objToSend = this.rancherAdapterToOut(delObj);
+		var objToSend = this.rancherAdapterToOut(delObj);
 		delete objToSend.aka;
 		delete objToSend.birthDate;
 		delete objToSend.emailAddress;
@@ -180,7 +183,7 @@ enyo.kind({
 		delete objToSend.rancher_type;
 		
 		
-		cgDelete = consumingGateway.Delete("Rancher", "testRequest", objToSend);
+		var cgDelete = consumingGateway.Delete("Rancher", "testRequest", objToSend);
 		if (cgDelete.exceptionId == 0){ //Deleted successfully
 			var tamanio = this.get().length;
 			for(var i=0;i<tamanio;i++){
@@ -266,10 +269,10 @@ enyo.kind({
 	addContact:function(objRancher,objCon,cbObj,cbMethod){
 		//AJAX
 		objCon.rancher_id = objRancher.rancher_id;
-		objToSend = this.rancherContactAdapterToOut(objCon);
+		var objToSend = this.rancherContactAdapterToOut(objCon);
 		delete objToSend.contactId;
 		
-		cgCreate = consumingGateway.Create("RancherContact", "test", objToSend);
+		var cgCreate = consumingGateway.Create("RancherContact", "test", objToSend);
 		if (cgCreate.exceptionId == 0){ //Created successfully			
 			objCon.contact_id = cgCreate.generatedId;
 			objRancher.contacts.push(objCon);
@@ -289,13 +292,29 @@ enyo.kind({
 	},
 	updateContact:function(objRancher,objOld,objNew,cbObj,cbMethod){
 		//AJAX
-		//Update Local		
-		for (var sKey in objNew){
-			objOld[sKey]=objNew[sKey];
+		objNew.contact_id = objOld.contact_id;
+		objNew.rancher_id = objOld.rancher_id;
+		var objToSend = this.rancherContactAdapterToOut(objNew);
+		var cgUpdateContact = consumingGateway.Update("RancherContact", "test", objToSend);
+		if (cgUpdateContact.exceptionId == 0){ //Updated successfully			
+			var tamanio = objRancher.contacts.length;
+			for(var i=0;i<tamanio;i++){
+				if (objRancher.contacts[i].contact_id == objOld.contact_id){
+					objRancher.contacts[i] = objNew;
+//					cbObj.objRan = objNew;
+					if(cbMethod){
+						cbObj[cbMethod]();
+					}
+					return true;					
+				}
+			}
+			return false;
 		}
-		if(cbMethod){
-			cbObj[cbMethod]();
-		}		
+		else{ //Error			
+			cacheMan.setMessage("", "","[Exception ID: " + cgUpdateContact.exceptionId + "] Descripcion: " + cgUpdateContact.exceptionDescription);
+			return false;
+		}
+				
 	},
 	deleteContact:function(objRancher,objCon,cbObj,cbMethod){
 		//AJAX

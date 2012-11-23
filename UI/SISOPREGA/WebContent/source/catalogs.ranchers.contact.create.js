@@ -28,7 +28,18 @@ enyo.kind({
 				  {kind: "Input", name:"email_add", hint:"Email",
 				   inputClassName: "blankInput", focusClassName:"darkFocus"},							 
 				  {kind: "Input", name:"phone_number", hint:"Telefono",
-				   inputClassName: "blankInput", focusClassName:"darkFocus"}]},
+				   inputClassName: "blankInput", focusClassName:"darkFocus"},
+				   {kind: "Input", name:"address_one", hint:"Domicilio",
+					   inputClassName: "blankInput", focusClassName:"darkFocus"},
+				   {kind: "Input", name:"address_two", hint:"",
+					   inputClassName: "blankInput", focusClassName:"darkFocus"},
+				   {kind: "Input", name:"city", hint:"Ciudad",
+					   inputClassName: "blankInput", focusClassName:"darkFocus"},
+				   {kind: "Input", name:"address_state", hint:"Estado",
+					   inputClassName: "blankInput", focusClassName:"darkFocus"},
+				   {kind: "Input", name:"zip_code", hint:"Codigo Postal",
+					   inputClassName: "blankInput", focusClassName:"darkFocus"},
+				   ]},
 			{kind: "Drawer", name:"draAdd", 
 			 components: [ 					
 				{kind: "Button",name:"btnAdd", className: "enyo-button-affirmative", 
@@ -53,25 +64,36 @@ enyo.kind({
 		this.$.mother_name.setValue("");
 		this.$.birth_date.setValue(new Date());
 		this.$.email_add.setValue("");
-		this.$.phone_number.setValue("");		
+		this.$.phone_number.setValue("");
+		this.$.address_one.setValue("");
+		this.$.address_two.setValue("");
+		this.$.city.setValue("");
+		this.$.address_state.setValue("");
+		this.$.zip_code.setValue("");		
 	},
 	updateRancher:function(){		
 		cacheRanchers.updateContact(this.objRancher,this.objContact,this.getContact(),this,"doUpdateRancher");
 	},
 	getContact:function(){
 		var fmt = new enyo.g11n.DateFmt({format: "yyyy-MM-dd"});		
-		var objContact={	
-							rancher_id:		"",
-							aka:			"", 
-							first_name:		"", 
-							last_name:		"", 
-							mother_name:	"",
-							email_add:		"",
-							contacts:		[],
-							billing:		{},
-							rancher_type:	1,
-							phone_number:	""
-						};
+		
+		var objContact = {
+				contact_id:		"",
+				rancher_id:		"",
+				aka:			"",
+				first_name:		"",
+				last_name:		"",
+				mother_name:	"",
+				birth_date:		"",
+				email_add:		"",
+				phone_number:	"",
+				address_one:	"",
+				address_two:	"",
+				city:			"",
+				address_state:	"",
+				zip_code:		""								
+			};
+		
 		objContact.aka=this.$.aka.getValue();
 		objContact.first_name=this.$.first_name.getValue();
 		objContact.last_name=this.$.last_name.getValue();
@@ -79,6 +101,11 @@ enyo.kind({
 		objContact.birth_date=fmt.format(this.$.birth_date.getValue());
 		objContact.email_add=this.$.email_add.getValue();
 		objContact.phone_number=this.$.phone_number.getValue();
+		objContact.address_one=this.$.address_one.getValue();
+		objContact.address_two=this.$.address_two.getValue();
+		objContact.city=this.$.city.getValue();
+		objContact.address_state=this.$.address_state.getValue();
+		objContact.zip_code=this.$.zip_code.getValue();		
 		return objContact;
 	},
 	addContact:function(){
@@ -101,6 +128,11 @@ enyo.kind({
 									 ));
 		this.$.email_add.setValue(this.objContact.email_add);
 		this.$.phone_number.setValue(this.objContact.phone_number);
+		this.$.address_one.setValue(this.objContact.address_one);
+		this.$.address_two.setValue(this.objContact.address_two);
+		this.$.city.setValue(this.objContact.city);
+		this.$.address_state.setValue(this.objContact.address_state);
+		this.$.zip_code.setValue(this.objContact.zip_code);
 		this.toggleUpdate();		
 		
 	},

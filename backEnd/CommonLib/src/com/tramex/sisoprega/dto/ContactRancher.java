@@ -42,7 +42,7 @@ public class ContactRancher {
     private String lastName;
     private String motherName;
     private Date birthDate;
-    private String emailAdd;
+    private String emailAddress;
     private String telephone;
     private String addressOne;
     private String addressTwo;
@@ -158,16 +158,16 @@ public class ContactRancher {
     /**
      * @return the emailAdd
      */
-    public String getEmailAdd() {
-	return emailAdd;
+    public String getEmailAddress() {
+	return emailAddress;
     }
 
     /**
      * @param emailAdd
      *            the emailAdd to set
      */
-    public void setEmailAdd(String emailAdd) {
-	this.emailAdd = emailAdd;
+    public void setEmailAddress(String emailAdd) {
+	this.emailAddress = emailAdd;
     }
 
     /**
@@ -265,7 +265,7 @@ public class ContactRancher {
 	return "rancherId:" + rancherId + ";" + "contactId:" + contactId
 		+ ";aka:" + aka + ";firstName:" + firstName + ";lastName:"
 		+ lastName + ";motherName:" + motherName + ";birthDate:"
-		+ birthDate + ";emailAdd:" + emailAdd + ";telephone:"
+		+ birthDate + ";emailAddress:" + emailAddress + ";telephone:"
 		+ telephone + ";addressOne:" + addressOne + ";addressTwo:"
 		+ addressTwo + ";city:" + city + ";state:" + addressState
 		+ ";zip:" + zipCode + ";";

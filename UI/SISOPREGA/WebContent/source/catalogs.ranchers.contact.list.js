@@ -100,9 +100,10 @@ enyo.kind({
 					return [inA.last_name.toLowerCase()] < 
 						   [inB.last_name.toLowerCase()] ? -1 : 1;
 				});							
-				this.$.productList.render();					
+//				this.$.productList.render();					
 			}
 		}
+		this.$.productList.render();
 	},
 	selectContact:function(inSender, inEvent) {
 		this.iSelected=inEvent.rowIndex;
