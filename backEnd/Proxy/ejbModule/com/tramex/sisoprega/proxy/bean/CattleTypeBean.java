@@ -110,30 +110,30 @@ public class CattleTypeBean extends BaseBean implements Cruddable {
 	    log.fine("Got contact from request: " + cattle);
 	    TypedQuery<CattleType> readQuery = null;
 
-	    /*if (cattle.getCatclassId() != 0) {
-		readQuery = em.createNamedQuery("CATTLE_CLASS_BY_ID",
-			CattleType.class);
-		readQuery.setParameter("catclassId", cattle.getCatclassId());
-	    } else {
-		readQuery = em.createNamedQuery("ALL_CATTLE_CLASSES",
-			CattleType.class);
-
-	    }*/
-	    readQuery= em.createNamedQuery("ALL_CATTLE_TYPE", CattleType.class);
+	    if(cattle.getCattypeId() != 0){
+		readQuery = em.createNamedQuery("CATTLE_TYPE_BY_ID", CattleType.class);
+		readQuery.setParameter("cattypeId", cattle.getCattypeId());
+	    }else if(cattle.getCatclassId()!=0){
+		readQuery = em.createNamedQuery("CATTLE_TYPE_BY_CLASS_ID", CattleType.class);
+		readQuery.setParameter("catClassId", cattle.getCatclassId());
+	    }else{
+		readQuery = em.createNamedQuery("ALL_CATTLE_TYPE", CattleType.class);
+	    }
+	    
 	    List<CattleType> queryResults = readQuery.getResultList();
 
 	    if (queryResults.isEmpty()) {
 		Error error = new Error();
-		error.setExceptionId("CCR1");
+		error.setExceptionId("CTR2");
 		error.setExceptionDescription("No data found");
-		error.setOrigin("proxy.CattleClass.Read");
+		error.setOrigin("proxy.CattleType.Read");
 		response.setError(error);
 	    } else {
 		List<GatewayContent> records = contentFromList(queryResults,
 			CattleType.class);
 		response.getRecord().addAll(records);
 		response.setError(new Error("0", "SUCCESS",
-			"proxy.CattleClass.Read"));
+			"proxy.CattleType.Read"));
 
 	    }
 
@@ -141,7 +141,7 @@ public class CattleTypeBean extends BaseBean implements Cruddable {
 	    log.severe("Exception found while reading Cattle Class");
 	    log.throwing(this.getClass().getCanonicalName(), "Read", e);
 
-	    response.setError(new Error("CCR2", "Read exception: "
+	    response.setError(new Error("CTR3", "Read exception: "
 		    + e.getMessage(), "proxy.CattleClass.Read"));
 	}
 
