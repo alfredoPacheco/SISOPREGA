@@ -117,7 +117,8 @@
 				<generated-value strategy="IDENTITY" />
 			</id>
 			<basic name="rancherId">
-				<column name="rancher_id" nullable="false" unique="true" updatable="false" />
+				<column name="rancher_id" nullable="false" unique="true"
+					updatable="false" />
 			</basic>
 			<basic name="addressOne">
 				<column name="address_one" length="100" nullable="false" />
@@ -255,5 +256,51 @@
 			</basic>
 		</attributes>
 	</entity>
-
+	<entity class="com.tramex.sisoprega.dto.CattleClass">
+		<table name="cat_cattle_class" />
+		<named-query name="CATTLE_CLASS_BY_ID">
+			<description>Retrieves a single cattle class record by it's ID</description>
+			<query>SELECT cattle FROM CattleClass cattle WHERE cattle.catclassId = :catclassId</query>
+		</named-query>
+		<named-query name="ALL_CATTLE_CLASSES">
+			<description>Retrieves all cattle class records from database</description>
+			<query>SELECT cattle FROM CattleClass cattle ORDER BY cattle.catclassName</query>
+		</named-query>
+		<attributes>
+			<id name="catclassId">
+				<column name="catclass_id" />
+				<generated-value strategy="IDENTITY" />
+			</id>
+			<basic name="catclassName">
+				<column name="catclass_name" length="50" unique="true"/>
+			</basic>
+		</attributes>
+	</entity>
+	<entity class="com.tramex.sisoprega.dto.CattleType">
+		<table name= "cat_cattle_type" />
+		<named-query name="ALL_CATTLE_TYPE">
+			<description>Retrieves all cattle class records from database </description>
+			<query>SELECT Cattle FROM CattleType Cattle ORDER BY Cattle.cattypeName</query>
+		</named-query>
+		 <!--<named-query name="CATTLE_TYPE_BY_CATTLE_TYPE_ID">
+			<description>Traer un registro utilizando el ID</description>
+			<query>SELECT Cattle FROM CattleType Cattle WHERE Cattle.cattypeId= :cattypeId</query>
+		</named-query>
+		<named-query name="CATTLE_TYPE">
+			<description></description>
+			<query></query>
+		</named-query>--> 
+		<attributes>
+			<id name="cattypeId">
+				<column name="cattype_id" />
+				<generated-value strategy="IDENTITY" />
+			</id>
+			<basic name="catclassId">
+				<column name="catclass_id" />
+			</basic>
+			<basic name="cattypeName">
+				<column name="cattype_name"/>
+			</basic>
+		</attributes>
+	</entity>
 </entity-mappings>

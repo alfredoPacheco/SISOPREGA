@@ -56,7 +56,7 @@ public class Rancher extends BaseBean implements Cruddable {
      */
     @Override
     public CreateGatewayResponse Create(GatewayRequest request) {
-	log.entering(Rancher.class.getCanonicalName(), "Create");
+	log.entering(this.getClass().getCanonicalName(), "Create");
 
 	CreateGatewayResponse response = new CreateGatewayResponse();
 	com.tramex.sisoprega.dto.Rancher rancher = null;

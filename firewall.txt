@@ -1,0 +1,19 @@
+iptables -P INPUT DROP
+iptables -P FORWARD ACCEPT
+iptables -P OUTPUT ACCEPT
+iptables -A INPUT -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A INPUT -m state --state NEW -m tcp -p tcp --dport 8822 -j ACCEPT
+iptables -A INPUT -s 198.61.225.0/24 -m state --state NEW -p tcp --dport 8822 -j ACCEPT
+iptables -A INPUT -s 10.177.22.0/24 -m state --state NEW -p tcp --dport 8822 -j ACCEPT
+iptables -A INPUT -s 198.61.225.0/24 -m state --state NEW -p udp --dport 123 -j ACCEPT
+iptables -A INPUT -s 10.177.22.0/24 -m state --state NEW -p udp --dport 123 -j ACCEPT
+iptables -A INPUT -m state --state NEW -p udp --dport 53 -j ACCEPT
+iptables -A INPUT -m state --state NEW -p tcp --dport 53 -j ACCEPT
+iptables -A INPUT -m state --state NEW -p tcp --dport 443 -j ACCEPT
+iptables -A INPUT -m state --state NEW -p tcp --dport 8080 -j ACCEPT
+iptables -A INPUT -m state --state NEW -p tcp --dport 8181 -j ACCEPT
+iptables -A INPUT -m state --state NEW -p tcp --dport 4848 -j ACCEPT
+iptables -A INPUT -s 127.0.0.1 -m state --state NEW -p tcp --dport 5432 -j ACCEPT
+iptables -A INPUT -s 127.0.0.1 -m state --state NEW -p udp --dport 5432 -j ACCEPT
+iptables -A INPUT -s 127.0.0.1/24 -m state --state NEW -p tcp --dport 5432 -j ACCEPT
+iptables -A INPUT -s 127.0.0.1/24 -m state --state NEW -p udp --dport 5432 -j ACCEPT

@@ -16,24 +16,20 @@
  * Author: Diego Torres
  *  
  */
-CREATE DATABASE IF NOT EXISTS sisoprega;
-USE sisoprega;
-
-/*Table structure for table cat_ranchers */
-
 DROP TABLE IF EXISTS cat_rancher;
 
 CREATE TABLE cat_rancher (
-  rancher_id SMALLINT unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  rancher_id SERIAL PRIMARY KEY,
   aka VARCHAR(100),
   first_name VARCHAR(50) NOT NULL,
   last_name VARCHAR(50) NOT NULL,
   mother_name VARCHAR(50),
   birth_date date,
   email_add VARCHAR(150),
-  telephone VARCHAR(20),
-  UNIQUE KEY U_cat_rancher (first_name, last_name, mother_name)
+  telephone VARCHAR(20)  
 );
+
+CREATE UNIQUE INDEX U_cat_rancher ON cat_rancher (first_name, last_name, mother_name);
 
 -- SAMPLE DATA FOR RANCHERS
 INSERT INTO cat_rancher(aka, first_name, last_name, mother_name, email_add, telephone) 
@@ -45,7 +41,7 @@ VALUES('Diego A.', 'Torres', 'Fuerte', '1982-04-13', 'diego.torres.fuerte@gmail.
 DROP TABLE IF EXISTS cat_enterprise_rancher;
 
 CREATE TABLE cat_enterprise_rancher(
-  enterprise_id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  enterprise_id SERIAL PRIMARY KEY,
   legal_name VARCHAR(100) NOT NULL,
   address_one VARCHAR(100) NOT NULL,
   address_two VARCHAR(100),
@@ -53,53 +49,35 @@ CREATE TABLE cat_enterprise_rancher(
   address_state VARCHAR(80) NOT NULL,
   zip_code VARCHAR(9) NOT NULL,
   legal_id VARCHAR(13) NOT NULL,
-  telephone	VARCHAR(20),
-  UNIQUE KEY U_enterprise_rancher_legal_id(legal_id),
-  UNIQUE KEY U_enterprise_rancher_legal_name(legal_name)
+  telephone VARCHAR(20)
 );
+
+CREATE UNIQUE INDEX U_enterprise_rancher_legal_id ON cat_enterprise_rancher(legal_id);
+CREATE UNIQUE INDEX U_enterprise_rancher_legal_name ON cat_enterprise_rancher(legal_name);
 
 DROP TABLE IF EXISTS cat_rancher_invoice;
 
 CREATE TABLE cat_rancher_invoice (
-  rancher_invoice_id  SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  rancher_id SMALLINT UNSIGNED NOT NULL REFERENCES cat_rancher(rancher_id),
+  rancher_invoice_id  SERIAL PRIMARY KEY,
+  rancher_id integer NOT NULL REFERENCES cat_rancher(rancher_id),
   legal_name VARCHAR(100) NOT NULL,
   address_one VARCHAR(100) NOT NULL,
   address_two VARCHAR(100),
   city VARCHAR(80) NOT NULL,
   address_state VARCHAR(80) NOT NULL,
   zip_code VARCHAR(9) NOT NULL,
-  legal_id VARCHAR(13) NOT NULL,
-  UNIQUE KEY U_rancher_invoice_rancher_id(rancher_id),
-  UNIQUE KEY U_rancher_invoice_legal_name(legal_name),
-  UNIQUE KEY U_rancher_invoice_legal_id(legal_id)
+  legal_id VARCHAR(13) NOT NULL
 );
+
+CREATE UNIQUE INDEX U_rancher_invoice_rancher_id ON cat_rancher_invoice(rancher_id);
+CREATE UNIQUE INDEX U_rancher_invoice_legal_name ON cat_rancher_invoice(legal_name);
+CREATE UNIQUE INDEX U_rancher_invoice_legal_ID ON cat_rancher_invoice(legal_id);
 
 DROP TABLE IF EXISTS cat_rancher_contact;
 
 CREATE TABLE cat_rancher_contact(
-  contact_id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  rancher_id SMALLINT UNSIGNED NOT NULL REFERENCES cat_rancher(rancher_id),
-  aka VARCHAR(100),
-  first_name VARCHAR(50) NOT NULL,
-  last_name VARCHAR(50) NOT NULL,
-  mother_name VARCHAR(50),
-  birth_date date,
-  email_add VARCHAR(150),
-  telephone VARCHAR(20),
-  address_one VARCHAR(100),
-  address_two VARCHAR(100),
-  city VARCHAR(80),
-  address_state VARCHAR(80),
-  zip_code VARCHAR(9),
-  UNIQUE KEY U_rancher_contact(rancher_id, first_name, last_name, mother_name)
-);
-
-DROP TABLE IF EXISTS cat_enterprise_contact;
-
-CREATE TABLE cat_enterprise_contact (
-  contact_id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  enterprise_id SMALLINT UNSIGNED NOT NULL REFERENCES cat_enterprise_rancher(enterprise_id),
+  contact_id SERIAL PRIMARY KEY,
+  rancher_id integer NOT NULL REFERENCES cat_rancher(rancher_id),
   aka VARCHAR(100),
   first_name VARCHAR(50) NOT NULL,
   last_name VARCHAR(50) NOT NULL,
@@ -113,6 +91,60 @@ CREATE TABLE cat_enterprise_contact (
   address_state VARCHAR(80),
   zip_code VARCHAR(9)
 );
+
+CREATE UNIQUE INDEX U_cat_rancher_contact ON cat_rancher_contact(rancher_id, first_name, last_name, mother_name);
+
+DROP TABLE IF EXISTS cat_enterprise_contact;
+
+CREATE TABLE cat_enterprise_contact (
+  contact_id SERIAL PRIMARY KEY,
+  enterprise_id integer NOT NULL REFERENCES cat_enterprise_rancher(enterprise_id),
+  aka VARCHAR(100),
+  first_name VARCHAR(50) NOT NULL,
+  last_name VARCHAR(50) NOT NULL,
+  mother_name VARCHAR(50),
+  birth_date date,
+  email_add VARCHAR(150),
+  telephone VARCHAR(20),
+  address_one VARCHAR(100),
+  address_two VARCHAR(100),
+  city VARCHAR(80),
+  address_state VARCHAR(80),
+  zip_code VARCHAR(9)
+);
+
+CREATE UNIQUE INDEX U_cat_enterprise_contact ON cat_enterprise_contact(enterprise_id, first_name, last_name, mother_name);
+
+/*
+ Table structure for table cat_cattle_classes
+ */
+DROP TABLE IF EXISTS cat_cattle_class;
+
+CREATE TABLE cat_cattle_class (
+  catclass_id SERIAL PRIMARY KEY,
+  catclass_name VARCHAR(50) NOT NULL
+);
+
+CREATE UNIQUE INDEX U_catclass_name ON cat_cattle_class(catclass_name);
+
+INSERT INTO cat_cattle_class(catclass_name) VALUES('Bobino');
+INSERT INTO cat_cattle_class(catclass_name) VALUES('Equino');
+
+/*
+ Table structure for table cat_cattle_types
+ */
+DROP TABLE IF EXISTS cat_cattle_type;
+
+CREATE TABLE cat_cattle_type (
+  cattype_id SMALLINT unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  catclass_id SMALLINT UNSIGNED NOT NULL REFERENCES cat_cattle_class(catclass_id),
+  cattype_name VARCHAR(50) NOT NULL
+);
+
+INSERT INTO cat_cattle_type(catclass_id, cattype_name) VALUES(1, 'Novillos');
+INSERT INTO cat_cattle_type(catclass_id, cattype_name) VALUES(1, 'Vaquillas');
+INSERT INTO cat_cattle_type(catclass_id, cattype_name) VALUES(2, 'Caballos');
+INSERT INTO cat_cattle_type(catclass_id, cattype_name) VALUES(2, 'Yeguas');
 
 /*
   Table structure for table cat_location 
@@ -159,21 +191,6 @@ INSERT INTO cat_banyard(banyard_code, location_id) VALUES('E1', 2);
 INSERT INTO cat_banyard(banyard_code, location_id) VALUES('E2', 2);
 INSERT INTO cat_banyard(banyard_code, location_id) VALUES('E3', 2);
 
-/*
- Table structure for table cat_cattle_classes
- */
-DROP TABLE IF EXISTS cat_cattle_class;
-
-CREATE TABLE cat_cattle_class (
-  catclass_id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  catclass_name VARCHAR(50) NOT NULL,
-  UNIQUE KEY U_catclass_name (catclass_name)
-);
-
-INSERT INTO cat_cattle_class(catclass_name) VALUES('Bobino');
-INSERT INTO cat_cattle_class(catclass_name) VALUES('Equino');
-
-
 /* 
   Table structure for table cat_banyard_capacity.
   it is pretendable to have different capacities by
@@ -196,21 +213,7 @@ INSERT INTO cat_banyard_capacity(banyard_id, catclass_id)
 SELECT banyard_id, catclass_id
 FROM cat_banyard, cat_cattle_class;
 
-/*
- Table structure for table cat_cattle_types
- */
-DROP TABLE IF EXISTS cat_cattle_type;
 
-CREATE TABLE cat_cattle_type (
-  cattype_id SMALLINT unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  catclass_id SMALLINT UNSIGNED NOT NULL REFERENCES cat_cattle_class(catclass_id),
-  cattype_name VARCHAR(50) NOT NULL
-);
-
-INSERT INTO cat_cattle_type(catclass_id, cattype_name) VALUES(1, 'Novillos');
-INSERT INTO cat_cattle_type(catclass_id, cattype_name) VALUES(1, 'Vaquillas');
-INSERT INTO cat_cattle_type(catclass_id, cattype_name) VALUES(2, 'Caballos');
-INSERT INTO cat_cattle_type(catclass_id, cattype_name) VALUES(2, 'Yeguas');
 
 /*
  Table structure for table cat_measurement_units 

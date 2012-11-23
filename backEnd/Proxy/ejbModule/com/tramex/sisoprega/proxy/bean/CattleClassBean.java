@@ -18,7 +18,6 @@ package com.tramex.sisoprega.proxy.bean;
 import java.util.List;
 
 import javax.ejb.Stateless;
-import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
 import com.tramex.sisoprega.common.BaseResponse;
@@ -29,13 +28,12 @@ import com.tramex.sisoprega.common.GatewayRequest;
 import com.tramex.sisoprega.common.ReadGatewayResponse;
 import com.tramex.sisoprega.common.UpdateGatewayResponse;
 import com.tramex.sisoprega.common.crud.Cruddable;
-import com.tramex.sisoprega.dto.ContactEnterprise;
+import com.tramex.sisoprega.dto.CattleClass;
 
 /**
- * This proxy knows the logic to evaluate Enterprise rancher's Contact
- * information and the way to the database in order to save their data. Also, it
- * is contained in EJB container, we can apply security and life cycle methods
- * for resources.<BR/>
+ * This proxy knows the logic to evaluate Cattle class entities information and
+ * the way to the database in order to save their data. Also, it is contained in
+ * EJB container, we can apply security and life cycle methods for resources.<BR/>
  * 
  * <B>Revision History:</B>
  * 
@@ -44,7 +42,7 @@ import com.tramex.sisoprega.dto.ContactEnterprise;
  * Date        By                           Description
  * MM/DD/YYYY
  * ----------  ---------------------------  -------------------------------------------
- * 11/11/2012  Diego Torres                 Initial Version.
+ * 11/15/2012  Diego Torres                 Initial Version.
  * ====================================================================================
  * </PRE>
  * 
@@ -52,7 +50,7 @@ import com.tramex.sisoprega.dto.ContactEnterprise;
  * 
  */
 @Stateless
-public class EnterpriseContact extends BaseBean implements Cruddable {
+public class CattleClassBean extends BaseBean implements Cruddable {
 
     /*
      * (non-Javadoc)
@@ -66,32 +64,35 @@ public class EnterpriseContact extends BaseBean implements Cruddable {
 	log.entering(this.getClass().getCanonicalName(), "Create");
 
 	CreateGatewayResponse response = new CreateGatewayResponse();
-	ContactEnterprise contact = null;
-
+	CattleClass cattle = null;
 	try {
-	    contact = entityFromRequest(request, ContactEnterprise.class);
+	    cattle = entityFromRequest(request, CattleClass.class);
 
-	    log.fine("Received contact in request: {" + contact + "}");
+	    log.fine("Received cattle class in request: " + cattle);
 
-	    if (validateEntity(contact)) {
-		em.persist(contact);
+	    if (validateEntity(cattle)) {
+		log.finer("Cattle class succesfully validated");
+		em.persist(cattle);
+		log.finer("Cattle class persisted on database");
 		em.flush();
 
-		String sId = String.valueOf(contact.getContactId());
+		String sId = String.valueOf(cattle.getCatclassId());
+		log.finer("Setting cattle class id in response: " + sId);
 		response.setGeneratedId(sId);
 		response.setError(new Error("0", "SUCCESS",
-			"proxy.EnterpriseContact.Create"));
+			"proxy.CattleClassBean.Create"));
 	    } else {
 		log.warning("Validation error: " + error_description);
-		response.setError(new Error("ECC1", "Validation error: "
-			+ error_description, "proxy.EnterpriseContact.Create"));
+		response.setError(new Error("CCC1", "Validation error: "
+			+ error_description, "proxy.CattleClassBean.Create"));
 	    }
+
 	} catch (Exception e) {
-	    log.severe("Exception found while creating enterprise contact");
+	    log.severe("Exception found while creating cattle class");
 	    log.throwing(this.getClass().getName(), "Create", e);
 
-	    response.setError(new Error("ECC2", "Create exception"
-		    + e.getMessage(), "proxy.EnterpriseContact.Create"));
+	    response.setError(new Error("CCC2", "Create exception: "
+		    + e.getMessage(), "proxy.CattleClassBean.Create"));
 	}
 
 	log.exiting(this.getClass().getCanonicalName(), "Create");
@@ -112,53 +113,46 @@ public class EnterpriseContact extends BaseBean implements Cruddable {
 	ReadGatewayResponse response = new ReadGatewayResponse();
 	response.setEntityName(request.getEntityName());
 
-	ContactEnterprise contact = null;
+	CattleClass cattle = null;
 	try {
-	    contact = entityFromRequest(request, ContactEnterprise.class);
+	    cattle = entityFromRequest(request, CattleClass.class);
 
-	    log.fine("Got contact from request: " + contact);
-	    TypedQuery<ContactEnterprise> readQuery = null;
+	    log.fine("Got contact from request: " + cattle);
+	    TypedQuery<CattleClass> readQuery = null;
 
-	    if (contact.getEnterpriseId() != 0) {
-		readQuery = em.createNamedQuery(
-			"ENTERPRISE_CONTACT_BY_ENTERPRISE_ID",
-			ContactEnterprise.class);
-		readQuery.setParameter("enterpriseId",
-			contact.getEnterpriseId());
-	    } else if (contact.getContactId() != 0) {
-		readQuery = em.createNamedQuery("ENTERPRISE_CONTACT_BY_ID",
-			ContactEnterprise.class);
-		readQuery.setParameter("contactId", contact.getContactId());
+	    if (cattle.getCatclassId() != 0) {
+		readQuery = em.createNamedQuery("CATTLE_CLASS_BY_ID",
+			CattleClass.class);
+		readQuery.setParameter("catclassId", cattle.getCatclassId());
 	    } else {
-		response.setError(new Error("ECR1",
-			"Invalid filter for contact query",
-			"proxy.EnterpriseContact.Read"));
-		return response;
+		readQuery = em.createNamedQuery("ALL_CATTLE_CLASSES",
+			CattleClass.class);
+
 	    }
 
-	    List<ContactEnterprise> queryResults = readQuery.getResultList();
+	    List<CattleClass> queryResults = readQuery.getResultList();
 
 	    if (queryResults.isEmpty()) {
 		Error error = new Error();
-		error.setExceptionId("ECR2");
+		error.setExceptionId("CCR1");
 		error.setExceptionDescription("No data found");
-		error.setOrigin("proxy.EnterpriseContact.Read");
+		error.setOrigin("proxy.CattleClass.Read");
 		response.setError(error);
 	    } else {
 		List<GatewayContent> records = contentFromList(queryResults,
-			ContactEnterprise.class);
+			CattleClass.class);
 		response.getRecord().addAll(records);
 		response.setError(new Error("0", "SUCCESS",
-			"proxy.EnterpriseContact.Read"));
+			"proxy.CattleClass.Read"));
 
 	    }
 
 	} catch (Exception e) {
-	    log.severe("Exception found while reading enterprise contact");
+	    log.severe("Exception found while reading Cattle Class");
 	    log.throwing(this.getClass().getCanonicalName(), "Read", e);
 
-	    response.setError(new Error("ECR3", "Read exception: "
-		    + e.getMessage(), "proxy.RancherContact.Read"));
+	    response.setError(new Error("CCR2", "Read exception: "
+		    + e.getMessage(), "proxy.CattleClass.Read"));
 	}
 
 	log.exiting(this.getClass().getCanonicalName(), "Read");
@@ -176,40 +170,40 @@ public class EnterpriseContact extends BaseBean implements Cruddable {
     public UpdateGatewayResponse Update(GatewayRequest request) {
 	log.entering(this.getClass().getCanonicalName(), "Update");
 	UpdateGatewayResponse response = new UpdateGatewayResponse();
-	ContactEnterprise contact = null;
+	CattleClass cattle = null;
 	try {
-	    contact = entityFromRequest(request, ContactEnterprise.class);
+	    cattle = entityFromRequest(request, CattleClass.class);
 
-	    if (contact.getContactId() == 0) {
-		log.warning("ECU1 - Invalid enterprise contact id");
-		response.setError(new Error("ECU1",
-			"Invalid enterprise contact id",
-			"proxy.EnterpriceContact.Update"));
+	    if (cattle.getCatclassId() == 0) {
+		log.warning("CCU1 - Invalid Cattle Class id");
+		response.setError(new Error("CCU1",
+			"Invalid Cattle Class id",
+			"proxy.CattleClass.Update"));
 	    } else {
-		if (validateEntity(contact)) {
-		    em.merge(contact);
+		if (validateEntity(cattle)) {
+		    em.merge(cattle);
 		    em.flush();
 
-		    GatewayContent content = getContentFromEntity(contact,
-			    ContactEnterprise.class);
+		    GatewayContent content = getContentFromEntity(cattle,
+			    CattleClass.class);
 		    response.setUpdatedRecord(content);
 
 		    response.setError(new Error("0", "SUCCESS",
-			    "proxy.EnterpriseContact.Update"));
+			    "proxy.CattleClass.Update"));
 		} else {
 		    log.warning("Validation error: " + error_description);
-		    response.setError(new Error("ECU2", "Validation error: "
+		    response.setError(new Error("CCU2", "Validation error: "
 			    + error_description,
-			    "proxy.EnterpriseContact.Update"));
+			    "proxy.CattleClass.Update"));
 		}
 	    }
 
 	} catch (Exception e) {
-	    log.severe("Exception found while updating EnterpriseContact");
+	    log.severe("Exception found while updating CattleClass");
 	    log.throwing(this.getClass().getName(), "Update", e);
 
-	    response.setError(new Error("RCU3", "Update exception "
-		    + e.getMessage(), "proxy.EnterpriseContact.Update"));
+	    response.setError(new Error("CCU3", "Update exception "
+		    + e.getMessage(), "proxy.CattleClass.Update"));
 	}
 
 	log.exiting(this.getClass().getCanonicalName(), "Update");
@@ -229,68 +223,36 @@ public class EnterpriseContact extends BaseBean implements Cruddable {
 	BaseResponse response = new BaseResponse();
 
 	try {
-	    ContactEnterprise contact = entityFromRequest(request,
-		    ContactEnterprise.class);
-	    if (contact.getContactId() == 0) {
-		log.warning("ECD1 - Invalid EnterpriseContact");
-		response.setError(new Error("RCD1",
-			"Invalid EnterpriseContactId",
-			"proxy.EnterpriseContact.Delete"));
+	    CattleClass contact = entityFromRequest(request,
+		    CattleClass.class);
+	    if (contact.getCatclassId() == 0) {
+		log.warning("CCD1 - Invalid CattleClass");
+		response.setError(new Error("CCD1",
+			"Invalid CattleClassId",
+			"proxy.CattleClass.Delete"));
 	    } else {
-		TypedQuery<ContactEnterprise> readQuery = em.createNamedQuery(
-			"ENTERPRISE_CONTACT_BY_ID", ContactEnterprise.class);
-		readQuery.setParameter("contactId", contact.getContactId());
+		TypedQuery<CattleClass> readQuery = em.createNamedQuery(
+			"CATTLE_CLASS_BY_ID", CattleClass.class);
+		readQuery.setParameter("catclassId", contact.getCatclassId());
 		contact = readQuery.getSingleResult();
 		em.merge(contact);
 		em.remove(contact);
 		em.flush();
 
 		response.setError(new Error("0", "SUCCESS",
-			"proxy.EnterpriseContact.Delete"));
+			"proxy.CattleClass.Delete"));
 	    }
 	} catch (Exception e) {
 	    log.severe("Exception found while deleting contact");
 	    log.throwing(this.getClass().getName(), "Delete", e);
 
-	    response.setError(new Error("ECD2", "Delete exception: "
-		    + e.getMessage(), "proxy.EnterpriseContact.Delete"));
+	    response.setError(new Error("CCD2", "Delete exception: "
+		    + e.getMessage(), "proxy.CattleClass.Delete"));
 	}
 
 	log.exiting(this.getClass().getCanonicalName(), "Delete");
 	return response;
     }
-    
-    @Override
-    protected boolean validateEntity(Object entity) {
-	boolean result = true;
-	if (super.validateEntity(entity)) {
-	    result = enterpriseExists((ContactEnterprise)entity);
-	} else {
-	    result = false;
-	}
-	return result;
-    }
-    
-    private boolean enterpriseExists(ContactEnterprise contact) {
-	boolean exists = true;
+   
 
-	TypedQuery<com.tramex.sisoprega.dto.EnterpriseRancher> readQuery = null;
-
-	readQuery = em.createNamedQuery("ENTERPRISE_RANCHER_BY_ID",
-		com.tramex.sisoprega.dto.EnterpriseRancher.class);
-	readQuery.setParameter("enterpriseId", contact.getEnterpriseId());
-
-	try {
-	    com.tramex.sisoprega.dto.EnterpriseRancher enterprise = readQuery
-		    .getSingleResult();
-	    exists = enterprise != null;
-	} catch (NoResultException e) {
-	    exists = false;
-	    error_description = "enterpriseId " + contact.getEnterpriseId()
-		    + " does not exists on database";
-	}
-
-	return exists;
-    }
-    
 }
