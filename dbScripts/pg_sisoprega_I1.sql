@@ -16,7 +16,7 @@
  * Author: Diego Torres
  *  
  */
-DROP TABLE IF EXISTS cat_rancher;
+DROP TABLE IF EXISTS cat_rancher CASCADE;
 
 CREATE TABLE cat_rancher (
   rancher_id SERIAL PRIMARY KEY,
@@ -30,6 +30,9 @@ CREATE TABLE cat_rancher (
 );
 
 CREATE UNIQUE INDEX U_cat_rancher ON cat_rancher (first_name, last_name, mother_name);
+
+GRANT ALL ON cat_rancher TO sisoprega;
+GRANT ALL ON cat_rancher_rancher_id_seq TO sisoprega;
 
 -- SAMPLE DATA FOR RANCHERS
 INSERT INTO cat_rancher(aka, first_name, last_name, mother_name, email_add, telephone) 
