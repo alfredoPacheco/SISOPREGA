@@ -279,17 +279,17 @@
 	<entity class="com.tramex.sisoprega.dto.CattleType">
 		<table name= "cat_cattle_type" />
 		<named-query name="ALL_CATTLE_TYPE">
-			<description>Retrieves all cattle class records from database </description>
+			<description>Retrieves all cattle type records from database </description>
 			<query>SELECT Cattle FROM CattleType Cattle ORDER BY Cattle.cattypeName</query>
 		</named-query>
-		 <!--<named-query name="CATTLE_TYPE_BY_CATTLE_TYPE_ID">
-			<description>Traer un registro utilizando el ID</description>
+		 <named-query name="CATTLE_TYPE_BY_ID">
+			<description>Retrieve a single cattle type record using the type id</description>
 			<query>SELECT Cattle FROM CattleType Cattle WHERE Cattle.cattypeId= :cattypeId</query>
 		</named-query>
-		<named-query name="CATTLE_TYPE">
-			<description></description>
-			<query></query>
-		</named-query>--> 
+		<named-query name="CATTLE_TYPE_BY_CLASS_ID">
+			<description>Retrieve the cattle types associated with a cattle class</description>
+			<query>SELECT Cattle FROM CattleType Cattle WHERE Cattle.catclassId = :catClassId</query>
+		</named-query> 
 		<attributes>
 			<id name="cattypeId">
 				<column name="cattype_id" />
