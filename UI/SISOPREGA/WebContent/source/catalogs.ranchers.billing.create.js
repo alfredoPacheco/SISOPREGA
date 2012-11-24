@@ -55,9 +55,19 @@ enyo.kind({
 		cacheRanchers.updateBilling(this.objRan,this.getBilling(),this,"doUpdateRancher");
 	},
 	getBilling:function(){
-		var objBilling ={billing_id:null,rancher_id:null,company_name:"",					 
-					 address_one:"",address_two:"",
-				     city_name:"",state_id:"",state_name:"",zip_code:"",rfc:"",phone_number:""};
+		var objBilling ={
+							billing_id:		null,
+							rancher_id:		null,
+							company_name:	"",					 
+							address_one:	"",
+							address_two:	"",
+							city_name:		"",
+							state_id:		"",
+							state_name:		"",
+							zip_code:		"",
+							rfc:			"",
+							phone_number:	""
+						};
 		objBilling.company_name=this.$.company_name.getValue();
 		objBilling.address_one=this.$.address_one.getValue();
 		objBilling.address_two=this.$.address_two.getValue();
