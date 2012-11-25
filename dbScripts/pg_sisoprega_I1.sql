@@ -16,35 +16,35 @@
  * Author: Diego Torres
  *  
  */
+ 
 DROP TABLE IF EXISTS cat_rancher CASCADE;
+CREATE TABLE cat_rancher(
+	rancher_id integer PRIMARY KEY,
+	is_enterprise boolean
+);
 
-CREATE TABLE cat_rancher (
-  rancher_id SERIAL PRIMARY KEY,
+GRANT ALL ON cat_rancher TO sisoprega;
+
+DROP TABLE IF EXISTS cat_person_rancher CASCADE;
+CREATE TABLE cat_person_rancher (
+  rancher_id integer PRIMARY KEY,
   aka VARCHAR(100),
   first_name VARCHAR(50) NOT NULL,
   last_name VARCHAR(50) NOT NULL,
   mother_name VARCHAR(50),
   birth_date date,
   email_add VARCHAR(150),
-  telephone VARCHAR(20)  
+  telephone VARCHAR(20)
 );
 
-CREATE UNIQUE INDEX U_cat_rancher ON cat_rancher (first_name, last_name, mother_name);
+CREATE UNIQUE INDEX U_cat_person_rancher ON cat_person_rancher (first_name, last_name, mother_name);
 
-GRANT ALL ON cat_rancher TO sisoprega;
-GRANT ALL ON cat_rancher_rancher_id_seq TO sisoprega;
+GRANT ALL ON cat_person_rancher TO sisoprega;
 
--- SAMPLE DATA FOR RANCHERS
-INSERT INTO cat_rancher(aka, first_name, last_name, mother_name, email_add, telephone) 
-VALUES('El Vato', 'Alfredo', 'Pacheco', 'Figueroa', 'j.alfredo.pacheco@gmail.com', '044 (656) 305-0450');
-INSERT INTO cat_rancher(first_name, last_name, mother_name, birth_date, email_add, telephone)
-VALUES('Diego A.', 'Torres', 'Fuerte', '1982-04-13', 'diego.torres.fuerte@gmail.com', '044 (656) 217-1598');
-
-
-DROP TABLE IF EXISTS cat_enterprise_rancher;
+DROP TABLE IF EXISTS cat_enterprise_rancher CASCADE;
 
 CREATE TABLE cat_enterprise_rancher(
-  enterprise_id SERIAL PRIMARY KEY,
+  enterprise_id integer PRIMARY KEY,
   legal_name VARCHAR(100) NOT NULL,
   address_one VARCHAR(100) NOT NULL,
   address_two VARCHAR(100),
@@ -58,11 +58,69 @@ CREATE TABLE cat_enterprise_rancher(
 CREATE UNIQUE INDEX U_enterprise_rancher_legal_id ON cat_enterprise_rancher(legal_id);
 CREATE UNIQUE INDEX U_enterprise_rancher_legal_name ON cat_enterprise_rancher(legal_name);
 
-DROP TABLE IF EXISTS cat_rancher_invoice;
+GRANT ALL ON cat_enterprise_rancher TO sisoprega;
+
+CREATE SEQUENCE rancher_seq;
+GRANT ALL ON rancher_seq TO sisoprega;
+
+DROP TRIGGER enterprise_rancher_id_trigger ON cat_enterprise_rancher;
+CREATE LANGUAGE plpgsql;
+CREATE OR REPLACE FUNCTION proc_enterprise_rancher_id() RETURNS TRIGGER AS 
+$proc$
+DECLARE
+	new_id integer;
+BEGIN
+	new_id := nextval('rancher_seq');
+	New.enterprise_id := new_id;
+	
+	INSERT INTO cat_rancher (rancher_id, is_enterprise)
+	VALUES (new_id, true);
+	
+	Return NEW;
+END;
+$proc$ LANGUAGE plpgsql;
+
+CREATE TRIGGER enterprise_rancher_id_trigger 
+BEFORE INSERT ON cat_enterprise_rancher
+FOR EACH ROW
+EXECUTE PROCEDURE proc_enterprise_rancher_id();
+
+DROP TRIGGER person_rancher_id_trigger ON cat_person_rancher;
+CREATE LANGUAGE plpgsql;
+CREATE OR REPLACE FUNCTION proc_person_rancher_id() RETURNS TRIGGER AS
+$proc$
+DECLARE
+	new_id integer;
+BEGIN
+	new_id := nextval('rancher_seq');
+	New.rancher_id := new_id;
+	
+	INSERT INTO cat_rancher(rancher_id, is_enterprise)
+	VALUES(new_id, false);
+	
+	Return NEW;
+END;
+$proc$ LANGUAGE plpgsql;
+
+CREATE TRIGGER person_rancher_id_trigger
+BEFORE INSERT ON cat_person_rancher
+FOR EACH ROW
+EXECUTE PROCEDURE proc_person_rancher_id();
+
+-- SAMPLE DATA FOR RANCHERS
+INSERT INTO cat_person_rancher(aka, first_name, last_name, mother_name, email_add, telephone) 
+VALUES('El Vato', 'Alfredo', 'Pacheco', 'Figueroa', 'j.alfredo.pacheco@gmail.com', '044 (656) 305-0450');
+INSERT INTO cat_person_rancher(first_name, last_name, mother_name, birth_date, email_add, telephone)
+VALUES('Diego A.', 'Torres', 'Fuerte', '1982-04-13', 'diego.torres.fuerte@gmail.com', '044 (656) 217-1598');
+INSERT INTO cat_enterprise_rancher(legal_name, address_one, address_two, city, address_state, zip_code, legal_id, telephone)
+VALUES('Ganaderia Apaloosa', 'Calle prueba #7357', 'Colonia foo bar', 'cd. Juarez', 'Chih.', '32590', 'GAAP339648IEA', '656 000-0000');
+
+
+DROP TABLE IF EXISTS cat_rancher_invoice CASCADE;
 
 CREATE TABLE cat_rancher_invoice (
   rancher_invoice_id  SERIAL PRIMARY KEY,
-  rancher_id integer NOT NULL REFERENCES cat_rancher(rancher_id),
+  rancher_id integer NOT NULL REFERENCES cat_person_rancher(rancher_id),
   legal_name VARCHAR(100) NOT NULL,
   address_one VARCHAR(100) NOT NULL,
   address_two VARCHAR(100),
@@ -76,7 +134,10 @@ CREATE UNIQUE INDEX U_rancher_invoice_rancher_id ON cat_rancher_invoice(rancher_
 CREATE UNIQUE INDEX U_rancher_invoice_legal_name ON cat_rancher_invoice(legal_name);
 CREATE UNIQUE INDEX U_rancher_invoice_legal_ID ON cat_rancher_invoice(legal_id);
 
-DROP TABLE IF EXISTS cat_rancher_contact;
+GRANT ALL ON cat_rancher_invoice TO sisoprega;
+GRANT ALL ON cat_rancher_invoice_rancher_invoice_id_seq TO sisoprega;
+
+DROP TABLE IF EXISTS cat_rancher_contact CASCADE;
 
 CREATE TABLE cat_rancher_contact(
   contact_id SERIAL PRIMARY KEY,
@@ -97,31 +158,13 @@ CREATE TABLE cat_rancher_contact(
 
 CREATE UNIQUE INDEX U_cat_rancher_contact ON cat_rancher_contact(rancher_id, first_name, last_name, mother_name);
 
-DROP TABLE IF EXISTS cat_enterprise_contact;
-
-CREATE TABLE cat_enterprise_contact (
-  contact_id SERIAL PRIMARY KEY,
-  enterprise_id integer NOT NULL REFERENCES cat_enterprise_rancher(enterprise_id),
-  aka VARCHAR(100),
-  first_name VARCHAR(50) NOT NULL,
-  last_name VARCHAR(50) NOT NULL,
-  mother_name VARCHAR(50),
-  birth_date date,
-  email_add VARCHAR(150),
-  telephone VARCHAR(20),
-  address_one VARCHAR(100),
-  address_two VARCHAR(100),
-  city VARCHAR(80),
-  address_state VARCHAR(80),
-  zip_code VARCHAR(9)
-);
-
-CREATE UNIQUE INDEX U_cat_enterprise_contact ON cat_enterprise_contact(enterprise_id, first_name, last_name, mother_name);
+GRANT ALL ON cat_rancher_contact TO sisoprega;
+GRANT ALL ON cat_rancher_contact_contact_id_seq TO sisoprega;
 
 /*
  Table structure for table cat_cattle_classes
  */
-DROP TABLE IF EXISTS cat_cattle_class;
+DROP TABLE IF EXISTS cat_cattle_class CASCADE;
 
 CREATE TABLE cat_cattle_class (
   catclass_id SERIAL PRIMARY KEY,
@@ -130,19 +173,25 @@ CREATE TABLE cat_cattle_class (
 
 CREATE UNIQUE INDEX U_catclass_name ON cat_cattle_class(catclass_name);
 
+GRANT ALL ON cat_cattle_class TO sisoprega;
+GRANT ALL ON cat_cattle_class_catclass_id_seq TO sisoprega;
+
 INSERT INTO cat_cattle_class(catclass_name) VALUES('Bobino');
 INSERT INTO cat_cattle_class(catclass_name) VALUES('Equino');
 
 /*
  Table structure for table cat_cattle_types
  */
-DROP TABLE IF EXISTS cat_cattle_type;
+DROP TABLE IF EXISTS cat_cattle_type CASCADE;
 
 CREATE TABLE cat_cattle_type (
-  cattype_id SMALLINT unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  catclass_id SMALLINT UNSIGNED NOT NULL REFERENCES cat_cattle_class(catclass_id),
+  cattype_id SERIAL PRIMARY KEY,
+  catclass_id integer NOT NULL REFERENCES cat_cattle_class(catclass_id),
   cattype_name VARCHAR(50) NOT NULL
 );
+
+GRANT ALL ON cat_cattle_type TO sisoprega;
+GRANT ALL ON cat_cattle_type_cattype_id_seq TO sisoprega;
 
 INSERT INTO cat_cattle_type(catclass_id, cattype_name) VALUES(1, 'Novillos');
 INSERT INTO cat_cattle_type(catclass_id, cattype_name) VALUES(1, 'Vaquillas');
@@ -152,12 +201,15 @@ INSERT INTO cat_cattle_type(catclass_id, cattype_name) VALUES(2, 'Yeguas');
 /*
   Table structure for table cat_location 
   */
-DROP TABLE IF EXISTS cat_location;
+DROP TABLE IF EXISTS cat_location CASCADE;
 
 CREATE TABLE cat_location (
-  location_id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  location_id SERIAL PRIMARY KEY,
   location_name VARCHAR(50) NOT NULL
 );
+
+GRANT ALL ON cat_location TO sisoprega;
+GRANT ALL ON cat_location_location_id_seq TO sisoprega;
 
 /*
  DEFAULT DATA FOR LOCATIONS
@@ -167,327 +219,236 @@ INSERT INTO cat_location(location_name) VALUES('Chihuahua');
 INSERT INTO cat_location(location_name) VALUES('Zona Sur');
 
 /*
- Table structure for table cat_banyards
- Sort by barnyard_location and code to provide selections to user.
- TODO: Handle position data in order to provide an interactive map.
+ Table structure for table cat_barnyards
 */
 
-DROP TABLE IF EXISTS cat_banyard;
+DROP TABLE IF EXISTS cat_barnyard CASCADE;
 
-CREATE TABLE cat_banyard (
-  banyard_id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  banyard_code VARCHAR(3) NOT NULL,
+CREATE TABLE cat_barnyard (
+  barnyard_id SERIAL PRIMARY KEY,
+  barnyard_code VARCHAR(3) NOT NULL,
   available BOOLEAN NOT NULL DEFAULT TRUE,
-  location_id SMALLINT UNSIGNED NOT NULL REFERENCES cat_location(location_id),
-  UNIQUE KEY U_banyard_code (banyard_code, location_id)
+  location_id integer NOT NULL REFERENCES cat_location(location_id)
 );
 
-/* Chihuahua (1) Banyards */
--- TODO: Retrieve from map pictures.
-INSERT INTO cat_banyard(banyard_code, location_id) VALUES('E1', 1);
-INSERT INTO cat_banyard(banyard_code, location_id) VALUES('E2', 1);
-INSERT INTO cat_banyard(banyard_code, location_id) VALUES('E3', 1);
+CREATE UNIQUE INDEX U_barnyard_code ON cat_barnyard(barnyard_code, location_id);
 
-/* Zona Sur (2) Banyards */
+GRANT ALL ON cat_barnyard TO sisoprega;
+GRANT ALL ON cat_barnyard_barnyard_id_seq TO sisoprega;
+
+/* Chihuahua (1) barnyards */
 -- TODO: Retrieve from map pictures.
-INSERT INTO cat_banyard(banyard_code, location_id) VALUES('E1', 2);
-INSERT INTO cat_banyard(banyard_code, location_id) VALUES('E2', 2);
-INSERT INTO cat_banyard(banyard_code, location_id) VALUES('E3', 2);
+INSERT INTO cat_barnyard(barnyard_code, location_id) VALUES('E1', 1);
+INSERT INTO cat_barnyard(barnyard_code, location_id) VALUES('E2', 1);
+INSERT INTO cat_barnyard(barnyard_code, location_id) VALUES('E3', 1);
+
+/* Zona Sur (2) barnyards */
+-- TODO: Retrieve from map pictures.
+INSERT INTO cat_barnyard(barnyard_code, location_id) VALUES('E1', 2);
+INSERT INTO cat_barnyard(barnyard_code, location_id) VALUES('E2', 2);
+INSERT INTO cat_barnyard(barnyard_code, location_id) VALUES('E3', 2);
 
 /* 
-  Table structure for table cat_banyard_capacity.
+  Table structure for table cat_barnyard_capacity.
   it is pretendable to have different capacities by
   cattle type.
 */
-DROP TABLE IF EXISTS cat_banyard_capacity;
+DROP TABLE IF EXISTS cat_barnyard_capacity CASCADE;
 
-CREATE TABLE cat_banyard_capacity (
-  capacity_id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  banyard_id SMALLINT UNSIGNED NOT NULL REFERENCES cat_banyard(banyard_id) ON DELETE CASCADE,
-  catclass_id SMALLINT UNSIGNED NOT NULL REFERENCES cat_cattle_class(catclass_id) ON DELETE CASCADE,
-  head_count SMALLINT UNSIGNED NOT NULL DEFAULT 50,
-  UNIQUE KEY U_banyardid_cattypeid (banyard_id,catclass_id)
+CREATE TABLE cat_barnyard_capacity (
+  capacity_id SERIAL PRIMARY KEY,
+  barnyard_id integer NOT NULL REFERENCES cat_barnyard(barnyard_id) ON DELETE CASCADE,
+  catclass_id integer NOT NULL REFERENCES cat_cattle_class(catclass_id) ON DELETE CASCADE,
+  head_count integer NOT NULL DEFAULT 50
 );
 
+CREATE UNIQUE INDEX U_barnyard_cattle_class ON cat_barnyard_capacity(barnyard_id, catclass_id);
+
+GRANT ALL ON cat_barnyard_capacity TO sisoprega;
+GRANT ALL ON cat_barnyard_capacity_capacity_id_seq TO sisoprega;
+
 /*
- All banyards capacity are set to 50 by default for all cattle type.
+ All barnyards capacity are set to 50 by default for all cattle type.
 */
-INSERT INTO cat_banyard_capacity(banyard_id, catclass_id)
-SELECT banyard_id, catclass_id
-FROM cat_banyard, cat_cattle_class;
-
-
+INSERT INTO cat_barnyard_capacity(barnyard_id, catclass_id)
+SELECT barnyard_id, catclass_id
+FROM cat_barnyard, cat_cattle_class;
 
 /*
  Table structure for table cat_measurement_units 
  */
-DROP TABLE IF EXISTS cat_measurement_unit;
+DROP TABLE IF EXISTS cat_measurement_unit CASCADE;
 
 CREATE TABLE cat_measurement_unit (
-  unit_id TINYINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  unit_id SERIAL PRIMARY KEY,
   unit_name VARCHAR(50) NOT NULL,
   unit_abreviation VARCHAR(4)
 );
 
+GRANT ALL ON cat_measurement_unit TO sisoprega;
+GRANT ALL ON cat_measurement_unit_unit_id_seq TO sisoprega;
 
-INSERT INTO cat_measurement_unit('Kilos', 'kg.');
-INSERT INTO cat_measurement_unit('Libras', 'lbs.');
+INSERT INTO cat_measurement_unit(unit_name, unit_abreviation) VALUES('Kilos', 'kg.');
+INSERT INTO cat_measurement_unit(unit_name, unit_abreviation) VALUES('Libras', 'lbs.');
 
 /*
  * Equivalence table will transform units
  */
 
-DROP TABLE cat_measurement_unit_equivalence;
+DROP TABLE cat_measurement_unit_equivalence CASCADE;
 
 CREATE TABLE cat_measurement_unit_equivalence(
-	unit_src TINYINT UNSIGNED NOT NULL,
-	unit_dest TINYINT UNSIGNED NOT NULL,
+	equivalence_id SERIAL PRIMARY KEY,
+	unit_src integer NOT NULL,
+	unit_dest integer NOT NULL,
 	equivalence DECIMAL(6,4)
 );
+
+GRANT ALL ON cat_measurement_unit_equivalence TO sisoprega;
+GRANT ALL ON cat_measurement_unit_equivalence_equivalence_id_seq TO sisoprega;
 
 INSERT INTO cat_measurement_unit_equivalence VALUES(1, 2, 2.2);
 INSERT INTO cat_measurement_unit_equivalence VALUES(2, 1, 0.4546);
 
-/*Table structure for table cat_transactions */
-
-DROP TABLE IF EXISTS cat_transactions;
-
-CREATE TABLE cat_transactions (
-  transaction_id int(10) unsigned NOT NULL AUTO_INCREMENT,
-  transaction_name varchar(50) NOT NULL,
-  PRIMARY KEY (transaction_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 /*Table structure for table ctrl_receptions */
 
-DROP TABLE IF EXISTS ctrl_receptions;
+DROP TABLE IF EXISTS ctrl_reception CASCADE;
 
-CREATE TABLE ctrl_receptions (
-  reception_id int(10) unsigned NOT NULL AUTO_INCREMENT,
-  rancher_id int(10) unsigned NOT NULL,
+CREATE TABLE ctrl_reception (
+  reception_id SERIAL PRIMARY KEY,
+  rancher_id integer NOT NULL REFERENCES cat_rancher(rancher_id),
   date_allotted date NOT NULL,
-  branch_id int(10) unsigned NOT NULL,
-  cattle_type int(10) unsigned NOT NULL,
-  city_id int(10) unsigned NOT NULL,
-  PRIMARY KEY (reception_id),
-  KEY FK_ctrl_receptions_cat_ranchers (rancher_id),
-  KEY FK_ctrl_receptions_cat_branches (branch_id),
-  KEY FK_ctrl_receptions_cat_cattle_types (cattle_type),
-  KEY FK_ctrl_receptions_cat_countries_states_cities (city_id),
-  CONSTRAINT FK_ctrl_receptions_cat_countries_states_cities FOREIGN KEY (city_id) REFERENCES cat_countries_states_cities (city_id),
-  CONSTRAINT FK_ctrl_receptions_cat_branches FOREIGN KEY (branch_id) REFERENCES cat_branches (branch_id),
-  CONSTRAINT FK_ctrl_receptions_cat_cattle_types FOREIGN KEY (cattle_type) REFERENCES cat_cattle_types (cattype_id),
-  CONSTRAINT FK_ctrl_receptions_cat_ranchers FOREIGN KEY (rancher_id) REFERENCES cat_ranchers (rancher_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  cattle_type integer NOT NULL REFERENCES cat_cattle_type(cattype_id),
+  location_id integer NOT NULL REFERENCES cat_location(location_id)
+);
+
+GRANT ALL ON ctrl_reception TO sisoprega;
+GRANT ALL ON ctrl_reception_reception_id_seq TO sisoprega;
 
 /*Table structure for table ctrl_receptions_barnyards */
+DROP TABLE IF EXISTS ctrl_reception_barnyard CASCADE;
 
-DROP TABLE IF EXISTS ctrl_receptions_barnyards;
+CREATE TABLE ctrl_reception_barnyard (
+  rec_barnyard_id SERIAL PRIMARY KEY,
+  reception_id integer NOT NULL REFERENCES ctrl_reception(reception_id),
+  barnyard_id integer NOT NULL REFERENCES cat_barnyard(barnyard_id)
+);
 
-CREATE TABLE ctrl_receptions_barnyards (
-  recbarnyard_id int(10) unsigned NOT NULL AUTO_INCREMENT,
-  reception_id int(10) unsigned NOT NULL,
-  banyard_id int(10) unsigned NOT NULL,
-  PRIMARY KEY (recbarnyard_id),
-  KEY FK_ctrl_receptions_barnyards_cat_barnyard (banyard_id),
-  KEY FK_ctrl_receptions_barnyards_ctrl_receptions (reception_id),
-  CONSTRAINT FK_ctrl_receptions_barnyards_ctrl_receptions FOREIGN KEY (reception_id) REFERENCES ctrl_receptions (reception_id) ON DELETE CASCADE,
-  CONSTRAINT FK_ctrl_receptions_barnyards_cat_barnyard FOREIGN KEY (banyard_id) REFERENCES cat_banyards (banyard_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-/*Table structure for table ctrl_receptions_feed */
-
-DROP TABLE IF EXISTS ctrl_receptions_feed;
-
-CREATE TABLE ctrl_receptions_feed (
-  feed_id int(10) unsigned NOT NULL AUTO_INCREMENT,
-  reception_id int(10) unsigned NOT NULL,
-  feedtype_id int(10) unsigned NOT NULL,
-  amount int(3) unsigned NOT NULL,
-  PRIMARY KEY (feed_id),
-  KEY FK_ctrl_receptions_feed_cat_feed_types (feedtype_id),
-  KEY FK_ctrl_receptions_feed_ctrl_receptions (reception_id),
-  CONSTRAINT FK_ctrl_receptions_feed_ctrl_receptions FOREIGN KEY (reception_id) REFERENCES ctrl_receptions (reception_id) ON DELETE CASCADE,
-  CONSTRAINT FK_ctrl_receptions_feed_cat_feed_types FOREIGN KEY (feedtype_id) REFERENCES cat_feed (feedtype_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-/*Table structure for table ctrl_receptions_feed_banyard */
-
-DROP TABLE IF EXISTS ctrl_receptions_feed_banyard;
-
-CREATE TABLE ctrl_receptions_feed_banyard (
-  feedby_id int(10) unsigned NOT NULL,
-  feed_id int(10) unsigned NOT NULL,
-  barnyard_id int(10) unsigned NOT NULL,
-  PRIMARY KEY (feedby_id),
-  UNIQUE KEY U_feedid_banyardid (feed_id,barnyard_id),
-  KEY FK_ctrl_receptions_feed_banyard_cat_banyards (barnyard_id),
-  CONSTRAINT FK_ctrl_receptions_feed_banyard_ctrl_receptions_feed FOREIGN KEY (feed_id) REFERENCES ctrl_receptions_feed (feed_id) ON DELETE CASCADE,
-  CONSTRAINT FK_ctrl_receptions_feed_banyard_cat_banyards FOREIGN KEY (barnyard_id) REFERENCES cat_banyards (banyard_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-/*Table structure for table ctrl_receptions_feed_notes */
-
-DROP TABLE IF EXISTS ctrl_receptions_feed_notes;
-
-CREATE TABLE ctrl_receptions_feed_notes (
-  note_id int(10) unsigned NOT NULL AUTO_INCREMENT,
-  feed_id int(10) unsigned NOT NULL,
-  note text NOT NULL,
-  PRIMARY KEY (note_id),
-  KEY FK_ctrl_receptions_feed_notes_ctrl_receptions_feed (feed_id),
-  CONSTRAINT FK_ctrl_receptions_feed_notes_ctrl_receptions_feed FOREIGN KEY (feed_id) REFERENCES ctrl_receptions_feed (feed_id) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+GRANT ALL ON ctrl_reception_barnyard TO sisoprega;
+GRANT ALL ON ctrl_reception_barnyard_rec_barnyard_id_seq TO sisoprega;
 
 /*Table structure for table ctrl_receptions_headcount */
+DROP TABLE IF EXISTS ctrl_reception_headcount CASCADE;
 
-DROP TABLE IF EXISTS ctrl_receptions_headcount;
+CREATE TABLE ctrl_reception_headcount (
+  headcount_id SERIAL PRIMARY KEY,
+  reception_id integer NOT NULL REFERENCES ctrl_reception(reception_id),
+  hc integer NOT NULL,
+  weight DECIMAL(12,4),
+  weight_uom integer NOT NULL REFERENCES cat_measurement_unit(unit_id)
+);
 
-CREATE TABLE ctrl_receptions_headcount (
-  headcount_id int(10) unsigned NOT NULL AUTO_INCREMENT,
-  reception_id int(10) unsigned NOT NULL,
-  hc int(3) unsigned NOT NULL,
-  hc_sex enum('1','0') NOT NULL,
-  PRIMARY KEY (headcount_id),
-  KEY FK_ctrl_receptions_headcoun_ctrl_receptions (reception_id),
-  CONSTRAINT FK_ctrl_receptions_headcoun_ctrl_receptions FOREIGN KEY (reception_id) REFERENCES ctrl_receptions (reception_id) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+GRANT ALL ON ctrl_reception_headcount TO sisoprega;
+GRANT ALL ON ctrl_reception_headcount_headcount_id_seq TO sisoprega;
 
-/*Table structure for table ctrl_receptions_headcount_barnyards */
+DROP TABLE IF EXISTS ctrl_feed_order CASCADE;
 
-DROP TABLE IF EXISTS ctrl_receptions_headcount_barnyards;
+CREATE TABLE ctrl_feed_order(
+	order_id SERIAL PRIMARY KEY,
+	reception_id integer NOT NULL REFERENCES ctrl_reception(reception_id),
+	barnyard_id integer NOT NULL REFERENCES cat_barnyard(barnyard_id),
+	feed_date date NOT NULL,
+	feed_originator varchar(150),
+);
 
-CREATE TABLE ctrl_receptions_headcount_barnyards (
-  hcbarnyard_id int(10) unsigned NOT NULL AUTO_INCREMENT,
-  headcount_id int(10) unsigned NOT NULL,
-  barnyard_id int(10) unsigned NOT NULL,
-  PRIMARY KEY (hcbarnyard_id),
-  KEY FK_ctrl_receptions_headcount_barnyards_cat_barnyards (barnyard_id),
-  KEY FK_ctrl_receptions_headcount_barnyards_ctrl_receptions_headcount (headcount_id),
-  CONSTRAINT FK_ctrl_receptions_headcount_barnyards_ctrl_receptions_headcount FOREIGN KEY (headcount_id) REFERENCES ctrl_receptions_headcount (headcount_id) ON DELETE CASCADE,
-  CONSTRAINT FK_ctrl_receptions_headcount_barnyards_cat_barnyards FOREIGN KEY (barnyard_id) REFERENCES cat_banyards (banyard_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+GRANT ALL ON ctrl_feed_order TO sisoprega;
+GRANT ALL ON ctrl_feed_order_order_id_seq TO sisoprega;
 
-/*Table structure for table ctrl_receptions_inspections */
+DROP TABLE IF EXISTS cat_food CASCADE;
+CREATE TABLE cat_food(
+	food_id SERIAL PRIMARY KEY,
+	food_name VARCHAR(15)
+);
 
-DROP TABLE IF EXISTS ctrl_receptions_inspections;
+GRANT ALL ON cat_food TO sisoprega;
+GRANT ALL ON cat_food_food_id_seq TO sisoprega;
 
-CREATE TABLE ctrl_receptions_inspections (
-  inspection_id int(10) unsigned NOT NULL AUTO_INCREMENT,
-  reception_id int(10) unsigned NOT NULL,
-  insp_date date NOT NULL,
-  catclass_id int(10) unsigned NOT NULL,
-  quantity int(3) unsigned NOT NULL,
-  PRIMARY KEY (inspection_id),
-  KEY FK_ctrl_receptions_inspections_cat_cattle_classes (catclass_id),
-  KEY FK_ctrl_receptions_inspections_ctrl_receptions (reception_id),
-  CONSTRAINT FK_ctrl_receptions_inspections_ctrl_receptions FOREIGN KEY (reception_id) REFERENCES ctrl_receptions (reception_id) ON DELETE CASCADE,
-  CONSTRAINT FK_ctrl_receptions_inspections_cat_cattle_classes FOREIGN KEY (catclass_id) REFERENCES cat_cattle_classes (catclass_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+DROP TABLE IF EXISTS ctrl_feed_order_details CASCADE;
+CREATE TABLE ctrl_feed_order_details(
+	id SERIAL PRIMARY KEY,
+	order_id integer NOT NULL REFERENCES ctrl_feed_order(order_id),
+	food_id integer NOT NULL REFERENCES cat_food(food_id),
+	quantity DECIMAL(10,2) NOT NULL DEFAULT 0.0,
+	handling varchar(100)
+);
 
-/*Table structure for table ctrl_receptions_inspections_banyards */
+CREATE UNIQUE INDEX U_feed_order_food ON ctrl_feed_order_details(order_id, food_id);
 
-DROP TABLE IF EXISTS ctrl_receptions_inspections_banyards;
+GRANT ALL ON ctrl_feed_order_details TO sisoprega;
+GRANT ALL ON ctrl_feed_order_details_id_seq TO sisoprega;
 
-CREATE TABLE ctrl_receptions_inspections_banyards (
-  insbanyard_id int(10) unsigned NOT NULL AUTO_INCREMENT,
-  inspection_id int(10) unsigned NOT NULL,
-  banyard_id int(10) unsigned NOT NULL,
-  PRIMARY KEY (insbanyard_id),
-  UNIQUE KEY U_inspectionid_banyardid (inspection_id,banyard_id),
-  KEY FK_ctrl_receptions_inspections_banyards_cat_banyards (banyard_id),
-  CONSTRAINT FK_ctrl_recep_inspect_banyards_ctrl_recep_inspect FOREIGN KEY (inspection_id) REFERENCES ctrl_receptions_inspections (inspection_id) ON DELETE CASCADE,
-  CONSTRAINT FK_ctrl_receptions_inspections_banyards_cat_banyards FOREIGN KEY (banyard_id) REFERENCES cat_banyards (banyard_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*
+  Table structure for table ctrl_receptions_inspections 
+*/
 
-/*Table structure for table ctrl_receptions_inspections_codes */
+DROP TABLE IF EXISTS ctrl_inspection CASCADE;
 
-DROP TABLE IF EXISTS ctrl_receptions_inspections_codes;
+CREATE TABLE ctrl_inspection (
+  inspection_id SERIAL PRIMARY KEY,
+  reception_id integer NOT NULL REFERENCES ctrl_reception(reception_id),
+  inspection_date date NOT NULL
+);
 
-CREATE TABLE ctrl_receptions_inspections_codes (
-  inspcode_id int(10) unsigned NOT NULL,
-  inspection_id int(10) unsigned NOT NULL,
-  code_id int(10) unsigned NOT NULL,
-  PRIMARY KEY (inspcode_id),
-  KEY FK_ctrl_receptions_inspections_codes_ctrl_receptions_inspections (inspection_id),
-  CONSTRAINT FK_ctrl_receptions_inspections_codes_ctrl_receptions_inspections FOREIGN KEY (inspection_id) REFERENCES ctrl_receptions_inspections (inspection_id) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+GRANT ALL ON ctrl_inspection TO sisoprega;
+GRANT ALL ON ctrl_inspection_inspection_id_seq TO sisoprega;
 
-/*Table structure for table ctrl_receptions_notes */
+/*
+ Table structure for table ctrl_receptions_inspections_barnyards
+ */
+DROP TABLE IF EXISTS ctrl_inspection_barnyard CASCADE;
 
-DROP TABLE IF EXISTS ctrl_receptions_notes;
+CREATE TABLE ctrl_inspection_barnyard (
+  id SERIAL PRIMARY KEY,
+  inspection_id integer NOT NULL REFERENCES ctrl_inspection(inspection_id),
+  barnyard_id integer NOT NULL REFERENCES cat_barnyard(barnyard_id)
+);
 
-CREATE TABLE ctrl_receptions_notes (
-  note_id int(10) unsigned NOT NULL AUTO_INCREMENT,
-  reception_id int(10) unsigned NOT NULL,
-  note text NOT NULL,
-  PRIMARY KEY (note_id),
-  KEY FK_ctrl_receptions_notes_ctrl_receptions (reception_id),
-  CONSTRAINT FK_ctrl_receptions_notes_ctrl_receptions FOREIGN KEY (reception_id) REFERENCES ctrl_receptions (reception_id) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX U_inspection_barnyard ON ctrl_inspection_barnyard(inspection_id, barnyard_id);
 
-/*Table structure for table ctrl_receptions_weights */
+GRANT ALL ON ctrl_inspection_barnyard TO sisoprega;
+GRANT ALL ON ctrl_inspection_barnyard_id_seq TO sisoprega;
 
-DROP TABLE IF EXISTS ctrl_receptions_weights;
+DROP TABLE IF EXISTS cat_inspection_code CASCADE;
 
-CREATE TABLE ctrl_receptions_weights (
-  weight_id int(10) unsigned NOT NULL AUTO_INCREMENT,
-  reception_id int(10) unsigned NOT NULL,
-  unit_id int(10) unsigned NOT NULL,
-  weight int(3) unsigned NOT NULL,
-  PRIMARY KEY (weight_id),
-  KEY FK_ctrl_receptions_weights_cat_measurement_units (unit_id),
-  KEY FK_ctrl_receptions_weights_ctrl_receptions (reception_id),
-  CONSTRAINT FK_ctrl_receptions_weights_ctrl_receptions FOREIGN KEY (reception_id) REFERENCES ctrl_receptions (reception_id) ON DELETE CASCADE,
-  CONSTRAINT FK_ctrl_receptions_weights_cat_measurement_units FOREIGN KEY (unit_id) REFERENCES cat_measurement_units (unit_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE cat_inspection_code(
+  inspection_code_id SERIAL PRIMARY KEY,
+  inspection_code_description VARCHAR(50)
+);
 
-/*Table structure for table ctrl_receptions_weights_banyard */
+GRANT ALL ON cat_inspection_code TO sisoprega;
+GRANT ALL ON cat_inspection_code_inspection_code_id_seq TO sisoprega;
 
-DROP TABLE IF EXISTS ctrl_receptions_weights_banyard;
+DROP TABLE IF EXISTS ctrl_inspection_result CASCADE;
+CREATE TABLE ctrl_inspection_result(
+	id SERIAL PRIMARY KEY,
+	inspection_id integer NOT NULL REFERENCES ctrl_inspection(inspection_id),
+	inspection_code_id integer NOT NULL REFERENCES cat_inspection_code(inspection_code_id),
+	hc integer NOT NULL,
+	weight decimal(12,4),
+	weight_uom integer NOT NULL REFERENCES cat_measurement_unit(unit_id),
+	note varchar(100)
+);
 
-CREATE TABLE ctrl_receptions_weights_banyard (
-  weightby_id int(10) unsigned NOT NULL AUTO_INCREMENT,
-  weight_id int(10) unsigned NOT NULL,
-  banyard_id int(10) unsigned NOT NULL,
-  PRIMARY KEY (weightby_id),
-  UNIQUE KEY U_weightid_banyardid (weight_id,banyard_id),
-  KEY FK_ctrl_receptions_weights_banyard_cat_banyards (banyard_id),
-  CONSTRAINT FK_ctrl_receptions_weights_banyard_ctrl_receptions_weights FOREIGN KEY (weight_id) REFERENCES ctrl_receptions_weights (weight_id) ON DELETE CASCADE,
-  CONSTRAINT FK_ctrl_receptions_weights_banyard_cat_banyards FOREIGN KEY (banyard_id) REFERENCES cat_banyards (banyard_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+GRANT ALL ON ctrl_inspection_result TO sisoprega;
+GRANT ALL ON ctrl_inspection_result_id_seq TO sisoprega;
 
-/*Table structure for table ctrl_transactions_log */
+/*Table structure for table cat_transactions */
+DROP TABLE IF EXISTS ctrl_log CASCADE;
 
-DROP TABLE IF EXISTS ctrl_transactions_log;
+CREATE TABLE ctrl_log (
+  operation_id SERIAL PRIMARY KEY,
+  operation_description varchar(250) NOT NULL
+);
 
-CREATE TABLE ctrl_transactions_log (
-  log_id int(10) unsigned NOT NULL AUTO_INCREMENT,
-  credential_id int(10) unsigned NOT NULL,
-  transaction_id int(10) unsigned NOT NULL,
-  transaction_info text NOT NULL,
-  transaction_date date NOT NULL,
-  PRIMARY KEY (log_id),
-  KEY FK_ctrl_transactions_log_cat_employees_credentials (credential_id),
-  KEY FK_ctrl_transactions_log_cat_transactions (transaction_id),
-  CONSTRAINT FK_ctrl_transactions_log_cat_transactions FOREIGN KEY (transaction_id) REFERENCES cat_transactions (transaction_id),
-  CONSTRAINT FK_ctrl_transactions_log_cat_employees_credentials FOREIGN KEY (credential_id) REFERENCES cat_employees_credentials (credential_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-/*Table structure for table ctrl_transactions_log_entity */
-
-DROP TABLE IF EXISTS ctrl_transactions_log_entity;
-
-CREATE TABLE ctrl_transactions_log_entity (
-  entity_id int(10) unsigned NOT NULL AUTO_INCREMENT,
-  log_id int(10) unsigned NOT NULL,
-  entity_name varchar(50) NOT NULL,
-  action_id int(10) unsigned NOT NULL,
-  id int(10) unsigned NOT NULL,
-  entity_info text NOT NULL,
-  PRIMARY KEY (entity_id),
-  KEY FK_ctrl_transactions_log_entity_cat_entity_actions (action_id),
-  KEY FK_ctrl_transactions_log_entity_ctrl_transactions_log (log_id),
-  CONSTRAINT FK_ctrl_transactions_log_entity_ctrl_transactions_log FOREIGN KEY (log_id) REFERENCES ctrl_transactions_log (log_id) ON DELETE CASCADE,
-  CONSTRAINT FK_ctrl_transactions_log_entity_cat_entity_actions FOREIGN KEY (action_id) REFERENCES cat_entity_actions (action_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+GRANT ALL ON ctrl_log TO sisoprega;
+GRANT ALL ON ctrl_log_operation_id_seq TO sisoprega;
