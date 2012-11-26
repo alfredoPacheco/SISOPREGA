@@ -34,7 +34,7 @@ package com.tramex.sisoprega.dto;
  * 
  */
 
-public class CatLocation {
+public class Location {
     private long locationId;
     private String locationName;
     /**

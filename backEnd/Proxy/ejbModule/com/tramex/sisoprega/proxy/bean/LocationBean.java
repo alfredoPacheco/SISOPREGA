@@ -28,7 +28,7 @@ import com.tramex.sisoprega.common.GatewayRequest;
 import com.tramex.sisoprega.common.ReadGatewayResponse;
 import com.tramex.sisoprega.common.UpdateGatewayResponse;
 import com.tramex.sisoprega.common.crud.Cruddable;
-import com.tramex.sisoprega.dto.CatLocation;
+import com.tramex.sisoprega.dto.Location;
 /**
  * This proxy knows the logic to evaluate Cattle class entities information and
  * the way to the database in order to save their data. Also, it is contained in
@@ -48,7 +48,7 @@ import com.tramex.sisoprega.dto.CatLocation;
  *
  */
 @Stateless
-public class CatLocationBean  extends BaseBean implements Cruddable {
+public class LocationBean  extends BaseBean implements Cruddable {
 
     /* (non-Javadoc)
      * @see com.tramex.sisoprega.common.crud.Cruddable#Create(com.tramex.sisoprega.common.GatewayRequest)
@@ -58,9 +58,9 @@ public class CatLocationBean  extends BaseBean implements Cruddable {
 	log.entering(this.getClass().getCanonicalName(), "Create");
 
 	CreateGatewayResponse response = new CreateGatewayResponse();
-	CatLocation catalog = null;
+	Location catalog = null;
 	try {
-	    catalog = entityFromRequest(request, CatLocation.class);
+	    catalog = entityFromRequest(request, Location.class);
 
 	    log.fine("Received catalog location in request: " + catalog);
 
@@ -103,24 +103,24 @@ public class CatLocationBean  extends BaseBean implements Cruddable {
 	ReadGatewayResponse response = new ReadGatewayResponse();
 	response.setEntityName(request.getEntityName());
 
-	CatLocation catalog = null;
+	Location catalog = null;
 	try {
-	    catalog = entityFromRequest(request, CatLocation.class);
+	    catalog = entityFromRequest(request, Location.class);
 
 	    log.fine("Got contact from request: " + catalog);
-	    TypedQuery<CatLocation> readQuery = null;
+	    TypedQuery<Location> readQuery = null;
 
 	    if (catalog.getLocationId() != 0) {
 		readQuery = em.createNamedQuery("CAT_LOCATION_BY_ID",
-			CatLocation.class);
+			Location.class);
 		readQuery.setParameter("catclassId", catalog.getLocationId());
 	    } else {
 		readQuery = em.createNamedQuery("ALL_CAT_LOCATION",
-			CatLocation.class);
+			Location.class);
 
 	    }
 
-	    List<CatLocation> queryResults = readQuery.getResultList();
+	    List<Location> queryResults = readQuery.getResultList();
 
 	    if (queryResults.isEmpty()) {
 		Error error = new Error();
@@ -130,7 +130,7 @@ public class CatLocationBean  extends BaseBean implements Cruddable {
 		response.setError(error);
 	    } else {
 		List<GatewayContent> records = contentFromList(queryResults,
-			CatLocation.class);
+			Location.class);
 		response.getRecord().addAll(records);
 		response.setError(new Error("0", "SUCCESS",
 			"proxy.CatLocation.Read"));
@@ -157,9 +157,9 @@ public class CatLocationBean  extends BaseBean implements Cruddable {
     public UpdateGatewayResponse Update(GatewayRequest request) {
 	log.entering(this.getClass().getCanonicalName(), "Update");
 	UpdateGatewayResponse response = new UpdateGatewayResponse();
-	CatLocation catalog = null;
+	Location catalog = null;
 	try {
-	    catalog = entityFromRequest(request, CatLocation.class);
+	    catalog = entityFromRequest(request, Location.class);
 
 	    if (catalog.getLocationId() == 0) {
 		log.warning("CLU1 - Invalid Cat Location id");
@@ -172,7 +172,7 @@ public class CatLocationBean  extends BaseBean implements Cruddable {
 		    em.flush();
 
 		    GatewayContent content = getContentFromEntity(catalog,
-			    CatLocation.class);
+			    Location.class);
 		    response.setUpdatedRecord(content);
 
 		    response.setError(new Error("0", "SUCCESS",
@@ -207,16 +207,16 @@ public class CatLocationBean  extends BaseBean implements Cruddable {
 	BaseResponse response = new BaseResponse();
 
 	try {
-	    CatLocation catalog = entityFromRequest(request,
-		    CatLocation.class);
+	    Location catalog = entityFromRequest(request,
+		    Location.class);
 	    if (catalog.getLocationId() == 0) {
 		log.warning("CLD1 - Invalid CatLocation");
 		response.setError(new Error("CLD1",
 			"Invalid CatLocationId",
 			"proxy.CatLocation.Delete"));
 	    } else {
-		TypedQuery<CatLocation> readQuery = em.createNamedQuery(
-			"CAT_LOCATION_BY_ID", CatLocation.class);
+		TypedQuery<Location> readQuery = em.createNamedQuery(
+			"CAT_LOCATION_BY_ID", Location.class);
 		readQuery.setParameter("locationId", catalog.getLocationId());
 		catalog = readQuery.getSingleResult();
 		em.merge(catalog);
