@@ -53,7 +53,7 @@ enyo.kind({
 		this.$.phone_number.setValue("");		
 	},
 	updateRancher:function(){
-		cacheRanchers.create(this.objRan,this.getRancher(),this,"doUpdateRancher");
+		cacheRanchers.upd(this.objRan,this.getRancher(),this,"doUpdateRancher");
 	},
 	getRancher:function(){
 		var objRan ={

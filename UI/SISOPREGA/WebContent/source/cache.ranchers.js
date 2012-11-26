@@ -269,10 +269,17 @@ enyo.kind({
 		}
 	},
 	upd:function(objOld,objNew,cbObj,cbMethod){
+		if (objOld.rancher_type==1){
+			return this.updateRancher(objOld,objNew,cbObj,cbMethod);			
+		}else{
+			return this.updateEnterpriseRancher(objOld,objNew,cbObj,cbMethod);
+		}
+	},
+	updateRancher:function(objOld,objNew,cbObj,cbMethod){
 		objNew.rancher_id = objOld.rancher_id;
 		var objToSend = this.rancherAdapterToOut(objNew);
-		var cgUpdate = consumingGateway.Update("Rancher", "test", objToSend);
-		if (cgUpdate.exceptionId == 0){ //Updated successfully
+		var cgUpdateRancher = consumingGateway.Update("Rancher", "test", objToSend);
+		if (cgUpdateRancher.exceptionId == 0){ //Updated successfully
 			for(prop in objNew){
 				objOld[prop]=objNew[prop];
 			}
@@ -291,7 +298,34 @@ enyo.kind({
 			return false;
 		}
 		else{ //Error			
-			cacheMan.setMessage("", "","[Exception ID: " + cgUpdate.exceptionId + "] Descripcion: " + cgUpdate.exceptionDescription);
+			cacheMan.setMessage("", "","[Exception ID: " + cgUpdateRancher.exceptionId + "] Descripcion: " + cgUpdateRancher.exceptionDescription);
+			return false;
+		}		
+	},
+	updateEnterpriseRancher:function(objOld,objNew,cbObj,cbMethod){
+		objNew.rancher_id = objOld.rancher_id;
+		var objToSend = this.enterpriseRancherAdapterToOut(objNew);
+		var cgUpdateEnterpriseRancher = consumingGateway.Update("EnterpriseRancher", "test", objToSend);
+		if (cgUpdateEnterpriseRancher.exceptionId == 0){ //Updated successfully
+			for(prop in objNew){
+				objOld[prop]=objNew[prop];
+			}
+			var tamanio = this.get().length;
+			for(var i=0;i<tamanio;i++){
+				if (this.arrObj[i].rancher_id == objOld.rancher_id){
+					this.arrObj[i] = objOld;
+					_arrRancherList = this.arrObj;
+					cbObj.objRan = objOld;
+					if(cbMethod){
+						cbObj[cbMethod]();
+					}
+					return true;					
+				}
+			}
+			return false;
+		}
+		else{ //Error			
+			cacheMan.setMessage("", "","[Exception ID: " + cgUpdateEnterpriseRancher.exceptionId + "] Descripcion: " + cgUpdateEnterpriseRancher.exceptionDescription);
 			return false;
 		}		
 	},
