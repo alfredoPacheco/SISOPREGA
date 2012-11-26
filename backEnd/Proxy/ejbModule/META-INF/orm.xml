@@ -303,4 +303,24 @@
 			</basic>
 		</attributes>
 	</entity>
+	<entity class="com.tramex.sisoprega.dto.Location">
+		<table name="cat_location" />
+		<named-query name="CAT_LOCATION_BY_ID">
+			<description>Retrieves a single catLocation record by ID</description>
+			<query>SELECT loc FROM Location loc WHERE loc.locationId = :locationId</query>
+		</named-query>
+		<named-query name="ALL_CAT_LOCATION">
+			<description>Retrieves all catalog location records from database</description>
+			<query>SELECT loc FROM Location loc ORDER BY loc.locationName</query>
+		</named-query>
+		<attributes>
+			<id name="locationId">
+				<column name="location_id"/>
+				<generated-value strategy="IDENTITY" />
+			</id>
+			<basic name="locationName">
+				<column name="location_name"/>
+			</basic>
+		</attributes>
+	</entity>
 </entity-mappings>
