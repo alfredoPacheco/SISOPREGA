@@ -325,5 +325,11 @@
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.Barnyard">
 		<table name="cat_barnyard" />
+		<attributes>
+			<id name="barnyardId">
+				<column name="barnyard_id"/>
+				<generated-value strategy= "IDENTITY"/>
+			</id>
+		</attributes>
 	</entity>
 </entity-mappings>
