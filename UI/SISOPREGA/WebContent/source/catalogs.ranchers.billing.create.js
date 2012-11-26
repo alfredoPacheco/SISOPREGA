@@ -17,7 +17,8 @@ enyo.kind({
 			 components: [
 					  {kind: "Input", name:"company_name", hint:"Razon Social",},	       
 					  {kind: "Input", name:"address_one", hint:"Calle y Numero"},	       
-					  {kind: "Input", name:"address_two", hint:"Colonia"},	       														  					  {kind: "Input", name:"state_id", hint:"Entidad"},
+					  {kind: "Input", name:"address_two", hint:"Colonia"},	       														  					  
+					  {kind: "Input", name:"state_id", hint:"Entidad"},
 					  {kind: "Input", name:"city_id", hint:"Poblacion"},	
 					  {kind: "Input", name:"zip_code", hint:"Codigo Postal"},					
 					  {kind: "Input", name:"rfc", hint:"RFC"},	
@@ -56,14 +57,13 @@ enyo.kind({
 	},
 	getBilling:function(){
 		var objBilling ={
-							billing_id:		null,
-							rancher_id:		null,
+							billing_id:		"",
+							rancher_id:		"",
 							company_name:	"",					 
 							address_one:	"",
 							address_two:	"",
-							city_name:		"",
-							state_id:		"",
-							state_name:		"",
+							city_id:		"",
+							state_id:		"",							
 							zip_code:		"",
 							rfc:			"",
 							phone_number:	""
@@ -93,8 +93,7 @@ enyo.kind({
 		}else{
 			this.resetValues();
 		}
-		this.toggleUpdate();
-		
+		this.toggleUpdate();		
 	},
 	toggleUpdate:function(){		
 		this.$.draAdd.setOpen(false);

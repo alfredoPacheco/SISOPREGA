@@ -22,9 +22,9 @@ enyo.kind({
 		    		jQuery.each(this, function(key, value){
 		    			objAux[key] = value;	
 		    		});
-		    	
-		    		objAux.billing = selfCacheRancher.getInvoice(selfCacheRancher.rancherAdapterToIn(objAux));
-		    		arrAux.push(selfCacheRancher.rancherAdapterToIn(objAux));
+		    		objTmp = selfCacheRancher.rancherAdapterToIn(objAux);
+		    		objTmp.billing = selfCacheRancher.getInvoice(objTmp);
+		    		arrAux.push(objTmp);
 		    	});
 //				//loading contacts from webservice:
 //				cgReadAllContacts = consumingGateway.Read();
@@ -81,7 +81,7 @@ enyo.kind({
 			};
 		return objNew;		   
 	},
-	rancherInvoiceAdapterToOut:function(objBill){		
+	rancherInvoiceAdapterToOut:function(objBill){
 //		company_name:	"",					 
 //		state_id:		"",
 //		rfc:			"",
@@ -89,13 +89,13 @@ enyo.kind({
 		var objNew = {
 			rancherInvoiceId:	objBill.billing_id,
 			rancherId:			objBill.rancher_id,
-			legalName:			objBill.legal_name,
+			legalName:			objBill.company_name,
 			addressOne:			objBill.address_one,
 			addressTwo:			objBill.address_two,
-			city:				objBill.city_name,
-			addressState:		objBill.state_name,
+			city:				objBill.city_id,
+			addressState:		objBill.state_id,
 			zipCode:			objBill.zip_code,
-			legalId:			objBill.legal_id				
+			legalId:			objBill.rfc				
 		};
 		return objNew;		   
 	},
@@ -115,7 +115,7 @@ enyo.kind({
 //		Fields out of web service:		
 		objNew.rfc = "";
 		objNew.contacts=[];
-		objNew.billing={};
+		objNew.billing=objRan.billing;
 		objNew.rancher_type=1;
 		
 		return objNew;
@@ -135,29 +135,28 @@ enyo.kind({
 				address_two:	objCon.addressTwo,
 				city:			objCon.city,
 				address_state:	objCon.addressState,
-				zip_code:		objCon.zipCode								
+				zip_code:		objCon.zipCode
 			};
 		return objNew;	
 	},
 	rancherInvoiceAdapterToIn:function(objBill){
-		
-//		company_name:	"",					 
-//		state_id:		"",
-//		rfc:			"",
-//		phone_number:	""
+
+
 		var objNew = {
 			billing_id:		objBill.rancherInvoiceId,
 			rancher_id:		objBill.rancherId,
-			legalName:		objBill.legalName,
+			company_name:	objBill.legalName,
 			address_one:	objBill.addressOne,
 			address_two:	objBill.addressTwo,
-			city_name:		objBill.city,
-			state_name:		objBill.addressState,
+			city_id:		objBill.city,
+			state_id:		objBill.addressState,
 			zip_code:		objBill.zipCode,
-			legal_id:		objBill.legalId				
+			rfc:			objBill.legalId
 		};
-		
-		return objNew;	
+//		TODO: AGREGAR PHONE NUMBER EN DEMAS CLASES
+		objNew.phone_number="";
+
+		return objNew;
 	},
 	create:function(objRan,cbObj,cbMethod){
 		//AJAX
@@ -166,6 +165,9 @@ enyo.kind({
 		var cgCreate = consumingGateway.Create("Rancher", "test", objToSend);
 		if (cgCreate.exceptionId == 0){ //Created successfully			
 			objRan.rancher_id = cgCreate.generatedId;
+			objRan.billing = {};
+			objRan.contacts = [];
+			objRan.rfc = "";
 			this.arrObj.push(objRan);
 			_arrRancherList = this.arrObj;
 			if(cbMethod){
@@ -403,10 +405,9 @@ enyo.kind({
 					jQuery.each(this, function(key, value){
 						objAux[key] = value;	
 					});	    		
-					objRan.billing = selfCacheRancher.rancherInvoiceAdapterToIn(objAux);
-					return objRan.billing;
-					
+					objRan.billing = selfCacheRancher.rancherInvoiceAdapterToIn(objAux);					
 				});
+				return objRan.billing;
 			}
 				
 //			else{ //Error						
@@ -416,8 +417,7 @@ enyo.kind({
 //			}
 //		}
 	
-		return null;
-		
+		return {};		
 	},
 	createBilling:function(objRancher,objBill,cbObj,cbMethod){
 		//AJAX
@@ -428,7 +428,7 @@ enyo.kind({
 		var cgCreateInvoice = consumingGateway.Create("RancherInvoice", "test", objToSend);
 		if (cgCreateInvoice.exceptionId == 0){ //Created successfully			
 			objBill.billing_id = cgCreateInvoice.generatedId;
-			objRancher.billing.push(objBill);			
+			objRancher.billing = objBill;		
 			if(cbMethod){
 				cbObj[cbMethod]();
 			}
@@ -442,20 +442,25 @@ enyo.kind({
 	},
 	updateBilling:function(objRancher,objBill,cbObj,cbMethod){
 		//AJAX
-		objBill.rancherInvoiceId = cbObj.objRan.rancherInvoiceId;
+//		TODO: ACTUAL
+		objBill.billing_id = cbObj.objRan.billing.billing_id;
 		objBill.rancher_id = cbObj.objRan.rancher_id;		
 		var objToSend = this.rancherInvoiceAdapterToOut(objBill);
-		var cgUpdateInvoice = consumingGateway.Update("RancherContact", "test", objToSend);
+		var cgUpdateInvoice = consumingGateway.Update("RancherInvoice", "test", objToSend);
 		if (cgUpdateInvoice.exceptionId == 0){ //Updated successfully			
-			objRancher.billing = objNew;
+			objRancher.billing = objBill;
 			if(cbMethod){
 				cbObj[cbMethod]();
 			}
 			return true;
 		}
-		else{ //Error			
-			cacheMan.setMessage("", "","[Exception ID: " + cgUpdateInvoice.exceptionId + "] Descripcion: " + cgUpdateInvoice.exceptionDescription);
-			return false;
+		else{ //Error	
+			if (cgUpdateInvoice.exceptionId == "RIU3"){
+				this.createBilling(objRancher,objBill,cbObj,cbMethod);
+			}else{
+				cacheMan.setMessage("", "","[Exception ID: " + cgUpdateInvoice.exceptionId + "] Descripcion: " + cgUpdateInvoice.exceptionDescription);
+				return false;
+			}
 		}
 //		for (var sKey in objBill){
 //			if(objBill[sKey]!=null){

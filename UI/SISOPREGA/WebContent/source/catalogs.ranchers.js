@@ -69,7 +69,8 @@ enyo.kind({
 	},
 	showEdit:function(){
 		_gobackStack.push({caption:"Ganaderos",paneMan:this.$.mainPane,paneName:"ranOptions"});			
-		var objRan=_arrRancherList[this.$.ranchersList.iSelected];
+//		var objRan=_arrRancherList[this.$.ranchersList.iSelected];
+		 var objRan=this.$.ranchersList.getSelected();
 		objRan.first_name=objRan.first_name;
 		if (objRan.rancher_type==1){
 			this.$.ranPerCreate.setRancher(objRan);
