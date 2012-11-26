@@ -10,8 +10,7 @@ enyo.kind({
 	get:function(){
 		
 		if (this.rancherWasReadFromGateway == false){
-			cacheMan.showScrim();
-			
+//			cacheMan.showScrim();
 			this.rancherWasReadFromGateway = true;
 			var objAux = {};
 			var arrAux = [];
@@ -57,7 +56,8 @@ enyo.kind({
 			
 			this.arrObj =  arrAux;
 			_arrRancherList = arrAux;
-			cacheMan.hideScrim();
+			
+//			cacheMan.hideScrim();
 		}
 		
 		return this.arrObj;
@@ -330,24 +330,20 @@ enyo.kind({
 		}		
 	},
 	del:function(delObj,cbObj,cbMethod){		
+		if (delObj.rancher_type==1){
+			return this.deleteRancher(delObj,cbObj,cbMethod);			
+		}else{
+			return this.deleteEnterpriseRancher(delObj, cbObj, cbMethod);
+		}
+	},
+	deleteRancher:function(delObj,cbObj,cbMethod){		
 		//AJAX
 		//Update Internal Object
-		var objToSend = this.rancherAdapterToOut(delObj);
-		delete objToSend.aka;
-		delete objToSend.birthDate;
-		delete objToSend.emailAddress;
-		delete objToSend.firstName;
-		delete objToSend.lastName;
-		delete objToSend.motherName;
-		delete objToSend.phone;
-		delete objToSend.rfc;
-		delete objToSend.contacts;
-		delete objToSend.billing;
-		delete objToSend.rancher_type;
+		var objToSend = {};
+		objToSend.rancherId = delObj.rancher_id;
 		
-		
-		var cgDelete = consumingGateway.Delete("Rancher", "testRequest", objToSend);
-		if (cgDelete.exceptionId == 0){ //Deleted successfully
+		var cgDeleteRancher = consumingGateway.Delete("Rancher", "testRequest", objToSend);
+		if (cgDeleteRancher.exceptionId == 0){ //Deleted successfully
 			var tamanio = this.get().length;
 			for(var i=0;i<tamanio;i++){
 				if (this.arrObj[i].rancher_id == delObj.rancher_id){
@@ -362,7 +358,31 @@ enyo.kind({
 			return false;
 		}
 		else{ //Error
-			cacheMan.setMessage("", "","[Exception ID: " + cgUpdate.exceptionId + "] Descripcion: " + cgUpdate.exceptionDescription);
+			cacheMan.setMessage("", "","[Exception ID: " + cgDeleteRancher.exceptionId + "] Descripcion: " + cgDeleteRancher.exceptionDescription);
+			return false;
+		}
+	},
+	deleteEnterpriseRancher:function(delObj,cbObj,cbMethod){		
+		var objToSend = {};
+		objToSend.enterpriseId = delObj.rancher_id;
+		
+		var cgDeleteEnterpriseRancher = consumingGateway.Delete("EnterpriseRancher", "testRequest", objToSend);
+		if (cgDeleteEnterpriseRancher.exceptionId == 0){ //Deleted successfully
+			var tamanio = this.get().length;
+			for(var i=0;i<tamanio;i++){
+				if (this.arrObj[i].rancher_id == delObj.rancher_id){
+					this.arrObj.splice(i, 1);
+					_arrRancherList = this.arrObj;
+					if(cbMethod){
+						cbObj[cbMethod]();
+					}
+					return true;					
+				}
+			}
+			return false;
+		}
+		else{ //Error
+			cacheMan.setMessage("", "","[Exception ID: " + cgDeleteEnterpriseRancher.exceptionId + "] Descripcion: " + cgDeleteEnterpriseRancher.exceptionDescription);
 			return false;
 		}
 	},

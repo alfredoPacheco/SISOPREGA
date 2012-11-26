@@ -51,6 +51,7 @@ enyo.kind({
 		this.$.last_name.setValue("");
 		this.$.mother_name.setValue("");
 		this.$.birth_date.setValue(new Date());
+		this.$.birth_date.setNull();
 		this.$.email_add.setValue("");
 		this.$.phone_number.setValue("");		
 	},
