@@ -323,4 +323,7 @@
 			</basic>
 		</attributes>
 	</entity>
+	<entity class="com.tramex.sisoprega.dto.Barnyard">
+		<table name="cat_barnyard" />
+	</entity>
 </entity-mappings>
