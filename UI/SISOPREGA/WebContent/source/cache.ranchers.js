@@ -10,15 +10,18 @@ enyo.kind({
 	get:function(){
 		
 		if (this.rancherWasReadFromGateway == false){
-			//cacheMan.showScrim();
+			cacheMan.showScrim();
+			
 			this.rancherWasReadFromGateway = true;
 			var objAux = {};
 			var arrAux = [];
 			var selfCacheRancher = this;		
-			var cgReadAll = consumingGateway.Read("Rancher", "testRequest", {});
 			
-			if (cgReadAll.exceptionId == 0){ //Read successfully
-				jQuery.each(cgReadAll.records, function() {       		
+	//Retrieve Ranchers
+			var cgReadAllRanchers = consumingGateway.Read("Rancher", "testRequest", {});
+			
+			if (cgReadAllRanchers.exceptionId == 0){ //Read successfully
+				jQuery.each(cgReadAllRanchers.records, function() {       		
 		    		jQuery.each(this, function(key, value){
 		    			objAux[key] = value;	
 		    		});
@@ -26,20 +29,35 @@ enyo.kind({
 		    		objTmp.billing = selfCacheRancher.getInvoice(objTmp);
 		    		arrAux.push(objTmp);
 		    	});
-//				//loading contacts from webservice:
-//				cgReadAllContacts = consumingGateway.Read();
-//				
-				
 			}
 			else{ //Error
-				//cacheMan.setMessage("", "","[Exception ID: " + cgCreate.exceptionId + "] Error al intentar crear Ganadero.");				
-				if (cgReadAll.exceptionId != "RR02"){
-					cacheMan.setMessage("", "","[Exception ID: " + cgReadAll.exceptionId + "] Descripcion: " + cgReadAll.exceptionDescription);	
+				if (cgReadAllRanchers.exceptionId != "RR02"){ //No data found
+					cacheMan.setMessage("", "","[Exception ID: " + cgReadAllRanchers.exceptionId + "] Descripcion: " + cgReadAllRanchers.exceptionDescription);	
 				}			
-			}			
+			}
+			
+			
+	//Retrieve Enterprise Ranchers:
+			var cgReadAllEnterpriseRanchers = consumingGateway.Read("EnterpriseRancher", "testRequest", {});
+			if (cgReadAllEnterpriseRanchers.exceptionId == 0){ //Read successfully
+				jQuery.each(cgReadAllEnterpriseRanchers.records, function() {       		
+		    		jQuery.each(this, function(key, value){
+		    			objAux[key] = value;	
+		    		});		    		
+		    		objTmp = selfCacheRancher.enterpriseRancherAdapterToIn(objAux);
+		    		objTmp.billing = selfCacheRancher.getInvoice(objTmp);
+		    		arrAux.push(objTmp);
+		    	});			
+			}
+			else{ //Error								
+				if (cgReadAllEnterpriseRanchers.exceptionId != "ERR2"){//No data found
+					cacheMan.setMessage("", "","[Exception ID: " + cgReadAllEnterpriseRanchers.exceptionId + "] Descripcion: " + cgReadAllEnterpriseRanchers.exceptionDescription);	
+				}			
+			}
+			
 			this.arrObj =  arrAux;
 			_arrRancherList = arrAux;
-//			cacheMan.hideScrim();
+			cacheMan.hideScrim();
 		}
 		
 		return this.arrObj;
