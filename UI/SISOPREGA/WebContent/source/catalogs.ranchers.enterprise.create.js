@@ -56,9 +56,22 @@ enyo.kind({
 		cacheRanchers.create(this.objRan,this.getRancher(),this,"doUpdateRancher");
 	},
 	getRancher:function(){
-		var objRan ={rancher_id:"",company_name:"",					 
-					     contacts:[],billing:{},rancher_type:2,address_one:"",address_two:"",city_id:"",
-						 city_name:"",state_id:"",state_name:"",zip_code:"",rfc:"",phone_number:""};
+		var objRan ={
+						rancher_id:		"",
+						company_name:	"",
+						contacts:		[],
+						billing:		{},
+						rancher_type:	2,
+						address_one:	"",
+						address_two:	"",
+						city_id:		"",
+						city_name:		"",
+						state_id:		"",
+						state_name:		"",
+						zip_code:		"",
+						rfc:			"",
+						phone_number:	""
+					};
 		objRan.company_name=this.$.company_name.getValue();
 		objRan.address_one=this.$.address_one.getValue();
 		objRan.address_two=this.$.address_two.getValue();
