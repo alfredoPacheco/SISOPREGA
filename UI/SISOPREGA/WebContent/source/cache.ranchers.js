@@ -100,25 +100,6 @@ enyo.kind({
 //				rancher_type:	objRan.rancher_type
 			};
 		return objNew;
-	},	
-	rancherContactAdapterToOut:function(objCon){
-		var objNew = {
-				contactId:		objCon.contact_id,
-				rancherId:		objCon.rancher_id,
-				aka:			objCon.aka,
-				firstName:		objCon.first_name,
-				lastName:		objCon.last_name,
-				motherName:		objCon.mother_name,
-				birthDate:		"" + DateOut(objCon.birth_date),
-				emailAddress:	objCon.email_add,
-				telephone:		objCon.phone_number,
-				addressOne:		objCon.address_one,						
-				addressTwo:		objCon.address_two,
-				city:			objCon.city,
-				addressState:	objCon.address_state,
-				zipCode:		objCon.zip_code				
-			};
-		return objNew;		   
 	},
 	rancherContactAdapterToIn:function(objCon){
 		var objNew = {
@@ -139,22 +120,23 @@ enyo.kind({
 			};
 		return objNew;	
 	},
-	rancherInvoiceAdapterToOut:function(objBill){
-//		company_name:	"",					 
-//		state_id:		"",
-//		rfc:			"",
-//		phone_number:	""
+	rancherContactAdapterToOut:function(objCon){
 		var objNew = {
-			rancherInvoiceId:	objBill.billing_id,
-			rancherId:			objBill.rancher_id,
-			legalName:			objBill.company_name,
-			addressOne:			objBill.address_one,
-			addressTwo:			objBill.address_two,
-			city:				objBill.city_id,
-			addressState:		objBill.state_id,
-			zipCode:			objBill.zip_code,
-			legalId:			objBill.rfc				
-		};
+				contactId:		objCon.contact_id,
+				rancherId:		objCon.rancher_id,
+				aka:			objCon.aka,
+				firstName:		objCon.first_name,
+				lastName:		objCon.last_name,
+				motherName:		objCon.mother_name,
+				birthDate:		"" + DateOut(objCon.birth_date),
+				emailAddress:	objCon.email_add,
+				telephone:		objCon.phone_number,
+				addressOne:		objCon.address_one,						
+				addressTwo:		objCon.address_two,
+				city:			objCon.city,
+				addressState:	objCon.address_state,
+				zipCode:		objCon.zip_code				
+			};
 		return objNew;		   
 	},
 	rancherInvoiceAdapterToIn:function(objBill){
@@ -175,6 +157,24 @@ enyo.kind({
 		objNew.phone_number="";
 
 		return objNew;
+	},
+	rancherInvoiceAdapterToOut:function(objBill){
+//		company_name:	"",					 
+//		state_id:		"",
+//		rfc:			"",
+//		phone_number:	""
+		var objNew = {
+			rancherInvoiceId:	objBill.billing_id,
+			rancherId:			objBill.rancher_id,
+			legalName:			objBill.company_name,
+			addressOne:			objBill.address_one,
+			addressTwo:			objBill.address_two,
+			city:				objBill.city_id,
+			addressState:		objBill.state_id,
+			zipCode:			objBill.zip_code,
+			legalId:			objBill.rfc				
+		};
+		return objNew;		   
 	},
 	enterpriseRancherAdapterToIn:function(objRan){
 		var objNew = {
@@ -211,7 +211,45 @@ enyo.kind({
 				telephone:		objRan.phone_number,
 			};
 		return objNew;
-	},	
+	},
+	enterpriseRancherContactAdapterToIn:function(objCon){
+		var objNew = {
+				contact_id:		objCon.contactId,
+				rancher_id:		objCon.enterpriseId,
+				aka:			objCon.aka,
+				first_name:		objCon.firstName,
+				last_name:		objCon.lastName,
+				mother_name:	objCon.motherName,
+				birth_date:		"" + UTCtoNormalDate(objCon.birthDate),
+				email_add:		objCon.emailAddress,
+				phone_number:	objCon.telephone,
+				address_one:	objCon.addressOne,
+				address_two:	objCon.addressTwo,
+				city:			objCon.city,
+				address_state:	objCon.addressState,
+				zip_code:		objCon.zipCode
+			};
+		return objNew;	
+	},
+	enterpriseRancherContactAdapterToOut:function(objCon){
+		var objNew = {
+				contactId:		objCon.contact_id,
+				enterpriseId:	objCon.rancher_id,
+				aka:			objCon.aka,
+				firstName:		objCon.first_name,
+				lastName:		objCon.last_name,
+				motherName:		objCon.mother_name,
+				birthDate:		"" + DateOut(objCon.birth_date),
+				emailAddress:	objCon.email_add,
+				telephone:		objCon.phone_number,
+				addressOne:		objCon.address_one,						
+				addressTwo:		objCon.address_two,
+				city:			objCon.city,
+				addressState:	objCon.address_state,
+				zipCode:		objCon.zip_code				
+			};
+		return objNew;		   
+	},
 	create:function(objRan,cbObj,cbMethod){
 		
 		if (objRan.rancher_type==1){
@@ -409,78 +447,102 @@ enyo.kind({
 		}
 	},
 	getContacts:function(objRan){
+//		TODO: ACTUAL
 		for (i in this.contactsReadFromGateway){
 			if (this.contactsReadFromGateway[i]==objRan.rancher_id){
 				return objRan.contacts;
 			}
 		}
-		
-		this.contactsReadFromGateway.push(objRan.rancher_id);
 		var objAux = {};
 		var arrAux = [];
 		var selfCacheRancher = this;		
 		var objToSend = new Object();
-		objToSend.rancherId = objRan.rancher_id;
-		var cgReadAllContacts = consumingGateway.Read("RancherContact", "testRequest", objToSend);
 		
-		if (cgReadAllContacts.exceptionId == 0){ //Read successfully
-			jQuery.each(cgReadAllContacts.records, function() {       		
-	    		jQuery.each(this, function(key, value){
-	    			objAux[key] = value;	
-	    		});		    		
-	    		arrAux.push(selfCacheRancher.rancherContactAdapterToIn(objAux));	    		
-	    	});
-		}
-//			else{ //Error
-//				//cacheMan.setMessage("", "","[Exception ID: " + cgCreate.exceptionId + "] Error al intentar crear Ganadero.");				
-//				if (cgReadAll.exceptionId != "RR02"){
-//					cacheMan.setMessage("", "","[Exception ID: " + cgReadAll.exceptionId + "] Descripcion: " + cgReadAll.exceptionDescription);	
-//				}			
-//			}			
+		if (objRan.rancher_type==1){
+			this.contactsReadFromGateway.push(objRan.rancher_id);
+			objToSend.rancherId = objRan.rancher_id;
+			var cdReadRancherContacts = consumingGateway.Read("RancherContact", "testRequest", objToSend);
 			
-//			this.arrObj =  arrAux;
-//			_arrRancherList = arrAux;
-//			cacheMan.hideScrim();
-//		}
-		
-		return objRan.contacts = arrAux;
+			if (cdReadRancherContacts.exceptionId == 0){ //Read successfully
+				jQuery.each(cdReadRancherContacts.records, function() {       		
+		    		jQuery.each(this, function(key, value){
+		    			objAux[key] = value;	
+		    		});		    		
+		    		arrAux.push(selfCacheRancher.rancherContactAdapterToIn(objAux));	    		
+		    	});
+			}
+			return objRan.contacts = arrAux;
+		}
+		else if (objRan.rancher_type==2){
+			this.contactsReadFromGateway.push(objRan.rancher_id);
+			objToSend.enterpriseId = objRan.rancher_id;
+			var cgReadEnterpriseContacts = consumingGateway.Read("EnterpriseContact", "testRequest", objToSend);
+			
+			if (cgReadEnterpriseContacts.exceptionId == 0){ //Read successfully
+				jQuery.each(cgReadEnterpriseContacts.records, function() {       		
+		    		jQuery.each(this, function(key, value){
+		    			objAux[key] = value;	
+		    		});		    		
+		    		arrAux.push(selfCacheRancher.enterpriseRancherContactAdapterToIn(objAux));	    		
+		    	});
+			}
+			return objRan.contacts = arrAux;
+		}
 	},
 	addContact:function(objRancher,objCon,cbObj,cbMethod){
-		//AJAX
-		objCon.rancher_id = objRancher.rancher_id;
-		var objToSend = this.rancherContactAdapterToOut(objCon);
-		delete objToSend.contactId;
+		var objToSend = {};
+		var cgCreateContact = null;
 		
-		var cgCreate = consumingGateway.Create("RancherContact", "test", objToSend);
-		if (cgCreate.exceptionId == 0){ //Created successfully			
-			objCon.contact_id = cgCreate.generatedId;
+		objCon.rancher_id = objRancher.rancher_id;
+		
+		if (objRancher.rancher_type==1){	
+			objToSend = this.rancherContactAdapterToOut(objCon);
+			delete objToSend.contactId;
+			cgCreateContact = consumingGateway.Create("RancherContact", "test", objToSend);
+		}
+		else if (objRancher.rancher_type==2){		
+			objToSend = this.enterpriseRancherContactAdapterToOut(objCon);
+			delete objToSend.contactId;
+			cgCreateContact = consumingGateway.Create("EnterpriseContact", "test", objToSend);
+		}
+		
+		if (cgCreateContact.exceptionId == 0){ //Created successfully			
+			objCon.contact_id = cgCreateContact.generatedId;
 			objRancher.contacts.push(objCon);
 			
-//			this.arrObj.push(objCon);
-//			_arrRancherList = this.arrObj;
 			if(cbMethod){
 				cbObj[cbMethod]();
 			}
 			return true;
 		}
-		else{ //Error
-			//cacheMan.setMessage("", "","[Exception ID: " + cgCreate.exceptionId + "] Error al intentar crear Ganadero.");
-			cacheMan.setMessage("", "","[Exception ID: " + cgCreate.exceptionId + "] Descripcion: " + cgCreate.exceptionDescription);
+		else{ //Error			
+			cacheMan.setMessage("", "","[Exception ID: " + cgCreateContact.exceptionId + "] Descripcion: " + cgCreateContact.exceptionDescription);
 			return false;
 		}
+		
+		
 	},
 	updateContact:function(objRancher,objOld,objNew,cbObj,cbMethod){
-		//AJAX
-		objNew.contact_id = objOld.contact_id;
+		var objToSend = {};
+		var cgUpdateContact = null;
 		objNew.rancher_id = objOld.rancher_id;
-		var objToSend = this.rancherContactAdapterToOut(objNew);
-		var cgUpdateContact = consumingGateway.Update("RancherContact", "test", objToSend);
+		
+		if (objRancher.rancher_type==1){	
+			objNew.contact_id = objOld.contact_id;
+			objToSend = this.rancherContactAdapterToOut(objNew);
+			cgUpdateContact = consumingGateway.Update("RancherContact", "test", objToSend);
+		}
+		else if (objRancher.rancher_type==2){		
+			objNew.enterpriseId = objCon.contact_id;
+			objToSend = this.enterpriseRancherContactAdapterToOut(objNew);			
+			cgUpdateContact = consumingGateway.Update("EnterpriseContact", "test", objToSend);
+		}
+		
 		if (cgUpdateContact.exceptionId == 0){ //Updated successfully			
 			var tamanio = objRancher.contacts.length;
 			for(var i=0;i<tamanio;i++){
 				if (objRancher.contacts[i].contact_id == objOld.contact_id){
 					objRancher.contacts[i] = objNew;
-//					cbObj.objRan = objNew;
 					if(cbMethod){
 						cbObj[cbMethod]();
 					}
@@ -492,27 +554,21 @@ enyo.kind({
 		else{ //Error			
 			cacheMan.setMessage("", "","[Exception ID: " + cgUpdateContact.exceptionId + "] Descripcion: " + cgUpdateContact.exceptionDescription);
 			return false;
-		}
-				
+		}	
 	},
 	deleteContact:function(objRancher,objCon,cbObj,cbMethod){
-		//AJAX
-		var objToSend = this.rancherContactAdapterToOut(objCon);
-		delete objToSend.aka;
-		delete objToSend.rancherId;
-		delete objToSend.firstName;
-		delete objToSend.lastName;
-		delete objToSend.motherName;
-		delete objToSend.birthDate;
-		delete objToSend.emailAddress;
-		delete objToSend.telephone;
-		delete objToSend.addressOne;
-		delete objToSend.addressTwo;
-		delete objToSend.city;
-		delete objToSend.addressState;
-		delete objToSend.zipCode;
+		var objToSend = {};
 		
-		var cgDeleteContact = consumingGateway.Delete("RancherContact", "testRequest", objToSend);
+		var cgDeleteContact = null;
+		if (objRancher.rancher_type==1){	
+			objToSend.contactId = objCon.contact_id;
+			cgDeleteContact = consumingGateway.Delete("RancherContact", "testRequest", objToSend);
+		}
+		else if (objRancher.rancher_type==2){				
+			objToSend.enterpriseId = objCon.contact_id;
+			cgDeleteContact = consumingGateway.Delete("EnterpriseContact", "testRequest", objToSend);
+		}
+		
 		if (cgDeleteContact.exceptionId == 0){ //Deleted successfully
 			var tamanio = objRancher.contacts.length;
 			for(var i=0;i<tamanio;i++){
@@ -529,7 +585,7 @@ enyo.kind({
 		else{ //Error
 			cacheMan.setMessage("", "","[Exception ID: " + cgDeleteContact.exceptionId + "] Descripcion: " + cgDeleteContact.exceptionDescription);
 			return false;
-		}			
+		}
 	},
 	getInvoice:function(objRan){
 	
