@@ -20,12 +20,20 @@
 CREATE DATABASE IF NOT EXISTS sisoprega;
 USE sisoprega;
 
-/*Table structure for table cat_ranchers */
-
 DROP TABLE IF EXISTS cat_rancher;
 
 CREATE TABLE cat_rancher (
-  rancher_id SMALLINT unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  rancher_id smallint(5) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  is_enterprise bit(1) NOT NULL DEFAULT b'0'
+);
+
+
+/*Table structure for table cat_person_rancher*/
+
+DROP TABLE IF EXISTS cat_person_rancher;
+
+CREATE TABLE cat_person_rancher (
+  rancher_id SMALLINT unsigned NOT NULL DEFAULT 0 PRIMARY KEY,
   aka VARCHAR(100),
   first_name VARCHAR(50) NOT NULL,
   last_name VARCHAR(50) NOT NULL,
@@ -36,17 +44,28 @@ CREATE TABLE cat_rancher (
   UNIQUE KEY U_cat_rancher (first_name, last_name, mother_name)
 );
 
+delimiter $$
+CREATE TRIGGER person_rancher_trigger
+BEFORE INSERT on cat_person_rancher
+FOR EACH ROW
+BEGIN
+	INSERT INTO cat_rancher (is_enterprise)
+	VALUES (0);
+	SET NEW.rancher_id= LAST_INSERT_ID();
+END$$
+delimiter ;
+
 -- SAMPLE DATA FOR RANCHERS
-INSERT INTO cat_rancher(aka, first_name, last_name, mother_name, email_add, telephone) 
+INSERT INTO cat_person_rancher(aka, first_name, last_name, mother_name, email_add, telephone) 
 VALUES('El Vato', 'Alfredo', 'Pacheco', 'Figueroa', 'j.alfredo.pacheco@gmail.com', '044 (656) 305-0450');
-INSERT INTO cat_rancher(first_name, last_name, mother_name, birth_date, email_add, telephone)
+INSERT INTO cat_person_rancher(first_name, last_name, mother_name, birth_date, email_add, telephone)
 VALUES('Diego A.', 'Torres', 'Fuerte', '1982-04-13', 'diego.torres.fuerte@gmail.com', '044 (656) 217-1598');
 
 
 DROP TABLE IF EXISTS cat_enterprise_rancher;
 
 CREATE TABLE cat_enterprise_rancher(
-  enterprise_id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  enterprise_id SMALLINT UNSIGNED NOT NULL DEFAULT 1 PRIMARY KEY,
   legal_name VARCHAR(100) NOT NULL,
   address_one VARCHAR(100) NOT NULL,
   address_two VARCHAR(100),
@@ -59,11 +78,30 @@ CREATE TABLE cat_enterprise_rancher(
   UNIQUE KEY U_enterprise_rancher_legal_name(legal_name)
 );
 
+delimiter $$
+CREATE TRIGGER enterprise_rancher_trigger
+BEFORE INSERT on cat_enterprise_rancher
+FOR EACH ROW
+BEGIN
+	INSERT INTO cat_rancher (is_enterprise)
+	VALUES (1);
+	SET NEW.enterprise_id= LAST_INSERT_ID();
+END$$
+delimiter ;
+
+-- SAMPLE DATA FOR RANCHERS
+INSERT INTO cat_enterprise_rancher(legal_name, address_one, address_two, zip_code, city, address_state, legal_id, telephone) 
+VALUES('El Vato', 'Alfredo', 'Pacheco', '23244', 'Figueroa', 'j.alfredo.pacheco@gmail.com', '1233444', '044 (656) 305-0450');
+INSERT INTO cat_enterprise_rancher(legal_name, address_one, address_two, zip_code, city, address_state, legal_id, telephone)
+VALUES('Diego A.', 'Torres', 'Fuerte', '434332','1982-04-13', 'diego.torres.fuerte@gmail.com', '432324','044 (656) 217-1598');
+
+
+
 DROP TABLE IF EXISTS cat_rancher_invoice;
 
 CREATE TABLE cat_rancher_invoice (
   rancher_invoice_id  SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  rancher_id SMALLINT UNSIGNED NOT NULL REFERENCES cat_rancher(rancher_id),
+  rancher_id SMALLINT UNSIGNED NOT NULL REFERENCES cat_person_rancher(rancher_id),
   legal_name VARCHAR(100) NOT NULL,
   address_one VARCHAR(100) NOT NULL,
   address_two VARCHAR(100),
@@ -80,7 +118,7 @@ DROP TABLE IF EXISTS cat_rancher_contact;
 
 CREATE TABLE cat_rancher_contact(
   contact_id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  rancher_id SMALLINT UNSIGNED NOT NULL REFERENCES cat_rancher(rancher_id),
+  rancher_id SMALLINT UNSIGNED NOT NULL REFERENCES cat_person_rancher(rancher_id),
   aka VARCHAR(100),
   first_name VARCHAR(50) NOT NULL,
   last_name VARCHAR(50) NOT NULL,
@@ -96,24 +134,6 @@ CREATE TABLE cat_rancher_contact(
   UNIQUE KEY U_rancher_contact(rancher_id, first_name, last_name, mother_name)
 );
 
-DROP TABLE IF EXISTS cat_enterprise_contact;
-
-CREATE TABLE cat_enterprise_contact (
-  contact_id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  enterprise_id SMALLINT UNSIGNED NOT NULL REFERENCES cat_enterprise_rancher(enterprise_id),
-  aka VARCHAR(100),
-  first_name VARCHAR(50) NOT NULL,
-  last_name VARCHAR(50) NOT NULL,
-  mother_name VARCHAR(50),
-  birth_date date,
-  email_add VARCHAR(150),
-  telephone VARCHAR(20),
-  address_one VARCHAR(100),
-  address_two VARCHAR(100),
-  city VARCHAR(80),
-  address_state VARCHAR(80),
-  zip_code VARCHAR(9)
-);
 
 /*
   Table structure for table cat_location 

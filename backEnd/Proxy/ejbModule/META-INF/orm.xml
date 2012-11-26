@@ -8,7 +8,7 @@
 		</persistence-unit-defaults>
 	</persistence-unit-metadata>
 	<entity class="com.tramex.sisoprega.dto.Rancher">
-		<table name="cat_rancher" />
+		<table name="cat_person_rancher" />
 		<named-query name="RANCHER_BY_ID">
 			<description>Get a single rancher by rancherId</description>
 			<query>SELECT r FROM Rancher r WHERE r.rancherId = :rancherId</query>
@@ -200,7 +200,7 @@
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.ContactEnterprise">
-		<table name="cat_enterprise_contact" />
+		<table name="cat_rancher_contact" />
 		<named-query name="ENTERPRISE_CONTACT_BY_ID">
 			<description>Get an enterprise contact by its contact id</description>
 			<query>
@@ -224,7 +224,7 @@
 				<generated-value strategy="IDENTITY" />
 			</id>
 			<basic name="enterpriseId">
-				<column name="enterprise_id" nullable="false" />
+				<column name="rancher_id" nullable="false" />
 			</basic>
 			<basic name="firstName">
 				<column name="first_name" nullable="false" length="50" />
@@ -321,6 +321,15 @@
 			<basic name="locationName">
 				<column name="location_name"/>
 			</basic>
+		</attributes>
+	</entity>
+	<entity class="com.tramex.sisoprega.dto.Barnyard">
+		<table name="cat_barnyard" />
+		<attributes>
+			<id name="barnyardId">
+				<column name="barnyard_id"/>
+				<generated-value strategy= "IDENTITY"/>
+			</id>
 		</attributes>
 	</entity>
 </entity-mappings>
