@@ -109,7 +109,8 @@ enyo.kind({
 		this.filterRanchers();
 	},
 	updateList:function(){
-		this.objList.sort(function(inA, inB) {			
+		
+		this.objList=this.objList.sort(function(inA, inB) {			
 			if(inA.rancher_type==1){
 				inA['sortStr']=inA.last_name.toLowerCase();
 			}else{
