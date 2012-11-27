@@ -447,7 +447,6 @@ enyo.kind({
 		}
 	},
 	getContacts:function(objRan){
-//		TODO: ACTUAL
 		for (i in this.contactsReadFromGateway){
 			if (this.contactsReadFromGateway[i]==objRan.rancher_id){
 				return objRan.contacts;
@@ -457,14 +456,15 @@ enyo.kind({
 		var arrAux = [];
 		var selfCacheRancher = this;		
 		var objToSend = new Object();
+		var cgReadContacts = null;
 		
-		if (objRan.rancher_type==1){
-			this.contactsReadFromGateway.push(objRan.rancher_id);
+		this.contactsReadFromGateway.push(objRan.rancher_id);
+		
+		if (objRan.rancher_type==1){			
 			objToSend.rancherId = objRan.rancher_id;
-			var cdReadRancherContacts = consumingGateway.Read("RancherContact", "testRequest", objToSend);
-			
-			if (cdReadRancherContacts.exceptionId == 0){ //Read successfully
-				jQuery.each(cdReadRancherContacts.records, function() {       		
+			cgReadContacts = consumingGateway.Read("RancherContact", "testRequest", objToSend);
+			if (cgReadContacts.exceptionId == 0){ //Read successfully
+				jQuery.each(cgReadContacts.records, function() {       		
 		    		jQuery.each(this, function(key, value){
 		    			objAux[key] = value;	
 		    		});		    		
@@ -473,13 +473,11 @@ enyo.kind({
 			}
 			return objRan.contacts = arrAux;
 		}
-		else if (objRan.rancher_type==2){
-			this.contactsReadFromGateway.push(objRan.rancher_id);
+		else if (objRan.rancher_type==2){			
 			objToSend.enterpriseId = objRan.rancher_id;
-			var cgReadEnterpriseContacts = consumingGateway.Read("EnterpriseContact", "testRequest", objToSend);
-			
-			if (cgReadEnterpriseContacts.exceptionId == 0){ //Read successfully
-				jQuery.each(cgReadEnterpriseContacts.records, function() {       		
+			cgReadContacts = consumingGateway.Read("EnterpriseContact", "testRequest", objToSend);
+			if (cgReadContacts.exceptionId == 0){ //Read successfully
+				jQuery.each(cgReadContacts.records, function() {       		
 		    		jQuery.each(this, function(key, value){
 		    			objAux[key] = value;	
 		    		});		    		
@@ -526,14 +524,13 @@ enyo.kind({
 		var objToSend = {};
 		var cgUpdateContact = null;
 		objNew.rancher_id = objOld.rancher_id;
+		objNew.contact_id = objOld.contact_id;
 		
-		if (objRancher.rancher_type==1){	
-			objNew.contact_id = objOld.contact_id;
+		if (objRancher.rancher_type==1){				
 			objToSend = this.rancherContactAdapterToOut(objNew);
 			cgUpdateContact = consumingGateway.Update("RancherContact", "test", objToSend);
 		}
-		else if (objRancher.rancher_type==2){		
-			objNew.enterpriseId = objCon.contact_id;
+		else if (objRancher.rancher_type==2){
 			objToSend = this.enterpriseRancherContactAdapterToOut(objNew);			
 			cgUpdateContact = consumingGateway.Update("EnterpriseContact", "test", objToSend);
 		}
@@ -558,14 +555,12 @@ enyo.kind({
 	},
 	deleteContact:function(objRancher,objCon,cbObj,cbMethod){
 		var objToSend = {};
-		
+		objToSend.contactId = objCon.contact_id;
 		var cgDeleteContact = null;
 		if (objRancher.rancher_type==1){	
-			objToSend.contactId = objCon.contact_id;
 			cgDeleteContact = consumingGateway.Delete("RancherContact", "testRequest", objToSend);
 		}
-		else if (objRancher.rancher_type==2){				
-			objToSend.enterpriseId = objCon.contact_id;
+		else if (objRancher.rancher_type==2){
 			cgDeleteContact = consumingGateway.Delete("EnterpriseContact", "testRequest", objToSend);
 		}
 		
