@@ -51,6 +51,7 @@ enyo.kind({
 		this.$.last_name.setValue("");
 		this.$.mother_name.setValue("");
 		this.$.birth_date.setValue(new Date());
+		this.$.birth_date.setNull();
 		this.$.email_add.setValue("");
 		this.$.phone_number.setValue("");		
 	},
@@ -75,7 +76,11 @@ enyo.kind({
 					};
 		
 		objRan.aka			=	this.$.aka.getValue();
-		objRan.birth_date	=	fmt.format(this.$.birth_date.getValue());
+		
+		if(this.$.birth_date.getValue()!=null){			
+			objRan.birth_date=fmt.format(this.$.birth_date.getValue());   
+		}
+		
 		objRan.email_add	=	this.$.email_add.getValue();
 		objRan.first_name	=	this.$.first_name.getValue();
 		objRan.last_name	=	this.$.last_name.getValue();
