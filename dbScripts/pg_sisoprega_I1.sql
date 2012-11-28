@@ -60,11 +60,10 @@ CREATE UNIQUE INDEX U_enterprise_rancher_legal_name ON cat_enterprise_rancher(le
 
 GRANT ALL ON cat_enterprise_rancher TO sisoprega;
 
+DROP SEQUENCE rancher_seq;
 CREATE SEQUENCE rancher_seq;
 GRANT ALL ON rancher_seq TO sisoprega;
 
-DROP TRIGGER enterprise_rancher_id_trigger ON cat_enterprise_rancher;
-CREATE LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION proc_enterprise_rancher_id() RETURNS TRIGGER AS 
 $proc$
 DECLARE
@@ -78,15 +77,29 @@ BEGIN
 	
 	Return NEW;
 END;
-$proc$ LANGUAGE plpgsql;
+$proc$ LANGUAGE 'plpgsql';
 
+DROP TRIGGER enterprise_rancher_id_trigger ON cat_enterprise_rancher;
 CREATE TRIGGER enterprise_rancher_id_trigger 
 BEFORE INSERT ON cat_enterprise_rancher
 FOR EACH ROW
 EXECUTE PROCEDURE proc_enterprise_rancher_id();
 
+DROP TRIGGER enterprise_rancher_delete_trigger ON cat_enterprise_rancher;
+CREATE OR REPLACE FUNCTION proc_enterprise_rancher_delete() RETURNS TRIGGER AS
+$proc$
+BEGIN
+	DELETE FROM cat_rancher
+	WHERE rancher_id = Old.enterprise_id;
+END;
+$proc$ LANGUAGE 'plpgsql';
+
+CREATE TRIGGER enterprise_rancher_delete_trigger 
+AFTER DELETE ON cat_enterprise_rancher
+FOR EACH ROW
+EXECUTE PROCEDURE proc_enterprise_rancher_delete();
+
 DROP TRIGGER person_rancher_id_trigger ON cat_person_rancher;
-CREATE LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION proc_person_rancher_id() RETURNS TRIGGER AS
 $proc$
 DECLARE
@@ -100,12 +113,26 @@ BEGIN
 	
 	Return NEW;
 END;
-$proc$ LANGUAGE plpgsql;
+$proc$ LANGUAGE 'plpgsql';
 
 CREATE TRIGGER person_rancher_id_trigger
 BEFORE INSERT ON cat_person_rancher
 FOR EACH ROW
 EXECUTE PROCEDURE proc_person_rancher_id();
+
+DROP TRIGGER person_rancher_delete_trigger ON cat_person_rancher;
+CREATE OR REPLACE FUNCTION proc_person_rancher_delete() RETURNS TRIGGER AS
+$proc$
+BEGIN
+	DELETE FROM cat_rancher
+	WHERE rancher_id = Old.rancher_id;
+END;
+$proc$ LANGUAGE 'plpgsql';
+
+CREATE TRIGGER person_rancher_delete_trigger
+AFTER DELETE ON cat_person_rancher
+FOR EACH ROW
+EXECUTE PROCEDURE proc_person_rancher_delete();
 
 -- SAMPLE DATA FOR RANCHERS
 INSERT INTO cat_person_rancher(aka, first_name, last_name, mother_name, email_add, telephone) 
@@ -358,7 +385,7 @@ CREATE TABLE ctrl_feed_order(
 	reception_id integer NOT NULL REFERENCES ctrl_reception(reception_id),
 	barnyard_id integer NOT NULL REFERENCES cat_barnyard(barnyard_id),
 	feed_date date NOT NULL,
-	feed_originator varchar(150),
+	feed_originator varchar(150)
 );
 
 GRANT ALL ON ctrl_feed_order TO sisoprega;

@@ -11,7 +11,8 @@
  * MM/DD/YYYY
  * ----------  ---------------------------  -------------------------------------------
  * 10/03/2012  Diego Torres                  Initial Version.
- * 11/25/2012  Jaime Figueroa		     Adapt Postgres Database to MySQL tables.
+ * 11/25/2012  Jaime Figueroa                Adapt Postgres Database to MySQL tables.
+ * 11/26/2012  Diego Torres                  Adapt triggers as in postgres database.
  * ====================================================================================
  * 
  * Author: Diego Torres
@@ -23,8 +24,10 @@ USE sisoprega;
 DROP TABLE IF EXISTS cat_rancher;
 
 CREATE TABLE cat_rancher (
-  rancher_id smallint(5) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  is_enterprise bit(1) NOT NULL DEFAULT b'0'
+  rancher_id SMALLINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  entity_id SMALLINT NOT NULL,
+  is_enterprise bit(1) NOT NULL DEFAULT b'0',
+  UNIQUE KEY U_rancher(rancher_id, is_enterprise)
 );
 
 
@@ -33,7 +36,7 @@ CREATE TABLE cat_rancher (
 DROP TABLE IF EXISTS cat_person_rancher;
 
 CREATE TABLE cat_person_rancher (
-  rancher_id SMALLINT unsigned NOT NULL DEFAULT 0 PRIMARY KEY,
+  rancher_id SMALLINT unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
   aka VARCHAR(100),
   first_name VARCHAR(50) NOT NULL,
   last_name VARCHAR(50) NOT NULL,
@@ -46,12 +49,11 @@ CREATE TABLE cat_person_rancher (
 
 delimiter $$
 CREATE TRIGGER person_rancher_trigger
-BEFORE INSERT on cat_person_rancher
+AFTER INSERT on cat_person_rancher
 FOR EACH ROW
 BEGIN
-	INSERT INTO cat_rancher (is_enterprise)
-	VALUES (0);
-	SET NEW.rancher_id= LAST_INSERT_ID();
+	INSERT INTO cat_rancher (entity_id, is_enterprise)
+	VALUES (NEW.rancher_id, 0);
 END$$
 delimiter ;
 
@@ -65,7 +67,7 @@ VALUES('Diego A.', 'Torres', 'Fuerte', '1982-04-13', 'diego.torres.fuerte@gmail.
 DROP TABLE IF EXISTS cat_enterprise_rancher;
 
 CREATE TABLE cat_enterprise_rancher(
-  enterprise_id SMALLINT UNSIGNED NOT NULL DEFAULT 1 PRIMARY KEY,
+  enterprise_id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   legal_name VARCHAR(100) NOT NULL,
   address_one VARCHAR(100) NOT NULL,
   address_two VARCHAR(100),
@@ -80,12 +82,11 @@ CREATE TABLE cat_enterprise_rancher(
 
 delimiter $$
 CREATE TRIGGER enterprise_rancher_trigger
-BEFORE INSERT on cat_enterprise_rancher
+AFTER INSERT on cat_enterprise_rancher
 FOR EACH ROW
 BEGIN
-	INSERT INTO cat_rancher (is_enterprise)
-	VALUES (1);
-	SET NEW.enterprise_id= LAST_INSERT_ID();
+	INSERT INTO cat_rancher (entity_id, is_enterprise)
+	VALUES (NEW.enterprise_id, 1);
 END$$
 delimiter ;
 
