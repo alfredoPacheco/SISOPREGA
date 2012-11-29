@@ -7,12 +7,23 @@
     	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     	<title>GlassFish JSP Page</title>
     	<script src="scripts/jquery-1.8.2/jquery.js"></script>
+    	<script src="scripts/webServicesConsuming/config.js"></script>
     	<script src="scripts/webServicesConsuming/consumingGateway.js"></script>
   </head>
   <body>    
     <div id = "seccion"></div>
     <script>
             $(document).ready(function() {
+            	
+				//########################################################################################
+            	
+            	$("#seccion").append("<h1>Consumir Login</h1>");
+            	
+            	consumirLogin = consumingGateway.Login("admin", "admin");
+            	
+            	$("#seccion").append("<b>sessionId: </b>" + sessionToken + "<br />");
+            	$("#seccion").append("<b>exceptionID: </b>" + consumirLogin.exceptionId + "<br />");
+            	$("#seccion").append("<b>exceptionDescription: </b>" + consumirLogin.exceptionDescription + "<br />");
             	
             	//########################################################################################
             	
@@ -32,7 +43,8 @@
             	$("#seccion").append("<b>origin: </b>" + consumirCreate.origin + "<br />");
             	$("#seccion").append("<b>exceptionID: </b>" + consumirCreate.exceptionId + "<br />");
             	$("#seccion").append("<b>exceptionDescription: </b>" + consumirCreate.exceptionDescription + "<br />");
-            	$("#seccion").append("<b>generatedID: </b>" + consumirCreate.generatedId + "<br />");            	
+            	$("#seccion").append("<b>generatedID: </b>" + consumirCreate.generatedId + "<br />");
+            	$("#seccion").append("<b>newToken: </b>" + sessionToken + "<br />");
             	
             	//########################################################################################
             	
@@ -53,12 +65,12 @@
     	    		});
     	    		$("#seccion").append("<br />");
     	    	});            	
-            	
+            	$("#seccion").append("<b>newToken: </b>" + sessionToken + "<br />");
             	//########################################################################################
             	
 				$("#seccion").append("<h1>Consumir Update</h1>");
             	
-            	ganadero2 = {rancherId:		3,
+            	ganadero2 = {rancherId:		consumirCreate.generatedId,
             				aka:			"aka_Freddy",
             				birthDate:		"04/12/1982",
             				emailAddress:	"j.alfredo.pacheco@gmail.com",
@@ -74,7 +86,7 @@
             	$("#seccion").append("<b>exceptionID: </b>" + consumirUpdate.exceptionId + "<br />");
             	$("#seccion").append("<b>exceptionDescription: </b>" + consumirUpdate.exceptionDescription + "<br />");
             	$("#seccion").append("<b>entityName: </b>" + consumirUpdate.entityName + "<br />");
-            	            	
+            	$("#seccion").append("<b>newToken: </b>" + sessionToken + "<br />");
             	
             	//########################################################################################
             	
@@ -100,7 +112,7 @@
             	
             	$("#seccion").append("<h1>Consumir Delete</h1>");
             	
-            	ganadero2.rancherId = 2;
+            	ganadero2.rancherId = consumirCreate.generatedId;
             	
             	
             	$("#seccion").append("rancherId a eliminar: " + ganadero2.rancherId + "<br />");
@@ -109,31 +121,37 @@
                 $("#seccion").append("<b>origin: </b>" + consumirDelete.origin + "<br />");
             	$("#seccion").append("<b>exceptionID: </b>" + consumirDelete.exceptionId + "<br />");
             	$("#seccion").append("<b>exceptionDescription: </b>" + consumirDelete.exceptionDescription + "<br />");
+            	$("#seccion").append("<b>newToken: </b>" + sessionToken + "<br />");
+            	//########################################################################################
             	
+            	$("#seccion").append("<h1>Consumir LogOut</h1>");
             	
+            	consumirLogOut = consumingGateway.LogOut();
             	
-            	var obj = new Object();
-            	obj.propiedad1 = "propiedad1";
-            	obj.propiedad2 = "propiedad2";
-            	obj.propiedad3 = "propiedad3";
-            	obj.propiedad4 = "propiedad4";
-            	obj.propiedad5 = "propiedad5";
-            	obj.propiedad6 = "propiedad6";
+            	$("#seccion").append("<b>result: </b>" + consumirLogOut.result + "<br />");
+            	$("#seccion").append("<b>exceptionID: </b>" + consumirLogOut.exceptionId + "<br />");
+            	$("#seccion").append("<b>exceptionDescription: </b>" + consumirLogOut.exceptionDescription + "<br />");
             	
-            	var cadena = "";
-            	for (prop in obj){
-            		cadena = cadena + " " + prop + " " + obj[prop];
-            	}
+				//########################################################################################
             	
-            	$("#seccion").append(cadena + "<br />");
+            	$("#seccion").append("<h1>Consumir Create</h1>");
             	
-            	delete obj.propiedad5;
-            	cadena = "";
-            	for (prop in obj){
-            		cadena = cadena + " " + prop + " " + obj[prop];
-            	}
+            	ganadero = {aka:			"aka_Freddy",
+            				birthDate:		"04/12/1982",
+            				emailAddress:	"j.alfredo.pacheco@gmail.com",
+            				firstName:		"El Uddfsad fltimo",
+            				lastName: 		"Pacheco",
+            				motherName: 	"Figueroa",
+            				phone: 			"3050450"
+            			};
             	
-            	$("#seccion").append(cadena + "<br />");
+            	consumirCreate = consumingGateway.Create("Rancher", "test", ganadero);
+            	
+            	$("#seccion").append("<b>origin: </b>" + consumirCreate.origin + "<br />");
+            	$("#seccion").append("<b>exceptionID: </b>" + consumirCreate.exceptionId + "<br />");
+            	$("#seccion").append("<b>exceptionDescription: </b>" + consumirCreate.exceptionDescription + "<br />");
+            	$("#seccion").append("<b>generatedID: </b>" + consumirCreate.generatedId + "<br />");            	
+            	$("#seccion").append("<b>newToken: </b>" + sessionToken + "<br />");
             	
             }); //$(document).ready(function()
         </script>

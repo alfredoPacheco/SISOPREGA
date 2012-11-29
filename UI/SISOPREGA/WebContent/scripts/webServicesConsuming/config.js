@@ -12,57 +12,24 @@
  * EXCEPT UNDER WRITTEN LICENSE FROM TRAMEX OR ITS LICENSORS.
  * 
  * &copy; COPYRIGHT 2012 TRAMEX. ALL RIGHTS RESERVED.
- */
-package com.tramex.sisoprega.common;
-
-/**
- * Defines a common model for all responses.<BR/>
  * 
- * <B>Revision History:</B>
+ * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ * This javascript sets the configuration properties shared along libraries in the
+ * static web project
  * 
- * <PRE>
+ * Revision History: 
  * ====================================================================================
  * Date        By                           Description
  * MM/DD/YYYY
  * ----------  ---------------------------  -------------------------------------------
- * 10/29/2012  Diego Torres                 Initial Version.
- * 10/28/2012  Diego Torres                 Adding token refresher property.
+ * 11/28/2012  Diego Torres                 Initial Version.
  * ====================================================================================
- * </PRE>
- * 
- * @author Diego Torres
  *
  */
-public class BaseResponse {
-	private Error error;
-	private String token;
-	/**
-	 * @return the exception
-	 */
-	public Error getError() {
-		return error;
-	}
-	/**
-	 * @param error the exception to set
-	 */
-	public void setError(Error error) {
-		this.error = error;
-	}
-	
-	@Override
-	public String toString(){
-		return "Error:{" + error.toString() + "};";
-	}
-	/**
-	 * @return the token
-	 */
-	public String getToken() {
-	    return token;
-	}
-	/**
-	 * @param token the token to set
-	 */
-	public void setToken(String token) {
-	    this.token = token;
-	}
-}
+
+var serverHost = 'http://localhost:8080';
+var gatewayApp_path = '/Gateway/GatewayService';
+var gatewayWsURL = serverHost + gatewayApp_path;
+var soapHeader = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="http://ws.gateway.sisoprega.tramex.com/">';
+	soapHeader += '<soapenv:Header/><soapenv:Body>';
+var soapFooter = '</soapenv:Body></soapenv:Envelope>';

@@ -172,6 +172,8 @@ $proc$
 BEGIN
 	DELETE FROM cat_rancher
 	WHERE rancher_id = Old.enterprise_id;
+	
+	Return NULL;
 END;
 $proc$ LANGUAGE 'plpgsql';
 
@@ -207,6 +209,8 @@ $proc$
 BEGIN
 	DELETE FROM cat_rancher
 	WHERE rancher_id = Old.rancher_id;
+	
+	Return NULL;
 END;
 $proc$ LANGUAGE 'plpgsql';
 
@@ -297,6 +301,8 @@ CREATE TABLE cat_cattle_type (
   catclass_id integer NOT NULL REFERENCES cat_cattle_class(catclass_id),
   cattype_name VARCHAR(50) NOT NULL
 );
+
+CREATE UNIQUE INDEX U_cattle_type ON cat_cattle_type(cattype_name);
 
 GRANT ALL ON cat_cattle_type TO sisoprega;
 GRANT ALL ON cat_cattle_type_cattype_id_seq TO sisoprega;
