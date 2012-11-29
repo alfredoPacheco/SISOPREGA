@@ -31,57 +31,44 @@ package com.tramex.sisoprega.dto;
  * @author Jaime Figueroa
  *
  */
-public class Barnyard {
-    private long barnyardId;    
-    private String barnyardCode;
-    private boolean available; 
-    private long locationId;
+public class MeasurementUnit {
+    private long unitId;
+    private String unitName;
+    private String unitAbreviation;
     /**
-     * @return the barnyardId
+     * @return the unitId
      */
-    public long getBarnyardId() {
-        return barnyardId;
+    public long getUnitId() {
+        return unitId;
     }
     /**
-     * @param barnyardId the barnyardId to set
+     * @param unitId the unitId to set
      */
-    public void setBarnyardId(long barnyardId) {
-        this.barnyardId = barnyardId;
+    public void setUnitId(long unitId) {
+        this.unitId = unitId;
     }
     /**
-     * @return the barnyardCode
+     * @return the unitName
      */
-    public String getBarnyardCode() {
-        return barnyardCode;
+    public String getUnitName() {
+        return unitName;
     }
     /**
-     * @param barnyardCode the barnyardCode to set
+     * @param unitName the unitName to set
      */
-    public void setBarnyardCode(String barnyardCode) {
-        this.barnyardCode = barnyardCode;
+    public void setUnitName(String unitName) {
+        this.unitName = unitName;
     }
     /**
-     * @return the available
+     * @return the unitAbreviation
      */
-    public boolean isAvailable() {
-        return available;
+    public String getUnitAbreviation() {
+        return unitAbreviation;
     }
     /**
-     * @param available the available to set
+     * @param unitAbreviation the unitAbreviation to set
      */
-    public void setAvailable(boolean available) {
-        this.available = available;
-    }
-    /**
-     * @return the locationId
-     */
-    public long getLocationId() {
-        return locationId;
-    }
-    /**
-     * @param locationId the locationId to set
-     */
-    public void setLocationId(long locationId) {
-        this.locationId = locationId;
+    public void setUnitAbreviation(String unitAbreviation) {
+        this.unitAbreviation = unitAbreviation;
     }
 }

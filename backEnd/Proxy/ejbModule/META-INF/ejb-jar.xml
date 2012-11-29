@@ -26,5 +26,9 @@
       <ejb-name>CattleClassProxy</ejb-name>
       <ejb-class>com.tramex.sisoprega.proxy.bean.CattleClassBean</ejb-class>
     </session>
+    <session>
+    	<ejb-name>CattleTypeProxy</ejb-name>
+    	<ejb-class>com.tramex.sisoprega.proxy.bean.CattleTypeBean</ejb-class>
+    </session>
   </enterprise-beans>
 </ejb-jar>

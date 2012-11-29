@@ -328,7 +328,34 @@
 		<attributes>
 			<id name="barnyardId">
 				<column name="barnyard_id"/>
-				<generated-value strategy= "IDENTITY"/>
+				<generated-value strategy = "IDENTITY"/>
+			</id>
+		</attributes>
+	</entity>
+	<entity class="com.tramex.sisoprega.dto.BarnyardCapacity">
+		<table name= "cat_barnyard_capacity" />
+		<attributes>
+			<id name="capacityId">
+				<column name= "capacity_id"/>
+				<generated-value strategy = "IDENTITY"/>
+			</id>
+		</attributes>
+	</entity>
+	<entity class="com.tramex.sisoprega.dto.MeasurementUnit">
+		<table name = "cat_measurement_unit" />	
+		<attributes>
+			<id name="unitId">
+				<column name = "unit_id" />
+				<generated-value strategy = "IDENTITY"/>
+			</id>
+		</attributes>
+	</entity>
+	<entity class="com.tramex.sisoprega.dto.MeasurementUnitEquivalence">
+		<table name= "cat_measurement_unit_equivalence" />
+		<attributes>
+			<id name="equivalenceId">
+				<column name = "equivalence_id" />
+				<generated-value strategy = "IDENTITY" />
 			</id>
 		</attributes>
 	</entity>
