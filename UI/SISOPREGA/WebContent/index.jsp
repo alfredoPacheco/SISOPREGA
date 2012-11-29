@@ -7,6 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
 <script src="scripts/jquery-1.8.2/jquery.js" ></script>
 <script src="scripts/enyo/framework/enyo.js"></script>
+<script src="scripts/webServicesConsuming/config.js"></script>
 <script src="scripts/webServicesConsuming/consumingGateway.js"></script>
 <title>SISOPREGA</title>
 </head>

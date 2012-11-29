@@ -4,7 +4,17 @@ enyo.kind({
 	cattleWasReadFromGateway: false,
 	reloadme:function(){
 		//AJAX
-	},	
+	},
+	cattleAdapterToIn:function(objCattle){
+
+		var objNew = {
+				cattype_id:		objCattle.cattypeId,
+//				catclass_id:	objCattle.catclassId,
+				cattype_name:	objCattle.cattypeName
+			};
+		
+		return objNew;
+	},
 	get:function(){
 		if (this.cattleWasReadFromGateway == false){
 //			cacheMan.showScrim();
@@ -21,8 +31,7 @@ enyo.kind({
 		    		jQuery.each(this, function(key, value){
 		    			objAux[key] = value;
 		    		});
-		    		objTmp = selfCacheRancher.cattleAdapterToIn(objAux);
-		    		//objTmp.billing = selfCacheRancher.getInvoice(objTmp);
+		    		objTmp = selfCacheRancher.cattleAdapterToIn(objAux);		    		
 		    		arrAux.push(objTmp);
 		    	});
 			}
