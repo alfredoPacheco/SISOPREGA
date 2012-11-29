@@ -31,57 +31,57 @@ package com.tramex.sisoprega.dto;
  * @author Jaime Figueroa
  *
  */
-public class Barnyard {
-    private long barnyardId;    
-    private String barnyardCode;
-    private boolean available; 
-    private long locationId;
+public class MeasurementUnitEquivalence {
+    private long equivalenceId;
+    private long unitSrc;
+    private long unitDest;
+    private Double equivalence;
     /**
-     * @return the barnyardId
+     * @return the equivalenceId
      */
-    public long getBarnyardId() {
-        return barnyardId;
+    public long getEquivalenceId() {
+        return equivalenceId;
     }
     /**
-     * @param barnyardId the barnyardId to set
+     * @param equivalenceId the equivalenceId to set
      */
-    public void setBarnyardId(long barnyardId) {
-        this.barnyardId = barnyardId;
+    public void setEquivalenceId(long equivalenceId) {
+        this.equivalenceId = equivalenceId;
     }
     /**
-     * @return the barnyardCode
+     * @return the unitSrc
      */
-    public String getBarnyardCode() {
-        return barnyardCode;
+    public long getUnitSrc() {
+        return unitSrc;
     }
     /**
-     * @param barnyardCode the barnyardCode to set
+     * @param unitSrc the unitSrc to set
      */
-    public void setBarnyardCode(String barnyardCode) {
-        this.barnyardCode = barnyardCode;
+    public void setUnitSrc(long unitSrc) {
+        this.unitSrc = unitSrc;
     }
     /**
-     * @return the available
+     * @return the unitDest
      */
-    public boolean isAvailable() {
-        return available;
+    public long getUnitDest() {
+        return unitDest;
     }
     /**
-     * @param available the available to set
+     * @param unitDest the unitDest to set
      */
-    public void setAvailable(boolean available) {
-        this.available = available;
+    public void setUnitDest(long unitDest) {
+        this.unitDest = unitDest;
     }
     /**
-     * @return the locationId
+     * @return the equivalence
      */
-    public long getLocationId() {
-        return locationId;
+    public Double getEquivalence() {
+        return equivalence;
     }
     /**
-     * @param locationId the locationId to set
+     * @param equivalence the equivalence to set
      */
-    public void setLocationId(long locationId) {
-        this.locationId = locationId;
+    public void setEquivalence(Double equivalence) {
+        this.equivalence = equivalence;
     }
 }

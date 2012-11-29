@@ -17,6 +17,7 @@ package com.tramex.sisoprega.proxy.bean;
 
 import java.util.List;
 
+import javax.ejb.Stateless;
 import javax.persistence.TypedQuery;
 
 import com.tramex.sisoprega.common.BaseResponse;
@@ -49,6 +50,7 @@ import com.tramex.sisoprega.dto.CattleType;
  * @author Jaime Figueroa
  *
  */
+@Stateless
 public class CattleTypeBean extends BaseBean implements Cruddable {
 
     /* (non-Javadoc)
@@ -71,7 +73,7 @@ public class CattleTypeBean extends BaseBean implements Cruddable {
 		log.finer("Cattle type persisted on database");
 		em.flush();
 
-		String sId = String.valueOf(cattle.getCatclassId()); //*  Duadas 
+		String sId = String.valueOf(cattle.getCattypeId()); 
 		log.finer("Setting cattle type id in response: " + sId);
 		response.setGeneratedId(sId);
 		response.setError(new Error("0", "SUCCESS",

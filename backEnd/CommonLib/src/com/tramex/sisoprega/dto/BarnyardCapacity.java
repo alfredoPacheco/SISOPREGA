@@ -31,11 +31,23 @@ package com.tramex.sisoprega.dto;
  * @author Jaime Figueroa
  *
  */
-public class Barnyard {
-    private long barnyardId;    
-    private String barnyardCode;
-    private boolean available; 
-    private long locationId;
+public class BarnyardCapacity {
+    private long capacityId;
+    private long barnyardId;
+    private long catclassId;
+    private long headCount;
+    /**
+     * @return the capacityId
+     */
+    public long getCapacityId() {
+        return capacityId;
+    }
+    /**
+     * @param capacityId the capacityId to set
+     */
+    public void setCapacityId(long capacityId) {
+        this.capacityId = capacityId;
+    }
     /**
      * @return the barnyardId
      */
@@ -49,39 +61,28 @@ public class Barnyard {
         this.barnyardId = barnyardId;
     }
     /**
-     * @return the barnyardCode
+     * @return the catclassId
      */
-    public String getBarnyardCode() {
-        return barnyardCode;
+    public long getCatclassId() {
+        return catclassId;
     }
     /**
-     * @param barnyardCode the barnyardCode to set
+     * @param catclassId the catclassId to set
      */
-    public void setBarnyardCode(String barnyardCode) {
-        this.barnyardCode = barnyardCode;
+    public void setCatclassId(long catclassId) {
+        this.catclassId = catclassId;
     }
     /**
-     * @return the available
+     * @return the headCount
      */
-    public boolean isAvailable() {
-        return available;
+    public long getHeadCount() {
+        return headCount;
     }
     /**
-     * @param available the available to set
+     * @param headCount the headCount to set
      */
-    public void setAvailable(boolean available) {
-        this.available = available;
+    public void setHeadCount(long headCount) {
+        this.headCount = headCount;
     }
-    /**
-     * @return the locationId
-     */
-    public long getLocationId() {
-        return locationId;
-    }
-    /**
-     * @param locationId the locationId to set
-     */
-    public void setLocationId(long locationId) {
-        this.locationId = locationId;
-    }
+    
 }
