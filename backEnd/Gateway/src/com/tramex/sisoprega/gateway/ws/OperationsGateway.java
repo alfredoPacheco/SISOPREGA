@@ -47,6 +47,7 @@ import com.tramex.sisoprega.common.crud.Cruddable;
  * MM/DD/YYYY
  * ----------  ---------------------------  -------------------------------------------
  * 10/27/2012  Diego Torres                 Initial Version.
+ * 11/27/2012  Diego Torres                 Preparing web service for login.
  * ====================================================================================
  * </PRE>
  * 
@@ -293,6 +294,18 @@ public class OperationsGateway {
 	// Log ending of method and respond to web service.
 	log.exiting(this.getClass().getCanonicalName(), "DeleteGateway");
 	return result;
+    }
+
+    /**
+     * 
+     * @param userName
+     * @param password
+     * @return
+     */
+    @WebMethod(operationName = "Login")
+    public String loginService(@WebParam(name = "userName") String userName,
+	    @WebParam(name = "password") String password) {
+	return "Session:{userName:" + userName + ";password:" + password + "}";
     }
 
     private Cruddable getCruddable(String cruddableName) {

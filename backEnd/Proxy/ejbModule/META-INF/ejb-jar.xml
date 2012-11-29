@@ -7,24 +7,24 @@
       <ejb-class>com.tramex.sisoprega.proxy.bean.Rancher</ejb-class>
     </session>
     <session>
-    	<ejb-name>EnterpriseRancherProxy</ejb-name>
-    	<ejb-class>com.tramex.sisoprega.proxy.bean.EnterpriseRancher</ejb-class>
+      <ejb-name>EnterpriseRancherProxy</ejb-name>
+      <ejb-class>com.tramex.sisoprega.proxy.bean.EnterpriseRancher</ejb-class>
     </session>
     <session>
-    	<ejb-name>RancherInvoiceProxy</ejb-name>
-    	<ejb-class>com.tramex.sisoprega.proxy.bean.RancherInvoice</ejb-class>
+      <ejb-name>RancherInvoiceProxy</ejb-name>
+      <ejb-class>com.tramex.sisoprega.proxy.bean.RancherInvoice</ejb-class>
     </session>
     <session>
-    	<ejb-name>RancherContactProxy</ejb-name>
-    	<ejb-class>com.tramex.sisoprega.proxy.bean.RancherContact</ejb-class>
+      <ejb-name>RancherContactProxy</ejb-name>
+      <ejb-class>com.tramex.sisoprega.proxy.bean.RancherContact</ejb-class>
     </session>
     <session>
-    	<ejb-name>EnterpriseContactProxy</ejb-name>
-    	<ejb-class>com.tramex.sisoprega.proxy.bean.EnterpriseContact</ejb-class>
+      <ejb-name>EnterpriseContactProxy</ejb-name>
+      <ejb-class>com.tramex.sisoprega.proxy.bean.EnterpriseContact</ejb-class>
     </session>
     <session>
-    	<ejb-name>CattleClassProxy</ejb-name>
-    	<ejb-class>com.tramex.sisoprega.proxy.bean.CattleClassBean</ejb-class>
+      <ejb-name>CattleClassProxy</ejb-name>
+      <ejb-class>com.tramex.sisoprega.proxy.bean.CattleClassBean</ejb-class>
     </session>
     <session>
     	<ejb-name>CattleTypeProxy</ejb-name>

@@ -111,6 +111,9 @@ enyo.kind({
 	showScrim:function(){
 		this.gblScrim.show();
 	},
+	hideScrim:function(){
+		this.gblScrim.hide();
+	},
 	setGlobalToaster:function(objVar){
 		this.gblToaster=objVar;
 	},
