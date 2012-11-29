@@ -11,12 +11,93 @@
  * MM/DD/YYYY
  * ----------  ---------------------------  -------------------------------------------
  * 10/03/2012  Diego Torres                  Initial Version.
+ * 11/27/2012  Diego Torres                  Add tables for security management
  * ====================================================================================
  * 
  * Author: Diego Torres
  *  
  */
  
+DROP TABLE IF EXISTS sys_sisoprega_role CASCADE;
+CREATE TABLE sys_sisoprega_role(
+	role_id SERIAL PRIMARY KEY,
+	role_name varchar(20) NOT NULL
+);
+ 
+CREATE UNIQUE INDEX U_role_name ON sys_sisoprega_role(role_name);
+
+GRANT ALL ON sys_sisoprega_role TO sisoprega;
+GRANT ALL ON sys_sisoprega_role_role_id_seq TO sisoprega;
+
+INSERT INTO sys_sisoprega_role(role_name)
+VALUES('mex_user');
+INSERT INTO sys_sisoprega_role(role_name)
+VALUES('usa_user');
+INSERT INTO sys_sisoprega_role(role_name)
+VALUES('business_user');
+INSERT INTO sys_sisoprega_role(role_name)
+VALUES('rancher');
+INSERT INTO sys_sisoprega_role(role_name)
+VALUES('buyer');
+ 
+/* 
+ * It is intended to send the password encrypted to the password field.
+ */
+DROP TABLE IF EXISTS sys_sisoprega_user CASCADE;
+CREATE TABLE sys_sisoprega_user(
+	user_id SERIAL PRIMARY KEY,
+	user_name varchar(20) NOT NULL,
+	password varchar(100) NOT NULL
+);
+CREATE UNIQUE INDEX U_user_name ON sys_sisoprega_user(user_name);
+ 
+GRANT ALL ON sys_sisoprega_user TO sisoprega;
+GRANT ALL ON sys_sisoprega_user_user_id_seq TO sisoprega;
+
+INSERT INTO sys_sisoprega_user(user_name, password)
+VALUES('all_mighty', 'all_mighty');
+INSERT INTO sys_sisoprega_user(user_name, password)
+VALUES('mex_user', 'mex_user');
+INSERT INTO sys_sisoprega_user(user_name, password)
+VALUES('usa_user', 'usa_user');
+INSERT INTO sys_sisoprega_user(user_name, password)
+VALUES('business_user', 'business_user');
+INSERT INTO sys_sisoprega_user(user_name, password)
+VALUES('rancher', 'rancher');
+INSERT INTO sys_sisoprega_user(user_name, password)
+VALUES('buyer', 'buyer');
+
+DROP TABLE IF EXISTS sys_sisoprega_user_role CASCADE;
+CREATE TABLE sys_sisoprega_user_role(
+	user_id integer NOT NULL REFERENCES sys_sisoprega_user(user_id),
+	role_id integer NOT NULL REFERENCES sys_sisoprega_role(role_id)
+);
+
+CREATE UNIQUE INDEX U_user_role ON sys_sisoprega_user_role(user_id, role_id);
+
+GRANT ALL ON sys_sisoprega_user_role TO sisoprega;
+
+INSERT INTO sys_sisoprega_user_role(user_id, role_id)
+VALUES(1, 1); -- ALL MIGHTY TO MX
+INSERT INTO sys_sisoprega_user_role(user_id, role_id)
+VALUES(1, 2); -- ALL MIGHTY TO US
+INSERT INTO sys_sisoprega_user_role(user_id, role_id)
+VALUES(1, 3); -- ALL MIGHTY TO BUS
+INSERT INTO sys_sisoprega_user_role(user_id, role_id)
+VALUES(1, 4); -- ALL MIGHTY TO RANCHER
+INSERT INTO sys_sisoprega_user_role(user_id, role_id)
+VALUES(1, 5); -- ALL MIGHTY TO BUYER
+INSERT INTO sys_sisoprega_user_role(user_id, role_id)
+VALUES(2, 1); -- MX TO MX
+INSERT INTO sys_sisoprega_user_role(user_id, role_id)
+VALUES(3, 2); -- US TO US
+INSERT INTO sys_sisoprega_user_role(user_id, role_id)
+VALUES(4, 3); -- BUS TO BUS
+INSERT INTO sys_sisoprega_user_role(user_id, role_id)
+VALUES(5, 4); -- RANCHER TO RANCHER
+INSERT INTO sys_sisoprega_user_role(user_id, role_id)
+VALUES(6, 5); -- BUYER TO BUYER
+
 DROP TABLE IF EXISTS cat_rancher CASCADE;
 CREATE TABLE cat_rancher(
 	rancher_id integer PRIMARY KEY,
@@ -91,6 +172,8 @@ $proc$
 BEGIN
 	DELETE FROM cat_rancher
 	WHERE rancher_id = Old.enterprise_id;
+	
+	Return NULL;
 END;
 $proc$ LANGUAGE 'plpgsql';
 
@@ -126,6 +209,8 @@ $proc$
 BEGIN
 	DELETE FROM cat_rancher
 	WHERE rancher_id = Old.rancher_id;
+	
+	Return NULL;
 END;
 $proc$ LANGUAGE 'plpgsql';
 
@@ -216,6 +301,8 @@ CREATE TABLE cat_cattle_type (
   catclass_id integer NOT NULL REFERENCES cat_cattle_class(catclass_id),
   cattype_name VARCHAR(50) NOT NULL
 );
+
+CREATE UNIQUE INDEX U_cattle_type ON cat_cattle_type(cattype_name);
 
 GRANT ALL ON cat_cattle_type TO sisoprega;
 GRANT ALL ON cat_cattle_type_cattype_id_seq TO sisoprega;

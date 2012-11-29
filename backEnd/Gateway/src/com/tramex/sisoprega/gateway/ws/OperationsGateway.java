@@ -18,11 +18,16 @@ package com.tramex.sisoprega.gateway.ws;
 import java.util.List;
 import java.util.logging.Logger;
 
+import javax.annotation.Resource;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
 import javax.naming.Context;
 import javax.naming.InitialContext;
+import javax.servlet.http.HttpSession;
+import javax.xml.ws.WebServiceContext;
+import javax.xml.ws.WebServiceException;
+import javax.xml.ws.handler.MessageContext;
 
 import com.tramex.sisoprega.common.BaseResponse;
 import com.tramex.sisoprega.common.CreateGatewayResponse;
@@ -47,6 +52,7 @@ import com.tramex.sisoprega.common.crud.Cruddable;
  * MM/DD/YYYY
  * ----------  ---------------------------  -------------------------------------------
  * 10/27/2012  Diego Torres                 Initial Version.
+ * 11/27/2012  Diego Torres                 Preparing web service for login.
  * ====================================================================================
  * </PRE>
  * 
@@ -56,6 +62,9 @@ import com.tramex.sisoprega.common.crud.Cruddable;
 @WebService(serviceName = "GatewayService")
 public class OperationsGateway {
 
+    @Resource
+    WebServiceContext wsContext;
+    
     private Logger log = Logger.getLogger(OperationsGateway.class
 	    .getCanonicalName());
 
@@ -77,7 +86,10 @@ public class OperationsGateway {
 	log.info("CreateGateway|Request{requestId:" + requestId
 		+ ";entityName:" + requestId + ";content:{"
 		+ content.toString() + "};}");
-
+	
+	if(getSessionId()==null)
+	    throw new WebServiceException("User is not logged in");
+	
 	// Generate request from input parameters
 	GatewayRequest request = new GatewayRequest();
 	request.setRequestId(requestId);
@@ -295,12 +307,43 @@ public class OperationsGateway {
 	return result;
     }
 
+    /**
+     * Provides an interface to evaluate user name and password.
+     * @param userName
+     * @param password
+     * @return
+     */
+    @WebMethod(operationName = "Login")
+    public String loginService(@WebParam(name = "userName") String userName,
+	    @WebParam(name = "password") String password) {
+	HttpSession session = getSession();
+	if(session==null)
+	    throw new WebServiceException("No session in WebServiceContext");
+	// TODO: Evaluate username and password and provide allowedRoles
+	log.info("Starting new Session");
+	String sessionId = "Session:{userName:" + userName + ";password:" + password + "}";
+	session.setAttribute("sessionId", sessionId);
+	return sessionId;
+    }
+    
+    /**
+     * Provides an interface to empty session information.
+     * @return
+     */
+    public String logoutService(){
+	HttpSession session = getSession();
+	if(session != null)
+	    session.removeAttribute("sessionId");
+	return "OK";
+    }
+
     private Cruddable getCruddable(String cruddableName) {
 	Context jndiContext = null;
 	Cruddable crud = null;
 	String commonPrefix = "java:global/Proxy/";
 	String commonSuffix = "Proxy";
 	try {
+	    // TODO: Produce the context with the provided userName and password
 	    jndiContext = new InitialContext();
 	    crud = (Cruddable) jndiContext.lookup(commonPrefix + cruddableName
 		    + commonSuffix);
@@ -311,6 +354,18 @@ public class OperationsGateway {
 	    log.throwing(this.getClass().getName(), "getCruddable", e);
 	}
 	return crud;
+    }
+    
+    private String getSessionId(){
+	HttpSession session = getSession();
+	if(session==null)
+	    throw new WebServiceException("No session in WebServiceContext");
+	return (String) session.getAttribute("sessionId");
+    }
+    
+    private HttpSession getSession(){
+	MessageContext mc = wsContext.getMessageContext();
+	return ((javax.servlet.http.HttpServletRequest)mc.get(MessageContext.SERVLET_REQUEST)).getSession();
     }
 
 }

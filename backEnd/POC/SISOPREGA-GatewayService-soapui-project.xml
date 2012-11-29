@@ -7,11 +7,29 @@
       <xsd:import namespace="http://ws.gateway.sisoprega.tramex.com/" schemaLocation="http://localhost:8080/Gateway/GatewayService?xsd=1"/>
     </xsd:schema>
   </types>
+  <message name="Login">
+    <part name="parameters" element="tns:Login"/>
+  </message>
+  <message name="LoginResponse">
+    <part name="parameters" element="tns:LoginResponse"/>
+  </message>
   <message name="Create">
     <part name="parameters" element="tns:Create"/>
   </message>
   <message name="CreateResponse">
     <part name="parameters" element="tns:CreateResponse"/>
+  </message>
+  <message name="Read">
+    <part name="parameters" element="tns:Read"/>
+  </message>
+  <message name="ReadResponse">
+    <part name="parameters" element="tns:ReadResponse"/>
+  </message>
+  <message name="logoutService">
+    <part name="parameters" element="tns:logoutService"/>
+  </message>
+  <message name="logoutServiceResponse">
+    <part name="parameters" element="tns:logoutServiceResponse"/>
   </message>
   <message name="Update">
     <part name="parameters" element="tns:Update"/>
@@ -25,16 +43,22 @@
   <message name="DeleteResponse">
     <part name="parameters" element="tns:DeleteResponse"/>
   </message>
-  <message name="Read">
-    <part name="parameters" element="tns:Read"/>
-  </message>
-  <message name="ReadResponse">
-    <part name="parameters" element="tns:ReadResponse"/>
-  </message>
   <portType name="OperationsGateway">
+    <operation name="Login">
+      <input wsam:Action="http://ws.gateway.sisoprega.tramex.com/OperationsGateway/LoginRequest" message="tns:Login"/>
+      <output wsam:Action="http://ws.gateway.sisoprega.tramex.com/OperationsGateway/LoginResponse" message="tns:LoginResponse"/>
+    </operation>
     <operation name="Create">
       <input wsam:Action="http://ws.gateway.sisoprega.tramex.com/OperationsGateway/CreateRequest" message="tns:Create"/>
       <output wsam:Action="http://ws.gateway.sisoprega.tramex.com/OperationsGateway/CreateResponse" message="tns:CreateResponse"/>
+    </operation>
+    <operation name="Read">
+      <input wsam:Action="http://ws.gateway.sisoprega.tramex.com/OperationsGateway/ReadRequest" message="tns:Read"/>
+      <output wsam:Action="http://ws.gateway.sisoprega.tramex.com/OperationsGateway/ReadResponse" message="tns:ReadResponse"/>
+    </operation>
+    <operation name="logoutService">
+      <input wsam:Action="http://ws.gateway.sisoprega.tramex.com/OperationsGateway/logoutServiceRequest" message="tns:logoutService"/>
+      <output wsam:Action="http://ws.gateway.sisoprega.tramex.com/OperationsGateway/logoutServiceResponse" message="tns:logoutServiceResponse"/>
     </operation>
     <operation name="Update">
       <input wsam:Action="http://ws.gateway.sisoprega.tramex.com/OperationsGateway/UpdateRequest" message="tns:Update"/>
@@ -44,14 +68,37 @@
       <input wsam:Action="http://ws.gateway.sisoprega.tramex.com/OperationsGateway/DeleteRequest" message="tns:Delete"/>
       <output wsam:Action="http://ws.gateway.sisoprega.tramex.com/OperationsGateway/DeleteResponse" message="tns:DeleteResponse"/>
     </operation>
-    <operation name="Read">
-      <input wsam:Action="http://ws.gateway.sisoprega.tramex.com/OperationsGateway/ReadRequest" message="tns:Read"/>
-      <output wsam:Action="http://ws.gateway.sisoprega.tramex.com/OperationsGateway/ReadResponse" message="tns:ReadResponse"/>
-    </operation>
   </portType>
   <binding name="OperationsGatewayPortBinding" type="tns:OperationsGateway">
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+    <operation name="Login">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
     <operation name="Create">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="Read">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="logoutService">
       <soap:operation soapAction=""/>
       <input>
         <soap:body use="literal"/>
@@ -70,15 +117,6 @@
       </output>
     </operation>
     <operation name="Delete">
-      <soap:operation soapAction=""/>
-      <input>
-        <soap:body use="literal"/>
-      </input>
-      <output>
-        <soap:body use="literal"/>
-      </output>
-    </operation>
-    <operation name="Read">
       <soap:operation soapAction=""/>
       <input>
         <soap:body use="literal"/>
@@ -99,25 +137,27 @@
   <xs:element name="CreateResponse" type="tns:CreateResponse"/>
   <xs:element name="Delete" type="tns:Delete"/>
   <xs:element name="DeleteResponse" type="tns:DeleteResponse"/>
+  <xs:element name="Login" type="tns:Login"/>
+  <xs:element name="LoginResponse" type="tns:LoginResponse"/>
   <xs:element name="Read" type="tns:Read"/>
   <xs:element name="ReadResponse" type="tns:ReadResponse"/>
   <xs:element name="Update" type="tns:Update"/>
   <xs:element name="UpdateResponse" type="tns:UpdateResponse"/>
+  <xs:element name="logoutService" type="tns:logoutService"/>
+  <xs:element name="logoutServiceResponse" type="tns:logoutServiceResponse"/>
+  <xs:complexType name="logoutService">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="logoutServiceResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
   <xs:complexType name="Read">
     <xs:sequence>
-      <xs:element name="request" type="tns:gatewayRequest" minOccurs="0"/>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="gatewayRequest">
-    <xs:sequence>
-      <xs:element name="content" type="tns:gatewayContent" minOccurs="0"/>
-      <xs:element name="entityName" type="xs:string" minOccurs="0"/>
       <xs:element name="requestId" type="xs:string" minOccurs="0"/>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="gatewayContent">
-    <xs:sequence>
-      <xs:element name="fields" type="tns:field" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="entityName" type="xs:string" minOccurs="0"/>
+      <xs:element name="field" type="tns:field" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
   </xs:complexType>
   <xs:complexType name="field">
@@ -136,6 +176,7 @@
       <xs:extension base="tns:baseResponse">
         <xs:sequence>
           <xs:element name="entityName" type="xs:string" minOccurs="0"/>
+          <xs:element name="record" type="tns:gatewayContent" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -145,6 +186,11 @@
       <xs:element name="error" type="tns:error" minOccurs="0"/>
     </xs:sequence>
   </xs:complexType>
+  <xs:complexType name="gatewayContent">
+    <xs:sequence>
+      <xs:element name="fields" type="tns:field" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
   <xs:complexType name="error">
     <xs:sequence>
       <xs:element name="exceptionDescription" type="xs:string" minOccurs="0"/>
@@ -152,9 +198,22 @@
       <xs:element name="origin" type="xs:string" minOccurs="0"/>
     </xs:sequence>
   </xs:complexType>
+  <xs:complexType name="Login">
+    <xs:sequence>
+      <xs:element name="userName" type="xs:string" minOccurs="0"/>
+      <xs:element name="password" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="LoginResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
   <xs:complexType name="Update">
     <xs:sequence>
-      <xs:element name="request" type="tns:gatewayRequest" minOccurs="0"/>
+      <xs:element name="requestId" type="xs:string" minOccurs="0"/>
+      <xs:element name="entityName" type="xs:string" minOccurs="0"/>
+      <xs:element name="field" type="tns:field" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
   </xs:complexType>
   <xs:complexType name="UpdateResponse">
@@ -174,7 +233,9 @@
   </xs:complexType>
   <xs:complexType name="Delete">
     <xs:sequence>
-      <xs:element name="request" type="tns:gatewayRequest" minOccurs="0"/>
+      <xs:element name="requestId" type="xs:string" minOccurs="0"/>
+      <xs:element name="entityName" type="xs:string" minOccurs="0"/>
+      <xs:element name="field" type="tns:field" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
   </xs:complexType>
   <xs:complexType name="DeleteResponse">
@@ -883,4 +944,17 @@
          </field>
       </ws:Update>
    </soapenv:Body>
-</soapenv:Envelope>]]></con:request><con:credentials><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://ws.gateway.sisoprega.tramex.com/OperationsGateway/UpdateRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:properties/><con:wssContainer/></con:soapui-project>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://ws.gateway.sisoprega.tramex.com/OperationsGateway/UpdateRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation isOneWay="false" action="" name="Login" bindingOperationName="Login" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/Gateway/GatewayService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="http://ws.gateway.sisoprega.tramex.com/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <ws:Login>
+         <userName>admin</userName>
+         <password>admin</password>
+      </ws:Login>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://ws.gateway.sisoprega.tramex.com/OperationsGateway/LoginRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation isOneWay="false" action="" name="logoutService" bindingOperationName="logoutService" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/Gateway/GatewayService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="http://ws.gateway.sisoprega.tramex.com/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <ws:logoutService/>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://ws.gateway.sisoprega.tramex.com/OperationsGateway/logoutServiceRequest"/></con:call></con:operation></con:interface><con:properties/><con:wssContainer/></con:soapui-project>
