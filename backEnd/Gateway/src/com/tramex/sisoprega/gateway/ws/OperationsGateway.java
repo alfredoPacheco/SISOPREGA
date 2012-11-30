@@ -62,310 +62,293 @@ import com.tramex.sisoprega.common.crud.Cruddable;
 @WebService(serviceName = "GatewayService")
 public class OperationsGateway {
 
-    @Resource
-    WebServiceContext wsContext;
-    
-    private Logger log = Logger.getLogger(OperationsGateway.class
-	    .getCanonicalName());
+  @Resource
+  WebServiceContext wsContext;
 
-    /**
-     * 
-     * Provides an interface to create entities.
-     * 
-     * @param requestId
-     * @param entityName
-     * @param content
-     * @return
-     */
-    @WebMethod(operationName = "Create")
-    public CreateGatewayResponse CreateGateway(
-	    @WebParam(name = "requestId") String requestId,
-	    @WebParam(name = "entityName") String entityName,
-	    @WebParam(name = "field") List<Field> content) {
-	log.entering(this.getClass().getCanonicalName(), "CreateGateway");
-	log.info("CreateGateway|Request{requestId:" + requestId
-		+ ";entityName:" + requestId + ";content:{"
-		+ content.toString() + "};}");
-	
-	if(getSessionId()==null)
-	    throw new WebServiceException("User is not logged in");
-	
-	// Generate request from input parameters
-	GatewayRequest request = new GatewayRequest();
-	request.setRequestId(requestId);
-	request.setEntityName(entityName);
+  private Logger log = Logger.getLogger(OperationsGateway.class.getCanonicalName());
 
-	// Generate request content from list of fields
-	GatewayContent gContent = new GatewayContent();
-	gContent.setFields(content);
-	request.setContent(gContent);
-	log.fine("Casted Request:" + request.toString());
+  /**
+   * 
+   * Provides an interface to create entities.
+   * 
+   * @param requestId
+   * @param entityName
+   * @param content
+   * @return
+   */
+  @WebMethod(operationName = "Create")
+  public CreateGatewayResponse CreateGateway(@WebParam(name = "requestId") String requestId,
+      @WebParam(name = "entityName") String entityName, @WebParam(name = "field") List<Field> content) {
+    log.entering(this.getClass().getCanonicalName(), "CreateGateway");
+    log.info("CreateGateway|Request{requestId:" + requestId + ";entityName:" + requestId + ";content:{" + content.toString()
+        + "};}");
 
-	CreateGatewayResponse result = null;
-	Error cgrEx = null;
-	try {
-	    // Retrieve a cruddable instance from an EJB in the glassfish
-	    // context
-	    Cruddable crud = getCruddable(request.getEntityName());
+    if (getSessionId() == null)
+      throw new WebServiceException("User is not logged in");
 
-	    // Generate the result from the cruddable operation
-	    result = crud.Create(request);
+    // Generate request from input parameters
+    GatewayRequest request = new GatewayRequest();
+    request.setRequestId(requestId);
+    request.setEntityName(entityName);
 
-	} catch (Exception e) {
-	    // Something went wrong, log the severe message
-	    log.severe("Error while creating cruddable entity [" + entityName
-		    + "]");
+    // Generate request content from list of fields
+    GatewayContent gContent = new GatewayContent();
+    gContent.setFields(content);
+    request.setContent(gContent);
+    log.fine("Casted Request:" + request.toString());
 
-	    // Log details about the failure
-	    log.throwing(OperationsGateway.class.getName(), "CreateGateway", e);
+    CreateGatewayResponse result = null;
+    Error cgrEx = null;
+    try {
+      // Retrieve a cruddable instance from an EJB in the glassfish
+      // context
+      Cruddable crud = getCruddable(request.getEntityName());
 
-	    // Create the failure result message for web service
-	    result = new CreateGatewayResponse();
-	    cgrEx = new Error("CG001", "Error on Creation", "CreateGateway");
-	    result.setError(cgrEx);
-	}
+      // Generate the result from the cruddable operation
+      result = crud.Create(request);
 
-	// Log ending of method and respond to web service.
-	log.exiting(this.getClass().getCanonicalName(), "CreateGateway");
-	return result;
+    } catch (Exception e) {
+      // Something went wrong, log the severe message
+      log.severe("Error while creating cruddable entity [" + entityName + "]");
+
+      // Log details about the failure
+      log.throwing(OperationsGateway.class.getName(), "CreateGateway", e);
+
+      // Create the failure result message for web service
+      result = new CreateGatewayResponse();
+      cgrEx = new Error("CG001", "Error on Creation", "CreateGateway");
+      result.setError(cgrEx);
     }
 
-    /**
-     * 
-     * Provides an interface to read entities. Use id in parameters to get only
-     * one record representing the requested entity by id.
-     * 
-     * @param requestId
-     * @param entityName
-     * @param content
-     * @return
-     */
-    @WebMethod(operationName = "Read")
-    public ReadGatewayResponse ReadGateway(
-	    @WebParam(name = "requestId") String requestId,
-	    @WebParam(name = "entityName") String entityName,
-	    @WebParam(name = "field") List<Field> content) {
-	log.entering(this.getClass().getCanonicalName(), "ReadGateway");
-	log.info("ReadGateway|Request{requestId:" + requestId + ";entityName:"
-		+ requestId + ";content:{" + content.toString() + "};}");
+    // Log ending of method and respond to web service.
+    log.exiting(this.getClass().getCanonicalName(), "CreateGateway");
+    return result;
+  }
 
-	// Generate request from input parameters
-	GatewayRequest request = new GatewayRequest();
-	request.setRequestId(requestId);
-	request.setEntityName(entityName);
+  /**
+   * 
+   * Provides an interface to read entities. Use id in parameters to get only
+   * one record representing the requested entity by id.
+   * 
+   * @param requestId
+   * @param entityName
+   * @param content
+   * @return
+   */
+  @WebMethod(operationName = "Read")
+  public ReadGatewayResponse ReadGateway(@WebParam(name = "requestId") String requestId,
+      @WebParam(name = "entityName") String entityName, @WebParam(name = "field") List<Field> content) {
+    log.entering(this.getClass().getCanonicalName(), "ReadGateway");
+    log.info("ReadGateway|Request{requestId:" + requestId + ";entityName:" + requestId + ";content:{" + content.toString()
+        + "};}");
 
-	// Generate request content from list of fields
-	GatewayContent gContent = new GatewayContent();
-	gContent.setFields(content);
-	request.setContent(gContent);
-	log.fine("Casted Request:" + request.toString());
+    // Generate request from input parameters
+    GatewayRequest request = new GatewayRequest();
+    request.setRequestId(requestId);
+    request.setEntityName(entityName);
 
-	ReadGatewayResponse result = null;
-	Error rge = null;
+    // Generate request content from list of fields
+    GatewayContent gContent = new GatewayContent();
+    gContent.setFields(content);
+    request.setContent(gContent);
+    log.fine("Casted Request:" + request.toString());
 
-	try {
-	    // Retrieve a cruddable instance from an EJB in the glassfish
-	    // context
-	    Cruddable crud = getCruddable(entityName);
+    ReadGatewayResponse result = null;
+    Error rge = null;
 
-	    // Generate the result from the cruddable operation
-	    result = crud.Read(request);
-	} catch (Exception e) {
-	    // Something went wrong, log the severe message
-	    log.severe("Error while creating cruddable entity [" + entityName
-		    + "]");
+    try {
+      // Retrieve a cruddable instance from an EJB in the glassfish
+      // context
+      Cruddable crud = getCruddable(entityName);
 
-	    // Log details about the failure
-	    log.throwing(OperationsGateway.class.getName(), "ReadGateway", e);
+      // Generate the result from the cruddable operation
+      result = crud.Read(request);
+    } catch (Exception e) {
+      // Something went wrong, log the severe message
+      log.severe("Error while creating cruddable entity [" + entityName + "]");
 
-	    // Create the failure result message for web service
-	    result = new ReadGatewayResponse();
-	    rge = new Error("RG001", "Error on Creation", "ReadGateway");
-	    result.setError(rge);
-	}
+      // Log details about the failure
+      log.throwing(OperationsGateway.class.getName(), "ReadGateway", e);
 
-	// Log ending of method and respond to web service.
-	log.exiting(this.getClass().getCanonicalName(), "ReadGateway");
-	return result;
+      // Create the failure result message for web service
+      result = new ReadGatewayResponse();
+      rge = new Error("RG001", "Error on Creation", "ReadGateway");
+      result.setError(rge);
     }
 
-    /**
-     * Provides an interface to update entities. will return the updated entity.
-     * 
-     * @param requestId
-     * @param entityName
-     * @param content
-     * @return
-     */
-    @WebMethod(operationName = "Update")
-    public UpdateGatewayResponse UpdateGateway(
-	    @WebParam(name = "requestId") String requestId,
-	    @WebParam(name = "entityName") String entityName,
-	    @WebParam(name = "field") List<Field> content) {
+    // Log ending of method and respond to web service.
+    log.exiting(this.getClass().getCanonicalName(), "ReadGateway");
+    return result;
+  }
 
-	log.entering(this.getClass().getCanonicalName(), "UpdateGateway");
-	log.info("UpdateGateway|Request{requestId:" + requestId
-		+ ";entityName:" + requestId + ";content:{"
-		+ content.toString() + "};}");
+  /**
+   * Provides an interface to update entities. will return the updated entity.
+   * 
+   * @param requestId
+   * @param entityName
+   * @param content
+   * @return
+   */
+  @WebMethod(operationName = "Update")
+  public UpdateGatewayResponse UpdateGateway(@WebParam(name = "requestId") String requestId,
+      @WebParam(name = "entityName") String entityName, @WebParam(name = "field") List<Field> content) {
 
-	// Generate request from input parameters
-	GatewayRequest request = new GatewayRequest();
-	request.setRequestId(requestId);
-	request.setEntityName(entityName);
+    log.entering(this.getClass().getCanonicalName(), "UpdateGateway");
+    log.info("UpdateGateway|Request{requestId:" + requestId + ";entityName:" + requestId + ";content:{" + content.toString()
+        + "};}");
 
-	// Generate request content from list of fields
-	GatewayContent gContent = new GatewayContent();
-	gContent.setFields(content);
-	request.setContent(gContent);
-	log.fine("Casted Request:" + request.toString());
+    // Generate request from input parameters
+    GatewayRequest request = new GatewayRequest();
+    request.setRequestId(requestId);
+    request.setEntityName(entityName);
 
-	UpdateGatewayResponse result = null;
-	Error uge = null;
+    // Generate request content from list of fields
+    GatewayContent gContent = new GatewayContent();
+    gContent.setFields(content);
+    request.setContent(gContent);
+    log.fine("Casted Request:" + request.toString());
 
-	try {
-	    // Retrieve a cruddable instance from an EJB in the glassfish
-	    // context
-	    Cruddable crud = getCruddable(entityName);
+    UpdateGatewayResponse result = null;
+    Error uge = null;
 
-	    // Generate the result from the cruddable operation
-	    result = crud.Update(request);
-	} catch (Exception e) {
-	    // Something went wrong, log the severe message
-	    log.severe("Error while creating cruddable entity [" + entityName
-		    + "]");
+    try {
+      // Retrieve a cruddable instance from an EJB in the glassfish
+      // context
+      Cruddable crud = getCruddable(entityName);
 
-	    // Log details about the failure
-	    log.throwing(OperationsGateway.class.getName(), "UpdateGateway", e);
+      // Generate the result from the cruddable operation
+      result = crud.Update(request);
+    } catch (Exception e) {
+      // Something went wrong, log the severe message
+      log.severe("Error while creating cruddable entity [" + entityName + "]");
 
-	    // Create the failure result message for web service
-	    result = new UpdateGatewayResponse();
-	    uge = new Error("RG001", "Error on Creation", "UpdateGateway");
-	    result.setError(uge);
-	}
+      // Log details about the failure
+      log.throwing(OperationsGateway.class.getName(), "UpdateGateway", e);
 
-	// Log ending of method and respond to web service.
-	log.exiting(this.getClass().getCanonicalName(), "UpdateGateway");
-	return result;
+      // Create the failure result message for web service
+      result = new UpdateGatewayResponse();
+      uge = new Error("RG001", "Error on Creation", "UpdateGateway");
+      result.setError(uge);
     }
 
-    /**
-     * Provides an interface to delete entities, should provide as field the id
-     * of the entity to be deleted.
-     * 
-     * @param requestId
-     * @param entityName
-     * @param content
-     * @return
-     */
-    @WebMethod(operationName = "Delete")
-    public BaseResponse DeleteGateway(
-	    @WebParam(name = "requestId") String requestId,
-	    @WebParam(name = "entityName") String entityName,
-	    @WebParam(name = "field") List<Field> content) {
-	log.entering(this.getClass().getCanonicalName(), "DeleteGateway");
-	log.info("DeleteGateway|Request{requestId:" + requestId
-		+ ";entityName:" + requestId + ";content:{"
-		+ content.toString() + "};}");
+    // Log ending of method and respond to web service.
+    log.exiting(this.getClass().getCanonicalName(), "UpdateGateway");
+    return result;
+  }
 
-	// Generate request from input parameters
-	GatewayRequest request = new GatewayRequest();
-	request.setRequestId(requestId);
-	request.setEntityName(entityName);
+  /**
+   * Provides an interface to delete entities, should provide as field the id of
+   * the entity to be deleted.
+   * 
+   * @param requestId
+   * @param entityName
+   * @param content
+   * @return
+   */
+  @WebMethod(operationName = "Delete")
+  public BaseResponse DeleteGateway(@WebParam(name = "requestId") String requestId,
+      @WebParam(name = "entityName") String entityName, @WebParam(name = "field") List<Field> content) {
+    log.entering(this.getClass().getCanonicalName(), "DeleteGateway");
+    log.info("DeleteGateway|Request{requestId:" + requestId + ";entityName:" + requestId + ";content:{" + content.toString()
+        + "};}");
 
-	// Generate request content from list of fields
-	GatewayContent gContent = new GatewayContent();
-	gContent.setFields(content);
-	request.setContent(gContent);
-	log.fine("Casted Request:" + request.toString());
+    // Generate request from input parameters
+    GatewayRequest request = new GatewayRequest();
+    request.setRequestId(requestId);
+    request.setEntityName(entityName);
 
-	BaseResponse result = null;
-	Error uge = null;
+    // Generate request content from list of fields
+    GatewayContent gContent = new GatewayContent();
+    gContent.setFields(content);
+    request.setContent(gContent);
+    log.fine("Casted Request:" + request.toString());
 
-	try {
-	    // Retrieve a cruddable instance from an EJB in the glassfish
-	    // context
-	    Cruddable crud = getCruddable(entityName);
+    BaseResponse result = null;
+    Error uge = null;
 
-	    // Generate the result from the cruddable operation
-	    result = crud.Delete(request);
-	} catch (Exception e) {
-	    // Something went wrong, log the severe message
-	    log.severe("Error while creating cruddable entity [" + entityName
-		    + "]");
+    try {
+      // Retrieve a cruddable instance from an EJB in the glassfish
+      // context
+      Cruddable crud = getCruddable(entityName);
 
-	    // Log details about the failure
-	    log.throwing(OperationsGateway.class.getName(), "DeleteGateway", e);
+      // Generate the result from the cruddable operation
+      result = crud.Delete(request);
+    } catch (Exception e) {
+      // Something went wrong, log the severe message
+      log.severe("Error while creating cruddable entity [" + entityName + "]");
 
-	    // Create the failure result message for web service
-	    result = new UpdateGatewayResponse();
-	    uge = new Error("RG001", "Error on Creation", "DeleteGateway");
-	    result.setError(uge);
-	}
+      // Log details about the failure
+      log.throwing(OperationsGateway.class.getName(), "DeleteGateway", e);
 
-	// Log ending of method and respond to web service.
-	log.exiting(this.getClass().getCanonicalName(), "DeleteGateway");
-	return result;
+      // Create the failure result message for web service
+      result = new UpdateGatewayResponse();
+      uge = new Error("RG001", "Error on Creation", "DeleteGateway");
+      result.setError(uge);
     }
 
-    /**
-     * Provides an interface to evaluate user name and password.
-     * @param userName
-     * @param password
-     * @return
-     */
-    @WebMethod(operationName = "Login")
-    public String loginService(@WebParam(name = "userName") String userName,
-	    @WebParam(name = "password") String password) {
-	HttpSession session = getSession();
-	if(session==null)
-	    throw new WebServiceException("No session in WebServiceContext");
-	// TODO: Evaluate username and password and provide allowedRoles
-	log.info("Starting new Session");
-	String sessionId = "Session:{userName:" + userName + ";password:" + password + "}";
-	session.setAttribute("sessionId", sessionId);
-	return sessionId;
-    }
-    
-    /**
-     * Provides an interface to empty session information.
-     * @return
-     */
-    public String logoutService(){
-	HttpSession session = getSession();
-	if(session != null)
-	    session.removeAttribute("sessionId");
-	return "OK";
-    }
+    // Log ending of method and respond to web service.
+    log.exiting(this.getClass().getCanonicalName(), "DeleteGateway");
+    return result;
+  }
 
-    private Cruddable getCruddable(String cruddableName) {
-	Context jndiContext = null;
-	Cruddable crud = null;
-	String commonPrefix = "java:global/Proxy/";
-	String commonSuffix = "Proxy";
-	try {
-	    // TODO: Produce the context with the provided userName and password
-	    jndiContext = new InitialContext();
-	    crud = (Cruddable) jndiContext.lookup(commonPrefix + cruddableName
-		    + commonSuffix);
-	    log.fine("Cruddable instance created for entity [" + cruddableName
-		    + "]");
-	} catch (java.lang.Exception e) {
-	    log.severe("Unable to load jndi context component");
-	    log.throwing(this.getClass().getName(), "getCruddable", e);
-	}
-	return crud;
+  /**
+   * Provides an interface to evaluate user name and password.
+   * 
+   * @param userName
+   * @param password
+   * @return
+   */
+  @WebMethod(operationName = "Login")
+  public String loginService(@WebParam(name = "userName") String userName, @WebParam(name = "password") String password) {
+    HttpSession session = getSession();
+    if (session == null)
+      throw new WebServiceException("No session in WebServiceContext");
+    // TODO: Evaluate username and password and provide allowedRoles
+    log.info("Starting new Session");
+    String sessionId = "Session:{userName:" + userName + ";password:" + password + "}";
+    session.setAttribute("sessionId", sessionId);
+    return sessionId;
+  }
+
+  /**
+   * Provides an interface to empty session information.
+   * 
+   * @return
+   */
+  public String logoutService() {
+    HttpSession session = getSession();
+    if (session != null)
+      session.removeAttribute("sessionId");
+    return "OK";
+  }
+
+  private Cruddable getCruddable(String cruddableName) {
+    Context jndiContext = null;
+    Cruddable crud = null;
+    String commonPrefix = "java:global/Proxy/";
+    String commonSuffix = "Proxy";
+    try {
+      // TODO: Produce the context with the provided userName and password
+      jndiContext = new InitialContext();
+      crud = (Cruddable) jndiContext.lookup(commonPrefix + cruddableName + commonSuffix);
+      log.fine("Cruddable instance created for entity [" + cruddableName + "]");
+    } catch (java.lang.Exception e) {
+      log.severe("Unable to load jndi context component");
+      log.throwing(this.getClass().getName(), "getCruddable", e);
     }
-    
-    private String getSessionId(){
-	HttpSession session = getSession();
-	if(session==null)
-	    throw new WebServiceException("No session in WebServiceContext");
-	return (String) session.getAttribute("sessionId");
-    }
-    
-    private HttpSession getSession(){
-	MessageContext mc = wsContext.getMessageContext();
-	return ((javax.servlet.http.HttpServletRequest)mc.get(MessageContext.SERVLET_REQUEST)).getSession();
-    }
+    return crud;
+  }
+
+  private String getSessionId() {
+    HttpSession session = getSession();
+    if (session == null)
+      throw new WebServiceException("No session in WebServiceContext");
+    return (String) session.getAttribute("sessionId");
+  }
+
+  private HttpSession getSession() {
+    MessageContext mc = wsContext.getMessageContext();
+    return ((javax.servlet.http.HttpServletRequest) mc.get(MessageContext.SERVLET_REQUEST)).getSession();
+  }
 
 }
