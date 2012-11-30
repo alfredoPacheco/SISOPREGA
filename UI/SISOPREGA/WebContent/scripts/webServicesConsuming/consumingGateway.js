@@ -33,7 +33,7 @@ var cConsumingGateway = {
 		// Se crea objeto que devolvera la funcion:
 		output = {
 			exceptionDescription : "Success",
-			exceptionId : 0,
+			exceptionId : 0			
 		};
 
 		// SOAP Message:
@@ -51,12 +51,20 @@ var cConsumingGateway = {
 			processData : false,
 			contentType : "text/xml;charset=UTF-8",
 			async : false,
-			success : function OnSuccess(data) {
-				sessionToken = jQuery(data).find("return").text();
+			success : function OnSuccess(data) {					
+				output.exceptionDescription = jQuery(data).find(
+				"exceptionDescription").text();
+				output.exceptionId = jQuery(data).find("exceptionId").text();
+				if (output.exceptionId == 0) {
+					sessionToken = jQuery(data).find("return").text();
+				}else{
+					sessionToken = "";
+				}
 			},
 			error : function OnError(request, status, error) {
 				output.exceptionId = 1;
 				output.exceptionDescription = error;
+				sessionToken = "";
 			}
 		});
 		return output;
