@@ -24,7 +24,7 @@ enyo.kind({
 			var selfCacheRancher = this;		
 			
 	//Retrieve CattleType
-			var cgReadAll = consumingGateway.Read("CattleType", "testRequest", {});
+			var cgReadAll = consumingGateway.Read("CattleType", {});
 			
 			if (cgReadAll.exceptionId == 0){ //Read successfully
 				jQuery.each(cgReadAll.records, function() {

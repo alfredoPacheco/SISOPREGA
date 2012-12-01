@@ -24,6 +24,7 @@ import javax.jws.WebParam;
 import javax.jws.WebService;
 import javax.naming.Context;
 import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.servlet.http.HttpSession;
 import javax.xml.ws.WebServiceContext;
 import javax.xml.ws.WebServiceException;
@@ -38,6 +39,7 @@ import com.tramex.sisoprega.common.GatewayRequest;
 import com.tramex.sisoprega.common.ReadGatewayResponse;
 import com.tramex.sisoprega.common.UpdateGatewayResponse;
 import com.tramex.sisoprega.common.crud.Cruddable;
+import com.tramex.sisoprega.login.LoginRemote;
 
 /**
  * OperationsGateway provides the web service and the web methods that will be
@@ -85,10 +87,9 @@ public class OperationsGateway {
 
     if (getSessionId() == null)
       throw new WebServiceException("User is not logged in");
-
+    
     // Generate request from input parameters
     GatewayRequest request = new GatewayRequest();
-    request.setRequestId(requestId);
     request.setEntityName(entityName);
 
     // Generate request content from list of fields
@@ -106,7 +107,6 @@ public class OperationsGateway {
 
       // Generate the result from the cruddable operation
       result = crud.Create(request);
-
     } catch (Exception e) {
       // Something went wrong, log the severe message
       log.severe("Error while creating cruddable entity [" + entityName + "]");
@@ -139,12 +139,14 @@ public class OperationsGateway {
   public ReadGatewayResponse ReadGateway(@WebParam(name = "requestId") String requestId,
       @WebParam(name = "entityName") String entityName, @WebParam(name = "field") List<Field> content) {
     log.entering(this.getClass().getCanonicalName(), "ReadGateway");
-    log.info("ReadGateway|Request{requestId:" + requestId + ";entityName:" + requestId + ";content:{" + content.toString()
+    log.info("ReadGateway|Request{requestId:" + requestId + ";entityName:" + entityName + ";content:{" + content.toString()
         + "};}");
 
+    if (getSessionId() == null)
+      throw new WebServiceException("User is not logged in");
+    
     // Generate request from input parameters
     GatewayRequest request = new GatewayRequest();
-    request.setRequestId(requestId);
     request.setEntityName(entityName);
 
     // Generate request content from list of fields
@@ -196,10 +198,12 @@ public class OperationsGateway {
     log.entering(this.getClass().getCanonicalName(), "UpdateGateway");
     log.info("UpdateGateway|Request{requestId:" + requestId + ";entityName:" + requestId + ";content:{" + content.toString()
         + "};}");
-
+    
+    if (getSessionId() == null)
+      throw new WebServiceException("User is not logged in");    
+   
     // Generate request from input parameters
     GatewayRequest request = new GatewayRequest();
-    request.setRequestId(requestId);
     request.setEntityName(entityName);
 
     // Generate request content from list of fields
@@ -251,10 +255,12 @@ public class OperationsGateway {
     log.entering(this.getClass().getCanonicalName(), "DeleteGateway");
     log.info("DeleteGateway|Request{requestId:" + requestId + ";entityName:" + requestId + ";content:{" + content.toString()
         + "};}");
-
+    
+    if (getSessionId() == null)
+      throw new WebServiceException("User is not logged in");
+    
     // Generate request from input parameters
     GatewayRequest request = new GatewayRequest();
-    request.setRequestId(requestId);
     request.setEntityName(entityName);
 
     // Generate request content from list of fields
@@ -303,10 +309,24 @@ public class OperationsGateway {
     HttpSession session = getSession();
     if (session == null)
       throw new WebServiceException("No session in WebServiceContext");
-    // TODO: Evaluate username and password and provide allowedRoles
+
+    // Evaluate username and password and provide allowedRoles
     log.info("Starting new Session");
-    String sessionId = "Session:{userName:" + userName + ";password:" + password + "}";
+    String sessionId = null;
+    Context jndiContext;
+    try {
+      jndiContext = new InitialContext();
+      LoginRemote login = (LoginRemote) jndiContext.lookup("java:global/Proxy/Login");
+      sessionId = login.login(userName, password);
+    } catch (NamingException e) {
+      throw new WebServiceException(e);
+    }
+    
+    if(sessionId== null)
+      throw new WebServiceException("Error al ingresar al sistema");
+    
     session.setAttribute("sessionId", sessionId);
+    session.setAttribute("userName", userName);
     return sessionId;
   }
 
@@ -317,8 +337,11 @@ public class OperationsGateway {
    */
   public String logoutService() {
     HttpSession session = getSession();
-    if (session != null)
+    if (session != null){
       session.removeAttribute("sessionId");
+      session.removeAttribute("userName");
+    }
+      
     return "OK";
   }
 
@@ -343,6 +366,7 @@ public class OperationsGateway {
     HttpSession session = getSession();
     if (session == null)
       throw new WebServiceException("No session in WebServiceContext");
+    
     return (String) session.getAttribute("sessionId");
   }
 
@@ -350,5 +374,4 @@ public class OperationsGateway {
     MessageContext mc = wsContext.getMessageContext();
     return ((javax.servlet.http.HttpServletRequest) mc.get(MessageContext.SERVLET_REQUEST)).getSession();
   }
-
 }

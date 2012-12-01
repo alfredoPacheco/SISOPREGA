@@ -26,7 +26,6 @@
  * ====================================================================================
  */
 
-var sessionToken = "";
 var cConsumingGateway = {
 
 	Login : function(userId, password) {
@@ -55,21 +54,15 @@ var cConsumingGateway = {
 				output.exceptionDescription = jQuery(data).find(
 				"exceptionDescription").text();
 				output.exceptionId = jQuery(data).find("exceptionId").text();
-				if (output.exceptionId == 0) {
-					sessionToken = jQuery(data).find("return").text();
-				}else{
-					sessionToken = "";
-				}
 			},
 			error : function OnError(request, status, error) {
 				output.exceptionId = 1;
 				output.exceptionDescription = error;
-				sessionToken = "";
 			}
 		});
 		return output;
 	},
-	Create : function(entityName, requestId, entity) {		
+	Create : function(entityName, entity) {		
 		// Se crea objeto que devolvera la funcion:
 		output = {
 			exceptionDescription : "Success",
@@ -80,8 +73,7 @@ var cConsumingGateway = {
 
 		// SOAP Message:
 		var soapMessage = soapHeader + '<ws:Create>';
-		soapMessage += '<requestId>' + sessionToken + '</requestId><entityName>'
-				+ entityName + '</entityName>';
+		soapMessage += '<entityName>' + entityName + '</entityName>';
 
 		jQuery.each(entity, function(key, value) {
 			soapMessage += '<field>';
@@ -106,7 +98,6 @@ var cConsumingGateway = {
 						"exceptionDescription").text();
 				output.exceptionId = jQuery(data).find("exceptionId").text();
 				output.origin = jQuery(data).find("origin").text();
-				sessionToken = jQuery(data).find("token").text();
 				if (output.exceptionId == 0) {
 					output.generatedId = jQuery(data).find("generatedId").text();
 				}
@@ -119,7 +110,7 @@ var cConsumingGateway = {
 		return output;
 	},
 
-	Read : function(entityName, requestId, entity) {
+	Read : function(entityName, entity) {
 		// Se crea objeto que devolvera la funcion:
 		output = {
 			exceptionDescription : "Success",
@@ -140,8 +131,7 @@ var cConsumingGateway = {
 			soapMessage += '</field>';
 		});
 
-		soapMessage += '<requestId>' + requestId
-				+ '</requestId></ws:Read>' + soapFooter;
+		soapMessage += '</ws:Read>' + soapFooter;
 
 		// Ajax request:
 		jQuery.ajax({
@@ -158,7 +148,6 @@ var cConsumingGateway = {
 						"exceptionDescription").text();
 				output.exceptionId = jQuery(data).find("exceptionId").text();
 				output.origin = jQuery(data).find("origin").text();
-				sessionToken = jQuery(data).find("token").text();
 
 				if (output.exceptionId == 0) {
 					output.entityName = jQuery(data).find("entityName").text();
@@ -182,7 +171,7 @@ var cConsumingGateway = {
 		return output;
 	},
 
-	Update : function(entityName, requestId, entity) {
+	Update : function(entityName, entity) {
 		// Se crea objeto que devolvera la funcion:
 		output = {
 			exceptionDescription : "Success",
@@ -194,8 +183,7 @@ var cConsumingGateway = {
 
 		// SOAP Message:
 		var soapMessage = soapHeader + '<ws:Update>';
-		soapMessage += '<requestId>' + requestId + '</requestId><entityName>'
-				+ entityName + '</entityName>';
+		soapMessage += '<entityName>' + entityName + '</entityName>';
 
 		jQuery.each(entity, function(key, value) {
 			soapMessage += '<field>';
@@ -220,7 +208,6 @@ var cConsumingGateway = {
 						"exceptionDescription").text();
 				output.exceptionId = jQuery(data).find("exceptionId").text();
 				output.origin = jQuery(data).find("origin").text();
-				sessionToken = jQuery(data).find("token").text();
 
 				if (output.exceptionId == 0) {
 					output.entityName = jQuery(data).find("entityName").text();
@@ -243,7 +230,7 @@ var cConsumingGateway = {
 		return output;
 	},
 
-	Delete : function(entityName, requestId, entity) {
+	Delete : function(entityName, entity) {
 		// Se crea objeto que devolvera la funcion:
 		output = {
 			exceptionDescription : "Success",
@@ -253,8 +240,7 @@ var cConsumingGateway = {
 
 		// SOAP Message:
 		var soapMessage = soapHeader + '<ws:Delete>';
-		soapMessage += '<entityName>' + entityName + '</entityName><requestId>'
-				+ requestId + '</requestId>';
+		soapMessage += '<entityName>' + entityName + '</entityName>';
 
 		jQuery.each(entity, function(key, value) {
 			soapMessage += '<field>';
@@ -279,7 +265,6 @@ var cConsumingGateway = {
 						"exceptionDescription").text();
 				output.exceptionId = jQuery(data).find("exceptionId").text();
 				output.origin = jQuery(data).find("origin").text();
-				sessionToken = jQuery(data).find("token").text();
 			},
 			error : function OnError(request, status, error) {
 				output.exceptionId = 1;
@@ -288,6 +273,7 @@ var cConsumingGateway = {
 		});
 		return output;
 	},
+	
 	LogOut : function() {
 		// Se crea objeto que devolvera la funcion:
 		output = {
@@ -310,7 +296,6 @@ var cConsumingGateway = {
 			async : false,
 			success : function OnSuccess(data) {
 				output.result = jQuery(data).find("return").text();
-				sessionToken = "";
 			},
 			error : function OnError(request, status, error) {
 				output.exceptionId = 1;

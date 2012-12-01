@@ -13,12 +13,10 @@
  * 
  * &copy; COPYRIGHT 2012 TRAMEX. ALL RIGHTS RESERVED.
  */
-package com.tramex.sisoprega.common;
-
-
+package com.tramex.sisoprega.login;
 
 /**
- * Defines the model to be implemented by the Create Gateway Requests.<BR/>
+ * The interface presents the contract that allows Login functionality.<BR/>
  * 
  * <B>Revision History:</B>
  * 
@@ -27,44 +25,33 @@ package com.tramex.sisoprega.common;
  * Date        By                           Description
  * MM/DD/YYYY
  * ----------  ---------------------------  -------------------------------------------
- * 10/27/2012  Diego Torres                 Initial Version.
+ * 11/30/2012  Diego Torres                 Initial Version.
  * ====================================================================================
  * </PRE>
  * 
  * @author Diego Torres
- *
+ * 
  */
-public class GatewayRequest {
-	private String entityName;
-	private GatewayContent content;
-	
-	/**
-	 * @return the entityName
-	 */
-	public String getEntityName() {
-		return entityName;
-	}
-	/**
-	 * @param entityName the entityName to set
-	 */
-	public void setEntityName(String entityName) {
-		this.entityName = entityName;
-	}
-	/**
-	 * @return the content
-	 */
-	public GatewayContent getContent() {
-		return content;
-	}
-	/**
-	 * @param content the content to set
-	 */
-	public void setContent(GatewayContent content) {
-		this.content = content;
-	}
-	
-	@Override
-	public String toString(){
-		return "entityName:" + entityName + ";GatewayContet[" + content.toString() + "]";
-	}
+public interface LoginRemote {
+  /**
+   * Provide user name and encrypted password to login.
+   * @param userName
+   * @param password
+   * @return
+   */
+  String login(String userName, String password);
+  
+  /**
+   * Provide session id to log out.
+   * 
+   * @param sessionId
+   */
+  void logout(String sessionId);
+  
+  /**
+   * Used to lock users when login attempts are exceed.
+   * @param userName
+   */
+  void lockUser(String userName); 
+
 }

@@ -46,120 +46,116 @@ import com.tramex.sisoprega.common.Utils;
  * 
  */
 public class BaseBean {
-    protected Logger log = Logger.getLogger(BaseBean.class.getCanonicalName());
+  protected Logger log = Logger.getLogger(BaseBean.class.getCanonicalName());
 
-    protected String error_description = "";
-    
-    @PersistenceContext
-    protected EntityManager em;
-    
-    /**
-     * Validates the entity, default validation includes only null, will need to
-     * override when complex validation is required in entity.
-     * 
-     * @param entity
-     * @return
-     */
-    protected boolean validateEntity(Object entity) {
-	boolean result = true;
+  protected String error_description = "";
 
-	if (entity == null) {
-	    error_description = "Provided entity can't be null";
-	    result = false;
-	}
+  @PersistenceContext
+  protected EntityManager em;
 
-	return result;
+  /**
+   * Validates the entity, default validation includes only null, will need to
+   * override when complex validation is required in entity.
+   * 
+   * @param entity
+   * @return
+   */
+  protected boolean validateEntity(Object entity) {
+    boolean result = true;
+
+    if (entity == null) {
+      error_description = "Provided entity can't be null";
+      result = false;
     }
 
-    /**
-     * Retrieval of an entity by using the provided content.
-     * 
-     * @param entity
-     * @param type
-     * @return
-     * @throws IllegalArgumentException
-     * @throws IllegalAccessException
-     */
-    protected GatewayContent getContentFromEntity(Object entity, Class<?> type)
-	    throws IllegalArgumentException, IllegalAccessException {
-	GatewayContent content = new GatewayContent();
+    return result;
+  }
 
-	Field[] clsField = type.getDeclaredFields();
-	for (Field field : clsField) {
-	    field.setAccessible(true);
-	    String fieldName = field.getName();
-	    log.finest("Identified field in entity:{" + fieldName + "}");
+  /**
+   * Retrieval of an entity by using the provided content.
+   * 
+   * @param entity
+   * @param type
+   * @return
+   * @throws IllegalArgumentException
+   * @throws IllegalAccessException
+   */
+  protected GatewayContent getContentFromEntity(Object entity, Class<?> type) throws IllegalArgumentException,
+      IllegalAccessException {
+    GatewayContent content = new GatewayContent();
 
-	    com.tramex.sisoprega.common.Field contentField = new com.tramex.sisoprega.common.Field();
-	    contentField.setName(fieldName);
-	    if (field.get(entity) != null)
-		contentField.setValue(field.get(entity).toString());
+    Field[] clsField = type.getDeclaredFields();
+    for (Field field : clsField) {
+      field.setAccessible(true);
+      String fieldName = field.getName();
+      log.finest("Identified field in entity:{" + fieldName + "}");
 
-	    content.getFields().add(contentField);
-	}
-	return content;
+      com.tramex.sisoprega.common.Field contentField = new com.tramex.sisoprega.common.Field();
+      contentField.setName(fieldName);
+      if (field.get(entity) != null)
+        contentField.setValue(field.get(entity).toString());
+
+      content.getFields().add(contentField);
+    }
+    return content;
+  }
+
+  /**
+   * Groups a list of entities in a record of gateway content.
+   * 
+   * @param entities
+   * @param type
+   * @return
+   * @throws IllegalArgumentException
+   * @throws IllegalAccessException
+   */
+  protected List<GatewayContent> contentFromList(List<?> entities, Class<?> type) throws IllegalArgumentException,
+      IllegalAccessException {
+
+    List<GatewayContent> result = new ArrayList<GatewayContent>();
+    for (Object entity : entities) {
+      result.add(getContentFromEntity(entity, type));
     }
 
-    /**
-     * Groups a list of entities in a record of gateway content.
-     * 
-     * @param entities
-     * @param type
-     * @return
-     * @throws IllegalArgumentException
-     * @throws IllegalAccessException
-     */
-    protected List<GatewayContent> contentFromList(List<?> entities,
-	    Class<?> type) throws IllegalArgumentException,
-	    IllegalAccessException {
+    log.finest("contentFromList Result: " + result.toString());
+    return result;
+  }
 
-	List<GatewayContent> result = new ArrayList<GatewayContent>();
-	for (Object entity : entities) {
-	    result.add(getContentFromEntity(entity, type));
-	}
+  /**
+   * Retrieves a provided entity from a list of names and values in the gateway
+   * request
+   * 
+   * @param request
+   * @param type
+   * @return
+   * @throws InstantiationException
+   * @throws IllegalAccessException
+   * @throws ParseException
+   */
+  public <T> T entityFromRequest(GatewayRequest request, Class<T> type) throws InstantiationException, IllegalAccessException,
+      ParseException {
 
-	log.finest("contentFromList Result: " + result.toString());
-	return result;
+    T entity = type.newInstance();
+    Field[] clsField = type.getDeclaredFields();
+
+    for (Field field : clsField) {
+      field.setAccessible(true);
+      String fieldName = field.getName();
+      log.finer("Identified field in entity:{" + fieldName + "}");
+      if (field.getType() == String.class) {
+        log.finest("The field is an String, setting value from request.");
+        field.set(entity, Utils.valueFromRequest(request, fieldName));
+      } else {
+        log.finest("The field is not an String, is a [" + field.getType() + "]");
+        Object val = Utils.valueFromRequest(request, fieldName, field.getType());
+        log.finer("Value to be set: " + val);
+        if (val != null) {
+          field.set(entity, val);
+        }
+      }
     }
 
-    /**
-     * Retrieves a provided entity from a list of names and values in the
-     * gateway request
-     * 
-     * @param request
-     * @param type
-     * @return
-     * @throws InstantiationException
-     * @throws IllegalAccessException
-     * @throws ParseException
-     */
-    public <T> T entityFromRequest(GatewayRequest request, Class<T> type)
-	    throws InstantiationException, IllegalAccessException,
-	    ParseException {
-
-	T entity = type.newInstance();
-	Field[] clsField = type.getDeclaredFields();
-
-	for (Field field : clsField) {
-	    field.setAccessible(true);
-	    String fieldName = field.getName();
-	    log.finer("Identified field in entity:{" + fieldName + "}");
-	    if (field.getType() == String.class) {
-		log.finest("The field is an String, setting value from request.");
-		field.set(entity, Utils.valueFromRequest(request, fieldName));
-	    } else {
-		log.finest("The field is not an String, is a ["
-			+ field.getType() + "]");
-		Object val = Utils.valueFromRequest(request, fieldName,
-			field.getType());
-		log.finer("Value to be set: " + val);
-		if (val != null) {
-		    field.set(entity, val);
-		}
-	    }
-	}
-
-	return entity;
-    }
+    return entity;
+  }
 
 }

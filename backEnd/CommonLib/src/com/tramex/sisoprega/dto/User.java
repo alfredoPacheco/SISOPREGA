@@ -13,12 +13,10 @@
  * 
  * &copy; COPYRIGHT 2012 TRAMEX. ALL RIGHTS RESERVED.
  */
-package com.tramex.sisoprega.common;
-
-
+package com.tramex.sisoprega.dto;
 
 /**
- * Defines the model to be implemented by the Create Gateway Requests.<BR/>
+ *  Defines the model for system users.<BR/>
  * 
  * <B>Revision History:</B>
  * 
@@ -27,44 +25,50 @@ package com.tramex.sisoprega.common;
  * Date        By                           Description
  * MM/DD/YYYY
  * ----------  ---------------------------  -------------------------------------------
- * 10/27/2012  Diego Torres                 Initial Version.
+ * 11/30/2012  Diego Torres                 Initial Version.
  * ====================================================================================
  * </PRE>
- * 
  * @author Diego Torres
  *
  */
-public class GatewayRequest {
-	private String entityName;
-	private GatewayContent content;
-	
-	/**
-	 * @return the entityName
-	 */
-	public String getEntityName() {
-		return entityName;
-	}
-	/**
-	 * @param entityName the entityName to set
-	 */
-	public void setEntityName(String entityName) {
-		this.entityName = entityName;
-	}
-	/**
-	 * @return the content
-	 */
-	public GatewayContent getContent() {
-		return content;
-	}
-	/**
-	 * @param content the content to set
-	 */
-	public void setContent(GatewayContent content) {
-		this.content = content;
-	}
-	
-	@Override
-	public String toString(){
-		return "entityName:" + entityName + ";GatewayContet[" + content.toString() + "]";
-	}
+public class User {
+  private long userId;
+  private String userName;
+  private String password;
+  /**
+   * @return the userId
+   */
+  public long getUserId() {
+    return userId;
+  }
+  /**
+   * @param userId the userId to set
+   */
+  public void setUserId(long userId) {
+    this.userId = userId;
+  }
+  /**
+   * @return the userName
+   */
+  public String getUserName() {
+    return userName;
+  }
+  /**
+   * @param userName the userName to set
+   */
+  public void setUserName(String userName) {
+    this.userName = userName;
+  }
+  /**
+   * @return the password
+   */
+  public String getPassword() {
+    return password;
+  }
+  /**
+   * @param password the password to set
+   */
+  public void setPassword(String password) {
+    this.password = password;
+  }
 }
