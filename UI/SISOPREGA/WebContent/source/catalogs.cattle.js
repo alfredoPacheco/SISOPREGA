@@ -18,17 +18,24 @@ enyo.kind({
 								{name: "desc", 
 								 style: "text-overflow: ellipsis; "+
 										 "overflow: hidden; white-space:"+
-										 "nowrap;color:#FFF;", 
-								}]}]}		
+										 "nowrap;color:#FFF;",
+										 content: ""},								
+								{name: "cattleClass", 
+									 style: "font-size: 0.85em;color:#999",content: ""}
+										 ]}
+							]}		
 			]
 		},
 		{kind: "Toolbar",	
 		components: [					 
 		{kind: "ToolInput", name:"cattype_name", align:"left",
 		 width:"70%",  hint:"Ganado",changeOnInput: true},
-		{kind: "Drawer", name:"draAdd", components: [ 										
-			{kind: "enyo.IconButton",name:"btnAdd",icon: "images/menu-icon-new.png",
+		{kind: "Drawer", name:"draAdd", components: [ 				
+		    {layoutKind: "HFlexLayout", align: "center",components: [
+			{kind: "enyo.IconButton",name:"btnAdd",icon: "images/menu-icon-new.png", flex:1,
 			 onclick: "addProduct"},
+			 {name: 'catclass_id', kind: "ListSelector", contentPack:"end", items: []}
+		    ]}
 		]},
 		{kind: "Drawer", name:"draUpdate", components: [		
 			{layoutKind: "HFlexLayout", align: "center",components: [			
@@ -37,14 +44,16 @@ enyo.kind({
 				 flex:1, onclick: "updateProduct"},							
 				{kind: "Button",name:"btnCancel", className: "enyo-button-negative", 
 				 flex:1,caption: "X", onclick: "toggleAdd"},
+				 {name: 'catclass_id', kind: "ListSelector", contentPack:"end", items: []}
 			]}
 		]},																		
 		]},					 		
 	],
 	setupProductRow:function(inSender, inIndex) {		
-		var obj;
-		if (objCattle=cacheCattle.get()[inIndex]){						
-			this.$.desc.setContent(objCattle.cattype_name);
+//		var obj;
+		if (objCattle=cacheCattle.getCattleType()[inIndex]){						
+			this.$.desc.setContent(objCattle.cattype_name);			
+			this.$.cattleClass.setContent(objCattle.catclass_name);
 			return true;
 		}
 	},
@@ -68,12 +77,13 @@ enyo.kind({
 		this.resetValues();		
 	},
 	afterUpdate:function(){
-		this.toggleAdd()
+		this.toggleAdd();
 		this.updateList();		
 	},
 	getCattle:function(){
-	 	var objCat={cattype_id:"",cattype_name: ""};
-		objCat.cattype_name=this.$.cattype_name.getValue();		
+	 	var objCat={cattype_id:"",cattype_name: "", catclass_name:name=""};
+		objCat.cattype_name=this.$.cattype_name.getValue();
+		objCat.catclass_name=this.$.catclass_name.getValue();
 		return objCat;
 	},
 	getProduct:function(inIndex){
@@ -87,14 +97,16 @@ enyo.kind({
 		this.$.draAdd.setOpen(true);
 		this.$.draUpdate.setOpen(false);		
 		this.updateList();
+		this.resetValues();
 	},
 	updateList:function(){
 		this.$.cattleList.render();					
 	},
 	setProduct:function(inSender, inEvent){		
 		this.iProduct=inEvent.rowIndex;
-		this.objCat=cacheCattle.get()[inEvent.rowIndex];	
+		this.objCat=cacheCattle.getCattleType()[inEvent.rowIndex];	
 		this.$.cattype_name.setValue(this.objCat.cattype_name);
+		this.$.catclass_id.setValue(this.objCat.catclass_name);
 		this.toggleUpdate();
 		return true;				
 		
@@ -109,6 +121,8 @@ enyo.kind({
 		this.resetValues();	
 	},	
 	resetValues:function(){
+		this.$.catclass_id.setValue(0);
+		this.$.catclass_id.setItems(cacheCattle.getLS());
 		this.$.cattype_name.setValue("");
 	}
 });
