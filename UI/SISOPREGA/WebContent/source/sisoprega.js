@@ -10,7 +10,8 @@ enyo.kind({
 				{kind: "VFlexBox", name:'lblMainCap', className:"",
 				 style:"color:#FFF;border:none", content: "Recepciones"},  
 				{kind: "Spacer"},
-				{name:'btnLogOut', onclick:"logOut",icon:"images/command-menu/icon-context.png"}]},		
+				{name:'btnLogOut', onclick:"logOut",icon:"images/command-menu/icon-context.png"}]},
+				
 				{kind: enyo.Pane, flex: 1, name: "mainPane",
 				 components:[
 				 {kind:"login", name:"login",onSucess:"goAhead",onFail:"noAccess"},
@@ -39,9 +40,10 @@ enyo.kind({
 		this.$.mainPane.selectViewByName("mainMenu");		
 	},
 	noAccess:function(){
+		cacheMan.setMessage("","", "Usuario o contraseña incorrecta.");
 	},
 	logOut:function(){
-		this.$.tbHeader.hide();		
+		this.$.tbHeader.hide();
 		cacheMan.clearBack();		
 		this.$.mainPane.selectViewByName("login");	
 	}

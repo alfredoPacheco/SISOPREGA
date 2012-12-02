@@ -36,7 +36,6 @@ package com.tramex.sisoprega.common;
  */
 public class GatewayRequest {
 	private String entityName;
-	private String requestId;
 	private GatewayContent content;
 	
 	/**
@@ -63,21 +62,9 @@ public class GatewayRequest {
 	public void setContent(GatewayContent content) {
 		this.content = content;
 	}
-	/**
-	 * @return the requestId
-	 */
-	public String getRequestId() {
-		return requestId;
-	}
-	/**
-	 * @param requestId the requestId to set
-	 */
-	public void setRequestId(String requestId) {
-		this.requestId = requestId;
-	}
 	
 	@Override
 	public String toString(){
-		return "entityName:" + entityName + ";requestId:" + requestId + ";GatewayContet[" + content.toString() + "]";
+		return "entityName:" + entityName + ";GatewayContet[" + content.toString() + "]";
 	}
 }

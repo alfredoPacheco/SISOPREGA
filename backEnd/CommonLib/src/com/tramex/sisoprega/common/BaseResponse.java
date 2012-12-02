@@ -26,6 +26,7 @@ package com.tramex.sisoprega.common;
  * MM/DD/YYYY
  * ----------  ---------------------------  -------------------------------------------
  * 10/29/2012  Diego Torres                 Initial Version.
+ * 10/28/2012  Diego Torres                 Adding token refresher property.
  * ====================================================================================
  * </PRE>
  * 

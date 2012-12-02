@@ -1,19 +1,58 @@
 enyo.kind({
 	name: "cache.cattle",
 	arrObj:_arrCattleList,
+	cattleWasReadFromGateway: false,
 	reloadme:function(){
 		//AJAX
-	},	
+	},
+	cattleAdapterToIn:function(objCattle){
+
+		var objNew = {
+				cattype_id:		objCattle.cattypeId,
+//				catclass_id:	objCattle.catclassId,
+				cattype_name:	objCattle.cattypeName
+			};
+		
+		return objNew;
+	},
 	get:function(){
-		//AJAX
+		if (this.cattleWasReadFromGateway == false){
+//			cacheMan.showScrim();
+			this.cattleWasReadFromGateway = true;
+			var objAux = {};
+			var arrAux = [];
+			var selfCacheRancher = this;		
+			
+	//Retrieve CattleType
+			var cgReadAll = consumingGateway.Read("CattleType", {});
+			
+			if (cgReadAll.exceptionId == 0){ //Read successfully
+				jQuery.each(cgReadAll.records, function() {
+		    		jQuery.each(this, function(key, value){
+		    			objAux[key] = value;
+		    		});
+		    		objTmp = selfCacheRancher.cattleAdapterToIn(objAux);		    		
+		    		arrAux.push(objTmp);
+		    	});
+			}
+			else{ //Error
+				if (cgReadAll.exceptionId != "RR02"){ //No data found
+					cacheMan.setMessage("", "","[Exception ID: " + cgReadAll.exceptionId + "] Descripcion: " + cgReadAll.exceptionDescription);	
+				}			
+			}
+			
+			this.arrObj =  arrAux;
+			_arrCatlleList = arrAux;
+			
+//			cacheMan.hideScrim();
+		}
+		
 		return this.arrObj;
 	},
 	create:function(objCat,cbObj,cbMethod){
-		//AJAX
-		//SCRIM.on
-		//scrimoff
-		//chacheMan.showScrim();
-		//chacheMan.hideScrim();		
+		
+		
+		
 		this.arrObj.push(objCat);		
 		if(cbMethod){
 			cbObj[cbMethod]();

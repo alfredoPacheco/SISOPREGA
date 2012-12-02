@@ -28,10 +28,20 @@ enyo.kind({
 					{kind:"Input", name:"user", hint:"User",selectAllOnFocus: true,},
 					{kind:"PasswordInput", name:"password", hint:"Password",selectAllOnFocus: true, }]}]},							 
 			]},		
-		{kind: "Toolbar",name:"tbHeader",style:"height:10px", 
+		{kind: "Toolbar",name:"tbFooter",style:"height:10px", 
 			components: [
 				{kind: "Button", className: "enyo-button-affirmative", 
-				 flex:1, caption: "Entrar", onclick: "doSucess"},				
+				 flex:1, caption: "Entrar", onclick: "onLogIn"},				
 				 ]},							  
 	],
+	onLogIn:function(){
+		var consumirLogin = consumingGateway.Login(this.$.user.getValue(), this.$.password.getValue());
+//		if(consumirLogin.exceptionId == 0 && consumirLogin.exceptionId.length > 0){
+		if(consumirLogin.exceptionId == 0){
+//		if(sessionToken != ""){
+			this.doSucess();
+		}else{
+			this.doFail();
+		}
+	}
 });
