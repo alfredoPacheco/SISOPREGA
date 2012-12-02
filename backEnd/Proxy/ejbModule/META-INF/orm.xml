@@ -7,6 +7,52 @@
 			<access>PROPERTY</access>
 		</persistence-unit-defaults>
 	</persistence-unit-metadata>
+	<entity class="com.tramex.sisoprega.dto.Tokenizer">
+		<table name="sys_token"/>
+		<named-query name="TOKEN_BY_CONTENT">
+			<description>Get a single token record using its session content</description>
+			<query>SELECT token FROM Tokenizer token WHERE token.sessionId = :sessionId</query>
+		</named-query>
+		<named-query name="TOKEN_BY_USER">
+			<description>Get a single record for selected user</description>
+			<query>SELECT t FROM Tokenizer t WHERE t.userId = :userId</query>
+		</named-query>
+		<attributes>
+			<id name="tokenId">
+				<column name="sys_token_id"/>
+				<generated-value strategy="IDENTITY"/>
+			</id>
+			<basic name="userId">
+				<column name="user_id"/>
+			</basic>
+			<basic name="dueDate">
+				<column name="due_date" nullable="true"/>
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="sessionId">
+				<column name="sys_token"/>
+			</basic>
+		</attributes>
+	</entity>
+	<entity class="com.tramex.sisoprega.dto.User">
+		<table name="sys_sisoprega_user"/>
+		<named-query name="USER_BY_NAME">
+			<description>Get a single user record by its User name</description>
+			<query>SELECT u FROM User u WHERE u.userName = :userName</query>
+		</named-query>
+		<attributes>
+			<id name="userId">
+				<column name="user_id"/>
+				<generated-value strategy="IDENTITY"/>
+			</id>
+			<basic name="userName">
+				<column name="user_name"/>
+			</basic>
+			<basic name="password">
+				<column name="password" />
+			</basic>
+		</attributes>
+	</entity>
 	<entity class="com.tramex.sisoprega.dto.Rancher">
 		<table name="cat_person_rancher" />
 		<named-query name="RANCHER_BY_ID">

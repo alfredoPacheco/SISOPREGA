@@ -35,7 +35,6 @@ package com.tramex.sisoprega.common;
  */
 public class BaseResponse {
 	private Error error;
-	private String token;
 	/**
 	 * @return the exception
 	 */
@@ -52,17 +51,5 @@ public class BaseResponse {
 	@Override
 	public String toString(){
 		return "Error:{" + error.toString() + "};";
-	}
-	/**
-	 * @return the token
-	 */
-	public String getToken() {
-	    return token;
-	}
-	/**
-	 * @param token the token to set
-	 */
-	public void setToken(String token) {
-	    this.token = token;
 	}
 }

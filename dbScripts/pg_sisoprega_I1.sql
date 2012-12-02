@@ -18,6 +18,12 @@
  *  
  */
  
+ 
+ /*
+ **********************************************************************************************
+ *    SECURITY TABLES
+ **********************************************************************************************
+ */
 DROP TABLE IF EXISTS sys_sisoprega_role CASCADE;
 CREATE TABLE sys_sisoprega_role(
 	role_id SERIAL PRIMARY KEY,
@@ -97,6 +103,25 @@ INSERT INTO sys_sisoprega_user_role(user_id, role_id)
 VALUES(5, 4); -- RANCHER TO RANCHER
 INSERT INTO sys_sisoprega_user_role(user_id, role_id)
 VALUES(6, 5); -- BUYER TO BUYER
+
+DROP TABLE IF EXISTS sys_token CASCADE;
+CREATE TABLE sys_token(
+	sys_token_id SERIAL PRIMARY KEY,
+	sys_token varchar(36) NOT NULL,
+	user_id integer NOT NULL REFERENCES sys_sisoprega_user(user_id),
+	due_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP + interval '20 minutes'
+);
+
+CREATE UNIQUE INDEX U_sys_token on sys_token(sys_token);
+CREATE UNIQUE INDEX U_sys_token_user on sys_token(user_id);
+
+GRANT ALL ON sys_token TO sisoprega;
+GRANT ALL ON sys_token_sys_token_id_seq TO sisoprega;
+/*
+ **********************************************************************************************
+ *    DATA TABLES
+ **********************************************************************************************
+ */
 
 DROP TABLE IF EXISTS cat_rancher CASCADE;
 CREATE TABLE cat_rancher(
