@@ -15,26 +15,67 @@
  */
 package com.tramex.sisoprega.proxy.bean;
 
+import javax.ejb.Stateless;
+import javax.persistence.TypedQuery;
+
 import com.tramex.sisoprega.common.BaseResponse;
 import com.tramex.sisoprega.common.CreateGatewayResponse;
+import com.tramex.sisoprega.common.Error;
+import com.tramex.sisoprega.common.GatewayContent;
 import com.tramex.sisoprega.common.GatewayRequest;
 import com.tramex.sisoprega.common.ReadGatewayResponse;
 import com.tramex.sisoprega.common.UpdateGatewayResponse;
 import com.tramex.sisoprega.common.crud.Cruddable;
+import com.tramex.sisoprega.dto.MeasurementUnit;
 
 /**
  * @author Jaime Figueroa
  *
  */
-public class MeasurementUnitBean implements Cruddable {
+@Stateless
+public class MeasurementUnitBean extends BaseBean implements Cruddable {
 
     /* (non-Javadoc)
      * @see com.tramex.sisoprega.common.crud.Cruddable#Create(com.tramex.sisoprega.common.GatewayRequest)
      */
     @Override
     public CreateGatewayResponse Create(GatewayRequest request) {
-	// TODO Auto-generated method stub
-	return null;
+	log.entering(this.getClass().getCanonicalName(), "Create");
+
+	CreateGatewayResponse response = new CreateGatewayResponse();
+	MeasurementUnit MeasurUni = null;
+	try {
+	    MeasurUni = entityFromRequest(request, MeasurementUnit.class);
+
+	    log.fine("Received MeasurementUnit in request: " + MeasurUni);
+
+	    if (validateEntity(MeasurUni)) {
+		log.finer("MeasurementUnit succesfully validated");
+		em.persist(MeasurUni);
+		log.finer("MeasurementUnit persisted on database");
+		em.flush();
+
+		String sId = String.valueOf(MeasurUni.getUnitId());
+		log.finer("Setting MeasurementUnit id in response: " + sId);
+		response.setGeneratedId(sId);
+		response.setError(new Error("0", "SUCCESS",
+			"proxy.MeasurementUnitdBean.Create"));
+	    } else {
+		log.warning("Validation error: " + error_description);
+		response.setError(new Error("MUC1", "Validation error: "
+			+ error_description, "proxy.MeasurementUnitBean.Create"));
+	    }
+
+	} catch (Exception e) {
+	    log.severe("Exception found while creating MeasurementUnitBean");
+	    log.throwing(this.getClass().getName(), "Create", e);
+
+	    response.setError(new Error("MUC2", "Create exception: "
+		    + e.getMessage(), "proxy.MeasurementUnitBean.Create"));
+	}
+
+	log.exiting(this.getClass().getCanonicalName(), "Create");
+	return response;
     }
 
     /* (non-Javadoc)
@@ -51,8 +92,44 @@ public class MeasurementUnitBean implements Cruddable {
      */
     @Override
     public UpdateGatewayResponse Update(GatewayRequest request) {
-	// TODO Auto-generated method stub
-	return null;
+	log.entering(this.getClass().getCanonicalName(), "Update");
+	UpdateGatewayResponse response = new UpdateGatewayResponse();
+	MeasurementUnit MeasurUni = null;
+	try {
+	    MeasurUni = entityFromRequest(request, MeasurementUnit.class);
+
+	    if (MeasurUni.getUnitId() == 0) {
+		log.warning("MUU1 - Invalid MeasurementUnit id");
+		response.setError(new Error("BU1", "Invalid MeasurementUnit id",
+			"proxy.MeasurementUnit.Update"));
+	    } else {
+		if (validateEntity(MeasurUni)) {
+		    em.merge(MeasurUni);
+		    em.flush();
+
+		    GatewayContent content = getContentFromEntity(MeasurUni,
+			    MeasurementUnit.class);
+		    response.setUpdatedRecord(content);
+
+		    response.setError(new Error("0", "SUCCESS",
+			    "proxy.MeasurementUnit.Update"));
+		} else {
+		    log.warning("Validation error: " + error_description);
+		    response.setError(new Error("MUU2", "Validation error: "
+			    + error_description, "proxy.MeasurementUnit.Update"));
+		}
+	    }
+
+	} catch (Exception e) {
+	    log.severe("Exception found while updating MeasurementUnit");
+	    log.throwing(this.getClass().getName(), "Update", e);
+
+	    response.setError(new Error("MUU3", "Update exception "
+		    + e.getMessage(), "proxy.MeasurementUnit.Update"));
+	}
+
+	log.exiting(this.getClass().getCanonicalName(), "Update");
+	return response;
     }
 
     /* (non-Javadoc)
@@ -60,8 +137,37 @@ public class MeasurementUnitBean implements Cruddable {
      */
     @Override
     public BaseResponse Delete(GatewayRequest request) {
-	// TODO Auto-generated method stub
-	return null;
+	log.entering(this.getClass().getCanonicalName(), "Delete");
+	BaseResponse response = new BaseResponse();
+
+	try {
+	    MeasurementUnit MeasurUni = entityFromRequest(request, MeasurementUnit.class);
+	    if (MeasurUni.getUnitId() == 0) {
+		log.warning("MUD1 - Invalid MeasurementUnit");
+		response.setError(new Error("BD1", "Invalid unitId",
+			"proxy.MeasurementUnit.Delete"));
+	    } else {
+		TypedQuery<MeasurementUnit> readQuery = em.createNamedQuery(
+			"CAT_MEASUREMENTUNIT_BY_ID", MeasurementUnit.class);
+		readQuery.setParameter("unitId", MeasurUni.getUnitId());
+		MeasurUni = readQuery.getSingleResult();
+		em.merge(MeasurUni);
+		em.remove(MeasurUni);
+		em.flush();
+
+		response.setError(new Error("0", "SUCCESS",
+			"proxy.MeasurementUnit.Delete"));
+	    }
+	} catch (Exception e) {
+	    log.severe("Exception found while deleting contact");
+	    log.throwing(this.getClass().getName(), "Delete", e);
+
+	    response.setError(new Error("BD2", "Delete exception: "
+		    + e.getMessage(), "proxy.MeasurementUnit.Delete"));
+	}
+
+	log.exiting(this.getClass().getCanonicalName(), "Delete");
+	return response;
     }
 
 }

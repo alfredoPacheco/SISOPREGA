@@ -8,14 +8,14 @@
 		</persistence-unit-defaults>
 	</persistence-unit-metadata>
 	<entity class="com.tramex.sisoprega.dto.User">
-		<table name="sys_sisoprega_user"/>
+		<table name="sys_sisoprega_user" />
 		<named-query name="USER_BY_NAME">
 			<description>Get a single user record by its User name</description>
 			<query>SELECT u FROM User u WHERE u.userName = :userName</query>
 		</named-query>
 		<attributes>
 			<id name="userName">
-				<column name="user_name"/>
+				<column name="user_name" />
 			</id>
 			<basic name="password">
 				<column name="password" />
@@ -287,24 +287,24 @@
 				<generated-value strategy="IDENTITY" />
 			</id>
 			<basic name="catclassName">
-				<column name="catclass_name" length="50" unique="true"/>
+				<column name="catclass_name" length="50" unique="true" />
 			</basic>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.CattleType">
-		<table name= "cat_cattle_type" />
+		<table name="cat_cattle_type" />
 		<named-query name="ALL_CATTLE_TYPE">
 			<description>Retrieves all cattle type records from database </description>
 			<query>SELECT Cattle FROM CattleType Cattle ORDER BY Cattle.cattypeName</query>
 		</named-query>
-		 <named-query name="CATTLE_TYPE_BY_ID">
+		<named-query name="CATTLE_TYPE_BY_ID">
 			<description>Retrieve a single cattle type record using the type id</description>
 			<query>SELECT Cattle FROM CattleType Cattle WHERE Cattle.cattypeId= :cattypeId</query>
 		</named-query>
 		<named-query name="CATTLE_TYPE_BY_CLASS_ID">
 			<description>Retrieve the cattle types associated with a cattle class</description>
 			<query>SELECT Cattle FROM CattleType Cattle WHERE Cattle.catclassId = :catClassId</query>
-		</named-query> 
+		</named-query>
 		<attributes>
 			<id name="cattypeId">
 				<column name="cattype_id" />
@@ -314,7 +314,7 @@
 				<column name="catclass_id" />
 			</basic>
 			<basic name="cattypeName">
-				<column name="cattype_name"/>
+				<column name="cattype_name" />
 			</basic>
 		</attributes>
 	</entity>
@@ -330,128 +330,156 @@
 		</named-query>
 		<attributes>
 			<id name="locationId">
-				<column name="location_id"/>
+				<column name="location_id" />
 				<generated-value strategy="IDENTITY" />
 			</id>
 			<basic name="locationName">
-				<column name="location_name"/>
+				<column name="location_name" />
 			</basic>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.Barnyard">
 		<table name="cat_barnyard" />
+		<named-query name="CAT_BARNYARD_BY_ID">
+			<description>Retrieves a single catBarnyard record by ID</description>
+			<query>SELECT bar FROM Barnyard bar WHERE bar.barnyardId = :barnyardId</query>
+		</named-query>
 		<attributes>
 			<id name="barnyardId">
-				<column name="barnyard_id"/>
-				<generated-value strategy = "IDENTITY"/>
+				<column name="barnyard_id" />
+				<generated-value strategy="IDENTITY" />
 			</id>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.BarnyardCapacity">
-		<table name= "cat_barnyard_capacity" />
+		<table name="cat_barnyard_capacity" />
+		<named-query name="CAT_BARNYARDCAPACITY_BY_ID">
+			<description>Retrieves a single catBarnyardCapacity record by ID</description>
+			<query>SELECT barCa FROM BarnyardCapacity barCa WHERE barCa.capacityId = :capacityId</query>
+		</named-query>
 		<attributes>
 			<id name="capacityId">
-				<column name= "capacity_id"/>
-				<generated-value strategy = "IDENTITY"/>
+				<column name="capacity_id" />
+				<generated-value strategy="IDENTITY" />
 			</id>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.MeasurementUnit">
-		<table name = "cat_measurement_unit" />	
+		<table name="cat_measurement_unit" />
+		<named-query name="CAT_MEASUREMENTUNIT_BY_ID">
+			<description>Retrieves a single catMeasurementUnit record by ID</description>
+			<query>SELECT MeaUni FROM MeasurementUnit MeaUni WHERE MeaUni.unitId = :unitId</query>
+		</named-query>
 		<attributes>
 			<id name="unitId">
-				<column name = "unit_id" />
-				<generated-value strategy = "IDENTITY"/>
+				<column name="unit_id" />
+				<generated-value strategy="IDENTITY" />
 			</id>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.MeasurementUnitEquivalence">
-		<table name= "cat_measurement_unit_equivalence" />
+		<table name="cat_measurement_unit_equivalence" />
+		<named-query name="CAT_MEASUREMENTUNITEQUIVALENCE_BY_ID">
+			<description>Retrieves a single catMeasurementUnitEquivalence record by ID</description>
+			<query>SELECT MeaUnEq FROM MeasurementUnitEquivalence MeaUnEq WHERE MeaUnEq.equivalenceId = :equivalenceId</query>
+		</named-query>
 		<attributes>
 			<id name="equivalenceId">
-				<column name = "equivalence_id" />
-				<generated-value strategy = "IDENTITY" />
+				<column name="equivalence_id" />
+				<generated-value strategy="IDENTITY" />
 			</id>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.Reception">
-		<table name = "ctrl_reception"/>
+		<table name="ctrl_reception" />
 		<attributes>
 			<id name="receptionId">
-				<column name = "reception_id" />
-				<generated-value strategy = "IDENTITY"/>
+				<column name="reception_id" />
+				<generated-value strategy="IDENTITY" />
 			</id>
+			<basic name="dateAllotted">
+				<column name="date_allotted" />
+				<temporal>TIMESTAMP</temporal>
+			</basic>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.ReceptionBarnyard">
-		<table name = "ctrl_reception_barnyard" />
+		<table name="ctrl_reception_barnyard" />
 		<attributes>
 			<id name="recBarnyardId">
-				<column name = "rec_barnyard_id" />
-				<generated-value strategy = "IDENTITY" />
+				<column name="rec_barnyard_id" />
+				<generated-value strategy="IDENTITY" />
 			</id>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.ReceptionHeadcount">
-		<table name = "ctrl_reception_headcount" />
+		<table name="ctrl_reception_headcount" />
 		<attributes>
 			<id name="headcountId">
-				<column name = "headcount_id"/>
-				<generated-value strategy = "IDENTITY"/>
+				<column name="headcount_id" />
+				<generated-value strategy="IDENTITY" />
 			</id>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.FeedOrder">
-		<table name = "ctrl_feed_order"/>
+		<table name="ctrl_feed_order" />
 		<attributes>
 			<id name="orderId">
-				<column name = "order_id"/>
-				<generated-value strategy = "IDENTITY"/>
+				<column name="order_id" />
+				<generated-value strategy="IDENTITY" />
 			</id>
+			<basic name="feedDate">
+				<column name="feed_date" />
+				<temporal>TIMESTAMP</temporal>
+			</basic>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.Food">
-		<table name = "cat_food" />
+		<table name="cat_food" />
 		<attributes>
 			<id name="foodId">
-				<column name = "food_id"/>
-				<generated-value strategy = "IDENTITY"/>
+				<column name="food_id" />
+				<generated-value strategy="IDENTITY" />
 			</id>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.FeedOrderDetails">
-		<table name = "ctrl_feed_order_details" />
+		<table name="ctrl_feed_order_details" />
 		<attributes>
-			<id name = "fodId">
-				<column name = "id"/>
-				<generated-value strategy = "IDENTITY" />		
+			<id name="fodId">
+				<column name="id" />
+				<generated-value strategy="IDENTITY" />
 			</id>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.Inspection">
-		<table name = "ctrl_inspection"/>
+		<table name="ctrl_inspection" />
 		<attributes>
 			<id name="inspectionId">
-				<column name = "inspection_id"/>
-				<generated-value strategy = "IDENTITY"/>
+				<column name="inspection_id" />
+				<generated-value strategy="IDENTITY" />
 			</id>
-		</attributes>	
+			<basic name="inspectionDate">
+				<column name="inspection_date" />
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.InspectionBarnyard">
-		<table name = "ctrl_inspection_barnyard" />
+		<table name="ctrl_inspection_barnyard" />
 		<attributes>
-			<id name = "ibId">
-				<column name = "id"/>
-				<generated-value strategy = "IDENTITY"/>
+			<id name="ibId">
+				<column name="id" />
+				<generated-value strategy="IDENTITY" />
 			</id>
 		</attributes>
-	</entity>		
+	</entity>
 	<entity class="com.tramex.sisoprega.dto.InspectionCode">
-		<table name = "cat_inspection_code"/>
+		<table name="cat_inspection_code" />
 		<attributes>
 			<id name="inspectionCodeId">
-				<column name = "inspection_code_id"/>
-				<generated-value strategy = "IDENTITY"/>
+				<column name="inspection_code_id" />
+				<generated-value strategy="IDENTITY" />
 			</id>
 		</attributes>
 	</entity>

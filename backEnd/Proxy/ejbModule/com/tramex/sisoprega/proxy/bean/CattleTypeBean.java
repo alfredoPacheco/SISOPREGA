@@ -45,6 +45,7 @@ import com.tramex.sisoprega.dto.CattleType;
  * 18/11/2012  Jaime Figueroa                 Initial Version.
  * 23/11/2012  Diego Torres		              Fixing Read operation.
  * 12/02/2012  Diego Torres                   Fixing Detele operation, change cattleClassId for cattleTypeId.
+ * 12/02/2012  Jaime Figueroa                 Fixing Update operation, change cattleClassId for cattleTypeId.
  * ====================================================================================
  * </PRE>
  * 
@@ -170,7 +171,7 @@ public class CattleTypeBean extends BaseBean implements Cruddable {
     try {
       cattle = entityFromRequest(request, CattleType.class);
 
-      if (cattle.getCatclassId() == 0) {
+      if (cattle.getCattypeId() == 0) {
         log.warning("CTU1 - Invalid Cattle Type id");
         response.setError(new Error("CTU1", "Invalid Cattle Type id", "proxy.CattleType.Update"));
       } else {
