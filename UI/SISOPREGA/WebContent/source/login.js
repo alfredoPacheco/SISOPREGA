@@ -25,8 +25,8 @@ enyo.kind({
 			 components: [
 			  {kind: "Item",
 				components: [
-					{kind:"Input", name:"user", hint:"User",selectAllOnFocus: true,},
-					{kind:"PasswordInput", name:"password", hint:"Password",selectAllOnFocus: true, }]}]},							 
+					{kind:"Input", name:"user", hint:"User",selectAllOnFocus: true, value:"mex_user"},
+					{kind:"PasswordInput", name:"password", hint:"Password",selectAllOnFocus: true, value:"mex_user" }]}]},							 
 			]},		
 		{kind: "Toolbar",name:"tbFooter",style:"height:10px", 
 			components: [

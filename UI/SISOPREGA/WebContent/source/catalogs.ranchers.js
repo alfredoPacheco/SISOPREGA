@@ -41,7 +41,13 @@ enyo.kind({
 	},
 	showOptions:function(){
 		this.addGoBackAction();
-		this.$.mainPane.selectViewByName("ranOptions");				
+		var objRan=this.$.ranchersList.getSelected();
+		if (objRan.rancher_type==2){
+			this.$.ranOptions.$.button3.setShowing(!1);
+		}else{
+			this.$.ranOptions.$.button3.setShowing(1);
+		}
+		this.$.mainPane.selectViewByName("ranOptions");		
 	},
 	showContacts:function(){
 		_gobackStack.push({caption:"Ganaderos",paneMan:this.$.mainPane,paneName:"ranOptions"});		

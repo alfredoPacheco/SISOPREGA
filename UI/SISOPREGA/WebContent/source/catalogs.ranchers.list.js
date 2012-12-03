@@ -24,7 +24,7 @@ enyo.kind({
 						{name: "name", 
 						 style: "text-overflow: ellipsis; overflow: hidden;"+
 								"white-space: nowrap;color:#FFF;", 
-						 content: ""},
+							content: ""},
 						{name: "info", 
 						 style: "font-size: 0.85em;color:#999",
 						 content: ""},											

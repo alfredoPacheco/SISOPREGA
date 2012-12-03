@@ -48,12 +48,13 @@ _arrRancherList[0].contacts.push(enyo.clone(_arrRancherList[1]));
 _arrRancherList[1].contacts.push(enyo.clone(_arrRancherList[0]));
 _arrRancherList[2].contacts.push(enyo.clone(_arrRancherList[0]));
 
-var _arrCattleList=[
+var _arrCattleTypeList=[
 				{cattype_id: 1,cattype_name: "CABALLOS"}, 
 				{cattype_id: 2,cattype_name: "LLEGUAS"}, 
 				{cattype_id: 3,cattype_name: "TOROS"},  
 				{cattype_id: 4, cattype_name: "VACAS"}, 				                                
 			   ];
+var _arrCattleClassList=[];
 var	_arrReceptionList=[
 		{reception_id:1,rancher_id:1,rancher_name:"BALDOR / DEL RIO MENDEZ ALAN", arrival_date:"2012-09-15",
 		 cattype_id:1,cattype_name:"CABALLOS",hc_aprox:100,
