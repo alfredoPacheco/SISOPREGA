@@ -31,4 +31,17 @@
       <ejb-class>com.tramex.sisoprega.proxy.bean.CattleTypeBean</ejb-class>
     </session>
   </enterprise-beans>
+  <assembly-descriptor>
+  	<security-role>
+  		<role-name>mx_usr</role-name>
+  	</security-role>
+  	<method-permission>
+  		<role-name>mx_usr</role-name>
+  		<method>
+  			<ejb-name>RancherProxy</ejb-name>
+  			<method-intf>Remote</method-intf>
+  			<method-name>Read</method-name>
+  		</method>
+  	</method-permission>
+  </assembly-descriptor>
 </ejb-jar>

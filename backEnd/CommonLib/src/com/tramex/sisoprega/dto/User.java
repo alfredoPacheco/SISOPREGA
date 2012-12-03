@@ -32,21 +32,8 @@ package com.tramex.sisoprega.dto;
  *
  */
 public class User {
-  private long userId;
   private String userName;
   private String password;
-  /**
-   * @return the userId
-   */
-  public long getUserId() {
-    return userId;
-  }
-  /**
-   * @param userId the userId to set
-   */
-  public void setUserId(long userId) {
-    this.userId = userId;
-  }
   /**
    * @return the userName
    */

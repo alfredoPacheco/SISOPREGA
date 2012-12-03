@@ -12,6 +12,7 @@
  * ----------  ---------------------------  -------------------------------------------
  * 10/03/2012  Diego Torres                  Initial Version.
  * 11/27/2012  Diego Torres                  Add tables for security management
+ * 12/01/2012  Diego Torres                  System log will be provided by app server.
  * ====================================================================================
  * 
  * Author: Diego Torres
@@ -24,99 +25,27 @@
  *    SECURITY TABLES
  **********************************************************************************************
  */
-DROP TABLE IF EXISTS sys_sisoprega_role CASCADE;
-CREATE TABLE sys_sisoprega_role(
-	role_id SERIAL PRIMARY KEY,
-	role_name varchar(20) NOT NULL
-);
- 
-CREATE UNIQUE INDEX U_role_name ON sys_sisoprega_role(role_name);
-
-GRANT ALL ON sys_sisoprega_role TO sisoprega;
-GRANT ALL ON sys_sisoprega_role_role_id_seq TO sisoprega;
-
-INSERT INTO sys_sisoprega_role(role_name)
-VALUES('mex_user');
-INSERT INTO sys_sisoprega_role(role_name)
-VALUES('usa_user');
-INSERT INTO sys_sisoprega_role(role_name)
-VALUES('business_user');
-INSERT INTO sys_sisoprega_role(role_name)
-VALUES('rancher');
-INSERT INTO sys_sisoprega_role(role_name)
-VALUES('buyer');
  
 /* 
  * It is intended to send the password encrypted to the password field.
  */
 DROP TABLE IF EXISTS sys_sisoprega_user CASCADE;
 CREATE TABLE sys_sisoprega_user(
-	user_id SERIAL PRIMARY KEY,
-	user_name varchar(20) NOT NULL,
-	password varchar(100) NOT NULL
+	user_name varchar(10) NOT NULL PRIMARY KEY,
+	user_password varchar(32) NOT NULL
 );
-CREATE UNIQUE INDEX U_user_name ON sys_sisoprega_user(user_name);
  
 GRANT ALL ON sys_sisoprega_user TO sisoprega;
-GRANT ALL ON sys_sisoprega_user_user_id_seq TO sisoprega;
-
-INSERT INTO sys_sisoprega_user(user_name, password)
-VALUES('all_mighty', 'all_mighty');
-INSERT INTO sys_sisoprega_user(user_name, password)
-VALUES('mex_user', 'mex_user');
-INSERT INTO sys_sisoprega_user(user_name, password)
-VALUES('usa_user', 'usa_user');
-INSERT INTO sys_sisoprega_user(user_name, password)
-VALUES('business_user', 'business_user');
-INSERT INTO sys_sisoprega_user(user_name, password)
-VALUES('rancher', 'rancher');
-INSERT INTO sys_sisoprega_user(user_name, password)
-VALUES('buyer', 'buyer');
-
-DROP TABLE IF EXISTS sys_sisoprega_user_role CASCADE;
-CREATE TABLE sys_sisoprega_user_role(
-	user_id integer NOT NULL REFERENCES sys_sisoprega_user(user_id),
-	role_id integer NOT NULL REFERENCES sys_sisoprega_role(role_id)
+ 
+DROP TABLE IF EXISTS sys_sisoprega_role CASCADE;
+CREATE TABLE sys_sisoprega_role(
+	user_name varchar(10) NOT NULL REFERENCES sys_sisoprega_user(user_name),
+	role_name varchar(20) NOT NULL
 );
+ 
+CREATE UNIQUE INDEX U_user_role ON sys_sisoprega_role(user_name, role_name);
 
-CREATE UNIQUE INDEX U_user_role ON sys_sisoprega_user_role(user_id, role_id);
-
-GRANT ALL ON sys_sisoprega_user_role TO sisoprega;
-
-INSERT INTO sys_sisoprega_user_role(user_id, role_id)
-VALUES(1, 1); -- ALL MIGHTY TO MX
-INSERT INTO sys_sisoprega_user_role(user_id, role_id)
-VALUES(1, 2); -- ALL MIGHTY TO US
-INSERT INTO sys_sisoprega_user_role(user_id, role_id)
-VALUES(1, 3); -- ALL MIGHTY TO BUS
-INSERT INTO sys_sisoprega_user_role(user_id, role_id)
-VALUES(1, 4); -- ALL MIGHTY TO RANCHER
-INSERT INTO sys_sisoprega_user_role(user_id, role_id)
-VALUES(1, 5); -- ALL MIGHTY TO BUYER
-INSERT INTO sys_sisoprega_user_role(user_id, role_id)
-VALUES(2, 1); -- MX TO MX
-INSERT INTO sys_sisoprega_user_role(user_id, role_id)
-VALUES(3, 2); -- US TO US
-INSERT INTO sys_sisoprega_user_role(user_id, role_id)
-VALUES(4, 3); -- BUS TO BUS
-INSERT INTO sys_sisoprega_user_role(user_id, role_id)
-VALUES(5, 4); -- RANCHER TO RANCHER
-INSERT INTO sys_sisoprega_user_role(user_id, role_id)
-VALUES(6, 5); -- BUYER TO BUYER
-
-DROP TABLE IF EXISTS sys_token CASCADE;
-CREATE TABLE sys_token(
-	sys_token_id SERIAL PRIMARY KEY,
-	sys_token varchar(36) NOT NULL,
-	user_id integer NOT NULL REFERENCES sys_sisoprega_user(user_id),
-	due_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP + interval '20 minutes'
-);
-
-CREATE UNIQUE INDEX U_sys_token on sys_token(sys_token);
-CREATE UNIQUE INDEX U_sys_token_user on sys_token(user_id);
-
-GRANT ALL ON sys_token TO sisoprega;
-GRANT ALL ON sys_token_sys_token_id_seq TO sisoprega;
+GRANT ALL ON sys_sisoprega_role TO sisoprega;
 /*
  **********************************************************************************************
  *    DATA TABLES
@@ -580,14 +509,3 @@ CREATE TABLE ctrl_inspection_result(
 
 GRANT ALL ON ctrl_inspection_result TO sisoprega;
 GRANT ALL ON ctrl_inspection_result_id_seq TO sisoprega;
-
-/*Table structure for table cat_transactions */
-DROP TABLE IF EXISTS ctrl_log CASCADE;
-
-CREATE TABLE ctrl_log (
-  operation_id SERIAL PRIMARY KEY,
-  operation_description varchar(250) NOT NULL
-);
-
-GRANT ALL ON ctrl_log TO sisoprega;
-GRANT ALL ON ctrl_log_operation_id_seq TO sisoprega;
