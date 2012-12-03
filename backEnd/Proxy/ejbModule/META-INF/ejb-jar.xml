@@ -32,19 +32,19 @@
     </session>
     <session>
     	<ejb-name>BarnyardProxy</ejb-name>
-    	<ejb-class>com.tramex.sisoprega.dto.Barnyard</ejb-class>
+    	<ejb-class>com.tramex.sisoprega.proxy.bean.BarnyardBean</ejb-class>
     </session>
     <session>
-    <ejb-name>BarnyardCapacityProxy</ejb-name>
-    <ejb-class>com.tramex.sisoprega.dto.BarnyardCapacity</ejb-class>
+    	<ejb-name>BarnyardCapacityProxy</ejb-name>
+    	<ejb-class>com.tramex.sisoprega.proxy.bean.BarnyardCapacityBean</ejb-class>
     </session>
     <session>
     	<ejb-name>MeasurementUnitProxy</ejb-name>
-    	<ejb-class>com.tramex.sisoprega.dto.MeasurementUnit</ejb-class>
+    	<ejb-class>com.tramex.sisoprega.proxy.bean.MeasurementUnitBean</ejb-class>
     </session>
     <session>
     	<ejb-name>MeasurementUnitEquivalenceProxy</ejb-name>
-    	<ejb-class>com.tramex.sisoprega.dto.MeasurementUnitEquivalence</ejb-class>
+    	<ejb-class>com.tramex.sisoprega.proxy.bean.MeasurementUnitEquivalenceBean</ejb-class>
     </session>
   </enterprise-beans>
 </ejb-jar>
