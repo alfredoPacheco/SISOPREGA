@@ -410,6 +410,10 @@
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.MeasurementUnitEquivalence">
 		<table name="cat_measurement_unit_equivalence" />
+		<named-query name="CAT_MEASUREMENTUNITEQUIVALENCE_BY_ID">
+			<description>Retrieves a single catMeasurementUnitEquivalence record by ID</description>
+			<query>SELECT MeaUnEq FROM MeasurementUnitEquivalence MeaUnEq WHERE MeaUnEq.equivalenceId = :equivalenceId</query>
+		</named-query>
 		<attributes>
 			<id name="equivalenceId">
 				<column name="equivalence_id" />
@@ -451,6 +455,10 @@
 				<column name="order_id" />
 				<generated-value strategy="IDENTITY" />
 			</id>
+			<basic name="feedDate">
+				<column name = "feed_date"  />
+				<temporal>TIMESTAMP</temporal>
+			</basic>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.Food">

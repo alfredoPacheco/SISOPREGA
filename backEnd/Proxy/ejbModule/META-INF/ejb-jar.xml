@@ -42,5 +42,9 @@
     	<ejb-name>MeasurementUnitProxy</ejb-name>
     	<ejb-class>com.tramex.sisoprega.dto.MeasurementUnit</ejb-class>
     </session>
+    <session>
+    	<ejb-name>MeasurementUnitEquivalenceProxy</ejb-name>
+    	<ejb-class>com.tramex.sisoprega.dto.MeasurementUnitEquivalence</ejb-class>
+    </session>
   </enterprise-beans>
 </ejb-jar>
