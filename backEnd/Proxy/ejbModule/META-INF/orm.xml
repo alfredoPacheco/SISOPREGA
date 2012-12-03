@@ -15,7 +15,7 @@
 		</named-query>
 		<attributes>
 			<id name="userName">
-				<column name="user_name"/>
+				<column name="user_name" />
 			</id>
 			<basic name="password">
 				<column name="password" />
@@ -425,7 +425,7 @@
 				<generated-value strategy="IDENTITY" />
 			</id>
 			<basic name="feedDate">
-				<column name = "feed_date"  />
+				<column name="feed_date" />
 				<temporal>TIMESTAMP</temporal>
 			</basic>
 		</attributes>
