@@ -27,38 +27,43 @@ enyo.kind({
 			]
 		},
 		{kind: "Toolbar",	
+		
 		components: [					 
+		
 		{kind: "ToolInput", name:"cattype_name", align:"left",
 		 width:"70%",  hint:"Ganado",changeOnInput: true},
+		 {name: 'cattleClassListSelector', kind: "ListSelector", contentPack:"end", items: [], style: "font-color:white"}, 
 		{kind: "Drawer", name:"draAdd", components: [ 				
 		    {layoutKind: "HFlexLayout", align: "center",components: [
 			{kind: "enyo.IconButton",name:"btnAdd",icon: "images/menu-icon-new.png", flex:1,
 			 onclick: "addProduct"},
-			 {name: 'catclass_id', kind: "ListSelector", contentPack:"end", items: []}
+//			 {name: 'catclass_id', kind: "ListSelector", contentPack:"end", items: []}
 		    ]}
 		]},
-		{kind: "Drawer", name:"draUpdate", components: [		
-			{layoutKind: "HFlexLayout", align: "center",components: [			
-				{kind: "enyo.IconButton",name:"btnUpdate", 
+		
+		{kind: "Drawer", name:"draUpdate", components: [
+			{layoutKind: "HFlexLayout", align: "center",components: [
+				{kind: "enyo.IconButton",name:"btnUpdate",
 				icon:"images/btn_edit.png",
 				 flex:1, onclick: "updateProduct"},							
-				{kind: "Button",name:"btnCancel", className: "enyo-button-negative", 
+				{kind: "Button",name:"btnCancel", className: "enyo-button-negative",
 				 flex:1,caption: "X", onclick: "toggleAdd"},
-				 {name: 'catclass_id', kind: "ListSelector", contentPack:"end", items: []}
+				 
 			]}
-		]},																		
+		]}
+		
 		]},					 		
 	],
 	setupProductRow:function(inSender, inIndex) {		
 //		var obj;
 		if (objCattle=cacheCattle.getCattleType()[inIndex]){						
-			this.$.desc.setContent(objCattle.cattype_name);			
-			this.$.cattleClass.setContent(objCattle.catclass_name);
+			this.$.desc.setContent(objCattle.cattype_name);
+			this.$.cattleClass.setContent(cacheCattle.getCattleClassByID(objCattle.catclass_id).catclass_name);
 			return true;
 		}
 	},
 	deleteProduct: function(inSender, inIndex){
-		if(cacheCattle.del(cacheCattle.get()[inIndex],this,"afterDelete")){
+		if(cacheCattle.del(cacheCattle.getCattleType()[inIndex],this,"afterDelete")){
 			return true;
 		}else{
 			return false;
@@ -81,9 +86,9 @@ enyo.kind({
 		this.updateList();		
 	},
 	getCattle:function(){
-	 	var objCat={cattype_id:"",cattype_name: "", catclass_name:name=""};
+	 	var objCat={cattype_id:"",catclass_id: "", cattype_name:""};
 		objCat.cattype_name=this.$.cattype_name.getValue();
-		objCat.catclass_name=this.$.catclass_name.getValue();
+		objCat.catclass_id=this.$.cattleClassListSelector.getValue();
 		return objCat;
 	},
 	getProduct:function(inIndex){
@@ -95,34 +100,39 @@ enyo.kind({
 	},
 	ready:function(){
 		this.$.draAdd.setOpen(true);
-		this.$.draUpdate.setOpen(false);		
+		this.$.draUpdate.setOpen(false);
+//		this.$.cattleClassListSelector.hide();
 		this.updateList();
 		this.resetValues();
 	},
 	updateList:function(){
 		this.$.cattleList.render();					
 	},
-	setProduct:function(inSender, inEvent){		
+	setProduct:function(inSender, inEvent){	
+		if (cacheCattle.getCattleType().length > 0){
 		this.iProduct=inEvent.rowIndex;
 		this.objCat=cacheCattle.getCattleType()[inEvent.rowIndex];	
 		this.$.cattype_name.setValue(this.objCat.cattype_name);
-		this.$.catclass_id.setValue(this.objCat.catclass_name);
+		this.$.cattleClassListSelector.setValue(this.objCat.catclass_id);		
 		this.toggleUpdate();
-		return true;				
-		
+		return true;
+		}
 	},	
 	toggleUpdate:function(){
+//		this.$.cattleClassListSelector.show();
 		this.$.draAdd.setOpen(false);
-		this.$.draUpdate.setOpen(true);				
+		this.$.draUpdate.setOpen(true);
+		
 	},	
 	toggleAdd:function(){
+//		this.$.cattleClassListSelector.hide();
 		this.$.draAdd.setOpen(true);
-		this.$.draUpdate.setOpen(false);				
+		this.$.draUpdate.setOpen(false);		
 		this.resetValues();	
 	},	
 	resetValues:function(){
-		this.$.catclass_id.setValue(0);
-		this.$.catclass_id.setItems(cacheCattle.getLS());
+		this.$.cattleClassListSelector.setValue(0);
+		this.$.cattleClassListSelector.setItems(cacheCattle.getCattleClassLS());
 		this.$.cattype_name.setValue("");
 	}
 });

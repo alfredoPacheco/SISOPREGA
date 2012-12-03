@@ -1,7 +1,7 @@
 enyo.kind({
 	name: "cache.cattle",
-	arrCattleType:_arrCattleTypeList,
-	arrCattleClass: _arrCattleClassList,
+	arrCattleType:[],
+	arrCattleClass: [],
 	cattleTypeWasReadFromGateway: false,
 	cattleClassWasReadFromGateway: false,
 	reloadme:function(){
@@ -11,7 +11,7 @@ enyo.kind({
 
 		var objNew = {
 				cattype_id:		objCattle.cattypeId,
-				catclass_name:	objCattle.catclassId,
+				catclass_id:	objCattle.catclassId,
 				cattype_name:	objCattle.cattypeName
 			};
 		
@@ -20,7 +20,7 @@ enyo.kind({
 	cattleClassAdapterToIn:function(objCattle){
 		
 		var objNew = {
-				catclass_id:	objCattle.catclassId,				
+				catclass_id:	objCattle.catclassId,
 				catclass_name:	objCattle.catclassName
 			};
 		
@@ -30,7 +30,7 @@ enyo.kind({
 
 		var objNew = {				
 				cattypeId:		objCattle.cattype_id,				
-				catclassId:		objCattle.catclass_name,
+				catclassId:		objCattle.catclass_id,
 				cattypeName:	objCattle.cattype_name
 			};
 		
@@ -39,7 +39,7 @@ enyo.kind({
 	cattleClassAdapterToOut:function(objCattle){
 		
 		var objNew = {
-				catclassId:	objCattle.catclass_id,				
+				catclassId:		objCattle.catclass_id,				
 				catclassName:	objCattle.catclass_name
 			};
 		
@@ -66,7 +66,7 @@ enyo.kind({
 		    	});
 			}
 			else{ //Error
-				if (cgReadAll.exceptionId != "RR02"){ //No data found
+				if (cgReadAll.exceptionId != "CTR2"){ //No data found
 					cacheMan.setMessage("", "","[Exception ID: " + cgReadAll.exceptionId + "] Descripcion: " + cgReadAll.exceptionDescription);	
 				}			
 			}
@@ -111,12 +111,12 @@ enyo.kind({
 //			cacheMan.hideScrim();
 		}
 		
-		return this.arrObj;
+		return this.arrCattleClass;
 	},
 	create:function(objCat,cbObj,cbMethod){
 		
 		var objToSend = this.cattleTypeAdapterToOut(objCat);
-		delete objToSend.rancherId;
+		delete objToSend.cattypeId;
 		var cgCreate = consumingGateway.Create("CattleType", objToSend);
 		if (cgCreate.exceptionId == 0){ //Created successfully
 			objCat.cattype_id = cgCreate.generatedId;
@@ -140,7 +140,7 @@ enyo.kind({
 
 	},
 	upd:function(objOld,objNew,cbObj,cbMethod){
-		objNew.cattypeId = objOld.cattype_id;
+		objNew.cattype_id = objOld.cattype_id;
 		var objToSend = this.cattleTypeAdapterToOut(objNew);
 		var cgUpdate = consumingGateway.Update("CattleType", objToSend);
 		if (cgUpdate.exceptionId == 0){ //Updated successfully
@@ -164,14 +164,15 @@ enyo.kind({
 		else{ //Error			
 			cacheMan.setMessage("", "","[Exception ID: " + cgUpdate.exceptionId + "] Descripcion: " + cgUpdate.exceptionDescription);
 			return false;
-		}		
-				
+		}						
 	},
-	getLS:function(){
+	getCattleClassLS:function(){
 		var _arrCattleLS=[];
-		for(var i=0;i<this.getCattleType().length;i++){		
-			_arrCattleLS.push({caption:this.getCattleType()[i].cattype_name,
-									value:this.getCattleType()[i].cattype_id});
+		var arrTemp=[];
+		arrTemp = this.getCattleClass();
+		for(var i=0;i<arrTemp.length;i++){		
+			_arrCattleLS.push({	caption:arrTemp[i].catclass_name,
+								value:	arrTemp[i].catclass_id});
 		}
 		return _arrCattleLS;
 	},
@@ -181,21 +182,42 @@ enyo.kind({
 				return this.getCattleType()[i];
 			}
 		}
+		return [];
 	},
-	del:function(delObj,cbObj,cbMethod){		
-		//AJAX
-		//Update Internal Object	
-		for(var i=0;i<this.getCattleType().length;i++){
-			if(this.getCattleType()[i]===delObj){
-				this.getCattleType().splice(i, 1);	
-				if(cbMethod){
-					cbObj[cbMethod]();
-				}		
-				return true;								
-				break;
+	getCattleClassByID:function(iID){
+		var arrTemp = [];
+		arrTemp = this.getCattleClass();
+		for(var i=0; i<arrTemp.length;i++){
+			if (arrTemp[i].catclass_id==iID){
+				return arrTemp[i];
 			}
 		}
-		return false;			
+		return null;
+	},
+	del:function(delObj,cbObj,cbMethod){		
+
+		var objToSend = {};
+		objToSend.cattypeId = delObj.cattype_id;
+		
+		var cgDelete = consumingGateway.Delete("CattleType", objToSend);
+		if (cgDelete.exceptionId == 0){ //Deleted successfully
+			var tamanio = this.getCattleType().length;
+			for(var i=0;i<tamanio;i++){
+				if (this.arrCattleType[i].cattype_id == delObj.cattype_id){
+					this.arrCattleType.splice(i, 1);
+					_arrCattleTypeList = this.arrCattleType;
+					if(cbMethod){
+						cbObj[cbMethod]();
+					}
+					return true;					
+				}
+			}
+			return false;
+		}
+		else{ //Error
+			cacheMan.setMessage("", "","[Exception ID: " + cgDelete.exceptionId + "] Descripcion: " + cgDelete.exceptionDescription);
+			return false;
+		}				
 	}
 });
 var cacheCattle= new cache.cattle();
