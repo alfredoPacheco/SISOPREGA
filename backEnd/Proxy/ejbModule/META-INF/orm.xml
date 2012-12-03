@@ -374,4 +374,85 @@
 			</id>
 		</attributes>
 	</entity>
+	<entity class="com.tramex.sisoprega.dto.Reception">
+		<table name = "ctrl_reception"/>
+		<attributes>
+			<id name="receptionId">
+				<column name = "reception_id" />
+				<generated-value strategy = "IDENTITY"/>
+			</id>
+		</attributes>
+	</entity>
+	<entity class="com.tramex.sisoprega.dto.ReceptionBarnyard">
+		<table name = "ctrl_reception_barnyard" />
+		<attributes>
+			<id name="recBarnyardId">
+				<column name = "rec_barnyard_id" />
+				<generated-value strategy = "IDENTITY" />
+			</id>
+		</attributes>
+	</entity>
+	<entity class="com.tramex.sisoprega.dto.ReceptionHeadcount">
+		<table name = "ctrl_reception_headcount" />
+		<attributes>
+			<id name="headcountId">
+				<column name = "headcount_id"/>
+				<generated-value strategy = "IDENTITY"/>
+			</id>
+		</attributes>
+	</entity>
+	<entity class="com.tramex.sisoprega.dto.FeedOrder">
+		<table name = "ctrl_feed_order"/>
+		<attributes>
+			<id name="orderId">
+				<column name = "order_id"/>
+				<generated-value strategy = "IDENTITY"/>
+			</id>
+		</attributes>
+	</entity>
+	<entity class="com.tramex.sisoprega.dto.Food">
+		<table name = "cat_food" />
+		<attributes>
+			<id name="foodId">
+				<column name = "food_id"/>
+				<generated-value strategy = "IDENTITY"/>
+			</id>
+		</attributes>
+	</entity>
+	<entity class="com.tramex.sisoprega.dto.FeedOrderDetails">
+		<table name = "ctrl_feed_order_details" />
+		<attributes>
+			<id name = "fodId">
+				<column name = "id"/>
+				<generated-value strategy = "IDENTITY" />		
+			</id>
+		</attributes>
+	</entity>
+	<entity class="com.tramex.sisoprega.dto.Inspection">
+		<table name = "ctrl_inspection"/>
+		<attributes>
+			<id name="inspectionId">
+				<column name = "inspection_id"/>
+				<generated-value strategy = "IDENTITY"/>
+			</id>
+		</attributes>	
+	</entity>
+	<entity class="com.tramex.sisoprega.dto.InspectionBarnyard">
+		<table name = "ctrl_inspection_barnyard" />
+		<attributes>
+			<id name = "ibId">
+				<column name = "id"/>
+				<generated-value strategy = "IDENTITY"/>
+			</id>
+		</attributes>
+	</entity>		
+	<entity class="com.tramex.sisoprega.dto.InspectionCode">
+		<table name = "cat_inspection_code"/>
+		<attributes>
+			<id name="inspectionCodeId">
+				<column name = "inspection_code_id"/>
+				<generated-value strategy = "IDENTITY"/>
+			</id>
+		</attributes>
+	</entity>
 </entity-mappings>
