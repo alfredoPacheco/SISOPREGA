@@ -35,7 +35,7 @@ public class MeasurementUnitEquivalence {
     private long equivalenceId;
     private long unitSrc;
     private long unitDest;
-    private Double equivalence;
+    private double equivalence;
     /**
      * @return the equivalenceId
      */
