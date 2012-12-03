@@ -38,5 +38,9 @@
     <ejb-name>BarnyardCapacityProxy</ejb-name>
     <ejb-class>com.tramex.sisoprega.dto.BarnyardCapacity</ejb-class>
     </session>
+    <session>
+    	<ejb-name>MeasurementUnitProxy</ejb-name>
+    	<ejb-class>com.tramex.sisoprega.dto.MeasurementUnit</ejb-class>
+    </session>
   </enterprise-beans>
 </ejb-jar>

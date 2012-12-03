@@ -397,6 +397,10 @@
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.MeasurementUnit">
 		<table name="cat_measurement_unit" />
+		<named-query name="CAT_MEASUREMENTUNIT_BY_ID">
+			<description>Retrieves a single catMeasurementUnit record by ID</description>
+			<query>SELECT MeaUni FROM MeasurementUnit MeaUni WHERE MeaUni.unitId = :unitId</query>
+		</named-query>
 		<attributes>
 			<id name="unitId">
 				<column name="unit_id" />
