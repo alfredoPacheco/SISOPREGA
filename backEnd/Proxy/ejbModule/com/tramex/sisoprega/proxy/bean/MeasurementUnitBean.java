@@ -15,6 +15,8 @@
  */
 package com.tramex.sisoprega.proxy.bean;
 
+import javax.ejb.Stateless;
+
 import com.tramex.sisoprega.common.BaseResponse;
 import com.tramex.sisoprega.common.CreateGatewayResponse;
 import com.tramex.sisoprega.common.GatewayRequest;
@@ -26,6 +28,7 @@ import com.tramex.sisoprega.common.crud.Cruddable;
  * @author Jaime Figueroa
  *
  */
+@Stateless
 public class MeasurementUnitBean implements Cruddable {
 
     /* (non-Javadoc)
