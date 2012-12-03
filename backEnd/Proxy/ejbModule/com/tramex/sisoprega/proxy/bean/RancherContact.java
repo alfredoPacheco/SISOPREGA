@@ -32,7 +32,7 @@ import com.tramex.sisoprega.common.crud.Cruddable;
 import com.tramex.sisoprega.dto.ContactRancher;
 
 /**
- * This proxy knows the logic to evaluate Rancher's Contact information and the
+ * This proxy knows the logic to evaluate RancherBean's Contact information and the
  * way to the database in order to save their data. Also, it is contained in EJB
  * container, we can apply security and life cycle methods for resources.<BR/>
  * 

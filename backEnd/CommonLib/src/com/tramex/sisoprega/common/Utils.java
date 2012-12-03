@@ -17,9 +17,10 @@ package com.tramex.sisoprega.common;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Common utilities that will be used across the back end solution.<BR/>
@@ -43,6 +44,9 @@ public class Utils {
 
   private static Logger log = Logger.getLogger(Utils.class.getCanonicalName());
 
+  private final static String EMAIL_REGEX_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+      + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+  
   /**
    * Retrieves a value from a GatewayRequest.Content, given a field name. Will
    * return null if no field name is found that match the field name. Will
@@ -103,10 +107,14 @@ public class Utils {
     return result;
   }
   
-  public static Date getDueDate(){
-    Calendar cal = Calendar.getInstance();
-    cal.add(Calendar.MINUTE, 20);
-    return cal.getTime();
+  /**
+   * Validates email against pattern.
+   * @param email
+   * @return
+   */
+  public static boolean isValidEmail(String email){
+    Pattern pattern = Pattern.compile(EMAIL_REGEX_PATTERN);
+    Matcher matcher = pattern.matcher(email);
+    return matcher.matches();
   }
-  
 }

@@ -4,7 +4,7 @@
   <enterprise-beans>
     <session>
       <ejb-name>RancherProxy</ejb-name>
-      <ejb-class>com.tramex.sisoprega.proxy.bean.Rancher</ejb-class>
+      <ejb-class>com.tramex.sisoprega.proxy.bean.RancherBean</ejb-class>
     </session>
     <session>
       <ejb-name>EnterpriseRancherProxy</ejb-name>

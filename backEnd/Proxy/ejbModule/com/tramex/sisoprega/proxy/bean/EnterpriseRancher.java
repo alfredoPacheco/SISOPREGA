@@ -218,10 +218,10 @@ public class EnterpriseRancher extends BaseBean implements Cruddable {
 		    + enterpriseRancher.toString() + "}");
 
 	    if (validateEntity(enterpriseRancher)) {
-		log.finer("Enterprise Rancher succesfully validated");
+		log.finer("Enterprise RancherBean succesfully validated");
 		em.persist(enterpriseRancher);
 		em.flush();
-		log.finer("Enterprise Rancher persisted on database");
+		log.finer("Enterprise RancherBean persisted on database");
 
 		String sId = String
 			.valueOf(enterpriseRancher.getEnterpriseId());

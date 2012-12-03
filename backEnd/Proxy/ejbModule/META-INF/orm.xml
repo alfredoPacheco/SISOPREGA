@@ -7,21 +7,6 @@
 			<access>PROPERTY</access>
 		</persistence-unit-defaults>
 	</persistence-unit-metadata>
-	<entity class="com.tramex.sisoprega.dto.User">
-		<table name="sys_sisoprega_user" />
-		<named-query name="USER_BY_NAME">
-			<description>Get a single user record by its User name</description>
-			<query>SELECT u FROM User u WHERE u.userName = :userName</query>
-		</named-query>
-		<attributes>
-			<id name="userName">
-				<column name="user_name" />
-			</id>
-			<basic name="password">
-				<column name="password" />
-			</basic>
-		</attributes>
-	</entity>
 	<entity class="com.tramex.sisoprega.dto.Rancher">
 		<table name="cat_person_rancher" />
 		<named-query name="RANCHER_BY_ID">
