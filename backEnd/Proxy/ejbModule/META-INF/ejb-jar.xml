@@ -55,8 +55,11 @@
   		<role-name>mx_usr</role-name>
   		<method>
   			<ejb-name>RancherProxy</ejb-name>
-  			<method-intf>Remote</method-intf>
-  			<method-name>Read</method-name>
+  			<method-name>*</method-name>
+  		</method>
+  		<method>
+  			<ejb-name>EnterpriseRancherProxy</ejb-name>
+  			<method-name>*</method-name>
   		</method>
   	</method-permission>
   </assembly-descriptor>

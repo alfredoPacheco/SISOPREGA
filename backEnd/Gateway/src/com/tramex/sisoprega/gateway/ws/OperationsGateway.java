@@ -24,7 +24,6 @@ import javax.jws.WebParam;
 import javax.jws.WebService;
 import javax.naming.Context;
 import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import javax.servlet.http.HttpSession;
 import javax.xml.ws.WebServiceContext;
 import javax.xml.ws.WebServiceException;
@@ -40,7 +39,6 @@ import com.tramex.sisoprega.common.GatewayRequest;
 import com.tramex.sisoprega.common.ReadGatewayResponse;
 import com.tramex.sisoprega.common.UpdateGatewayResponse;
 import com.tramex.sisoprega.common.crud.Cruddable;
-import com.tramex.sisoprega.login.LoginRemote;
 
 /**
  * OperationsGateway provides the web service and the web methods that will be
@@ -56,6 +54,7 @@ import com.tramex.sisoprega.login.LoginRemote;
  * ----------  ---------------------------  -------------------------------------------
  * 10/27/2012  Diego Torres                 Initial Version.
  * 11/27/2012  Diego Torres                 Preparing web service for login.
+ * 12/03/2012  Diego Torres                 web service login succeed.
  * ====================================================================================
  * </PRE>
  * 
@@ -69,6 +68,8 @@ public class OperationsGateway {
   WebServiceContext wsContext;
 
   private Logger log = Logger.getLogger(OperationsGateway.class.getCanonicalName());
+
+  private final static String REALM_NAME = "security";
 
   /**
    * 
@@ -86,7 +87,7 @@ public class OperationsGateway {
     log.info("CreateGateway|Request{requestId:" + requestId + ";entityName:" + requestId + ";content:{" + content.toString()
         + "};}");
 
-    if (getSessionId() == null)
+    if (getSessionUserName() == null)
       throw new WebServiceException("User is not logged in");
 
     // Generate request from input parameters
@@ -102,12 +103,18 @@ public class OperationsGateway {
     CreateGatewayResponse result = null;
     Error cgrEx = null;
     try {
-      // Retrieve a cruddable instance from an EJB in the glassfish
-      // context
-      Cruddable crud = getCruddable(request.getEntityName());
-
-      // Generate the result from the cruddable operation
-      result = crud.Create(request);
+      ProgrammaticLogin pl = new ProgrammaticLogin();
+      if (logIn(pl)) {
+        // Retrieve a cruddable instance from an EJB in the glassfish
+        // context
+        Cruddable crud = getCruddable(request.getEntityName());
+        // Generate the result from the cruddable operation
+        result = crud.Create(request);
+      } else {
+        result = new CreateGatewayResponse();
+        cgrEx = new Error("GW01", "Error al ingresar al sistema, por favor revise sus credenciales", "CreateGateway");
+      }
+      logOut(pl);
     } catch (Exception e) {
       // Something went wrong, log the severe message
       log.severe("Error while creating cruddable entity [" + entityName + "]");
@@ -143,7 +150,7 @@ public class OperationsGateway {
     log.info("ReadGateway|Request{requestId:" + requestId + ";entityName:" + entityName + ";content:{" + content.toString()
         + "};}");
 
-    if (getSessionId() == null)
+    if (getSessionUserName() == null)
       throw new WebServiceException("User is not logged in");
 
     // Generate request from input parameters
@@ -160,12 +167,19 @@ public class OperationsGateway {
     Error rge = null;
 
     try {
-      // Retrieve a cruddable instance from an EJB in the glassfish
-      // context
-      Cruddable crud = getCruddable(entityName);
+      ProgrammaticLogin pl = new ProgrammaticLogin();
+      if (logIn(pl)) {
+        // Retrieve a cruddable instance from an EJB in the glassfish
+        // context
+        Cruddable crud = getCruddable(entityName);
 
-      // Generate the result from the cruddable operation
-      result = crud.Read(request);
+        // Generate the result from the cruddable operation
+        result = crud.Read(request);
+      } else {
+        result = new ReadGatewayResponse();
+        rge = new Error("GW01", "Error al ingresar al sistema, por favor revise sus credenciales", "ReadGateway");
+      }
+      logOut(pl);
     } catch (Exception e) {
       // Something went wrong, log the severe message
       log.severe("Error while creating cruddable entity [" + entityName + "]");
@@ -173,10 +187,17 @@ public class OperationsGateway {
       // Log details about the failure
       log.throwing(OperationsGateway.class.getName(), "ReadGateway", e);
 
-      // Create the failure result message for web service
-      result = new ReadGatewayResponse();
-      rge = new Error("RG001", "Error on Creation", "ReadGateway");
-      result.setError(rge);
+      if (e instanceof javax.ejb.EJBAccessException) {
+        // Create the failure result message for web service
+        result = new ReadGatewayResponse();
+        rge = new Error("GW01", "Error al ingresar al sistema, por favor revise sus credenciales", "ReadGateway");
+        result.setError(rge);
+      } else {
+        // Create the failure result message for web service
+        result = new ReadGatewayResponse();
+        rge = new Error("RG001", "Se ha encontrado un error al intentar leer el catálogo", "ReadGateway");
+        result.setError(rge);
+      }
     }
 
     // Log ending of method and respond to web service.
@@ -200,7 +221,7 @@ public class OperationsGateway {
     log.info("UpdateGateway|Request{requestId:" + requestId + ";entityName:" + requestId + ";content:{" + content.toString()
         + "};}");
 
-    if (getSessionId() == null)
+    if (getSessionUserName() == null)
       throw new WebServiceException("User is not logged in");
 
     // Generate request from input parameters
@@ -217,12 +238,19 @@ public class OperationsGateway {
     Error uge = null;
 
     try {
-      // Retrieve a cruddable instance from an EJB in the glassfish
-      // context
-      Cruddable crud = getCruddable(entityName);
+      ProgrammaticLogin pl = new ProgrammaticLogin();
+      if (logIn(pl)) {
+        // Retrieve a cruddable instance from an EJB in the glassfish
+        // context
+        Cruddable crud = getCruddable(entityName);
 
-      // Generate the result from the cruddable operation
-      result = crud.Update(request);
+        // Generate the result from the cruddable operation
+        result = crud.Update(request);
+      } else {
+        result = new UpdateGatewayResponse();
+        uge = new Error("GW01", "Error al ingresar al sistema, por favor revise sus credenciales", "ReadGateway");
+      }
+      logOut(pl);
     } catch (Exception e) {
       // Something went wrong, log the severe message
       log.severe("Error while creating cruddable entity [" + entityName + "]");
@@ -257,7 +285,7 @@ public class OperationsGateway {
     log.info("DeleteGateway|Request{requestId:" + requestId + ";entityName:" + requestId + ";content:{" + content.toString()
         + "};}");
 
-    if (getSessionId() == null)
+    if (getSessionUserName() == null)
       throw new WebServiceException("User is not logged in");
 
     // Generate request from input parameters
@@ -274,12 +302,19 @@ public class OperationsGateway {
     Error uge = null;
 
     try {
-      // Retrieve a cruddable instance from an EJB in the glassfish
-      // context
-      Cruddable crud = getCruddable(entityName);
+      ProgrammaticLogin pl = new ProgrammaticLogin();
+      if (logIn(pl)) {
+        // Retrieve a cruddable instance from an EJB in the glassfish
+        // context
+        Cruddable crud = getCruddable(entityName);
 
-      // Generate the result from the cruddable operation
-      result = crud.Delete(request);
+        // Generate the result from the cruddable operation
+        result = crud.Delete(request);
+      } else {
+        result = new UpdateGatewayResponse();
+        uge = new Error("GW01", "Error al ingresar al sistema, por favor revise sus credenciales", "DeleteGateway");
+      }
+      logOut(pl);
     } catch (Exception e) {
       // Something went wrong, log the severe message
       log.severe("Error while creating cruddable entity [" + entityName + "]");
@@ -307,7 +342,7 @@ public class OperationsGateway {
    */
   @WebMethod(operationName = "Login")
   public BaseResponse loginService(@WebParam(name = "userName") String userName, @WebParam(name = "password") String password) {
-    
+
     BaseResponse result = new BaseResponse();
     HttpSession session = getSession();
     if (session == null)
@@ -317,24 +352,24 @@ public class OperationsGateway {
     ProgrammaticLogin pl = new ProgrammaticLogin();
 
     boolean logged = false;
-    try{
-      System.setProperty("java.security.auth.login.config", "./auth.conf");
-      logged = pl.login(userName, password, "jdbcSisopregaRealm", true);
-      if(logged){
+    try {
+      logged = pl.login(userName, password.toCharArray(), REALM_NAME, true);
+      if (logged) {
         log.info("Starting new Session");
         session.setAttribute("userName", userName);
-        session.setAttribute("passord", password);
-        
+        session.setAttribute("password", password);
+
         result.setError(new Error("0", "Success", "Login"));
         pl.logout();
-      }else{
+      } else {
         result.setError(new Error("LOG01", "No es posible ingresar al sistema, revise sus credenciales", "Login"));
       }
-    }catch(Exception e){
+    } catch (Exception e) {
       log.throwing("LOG02", "Unable to log in.", e);
-      result.setError(new Error("LOG02", "No es posible ingresar al sistema, revise sus credenciales. \n" + e.getMessage(), "Login"));
+      result.setError(new Error("LOG02", "No es posible ingresar al sistema, revise sus credenciales. \n" + e.getMessage(),
+          "Login"));
     }
-    
+
     return result;
   }
 
@@ -346,8 +381,8 @@ public class OperationsGateway {
   public String logoutService() {
     HttpSession session = getSession();
     if (session != null) {
-      session.removeAttribute("sessionId");
       session.removeAttribute("userName");
+      session.removeAttribute("passord");
     }
 
     return "OK";
@@ -359,11 +394,6 @@ public class OperationsGateway {
     String commonPrefix = "java:global/Proxy/";
     String commonSuffix = "Proxy";
     try {
-      // TODO: Produce the context with the provided userName and password
-      ProgrammaticLogin pl = new ProgrammaticLogin();
-
-      pl.login(getSessionUserName(), getSessionPassword().toCharArray());
-
       jndiContext = new InitialContext();
       crud = (Cruddable) jndiContext.lookup(commonPrefix + cruddableName + commonSuffix);
       log.fine("Cruddable instance created for entity [" + cruddableName + "]");
@@ -372,14 +402,6 @@ public class OperationsGateway {
       log.throwing(this.getClass().getName(), "getCruddable", e);
     }
     return crud;
-  }
-
-  private String getSessionId() {
-    HttpSession session = getSession();
-    if (session == null)
-      throw new WebServiceException("No session in WebServiceContext");
-
-    return (String) session.getAttribute("sessionId");
   }
 
   private String getSessionUserName() {
@@ -402,4 +424,15 @@ public class OperationsGateway {
     MessageContext mc = wsContext.getMessageContext();
     return ((javax.servlet.http.HttpServletRequest) mc.get(MessageContext.SERVLET_REQUEST)).getSession();
   }
+
+  private boolean logIn(ProgrammaticLogin pl) throws Exception {
+    boolean propagateException = false;
+    log.fine("Login using: " + getSessionUserName() + ":" + getSessionPassword());
+    return pl.login(getSessionUserName(), getSessionPassword().toCharArray(), REALM_NAME, propagateException);
+  }
+
+  private boolean logOut(ProgrammaticLogin pl) {
+    return pl.logout();
+  }
+
 }

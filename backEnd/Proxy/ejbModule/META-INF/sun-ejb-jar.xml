@@ -5,16 +5,9 @@
   	<role-name>mx_usr</role-name>
   	<group-name>mex_user</group-name>
   </security-role-mapping>
-  <enterprise-beans>
-  	<ejb>
-  		<ejb-name>RancherProxy</ejb-name>
-  		<ior-security-config>
-  			<as-context>
-  				<auth-method>USERNAME_PASSWORD</auth-method>
-  				<realm>jdbcSisopregaRealm</realm>
-  				<required>true</required>
-  			</as-context>
-  		</ior-security-config>
-  	</ejb>
-  </enterprise-beans>
+  <security-role-mapping>
+  	<role-name>us_usr</role-name>
+  	<group-name>usa_user</group-name>
+  </security-role-mapping>
+  <enterprise-beans/>
 </sun-ejb-jar>
