@@ -30,5 +30,21 @@
       <ejb-name>CattleTypeProxy</ejb-name>
       <ejb-class>com.tramex.sisoprega.proxy.bean.CattleTypeBean</ejb-class>
     </session>
+    <session>
+    	<ejb-name>BarnyardProxy</ejb-name>
+    	<ejb-class>com.tramex.sisoprega.dto.Barnyard</ejb-class>
+    </session>
+    <session>
+    <ejb-name>BarnyardCapacityProxy</ejb-name>
+    <ejb-class>com.tramex.sisoprega.dto.BarnyardCapacity</ejb-class>
+    </session>
+    <session>
+    	<ejb-name>MeasurementUnitProxy</ejb-name>
+    	<ejb-class>com.tramex.sisoprega.dto.MeasurementUnit</ejb-class>
+    </session>
+    <session>
+    	<ejb-name>MeasurementUnitEquivalenceProxy</ejb-name>
+    	<ejb-class>com.tramex.sisoprega.dto.MeasurementUnitEquivalence</ejb-class>
+    </session>
   </enterprise-beans>
 </ejb-jar>
