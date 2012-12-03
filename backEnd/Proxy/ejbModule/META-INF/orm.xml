@@ -397,6 +397,10 @@
 				<column name="reception_id" />
 				<generated-value strategy="IDENTITY" />
 			</id>
+			<basic name="dateAllotted">
+				<column name="date_allotted" />
+				<temporal>TIMESTAMP</temporal>
+			</basic>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.ReceptionBarnyard">
@@ -455,6 +459,10 @@
 				<column name="inspection_id" />
 				<generated-value strategy="IDENTITY" />
 			</id>
+			<basic name="inspectionDate">
+				<column name="inspection_date" />
+				<temporal>TIMESTAMP</temporal>
+			</basic>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.InspectionBarnyard">
