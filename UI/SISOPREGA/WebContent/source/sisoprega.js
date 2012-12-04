@@ -42,6 +42,8 @@ enyo.kind({
 		cacheMan.setMessage("","", "Usuario o contraseña incorrecta.");
 	},
 	logOut:function(){
+		cacheRanchers = null;
+		cacheCattle = null;		
 		consumingGateway.LogOut();
 		this.$.tbHeader.hide();
 		cacheMan.clearBack();		

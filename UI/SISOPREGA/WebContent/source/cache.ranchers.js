@@ -7,6 +7,10 @@ enyo.kind({
 	reloadme:function(){
 		//AJAX
 	},	
+	clear:function(){
+		this.arrObj = [];
+		_arrRancherList = [];
+	},
 	get:function(){
 		
 		if (this.rancherWasReadFromGateway == false){
