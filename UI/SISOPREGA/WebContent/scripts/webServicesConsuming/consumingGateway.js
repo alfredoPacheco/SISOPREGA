@@ -283,7 +283,7 @@ var cConsumingGateway = {
 		};
 		
 		// SOAP Message:
-		var soapMessage = soapHeader + '<ws:logoutService></ws:logoutService>' + soapFooter;
+		var soapMessage = soapHeader + '<ws:Logout/>' + soapFooter;
 
 		// Ajax request:
 		jQuery.ajax({

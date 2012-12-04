@@ -378,6 +378,7 @@ public class OperationsGateway {
    * 
    * @return
    */
+  @WebMethod(operationName = "Logout")
   public String logoutService() {
     HttpSession session = getSession();
     if (session != null) {
@@ -385,6 +386,7 @@ public class OperationsGateway {
       session.removeAttribute("passord");
     }
 
+    log.info("Closing session.!");
     return "OK";
   }
 

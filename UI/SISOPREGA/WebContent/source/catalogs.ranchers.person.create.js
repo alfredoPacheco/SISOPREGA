@@ -23,7 +23,7 @@ enyo.kind({
 				   inputClassName: "blankInput", focusClassName:"darkFocus"},
 				  {kind: "VFlexBox", style: "",
 				   components:[{content:"Fecha de Nacimiento",},
-						{kind: "DatePicker", name:"birth_date", label: "", className:"picker-hbox"}]},						
+						{kind: "DatePicker", name:"birth_date", minYear:1940, label: "", className:"picker-hbox"}]},						
 				  {kind: "Input", name:"email_add", hint:"Email",
 				   inputClassName: "blankInput", focusClassName:"darkFocus"},							 
 				  {kind: "Input", name:"phone_number", hint:"Telefono",
@@ -69,9 +69,7 @@ enyo.kind({
 						first_name:		"",
 						last_name:		"",
 						mother_name:	"",
-						phone_number:	"",						
-//						contacts:		[],
-//						billing:		{},
+						phone_number:	"",
 						rancher_type:	1,
 					};
 		
@@ -96,10 +94,16 @@ enyo.kind({
 		this.resetValues();		
 		this.objRan=objVar;
 		this.$.aka.setValue(this.objRan.aka);
-		this.$.birth_date.setValue(new Date(this.objRan.birth_date.substring(0,4),
-				this.objRan.birth_date.substring(5,7)-1,
-				this.objRan.birth_date.substring(8,10)																
-		));
+		
+		// Diego: Validate if retrieved value from database is not empty.
+		if(this.objRan.birth_date != ''){
+			this.$.birth_date.setValue(new Date(this.objRan.birth_date.substring(0,4),
+					this.objRan.birth_date.substring(5,7)-1,
+					this.objRan.birth_date.substring(8,10)																
+			));
+		}
+		
+		
 		this.$.email_add.setValue(this.objRan.email_add);
 		this.$.first_name.setValue(this.objRan.first_name);
 		this.$.last_name.setValue(this.objRan.last_name);

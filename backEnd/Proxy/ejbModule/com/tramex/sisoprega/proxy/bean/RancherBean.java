@@ -62,9 +62,9 @@ public class RancherBean extends BaseBean implements Cruddable {
     log.entering(this.getClass().getCanonicalName(), "Create");
 
     CreateGatewayResponse response = new CreateGatewayResponse();
-    com.tramex.sisoprega.dto.Rancher rancher = null;
+    Rancher rancher = null;
     try {
-      rancher = entityFromRequest(request, com.tramex.sisoprega.dto.Rancher.class);
+      rancher = entityFromRequest(request, Rancher.class);
 
       log.fine("Received rancher in request:{" + rancher.toString() + "}");
 
@@ -88,11 +88,8 @@ public class RancherBean extends BaseBean implements Cruddable {
       log.throwing(this.getClass().getName(), "Create", e);
 
       if (e instanceof javax.persistence.PersistenceException)
-        response
-            .setError(new Error(
-                "DB01",
-                "Los datos que usted ha intentado ingresar, no son permitidos por la base de datos, muy probablemente el ganadero que usted quiere agregar ya existe en la base de datos.",
-                "proxy.Rancher.Create"));
+        response.setError(new Error("DB01", "Los datos que usted ha intentado ingresar, no son permitidos por la base de datos, "
+            + "muy probablemente el ganadero que usted quiere agregar ya existe en la base de datos.", "proxy.Rancher.Create"));
       else {
         response.setError(new Error("DB02", "Error en la base de datos:[" + e.getMessage() + "]", "proxy.Rancher.Create"));
       }
@@ -112,32 +109,32 @@ public class RancherBean extends BaseBean implements Cruddable {
     ReadGatewayResponse response = new ReadGatewayResponse();
     response.setEntityName(request.getEntityName());
 
-    com.tramex.sisoprega.dto.Rancher rancher = null;
+    Rancher rancher = null;
     try {
-      rancher = entityFromRequest(request, com.tramex.sisoprega.dto.Rancher.class);
+      rancher = entityFromRequest(request, Rancher.class);
 
       log.fine("Got rancher from request: " + rancher);
 
-      TypedQuery<com.tramex.sisoprega.dto.Rancher> readQuery = null;
+      TypedQuery<Rancher> readQuery = null;
 
       if (rancher.getRancherId() != 0) {
-        readQuery = em.createNamedQuery("RANCHER_BY_ID", com.tramex.sisoprega.dto.Rancher.class);
+        readQuery = em.createNamedQuery("RANCHER_BY_ID", Rancher.class);
         log.fine("Query by Id [" + rancher.getRancherId() + "]");
         readQuery.setParameter("rancherId", rancher.getRancherId());
       } else {
         // No other filter expected for ranchers, only by Id
-        readQuery = em.createNamedQuery("ALL_RANCHERS", com.tramex.sisoprega.dto.Rancher.class);
+        readQuery = em.createNamedQuery("ALL_RANCHERS", Rancher.class);
       }
 
       // Query the results through the persistence
       // Using a typedQuery to retrieve a list of Ranchers.
-      List<com.tramex.sisoprega.dto.Rancher> queryResults = readQuery.getResultList();
+      List<Rancher> queryResults = readQuery.getResultList();
 
       if (queryResults.isEmpty()) {
-        response.setError(new Error("RR02", "No data found", "proxy.Rancher.Read"));
+        response.setError(new Error("RD01", "No se encontraron los datos requeridos.", "proxy.Rancher.Read"));
       } else {
         // Add query results to response
-        response.getRecord().addAll(contentFromList(queryResults, com.tramex.sisoprega.dto.Rancher.class));
+        response.getRecord().addAll(contentFromList(queryResults, Rancher.class));
 
         // Add success message to response
         response.setError(new Error("0", "SUCCESS", "proxy.Rancher.Read"));
@@ -147,7 +144,7 @@ public class RancherBean extends BaseBean implements Cruddable {
       log.severe("Exception found while reading rancher filter");
       log.throwing(this.getClass().getName(), "Read", e);
 
-      response.setError(new Error("RR01", "Read Exception: " + e.getMessage(), "proxy.Rancher.Read"));
+      response.setError(new Error("DB02", "Error en la base de datos:[" + e.getMessage() + "]", "proxy.Rancher.Read"));
     }
 
     // end and respond.
@@ -162,30 +159,36 @@ public class RancherBean extends BaseBean implements Cruddable {
   public UpdateGatewayResponse Update(GatewayRequest request) {
     log.entering(RancherBean.class.getCanonicalName(), "Update");
     UpdateGatewayResponse response = new UpdateGatewayResponse();
-    com.tramex.sisoprega.dto.Rancher rancher = null;
+    Rancher rancher = null;
     try {
-      rancher = entityFromRequest(request, com.tramex.sisoprega.dto.Rancher.class);
+      rancher = entityFromRequest(request, Rancher.class);
       if (rancher.getRancherId() == 0) {
         log.warning("RU01 - Invalid rancherId.");
-        response.setError(new Error("RU01", "Invalid rancherId", "proxy.Rancher.Update"));
+        response.setError(new Error("UPD01", "No se ha especificado un Id de ganadero para ser modificado.",
+            "proxy.Rancher.Update"));
       } else {
         if (validateEntity(rancher)) {
           em.merge(rancher);
           em.flush();
 
-          response.setUpdatedRecord(getContentFromEntity(rancher, com.tramex.sisoprega.dto.Rancher.class));
+          response.setUpdatedRecord(getContentFromEntity(rancher, Rancher.class));
           response.setEntityName(request.getEntityName());
           response.setError(new Error("0", "SUCCESS", "proxy.Rancher.Update"));
         } else {
           log.warning("Validation error: " + error_description);
-          response.setError(new Error("RU02", "Validation error: " + error_description, "proxy.Rancher.Update"));
+          response.setError(new Error("VAL01", "Error de validación de datos: " + error_description, "proxy.Rancher.Update"));
         }
       }
     } catch (Exception e) {
       log.severe("Exception found while updating rancher");
       log.throwing(this.getClass().getName(), "Update", e);
 
-      response.setError(new Error("RU03", "Update exception" + e.getMessage(), "proxy.Rancher.Update"));
+      if (e instanceof javax.persistence.PersistenceException)
+        response.setError(new Error("DB01", "Los datos que usted ha intentado ingresar, no son permitidos por la base de datos, "
+            + "muy probablemente el ganadero que usted quiere agregar ya existe en la base de datos.", "proxy.Rancher.Create"));
+      else {
+        response.setError(new Error("DB02", "Error en la base de datos:[" + e.getMessage() + "]", "proxy.Rancher.Update"));
+      }
     }
 
     log.exiting(RancherBean.class.getCanonicalName(), "Update");
@@ -197,17 +200,15 @@ public class RancherBean extends BaseBean implements Cruddable {
    */
   @Override
   public BaseResponse Delete(GatewayRequest request) {
-    // TODO: Restrict deletion when child records exists
     log.entering(RancherBean.class.getCanonicalName(), "Delete");
     BaseResponse response = new BaseResponse();
     try {
-      com.tramex.sisoprega.dto.Rancher rancher = entityFromRequest(request, com.tramex.sisoprega.dto.Rancher.class);
+      Rancher rancher = entityFromRequest(request, Rancher.class);
       if (rancher.getRancherId() == 0) {
         log.warning("RD01 - Invalid rancherId.");
         response.setError(new Error("RD01", "Invalid rancherId", "proxy.Rancher.Delete"));
       } else {
-        TypedQuery<com.tramex.sisoprega.dto.Rancher> readQuery = em.createNamedQuery("RANCHER_BY_ID",
-            com.tramex.sisoprega.dto.Rancher.class);
+        TypedQuery<Rancher> readQuery = em.createNamedQuery("RANCHER_BY_ID", Rancher.class);
         readQuery.setParameter("rancherId", rancher.getRancherId());
         rancher = readQuery.getSingleResult();
         em.merge(rancher);
@@ -232,12 +233,12 @@ public class RancherBean extends BaseBean implements Cruddable {
     boolean result = super.validateEntity(entity);
     Rancher rancher = (Rancher) entity;
 
-    if (result){
+    if (result) {
       result = rancher.getAka().length() <= 100;
-      if(!result)
+      if (!result)
         error_description = "El alias del ganadero es más grande de lo permitido";
     }
-    
+
     if (result) {
       result = rancher.getFirstName().length() <= 50;
       if (!result)
@@ -270,7 +271,7 @@ public class RancherBean extends BaseBean implements Cruddable {
       if (!result)
         error_description = "La dirección de correo electrónico es incorrecta.";
     }
-    
+
     return result;
   }
 

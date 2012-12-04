@@ -1,6 +1,5 @@
 enyo.kind({
 	name: "sisoprega",
-	//kind: enyo.SlidingView,
 	kind: enyo.VFlexBox,
 	components: [
 		{kind: "Toolbar",name:"tbHeader",style:"height:10px", 
@@ -43,8 +42,9 @@ enyo.kind({
 		cacheMan.setMessage("","", "Usuario o contraseña incorrecta.");
 	},
 	logOut:function(){
+		consumingGateway.LogOut();
 		this.$.tbHeader.hide();
 		cacheMan.clearBack();		
-		this.$.mainPane.selectViewByName("login");	
+		this.$.mainPane.selectViewByName("login");
 	}
 });

@@ -28,10 +28,9 @@ enyo.kind({
 		    		objTmp.billing = selfCacheRancher.getInvoice(objTmp);
 		    		arrAux.push(objTmp);
 		    	});
-			}
-			else{ //Error
+			}else{ //Error
 				if (cgReadAllRanchers.exceptionId != "RR02"){ //No data found
-					cacheMan.setMessage("", "","[Exception ID: " + cgReadAllRanchers.exceptionId + "] Descripcion: " + cgReadAllRanchers.exceptionDescription);	
+					cacheMan.setMessage("", "","[Exception ID: " + cgReadAllRanchers.exceptionId + "] Descripción: " + cgReadAllRanchers.exceptionDescription);	
 				}			
 			}
 			

@@ -36,9 +36,7 @@ enyo.kind({
 	],
 	onLogIn:function(){
 		var consumirLogin = consumingGateway.Login(this.$.user.getValue(), this.$.password.getValue());
-//		if(consumirLogin.exceptionId == 0 && consumirLogin.exceptionId.length > 0){
 		if(consumirLogin.exceptionId == 0){
-//		if(sessionToken != ""){
 			this.doSucess();
 		}else{
 			this.doFail();

@@ -20,10 +20,6 @@
 		enyo.create({
 			kind : "sisoprega"
 		}).renderInto(document.body);
-		//enyo.create({kind: "catalogs.barnyards"}).renderInto(document.body);	
-		//enyo.create({kind: "receptions.main"}).renderInto(document.body);	
-		//enyo.create({kind: "receptions.create"}).renderInto(document.body);
-	
 	});
 	</script>
 </body>
