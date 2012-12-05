@@ -355,15 +355,28 @@
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.BarnyardCapacity">
 		<table name="cat_barnyard_capacity" />
-		<named-query name="CAT_BARNYARDCAPACITY_BY_ID">
+		<named-query name="BARNYARD_CAPACITY_BY_ID">
 			<description>Retrieves a single catBarnyardCapacity record by ID</description>
 			<query>SELECT barCa FROM BarnyardCapacity barCa WHERE barCa.capacityId = :capacityId</query>
+		</named-query>
+		<named-query name="BARNYARD_CAPACITY_BY_BARNYARD_AND_CATTLE">
+			<description>Retrieves a single barnyard capacity record using the barnyard and the cattle</description>
+			<query>SELECT capacity FROM BarnyardCapacity capacity WHERE capacity.barnyardId = :barnyardId AND capacity.catclassId = :cattleClassId</query>
 		</named-query>
 		<attributes>
 			<id name="capacityId">
 				<column name="capacity_id" />
 				<generated-value strategy="IDENTITY" />
 			</id>
+			<basic name="barnyardId">
+				<column name="barnyard_id"/>
+			</basic>
+			<basic name="catclassId">
+				<column name="catclass_id"/>
+			</basic>
+			<basic name="headCount">
+				<column name="head_count"/>
+			</basic>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.MeasurementUnit">

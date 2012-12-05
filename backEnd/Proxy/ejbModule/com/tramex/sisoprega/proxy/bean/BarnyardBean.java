@@ -170,8 +170,8 @@ public class BarnyardBean extends BaseBean implements Cruddable {
       barnyard = entityFromRequest(request, Barnyard.class);
 
       if (barnyard.getBarnyardId() == 0) {
-        log.warning("BU1 - Invalid Barnyard id");
-        response.setError(new Error("BU1", "Invalid Barnyard id", "proxy.Barnyard.Update"));
+        log.warning("VAL04 - Entity ID Omission.");
+        response.setError(new Error("VAL04", "Se ha omitido el id del corral al intentar actualizar sus datos.", "proxy.Barnyard.Update"));
       } else {
         if (validateEntity(barnyard)) {
           em.merge(barnyard);
@@ -195,9 +195,9 @@ public class BarnyardBean extends BaseBean implements Cruddable {
         response
             .setError(new Error("DB01", "Los datos que usted ha intentado ingresar, no son permitidos por la base de datos, "
                 + "muy probablemente el corral que usted quiere agregar ya existe en la base de datos.",
-                "proxy.BarnyardBean.Create"));
+                "proxy.BarnyardBean.Update"));
       else {
-        response.setError(new Error("DB02", "Error en la base de datos:[" + e.getMessage() + "]", "proxy.BarnyardBean.Create"));
+        response.setError(new Error("DB02", "Error en la base de datos:[" + e.getMessage() + "]", "proxy.BarnyardBean.Update"));
       }
     }
 
@@ -219,8 +219,8 @@ public class BarnyardBean extends BaseBean implements Cruddable {
     try {
       Barnyard barnyard = entityFromRequest(request, Barnyard.class);
       if (barnyard.getBarnyardId() == 0) {
-        log.warning("BD1 - Invalid Barnyard");
-        response.setError(new Error("BD1", "Invalid BarnyardId", "proxy.Barnyard.Delete"));
+        log.warning("VAL04 - Entity ID Omission.");
+        response.setError(new Error("VAL04", "Se ha omitido el id del corral al intentar eliminar el registro.", "proxy.Barnyard.Delete"));
       } else {
         TypedQuery<Barnyard> readQuery = em.createNamedQuery("BARNYARD_BY_ID", Barnyard.class);
         readQuery.setParameter("barnyardId", barnyard.getBarnyardId());

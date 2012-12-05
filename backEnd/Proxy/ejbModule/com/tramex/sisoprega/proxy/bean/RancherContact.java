@@ -129,7 +129,7 @@ public class RancherContact extends BaseBean implements Cruddable {
 		readQuery.setParameter("contactId", contact.getContactId());
 	    } else {
 		response.setError(new Error("VAL03",
-			"El filtro especificado no es válid en el catálogo de ganaderos",
+			"El filtro especificado no es válido en el catálogo de contactos.",
 			"proxy.RancherContact.Read"));
 		return response;
 	    }
