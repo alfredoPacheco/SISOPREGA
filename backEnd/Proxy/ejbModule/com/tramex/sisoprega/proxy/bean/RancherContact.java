@@ -128,8 +128,8 @@ public class RancherContact extends BaseBean implements Cruddable {
 			ContactRancher.class);
 		readQuery.setParameter("contactId", contact.getContactId());
 	    } else {
-		response.setError(new Error("RCR1",
-			"Invalid filter for contact query",
+		response.setError(new Error("VAL03",
+			"El filtro especificado no es válid en el catálogo de ganaderos",
 			"proxy.RancherContact.Read"));
 		return response;
 	    }
@@ -137,7 +137,7 @@ public class RancherContact extends BaseBean implements Cruddable {
 	    List<ContactRancher> queryResults = readQuery.getResultList();
 
 	    if (queryResults.isEmpty()) {
-		response.setError(new Error("RCR2", "No data found",
+		response.setError(new Error("VAL02", "No data found",
 			"proxy.RancherContact.Read"));
 	    } else {
 		List<GatewayContent> records = contentFromList(queryResults,
@@ -153,7 +153,7 @@ public class RancherContact extends BaseBean implements Cruddable {
 	    log.severe("Exception found while reading rancher contact");
 	    log.throwing(this.getClass().getCanonicalName(), "Read", e);
 
-	    response.setError(new Error("RCR3", "Read exception: "
+	    response.setError(new Error("DB02", "Read exception: "
 		    + e.getMessage(), "proxy.RancherContact.Read"));
 	}
 

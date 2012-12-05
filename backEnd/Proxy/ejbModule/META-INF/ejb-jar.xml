@@ -51,6 +51,9 @@
   	<security-role>
   		<role-name>mx_usr</role-name>
   	</security-role>
+  	<security-role>
+  		<role-name>sisoprega_admin</role-name>
+  	</security-role>
   	<method-permission>
   		<role-name>mx_usr</role-name>
   		<method>
@@ -59,6 +62,17 @@
   		</method>
   		<method>
   			<ejb-name>EnterpriseRancherProxy</ejb-name>
+  			<method-name>*</method-name>
+  		</method>
+  		<method>
+  			<ejb-name>BarnyardProxy</ejb-name>
+  			<method-name>Read</method-name>
+  		</method>
+  	</method-permission>
+  	<method-permission>
+  		<role-name>sisoprega_admin</role-name>
+  		<method>
+  			<ejb-name>BarnyardProxy</ejb-name>
   			<method-name>*</method-name>
   		</method>
   	</method-permission>

@@ -116,8 +116,7 @@ public class BaseBean {
     for (Object entity : entities) {
       result.add(getContentFromEntity(entity, type));
     }
-
-    log.finest("contentFromList Result: " + result.toString());
+    
     return result;
   }
 

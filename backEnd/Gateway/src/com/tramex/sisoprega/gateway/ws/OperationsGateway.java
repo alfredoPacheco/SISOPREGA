@@ -116,16 +116,17 @@ public class OperationsGateway {
       }
       logOut(pl);
     } catch (Exception e) {
-      // Something went wrong, log the severe message
-      log.severe("Error while creating cruddable entity [" + entityName + "]");
+      if (e instanceof javax.ejb.EJBAccessException) {
+        result = new CreateGatewayResponse();
+        cgrEx = new Error("GW01", "Error al ingresar al sistema, por favor revise sus credenciales", "CreateGateway");
+        result.setError(cgrEx);
+      } else {
+        // Something went wrong, log the severe message
+        log.severe("Error while creating cruddable entity [" + entityName + "]");
 
-      // Log details about the failure
-      log.throwing(OperationsGateway.class.getName(), "CreateGateway", e);
-
-      // Create the failure result message for web service
-      result = new CreateGatewayResponse();
-      cgrEx = new Error("CG001", "Error on Creation", "CreateGateway");
-      result.setError(cgrEx);
+        // Log details about the failure
+        log.throwing(OperationsGateway.class.getName(), "CreateGateway", e);
+      }
     }
 
     // Log ending of method and respond to web service.
@@ -176,26 +177,28 @@ public class OperationsGateway {
         // Generate the result from the cruddable operation
         result = crud.Read(request);
       } else {
+        log.severe("Failed tryial to access already logged entity from user [" + getSessionUserName() + "]");
         result = new ReadGatewayResponse();
         rge = new Error("GW01", "Error al ingresar al sistema, por favor revise sus credenciales", "ReadGateway");
       }
       logOut(pl);
     } catch (Exception e) {
-      // Something went wrong, log the severe message
-      log.severe("Error while creating cruddable entity [" + entityName + "]");
-
-      // Log details about the failure
-      log.throwing(OperationsGateway.class.getName(), "ReadGateway", e);
-
       if (e instanceof javax.ejb.EJBAccessException) {
+        log.severe("Not authorized access tryial on read method for [" + entityName + "]");
         // Create the failure result message for web service
         result = new ReadGatewayResponse();
         rge = new Error("GW01", "Error al ingresar al sistema, por favor revise sus credenciales", "ReadGateway");
         result.setError(rge);
       } else {
+        // Something went wrong, log the severe message
+        log.severe("Error while reading cruddable entity [" + entityName + "]");
+
+        // Log details about the failure
+        log.throwing(OperationsGateway.class.getName(), "ReadGateway", e);
+
         // Create the failure result message for web service
         result = new ReadGatewayResponse();
-        rge = new Error("RG001", "Se ha encontrado un error al intentar leer el catálogo", "ReadGateway");
+        rge = new Error("GW02", "Se ha encontrado un error al intentar leer datos en la base de datos.", "ReadGateway");
         result.setError(rge);
       }
     }
@@ -247,21 +250,32 @@ public class OperationsGateway {
         // Generate the result from the cruddable operation
         result = crud.Update(request);
       } else {
+        log.severe("Failed tryial to access already logged entity from user [" + getSessionUserName() + "]");
         result = new UpdateGatewayResponse();
-        uge = new Error("GW01", "Error al ingresar al sistema, por favor revise sus credenciales", "ReadGateway");
+        uge = new Error("GW01", "Error al ingresar al sistema, por favor revise sus credenciales", "UpdateGateway");
       }
       logOut(pl);
     } catch (Exception e) {
-      // Something went wrong, log the severe message
-      log.severe("Error while creating cruddable entity [" + entityName + "]");
 
-      // Log details about the failure
-      log.throwing(OperationsGateway.class.getName(), "UpdateGateway", e);
+      if (e instanceof javax.ejb.EJBAccessException) {
+        log.severe("Not authorized access tryial on update method for [" + entityName + "]");
+        // Create the failure result message for web service
+        result = new UpdateGatewayResponse();
+        uge = new Error("GW01", "Error al ingresar al sistema, por favor revise sus credenciales", "UpdateGateway");
+        result.setError(uge);
+      } else {
+        // Something went wrong, log the severe message
+        log.severe("Error while updating cruddable entity [" + entityName + "]");
 
-      // Create the failure result message for web service
-      result = new UpdateGatewayResponse();
-      uge = new Error("RG001", "Error on Creation", "UpdateGateway");
-      result.setError(uge);
+        // Log details about the failure
+        log.throwing(OperationsGateway.class.getName(), "UpdateGateway", e);
+
+        // Create the failure result message for web service
+        result = new UpdateGatewayResponse();
+        uge = new Error("GW02", "Se ha encontrado un error al intentar actualizar el registro en la base de datos.",
+            "UpdateGateway");
+        result.setError(uge);
+      }
     }
 
     // Log ending of method and respond to web service.
@@ -316,16 +330,26 @@ public class OperationsGateway {
       }
       logOut(pl);
     } catch (Exception e) {
-      // Something went wrong, log the severe message
-      log.severe("Error while creating cruddable entity [" + entityName + "]");
 
-      // Log details about the failure
-      log.throwing(OperationsGateway.class.getName(), "DeleteGateway", e);
+      if (e instanceof javax.ejb.EJBAccessException) {
+        log.severe("Not authorized access tryial on delete method for [" + entityName + "]");
+        // Create the failure result message for web service
+        result = new UpdateGatewayResponse();
+        uge = new Error("GW01", "Error al ingresar al sistema, por favor revise sus credenciales", "DeleteGateway");
+        result.setError(uge);
+      } else {
+        // Something went wrong, log the severe message
+        log.severe("Error while deleting cruddable entity [" + entityName + "]");
 
-      // Create the failure result message for web service
-      result = new UpdateGatewayResponse();
-      uge = new Error("RG001", "Error on Creation", "DeleteGateway");
-      result.setError(uge);
+        // Log details about the failure
+        log.throwing(OperationsGateway.class.getName(), "DeleteGateway", e);
+
+        // Create the failure result message for web service
+        result = new UpdateGatewayResponse();
+        uge = new Error("GW02", "Se ha encontrado un error al intentar eliminar el registro en la base de datos.",
+            "DeleteGateway");
+        result.setError(uge);
+      }
     }
 
     // Log ending of method and respond to web service.
@@ -354,6 +378,7 @@ public class OperationsGateway {
     boolean logged = false;
     try {
       logged = pl.login(userName, password.toCharArray(), REALM_NAME, true);
+      // TODO: Implement user lock
       if (logged) {
         log.info("Starting new Session");
         session.setAttribute("userName", userName);
