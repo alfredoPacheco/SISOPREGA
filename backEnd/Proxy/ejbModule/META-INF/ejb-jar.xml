@@ -14,6 +14,14 @@
 			<ejb-class>com.tramex.sisoprega.proxy.bean.BarnyardCapacityBean</ejb-class>
 		</session>
 		<session>
+			<ejb-name>CattleClassProxy</ejb-name>
+			<ejb-class>com.tramex.sisoprega.proxy.bean.CattleClassBean</ejb-class>
+		</session>
+		<session>
+			<ejb-name>CattleTypeProxy</ejb-name>
+			<ejb-class>com.tramex.sisoprega.proxy.bean.CattleTypeBean</ejb-class>
+		</session>
+		<session>
 			<ejb-name>RancherProxy</ejb-name>
 			<ejb-class>com.tramex.sisoprega.proxy.bean.RancherBean</ejb-class>
 		</session>
@@ -32,14 +40,6 @@
 		<session>
 			<ejb-name>EnterpriseContactProxy</ejb-name>
 			<ejb-class>com.tramex.sisoprega.proxy.bean.EnterpriseContact</ejb-class>
-		</session>
-		<session>
-			<ejb-name>CattleClassProxy</ejb-name>
-			<ejb-class>com.tramex.sisoprega.proxy.bean.CattleClassBean</ejb-class>
-		</session>
-		<session>
-			<ejb-name>CattleTypeProxy</ejb-name>
-			<ejb-class>com.tramex.sisoprega.proxy.bean.CattleTypeBean</ejb-class>
 		</session>
 		<session>
 			<ejb-name>MeasurementUnitProxy</ejb-name>
@@ -72,6 +72,10 @@
 				<method-name>Read</method-name>
 			</method>
 			<method>
+				<ejb-name>CattleTypeProxy</ejb-name>
+				<method-name>*</method-name>
+			</method>
+			<method>
 				<ejb-name>RancherProxy</ejb-name>
 				<method-name>*</method-name>
 			</method>
@@ -92,6 +96,10 @@
 			</method>
 			<method>
 				<ejb-name>CattleClassProxy</ejb-name>
+				<method-name>*</method-name>
+			</method>
+			<method>
+				<ejb-name>CattleTypeProxy</ejb-name>
 				<method-name>*</method-name>
 			</method>
 		</method-permission>

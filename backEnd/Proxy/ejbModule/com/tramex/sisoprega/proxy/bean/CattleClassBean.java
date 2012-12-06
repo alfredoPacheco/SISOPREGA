@@ -94,7 +94,7 @@ public class CattleClassBean extends BaseBean implements Cruddable {
                 + "muy probablemente la clase de ganado que usted quiere agregar ya existe en la base de datos.",
                 "proxy.CattleClassBean.Create"));
       else {
-        response.setError(new Error("DB02", "Create exception: " + e.getMessage(), "proxy.CattleClass.Create"));
+        response.setError(new Error("DB02", "Create exception: " + e.getMessage(), "proxy.CattleClassBean.Create"));
       }
     }
 
@@ -192,7 +192,7 @@ public class CattleClassBean extends BaseBean implements Cruddable {
         response
             .setError(new Error("DB01", "Los datos que usted ha intentado ingresar, no son permitidos por la base de datos, "
                 + "muy probablemente la clase de ganado que usted quiere agregar ya existe en la base de datos.",
-                "proxy.BarnyardBean.Update"));
+                "proxy.CattleClass.Update"));
       else {
         response.setError(new Error("DB02", "Error en la base de datos:[" + e.getMessage() + "]", "proxy.CattleClassBean.Update"));
       }
