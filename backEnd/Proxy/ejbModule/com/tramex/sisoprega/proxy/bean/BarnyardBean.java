@@ -237,7 +237,7 @@ public class BarnyardBean extends BaseBean implements Cruddable {
 
       response.setError(new Error("DEL01",
           "Error al intentar borrar datos, es probable que esta entidad tenga otras entidades relacionadas, "
-              + "por ejemplo, un corrar que cuenta con recepciones no puede ser eliminado sin antes resolver la recepción.",
+              + "por ejemplo, un corral que cuenta con recepciones no puede ser eliminado sin antes resolver la recepción.",
           "proxy.Barnyard.Delete"));
     }
 
