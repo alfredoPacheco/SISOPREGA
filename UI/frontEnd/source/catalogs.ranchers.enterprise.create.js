@@ -2,6 +2,7 @@ enyo.kind({
 	name: "catalogs.ranchers.enterprise.create",	
 	kind: enyo.SlidingView,
 	layoutKind: enyo.VFlexLayout,
+	iCreated:null,
 	events: {
 		"onAddRancher": "",
 		"onUpdateRancher": "",		
@@ -10,7 +11,7 @@ enyo.kind({
 	objRan:{},
 	components: [	
 		{kind: enyo.Scroller,
-    	 style: "background-image: url(images/practice_background.png); background-size: cover; ",			 
+		 className:"listBG", 
 	     flex: 1,
 		 components: [
 			{kind: "RowGroup", defaultKind: "HFlexBox", caption: "",
@@ -70,7 +71,14 @@ enyo.kind({
 		return objRan;
 	},
 	addRancher:function(){
-		cacheRanchers.create(this.getRancher(),this,"doAddRancher");
+		cacheRanchers.create(this.getRancher(),this,"afteraddRancher");
+	},
+	afteraddRancher:function(){
+		this.iCreated=cacheRanchers.iLastRanID;
+		this.doAddRancher();
+	},
+	getJustCreated:function(){
+		return this.iCreated;
 	},
 	setRancher:function(objRan){
 		this.resetValues();		

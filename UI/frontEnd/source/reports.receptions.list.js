@@ -9,7 +9,7 @@ enyo.kind({
 	objList:[],	
 	components:[
 		{kind: enyo.Scroller,flex: 1,
-    	style: "background-image: url(images/practice_background.png); background-size: cover;",	
+		 className:"listBG",
  		 components: [
 			{kind: enyo.VirtualRepeater, toggleSelected:true,
 				name: "receptionList", onSetupRow: "setupRow", onclick:"selectReception",								
@@ -24,18 +24,16 @@ enyo.kind({
 								{kind:enyo.VFlexBox,width:"90%",
 								 components:[
 									{name: "name",									 
-									 style: "text-overflow: ellipsis; "+
-									 "overflow: hidden; white-space:"+
-									 "nowrap;color:#FFF;", 
+									className:"listFirst",
 									 content: ""},
 									{name: "cattle", 
-									 style: "font-size: 0.85em;color:#999",
+									 className:"listSecond",
 									 content: ""},
 									{name: "weight", 
-									 style: "font-size: 0.85em;color:#999",
+									 className:"listSecond",
 									 content: ""},
 									{name: "barnyards", 
-									 style: "font-size: 0.85em;color:#999",
+									className:"listSecond",
 									 content: ""},									 									
 									 ]}]}]}]}]},				
 	],

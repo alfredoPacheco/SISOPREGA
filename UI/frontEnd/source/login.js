@@ -4,9 +4,9 @@ enyo.kind({
 	events: {
 		"onSucess":"",
 		"onFail":"",
-	},
+	},	
 	components: [	
-		{kind: "Toolbar",name:"tbHeader",style:"height:10px;", 
+		{kind: "Toolbar",name:"tbHeader",
 			components: [
 				{kind: "Spacer"},
 				{kind: "VFlexBox", style:"color:#FFF;border:none",
@@ -14,24 +14,32 @@ enyo.kind({
 				{kind: "Spacer"},				
 				 ]},	
 		{kind: enyo.Scroller,
-	     flex: 1, 
-    	style: " background-size: cover;",		 
+		 className:"loginBG",		
+	     flex: 1,	    
 		 components: [
-		 {kind:"VFlexBox",align: "center", pack: "center",components:[
-		 				{kind: "Spacer"},
-			{kind: "Image",
-				    src: "images/sisoprega.png",style:"margin-top:20px; margin-bottom:20px"}]},						 
-			{kind: "RowGroup", defaultKind: "HFlexBox", caption: "", style:"color:#FFF",
-			 components: [
-			  {kind: "Item",
-				components: [
-					{kind:"Input", name:"user", hint:"User",selectAllOnFocus: true,},
-					{kind:"PasswordInput", name:"password", hint:"Password",selectAllOnFocus: true, }]}]},							 
-			]},		
-		{kind: "Toolbar",name:"tbHeader",style:"height:10px", 
+		 	{kind:"VFlexBox",align: "center", pack: "center",
+		 		components:[
+		 			{kind: "Spacer"},						
+					{kind: "Image",
+				     src: "images/eastman.png"},					
+					{kind: "RowGroup", layoutKind:enyo.VFlexLayout, caption: "", 
+					 width:"50%;",
+			 	 	 style:"color:#FFF;margin-top:10%",
+			 	 	 components: [	
+						{kind:"Input", name:"user", hint:"User",selectAllOnFocus: true,},
+						{kind:"PasswordInput", name:"password", hint:"Password",selectAllOnFocus: true,}
+					]},
+					{kind: "Spacer"}					 
+			]}]},		
+		{kind: "Toolbar",name:"tbHeader",style:"", 
 			components: [
-				{kind: "Button", className: "enyo-button-affirmative", 
-				 flex:1, caption: "Entrar", onclick: "doSucess"},				
+				{kind: "Button", className: "enyo-button-affirmative",style:"background-color:#5f0712",
+				 flex:1, caption: "Entrar", onclick: "checkLogIn"},				
 				 ]},							  
 	],
+	checkLogIn:function(){
+		cacheMan.showScrim();		
+		cacheMan.hideScrim();
+		this.doSucess();				
+	}
 });
