@@ -10,6 +10,9 @@ enyo.kind({
 	clear:function(){
 		this.arrObj = [];
 		_arrRancherList = [];
+		this.rancherWasReadFromGateway = false;
+		this.invoiceWasReadFromGateway = false;
+		this.contactsReadFromGateway = [];		
 	},
 	get:function(){
 		

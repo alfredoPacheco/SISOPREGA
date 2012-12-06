@@ -26,27 +26,32 @@ enyo.kind({
 	],
 	ready:function(){
 		this.$.tbHeader.hide();
-		cacheMan.setGlobalToaster(this.$);		
-		cacheMan.setGlobalScrim(this.$.scrimMain);				
+		cacheMan.setGlobalToaster(this.$);
+		cacheMan.setGlobalScrim(this.$.scrimMain);
 		cacheMan.setGlobalLabel(this.$.lblMainCap);
 		_objMainHeader=this.$.lblMainCap;
 	},
 	goBack:function(){
-		cacheMan.goBack();										
+		cacheMan.goBack();
 	},
 	goAhead:function(){
 		this.$.tbHeader.show();
-		this.$.mainPane.selectViewByName("mainMenu");		
+		this.$.mainPane.selectViewByName("mainMenu");
 	},
 	noAccess:function(){
 		cacheMan.setMessage("","", "Usuario o contraseña incorrecta.");
 	},
 	logOut:function(){
-		cacheRanchers = null;
-		cacheCattle = null;		
+
 		consumingGateway.LogOut();
 		this.$.tbHeader.hide();
-		cacheMan.clearBack();		
-		this.$.mainPane.selectViewByName("login");
+		cacheMan.clearBack();
+		enyo.$.sisoprega.destroy();
+		window.location = './'; 
+//		
+//		enyo.create({
+//			kind : "sisoprega"
+//		}).renderInto(document.body);
+//		this.$.mainPane.selectViewByName("login");
 	}
 });

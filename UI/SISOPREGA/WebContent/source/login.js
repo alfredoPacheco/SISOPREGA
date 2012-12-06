@@ -25,8 +25,8 @@ enyo.kind({
 			 components: [
 			  {kind: "Item",
 				components: [
-					{kind:"Input", name:"user", hint:"User",selectAllOnFocus: true, value:"mex_user"},
-					{kind:"PasswordInput", name:"password", hint:"Password",selectAllOnFocus: true, value:"mex_user" }]}]},							 
+					{kind:"Input", name:"user", hint:"User",selectAllOnFocus: true, value:"alfredo"},
+					{kind:"PasswordInput", name:"password", hint:"Password",selectAllOnFocus: true, value:"alfredo" }]}]},							 
 			]},		
 		{kind: "Toolbar",name:"tbFooter",style:"height:10px", 
 			components: [
@@ -35,9 +35,11 @@ enyo.kind({
 				 ]},							  
 	],
 	onLogIn:function(){
+		
 		var consumirLogin = consumingGateway.Login(this.$.user.getValue(), this.$.password.getValue());
 		if(consumirLogin.exceptionId == 0){
 			cacheRanchers.get();
+			
 			cacheCattle.getCattleClass();
 			cacheCattle.getCattleType();
 			this.doSucess();
