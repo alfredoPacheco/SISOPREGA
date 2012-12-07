@@ -1,6 +1,7 @@
 enyo.kind({
 	name: "cache.ranchers",
 	arrObj:_arrRancherList,
+	iLastRanID:null,
 	reloadme:function(){
 		//AJAX
 	},	
@@ -8,7 +9,10 @@ enyo.kind({
 		return this.arrObj;
 	},
 	create:function(objRan,cbObj,cbMethod){
+		
 		//AJAX
+		this.iLastRanID=objRan.rancher_id=Math.random().toString(36).substring(2, 15) + 
+						  Math.random().toString(36).substring(2, 15); //CHANGE FOR DB ID;
 		this.arrObj.push(objRan);
 		if(cbMethod){
 			cbObj[cbMethod]();

@@ -6,7 +6,7 @@ enyo.kind({
 	objCat:null,
 	components:[	
 		{kind: enyo.Scroller,flex: 1,
-		 style: "background-image: url(images/practice_background.png); background-size: cover;",			
+		 className:"listBG",
 		 components: [
 					{kind: enyo.VirtualRepeater, name: "cattleList", onSetupRow: "setupProductRow", 
 					 onclick: "setProduct",								
@@ -16,9 +16,7 @@ enyo.kind({
 							 tapHighlight: true,
 							 components: [
 								{name: "desc", 
-								 style: "text-overflow: ellipsis; "+
-										 "overflow: hidden; white-space:"+
-										 "nowrap;color:#FFF;", 
+								 className:"listFirst"
 								}]}]}		
 			]
 		},

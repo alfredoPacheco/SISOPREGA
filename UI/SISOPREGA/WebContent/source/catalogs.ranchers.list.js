@@ -79,7 +79,6 @@ enyo.kind({
 		var group = this.getGroupName(inIndex);
 		this.$.divider.setCaption(group);
 		this.$.divider.canGenerate = Boolean(group);
-		//this.$.item.applyStyle("border-top", Boolean(group) ? "none" : "1px solid silver;");
 	},	
 	setupProductRow:function(inSender, inIndex) {		
 		var objRan;

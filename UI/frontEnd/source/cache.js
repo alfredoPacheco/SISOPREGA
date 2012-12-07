@@ -1,3 +1,36 @@
+var _arrCattleReject=[{reject_id:1,reject_desc:"EMFERMEDAD"},
+                      {reject_id:2,reject_desc:"HERIDA"},
+                      {reject_id:3,reject_desc:"OTRAS"}];
+var _arrFeed=[{feed_id:1,feed_desc:"MOLIDA",feed_units:"KG"},
+			  {feed_id:2,feed_desc:"ALFALFA",feed_units:"PACAS"},
+			  {feed_id:3,feed_desc:"AVENA",feed_units:"PACAS"},
+			  {feed_id:4,feed_desc:"CONCENTRADO",feed_units:"SACOS"},			  
+              {feed_id:5,feed_desc:"MAIZ",feed_units:"KG"}];			  
+					  
+var _arrBYOccupied={"1E5":{reception_id:1},
+					"_B21":{reception_id:2,accepted_count:"",inspections:[]},
+					 feed:[{}]};
+var	_arrReceptionList=[
+		{reception_id:1,rancher_id:1,
+		 rancher_name:"BALDOR / DEL RIO MENDEZ ALAN", arrival_date:"2012-09-15",
+		 cattype_id:1,cattype_name:"CABALLOS",hc_aprox:100,
+		 city_id:1,city_name:"LOCAL",
+		 weights:[{hcw_id:0,hc:50,weight:1234}],barnyards:{"1E5":"1E5"},
+		 accepted_count:"",
+		 inspections:[{rejected_id:1,rejected_count:1,reject_id:1,reject_desc:"ENFERMEDAD"}],
+		 feed:[{feeding_id:1,barnyards:{"1E5":"1E5"},handling:"ETC",
+		        feed:{"1":{feed_desc:"MOLIDA",feed_units:1}}}]		
+		 },		
+		{reception_id:2,rancher_id:2,
+		 rancher_name:"FUERTE / TORRRES FUERTE DIEGO", arrival_date:"2012-09-16",
+		 cattype_id:2,cattype_name:"LLEGUAS",hc_aprox:60,
+		 city_id:2,city_name:"FORANEA",
+		 weights:[{hcw_id:0,hc:50,weight:1234}],barnyards:{},
+		 accepted_count:"",
+		 inspections:[],
+		 feed:[]		 
+		 },
+	];					
 var _arrCities=[{city_id:1,city_name:"LOCAL"},{city_id:2,city_name:"FORANEA"}];
 
 var _arrRancherList =[
@@ -12,7 +45,7 @@ var _arrRancherList =[
 					{rancher_id:3,aka:"SI", company_name:"VACA Y POLLITO",					 
 					 contacts:[],billing:{},rancher_type:2,address_one:"",address_two:"",city_id:1,
 					 zip_code:"UNZIP",rfc:"UNARFC",phone_number:"6561234567"},	
-				];
+					];
 
 
 _arrRancherList[0].contacts.push(enyo.clone(_arrRancherList[1]));
@@ -26,17 +59,6 @@ var _arrCattleList=[
 				{cattype_id: 3,cattype_name: "TOROS"},  
 				{cattype_id: 4, cattype_name: "VACAS"}, 				                                
 			   ];
-var	_arrReceptionList=[
-		{reception_id:1,rancher_id:1,rancher_name:"BALDOR / DEL RIO MENDEZ ALAN", arrival_date:"2012-09-15",
-		 cattype_id:1,cattype_name:"CABALLOS",hc_aprox:100,
-		 city_id:1,city_name:"JUAREZ/CHIHUAHUA",
-		 weights:[{hcw_id:0,hc:50,weight:1234},{hcw_id:1,hc:50,weight:5678}],
-		 barnyards:[{barnyard_id:3,barnyard_code:"A3",occupied:true,
-		 barnyard_capacity:[{cattype_id:1,cattype_name:"CABALLOS",head_count:75}]},]},		
-		{reception_id:2,rancher_id:2,rancher_name:"FUERTE / TORRRES FUERTE DIEGO", arrival_date:"2012-09-16",
-		 cattype_id:2,cattype_name:"LLEGUAS",hc_aprox:60,city_id:2,city_name:"SONORA/CABORCA",
-		 weights:[],barnyards:[]},								
-	];
 var _gobackStack=[];	
 
 var _arrBarnyardsList=[
@@ -83,6 +105,9 @@ enyo.kind({
 	showScrim:function(){
 		this.gblScrim.show();
 	},
+	hideScrim:function(){
+		this.gblScrim.hide();
+	},
 	setGlobalToaster:function(objVar){
 		this.gblToaster=objVar;
 	},
@@ -120,7 +145,7 @@ enyo.kind({
 				return this.getCities()[i];
 			}
 		}
-	},			
+	},		
 });
 
 var cacheMan = new cache();

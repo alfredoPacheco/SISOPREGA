@@ -7,6 +7,12 @@ enyo.kind({
 	reloadme:function(){
 		//AJAX
 	},
+	clear:function(){
+		this.arrCattleType = [];
+		arrCattleClass = [];
+		_arrCattleTypeList = [];
+		_arrCattleClassList = [];
+	},
 	cattleTypeAdapterToIn:function(objCattle){
 
 		var objNew = {

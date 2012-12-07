@@ -37,7 +37,6 @@ enyo.kind({
 		    {layoutKind: "HFlexLayout", align: "center",components: [
 			{kind: "enyo.IconButton",name:"btnAdd",icon: "images/menu-icon-new.png", flex:1,
 			 onclick: "addProduct"},
-//			 {name: 'catclass_id', kind: "ListSelector", contentPack:"end", items: []}
 		    ]}
 		]},
 		
@@ -55,7 +54,6 @@ enyo.kind({
 		]},					 		
 	],
 	setupProductRow:function(inSender, inIndex) {		
-//		var obj;
 		if (objCattle=cacheCattle.getCattleType()[inIndex]){						
 			this.$.desc.setContent(objCattle.cattype_name);
 			this.$.cattleClass.setContent(cacheCattle.getCattleClassByID(objCattle.catclass_id).catclass_name);
@@ -101,7 +99,6 @@ enyo.kind({
 	ready:function(){
 		this.$.draAdd.setOpen(true);
 		this.$.draUpdate.setOpen(false);
-//		this.$.cattleClassListSelector.hide();
 		this.updateList();
 		this.resetValues();
 	},
@@ -119,13 +116,11 @@ enyo.kind({
 		}
 	},	
 	toggleUpdate:function(){
-//		this.$.cattleClassListSelector.show();
 		this.$.draAdd.setOpen(false);
 		this.$.draUpdate.setOpen(true);
 		
 	},	
 	toggleAdd:function(){
-//		this.$.cattleClassListSelector.hide();
 		this.$.draAdd.setOpen(true);
 		this.$.draUpdate.setOpen(false);		
 		this.resetValues();	
