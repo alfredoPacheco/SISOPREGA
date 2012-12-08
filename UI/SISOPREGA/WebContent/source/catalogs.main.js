@@ -1,6 +1,5 @@
 enyo.kind({
 	name: "catalogs.main",
-	//kind: enyo.SlidingView,
 	kind: enyo.VFlexBox,	
 	iProduct:"",
 	events:{
@@ -18,7 +17,6 @@ enyo.kind({
 	showRanchers:function(){
 		this.addGoBackAction();
 		_objMainHeader.setContent('Ganaderos');
-		//this.$.ranchersList.$.catRanchers.upda
 		this.$.mainPane.selectViewByName("catRanchers");		
 	},	
 	showBarnyards:function(){

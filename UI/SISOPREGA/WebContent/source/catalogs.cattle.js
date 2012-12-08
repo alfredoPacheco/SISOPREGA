@@ -129,6 +129,14 @@ enyo.kind({
 		this.$.cattleClassListSelector.setValue(0);
 		this.$.cattleClassListSelector.setItems(cacheCattle.getCattleClassLS());
 		this.$.cattype_name.setValue("");
+	},
+	getLS:function(){
+		var _arrCattleLS=[];
+		for(var i=0;i<this.get().length;i++){		
+			_arrCattleLS.push({caption:this.get()[i].cattype_name,
+									value:this.get()[i].cattype_id});
+		}
+		return _arrCattleLS;
 	}
 });
 
