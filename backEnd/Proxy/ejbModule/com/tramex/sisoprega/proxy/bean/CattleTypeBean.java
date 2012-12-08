@@ -77,8 +77,8 @@ public class CattleTypeBean extends BaseBean implements Cruddable {
       if (validateEntity(cattle)) {
         log.finer("Cattle type succesfully validated");
         em.persist(cattle);
-        log.finer("Cattle type persisted on database");
         em.flush();
+        log.finer("Cattle type persisted on database");
 
         String sId = String.valueOf(cattle.getCattypeId());
         log.finer("Setting cattle type id in response: " + sId);

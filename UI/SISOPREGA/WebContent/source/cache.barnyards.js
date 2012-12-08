@@ -1,6 +1,7 @@
 enyo.kind({
 	name: "cache.barnyards",
 	arrObj:_arrBarnyardsList,
+	arrObjInUse:_arrBYOccupied,
 	arrObjAv:enyo.clone(_arrBarnyardsList),
 	reloadme:function(){
 		//AJAX
@@ -133,7 +134,37 @@ enyo.kind({
 		if(cbMethod){
 			cbObj[cbMethod]();
 		}		
-	}
+	},
+	isOccupied:function(sID){
+		if(_arrBYOccupied[sID]){
+			return true;
+		}else{
+			return false;
+		}
+	},
+	setOccupied:function(sID,iReceptionID){
+		this.arrObjInUse[sID]={reception_id:iReceptionID,accepted_count:"",inspections:[],feed:[]};
+	},
+	releaseBY:function(objRec,sID,cbObj,cbMethod){
+		delete objRec.barnyards[sID];
+		delete this.arrObjInUse[sID];
+		//AJAX		
+		if(cbMethod){
+			cbObj[cbMethod]();
+		}
+	},
+	inUse:function(){
+		return this.arrObjInUse;
+	},
+	getBYbyRecID:function(sID){
+		var arrBY={};
+		for(var sKey in this.arrObjInUse){
+			if(this.arrObjInUse[sKey].reception_id==sID){
+				arrBY[sKey]=this.arrObjInUse[sKey];
+			}
+		}
+		return arrBY;
+	},
 });
 
 var cacheBY= new cache.barnyards();

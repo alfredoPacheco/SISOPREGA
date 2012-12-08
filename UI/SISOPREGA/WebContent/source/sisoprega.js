@@ -2,11 +2,11 @@ enyo.kind({
 	name: "sisoprega",
 	kind: enyo.VFlexBox,
 	components: [
-		{kind: "Toolbar",name:"tbHeader",style:"height:10px", 
+		{kind: "Toolbar",name:"tbHeader",style:"height:10px", className:"headerMain", 
 			components: [
 				{name:'btnGoBack',icon:"images/command-menu/menu-icon-back.png", onclick:"goBack"},
 				{kind: "Spacer"},
-				{kind: "VFlexBox", name:'lblMainCap', className:"",
+				{kind: "VFlexBox", name:'lblMainCap', allowHtml:true,
 				 style:"color:#FFF;border:none", content: "Recepciones"},  
 				{kind: "Spacer"},
 				{name:'btnLogOut', onclick:"logOut",icon:"images/command-menu/icon-context.png"}]},
@@ -18,7 +18,7 @@ enyo.kind({
 				 ]},
 		 //SCRIM
 		 {kind: enyo.Scrim,name:"scrimMain",layoutKind:enyo.VFlexLayout, align: "center", pack: "center",
-		  components: [{kind: enyo.SpinnerLarge}]},
+		  components: [{kind: "SpinnerLarge"}]},
 		 {kind: enyo.Dialog, name:"toastMain",flyInFrom: "bottom",lazy: false, scrim:true, 
 		  components:[{style: "padding: 12px", content: "Alerta"},
 					  {name:"msgMain",style: "padding: 12px; font-size: 14px: width:100%:height:100%", 

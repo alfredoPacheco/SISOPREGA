@@ -11,7 +11,7 @@ enyo.kind({
 	objList:[],
 	components:[
 		{kind: enyo.Scroller,flex: 1,
-    	style: "background-image: url(images/practice_background.png); background-size: cover;",	
+		 className:"listBG",
  		 components: [
 			{kind: enyo.VirtualRepeater, name: "rancherList", onSetupRow: "setupProductRow", 
 			 onclick: "selectRancher",								
@@ -22,16 +22,15 @@ enyo.kind({
 					tapHighlight: true,
 					components: [
 						{name: "name", 
-						 style: "text-overflow: ellipsis; overflow: hidden;"+
-								"white-space: nowrap;color:#FFF;", 
+						 className: "listFirst",
 							content: ""},
 						{name: "info", 
-						 style: "font-size: 0.85em;color:#999",
-						 content: ""},											
-						{kind: "BasicRichText",
-						 name: "description", 
-						 style: "font-size: 0.75em;color:#DDD",
-						 content: ""}									
+						 className: "listSecond",
+						 content: ""}//,											
+//						{kind: "BasicRichText",
+//						 name: "description", 
+//						 className: "listSecond",
+//						 content: ""}									
 					]}
 			]}		
 		]},
@@ -78,6 +77,7 @@ enyo.kind({
 		// use group divider at group transition, otherwise use item border for divider
 		var group = this.getGroupName(inIndex);
 		this.$.divider.setCaption(group);
+		//this.$.divider.applyStyle("color","white");
 		this.$.divider.canGenerate = Boolean(group);
 	},	
 	setupProductRow:function(inSender, inIndex) {		
@@ -91,7 +91,6 @@ enyo.kind({
 			}else{
 				this.$.name.setContent(objRan.company_name);
 				this.$.info.setContent(objRan.phone_number);			
-				//this.$.description.setContent(objRan.description);				
 			}
 			return true;
 		}

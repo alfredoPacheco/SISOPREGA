@@ -137,7 +137,7 @@ public class BarnyardCapacityBean extends BaseBean implements Cruddable {
             "proxy.BarnyardCapacityBean.Read"));
         return response;
       }
-      
+
       List<BarnyardCapacity> result = query.getResultList();
       if (result.isEmpty()) {
         response.setError(new Error("VAL02", "No se encontraron datos para el filtro seleccionado", "proxy.BarnyardBean.Read"));
@@ -177,7 +177,8 @@ public class BarnyardCapacityBean extends BaseBean implements Cruddable {
 
       if (barnyardCa.getCapacityId() == 0) {
         log.warning("VAL04 - Entity ID Omission.");
-        response.setError(new Error("VAL04", "Se ha omitido el id de la capacidad del corral al intentar actualizar sus datos.", "proxy.BarnyardCapacity.Update"));
+        response.setError(new Error("VAL04", "Se ha omitido el id de la capacidad del corral al intentar actualizar sus datos.",
+            "proxy.BarnyardCapacity.Update"));
       } else {
         if (validateEntity(barnyardCa)) {
           em.merge(barnyardCa);
@@ -189,7 +190,8 @@ public class BarnyardCapacityBean extends BaseBean implements Cruddable {
           response.setError(new Error("0", "SUCCESS", "proxy.BarnyardCapacity.Update"));
         } else {
           log.warning("Validation error: " + error_description);
-          response.setError(new Error("VAL01", "Error de validación de datos:" + error_description, "proxy.BarnyardCapacityBean.Update"));
+          response.setError(new Error("VAL01", "Error de validación de datos:" + error_description,
+              "proxy.BarnyardCapacityBean.Update"));
         }
       }
 
@@ -198,13 +200,12 @@ public class BarnyardCapacityBean extends BaseBean implements Cruddable {
       log.throwing(this.getClass().getName(), "Update", e);
 
       if (e instanceof javax.persistence.PersistenceException)
-        response
-            .setError(new Error("DB01", "Los datos que usted ha intentado ingresar, no son permitidos por la base de datos, "
-            + "muy probablemente el corral que usted quiere agregar "
-            + "ya cuenta con la capacidad de la clase de ganado que usted esta indicando.",
-                "proxy.BarnyardBean.Update"));
+        response.setError(new Error("DB01", "Los datos que usted ha intentado ingresar, no son permitidos por la base de datos, "
+            + "muy probablemente la capacidad que usted quiere agregar ya se encuentra en la base de datos.",
+            "proxy.BarnyardBean.Update"));
       else {
-        response.setError(new Error("DB02", "Error en la base de datos:[" + e.getMessage() + "]", "proxy.BarnyardCapacityBean.Update"));
+        response.setError(new Error("DB02", "Error en la base de datos:[" + e.getMessage() + "]",
+            "proxy.BarnyardCapacityBean.Update"));
       }
     }
 
@@ -228,7 +229,8 @@ public class BarnyardCapacityBean extends BaseBean implements Cruddable {
       BarnyardCapacity barnyardCa = entityFromRequest(request, BarnyardCapacity.class);
       if (barnyardCa.getCapacityId() == 0) {
         log.warning("VAL04 - Entity ID Omission.");
-        response.setError(new Error("VAL04", "Se ha omitido el id de la capacidad del corral al intentar eliminar el registro.", "proxy.BarnyardCapacity.Delete"));
+        response.setError(new Error("VAL04", "Se ha omitido el id de la capacidad del corral al intentar eliminar el registro.",
+            "proxy.BarnyardCapacity.Delete"));
       } else {
         TypedQuery<BarnyardCapacity> readQuery = em.createNamedQuery("BARNYARD_CAPACITY_BY_ID", BarnyardCapacity.class);
         readQuery.setParameter("capacityId", barnyardCa.getCapacityId());
@@ -243,8 +245,10 @@ public class BarnyardCapacityBean extends BaseBean implements Cruddable {
       log.severe("Exception found while deleting barnyard capacity");
       log.throwing(this.getClass().getName(), "Delete", e);
 
-      response.setError(new Error("DEL01", "Error al intentar borrar datos, es probable que esta entidad tenga otras entidades relacionadas, "
-          + "por ejemplo, un corrar que cuenta con recepciones no puede ser eliminado sin antes resolver la recepción.", "proxy.BarnyardCapacity.Delete"));
+      response.setError(new Error("DEL01",
+          "Error al intentar borrar datos, es probable que esta entidad tenga otras entidades relacionadas, "
+              + "por ejemplo, un corrar que cuenta con recepciones no puede ser eliminado sin antes resolver la recepción.",
+          "proxy.BarnyardCapacity.Delete"));
     }
 
     log.exiting(this.getClass().getCanonicalName(), "Delete");

@@ -1,10 +1,10 @@
 {
-	"id": "com.hptraining.hpstore",
+	"id": "com.tramex.sisoprega",
 	"version": "1.0.0",
-	"vendor": "HP",
+	"vendor": "TRAMEX",
 	"type": "web",
-	"main": "index.html",
-	"title": "HP Store",
+	"main": "index.jsp",
+	"title": "SISOPREGA",
 	"icon": "./images/mainMenu_logo.png",
   	"uiRevision": "2"
 }
