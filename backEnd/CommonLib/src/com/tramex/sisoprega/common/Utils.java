@@ -101,6 +101,10 @@ public class Utils {
         result = dValue;
         log.finest("found date: " + sValue);
       }
+      if(type.getName().equals("boolean")){
+        result = Boolean.parseBoolean(sValue);
+        log.fine("found boolean: " + sValue);
+      }
     }
 
     log.exiting(Utils.class.getCanonicalName(), "valueFromRequest");

@@ -1,4 +1,3 @@
-/* Copyright 2009-2011 Hewlett-Packard Development Company, L.P. All rights reserved. */
 enyo.kind({
 	name: "catalogs.ranchers.options",	
 	kind: enyo.SlidingView,
@@ -9,34 +8,14 @@ enyo.kind({
 		"onBilling": "",
 	},	
 	components: [
-  {
-    kind: "Spacer"
-  },
-  {
-    kind: "Button",
-    className: "enyo-button-dark",
-    caption: "Editar",
-	onclick:"doEdit"
-  },
-  {
-    kind: "Button",
-    caption: "Contactos",
-	className: "enyo-button-blue",	
-	onclick:"doContacts"	
-  },
-  {
-    kind: "Button",
-    className: "enyo-button-dark",
-    caption: "Facturacion",
-	onclick:"doBilling"
-  },  
-  {
-    kind: "Spacer"
-  },
-  {
-    kind: "Toolbar",
-    components: [
-    ]
-  }
-]
+		{kind: enyo.VFlexBox,
+		 className:"buttonsBG",
+	     flex: 1,
+		 align:"center",	    
+		 components: [		
+			{kind: "Spacer"},
+			{kind: "Button",className: "enyo-button-option",caption: "Editar",onclick:"doEdit"},
+			{kind: "Button",caption: "Contactos",className: "enyo-button-option",	onclick:"doContacts"},
+			{kind: "Button",className: "enyo-button-option",caption: "Facturacion",onclick:"doBilling"},  
+			{kind: "Spacer"}]}]
 });

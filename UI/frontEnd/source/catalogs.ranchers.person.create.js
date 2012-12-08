@@ -1,7 +1,6 @@
 enyo.kind({
 	name: "catalogs.ranchers.person.create",	
-	kind: enyo.SlidingView,
-	layoutKind: enyo.VFlexLayout,
+	kind: "Control", layoutKind: "HFlexLayout",
 	events: {
 		"onAddRancher": "",
 		"onUpdateRancher": "",	
@@ -10,8 +9,9 @@ enyo.kind({
 	objRan:{},	
 	components: [	
 			{kind: enyo.Scroller, flex: 1,	
+			 className:"formBG",
 			 components:[
-			{kind: "RowGroup", defaultKind: "HFlexBox", caption: "", style:"color:#FFF",
+			{kind: "RowGroup", defaultKind: "HFlexBox", caption: "",
 			 components: [
 				  {kind: "Input", name:"aka", hint:"Alias",
 				   inputClassName: "blankInput",focusClassName:"darkFocus"},	       
@@ -23,8 +23,9 @@ enyo.kind({
 				   inputClassName: "blankInput", focusClassName:"darkFocus"},
 				  {kind: "VFlexBox", style: "",
 				   components:[{content:"Fecha de Nacimiento",},
-						{kind: "DatePicker", name:"birth_date", label: "", className:"picker-hbox"}]},						
-				  {kind: "Input", name:"email_add", hint:"Email",
+						{kind: "DatePicker", name:"birth_date", label: "", maxYear:new Date().getFullYear(),
+						 className:"picker-hbox"}]},						
+				  {kind: "Input", name:"email_add", hint:"Email",inputType:"email",
 				   inputClassName: "blankInput", focusClassName:"darkFocus"},							 
 				  {kind: "Input", name:"phone_number", hint:"Telefono",
 				   inputClassName: "blankInput", focusClassName:"darkFocus"}]},
@@ -40,7 +41,7 @@ enyo.kind({
 					{kind: "Button",name:"btnCancel", className: "enyo-button-negative", 
 					 flex:1,caption: "Cancelar", onclick: "doCancel"}]}]}]}		
 	],
-	ready: function() {		
+	ready: function() {	
 		this.$.draAdd.setOpen(true);
 		this.$.draUpdate.setOpen(false);					
 	},
@@ -50,7 +51,7 @@ enyo.kind({
 		this.$.first_name.setValue("");
 		this.$.last_name.setValue("");
 		this.$.mother_name.setValue("");
-		this.$.birth_date.setValue(new Date());
+		this.$.birth_date.setNull();
 		this.$.email_add.setValue("");
 		this.$.phone_number.setValue("");		
 	},
@@ -65,14 +66,25 @@ enyo.kind({
 		objRan.first_name=this.$.first_name.getValue();
 		objRan.last_name=this.$.last_name.getValue();
 		objRan.mother_name=this.$.mother_name.getValue();
-		objRan.birth_date=fmt.format(this.$.birth_date.getValue());
+		if(this.$.birth_date.getValue()==null){
+			objRan.birth_date=this.$.birth_date.getValue();
+		}else{
+			objRan.birth_date=fmt.format(this.$.birth_date.getValue());			
+		}		
 		objRan.email_add=this.$.email_add.getValue();
 		objRan.phone_number=this.$.phone_number.getValue();
 		return objRan;
 	},
 	addRancher:function(){
-		cacheRanchers.create(this.getRancher(),this,"doAddRancher");		
+		this.iCreated=cacheRanchers.create(this.getRancher(),this,"afteraddRancher");		
 	},
+	afteraddRancher:function(){
+		this.iCreated=cacheRanchers.iLastRanID;
+		this.doAddRancher();
+	},
+	getJustCreated:function(){
+		return this.iCreated;
+	},	
 	setRancher:function(objVar){
 		this.resetValues();		
 		this.objRan=objVar;

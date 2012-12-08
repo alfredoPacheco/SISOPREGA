@@ -8,10 +8,15 @@ enyo.kind({
 		onCattle:""
 	},	
 	components: [
-		{kind: "Spacer"},
-		{kind: "Button", className: "enyo-button-blue", caption: "Ganaderos",onclick:"doRanchers"},
-		{kind: "Button", className: "enyo-button-blue", caption: "Ganado",   onclick:"doCattle"},
-		{kind: "Button", className: "enyo-button-blue", caption: "Corrales", onclick:"doBarnyards"},
-		{kind: "Spacer"}
+		{kind: enyo.VFlexBox,
+		 className:"buttonsBG",
+	     flex: 1,
+		 align:"center",	    
+		 components: [		
+			{kind: "Spacer"},
+			{kind: "Button", className: "enyo-button-cat", caption: "Ganaderos",onclick:"doRanchers"},
+			{kind: "Button", className: "enyo-button-cat", caption: "Ganado",   onclick:"doCattle"},
+			{kind: "Button", className: "enyo-button-cat", caption: "Corrales", onclick:"doBarnyards"},
+			{kind: "Spacer"}]}
 	]
 });

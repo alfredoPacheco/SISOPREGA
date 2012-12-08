@@ -64,7 +64,7 @@ public class BaseBean {
     boolean result = true;
 
     if (entity == null) {
-      error_description = "Provided entity can't be null";
+      error_description = "La entidad que usted trata de modificar está vacía.";
       result = false;
     }
 
@@ -116,8 +116,7 @@ public class BaseBean {
     for (Object entity : entities) {
       result.add(getContentFromEntity(entity, type));
     }
-
-    log.finest("contentFromList Result: " + result.toString());
+    
     return result;
   }
 
@@ -146,7 +145,7 @@ public class BaseBean {
         log.finest("The field is an String, setting value from request.");
         field.set(entity, Utils.valueFromRequest(request, fieldName));
       } else {
-        log.finest("The field is not an String, is a [" + field.getType() + "]");
+        log.finest("The field is a [" + field.getType() + "], searching it's value in the request");
         Object val = Utils.valueFromRequest(request, fieldName, field.getType());
         log.finer("Value to be set: " + val);
         if (val != null) {
