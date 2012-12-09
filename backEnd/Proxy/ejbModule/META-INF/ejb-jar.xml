@@ -49,10 +49,22 @@
 			<ejb-name>MeasurementUnitEquivalenceProxy</ejb-name>
 			<ejb-class>com.tramex.sisoprega.proxy.bean.MeasurementUnitEquivalenceBean</ejb-class>
 		</session>
-		 <session>
+		<session>
 			<ejb-name>ReceptionProxy</ejb-name>
 			<ejb-class>com.tramex.sisoprega.proxy.bean.ReceptionBean</ejb-class>
-    </session>
+		</session>
+		<session>
+			<ejb-name>ReceptionBarnyardProxy</ejb-name>
+			<ejb-class>com.tramex.sisoprega.proxy.bean.ReceptionBarnyardBean</ejb-class>
+		</session>
+		<session>
+			<ejb-name>ReceptionHeadcountProxy</ejb-name>
+			<ejb-class>com.tramex.sisoprega.proxy.bean.ReceptionHeadcountBean</ejb-class>
+		</session>
+		<session>
+			<ejb-name>FeedOrderProxy</ejb-name>
+			<ejb-class>com.tramex.sisoprega.proxy.bean.FeedOrderBean</ejb-class>
+		</session>
 	</enterprise-beans>
 	<assembly-descriptor>
 		<security-role>

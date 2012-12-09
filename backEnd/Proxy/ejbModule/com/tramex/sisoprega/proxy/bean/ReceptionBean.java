@@ -16,10 +16,12 @@
 package com.tramex.sisoprega.proxy.bean;
 
 import javax.ejb.Stateless;
+import javax.persistence.TypedQuery;
 
 import com.tramex.sisoprega.common.BaseResponse;
 import com.tramex.sisoprega.common.CreateGatewayResponse;
 import com.tramex.sisoprega.common.Error;
+import com.tramex.sisoprega.common.GatewayContent;
 import com.tramex.sisoprega.common.GatewayRequest;
 import com.tramex.sisoprega.common.ReadGatewayResponse;
 import com.tramex.sisoprega.common.UpdateGatewayResponse;
@@ -27,6 +29,20 @@ import com.tramex.sisoprega.common.crud.Cruddable;
 import com.tramex.sisoprega.dto.Reception;
 
 /**
+ * This proxy knows the logic to evaluate Reception information and the
+ * way to the database in order to save their data. Also, it is contained in EJB
+ * container, we can apply security and life cycle methods for resources.<BR/>
+ * 
+ * <B>Revision History:</B>
+ * 
+ * <PRE>
+ * ====================================================================================
+ * Date        By                           Description
+ * MM/DD/YYYY
+ * ----------  ---------------------------  -------------------------------------------
+ * 12/07/2012  Jaime Figueroa                Initial Version.                                     
+ * ====================================================================================
+ * </PRE>
  * @author Jaime Figueroa
  * 
  */
@@ -63,14 +79,19 @@ public class ReceptionBean extends BaseBean implements Cruddable {
         response.setError(new Error("0", "SUCCESS", "proxy.Reception.Create"));
       } else {
         log.warning("Validation error: " + error_description);
-        response.setError(new Error("RC1", "Validation error: " + error_description, "proxy.Reception.Create"));
+        response.setError(new Error("VAL01", "Validation error: " + error_description, "proxy.Reception.Create"));
       }
 
     } catch (Exception e) {
       log.severe("Exception found while creating ReceptionBean");
       log.throwing(this.getClass().getName(), "Create", e);
 
-      response.setError(new Error("RC2", "Create exception: " + e.getMessage(), "proxy.ReceptionBean.Create"));
+      if (e instanceof javax.persistence.PersistenceException)
+        response.setError(new Error("DB01",
+            "Los datos que usted ha intentado ingresar, no son permitidos por la base de datos, ", "proxy.ReceptionBean.Create"));
+      else {
+        response.setError(new Error("DB02", "Create exception: " + e.getMessage(), "proxy.ReceptionBean.Create"));
+      }
     }
 
     log.exiting(this.getClass().getCanonicalName(), "Create");
@@ -99,8 +120,45 @@ public class ReceptionBean extends BaseBean implements Cruddable {
    */
   @Override
   public UpdateGatewayResponse Update(GatewayRequest request) {
-    // TODO Auto-generated method stub
-    return null;
+    log.entering(this.getClass().getCanonicalName(), "Update");
+    UpdateGatewayResponse response = new UpdateGatewayResponse();
+    Reception reception = null;
+    try {
+      reception = entityFromRequest(request, Reception.class);
+
+      if (reception.getReceptionId() == 0) {
+        log.warning("VAL04 - Entity ID Omission.");
+        response.setError(new Error("VAL04", "Se ha omitido el id de Recepción al intentar actualizar sus datos.",
+            "proxy.Reception.Update"));
+      } else {
+        if (validateEntity(reception)) {
+          em.merge(reception);
+          em.flush();
+
+          GatewayContent content = getContentFromEntity(reception, Reception.class);
+          response.setUpdatedRecord(content);
+
+          response.setError(new Error("0", "SUCCESS", "proxy.Reception.Update"));
+        } else {
+          log.warning("Validation error:" + error_description);
+          response.setError(new Error("VAL01", "Error de validación de datos:" + error_description, "proxy.ReceptionBean.Update"));
+        }
+      }
+
+    } catch (Exception e) {
+      log.severe("Exception found while updating Reception");
+      log.throwing(this.getClass().getName(), "Update", e);
+
+      if (e instanceof javax.persistence.PersistenceException)
+        response.setError(new Error("DB01", "Los datos que usted ha intentado ingresar, no son permitidos por la base de datos, ",
+            "proxy.ReceptionBean.Update"));
+      else {
+        response.setError(new Error("DB02", "Error en la base de datos:[" + e.getMessage() + "]", "proxy.ReceptionBean.Update"));
+      }
+    }
+
+    log.exiting(this.getClass().getCanonicalName(), "Update");
+    return response;
   }
 
   /*
@@ -112,8 +170,35 @@ public class ReceptionBean extends BaseBean implements Cruddable {
    */
   @Override
   public BaseResponse Delete(GatewayRequest request) {
-    // TODO Auto-generated method stub
-    return null;
+    log.entering(this.getClass().getCanonicalName(), "Delete");
+    BaseResponse response = new BaseResponse();
+
+    try {
+      Reception reception = entityFromRequest(request, Reception.class);
+      if (reception.getReceptionId() == 0) {
+        log.warning("VAL04 - Entity ID Omission.");
+        response.setError(new Error("VAL04", "Se ha omitido el id del corral al intentar eliminar el registro.", "proxy.Reception.Delete"));
+      } else {
+        TypedQuery<Reception> readQuery = em.createNamedQuery("CRT_RECEPTION_BY_ID", Reception.class);
+        readQuery.setParameter("receptionId", reception.getReceptionId());
+        reception = readQuery.getSingleResult();
+        em.merge(reception);
+        em.remove(reception);
+        em.flush();
+
+        response.setError(new Error("0", "SUCCESS", "proxy.Reception.Delete"));
+      }
+    } catch (Exception e) {
+      log.severe("Exception found while deleting reception");
+      log.throwing(this.getClass().getName(), "Delete", e);
+
+      response.setError(new Error("DEL01",
+          "Error al intentar borrar datos, es probable que esta entidad tenga otras entidades relacionadas, ",
+          "proxy.Reception.Delete"));
+    }
+
+    log.exiting(this.getClass().getCanonicalName(), "Delete");
+    return response;
   }
 
 }

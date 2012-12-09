@@ -194,7 +194,7 @@ public class BarnyardBean extends BaseBean implements Cruddable {
       if (e instanceof javax.persistence.PersistenceException)
         response
             .setError(new Error("DB01", "Los datos que usted ha intentado ingresar, no son permitidos por la base de datos, "
-                + "muy probablemente el corral que usted quiere agregar ya existe en la base de datos.",
+                + "muy probablemente el corral que usted quiere actualizar ya existe en la base de datos.",
                 "proxy.BarnyardBean.Update"));
       else {
         response.setError(new Error("DB02", "Error en la base de datos:[" + e.getMessage() + "]", "proxy.BarnyardBean.Update"));
