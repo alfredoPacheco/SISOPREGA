@@ -31,7 +31,7 @@
 		</session>
 		<session>
 			<ejb-name>EnterpriseRancherProxy</ejb-name>
-			<ejb-class>com.tramex.sisoprega.proxy.bean.EnterpriseRancher</ejb-class>
+			<ejb-class>com.tramex.sisoprega.proxy.bean.EnterpriseRancherBean</ejb-class>
 		</session>
 		<session>
 			<ejb-name>RancherInvoiceProxy</ejb-name>
@@ -64,6 +64,14 @@
 		<session>
 			<ejb-name>FeedOrderProxy</ejb-name>
 			<ejb-class>com.tramex.sisoprega.proxy.bean.FeedOrderBean</ejb-class>
+		</session>
+		<session>
+			<ejb-name>FoodProxy</ejb-name>
+			<ejb-class>com.tramex.sisoprega.proxy.bean.FoodBean</ejb-class>
+		</session>
+		<session>
+			<ejb-name>FeedOrderDetailsProxy</ejb-name>
+			<ejb-class>com.tramex.sisoprega.proxy.bean.FeedOrderDetailsBean</ejb-class>
 		</session>
 	</enterprise-beans>
 	<assembly-descriptor>
