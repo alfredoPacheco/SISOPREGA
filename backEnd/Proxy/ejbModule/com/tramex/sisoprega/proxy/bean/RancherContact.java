@@ -28,6 +28,7 @@ import com.tramex.sisoprega.common.GatewayContent;
 import com.tramex.sisoprega.common.GatewayRequest;
 import com.tramex.sisoprega.common.ReadGatewayResponse;
 import com.tramex.sisoprega.common.UpdateGatewayResponse;
+import com.tramex.sisoprega.common.Utils;
 import com.tramex.sisoprega.common.crud.Cruddable;
 import com.tramex.sisoprega.dto.ContactRancher;
 
@@ -79,14 +80,20 @@ public class RancherContact extends BaseBean implements Cruddable {
         response.setGeneratedId(sId);
         response.setError(new Error("0", "SUCCESS", "proxy.RancherContact.Create"));
       } else {
-        log.warning("Validation error: " + error_description);
-        response.setError(new Error("RCC1", "Validation error: " + error_description, "proxy.RancherContact.Create"));
+        log.warning("Validation error:" + error_description);
+        response.setError(new Error("VAL01", "Error de validación de datos:" + error_description, "proxy.RancherContact.Create"));
       }
     } catch (Exception e) {
       log.severe("Exception found while creating rancher contact");
       log.throwing(this.getClass().getName(), "Create", e);
 
-      response.setError(new Error("RCC2", "Create exception" + e.getMessage(), "proxy.RancherContact.Create"));
+      if (e instanceof javax.persistence.PersistenceException)
+        response.setError(new Error("DB01", "Los datos que usted ha intentado ingresar, no son permitidos por la base de datos, "
+            + "muy probablemente el contacto que usted quiere agregar ya existe en la base de datos.",
+            "proxy.RancherContact.Create"));
+      else {
+        response.setError(new Error("DB02", "Error en la base de datos:[" + e.getMessage() + "]", "proxy.RancherContact.Create"));
+      }
     }
 
     log.exiting(this.getClass().getCanonicalName(), "Create");
@@ -129,7 +136,7 @@ public class RancherContact extends BaseBean implements Cruddable {
       List<ContactRancher> queryResults = readQuery.getResultList();
 
       if (queryResults.isEmpty()) {
-        response.setError(new Error("VAL02", "No data found", "proxy.RancherContact.Read"));
+        response.setError(new Error("VAL02", "No se encontraron datos para el filtro seleccionado", "proxy.RancherContact.Read"));
       } else {
         List<GatewayContent> records = contentFromList(queryResults, ContactRancher.class);
         response.getRecord().addAll(records);
@@ -142,7 +149,7 @@ public class RancherContact extends BaseBean implements Cruddable {
       log.severe("Exception found while reading rancher contact");
       log.throwing(this.getClass().getCanonicalName(), "Read", e);
 
-      response.setError(new Error("DB02", "Read exception: " + e.getMessage(), "proxy.RancherContact.Read"));
+      response.setError(new Error("DB02", "Error en la base de datos: " + e.getMessage(), "proxy.RancherContact.Read"));
     }
 
     log.exiting(this.getClass().getCanonicalName(), "Read");
@@ -164,8 +171,9 @@ public class RancherContact extends BaseBean implements Cruddable {
       contact = entityFromRequest(request, ContactRancher.class);
 
       if (contact.getContactId() == 0) {
-        log.warning("RCU1 - Invalid rancher contact id");
-        response.setError(new Error("RCU1", "Invalid rancher contact id", "proxy.RancherContact.Update"));
+        log.warning("VAL04 - Entity ID Omission.");
+        response.setError(new Error("VAL04", "Se ha omitido el id del contacto al intentar actualizar sus datos.",
+            "proxy.RancherContactBean.Update"));
       } else {
         // Received Id.
         if (validateEntity(contact)) {
@@ -178,14 +186,21 @@ public class RancherContact extends BaseBean implements Cruddable {
           response.setError(new Error("0", "SUCCESS", "proxy.RancherContact.Update"));
         } else {
           log.warning("Validation error: " + error_description);
-          response.setError(new Error("RCU2", "Validation error: " + error_description, "proxy.RancherContact.Update"));
+          response.setError(new Error("VAL01", "Error de validación de datos: " + error_description,
+              "proxy.RancherContact.Update"));
         }
       }
     } catch (Exception e) {
       log.severe("Exception found while updating RanacherContact");
       log.throwing(this.getClass().getName(), "Update", e);
 
-      response.setError(new Error("RCU3", "Update exception " + e.getMessage(), "proxy.RancherContact.Update"));
+      if (e instanceof javax.persistence.PersistenceException)
+        response.setError(new Error("DB01", "Los datos que usted ha intentado ingresar, no son permitidos por la base de datos, "
+            + "muy probablemente el contacto que usted quiere agregar ya existe en la base de datos.",
+            "proxy.RancherContact.Create"));
+      else {
+        response.setError(new Error("DB02", "Error en la base de datos:[" + e.getMessage() + "]", "proxy.RancherContact.Update"));
+      }
     }
 
     log.exiting(this.getClass().getCanonicalName(), "Update");
@@ -206,8 +221,9 @@ public class RancherContact extends BaseBean implements Cruddable {
     try {
       ContactRancher contact = entityFromRequest(request, ContactRancher.class);
       if (contact.getContactId() == 0) {
-        log.warning("RCD1 - Invalid RancherContact");
-        response.setError(new Error("RCD1", "Invalid RancherContactId", "proxy.Rancher.Delete"));
+        log.warning("VAL04 - Entity ID Omission.");
+        response.setError(new Error("VAL04", "Se ha omitido el id del contacto al intentar eliminar el registro.",
+            "proxy.RancherContactBean.Delete"));
       } else {
         TypedQuery<ContactRancher> readQuery = em.createNamedQuery("RANCHER_CONTACT_BY_ID", ContactRancher.class);
         readQuery.setParameter("contactId", contact.getContactId());
@@ -222,7 +238,9 @@ public class RancherContact extends BaseBean implements Cruddable {
       log.severe("Exception found while deleting contact");
       log.throwing(this.getClass().getName(), "Delete", e);
 
-      response.setError(new Error("RCD2", "Delete exception: " + e.getMessage(), "proxy.RancherContant.Delete"));
+      response.setError(new Error("DEL01",
+          "Error al intentar borrar datos. Es muy probable que la entidad que usted quiere eliminar "
+              + "cuente con otras entidades relacionadas.", "proxy.RancherContactBean.Delete"));
     }
 
     log.exiting(this.getClass().getCanonicalName(), "Delete");
@@ -231,13 +249,101 @@ public class RancherContact extends BaseBean implements Cruddable {
 
   @Override
   protected boolean validateEntity(Object entity) {
-    boolean result = true;
-    if (super.validateEntity(entity)) {
-      result = rancherExists((ContactRancher) entity);
-    } else {
-      result = false;
+    boolean valid = true;
+    valid = super.validateEntity(entity);
+
+    ContactRancher contact = (ContactRancher) entity;
+
+    // Validate address One
+    if (valid) {
+      valid = contact.getAddressOne().length() <= 100;
+      if (!valid)
+        error_description = "La dirección del contacto excede el tamaño permitido en la base de datos.";
     }
-    return result;
+
+    if (valid) {
+      valid = contact.getAddressState().length() <= 80;
+      if (!valid)
+        error_description = "El estado (Entidad Federativa) de la dirección excede el tamaño permitido en la base de datos.";
+    }
+
+    if (valid) {
+      valid = contact.getAddressTwo().length() <= 100;
+      if (!valid)
+        error_description = "La línea secundaria de la dirección excede el tamaño permitido en la base de datos.";
+    }
+
+    if (valid) {
+      valid = contact.getAka().length() <= 100;
+      if (!valid)
+        error_description = "El alias del contacto excede el tamaño permitido en la base de datos.";
+    }
+
+    if (valid) {
+      valid = contact.getCity().length() <= 80;
+      if (!valid)
+        error_description = "El nombre de la ciudad del contacto excede el tamaño permitido en la base de datos.";
+    }
+
+    if (valid) {
+      valid = contact.getEmailAddress().length() <= 150;
+      if (!valid)
+        error_description = "La dirección de correo electrónico excede el tamaño permitido en la base de datos.";
+    }
+
+    if (valid && contact.getEmailAddress() != null && contact.getEmailAddress().length() > 0) {
+      valid = Utils.isValidEmail(contact.getEmailAddress());
+      if (!valid)
+        error_description = "La dirección de correo electrónico no cumple con un formato reconocible (correo@dominio.etc).";
+    }
+
+    if (valid) {
+      valid = contact.getFirstName().length() <= 50;
+      if (!valid)
+        error_description = "El nombre del contacto excede el tamaño permitido en la base de datos.";
+    }
+
+    if (valid) {
+      valid = contact.getFirstName().trim().length() > 0;
+      if (!valid)
+        error_description = "El nombre del contacto es un campo requerido.";
+    }
+
+    if (valid) {
+      valid = contact.getLastName().length() <= 50;
+      if (!valid)
+        error_description = "El apellido paterno del contacto excede el tamaño permitido en la base de datos.";
+    }
+
+    if (valid) {
+      valid = contact.getLastName().trim().length() > 0;
+      if (!valid)
+        error_description = "El apellido del contact es un campo requerido.";
+    }
+
+    if (valid) {
+      valid = contact.getMotherName().length() <= 50;
+      if (!valid)
+        error_description = "El apellido materno del contacto excede el tamaño permitido en la base de datos.";
+    }
+
+    if (valid) {
+      valid = contact.getTelephone().length() <= 20;
+      if (!valid)
+        error_description = "El teléfono del contacto excede el tamaño permitido en la base de datos.";
+    }
+
+    if (valid) {
+      valid = contact.getZipCode().length() <= 9;
+      if (!valid)
+        error_description = "El código postal de la dirección del contacto excede el tamaño permitido en la base de datos.";
+    }
+
+    if (valid) {
+      valid = rancherExists(contact);
+    }
+
+    return valid;
   }
 
   private boolean rancherExists(ContactRancher contact) {

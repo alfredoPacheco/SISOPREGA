@@ -307,10 +307,22 @@ public class EnterpriseContact extends BaseBean implements Cruddable {
         error_description = "El nombre del contacto excede el tamaño permitido en la base de datos.";
     }
     
-    if(valid){
-      valid = contact.getLastName().length()<=50;
-      if(!valid)
+    if (valid) {
+      valid = contact.getFirstName().trim().length() > 0;
+      if (!valid)
+        error_description = "El nombre del contacto es un campo requerido.";
+    }
+
+    if (valid) {
+      valid = contact.getLastName().length() <= 50;
+      if (!valid)
         error_description = "El apellido paterno del contacto excede el tamaño permitido en la base de datos.";
+    }
+
+    if (valid) {
+      valid = contact.getLastName().trim().length() > 0;
+      if (!valid)
+        error_description = "El apellido del contact es un campo requerido.";
     }
     
     if(valid){
