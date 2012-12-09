@@ -6,7 +6,7 @@ enyo.kind({
 	objCat:null,
 	components:[	
 		{kind: enyo.Scroller,flex: 1,
-		 style: "background-image: url(images/practice_background.png); background-size: cover;",			
+		className:"listBG",		 
 		 components: [
 					{kind: enyo.VirtualRepeater, name: "cattleList", onSetupRow: "setupProductRow", 
 					 onclick: "setProduct",								
@@ -16,12 +16,10 @@ enyo.kind({
 							 tapHighlight: true,
 							 components: [
 								{name: "desc", 
-								 style: "text-overflow: ellipsis; "+
-										 "overflow: hidden; white-space:"+
-										 "nowrap;color:#FFF;",
-										 content: ""},								
+									className:"listFirst"
+								 },								
 								{name: "cattleClass", 
-									 style: "font-size: 0.85em;color:#999",content: ""}
+									 className:"listSecond",content: ""}
 										 ]}
 							]}		
 			]
@@ -31,13 +29,14 @@ enyo.kind({
 		components: [					 
 		
 		{kind: "ToolInput", name:"cattype_name", align:"left",
-		 width:"70%",  hint:"Ganado",changeOnInput: true},
-		 {name: 'cattleClassListSelector', kind: "ListSelector", contentPack:"end", items: [], style: "font-color:white"}, 
+		 width:"60%",  hint:"Ganado",changeOnInput: true},
+		 {name: 'cattleClassListSelector', kind: "ListSelector", contentPack:"end", items: [], style: "color:#E5E5E5"}, 
 		{kind: "Drawer", name:"draAdd", components: [ 				
-		    {layoutKind: "HFlexLayout", align: "center",components: [
+		    //{layoutKind: "HFlexLayout", align: "center",components: [
 			{kind: "enyo.IconButton",name:"btnAdd",icon: "images/menu-icon-new.png", flex:1,
 			 onclick: "addProduct"},
-		    ]}
+		    //]
+			//}
 		]},
 		
 		{kind: "Drawer", name:"draUpdate", components: [
