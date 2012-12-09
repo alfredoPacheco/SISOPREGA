@@ -246,7 +246,7 @@ public class RancherInvoice extends BaseBean implements Cruddable {
     }
 
     /**
-     * Override functionality, evaluating over EnterpriseRancher for
+     * Override functionality, evaluating over EnterpriseRancherBean for
      * duplicates.
      */
     @Override
