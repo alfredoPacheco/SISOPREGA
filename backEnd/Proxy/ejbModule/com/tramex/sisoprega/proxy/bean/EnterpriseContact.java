@@ -154,7 +154,7 @@ public class EnterpriseContact extends BaseBean implements Cruddable {
       log.severe("Exception found while reading enterprise contact");
       log.throwing(this.getClass().getCanonicalName(), "Read", e);
 
-      response.setError(new Error("DB02", "Read exception: " + e.getMessage(), "proxy.RancherContact.Read"));
+      response.setError(new Error("DB02", "Read exception: " + e.getMessage(), "proxy.EnterpriseContact.Read"));
     }
 
     log.exiting(this.getClass().getCanonicalName(), "Read");
