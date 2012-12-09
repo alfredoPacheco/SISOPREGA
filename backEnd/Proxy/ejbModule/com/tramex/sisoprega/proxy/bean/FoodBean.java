@@ -15,53 +15,178 @@
  */
 package com.tramex.sisoprega.proxy.bean;
 
+import javax.ejb.Stateless;
+import javax.persistence.TypedQuery;
+
 import com.tramex.sisoprega.common.BaseResponse;
 import com.tramex.sisoprega.common.CreateGatewayResponse;
+import com.tramex.sisoprega.common.Error;
+import com.tramex.sisoprega.common.GatewayContent;
 import com.tramex.sisoprega.common.GatewayRequest;
 import com.tramex.sisoprega.common.ReadGatewayResponse;
 import com.tramex.sisoprega.common.UpdateGatewayResponse;
 import com.tramex.sisoprega.common.crud.Cruddable;
+import com.tramex.sisoprega.dto.Food;
 
 /**
  * @author Jaime Figueroa
- *
+ * 
  */
-public class FoodBean implements Cruddable {
+@Stateless
+public class FoodBean extends BaseBean implements Cruddable {
 
-    /* (non-Javadoc)
-     * @see com.tramex.sisoprega.common.crud.Cruddable#Create(com.tramex.sisoprega.common.GatewayRequest)
-     */
-    @Override
-    public CreateGatewayResponse Create(GatewayRequest request) {
-	// TODO Auto-generated method stub
-	return null;
+  /*
+   * (non-Javadoc)
+   * 
+   * @see
+   * com.tramex.sisoprega.common.crud.Cruddable#Create(com.tramex.sisoprega.
+   * common.GatewayRequest)
+   */
+  @Override
+  public CreateGatewayResponse Create(GatewayRequest request) {
+    log.entering(this.getClass().getCanonicalName(), "Create");
+
+    CreateGatewayResponse response = new CreateGatewayResponse();
+    Food food = null;
+    try {
+      food = entityFromRequest(request, Food.class);
+
+      log.fine("Received Food in request: " + food);
+
+      if (validateEntity(food)) {
+        log.finer("Food succesfully validated");
+        em.persist(food);
+        log.finer("Food persisted on database");
+        em.flush();
+
+        String sId = String.valueOf(food.getFoodId());
+        log.finer("Setting Food id in response: " + sId);
+        response.setGeneratedId(sId);
+        response.setError(new Error("0", "SUCCESS", "proxy.FoodBean.Create"));
+      } else {
+        log.warning("Error de validación: " + error_description);
+        response.setError(new Error("VAL01", "Error de validación: " + error_description, "proxy.FoodBean.Create"));
+      }
+
+    } catch (Exception e) {
+      log.severe("Exception found while creating FoodBean");
+      log.throwing(this.getClass().getName(), "Create", e);
+
+      if (e instanceof javax.persistence.PersistenceException)
+        response.setError(new Error("DB01", "Los datos que usted ha intentado ingresar, no son permitidos por la base de datos, "
+            + "muy probablemente este alimento ya ha sido registrado.", "proxy.FoodBean.Create"));
+      else {
+        response.setError(new Error("DB02", "Create exception: " + e.getMessage(), "proxy.FoodBean.Create"));
+      }
     }
 
-    /* (non-Javadoc)
-     * @see com.tramex.sisoprega.common.crud.Cruddable#Read(com.tramex.sisoprega.common.GatewayRequest)
-     */
-    @Override
-    public ReadGatewayResponse Read(GatewayRequest request) {
-	// TODO Auto-generated method stub
-	return null;
+    log.exiting(this.getClass().getCanonicalName(), "Create");
+    return response;
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see
+   * com.tramex.sisoprega.common.crud.Cruddable#Read(com.tramex.sisoprega.common
+   * .GatewayRequest)
+   */
+  @Override
+  public ReadGatewayResponse Read(GatewayRequest request) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see
+   * com.tramex.sisoprega.common.crud.Cruddable#Update(com.tramex.sisoprega.
+   * common.GatewayRequest)
+   */
+  @Override
+  public UpdateGatewayResponse Update(GatewayRequest request) {
+    log.entering(this.getClass().getCanonicalName(), "Update");
+    UpdateGatewayResponse response = new UpdateGatewayResponse();
+    Food food = null;
+    try {
+      food = entityFromRequest(request, Food.class);
+
+      if (food.getFoodId() == 0) {
+        log.warning("VAL04 - Entity ID Omission.");
+        response.setError(new Error("VAL04", "Se ha omitido el id del corral al intentar actualizar sus datos.",
+            "proxy.Food.Update"));
+      } else {
+        if (validateEntity(food)) {
+          em.merge(food);
+          em.flush();
+
+          GatewayContent content = getContentFromEntity(food, Food.class);
+          response.setUpdatedRecord(content);
+
+          response.setError(new Error("0", "SUCCESS", "proxy.Food.Update"));
+        } else {
+          log.warning("Validation error:" + error_description);
+          response.setError(new Error("VAL01", "Error de validación de datos:" + error_description, "proxy.FoodBean.Update"));
+        }
+      }
+
+    } catch (Exception e) {
+      log.severe("Exception found while updating Food");
+      log.throwing(this.getClass().getName(), "Update", e);
+
+      if (e instanceof javax.persistence.PersistenceException)
+        response.setError(new Error("DB01", "Los datos que usted ha intentado ingresar, no son permitidos por la base de datos, "
+            + "muy probablemente este alimento ya ha sido registrado.", "proxy.FoodBean.Update"));
+      else {
+        response.setError(new Error("DB02", "Error en la base de datos:[" + e.getMessage() + "]", "proxy.FoodBean.Update"));
+      }
     }
 
-    /* (non-Javadoc)
-     * @see com.tramex.sisoprega.common.crud.Cruddable#Update(com.tramex.sisoprega.common.GatewayRequest)
-     */
-    @Override
-    public UpdateGatewayResponse Update(GatewayRequest request) {
-	// TODO Auto-generated method stub
-	return null;
+    log.exiting(this.getClass().getCanonicalName(), "Update");
+    return response;
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see
+   * com.tramex.sisoprega.common.crud.Cruddable#Delete(com.tramex.sisoprega.
+   * common.GatewayRequest)
+   */
+  @Override
+  public BaseResponse Delete(GatewayRequest request) {
+    log.entering(this.getClass().getCanonicalName(), "Delete");
+    BaseResponse response = new BaseResponse();
+
+    try {
+      Food food = entityFromRequest(request, Food.class);
+      if (food.getFoodId() == 0) {
+        log.warning("VAL04 - Entity ID Omission.");
+        response.setError(new Error("VAL04", "Se ha omitido el id del corral al intentar eliminar el registro.",
+            "proxy.Food.Delete"));
+      } else {
+        TypedQuery<Food> readQuery = em.createNamedQuery("CAT_FOOD_BY_ID", Food.class);
+        readQuery.setParameter("foodId", food.getFoodId());
+        food = readQuery.getSingleResult();
+        em.merge(food);
+        em.remove(food);
+        em.flush();
+
+        response.setError(new Error("0", "SUCCESS", "proxy.Food.Delete"));
+      }
+    } catch (Exception e) {
+      log.severe("Exception found while deleting Food");
+      log.throwing(this.getClass().getName(), "Delete", e);
+
+      response.setError(new Error("DEL01",
+          "Error al intentar borrar datos, es probable que esta entidad tenga otras entidades relacionadas, "
+              + "por ejemplo, muy probablemente un corral ya ha sido alimentado con este tipo de comida.",
+          "proxy.Food.Delete"));
     }
 
-    /* (non-Javadoc)
-     * @see com.tramex.sisoprega.common.crud.Cruddable#Delete(com.tramex.sisoprega.common.GatewayRequest)
-     */
-    @Override
-    public BaseResponse Delete(GatewayRequest request) {
-	// TODO Auto-generated method stub
-	return null;
-    }
+    log.exiting(this.getClass().getCanonicalName(), "Delete");
+    return response;
+  }
 
 }

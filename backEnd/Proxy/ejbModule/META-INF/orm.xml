@@ -467,6 +467,10 @@
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.Food">
 		<table name="cat_food" />
+		<named-query name="CAT_FOOD_BY_ID">
+			<description>Retrieves a single crtFood record by ID</description>
+			<query>SELECT fod FROM Food fod WHERE fod.foodId = :foodId</query>
+		</named-query>
 		<attributes>
 			<id name="foodId">
 				<column name="food_id" />

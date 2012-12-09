@@ -65,6 +65,10 @@
 			<ejb-name>FeedOrderProxy</ejb-name>
 			<ejb-class>com.tramex.sisoprega.proxy.bean.FeedOrderBean</ejb-class>
 		</session>
+		<session>
+			<ejb-name>FoodProxy</ejb-name>
+			<ejb-class>com.tramex.sisoprega.proxy.bean.FoodBean</ejb-class>
+		</session>
 	</enterprise-beans>
 	<assembly-descriptor>
 		<security-role>
