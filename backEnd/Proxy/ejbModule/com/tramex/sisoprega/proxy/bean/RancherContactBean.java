@@ -30,7 +30,7 @@ import com.tramex.sisoprega.common.ReadGatewayResponse;
 import com.tramex.sisoprega.common.UpdateGatewayResponse;
 import com.tramex.sisoprega.common.Utils;
 import com.tramex.sisoprega.common.crud.Cruddable;
-import com.tramex.sisoprega.dto.ContactRancher;
+import com.tramex.sisoprega.dto.RancherContact;
 
 /**
  * This proxy knows the logic to evaluate RancherBean's Contact information and
@@ -45,6 +45,7 @@ import com.tramex.sisoprega.dto.ContactRancher;
  * MM/DD/YYYY
  * ----------  ---------------------------  -------------------------------------------
  * 11/11/2012  Diego Torres                 Initial Version.
+ * 12/08/2012  Diego Torres                 Fixing standard error codes and validation.
  * ====================================================================================
  * </PRE>
  * 
@@ -52,7 +53,7 @@ import com.tramex.sisoprega.dto.ContactRancher;
  * 
  */
 @Stateless
-public class RancherContact extends BaseBean implements Cruddable {
+public class RancherContactBean extends BaseBean implements Cruddable {
 
   /*
    * (non-Javadoc)
@@ -65,10 +66,10 @@ public class RancherContact extends BaseBean implements Cruddable {
     log.entering(this.getClass().getCanonicalName(), "Create");
 
     CreateGatewayResponse response = new CreateGatewayResponse();
-    ContactRancher contact = null;
+    RancherContact contact = null;
 
     try {
-      contact = entityFromRequest(request, ContactRancher.class);
+      contact = entityFromRequest(request, RancherContact.class);
 
       log.fine("Received contact in request: {" + contact + "}");
 
@@ -113,19 +114,19 @@ public class RancherContact extends BaseBean implements Cruddable {
     ReadGatewayResponse response = new ReadGatewayResponse();
     response.setEntityName(request.getEntityName());
 
-    ContactRancher contact = null;
+    RancherContact contact = null;
     try {
-      contact = entityFromRequest(request, ContactRancher.class);
+      contact = entityFromRequest(request, RancherContact.class);
 
       log.fine("Got contact from request: " + contact);
 
-      TypedQuery<ContactRancher> readQuery = null;
+      TypedQuery<RancherContact> readQuery = null;
 
       if (contact.getRancherId() != 0) {
-        readQuery = em.createNamedQuery("RANCHER_CONTACT_BY_RANCHER_ID", ContactRancher.class);
+        readQuery = em.createNamedQuery("RANCHER_CONTACT_BY_RANCHER_ID", RancherContact.class);
         readQuery.setParameter("rancherId", contact.getRancherId());
       } else if (contact.getContactId() != 0) {
-        readQuery = em.createNamedQuery("RANCHER_CONTACT_BY_ID", ContactRancher.class);
+        readQuery = em.createNamedQuery("RANCHER_CONTACT_BY_ID", RancherContact.class);
         readQuery.setParameter("contactId", contact.getContactId());
       } else {
         response.setError(new Error("VAL03", "El filtro especificado no es válido en el catálogo de contactos.",
@@ -133,12 +134,12 @@ public class RancherContact extends BaseBean implements Cruddable {
         return response;
       }
 
-      List<ContactRancher> queryResults = readQuery.getResultList();
+      List<RancherContact> queryResults = readQuery.getResultList();
 
       if (queryResults.isEmpty()) {
         response.setError(new Error("VAL02", "No se encontraron datos para el filtro seleccionado", "proxy.RancherContact.Read"));
       } else {
-        List<GatewayContent> records = contentFromList(queryResults, ContactRancher.class);
+        List<GatewayContent> records = contentFromList(queryResults, RancherContact.class);
         response.getRecord().addAll(records);
 
         response.setError(new Error("0", "SUCCESS", "proxy.RancherContact.Read"));
@@ -166,9 +167,9 @@ public class RancherContact extends BaseBean implements Cruddable {
   public UpdateGatewayResponse Update(GatewayRequest request) {
     log.entering(this.getClass().getCanonicalName(), "Update");
     UpdateGatewayResponse response = new UpdateGatewayResponse();
-    ContactRancher contact = null;
+    RancherContact contact = null;
     try {
-      contact = entityFromRequest(request, ContactRancher.class);
+      contact = entityFromRequest(request, RancherContact.class);
 
       if (contact.getContactId() == 0) {
         log.warning("VAL04 - Entity ID Omission.");
@@ -180,7 +181,7 @@ public class RancherContact extends BaseBean implements Cruddable {
           em.merge(contact);
           em.flush();
 
-          GatewayContent content = getContentFromEntity(contact, ContactRancher.class);
+          GatewayContent content = getContentFromEntity(contact, RancherContact.class);
           response.setUpdatedRecord(content);
 
           response.setError(new Error("0", "SUCCESS", "proxy.RancherContact.Update"));
@@ -219,13 +220,13 @@ public class RancherContact extends BaseBean implements Cruddable {
     BaseResponse response = new BaseResponse();
 
     try {
-      ContactRancher contact = entityFromRequest(request, ContactRancher.class);
+      RancherContact contact = entityFromRequest(request, RancherContact.class);
       if (contact.getContactId() == 0) {
         log.warning("VAL04 - Entity ID Omission.");
         response.setError(new Error("VAL04", "Se ha omitido el id del contacto al intentar eliminar el registro.",
             "proxy.RancherContactBean.Delete"));
       } else {
-        TypedQuery<ContactRancher> readQuery = em.createNamedQuery("RANCHER_CONTACT_BY_ID", ContactRancher.class);
+        TypedQuery<RancherContact> readQuery = em.createNamedQuery("RANCHER_CONTACT_BY_ID", RancherContact.class);
         readQuery.setParameter("contactId", contact.getContactId());
         contact = readQuery.getSingleResult();
         em.merge(contact);
@@ -252,7 +253,7 @@ public class RancherContact extends BaseBean implements Cruddable {
     boolean valid = true;
     valid = super.validateEntity(entity);
 
-    ContactRancher contact = (ContactRancher) entity;
+    RancherContact contact = (RancherContact) entity;
 
     // Validate address One
     if (valid) {
@@ -346,7 +347,7 @@ public class RancherContact extends BaseBean implements Cruddable {
     return valid;
   }
 
-  private boolean rancherExists(ContactRancher contact) {
+  private boolean rancherExists(RancherContact contact) {
     boolean exists = true;
 
     TypedQuery<com.tramex.sisoprega.dto.Rancher> readQuery = null;

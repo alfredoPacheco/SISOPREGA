@@ -144,20 +144,20 @@
 			</basic>
 		</attributes>
 	</entity>
-	<entity class="com.tramex.sisoprega.dto.ContactRancher">
+	<entity class="com.tramex.sisoprega.dto.RancherContact">
 		<table name="cat_rancher_contact" />
 		<named-query name="RANCHER_CONTACT_BY_ID">
 			<description>Get a rancher contact by its contact Id</description>
 			<query>
 			SELECT contact 
-			FROM ContactRancher contact 
+			FROM RancherContact contact 
 			WHERE contact.contactId = :contactId</query>
 		</named-query>
 		<named-query name="RANCHER_CONTACT_BY_RANCHER_ID">
 			<description>Get all rancher contacts by rancher id</description>
 			<query>
 			SELECT contact 
-			FROM ContactRancher contact 
+			FROM RancherContact contact 
 			WHERE contact.rancherId = :rancherId 
 			ORDER BY contact.firstName, contact.lastName, contact.motherName</query>
 		</named-query>
@@ -199,13 +199,13 @@
 			</basic>
 		</attributes>
 	</entity>
-	<entity class="com.tramex.sisoprega.dto.ContactEnterprise">
+	<entity class="com.tramex.sisoprega.dto.EnterpriseContact">
 		<table name="cat_rancher_contact" />
 		<named-query name="ENTERPRISE_CONTACT_BY_ID">
 			<description>Get an enterprise contact by its contact id</description>
 			<query>
 			SELECT contact
-			FROM ContactEnterprise contact
+			FROM EnterpriseContact contact
 			WHERE contact.contactId = :contactId
 			</query>
 		</named-query>
@@ -213,7 +213,7 @@
 			<description> Get all enterprise contact by enterprise id</description>
 			<query>
 				SELECT contact
-				FROM ContactEnterprise contact
+				FROM EnterpriseContact contact
 				WHERE contact.enterpriseId = :enterpriseId
 				ORDER BY contact.firstName, contact.lastName, contact.motherName
 			</query>

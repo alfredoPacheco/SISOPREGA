@@ -26,7 +26,7 @@ import com.tramex.sisoprega.common.crud.Cruddable;
  * @author Jaime Figueroa
  *
  */
-public class InspectionBarnyardbean implements Cruddable {
+public class InspectionBarnyardBean implements Cruddable {
 
     /* (non-Javadoc)
      * @see com.tramex.sisoprega.common.crud.Cruddable#Create(com.tramex.sisoprega.common.GatewayRequest)
