@@ -18,7 +18,7 @@ enyo.kind({
 				 ]},
 		 //SCRIM
 		 {kind: enyo.Scrim,name:"scrimMain",layoutKind:enyo.VFlexLayout, align: "center", pack: "center",
-		  components: [{kind: "SpinnerLarge"}]},
+		  components: [{kind: enyo.SpinnerLarge}]},
 		 {kind: enyo.Dialog, name:"toastMain",flyInFrom: "bottom",lazy: false, scrim:true, 
 		  components:[{style: "padding: 12px", content: "Alerta"},
 					  {name:"msgMain",style: "padding: 12px; font-size: 14px: width:100%:height:100%", 
@@ -39,7 +39,7 @@ enyo.kind({
 		this.$.mainPane.selectViewByName("mainMenu");
 	},
 	noAccess:function(){
-		cacheMan.setMessage("","", "Usuario o contraseña incorrecta.");
+		cacheMan.setMessage("", "Usuario o contraseña incorrecta.");
 	},
 	logOut:function(){
 

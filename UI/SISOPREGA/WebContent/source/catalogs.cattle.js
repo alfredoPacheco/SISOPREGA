@@ -11,6 +11,7 @@ enyo.kind({
 					{kind: enyo.VirtualRepeater, name: "cattleList", onSetupRow: "setupProductRow", 
 					 onclick: "setProduct",								
 						components: [
+						    {kind: "Divider"},		
 							{kind: enyo.SwipeableItem,
 							 onConfirm: "deleteProduct", 							 
 							 tapHighlight: true,
@@ -53,7 +54,8 @@ enyo.kind({
 		]},					 		
 	],
 	setupProductRow:function(inSender, inIndex) {		
-		if (objCattle=cacheCattle.getCattleType()[inIndex]){						
+		if (objCattle=cacheCattle.getCattleType()[inIndex]){
+			this.setupDivider(inIndex);
 			this.$.desc.setContent(objCattle.cattype_name);
 			this.$.cattleClass.setContent(cacheCattle.getCattleClassByID(objCattle.catclass_id).catclass_name);
 			return true;
@@ -102,6 +104,7 @@ enyo.kind({
 		this.resetValues();
 	},
 	updateList:function(){
+		
 		this.$.cattleList.render();					
 	},
 	setProduct:function(inSender, inEvent){	
@@ -136,6 +139,33 @@ enyo.kind({
 									value:this.get()[i].cattype_id});
 		}
 		return _arrCattleLS;
+	},
+	getGroupName: function(inIndex) {
+//		try{
+//			// get previous record
+//			var r0 = this.objList[inIndex -1];
+//			// get (and memoized) first letter of last name
+//			if (r0) {
+//				r0.letter = r0.sortStr.substr(0,1).toUpperCase();
+//			}
+//			var a = r0 && r0.letter;
+//			// get record
+//			var r1 = this.objList[inIndex];
+//			r1.letter = r1.sortStr.substr(0,1).toUpperCase();
+//			var b = r1.letter;
+//			// new group if first letter of last name has changed
+//			return a != b ? b : null;
+//		}catch(e){
+			return null;
+//		}
+
+	},
+	setupDivider: function(inIndex) {
+		// use group divider at group transition, otherwise use item border for divider
+		var group = this.getGroupName(inIndex);
+		this.$.divider.setCaption(group);
+		//this.$.divider.applyStyle("color","white");
+		this.$.divider.canGenerate = Boolean(group);
 	}
 });
 
