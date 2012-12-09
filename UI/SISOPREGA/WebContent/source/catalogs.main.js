@@ -7,10 +7,9 @@ enyo.kind({
 	components: [
 		{ kind: enyo.Pane, flex: 1, name: "mainPane",
 		 components:[
-			{kind:"catalogs.menu",name:"catMenu", onRanchers:"showRanchers",onBarnyards:"showBarnyards",
+			{kind:"catalogs.menu",name:"catMenu", onRanchers:"showRanchers",
 			 onReports:"showReports",onCattle:"showCattle"},			
-			{kind:"catalogs.cattle",name:"catCattle"},									 
-			{kind:"catalogs.barnyards",name:"catBY"},						
+			{kind:"catalogs.cattle",name:"catCattle"},
 			{kind:"catalogs.ranchers",name:"catRanchers"},			
 		 ]},		 
 	],
@@ -19,12 +18,7 @@ enyo.kind({
 		_objMainHeader.setContent('Ganaderos');
 		this.$.mainPane.selectViewByName("catRanchers");		
 	},	
-	showBarnyards:function(){
-		this.addGoBackAction();		
-		_objMainHeader.setContent('Corrales');
-		this.$.catBY.$.barnyardList.updateList();
-		this.$.mainPane.selectViewByName("catBY");		
-	},		
+			
 	showReports:function(){
 		this.addGoBackAction();		
 		_objMainHeader.setContent('Reportes');

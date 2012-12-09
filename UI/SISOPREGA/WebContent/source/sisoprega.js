@@ -7,7 +7,7 @@ enyo.kind({
 				{name:'btnGoBack',icon:"images/command-menu/menu-icon-back.png", onclick:"goBack"},
 				{kind: "Spacer"},
 				{kind: "VFlexBox", name:'lblMainCap', allowHtml:true,
-				 style:"color:#FFF;border:none", content: "Recepciones"},  
+				 style:"color:#FFF;border:none", content: "Menu Principal"},  
 				{kind: "Spacer"},
 				{name:'btnLogOut', onclick:"logOut",icon:"images/command-menu/icon-context.png"}]},
 				
@@ -33,9 +33,17 @@ enyo.kind({
 	},
 	goBack:function(){
 		cacheMan.goBack();
+		if (_objMainHeader.getContent() =="Menu Principal"){
+			this.$.btnGoBack.setShowing(!1);
+		}
+		else{
+			this.$.btnGoBack.setShowing(1);
+		}
+			
 	},
-	goAhead:function(){
-		this.$.tbHeader.show();
+	goAhead:function(){			
+		this.$.btnGoBack.setShowing(!1);
+		this.$.tbHeader.show();	
 		this.$.mainPane.selectViewByName("mainMenu");
 	},
 	noAccess:function(){
@@ -48,10 +56,5 @@ enyo.kind({
 		cacheMan.clearBack();
 		enyo.$.sisoprega.destroy();
 		window.location = './'; 
-//		
-//		enyo.create({
-//			kind : "sisoprega"
-//		}).renderInto(document.body);
-//		this.$.mainPane.selectViewByName("login");
 	}
 });

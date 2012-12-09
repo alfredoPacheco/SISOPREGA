@@ -4,6 +4,7 @@ enyo.kind({
 	layoutKind: enyo.VFlexLayout,
 	iProduct:"",
 	objCat:null,
+	objList:[],
 	components:[	
 		{kind: enyo.Scroller,flex: 1,
 		className:"listBG",		 
@@ -158,7 +159,6 @@ enyo.kind({
 //		}catch(e){
 			return null;
 //		}
-
 	},
 	setupDivider: function(inIndex) {
 		// use group divider at group transition, otherwise use item border for divider
