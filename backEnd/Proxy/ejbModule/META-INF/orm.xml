@@ -480,6 +480,10 @@
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.FeedOrderDetails">
 		<table name="ctrl_feed_order_details" />
+		<named-query name="CRT_FEEDORDERDETAILS_BY_ID">
+			<description>Retrieves a single crtFood record by ID</description>
+			<query>SELECT FeOrDls FROM FeedOrderDetails FeOrDls WHERE FeOrDls.fodId = :fodId</query>
+		</named-query>
 		<attributes>
 			<id name="fodId">
 				<column name="id" />
