@@ -37,7 +37,7 @@ enyo.kind({
 		    	});
 			}else{ //Error
 				if (cgReadAllRanchers.exceptionId != "RR02"){ //No data found
-					cacheMan.setMessage("", "","[Exception ID: " + cgReadAllRanchers.exceptionId + "] Descripción: " + cgReadAllRanchers.exceptionDescription);	
+					cacheMan.setMessage("", "[Exception ID: " + cgReadAllRanchers.exceptionId + "] Descripción: " + cgReadAllRanchers.exceptionDescription);	
 				}			
 			}
 			
@@ -56,7 +56,7 @@ enyo.kind({
 			}
 			else{ //Error								
 				if (cgReadAllEnterpriseRanchers.exceptionId != "ERR2"){//No data found
-					cacheMan.setMessage("", "","[Exception ID: " + cgReadAllEnterpriseRanchers.exceptionId + "] Descripcion: " + cgReadAllEnterpriseRanchers.exceptionDescription);	
+					cacheMan.setMessage("", "[Exception ID: " + cgReadAllEnterpriseRanchers.exceptionId + "] Descripcion: " + cgReadAllEnterpriseRanchers.exceptionDescription);	
 				}			
 			}
 			
@@ -283,7 +283,7 @@ enyo.kind({
 		}
 		else{ //Error
 			//cacheMan.setMessage("", "","[Exception ID: " + cgCreate.exceptionId + "] Error al intentar crear Ganadero.");
-			cacheMan.setMessage("", "","[Exception ID: " + cgCreate.exceptionId + "] Descripcion: " + cgCreate.exceptionDescription);
+			cacheMan.setMessage("", "[Exception ID: " + cgCreate.exceptionId + "] Descripcion: " + cgCreate.exceptionDescription);
 			return false;
 		}
 	},
@@ -308,7 +308,7 @@ enyo.kind({
 			return true;
 		}
 		else{ //Error			
-			cacheMan.setMessage("", "","[Exception ID: " + cgCreateEnterpriseRancher.exceptionId + "] Descripcion: " + cgCreateEnterpriseRancher.exceptionDescription);
+			cacheMan.setMessage("", "[Exception ID: " + cgCreateEnterpriseRancher.exceptionId + "] Descripcion: " + cgCreateEnterpriseRancher.exceptionDescription);
 			return false;
 		}
 	},
@@ -342,7 +342,7 @@ enyo.kind({
 			return false;
 		}
 		else{ //Error			
-			cacheMan.setMessage("", "","[Exception ID: " + cgUpdateRancher.exceptionId + "] Descripcion: " + cgUpdateRancher.exceptionDescription);
+			cacheMan.setMessage("", "[Exception ID: " + cgUpdateRancher.exceptionId + "] Descripcion: " + cgUpdateRancher.exceptionDescription);
 			return false;
 		}		
 	},
@@ -369,7 +369,7 @@ enyo.kind({
 			return false;
 		}
 		else{ //Error			
-			cacheMan.setMessage("", "","[Exception ID: " + cgUpdateEnterpriseRancher.exceptionId + "] Descripcion: " + cgUpdateEnterpriseRancher.exceptionDescription);
+			cacheMan.setMessage("", "[Exception ID: " + cgUpdateEnterpriseRancher.exceptionId + "] Descripcion: " + cgUpdateEnterpriseRancher.exceptionDescription);
 			return false;
 		}		
 	},
@@ -402,7 +402,7 @@ enyo.kind({
 			return false;
 		}
 		else{ //Error
-			cacheMan.setMessage("", "","[Exception ID: " + cgDeleteRancher.exceptionId + "] Descripcion: " + cgDeleteRancher.exceptionDescription);
+			cacheMan.setMessage("", "[Exception ID: " + cgDeleteRancher.exceptionId + "] Descripcion: " + cgDeleteRancher.exceptionDescription);
 			return false;
 		}
 	},
@@ -426,7 +426,7 @@ enyo.kind({
 			return false;
 		}
 		else{ //Error
-			cacheMan.setMessage("", "","[Exception ID: " + cgDeleteEnterpriseRancher.exceptionId + "] Descripcion: " + cgDeleteEnterpriseRancher.exceptionDescription);
+			cacheMan.setMessage("", "[Exception ID: " + cgDeleteEnterpriseRancher.exceptionId + "] Descripcion: " + cgDeleteEnterpriseRancher.exceptionDescription);
 			return false;
 		}
 	},
@@ -520,7 +520,7 @@ enyo.kind({
 			return true;
 		}
 		else{ //Error			
-			cacheMan.setMessage("", "","[Exception ID: " + cgCreateContact.exceptionId + "] Descripcion: " + cgCreateContact.exceptionDescription);
+			cacheMan.setMessage("", "[Exception ID: " + cgCreateContact.exceptionId + "] Descripcion: " + cgCreateContact.exceptionDescription);
 			return false;
 		}
 		
@@ -555,7 +555,7 @@ enyo.kind({
 			return false;
 		}
 		else{ //Error			
-			cacheMan.setMessage("", "","[Exception ID: " + cgUpdateContact.exceptionId + "] Descripcion: " + cgUpdateContact.exceptionDescription);
+			cacheMan.setMessage("", "[Exception ID: " + cgUpdateContact.exceptionId + "] Descripcion: " + cgUpdateContact.exceptionDescription);
 			return false;
 		}	
 	},
@@ -584,7 +584,7 @@ enyo.kind({
 			return false;
 		}
 		else{ //Error
-			cacheMan.setMessage("", "","[Exception ID: " + cgDeleteContact.exceptionId + "] Descripcion: " + cgDeleteContact.exceptionDescription);
+			cacheMan.setMessage("", "[Exception ID: " + cgDeleteContact.exceptionId + "] Descripcion: " + cgDeleteContact.exceptionDescription);
 			return false;
 		}
 	},
@@ -610,7 +610,7 @@ enyo.kind({
 				
 //			else{ //Error						
 //				if (cgReadInvoice.exceptionId != "RR02"){
-//					cacheMan.setMessage("", "","[Exception ID: " + cgReadInvoice.exceptionId + "] Descripcion: " + cgReadInvoice.exceptionDescription);	
+//					cacheMan.setMessage("", "[Exception ID: " + cgReadInvoice.exceptionId + "] Descripcion: " + cgReadInvoice.exceptionDescription);	
 //				}			
 //			}
 //		}
@@ -633,8 +633,8 @@ enyo.kind({
 			return true;
 		}
 		else{ //Error
-			//cacheMan.setMessage("", "","[Exception ID: " + cgCreateInvoice.exceptionId + "] Error al intentar crear Ganadero.");
-			cacheMan.setMessage("", "","[Exception ID: " + cgCreateInvoice.exceptionId + "] Descripcion: " + cgCreateInvoice.exceptionDescription);
+			//cacheMan.setMessage("", "[Exception ID: " + cgCreateInvoice.exceptionId + "] Error al intentar crear Ganadero.");
+			cacheMan.setMessage("", "[Exception ID: " + cgCreateInvoice.exceptionId + "] Descripcion: " + cgCreateInvoice.exceptionDescription);
 			return false;
 		}
 	},
@@ -655,7 +655,7 @@ enyo.kind({
 			if (cgUpdateInvoice.exceptionId == "RIU3"){
 				this.createBilling(objRancher,objBill,cbObj,cbMethod);
 			}else{
-				cacheMan.setMessage("", "","[Exception ID: " + cgUpdateInvoice.exceptionId + "] Descripcion: " + cgUpdateInvoice.exceptionDescription);
+				cacheMan.setMessage("", "[Exception ID: " + cgUpdateInvoice.exceptionId + "] Descripcion: " + cgUpdateInvoice.exceptionDescription);
 				return false;
 			}
 		}
