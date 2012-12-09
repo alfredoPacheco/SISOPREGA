@@ -6,22 +6,21 @@ enyo.kind({
 	objCat:null,
 	components:[	
 		{kind: enyo.Scroller,flex: 1,
-		 style: "background-image: url(images/practice_background.png); background-size: cover;",			
+		className:"listBG",		 
 		 components: [
 					{kind: enyo.VirtualRepeater, name: "cattleList", onSetupRow: "setupProductRow", 
 					 onclick: "setProduct",								
 						components: [
+						    {kind: "Divider"},		
 							{kind: enyo.SwipeableItem,
 							 onConfirm: "deleteProduct", 							 
 							 tapHighlight: true,
 							 components: [
 								{name: "desc", 
-								 style: "text-overflow: ellipsis; "+
-										 "overflow: hidden; white-space:"+
-										 "nowrap;color:#FFF;",
-										 content: ""},								
+									className:"listFirst"
+								 },								
 								{name: "cattleClass", 
-									 style: "font-size: 0.85em;color:#999",content: ""}
+									 className:"listSecond",content: ""}
 										 ]}
 							]}		
 			]
@@ -31,13 +30,14 @@ enyo.kind({
 		components: [					 
 		
 		{kind: "ToolInput", name:"cattype_name", align:"left",
-		 width:"70%",  hint:"Ganado",changeOnInput: true},
-		 {name: 'cattleClassListSelector', kind: "ListSelector", contentPack:"end", items: [], style: "font-color:white"}, 
+		 width:"60%",  hint:"Ganado",changeOnInput: true},
+		 {name: 'cattleClassListSelector', kind: "ListSelector", contentPack:"end", items: [], style: "color:#E5E5E5"}, 
 		{kind: "Drawer", name:"draAdd", components: [ 				
-		    {layoutKind: "HFlexLayout", align: "center",components: [
+		    //{layoutKind: "HFlexLayout", align: "center",components: [
 			{kind: "enyo.IconButton",name:"btnAdd",icon: "images/menu-icon-new.png", flex:1,
 			 onclick: "addProduct"},
-		    ]}
+		    //]
+			//}
 		]},
 		
 		{kind: "Drawer", name:"draUpdate", components: [
@@ -54,7 +54,8 @@ enyo.kind({
 		]},					 		
 	],
 	setupProductRow:function(inSender, inIndex) {		
-		if (objCattle=cacheCattle.getCattleType()[inIndex]){						
+		if (objCattle=cacheCattle.getCattleType()[inIndex]){
+			this.setupDivider(inIndex);
 			this.$.desc.setContent(objCattle.cattype_name);
 			this.$.cattleClass.setContent(cacheCattle.getCattleClassByID(objCattle.catclass_id).catclass_name);
 			return true;
@@ -103,6 +104,7 @@ enyo.kind({
 		this.resetValues();
 	},
 	updateList:function(){
+		
 		this.$.cattleList.render();					
 	},
 	setProduct:function(inSender, inEvent){	
@@ -137,6 +139,33 @@ enyo.kind({
 									value:this.get()[i].cattype_id});
 		}
 		return _arrCattleLS;
+	},
+	getGroupName: function(inIndex) {
+//		try{
+//			// get previous record
+//			var r0 = this.objList[inIndex -1];
+//			// get (and memoized) first letter of last name
+//			if (r0) {
+//				r0.letter = r0.sortStr.substr(0,1).toUpperCase();
+//			}
+//			var a = r0 && r0.letter;
+//			// get record
+//			var r1 = this.objList[inIndex];
+//			r1.letter = r1.sortStr.substr(0,1).toUpperCase();
+//			var b = r1.letter;
+//			// new group if first letter of last name has changed
+//			return a != b ? b : null;
+//		}catch(e){
+			return null;
+//		}
+
+	},
+	setupDivider: function(inIndex) {
+		// use group divider at group transition, otherwise use item border for divider
+		var group = this.getGroupName(inIndex);
+		this.$.divider.setCaption(group);
+		//this.$.divider.applyStyle("color","white");
+		this.$.divider.canGenerate = Boolean(group);
 	}
 });
 

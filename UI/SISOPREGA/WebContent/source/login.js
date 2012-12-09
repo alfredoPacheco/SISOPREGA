@@ -26,12 +26,12 @@ enyo.kind({
 					 width:"50%;",
 			 	 	 style:"color:#FFF;margin-top:10%",
 			 	 	 components: [	
-						{kind:"Input", name:"user", hint:"Usuario",selectAllOnFocus: true,},
-						{kind:"PasswordInput", name:"password", hint:"Contraseña",selectAllOnFocus: true,}
+						{kind:"Input", name:"user", hint:"Usuario",selectAllOnFocus: true, value:"alfredo"},
+						{kind:"PasswordInput", name:"password", hint:"Contraseña",selectAllOnFocus: true, value:"alfredo"}
 					]},
 					{kind: "Spacer"}					 
 			]}]},		
-		{kind: "Toolbar",name:"tbHeader",style:"", 
+		{kind: "Toolbar",name:"tbHeader2",style:"", 
 			components: [
 				{kind: "Button", className: "enyo-button-affirmative",style:"background-color:#5f0712",
 				 flex:1, caption: "Entrar", onclick: "checkLogIn"},				
@@ -41,6 +41,7 @@ enyo.kind({
 		var consumirLogin = consumingGateway.Login(this.$.user.getValue(), this.$.password.getValue());
 		if(consumirLogin.exceptionId == 0){
 			cacheRanchers.get();
+			
 			cacheCattle.getCattleClass();
 			cacheCattle.getCattleType();
 			this.doSucess();

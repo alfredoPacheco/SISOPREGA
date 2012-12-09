@@ -19,9 +19,8 @@
             	
             	$("#seccion").append("<h1>Consumir Login</h1>");
             	
-            	consumirLogin = consumingGateway.Login("admin", "admin");
+            	consumirLogin = consumingGateway.Login("jaime", "123");
             	
-            	$("#seccion").append("<b>sessionId: </b>" + sessionToken + "<br />");
             	$("#seccion").append("<b>exceptionID: </b>" + consumirLogin.exceptionId + "<br />");
             	$("#seccion").append("<b>exceptionDescription: </b>" + consumirLogin.exceptionDescription + "<br />");
             	
@@ -38,13 +37,13 @@
             				phone: 			"3050450"
             			};
             	
-            	consumirCreate = consumingGateway.Create("Rancher", "test", ganadero);
+            	consumirCreate = consumingGateway.Create("Rancher", ganadero);
             	
             	$("#seccion").append("<b>origin: </b>" + consumirCreate.origin + "<br />");
             	$("#seccion").append("<b>exceptionID: </b>" + consumirCreate.exceptionId + "<br />");
             	$("#seccion").append("<b>exceptionDescription: </b>" + consumirCreate.exceptionDescription + "<br />");
             	$("#seccion").append("<b>generatedID: </b>" + consumirCreate.generatedId + "<br />");
-            	$("#seccion").append("<b>newToken: </b>" + sessionToken + "<br />");
+            	
             	
             	//########################################################################################
             	
@@ -53,7 +52,7 @@
             	miEntidad = {rancherId:consumirCreate.generatedId};
             	//miEntidad = {}; NO BORRAR, ejemplo para traer todos los records
             	
-            	consumirRead = consumingGateway.Read("Rancher", "testRequest", miEntidad);
+            	consumirRead = consumingGateway.Read("Rancher",  miEntidad);
             	
                 $("#seccion").append("<b>Entity Name: </b>" + consumirRead.entityName + "<br />");
             	$("#seccion").append("<b>Exception ID: </b>" + consumirRead.exceptionId + "<br />");
@@ -65,7 +64,7 @@
     	    		});
     	    		$("#seccion").append("<br />");
     	    	});            	
-            	$("#seccion").append("<b>newToken: </b>" + sessionToken + "<br />");
+            	
             	//########################################################################################
             	
 				$("#seccion").append("<h1>Consumir Update</h1>");
@@ -80,20 +79,20 @@
             				phone: 			"1234567"
             			};
             	
-            	consumirUpdate = consumingGateway.Update("Rancher", "test", ganadero2);            	
+            	consumirUpdate = consumingGateway.Update("Rancher", ganadero2);            	
             	
             	$("#seccion").append("<b>origin: </b>" + consumirUpdate.origin + "<br />");
             	$("#seccion").append("<b>exceptionID: </b>" + consumirUpdate.exceptionId + "<br />");
             	$("#seccion").append("<b>exceptionDescription: </b>" + consumirUpdate.exceptionDescription + "<br />");
             	$("#seccion").append("<b>entityName: </b>" + consumirUpdate.entityName + "<br />");
-            	$("#seccion").append("<b>newToken: </b>" + sessionToken + "<br />");
+           
             	
             	//########################################################################################
             	
             	
             	$("#seccion").append("<h1>Consumir Read All</h1>");
             	
-            	consumirRead = consumingGateway.Read("Rancher", "testRequest", {});
+            	consumirRead = consumingGateway.Read("Rancher", {});
             	
             	$("#seccion").append("<b>Entity Name: </b>" + consumirRead.entityName + "<br />");
             	$("#seccion").append("<b>Exception ID: </b>" + consumirRead.exceptionId + "<br />");
@@ -116,12 +115,11 @@
             	
             	
             	$("#seccion").append("rancherId a eliminar: " + ganadero2.rancherId + "<br />");
-            	consumirDelete = consumingGateway.Delete("Rancher", "testRequest", ganadero2);
+            	consumirDelete = consumingGateway.Delete("Rancher", ganadero2);
             	
                 $("#seccion").append("<b>origin: </b>" + consumirDelete.origin + "<br />");
             	$("#seccion").append("<b>exceptionID: </b>" + consumirDelete.exceptionId + "<br />");
             	$("#seccion").append("<b>exceptionDescription: </b>" + consumirDelete.exceptionDescription + "<br />");
-            	$("#seccion").append("<b>newToken: </b>" + sessionToken + "<br />");
             	//########################################################################################
             	
             	$("#seccion").append("<h1>Consumir LogOut</h1>");
@@ -145,13 +143,12 @@
             				phone: 			"3050450"
             			};
             	
-            	consumirCreate = consumingGateway.Create("Rancher", "test", ganadero);
+            	consumirCreate = consumingGateway.Create("Rancher", ganadero);
             	
             	$("#seccion").append("<b>origin: </b>" + consumirCreate.origin + "<br />");
             	$("#seccion").append("<b>exceptionID: </b>" + consumirCreate.exceptionId + "<br />");
             	$("#seccion").append("<b>exceptionDescription: </b>" + consumirCreate.exceptionDescription + "<br />");
             	$("#seccion").append("<b>generatedID: </b>" + consumirCreate.generatedId + "<br />");            	
-            	$("#seccion").append("<b>newToken: </b>" + sessionToken + "<br />");
             	
             }); //$(document).ready(function()
         </script>

@@ -12,6 +12,8 @@ enyo.kind({
 		arrCattleClass = [];
 		_arrCattleTypeList = [];
 		_arrCattleClassList = [];
+		this.cattleClassWasReadFromGateway = false;
+		this.cattleClassWasReadFromGateway = false;
 	},
 	cattleTypeAdapterToIn:function(objCattle){
 
@@ -73,7 +75,7 @@ enyo.kind({
 			}
 			else{ //Error
 				if (cgReadAll.exceptionId != "CTR2"){ //No data found
-					cacheMan.setMessage("", "","[Exception ID: " + cgReadAll.exceptionId + "] Descripcion: " + cgReadAll.exceptionDescription);	
+					cacheMan.setMessage("", "[Exception ID: " + cgReadAll.exceptionId + "] Descripcion: " + cgReadAll.exceptionDescription);	
 				}			
 			}
 			
@@ -107,7 +109,7 @@ enyo.kind({
 			}
 			else{ //Error
 				if (cgReadAll.exceptionId != "RR02"){ //No data found
-					cacheMan.setMessage("", "","[Exception ID: " + cgReadAll.exceptionId + "] Descripcion: " + cgReadAll.exceptionDescription);	
+					cacheMan.setMessage("", "[Exception ID: " + cgReadAll.exceptionId + "] Descripcion: " + cgReadAll.exceptionDescription);	
 				}			
 			}
 			
@@ -140,7 +142,7 @@ enyo.kind({
 		}
 		else{ //Error
 			//cacheMan.setMessage("", "","[Exception ID: " + cgCreate.exceptionId + "] Error al intentar crear Ganadero.");
-			cacheMan.setMessage("", "","[Exception ID: " + cgCreate.exceptionId + "] Descripcion: " + cgCreate.exceptionDescription);
+			cacheMan.setMessage("", "[Exception ID: " + cgCreate.exceptionId + "] Descripcion: " + cgCreate.exceptionDescription);
 			return false;
 		}
 
@@ -168,7 +170,7 @@ enyo.kind({
 			return false;
 		}
 		else{ //Error			
-			cacheMan.setMessage("", "","[Exception ID: " + cgUpdate.exceptionId + "] Descripcion: " + cgUpdate.exceptionDescription);
+			cacheMan.setMessage("", "[Exception ID: " + cgUpdate.exceptionId + "] Descripcion: " + cgUpdate.exceptionDescription);
 			return false;
 		}						
 	},
@@ -221,7 +223,7 @@ enyo.kind({
 			return false;
 		}
 		else{ //Error
-			cacheMan.setMessage("", "","[Exception ID: " + cgDelete.exceptionId + "] Descripcion: " + cgDelete.exceptionDescription);
+			cacheMan.setMessage("", "[Exception ID: " + cgDelete.exceptionId + "] Descripcion: " + cgDelete.exceptionDescription);
 			return false;
 		}				
 	}
