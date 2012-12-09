@@ -8440,8 +8440,8 @@ kind: enyo.Item,
 published: {
 swipeable: !0,
 confirmRequired: !0,
-confirmCaption: enyo._$L("Delete"),
-cancelCaption: enyo._$L("Cancel"),
+confirmCaption: enyo._$L("Eliminar"),
+cancelCaption: enyo._$L("Cancelar"),
 confirmShowing: !1,
 confirmWhenAutoHidden: !1,
 allowLeft: !0
