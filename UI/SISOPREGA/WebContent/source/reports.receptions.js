@@ -6,14 +6,14 @@ enyo.kind({
 	},
 	components: [	
 		{kind: enyo.Scroller,
-    	 style: "background-image: url(images/practice_background.png); background-size: cover; ",			 
+    	 className:"formBG",		 
 	     flex: 1,
 		 components: [
 			{kind: "RowGroup", defaultKind: "HFlexBox", caption: "", style:"color:#FFF",
 			 components: [
 					  {kind: "Item",
 						components: [
-							{content: "Ganadero", className: "enyo-label", flex: 1},
+							{content: "Ganadero", className: "", flex: 1},
 							{name: 'rancher_id', flex:1, kind: "ListSelector",contentPack:"end", items: []}]},
 							{kind: "VFlexBox", style: "",					  				  
 							 components:[

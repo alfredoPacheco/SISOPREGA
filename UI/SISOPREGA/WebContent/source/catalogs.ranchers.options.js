@@ -9,34 +9,15 @@ enyo.kind({
 		"onBilling": "",
 	},	
 	components: [
-  {
-    kind: "Spacer"
-  },
-  {
-    kind: "Button",
-    className: "enyo-button-dark",
-    caption: "Editar",
-	onclick:"doEdit"
-  },
-  {
-    kind: "Button",
-    caption: "Contactos",
-	className: "enyo-button-blue",	
-	onclick:"doContacts"	
-  },
-  {
-    kind: "Button",
-    className: "enyo-button-dark",
-    caption: "Facturacion",
-	onclick:"doBilling"
-  },  
-  {
-    kind: "Spacer"
-  },
-  {
-    kind: "Toolbar",
-    components: [
-    ]
-  }
-]
+         {kind: enyo.VFlexBox,
+			 className:"buttonsBG",
+		     flex: 1,
+			 align:"center",	    
+			 components: [
+				{kind: "Spacer"},
+				{kind: "Button", className: "enyo-button-cat", 	caption: "Editar", 		onclick:"doEdit" },
+				{kind: "Button", className: "enyo-button-cat",	caption: "Contactos",	onclick:"doContacts"},
+				{kind: "Button", className: "enyo-button-cat", 	caption: "Facturacion", onclick:"doBilling"},  
+				{kind: "Spacer"}]}
+	 ]
 });
