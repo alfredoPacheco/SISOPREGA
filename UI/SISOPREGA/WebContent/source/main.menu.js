@@ -29,24 +29,28 @@ enyo.kind({
 		this.$.mainPane.selectViewByName("operations");
 	},
 	showCatalogs:function(){
+		enyo.$.sisoprega_btnGoBack.setShowing(1);
 		_objMainHeader.setContent('Catalogos');
 		this.addGoBackAction();
 		this.$.mainPane.selectViewByName("catalogs");		
 	},	
 	showReports:function(){
+		enyo.$.sisoprega_btnGoBack.setShowing(1);
 		_objMainHeader.setContent('Reportes');		
 		this.addGoBackAction();
 		this.$.mainPane.selectViewByName("reports");
 		
 	},		
 	showReceptions:function(){
+		
 		_objMainHeader.setContent('Recepciones');
 		_gobackStack.push({caption:"Operaciones",paneMan:this.$.mainPane,paneName:"operations"});	
 		this.$.mainPane.selectViewByName("receptions");		
 	},
 	showReceptionsMap:function(){
+		enyo.$.sisoprega_btnGoBack.setShowing(1);
 		_objMainHeader.setContent('Recepciones');
-		_gobackStack.push({caption:"Operaciones",paneMan:this.$.mainPane,paneName:"menuOptions"});	
+		_gobackStack.push({caption:"Menu Principal",paneMan:this.$.mainPane,paneName:"menuOptions"});	
 		this.$.mainPane.selectViewByName("receptionsMap");		
 	},	
 	showInspections:function(){
@@ -55,8 +59,9 @@ enyo.kind({
 		this.$.inspections.updateList();
 		this.$.mainPane.selectViewByName("inspections");		
 	},
-	addGoBackAction:function(){
-		_gobackStack.push({caption:"Menu Principal",paneMan:this.$.mainPane,paneName:"menuOptions"});		
+	addGoBackAction:function(){		
+		_gobackStack.push({caption:"Menu Principal",paneMan:this.$.mainPane,paneName:"menuOptions"});
+		
 	}
 });
 
