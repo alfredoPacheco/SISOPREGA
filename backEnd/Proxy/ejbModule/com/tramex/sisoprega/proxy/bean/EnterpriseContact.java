@@ -28,6 +28,7 @@ import com.tramex.sisoprega.common.GatewayContent;
 import com.tramex.sisoprega.common.GatewayRequest;
 import com.tramex.sisoprega.common.ReadGatewayResponse;
 import com.tramex.sisoprega.common.UpdateGatewayResponse;
+import com.tramex.sisoprega.common.Utils;
 import com.tramex.sisoprega.common.crud.Cruddable;
 import com.tramex.sisoprega.dto.ContactEnterprise;
 
@@ -45,6 +46,7 @@ import com.tramex.sisoprega.dto.ContactEnterprise;
  * MM/DD/YYYY
  * ----------  ---------------------------  -------------------------------------------
  * 11/11/2012  Diego Torres                 Initial Version.
+ * 12/05/2012  Diego Torres                 Adding validation and standard error codes.
  * ====================================================================================
  * </PRE>
  * 
@@ -54,243 +56,306 @@ import com.tramex.sisoprega.dto.ContactEnterprise;
 @Stateless
 public class EnterpriseContact extends BaseBean implements Cruddable {
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * com.tramex.sisoprega.common.crud.Cruddable#Create(com.tramex.sisoprega
-     * .common.GatewayRequest)
-     */
-    @Override
-    public CreateGatewayResponse Create(GatewayRequest request) {
-	log.entering(this.getClass().getCanonicalName(), "Create");
+  /*
+   * (non-Javadoc)
+   * 
+   * @see com.tramex.sisoprega.common.crud.Cruddable#Create(com.tramex.sisoprega
+   * .common.GatewayRequest)
+   */
+  @Override
+  public CreateGatewayResponse Create(GatewayRequest request) {
+    log.entering(this.getClass().getCanonicalName(), "Create");
 
-	CreateGatewayResponse response = new CreateGatewayResponse();
-	ContactEnterprise contact = null;
+    CreateGatewayResponse response = new CreateGatewayResponse();
+    ContactEnterprise contact = null;
 
-	try {
-	    contact = entityFromRequest(request, ContactEnterprise.class);
+    try {
+      contact = entityFromRequest(request, ContactEnterprise.class);
 
-	    log.fine("Received contact in request: {" + contact + "}");
+      log.fine("Received contact in request: {" + contact + "}");
 
-	    if (validateEntity(contact)) {
-		em.persist(contact);
-		em.flush();
+      if (validateEntity(contact)) {
+        log.finer("Contact succesfully validated.");
+        em.persist(contact);
+        em.flush();
+        log.finer("Contact persisted on database");
 
-		String sId = String.valueOf(contact.getContactId());
-		response.setGeneratedId(sId);
-		response.setError(new Error("0", "SUCCESS",
-			"proxy.EnterpriseContact.Create"));
-	    } else {
-		log.warning("Validation error: " + error_description);
-		response.setError(new Error("ECC1", "Validation error: "
-			+ error_description, "proxy.EnterpriseContact.Create"));
-	    }
-	} catch (Exception e) {
-	    log.severe("Exception found while creating enterprise contact");
-	    log.throwing(this.getClass().getName(), "Create", e);
+        String sId = String.valueOf(contact.getContactId());
+        log.finer("Setting contactId in response: " + sId);
+        response.setGeneratedId(sId);
+        response.setError(new Error("0", "SUCCESS", "proxy.EnterpriseContact.Create"));
+      } else {
+        log.warning("Error de validación: " + error_description);
+        response.setError(new Error("VAL01", "Error de validación: " + error_description, "proxy.EnterpriseContact.Create"));
+      }
+    } catch (Exception e) {
+      log.severe("Exception found while creating enterprise contact");
+      log.throwing(this.getClass().getName(), "Create", e);
 
-	    response.setError(new Error("ECC2", "Create exception"
-		    + e.getMessage(), "proxy.EnterpriseContact.Create"));
-	}
-
-	log.exiting(this.getClass().getCanonicalName(), "Create");
-	return response;
+      if (e instanceof javax.persistence.PersistenceException)
+        response.setError(new Error("DB01", "Los datos que usted ha intentado ingresar, no son permitidos por la base de datos, "
+            + "muy probablemente el contacto que usted quiere agregar ya existe en la base de datos.",
+            "proxy.EnterpriseContact.Create"));
+      else {
+        response.setError(new Error("DB02", "Create exception: " + e.getMessage(), "proxy.EnterpriseContact.Create"));
+      }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * com.tramex.sisoprega.common.crud.Cruddable#Read(com.tramex.sisoprega.
-     * common.GatewayRequest)
-     */
-    @Override
-    public ReadGatewayResponse Read(GatewayRequest request) {
-	log.entering(this.getClass().getCanonicalName(), "Read");
+    log.exiting(this.getClass().getCanonicalName(), "Create");
+    return response;
+  }
 
-	ReadGatewayResponse response = new ReadGatewayResponse();
-	response.setEntityName(request.getEntityName());
+  /*
+   * (non-Javadoc)
+   * 
+   * @see com.tramex.sisoprega.common.crud.Cruddable#Read(com.tramex.sisoprega.
+   * common.GatewayRequest)
+   */
+  @Override
+  public ReadGatewayResponse Read(GatewayRequest request) {
+    log.entering(this.getClass().getCanonicalName(), "Read");
 
-	ContactEnterprise contact = null;
-	try {
-	    contact = entityFromRequest(request, ContactEnterprise.class);
+    ReadGatewayResponse response = new ReadGatewayResponse();
+    response.setEntityName(request.getEntityName());
 
-	    log.fine("Got contact from request: " + contact);
-	    TypedQuery<ContactEnterprise> readQuery = null;
+    ContactEnterprise contact = null;
+    try {
+      contact = entityFromRequest(request, ContactEnterprise.class);
 
-	    if (contact.getEnterpriseId() != 0) {
-		readQuery = em.createNamedQuery(
-			"ENTERPRISE_CONTACT_BY_ENTERPRISE_ID",
-			ContactEnterprise.class);
-		readQuery.setParameter("enterpriseId",
-			contact.getEnterpriseId());
-	    } else if (contact.getContactId() != 0) {
-		readQuery = em.createNamedQuery("ENTERPRISE_CONTACT_BY_ID",
-			ContactEnterprise.class);
-		readQuery.setParameter("contactId", contact.getContactId());
-	    } else {
-		response.setError(new Error("ECR1",
-			"Invalid filter for contact query",
-			"proxy.EnterpriseContact.Read"));
-		return response;
-	    }
+      log.fine("Got contact from request: " + contact);
+      TypedQuery<ContactEnterprise> readQuery = null;
 
-	    List<ContactEnterprise> queryResults = readQuery.getResultList();
+      if (contact.getEnterpriseId() != 0) {
+        readQuery = em.createNamedQuery("ENTERPRISE_CONTACT_BY_ENTERPRISE_ID", ContactEnterprise.class);
+        readQuery.setParameter("enterpriseId", contact.getEnterpriseId());
+      } else if (contact.getContactId() != 0) {
+        readQuery = em.createNamedQuery("ENTERPRISE_CONTACT_BY_ID", ContactEnterprise.class);
+        readQuery.setParameter("contactId", contact.getContactId());
+      } else {
+        response.setError(new Error("VAL03", "El filtro especificado no es válido en el catálogo de contactos",
+            "proxy.EnterpriseContact.Read"));
+        return response;
+      }
 
-	    if (queryResults.isEmpty()) {
-		Error error = new Error();
-		error.setExceptionId("ECR2");
-		error.setExceptionDescription("No data found");
-		error.setOrigin("proxy.EnterpriseContact.Read");
-		response.setError(error);
-	    } else {
-		List<GatewayContent> records = contentFromList(queryResults,
-			ContactEnterprise.class);
-		response.getRecord().addAll(records);
-		response.setError(new Error("0", "SUCCESS",
-			"proxy.EnterpriseContact.Read"));
+      List<ContactEnterprise> queryResults = readQuery.getResultList();
 
-	    }
+      if (queryResults.isEmpty()) {
+        response.setError(new Error("VAL02", "No se encontraron datos para el filtro seleccionado",
+            "proxy.EnterpriseContact.Read"));
+      } else {
+        List<GatewayContent> records = contentFromList(queryResults, ContactEnterprise.class);
+        response.getRecord().addAll(records);
 
-	} catch (Exception e) {
-	    log.severe("Exception found while reading enterprise contact");
-	    log.throwing(this.getClass().getCanonicalName(), "Read", e);
+        response.setError(new Error("0", "SUCCESS", "proxy.EnterpriseContact.Read"));
+      }
 
-	    response.setError(new Error("ECR3", "Read exception: "
-		    + e.getMessage(), "proxy.RancherContact.Read"));
-	}
+    } catch (Exception e) {
+      // something went wrong, alert the server and respond the client
+      log.severe("Exception found while reading enterprise contact");
+      log.throwing(this.getClass().getCanonicalName(), "Read", e);
 
-	log.exiting(this.getClass().getCanonicalName(), "Read");
-	return response;
+      response.setError(new Error("DB02", "Read exception: " + e.getMessage(), "proxy.RancherContact.Read"));
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * com.tramex.sisoprega.common.crud.Cruddable#Update(com.tramex.sisoprega
-     * .common.GatewayRequest)
-     */
-    @Override
-    public UpdateGatewayResponse Update(GatewayRequest request) {
-	log.entering(this.getClass().getCanonicalName(), "Update");
-	UpdateGatewayResponse response = new UpdateGatewayResponse();
-	ContactEnterprise contact = null;
-	try {
-	    contact = entityFromRequest(request, ContactEnterprise.class);
+    log.exiting(this.getClass().getCanonicalName(), "Read");
+    return response;
+  }
 
-	    if (contact.getContactId() == 0) {
-		log.warning("ECU1 - Invalid enterprise contact id");
-		response.setError(new Error("ECU1",
-			"Invalid enterprise contact id",
-			"proxy.EnterpriceContact.Update"));
-	    } else {
-		if (validateEntity(contact)) {
-		    em.merge(contact);
-		    em.flush();
+  /*
+   * (non-Javadoc)
+   * 
+   * @see com.tramex.sisoprega.common.crud.Cruddable#Update(com.tramex.sisoprega
+   * .common.GatewayRequest)
+   */
+  @Override
+  public UpdateGatewayResponse Update(GatewayRequest request) {
+    log.entering(this.getClass().getCanonicalName(), "Update");
+    UpdateGatewayResponse response = new UpdateGatewayResponse();
+    ContactEnterprise contact = null;
+    try {
+      contact = entityFromRequest(request, ContactEnterprise.class);
 
-		    GatewayContent content = getContentFromEntity(contact,
-			    ContactEnterprise.class);
-		    response.setUpdatedRecord(content);
+      if (contact.getContactId() == 0) {
+        log.warning("VAL04 - Entity ID Omission.");
+        response.setError(new Error("VAL04", "Se ha omitido el id del contacto al intentar actualizar sus datos.",
+            "proxy.EnterpriseContact.Update"));
+      } else {
+        if (validateEntity(contact)) {
+          em.merge(contact);
+          em.flush();
 
-		    response.setError(new Error("0", "SUCCESS",
-			    "proxy.EnterpriseContact.Update"));
-		} else {
-		    log.warning("Validation error: " + error_description);
-		    response.setError(new Error("ECU2", "Validation error: "
-			    + error_description,
-			    "proxy.EnterpriseContact.Update"));
-		}
-	    }
+          GatewayContent content = getContentFromEntity(contact, ContactEnterprise.class);
+          response.setUpdatedRecord(content);
 
-	} catch (Exception e) {
-	    log.severe("Exception found while updating EnterpriseContact");
-	    log.throwing(this.getClass().getName(), "Update", e);
+          response.setError(new Error("0", "SUCCESS", "proxy.EnterpriseContact.Update"));
+        } else {
+          log.warning("Validation error: " + error_description);
+          response.setError(new Error("VAL01", "Error de validación de datos:" + error_description,
+              "proxy.EnterpriseContact.Update"));
+        }
+      }
 
-	    response.setError(new Error("RCU3", "Update exception "
-		    + e.getMessage(), "proxy.EnterpriseContact.Update"));
-	}
+    } catch (Exception e) {
+      log.severe("Exception found while updating EnterpriseContact");
+      log.throwing(this.getClass().getName(), "Update", e);
 
-	log.exiting(this.getClass().getCanonicalName(), "Update");
-	return response;
+      if (e instanceof javax.persistence.PersistenceException)
+        response.setError(new Error("DB01", "Los datos que usted ha intentado ingresar, no son permitidos por la base de datos, "
+            + "muy probablemente el contacto que usted quiere agregar ya se encuentra en la base de datos.",
+            "proxy.EnterpriseContact.Update"));
+      else {
+        response.setError(new Error("DB02", "Error en la base de datos:[" + e.getMessage() + "]",
+            "proxy.EnterpriseContact.Update"));
+      }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * com.tramex.sisoprega.common.crud.Cruddable#Delete(com.tramex.sisoprega
-     * .common.GatewayRequest)
-     */
-    @Override
-    public BaseResponse Delete(GatewayRequest request) {
-	log.entering(this.getClass().getCanonicalName(), "Delete");
-	BaseResponse response = new BaseResponse();
+    log.exiting(this.getClass().getCanonicalName(), "Update");
+    return response;
+  }
 
-	try {
-	    ContactEnterprise contact = entityFromRequest(request,
-		    ContactEnterprise.class);
-	    if (contact.getContactId() == 0) {
-		log.warning("ECD1 - Invalid EnterpriseContact");
-		response.setError(new Error("RCD1",
-			"Invalid EnterpriseContactId",
-			"proxy.EnterpriseContact.Delete"));
-	    } else {
-		TypedQuery<ContactEnterprise> readQuery = em.createNamedQuery(
-			"ENTERPRISE_CONTACT_BY_ID", ContactEnterprise.class);
-		readQuery.setParameter("contactId", contact.getContactId());
-		contact = readQuery.getSingleResult();
-		em.merge(contact);
-		em.remove(contact);
-		em.flush();
+  /*
+   * (non-Javadoc)
+   * 
+   * @see com.tramex.sisoprega.common.crud.Cruddable#Delete(com.tramex.sisoprega
+   * .common.GatewayRequest)
+   */
+  @Override
+  public BaseResponse Delete(GatewayRequest request) {
+    log.entering(this.getClass().getCanonicalName(), "Delete");
+    BaseResponse response = new BaseResponse();
 
-		response.setError(new Error("0", "SUCCESS",
-			"proxy.EnterpriseContact.Delete"));
-	    }
-	} catch (Exception e) {
-	    log.severe("Exception found while deleting contact");
-	    log.throwing(this.getClass().getName(), "Delete", e);
+    try {
+      ContactEnterprise contact = entityFromRequest(request, ContactEnterprise.class);
+      if (contact.getContactId() == 0) {
+        log.warning("VAL04 - Entity ID Omission.");
+        response.setError(new Error("VAL04", "Se ha omitido el id del contacto al intentar eliminar el registro.",
+            "proxy.EnterpriseContact.Delete"));
+      } else {
+        TypedQuery<ContactEnterprise> readQuery = em.createNamedQuery("ENTERPRISE_CONTACT_BY_ID", ContactEnterprise.class);
+        readQuery.setParameter("contactId", contact.getContactId());
+        contact = readQuery.getSingleResult();
+        em.merge(contact);
+        em.remove(contact);
+        em.flush();
 
-	    response.setError(new Error("ECD2", "Delete exception: "
-		    + e.getMessage(), "proxy.EnterpriseContact.Delete"));
-	}
+        response.setError(new Error("0", "SUCCESS", "proxy.EnterpriseContact.Delete"));
+      }
+    } catch (Exception e) {
+      log.severe("Exception found while deleting contact");
+      log.throwing(this.getClass().getName(), "Delete", e);
 
-	log.exiting(this.getClass().getCanonicalName(), "Delete");
-	return response;
+      response.setError(new Error("DEL01",
+          "Error al intentar borrar datos. Por favor comunique el error al soporte de aplicaciones.",
+          "proxy.EnterpriseContact.Delete"));
+    }
+
+    log.exiting(this.getClass().getCanonicalName(), "Delete");
+    return response;
+  }
+
+  @Override
+  protected boolean validateEntity(Object entity) {
+    boolean valid = super.validateEntity(entity);
+    ContactEnterprise contact = (ContactEnterprise) entity;
+    
+    // Validate address One
+    if(valid){
+      valid = contact.getAddressOne().length()<=100;
+      if (!valid)
+        error_description = "La dirección del contacto excede el tamaño permitido en la base de datos.";
     }
     
-    @Override
-    protected boolean validateEntity(Object entity) {
-	boolean result = true;
-	if (super.validateEntity(entity)) {
-	    result = enterpriseExists((ContactEnterprise)entity);
-	} else {
-	    result = false;
-	}
-	return result;
+    if(valid){
+      valid = contact.getAddressState().length()<=80;
+      if(!valid)
+        error_description = "El estado (Entidad Federativa) de la dirección excede el tamaño permitido en la base de datos.";
     }
     
-    private boolean enterpriseExists(ContactEnterprise contact) {
-	boolean exists = true;
-
-	TypedQuery<com.tramex.sisoprega.dto.EnterpriseRancher> readQuery = null;
-
-	readQuery = em.createNamedQuery("ENTERPRISE_RANCHER_BY_ID",
-		com.tramex.sisoprega.dto.EnterpriseRancher.class);
-	readQuery.setParameter("enterpriseId", contact.getEnterpriseId());
-
-	try {
-	    com.tramex.sisoprega.dto.EnterpriseRancher enterprise = readQuery
-		    .getSingleResult();
-	    exists = enterprise != null;
-	} catch (NoResultException e) {
-	    exists = false;
-	    error_description = "enterpriseId " + contact.getEnterpriseId()
-		    + " does not exists on database";
-	}
-
-	return exists;
+    if(valid){
+      valid = contact.getAddressTwo().length()<=100;
+      if(!valid)
+        error_description = "La línea secundaria de la dirección excede el tamaño permitido en la base de datos.";
     }
     
+    if(valid){
+      valid = contact.getAka().length()<=100;
+      if(!valid)
+        error_description = "El alias del contacto excede el tamaño permitido en la base de datos.";
+    }
+    
+    if(valid){
+      valid = contact.getCity().length()<=80;
+      if(!valid)
+        error_description = "El nombre de la ciudad del contacto excede el tamaño permitido en la base de datos.";
+    }
+    
+    if(valid){
+      valid = contact.getEmailAddress().length()<=150;
+      if(!valid)
+        error_description = "La dirección de correo electrónico excede el tamaño permitido en la base de datos.";
+    }
+    
+    if(valid && contact.getEmailAddress() != null && contact.getEmailAddress().length()>0){
+      valid = Utils.isValidEmail(contact.getEmailAddress());
+      if(!valid)
+        error_description = "La dirección de correo electrónico no cumple con un formato reconocible (correo@dominio.etc).";
+    }
+    
+    if(valid){
+      valid = contact.getFirstName().length()<=50;
+      if(!valid)
+        error_description = "El nombre del contacto excede el tamaño permitido en la base de datos.";
+    }
+    
+    if(valid){
+      valid = contact.getLastName().length()<=50;
+      if(!valid)
+        error_description = "El apellido paterno del contacto excede el tamaño permitido en la base de datos.";
+    }
+    
+    if(valid){
+      valid = contact.getMotherName().length()<=50;
+      if(!valid)
+        error_description = "El apellido materno del contacto excede el tamaño permitido en la base de datos.";
+    }
+    
+    if(valid){
+      valid = contact.getTelephone().length()<=20;
+      if(!valid)
+        error_description = "El teléfono del contacto excede el tamaño permitido en la base de datos.";
+    }
+    
+    if(valid){
+      valid = contact.getZipCode().length()<=9;
+      if(!valid)
+        error_description = "El código postal de la dirección del contacto excede el tamaño permitido en la base de datos.";
+    }
+    
+    if (valid) {
+      valid = enterpriseExists(contact);
+    }
+    
+    return valid;
+  }
+
+  private boolean enterpriseExists(ContactEnterprise contact) {
+    boolean exists = true;
+
+    TypedQuery<com.tramex.sisoprega.dto.EnterpriseRancher> readQuery = null;
+
+    readQuery = em.createNamedQuery("ENTERPRISE_RANCHER_BY_ID", com.tramex.sisoprega.dto.EnterpriseRancher.class);
+    readQuery.setParameter("enterpriseId", contact.getEnterpriseId());
+
+    try {
+      com.tramex.sisoprega.dto.EnterpriseRancher enterprise = readQuery.getSingleResult();
+      exists = enterprise != null;
+    } catch (NoResultException e) {
+      exists = false;
+      error_description = "La empresa " + contact.getEnterpriseId() + " a la cual desea agregar el contacto, "
+          + "no existe en la base de datos.";
+    }
+
+    return exists;
+  }
+
 }

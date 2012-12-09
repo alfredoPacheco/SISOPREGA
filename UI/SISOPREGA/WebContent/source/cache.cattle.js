@@ -12,6 +12,8 @@ enyo.kind({
 		arrCattleClass = [];
 		_arrCattleTypeList = [];
 		_arrCattleClassList = [];
+		this.cattleClassWasReadFromGateway = false;
+		this.cattleClassWasReadFromGateway = false;
 	},
 	cattleTypeAdapterToIn:function(objCattle){
 

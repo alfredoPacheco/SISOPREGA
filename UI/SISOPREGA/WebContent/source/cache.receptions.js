@@ -7,9 +7,15 @@ enyo.kind({
 	get:function(){
 		return this.arrObj;
 	},
-	create:function(objCat,cbObj,cbMethod){
+	create:function(objRec,cbObj,cbMethod){
 		//AJAX
-		this.arrObj.push(objCat);
+		//UPDATE INTERNAL
+		objRec.reception_id=Math.random().toString(36).substring(2, 15) + 
+		                    Math.random().toString(36).substring(2, 15); //CHANGE FOR DB ID
+		for (var sKey in objRec.barnyards){
+			cacheBY.setOccupied(sKey,objRec.reception_id);
+		}
+		this.arrObj.push(objRec);
 		if(cbMethod){
 			cbObj[cbMethod]();
 		}				
@@ -111,5 +117,84 @@ enyo.kind({
 			cbObj[cbMethod]();
 		}		
 	},
+	appendBY:function(objReception,objBY,cbObj,cbMethod){
+		//AJAX
+		//ADD TO REC
+		for (var sKey in objBY) {
+			objReception.barnyards[sKey] = objBY[sKey];
+		}		
+		var cacheObj= new cache.barnyards();
+		for(var sKey in objBY){
+			cacheObj.setOccupied(sKey,objReception.reception_id);
+		}
+		cacheObj
+		if(cbMethod){
+			cbObj[cbMethod]();
+		}		
+	},
+	addFeed:function(objRec,objFeed,cbObj,cbMethod){
+		objRec.feed.push(objFeed);
+		if(cbMethod){
+			cbObj[cbMethod]();
+		}					
+	},
+	updateFeed:function(objOld,objNew,cbObj,cbMethod){
+		//AJAX
+		//Update Local		
+		for(var sKey in objNew){
+			if(objNew[sKey]!=null){
+				objOld[sKey]=objNew[sKey]
+			}
+		}		
+		if(cbMethod){
+			cbObj[cbMethod]();
+		}		
+	},
+	deleteFeed:function(arrFeed,objFeed,cbObj,cbMethod){
+		for(var i=0; i<arrFeed.length;i++){		
+			if (arrFeed[i]===objFeed){
+				arrFeed.splice(i, 1);
+				if(cbMethod){
+					cbObj[cbMethod]();
+				}
+				break;					
+			}
+		}
+	},
+	addReject:function(iAccepted,objRec,objReject,cbObj,cbMethod){
+		//AJAX
+		//REFRESH LOCAL
+		if(iAccepted==""){iAccepted=0;}
+		objRec.accepted_count=iAccepted;
+		if(objReject){
+			objRec.inspections.push(objReject);
+		}
+		if(cbMethod){			
+			cbObj[cbMethod]();
+		}			
+	},
+	updateReject:function(iAccepted,objRec,iInspIdx,objReject,cbObj,cbMethod){
+		//AJAX
+		//REFRESH LOCAL
+		if(iAccepted==""){iAccepted=0;}
+		objRec.accepted_count=iAccepted;
+		objRec.inspections[iInspIdx].rejected_count=objReject.rejected_count;
+		objRec.inspections[iInspIdx].reject_id=objReject.reject_id;
+		objRec.inspections[iInspIdx].reject_desc=objReject.reject_desc;				
+		if(cbMethod){
+			cbObj[cbMethod]();
+		}			
+	},
+	deleteReject:function(arrRejects,objReject,cbObj,cbMethod){
+		for(var i=0; i<arrRejects.length;i++){		
+			if (arrRejects[i]===objReject){
+				arrRejects.splice(i, 1);
+				if(cbMethod){
+					cbObj[cbMethod]();
+				}
+				break;					
+			}
+		}
+	},				
 });
 var cacheReceptions= new cache.receptions();

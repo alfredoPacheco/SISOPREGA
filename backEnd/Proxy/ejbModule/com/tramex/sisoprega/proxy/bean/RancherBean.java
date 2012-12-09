@@ -269,7 +269,7 @@ public class RancherBean extends BaseBean implements Cruddable {
       if (rancher.getEmailAddress() != null && !rancher.getEmailAddress().trim().equals(""))
         result = Utils.isValidEmail(rancher.getEmailAddress());
       if (!result)
-        error_description = "La dirección de correo electrónico es incorrecta.";
+        error_description = "La dirección de correo electrónico no cumple con un formato reconocible (correo@dominio.etc).";
     }
 
     return result;
