@@ -516,6 +516,18 @@
 				<column name="id" />
 				<generated-value strategy="IDENTITY" />
 			</id>
+			<basic name="foodId">
+				<column name = "food_id"/>
+			</basic>
+			<basic name="handling">
+				<column name = "handling"/>
+			</basic>
+			<basic name="orderId">
+				<column name = "order_id" />
+			</basic>
+			<basic name="quantity">
+				<column name = "quantity"/>
+			</basic>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.Inspection">
