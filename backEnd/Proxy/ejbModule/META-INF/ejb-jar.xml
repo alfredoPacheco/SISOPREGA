@@ -85,6 +85,10 @@
 			<ejb-name>InspectionCodeProxy</ejb-name>
 			<ejb-class>com.tramex.sisoprega.proxy.bean.InspectionCodeBean</ejb-class>
 		</session>
+		<session>
+			<ejb-name>FeedOrderBarnyardProxy</ejb-name>
+			<ejb-class>com.tramex.sisoprega.proxy.bean.FeedOrderBarnyardBean</ejb-class>
+		</session>
 	</enterprise-beans>
 	<assembly-descriptor>
 		<security-role>

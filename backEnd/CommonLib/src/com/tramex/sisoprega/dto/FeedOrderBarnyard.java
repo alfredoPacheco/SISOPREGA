@@ -16,7 +16,7 @@
 package com.tramex.sisoprega.dto;
 
 /**
- * Defines the model for the Inspection Barnyard Type entity.<BR/>
+ * Defines the model for the Feed Order Barnyard Type entity.<BR/>
  * 
  * <B>Revision History:</B>
  * 
@@ -25,51 +25,51 @@ package com.tramex.sisoprega.dto;
  * Date        By                           Description
  * MM/DD/YYYY
  * ----------  ---------------------------  -------------------------------------------
- * 12/01/2012  Jaime Figueroa                 Initial Version.
+ * 12/09/2012  Jaime Figueroa                 Initial Version.
  * ====================================================================================
  * </PRE>
  * 
  * @author Jaime Figueroa
  *
  */
-public class InspectionBarnyard {
-    private long ibId;
-    private long inspectionId;
-    private long barnyardId;
-    /**
-     * @return the ibId
-     */
-    public long getIbId() {
-        return ibId;
-    }
-    /**
-     * @param ibId the ibId to set
-     */
-    public void setIbId(long ibId) {
-        this.ibId = ibId;
-    }
-    /**
-     * @return the inspectionId
-     */
-    public long getInspectionId() {
-        return inspectionId;
-    }
-    /**
-     * @param inspectionId the inspectionId to set
-     */
-    public void setInspectionId(long inspectionId) {
-        this.inspectionId = inspectionId;
-    }
-    /**
-     * @return the barnyardId
-     */
-    public long getBarnyardId() {
-        return barnyardId;
-    }
-    /**
-     * @param barnyardId the barnyardId to set
-     */
-    public void setBarnyardId(long barnyardId) {
-        this.barnyardId = barnyardId;
-    }
+public class FeedOrderBarnyard {
+  private long feedOrdBarnId;
+  private long barnyardId;
+  private long orderId;
+  /**
+   * @return the feedOrdBarnId
+   */
+  public long getFeedOrdBarnId() {
+    return feedOrdBarnId;
+  }
+  /**
+   * @param feedOrdBarnId the feedOrdBarnId to set
+   */
+  public void setFeedOrdBarnId(long feedOrdBarnId) {
+    this.feedOrdBarnId = feedOrdBarnId;
+  }
+  /**
+   * @return the barnyardId
+   */
+  public long getBarnyardId() {
+    return barnyardId;
+  }
+  /**
+   * @param barnyardId the barnyardId to set
+   */
+  public void setBarnyardId(long barnyardId) {
+    this.barnyardId = barnyardId;
+  }
+  /**
+   * @return the orderId
+   */
+  public long getOrderId() {
+    return orderId;
+  }
+  /**
+   * @param orderId the orderId to set
+   */
+  public void setOrderId(long orderId) {
+    this.orderId = orderId;
+  }
 }

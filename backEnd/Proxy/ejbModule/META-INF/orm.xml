@@ -534,4 +534,17 @@
 			</id>
 		</attributes>
 	</entity>
+	<entity class="com.tramex.sisoprega.dto.FeedOrderBarnyard">
+		<table name = "ctrl_feed_order_barnyard" />
+		<named-query name="CAT_FEEDORDERBARNYARD_BY_ID">
+			<description>Retrieves a single crtFood record by ID</description>
+			<query>SELECT FedOrBar FROM FeedOrderBarnyard FedOrBar WHERE FedOrBar.feedOrdBarnId = :feedOrdBarnId</query>
+		</named-query>
+		<attributes>
+			<id name="feedOrdBarnId">
+				<column name= "feed_ord_barn_id"/>
+				<generated-value strategy="IDENTITY"/>
+			</id>
+		</attributes>
+	</entity>
 </entity-mappings>
