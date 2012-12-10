@@ -119,7 +119,7 @@ public class FeedOrderBean extends BaseBean implements Cruddable {
     FeedOrder order = null;
     try {
       order = entityFromRequest(request, FeedOrder.class);
-      log.fine("Got rancher from request: " + order);
+      log.fine("Got Feed Order from request: " + order);
 
       TypedQuery<FeedOrder> readQuery = null;
 
