@@ -242,7 +242,7 @@ CREATE UNIQUE INDEX U_catclass_name ON cat_cattle_class(catclass_name);
 GRANT ALL ON cat_cattle_class TO sisoprega;
 GRANT ALL ON cat_cattle_class_catclass_id_seq TO sisoprega;
 
-INSERT INTO cat_cattle_class(catclass_name) VALUES('Bobino');
+INSERT INTO cat_cattle_class(catclass_name) VALUES('Bovino');
 INSERT INTO cat_cattle_class(catclass_name) VALUES('Equino');
 
 /*

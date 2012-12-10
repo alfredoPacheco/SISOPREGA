@@ -420,6 +420,15 @@
 				<column name="date_allotted" />
 				<temporal>TIMESTAMP</temporal>
 			</basic>
+			<basic name="rancherId">
+				<column name = "rancher_id"/>
+			</basic>
+			<basic name = "locationId">
+				<column name = "location_id"/>
+			</basic>
+			<basic name="cattleType">
+				<column name = "cattle_type"/>
+			</basic>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.ReceptionBarnyard">
@@ -433,6 +442,12 @@
 				<column name="rec_barnyard_id" />
 				<generated-value strategy="IDENTITY" />
 			</id>
+			<basic name = "barnyardId">
+				<column name = "barnyard_id"/>
+			</basic>
+			<basic name="receptionId">
+				<column name="receptio_id"/>
+			</basic>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.ReceptionHeadcount">
@@ -446,6 +461,18 @@
 				<column name="headcount_id" />
 				<generated-value strategy="IDENTITY" />
 			</id>
+			<basic name="receptionId">
+				<column name = "reception_id"/>
+			</basic>
+			<basic name="hc">
+				<column name = "hc"/>
+			</basic>
+			<basic name = "weight">
+				<column name = "weight"/>
+			</basic>
+			<basic name = "weightUom">
+				<column name = "weight_uom"/>
+			</basic>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.FeedOrder">
@@ -510,6 +537,9 @@
 				<column name="inspection_date" />
 				<temporal>TIMESTAMP</temporal>
 			</basic>
+			<basic name="receptionId">
+				<column name ="inspection_id"/>
+			</basic>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.InspectionBarnyard">
@@ -523,6 +553,12 @@
 				<column name="id" />
 				<generated-value strategy="IDENTITY" />
 			</id>
+			<basic name="inspectionId">
+				<column name = "inspection_id"/>
+			</basic>
+			<basic name="barnyardId">
+				<column name = "barnyard_Id"/>
+			</basic>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.InspectionCode">
@@ -536,6 +572,28 @@
 				<column name="inspection_code_id" />
 				<generated-value strategy="IDENTITY" />
 			</id>
+			<basic name="inspectionCodeDescription">
+				<column name = "inspection_code_description"/>
+			</basic>
+		</attributes>
+	</entity>
+	<entity class="com.tramex.sisoprega.dto.FeedOrderBarnyard">
+		<table name = "ctrl_feed_order_barnyard" />
+		<named-query name="CAT_FEEDORDERBARNYARD_BY_ID">
+			<description>Retrieves a single crtFood record by ID</description>
+			<query>SELECT FedOrBar FROM FeedOrderBarnyard FedOrBar WHERE FedOrBar.feedOrdBarnId = :feedOrdBarnId</query>
+		</named-query>
+		<attributes>
+			<id name="feedOrdBarnId">
+				<column name= "feed_ord_barn_id"/>
+				<generated-value strategy="IDENTITY"/>
+			</id>
+			<basic name="barnyardId">
+				<column name = "barnyard_id"/>
+			</basic>
+			<basic name="orderId">
+				<column name = "order_id"/>
+			</basic>
 		</attributes>
 	</entity>
 </entity-mappings>

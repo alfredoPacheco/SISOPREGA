@@ -18,7 +18,7 @@ package com.tramex.sisoprega.dto;
 import java.util.Date;
 
 /**
- *  Defines the model for the Cattle Type entity.<BR/>
+ *  Defines the model for the Feed Order Type entity.<BR/>
  * 
  * <B>Revision History:</B>
  * 
@@ -27,7 +27,7 @@ import java.util.Date;
  * Date        By                           Description
  * MM/DD/YYYY
  * ----------  ---------------------------  -------------------------------------------
- * 1/12/2012  Jaime Figueroa                 Initial Version.
+ * 12/01/2012  Jaime Figueroa                 Initial Version.
  * ====================================================================================
  * </PRE>
  * 
@@ -37,7 +37,6 @@ import java.util.Date;
 public class FeedOrder {
     private long orderId;
     private long  receptionId;
-    private long barnyardId;
     private Date feedDate;
     private String feedOriginator;
     /**
@@ -63,18 +62,6 @@ public class FeedOrder {
      */
     public void setReceptionId(long receptionId) {
         this.receptionId = receptionId;
-    }
-    /**
-     * @return the barnyardId
-     */
-    public long getBarnyardId() {
-        return barnyardId;
-    }
-    /**
-     * @param barnyardId the barnyardId to set
-     */
-    public void setBarnyardId(long barnyardId) {
-        this.barnyardId = barnyardId;
     }
     /**
      * @return the feedDate

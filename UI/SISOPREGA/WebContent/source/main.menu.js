@@ -23,45 +23,42 @@ enyo.kind({
 	 		{kind:"inspections.list", name:"inspections"},									
 		 ]}				 			
 	],
-	showOperations:function(){
-		_objMainHeader.setContent('Operaciones');
-		this.addGoBackAction();
-		this.$.mainPane.selectViewByName("operations");
-	},
+	showReceptionsMap:function(){
+		enyo.$.sisoprega_btnGoBack.setShowing(1);
+		_objMainHeader.setContent('Corrales');
+		_gobackStack.push({caption:"Menu Principal",paneMan:this.$.mainPane,paneName:"menuOptions"});	
+		this.$.mainPane.selectViewByName("receptionsMap");		
+	},	
 	showCatalogs:function(){
 		enyo.$.sisoprega_btnGoBack.setShowing(1);
 		_objMainHeader.setContent('Catalogos');
 		this.addGoBackAction();
 		this.$.mainPane.selectViewByName("catalogs");		
-	},	
+	},
 	showReports:function(){
 		enyo.$.sisoprega_btnGoBack.setShowing(1);
 		_objMainHeader.setContent('Reportes');		
 		this.addGoBackAction();
 		this.$.mainPane.selectViewByName("reports");
-		
-	},		
-	showReceptions:function(){
-		
-		_objMainHeader.setContent('Recepciones');
-		_gobackStack.push({caption:"Operaciones",paneMan:this.$.mainPane,paneName:"operations"});	
-		this.$.mainPane.selectViewByName("receptions");		
-	},
-	showReceptionsMap:function(){
-		enyo.$.sisoprega_btnGoBack.setShowing(1);
-		_objMainHeader.setContent('Recepciones');
-		_gobackStack.push({caption:"Menu Principal",paneMan:this.$.mainPane,paneName:"menuOptions"});	
-		this.$.mainPane.selectViewByName("receptionsMap");		
 	},	
-	showInspections:function(){
-		_objMainHeader.setContent('Inspecciones');
-		_gobackStack.push({caption:"Operaciones",paneMan:this.$.mainPane,paneName:"operations"});
-		this.$.inspections.updateList();
-		this.$.mainPane.selectViewByName("inspections");		
-	},
+//	showOperations:function(){
+//		_objMainHeader.setContent('Operaciones');
+//		this.addGoBackAction();
+//		this.$.mainPane.selectViewByName("operations");
+//	},
+//	showReceptions:function(){
+//		_objMainHeader.setContent('Recepciones');
+//		_gobackStack.push({caption:"Operaciones",paneMan:this.$.mainPane,paneName:"operations"});	
+//		this.$.mainPane.selectViewByName("receptions");		
+//	},
+//	showInspections:function(){
+//		_objMainHeader.setContent('Inspecciones');
+//		_gobackStack.push({caption:"Operaciones",paneMan:this.$.mainPane,paneName:"operations"});
+//		this.$.inspections.updateList();
+//		this.$.mainPane.selectViewByName("inspections");		
+//	},
 	addGoBackAction:function(){		
-		_gobackStack.push({caption:"Menu Principal",paneMan:this.$.mainPane,paneName:"menuOptions"});
-		
+		_gobackStack.push({caption:"Menu Principal",paneMan:this.$.mainPane,paneName:"menuOptions"});		
 	}
 });
 

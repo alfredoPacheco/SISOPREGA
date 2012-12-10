@@ -31,9 +31,9 @@ import com.tramex.sisoprega.common.crud.Cruddable;
 import com.tramex.sisoprega.dto.FeedOrder;
 
 /**
- * This proxy knows the logic to evaluate Feed orders and the way to the
- * database in order to save their data. Also, it is contained in EJB container,
- * we can apply security and life cycle methods for resources.<BR/>
+ * This proxy knows the logic to evaluate Feed Order information and the
+ * way to the database in order to save their data. Also, it is contained in EJB
+ * container, we can apply security and life cycle methods for resources.<BR/>
  * 
  * <B>Revision History:</B>
  * 
@@ -47,7 +47,7 @@ import com.tramex.sisoprega.dto.FeedOrder;
  * ====================================================================================
  * </PRE>
  * 
- * @author Diego Torres
+ * @author Jaime Figueroa
  * 
  */
 @Stateless
@@ -69,10 +69,10 @@ public class FeedOrderBean extends BaseBean implements Cruddable {
     try {
       feedOrd = entityFromRequest(request, FeedOrder.class);
 
-      log.fine("Received Barnyard in request: " + feedOrd);
+      log.fine("Received FeedOrder in request: " + feedOrd);
 
       if (validateEntity(feedOrd)) {
-        log.finer("BarnyFeedOrderard succesfully validated");
+        log.finer("FeedOrder succesfully validated");
         em.persist(feedOrd);
         log.finer("FeedOrder persisted on database");
         em.flush();
@@ -177,7 +177,7 @@ public class FeedOrderBean extends BaseBean implements Cruddable {
     try {
       feedOrd = entityFromRequest(request, FeedOrder.class);
 
-      if (feedOrd.getBarnyardId() == 0) {
+      if (feedOrd.getOrderId() == 0) {
         log.warning("VAL04 - Entity ID Omission.");
         response.setError(new Error("VAL04", "Se ha omitido el id de la orden de alimentación al intentar actualizar sus datos.",
             "proxy.FeedOrder.Update"));
@@ -229,11 +229,12 @@ public class FeedOrderBean extends BaseBean implements Cruddable {
       FeedOrder feedOrd = entityFromRequest(request, FeedOrder.class);
       if (feedOrd.getOrderId() == 0) {
         log.warning("VAL04 - Entity ID Omission.");
+		
         response.setError(new Error("VAL04", "Se ha omitido el id de la orden de alimentación al intentar eliminar el registro.",
             "proxy.FeedOrder.Delete"));
       } else {
         TypedQuery<FeedOrder> readQuery = em.createNamedQuery("CRT_FEEDORDER_BY_ID", FeedOrder.class);
-        readQuery.setParameter("orderId", feedOrd.getBarnyardId());
+        readQuery.setParameter("orderId", feedOrd.getOrderId());
         feedOrd = readQuery.getSingleResult();
         em.merge(feedOrd);
         em.remove(feedOrd);
