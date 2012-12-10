@@ -390,6 +390,12 @@
 				<column name="unit_id" />
 				<generated-value strategy="IDENTITY" />
 			</id>
+			<basic name="unitName">
+				<column name = "unit_name"/>
+			</basic>
+			<basic name="unitAbreviation">
+				<column name = "Uni_abreviation"/>
+			</basic>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.MeasurementUnitEquivalence">
@@ -403,6 +409,15 @@
 				<column name="equivalence_id" />
 				<generated-value strategy="IDENTITY" />
 			</id>
+			<basic name="equivalence">
+				<column name = "equivalence"/>
+			</basic>
+			<basic name="unitDest">
+				<column name ="unit_dest"/>
+			</basic>
+			<basic name="unitSrc">
+				<column name = "unit_src"/>
+			</basic>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.Reception">
