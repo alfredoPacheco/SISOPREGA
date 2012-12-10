@@ -15,53 +15,192 @@
  */
 package com.tramex.sisoprega.proxy.bean;
 
+import javax.ejb.Stateless;
+import javax.persistence.TypedQuery;
+
 import com.tramex.sisoprega.common.BaseResponse;
 import com.tramex.sisoprega.common.CreateGatewayResponse;
+import com.tramex.sisoprega.common.Error;
+import com.tramex.sisoprega.common.GatewayContent;
 import com.tramex.sisoprega.common.GatewayRequest;
 import com.tramex.sisoprega.common.ReadGatewayResponse;
 import com.tramex.sisoprega.common.UpdateGatewayResponse;
 import com.tramex.sisoprega.common.crud.Cruddable;
+import com.tramex.sisoprega.dto.ReceptionHeadcount;
 
 /**
+ * * This proxy knows the logic to evaluate Reception Head Count information and
+ * the way to the database in order to save their data. Also, it is contained in
+ * EJB container, we can apply security and life cycle methods for resources.<BR/>
+ * 
+ * <B>Revision History:</B>
+ * 
+ * <PRE>
+ * ====================================================================================
+ * Date        By                           Description
+ * MM/DD/YYYY
+ * ----------  ---------------------------  -------------------------------------------
+ * 12/07/2012            Jaime Figueroa               Initial Version.
+ * ====================================================================================
+ * </PRE>
+ * 
  * @author Jaime Figueroa
- *
+ * 
  */
-public class ReceptionHeadcountBean implements Cruddable {
+@Stateless
+public class ReceptionHeadcountBean extends BaseBean implements Cruddable {
 
-    /* (non-Javadoc)
-     * @see com.tramex.sisoprega.common.crud.Cruddable#Create(com.tramex.sisoprega.common.GatewayRequest)
-     */
-    @Override
-    public CreateGatewayResponse Create(GatewayRequest request) {
-	// TODO Auto-generated method stub
-	return null;
+  /*
+   * (non-Javadoc)
+   * 
+   * @see
+   * com.tramex.sisoprega.common.crud.Cruddable#Create(com.tramex.sisoprega.
+   * common.GatewayRequest)
+   */
+  @Override
+  public CreateGatewayResponse Create(GatewayRequest request) {
+    log.entering(this.getClass().getCanonicalName(), "Create");
+
+    CreateGatewayResponse response = new CreateGatewayResponse();
+    ReceptionHeadcount recepHead = null;
+    try {
+      recepHead = entityFromRequest(request, ReceptionHeadcount.class);
+
+      log.fine("Received ReceptionHeadcount in request: " + recepHead);
+
+      if (validateEntity(recepHead)) {
+        log.finer("ReceptionHeadcount succesfully validated");
+        em.persist(recepHead);
+        log.finer("ReceptionHeadcount persisted on database");
+        em.flush();
+
+        String sId = String.valueOf(recepHead.getHeadcountId());
+        log.finer("Setting ReceptionHeadcount id in response: " + sId);
+        response.setGeneratedId(sId);
+        response.setError(new Error("0", "SUCCESS", "proxy.ReceptionHeadcountBean.Create"));
+      } else {
+        log.warning("Error de validación: " + error_description);
+        response.setError(new Error("VAL01", "Error de validación: " + error_description, "proxy.ReceptionHeadcountBean.Create"));
+      }
+
+    } catch (Exception e) {
+      log.severe("Exception found while creating ReceptionHeadcountBean");
+      log.throwing(this.getClass().getName(), "Create", e);
+
+      if (e instanceof javax.persistence.PersistenceException)
+        response.setError(new Error("DB01",
+            "Los datos que usted ha intentado ingresar, no son permitidos por la base de datos, ",
+            "proxy.ReceptionHeadcountBean.Create"));
+      else {
+        response.setError(new Error("DB02", "Create exception: " + e.getMessage(), "proxy.ReceptionHeadcountBean.Create"));
+      }
     }
 
-    /* (non-Javadoc)
-     * @see com.tramex.sisoprega.common.crud.Cruddable#Read(com.tramex.sisoprega.common.GatewayRequest)
-     */
-    @Override
-    public ReadGatewayResponse Read(GatewayRequest request) {
-	// TODO Auto-generated method stub
-	return null;
+    log.exiting(this.getClass().getCanonicalName(), "Create");
+    return response;
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see
+   * com.tramex.sisoprega.common.crud.Cruddable#Read(com.tramex.sisoprega.common
+   * .GatewayRequest)
+   */
+  @Override
+  public ReadGatewayResponse Read(GatewayRequest request) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see
+   * com.tramex.sisoprega.common.crud.Cruddable#Update(com.tramex.sisoprega.
+   * common.GatewayRequest)
+   */
+  @Override
+  public UpdateGatewayResponse Update(GatewayRequest request) {
+    log.entering(this.getClass().getCanonicalName(), "Update");
+    UpdateGatewayResponse response = new UpdateGatewayResponse();
+    ReceptionHeadcount recepHead = null;
+    try {
+      recepHead = entityFromRequest(request, ReceptionHeadcount.class);
+
+      if (recepHead.getHeadcountId() == 0) {
+        log.warning("VAL04 - Entity ID Omission.");
+        response.setError(new Error("VAL04", "Se ha omitido el id del corral al intentar actualizar sus datos.",
+            "proxy.ReceptionHeadcount.Update"));
+      } else {
+        if (validateEntity(recepHead)) {
+          em.merge(recepHead);
+          em.flush();
+
+          GatewayContent content = getContentFromEntity(recepHead, ReceptionHeadcount.class);
+          response.setUpdatedRecord(content);
+
+          response.setError(new Error("0", "SUCCESS", "proxy.ReceptionHeadcount.Update"));
+        } else {
+          log.warning("Validation error:" + error_description);
+          response.setError(new Error("VAL01", "Error de validación de datos:" + error_description, "proxy.ReceptionHeadcountBean.Update"));
+        }
+      }
+
+    } catch (Exception e) {
+      log.severe("Exception found while updating ReceptionHeadcount");
+      log.throwing(this.getClass().getName(), "Update", e);
+
+      if (e instanceof javax.persistence.PersistenceException)
+        response.setError(new Error("DB01", "Los datos que usted ha intentado ingresar, no son permitidos por la base de datos, ",
+            "proxy.ReceptionHeadcountBean.Update"));
+      else {
+        response.setError(new Error("DB02", "Error en la base de datos:[" + e.getMessage() + "]", "proxy.ReceptionHeadcountBean.Update"));
+      }
     }
 
-    /* (non-Javadoc)
-     * @see com.tramex.sisoprega.common.crud.Cruddable#Update(com.tramex.sisoprega.common.GatewayRequest)
-     */
-    @Override
-    public UpdateGatewayResponse Update(GatewayRequest request) {
-	// TODO Auto-generated method stub
-	return null;
+    log.exiting(this.getClass().getCanonicalName(), "Update");
+    return response;
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see
+   * com.tramex.sisoprega.common.crud.Cruddable#Delete(com.tramex.sisoprega.
+   * common.GatewayRequest)
+   */
+  @Override
+  public BaseResponse Delete(GatewayRequest request) {
+    log.entering(this.getClass().getCanonicalName(), "Delete");
+    BaseResponse response = new BaseResponse();
+
+    try {
+      ReceptionHeadcount recepHead = entityFromRequest(request, ReceptionHeadcount.class);
+      if (recepHead.getHeadcountId() == 0) {
+        log.warning("VAL04 - Entity ID Omission.");
+        response.setError(new Error("VAL04", "Se ha omitido el id del corral al intentar eliminar el registro.", "proxy.ReceptionHeadcount.Delete"));
+      } else {
+        TypedQuery<ReceptionHeadcount> readQuery = em.createNamedQuery("CRT_RECEPTIONHEADCOUNT_BY_ID", ReceptionHeadcount.class);
+        readQuery.setParameter("headcountId", recepHead.getHeadcountId());
+        recepHead = readQuery.getSingleResult();
+        em.merge(recepHead);
+        em.remove(recepHead);
+        em.flush();
+
+        response.setError(new Error("0", "SUCCESS", "proxy.ReceptionHeadcount.Delete"));
+      }
+    } catch (Exception e) {
+      log.severe("Exception found while deleting ReceptionHeadcount");
+      log.throwing(this.getClass().getName(), "Delete", e);
+
+      response.setError(new Error("DEL01",
+          "Error al intentar borrar datos, es probable que esta entidad tenga otras entidades relacionadas, ",
+          "proxy.ReceptionHeadcount.Delete"));
     }
 
-    /* (non-Javadoc)
-     * @see com.tramex.sisoprega.common.crud.Cruddable#Delete(com.tramex.sisoprega.common.GatewayRequest)
-     */
-    @Override
-    public BaseResponse Delete(GatewayRequest request) {
-	// TODO Auto-generated method stub
-	return null;
-    }
+    log.exiting(this.getClass().getCanonicalName(), "Delete");
+    return response;
+  }
 
 }

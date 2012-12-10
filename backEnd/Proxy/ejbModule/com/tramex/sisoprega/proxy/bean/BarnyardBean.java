@@ -194,7 +194,7 @@ public class BarnyardBean extends BaseBean implements Cruddable {
       if (e instanceof javax.persistence.PersistenceException)
         response
             .setError(new Error("DB01", "Los datos que usted ha intentado ingresar, no son permitidos por la base de datos, "
-                + "muy probablemente el corral que usted quiere agregar ya existe en la base de datos.",
+                + "muy probablemente el corral que usted quiere actualizar ya existe en la base de datos.",
                 "proxy.BarnyardBean.Update"));
       else {
         response.setError(new Error("DB02", "Error en la base de datos:[" + e.getMessage() + "]", "proxy.BarnyardBean.Update"));
@@ -220,7 +220,8 @@ public class BarnyardBean extends BaseBean implements Cruddable {
       Barnyard barnyard = entityFromRequest(request, Barnyard.class);
       if (barnyard.getBarnyardId() == 0) {
         log.warning("VAL04 - Entity ID Omission.");
-        response.setError(new Error("VAL04", "Se ha omitido el id del corral al intentar eliminar el registro.", "proxy.Barnyard.Delete"));
+        response.setError(new Error("VAL04", "Se ha omitido el id del corral al intentar eliminar el registro.",
+            "proxy.Barnyard.Delete"));
       } else {
         TypedQuery<Barnyard> readQuery = em.createNamedQuery("BARNYARD_BY_ID", Barnyard.class);
         readQuery.setParameter("barnyardId", barnyard.getBarnyardId());

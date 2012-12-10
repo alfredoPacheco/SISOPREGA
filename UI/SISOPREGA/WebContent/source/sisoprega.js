@@ -2,12 +2,12 @@ enyo.kind({
 	name: "sisoprega",
 	kind: enyo.VFlexBox,
 	components: [
-		{kind: "Toolbar",name:"tbHeader",style:"height:10px", 
+		{kind: "Toolbar",name:"tbHeader",style:"height:10px", className:"headerMain", 
 			components: [
 				{name:'btnGoBack',icon:"images/command-menu/menu-icon-back.png", onclick:"goBack"},
 				{kind: "Spacer"},
-				{kind: "VFlexBox", name:'lblMainCap', className:"",
-				 style:"color:#FFF;border:none", content: "Recepciones"},  
+				{kind: "VFlexBox", name:'lblMainCap', allowHtml:true,
+				 style:"color:#FFF;border:none", content: "Menu Principal"},  
 				{kind: "Spacer"},
 				{name:'btnLogOut', onclick:"logOut",icon:"images/command-menu/icon-context.png"}]},
 				
@@ -26,27 +26,35 @@ enyo.kind({
 	],
 	ready:function(){
 		this.$.tbHeader.hide();
-		cacheMan.setGlobalToaster(this.$);		
-		cacheMan.setGlobalScrim(this.$.scrimMain);				
+		cacheMan.setGlobalToaster(this.$);
+		cacheMan.setGlobalScrim(this.$.scrimMain);
 		cacheMan.setGlobalLabel(this.$.lblMainCap);
 		_objMainHeader=this.$.lblMainCap;
 	},
 	goBack:function(){
-		cacheMan.goBack();										
+		cacheMan.goBack();
+		if (_objMainHeader.getContent() =="Menu Principal"){
+			this.$.btnGoBack.setShowing(!1);
+		}
+		else{
+			this.$.btnGoBack.setShowing(1);
+		}
+			
 	},
-	goAhead:function(){
-		this.$.tbHeader.show();
-		this.$.mainPane.selectViewByName("mainMenu");		
+	goAhead:function(){			
+		this.$.btnGoBack.setShowing(!1);
+		this.$.tbHeader.show();	
+		this.$.mainPane.selectViewByName("mainMenu");
 	},
 	noAccess:function(){
-		cacheMan.setMessage("","", "Usuario o contraseña incorrecta.");
+		cacheMan.setMessage("", "Usuario o contraseña incorrecta.");
 	},
 	logOut:function(){
-		cacheRanchers = null;
-		cacheCattle = null;		
+
 		consumingGateway.LogOut();
 		this.$.tbHeader.hide();
-		cacheMan.clearBack();		
-		this.$.mainPane.selectViewByName("login");
+		cacheMan.clearBack();
+		enyo.$.sisoprega.destroy();
+		window.location = './'; 
 	}
 });

@@ -1392,7 +1392,7 @@ html, body, input, button {
 	white-space: nowrap;
 	font-weight: bold;
 	font-size: 12pt;
-	color: #3a8bcb;
+	color: #381402;
 
 	/* Needs to be effectively zero compared to .enyo-divider-left-cap's
 	   flex so the caption will flex but take as little space as possible

@@ -91,7 +91,7 @@ enyo.kind({
 		this.$.arrival_date.setValue(new Date());
 		this.$.hc_aprox.setValue("");
 		this.$.rancher_id.setItems(cacheRanchers.ls());
-		this.$.cattype_id.setItems(cacheCattle.getLS());
+		this.$.cattype_id.setItems(cacheCattle.getCattleClassLS());
 		this.$.city_id.setItems(cacheMan.getCitiesLS());
 	},
 	setReception:function(receptionDef){

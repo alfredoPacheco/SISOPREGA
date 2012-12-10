@@ -5,9 +5,15 @@ enyo.kind({
 	events: {
 		"onReceptions":""
 	},	
+	className:"buttonsBG",
 	components: [
-		{kind: "Spacer"},
-		{kind: "Button", className: "enyo-button-blue", caption: "Ganado", onclick:"doReceptions"},
-		{kind: "Spacer"}
+		{kind: enyo.VFlexBox,
+		 className:"buttonsBG",
+	     flex: 1,
+		 align:"center",	    
+		 components: [			
+			{kind: "Spacer"},
+			{kind: "Button", className: "enyo-button-option", caption: "Ganado", onclick:"doReceptions"},
+			{kind: "Spacer"}]}
 	]
 });

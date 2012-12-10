@@ -131,7 +131,7 @@ public class RancherBean extends BaseBean implements Cruddable {
       List<Rancher> queryResults = readQuery.getResultList();
 
       if (queryResults.isEmpty()) {
-        response.setError(new Error("RD01", "No se encontraron los datos requeridos.", "proxy.Rancher.Read"));
+        response.setError(new Error("VAL02", "No se encontraron datos para el filtro seleccionado", "proxy.RancherBean.Read"));
       } else {
         // Add query results to response
         response.getRecord().addAll(contentFromList(queryResults, Rancher.class));
@@ -163,9 +163,9 @@ public class RancherBean extends BaseBean implements Cruddable {
     try {
       rancher = entityFromRequest(request, Rancher.class);
       if (rancher.getRancherId() == 0) {
-        log.warning("RU01 - Invalid rancherId.");
-        response.setError(new Error("UPD01", "No se ha especificado un Id de ganadero para ser modificado.",
-            "proxy.Rancher.Update"));
+        log.warning("VAL04 - Entity ID Omission.");
+        response.setError(new Error("VAL04", "Se ha omitido el id del ganadero al intentar actualizar sus datos.",
+            "proxy.RancherBean.Update"));
       } else {
         if (validateEntity(rancher)) {
           em.merge(rancher);
@@ -205,8 +205,9 @@ public class RancherBean extends BaseBean implements Cruddable {
     try {
       Rancher rancher = entityFromRequest(request, Rancher.class);
       if (rancher.getRancherId() == 0) {
-        log.warning("RD01 - Invalid rancherId.");
-        response.setError(new Error("RD01", "Invalid rancherId", "proxy.Rancher.Delete"));
+        log.warning("VAL04 - Entity ID Omission.");
+        response.setError(new Error("VAL04", "Se ha omitido el id del ganadero al intentar eliminar el registro.",
+            "proxy.RancherBean.Delete"));
       } else {
         TypedQuery<Rancher> readQuery = em.createNamedQuery("RANCHER_BY_ID", Rancher.class);
         readQuery.setParameter("rancherId", rancher.getRancherId());
@@ -221,7 +222,9 @@ public class RancherBean extends BaseBean implements Cruddable {
       log.severe("Exception found while deleting rancher");
       log.throwing(this.getClass().getName(), "Delete", e);
 
-      response.setError(new Error("RU02", "Delete exception: " + e.getMessage(), "proxy.Rancher.Delete"));
+      response.setError(new Error("DEL01",
+          "Error al intentar borrar datos. Es muy probable que la entidad que usted quiere eliminar "
+              + "cuente con otras entidades relacionadas.", "proxy.RancherBean.Delete"));
     }
 
     log.exiting(RancherBean.class.getCanonicalName(), "Delete");
@@ -269,7 +272,7 @@ public class RancherBean extends BaseBean implements Cruddable {
       if (rancher.getEmailAddress() != null && !rancher.getEmailAddress().trim().equals(""))
         result = Utils.isValidEmail(rancher.getEmailAddress());
       if (!result)
-        error_description = "La dirección de correo electrónico es incorrecta.";
+        error_description = "La dirección de correo electrónico no cumple con un formato reconocible (correo@dominio.etc).";
     }
 
     return result;

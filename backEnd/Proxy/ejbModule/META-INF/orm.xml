@@ -144,20 +144,20 @@
 			</basic>
 		</attributes>
 	</entity>
-	<entity class="com.tramex.sisoprega.dto.ContactRancher">
+	<entity class="com.tramex.sisoprega.dto.RancherContact">
 		<table name="cat_rancher_contact" />
 		<named-query name="RANCHER_CONTACT_BY_ID">
 			<description>Get a rancher contact by its contact Id</description>
 			<query>
 			SELECT contact 
-			FROM ContactRancher contact 
+			FROM RancherContact contact 
 			WHERE contact.contactId = :contactId</query>
 		</named-query>
 		<named-query name="RANCHER_CONTACT_BY_RANCHER_ID">
 			<description>Get all rancher contacts by rancher id</description>
 			<query>
 			SELECT contact 
-			FROM ContactRancher contact 
+			FROM RancherContact contact 
 			WHERE contact.rancherId = :rancherId 
 			ORDER BY contact.firstName, contact.lastName, contact.motherName</query>
 		</named-query>
@@ -199,13 +199,13 @@
 			</basic>
 		</attributes>
 	</entity>
-	<entity class="com.tramex.sisoprega.dto.ContactEnterprise">
+	<entity class="com.tramex.sisoprega.dto.EnterpriseContact">
 		<table name="cat_rancher_contact" />
 		<named-query name="ENTERPRISE_CONTACT_BY_ID">
 			<description>Get an enterprise contact by its contact id</description>
 			<query>
 			SELECT contact
-			FROM ContactEnterprise contact
+			FROM EnterpriseContact contact
 			WHERE contact.contactId = :contactId
 			</query>
 		</named-query>
@@ -213,7 +213,7 @@
 			<description> Get all enterprise contact by enterprise id</description>
 			<query>
 				SELECT contact
-				FROM ContactEnterprise contact
+				FROM EnterpriseContact contact
 				WHERE contact.enterpriseId = :enterpriseId
 				ORDER BY contact.firstName, contact.lastName, contact.motherName
 			</query>
@@ -343,13 +343,13 @@
 				<generated-value strategy="IDENTITY" />
 			</id>
 			<basic name="available">
-				<column name="available"/>
+				<column name="available" />
 			</basic>
 			<basic name="barnyardCode">
-				<column name="barnyard_code"/>
+				<column name="barnyard_code" />
 			</basic>
 			<basic name="locationId">
-				<column name="location_id"/>
+				<column name="location_id" />
 			</basic>
 		</attributes>
 	</entity>
@@ -369,13 +369,13 @@
 				<generated-value strategy="IDENTITY" />
 			</id>
 			<basic name="barnyardId">
-				<column name="barnyard_id"/>
+				<column name="barnyard_id" />
 			</basic>
 			<basic name="catclassId">
-				<column name="catclass_id"/>
+				<column name="catclass_id" />
 			</basic>
 			<basic name="headCount">
-				<column name="head_count"/>
+				<column name="head_count" />
 			</basic>
 		</attributes>
 	</entity>
@@ -407,6 +407,10 @@
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.Reception">
 		<table name="ctrl_reception" />
+		<named-query name="CRT_RECEPTION_BY_ID">
+			<description>Retrieves a single crtReception record by ID</description>
+			<query>SELECT Recep FROM Reception Recep WHERE Recep.receptionId = :receptionId</query>
+		</named-query>
 		<attributes>
 			<id name="receptionId">
 				<column name="reception_id" />
@@ -420,6 +424,10 @@
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.ReceptionBarnyard">
 		<table name="ctrl_reception_barnyard" />
+		<named-query name="CRT_RECEPTIONBARNYARD_BY_ID">
+			<description>Retrieves a single crtReceptionBarnyard record by ID</description>
+			<query>SELECT RecepYard FROM ReceptionBarnyard RecepYard WHERE RecepYard.recBarnyardId = :recBarnyardId</query>
+		</named-query>
 		<attributes>
 			<id name="recBarnyardId">
 				<column name="rec_barnyard_id" />
@@ -429,6 +437,10 @@
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.ReceptionHeadcount">
 		<table name="ctrl_reception_headcount" />
+		<named-query name="CRT_RECEPTIONHEADCOUNT_BY_ID">
+			<description>Retrieves a single crtReceptionHeadcount record by ID</description>
+			<query>SELECT RecepHcount FROM ReceptionHeadcount RecepHcount WHERE RecepHcount.headcountId = :headcountId</query>
+		</named-query>
 		<attributes>
 			<id name="headcountId">
 				<column name="headcount_id" />
@@ -438,6 +450,10 @@
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.FeedOrder">
 		<table name="ctrl_feed_order" />
+		<named-query name="CRT_FEEDORDER_BY_ID">
+			<description>Retrieves a single crtReceptionHeadcount record by ID</description>
+			<query>SELECT FeedOrd FROM FeedOrder FeedOrd WHERE FeedOrd.orderId = :orderId</query>
+		</named-query>
 		<attributes>
 			<id name="orderId">
 				<column name="order_id" />
@@ -451,6 +467,10 @@
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.Food">
 		<table name="cat_food" />
+		<named-query name="CAT_FOOD_BY_ID">
+			<description>Retrieves a single crtFood record by ID</description>
+			<query>SELECT fod FROM Food fod WHERE fod.foodId = :foodId</query>
+		</named-query>
 		<attributes>
 			<id name="foodId">
 				<column name="food_id" />
@@ -460,6 +480,10 @@
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.FeedOrderDetails">
 		<table name="ctrl_feed_order_details" />
+		<named-query name="CRT_FEEDORDERDETAILS_BY_ID">
+			<description>Retrieves a single crtFood record by ID</description>
+			<query>SELECT FeOrDls FROM FeedOrderDetails FeOrDls WHERE FeOrDls.fodId = :fodId</query>
+		</named-query>
 		<attributes>
 			<id name="fodId">
 				<column name="id" />
@@ -469,6 +493,10 @@
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.Inspection">
 		<table name="ctrl_inspection" />
+		<named-query name="CRT_INSPECTION_BY_ID">
+			<description>Retrieves a single crtFood record by ID</description>
+			<query>SELECT Insp FROM Inspection Insp WHERE Insp.inspectionId = :inspectionId</query>
+		</named-query>
 		<attributes>
 			<id name="inspectionId">
 				<column name="inspection_id" />
@@ -482,6 +510,10 @@
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.InspectionBarnyard">
 		<table name="ctrl_inspection_barnyard" />
+		<named-query name="CRT_INSPECTIONBARNYARD_BY_ID">
+			<description>Retrieves a single crtFood record by ID</description>
+			<query>SELECT InspBar FROM InspectionBarnyard InspBar WHERE InspBar.ibId = :ibId</query>
+		</named-query>
 		<attributes>
 			<id name="ibId">
 				<column name="id" />
@@ -491,6 +523,10 @@
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.InspectionCode">
 		<table name="cat_inspection_code" />
+		<named-query name="CAT_INSPECTIONCODE_BY_ID">
+			<description>Retrieves a single crtFood record by ID</description>
+			<query>SELECT InspCod FROM InspectionCode InspCod WHERE InspCod.inspectionCodeId = :inspectionCodeId</query>
+		</named-query>
 		<attributes>
 			<id name="inspectionCodeId">
 				<column name="inspection_code_id" />

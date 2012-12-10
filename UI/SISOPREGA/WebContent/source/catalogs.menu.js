@@ -3,15 +3,18 @@ enyo.kind({
 	kind: enyo.SlidingView,
 	layoutKind: enyo.VFlexLayout,
 	events: {
-		onRanchers:"",
-		onBarnyards:"",
+		onRanchers:"",		
 		onCattle:""
 	},	
 	components: [
-		{kind: "Spacer"},
-		{kind: "Button", className: "enyo-button-blue", caption: "Ganaderos",onclick:"doRanchers"},
-		{kind: "Button", className: "enyo-button-blue", caption: "Ganado",   onclick:"doCattle"},
-		{kind: "Button", className: "enyo-button-blue", caption: "Corrales", onclick:"doBarnyards"},
-		{kind: "Spacer"}
+		{kind: enyo.VFlexBox,
+		 className:"buttonsBG",
+	     flex: 1,
+		 align:"center",	    
+		 components: [		
+			{kind: "Spacer"},
+			{kind: "Button", className: "enyo-button-cat", caption: "Ganaderos",onclick:"doRanchers"},
+			{kind: "Button", className: "enyo-button-cat", caption: "Ganado",   onclick:"doCattle"},
+			{kind: "Spacer"}]}
 	]
 });

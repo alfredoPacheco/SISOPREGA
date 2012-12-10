@@ -14,26 +14,6 @@
 			<ejb-class>com.tramex.sisoprega.proxy.bean.BarnyardCapacityBean</ejb-class>
 		</session>
 		<session>
-			<ejb-name>RancherProxy</ejb-name>
-			<ejb-class>com.tramex.sisoprega.proxy.bean.RancherBean</ejb-class>
-		</session>
-		<session>
-			<ejb-name>EnterpriseRancherProxy</ejb-name>
-			<ejb-class>com.tramex.sisoprega.proxy.bean.EnterpriseRancher</ejb-class>
-		</session>
-		<session>
-			<ejb-name>RancherInvoiceProxy</ejb-name>
-			<ejb-class>com.tramex.sisoprega.proxy.bean.RancherInvoice</ejb-class>
-		</session>
-		<session>
-			<ejb-name>RancherContactProxy</ejb-name>
-			<ejb-class>com.tramex.sisoprega.proxy.bean.RancherContact</ejb-class>
-		</session>
-		<session>
-			<ejb-name>EnterpriseContactProxy</ejb-name>
-			<ejb-class>com.tramex.sisoprega.proxy.bean.EnterpriseContact</ejb-class>
-		</session>
-		<session>
 			<ejb-name>CattleClassProxy</ejb-name>
 			<ejb-class>com.tramex.sisoprega.proxy.bean.CattleClassBean</ejb-class>
 		</session>
@@ -42,12 +22,68 @@
 			<ejb-class>com.tramex.sisoprega.proxy.bean.CattleTypeBean</ejb-class>
 		</session>
 		<session>
+			<ejb-name>EnterpriseContactProxy</ejb-name>
+			<ejb-class>com.tramex.sisoprega.proxy.bean.EnterpriseContactBean</ejb-class>
+		</session>
+		<session>
+			<ejb-name>RancherProxy</ejb-name>
+			<ejb-class>com.tramex.sisoprega.proxy.bean.RancherBean</ejb-class>
+		</session>
+		<session>
+			<ejb-name>EnterpriseRancherProxy</ejb-name>
+			<ejb-class>com.tramex.sisoprega.proxy.bean.EnterpriseRancherBean</ejb-class>
+		</session>
+		<session>
+			<ejb-name>RancherInvoiceProxy</ejb-name>
+			<ejb-class>com.tramex.sisoprega.proxy.bean.RancherInvoiceBean</ejb-class>
+		</session>
+		<session>
+			<ejb-name>RancherContactProxy</ejb-name>
+			<ejb-class>com.tramex.sisoprega.proxy.bean.RancherContactBean</ejb-class>
+		</session>
+		<session>
 			<ejb-name>MeasurementUnitProxy</ejb-name>
 			<ejb-class>com.tramex.sisoprega.proxy.bean.MeasurementUnitBean</ejb-class>
 		</session>
 		<session>
 			<ejb-name>MeasurementUnitEquivalenceProxy</ejb-name>
 			<ejb-class>com.tramex.sisoprega.proxy.bean.MeasurementUnitEquivalenceBean</ejb-class>
+		</session>
+		<session>
+			<ejb-name>ReceptionProxy</ejb-name>
+			<ejb-class>com.tramex.sisoprega.proxy.bean.ReceptionBean</ejb-class>
+		</session>
+		<session>
+			<ejb-name>ReceptionBarnyardProxy</ejb-name>
+			<ejb-class>com.tramex.sisoprega.proxy.bean.ReceptionBarnyardBean</ejb-class>
+		</session>
+		<session>
+			<ejb-name>ReceptionHeadcountProxy</ejb-name>
+			<ejb-class>com.tramex.sisoprega.proxy.bean.ReceptionHeadcountBean</ejb-class>
+		</session>
+		<session>
+			<ejb-name>FeedOrderProxy</ejb-name>
+			<ejb-class>com.tramex.sisoprega.proxy.bean.FeedOrderBean</ejb-class>
+		</session>
+		<session>
+			<ejb-name>FoodProxy</ejb-name>
+			<ejb-class>com.tramex.sisoprega.proxy.bean.FoodBean</ejb-class>
+		</session>
+		<session>
+			<ejb-name>FeedOrderDetailsProxy</ejb-name>
+			<ejb-class>com.tramex.sisoprega.proxy.bean.FeedOrderDetailsBean</ejb-class>
+		</session>
+		<session>
+			<ejb-name>InspectionProxy</ejb-name>
+			<ejb-class>com.tramex.sisoprega.proxy.bean.InspectionsBean</ejb-class>
+		</session>
+		<session>
+			<ejb-name>InspectionBarnyardProxy</ejb-name>
+			<ejb-class>com.tramex.sisoprega.proxy.bean.InspectionBarnyardBean</ejb-class>
+		</session>
+		<session>
+			<ejb-name>InspectionCodeProxy</ejb-name>
+			<ejb-class>com.tramex.sisoprega.proxy.bean.InspectionCodeBean</ejb-class>
 		</session>
 	</enterprise-beans>
 	<assembly-descriptor>
@@ -72,6 +108,14 @@
 				<method-name>Read</method-name>
 			</method>
 			<method>
+				<ejb-name>CattleTypeProxy</ejb-name>
+				<method-name>*</method-name>
+			</method>
+			<method>
+				<ejb-name>EnterpriseContactProxy</ejb-name>
+				<method-name>*</method-name>
+			</method>
+			<method>
 				<ejb-name>RancherProxy</ejb-name>
 				<method-name>*</method-name>
 			</method>
@@ -92,6 +136,14 @@
 			</method>
 			<method>
 				<ejb-name>CattleClassProxy</ejb-name>
+				<method-name>*</method-name>
+			</method>
+			<method>
+				<ejb-name>CattleTypeProxy</ejb-name>
+				<method-name>*</method-name>
+			</method>
+			<method>
+				<ejb-name>EnterpriseContactProxy</ejb-name>
 				<method-name>*</method-name>
 			</method>
 		</method-permission>

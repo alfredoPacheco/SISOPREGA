@@ -100,7 +100,7 @@ public class MeasurementUnitBean extends BaseBean implements Cruddable {
 
 	    if (MeasurUni.getUnitId() == 0) {
 		log.warning("MUU1 - Invalid MeasurementUnit id");
-		response.setError(new Error("BU1", "Invalid MeasurementUnit id",
+		response.setError(new Error("MUU1", "Invalid MeasurementUnit id",
 			"proxy.MeasurementUnit.Update"));
 	    } else {
 		if (validateEntity(MeasurUni)) {
@@ -144,7 +144,7 @@ public class MeasurementUnitBean extends BaseBean implements Cruddable {
 	    MeasurementUnit MeasurUni = entityFromRequest(request, MeasurementUnit.class);
 	    if (MeasurUni.getUnitId() == 0) {
 		log.warning("MUD1 - Invalid MeasurementUnit");
-		response.setError(new Error("BD1", "Invalid unitId",
+		response.setError(new Error("MUD1", "Invalid unitId",
 			"proxy.MeasurementUnit.Delete"));
 	    } else {
 		TypedQuery<MeasurementUnit> readQuery = em.createNamedQuery(
@@ -162,7 +162,7 @@ public class MeasurementUnitBean extends BaseBean implements Cruddable {
 	    log.severe("Exception found while deleting contact");
 	    log.throwing(this.getClass().getName(), "Delete", e);
 
-	    response.setError(new Error("BD2", "Delete exception: "
+	    response.setError(new Error("MUD2", "Delete exception: "
 		    + e.getMessage(), "proxy.MeasurementUnit.Delete"));
 	}
 
