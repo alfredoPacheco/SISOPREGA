@@ -432,6 +432,19 @@ CREATE TABLE ctrl_feed_order(
 GRANT ALL ON ctrl_feed_order TO sisoprega;
 GRANT ALL ON ctrl_feed_order_order_id_seq TO sisoprega;
 
+DROP TABLE IF EXISTS ctrl_feed_order_barnyard CASCADE;
+
+CREATE TABLE ctrl_feed_order_barnyard(
+	feed_ord_barn_id SERIAL PRIMARY KEY,
+	order_id integer NOT NULL REFERENCES ctrl_feed_order(order_id),
+	barnyard_id integer NOT NULL REFERENCES cat_barnyard(barnyard_id)
+);
+
+CREATE UNIQUE INDEX U_feed_order_barnyard ON ctrl_feed_order_barnyard(order_id, barnyard_id);
+
+GRANT ALL ON ctrl_feed_order_barnyard TO sisoprega;
+GRANT ALL ON cctrl_feed_order_barnyard_feed_ord_barn_id_seq TO sisoprega;
+
 DROP TABLE IF EXISTS cat_food CASCADE;
 CREATE TABLE cat_food(
 	food_id SERIAL PRIMARY KEY,
