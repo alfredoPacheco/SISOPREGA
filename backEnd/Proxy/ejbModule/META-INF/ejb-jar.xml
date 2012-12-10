@@ -73,6 +73,18 @@
 			<ejb-name>FeedOrderDetailsProxy</ejb-name>
 			<ejb-class>com.tramex.sisoprega.proxy.bean.FeedOrderDetailsBean</ejb-class>
 		</session>
+		<session>
+			<ejb-name>InspectionProxy</ejb-name>
+			<ejb-class>com.tramex.sisoprega.proxy.bean.InspectionsBean</ejb-class>
+		</session>
+		<session>
+			<ejb-name>InspectionBarnyardProxy</ejb-name>
+			<ejb-class>com.tramex.sisoprega.proxy.bean.InspectionBarnyardBean</ejb-class>
+		</session>
+		<session>
+			<ejb-name>InspectionCodeProxy</ejb-name>
+			<ejb-class>com.tramex.sisoprega.proxy.bean.InspectionCodeBean</ejb-class>
+		</session>
 	</enterprise-beans>
 	<assembly-descriptor>
 		<security-role>

@@ -220,7 +220,8 @@ public class BarnyardBean extends BaseBean implements Cruddable {
       Barnyard barnyard = entityFromRequest(request, Barnyard.class);
       if (barnyard.getBarnyardId() == 0) {
         log.warning("VAL04 - Entity ID Omission.");
-        response.setError(new Error("VAL04", "Se ha omitido el id del corral al intentar eliminar el registro.", "proxy.Barnyard.Delete"));
+        response.setError(new Error("VAL04", "Se ha omitido el id del corral al intentar eliminar el registro.",
+            "proxy.Barnyard.Delete"));
       } else {
         TypedQuery<Barnyard> readQuery = em.createNamedQuery("BARNYARD_BY_ID", Barnyard.class);
         readQuery.setParameter("barnyardId", barnyard.getBarnyardId());

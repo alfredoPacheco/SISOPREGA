@@ -493,6 +493,10 @@
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.Inspection">
 		<table name="ctrl_inspection" />
+		<named-query name="CRT_INSPECTION_BY_ID">
+			<description>Retrieves a single crtFood record by ID</description>
+			<query>SELECT Insp FROM Inspection Insp WHERE Insp.inspectionId = :inspectionId</query>
+		</named-query>
 		<attributes>
 			<id name="inspectionId">
 				<column name="inspection_id" />
@@ -506,6 +510,10 @@
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.InspectionBarnyard">
 		<table name="ctrl_inspection_barnyard" />
+		<named-query name="CRT_INSPECTIONBARNYARD_BY_ID">
+			<description>Retrieves a single crtFood record by ID</description>
+			<query>SELECT InspBar FROM InspectionBarnyard InspBar WHERE InspBar.ibId = :ibId</query>
+		</named-query>
 		<attributes>
 			<id name="ibId">
 				<column name="id" />
@@ -515,6 +523,10 @@
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.InspectionCode">
 		<table name="cat_inspection_code" />
+		<named-query name="CAT_INSPECTIONCODE_BY_ID">
+			<description>Retrieves a single crtFood record by ID</description>
+			<query>SELECT InspCod FROM InspectionCode InspCod WHERE InspCod.inspectionCodeId = :inspectionCodeId</query>
+		</named-query>
 		<attributes>
 			<id name="inspectionCodeId">
 				<column name="inspection_code_id" />
