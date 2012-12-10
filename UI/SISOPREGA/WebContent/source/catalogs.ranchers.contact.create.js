@@ -11,6 +11,7 @@ enyo.kind({
 	objContact:{},	
 	components: [	
 			{kind: enyo.Scroller, flex: 1,	
+				className:"formBG",
 			 components:[
 			{kind: "RowGroup", defaultKind: "HFlexBox", caption: "", style:"color:#FFF",
 			 components: [
@@ -24,7 +25,7 @@ enyo.kind({
 				   inputClassName: "blankInput", focusClassName:"darkFocus"},
 				  {kind: "VFlexBox", style: "",
 				   components:[{content:"Fecha de Nacimiento",},
-						{kind: "DatePicker", name:"birth_date", label: "", className:"picker-hbox"}]},						
+						{kind: "DatePicker", name:"birth_date", label: "", minYear:1940, maxYear:new Date().getFullYear(), className:"picker-hbox"}]},						
 				  {kind: "Input", name:"email_add", hint:"Email",
 				   inputClassName: "blankInput", focusClassName:"darkFocus"},							 
 				  {kind: "Input", name:"phone_number", hint:"Telefono",
@@ -98,7 +99,9 @@ enyo.kind({
 		objContact.first_name=this.$.first_name.getValue();
 		objContact.last_name=this.$.last_name.getValue();
 		objContact.mother_name=this.$.mother_name.getValue();
-		objContact.birth_date=fmt.format(this.$.birth_date.getValue());
+		if(this.$.birth_date.getValue()!=null){			
+			objContact.birth_date=fmt.format(this.$.birth_date.getValue());
+		}
 		objContact.email_add=this.$.email_add.getValue();
 		objContact.phone_number=this.$.phone_number.getValue();
 		objContact.address_one=this.$.address_one.getValue();
@@ -122,10 +125,12 @@ enyo.kind({
 		this.$.first_name.setValue(this.objContact.first_name);
 		this.$.last_name.setValue(this.objContact.last_name);
 		this.$.mother_name.setValue(this.objContact.mother_name);
-		this.$.birth_date.setValue(new Date(this.objContact.birth_date.substring(0,4),
+		if(this.objContact.birth_date != ''){
+			this.$.birth_date.setValue(new Date(this.objContact.birth_date.substring(0,4),
 												this.objContact.birth_date.substring(5,7)-1,
 												this.objContact.birth_date.substring(8,10)																
 									 ));
+		}
 		this.$.email_add.setValue(this.objContact.email_add);
 		this.$.phone_number.setValue(this.objContact.phone_number);
 		this.$.address_one.setValue(this.objContact.address_one);
