@@ -3,6 +3,7 @@ enyo.kind({
 	kind: enyo.VFlexBox,
 	components: [
 		{kind: "Toolbar",name:"tbHeader",style:"height:10px", className:"headerMain", 
+			
 			components: [
 				{name:'btnGoBack',icon:"images/command-menu/menu-icon-back.png", onclick:"goBack"},
 				{kind: "Spacer"},

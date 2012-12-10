@@ -9,7 +9,7 @@ enyo.kind({
 		{kind: enyo.Pane, flex: 1, name: "mainPane",
 		 components:[	
 			{kind: enyo.Scroller, name:"barnyardList",flex: 1,
-			 style: "background-image: url(images/practice_background.png); background-size: cover;",			
+			className:"listBG",			
 			 components: [
 				{kind: enyo.VirtualRepeater, name: "productList", onSetupRow: "setupProductRow", 
 				 onclick: "setSelected",								
@@ -19,12 +19,10 @@ enyo.kind({
 						{kind:enyo.VFlexBox,width:"90%",
 						 components:[
 							{name: "code",									 
-							 style: "text-overflow: ellipsis; "+
-								 "overflow: hidden; white-space:"+
-								 "nowrap;color:#FFF;", 
+							className:"listFirst", 							 
 							 content: ""},
 							{name: "info", 
-							 style: "font-size: 0.85em;color:#999",
+								className:"listSecond",							 
 							 content: "",},	
 						 ]}
 					 ]}

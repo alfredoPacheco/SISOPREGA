@@ -184,6 +184,16 @@ enyo.kind({
 		}
 		return _arrCattleLS;
 	},
+	getCattleTypeLS:function(){
+		var _arrCattleLS=[];
+		var arrTemp=[];
+		arrTemp = this.getCattleType();
+		for(var i=0;i<arrTemp.length;i++){
+			_arrCattleLS.push({caption:arrTemp[i].cattype_name,
+									value:arrTemp[i].cattype_id});
+		}
+		return _arrCattleLS;
+	},
 	getByID:function(iID){
 		for(var i=0; i<this.getCattleType().length;i++){
 			if (this.getCattleType()[i].cattype_id==iID){
