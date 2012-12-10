@@ -490,6 +490,12 @@
 				<column name="feed_date" />
 				<temporal>TIMESTAMP</temporal>
 			</basic>
+			<basic name="receptionId">
+				<column name = "recepcion_id"/>
+			</basic>
+			<basic name="feedOriginator">
+				<column name = "feed_originator"/>
+			</basic>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.Food">
@@ -503,6 +509,9 @@
 				<column name="food_id" />
 				<generated-value strategy="IDENTITY" />
 			</id>
+			<basic name="foodName">
+				<column name = "food_name"/>
+			</basic>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.FeedOrderDetails">
