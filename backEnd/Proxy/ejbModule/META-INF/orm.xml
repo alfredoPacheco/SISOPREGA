@@ -559,6 +559,9 @@
 				<column name="inspection_code_id" />
 				<generated-value strategy="IDENTITY" />
 			</id>
+			<basic name="inspectionCodeDescription">
+				<column name = "inspection_code_description"/>
+			</basic>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.FeedOrderBarnyard">
@@ -572,6 +575,12 @@
 				<column name= "feed_ord_barn_id"/>
 				<generated-value strategy="IDENTITY"/>
 			</id>
+			<basic name="barnyardId">
+				<column name = "barnyard_id"/>
+			</basic>
+			<basic name="orderId">
+				<column name = "order_id"/>
+			</basic>
 		</attributes>
 	</entity>
 </entity-mappings>
