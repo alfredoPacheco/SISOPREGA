@@ -23,7 +23,7 @@
 		</session>
 		<session>
 			<ejb-name>EnterpriseContactProxy</ejb-name>
-			<ejb-class>com.tramex.sisoprega.proxy.bean.EnterpriseContact</ejb-class>
+			<ejb-class>com.tramex.sisoprega.proxy.bean.EnterpriseContactBean</ejb-class>
 		</session>
 		<session>
 			<ejb-name>RancherProxy</ejb-name>
@@ -35,11 +35,11 @@
 		</session>
 		<session>
 			<ejb-name>RancherInvoiceProxy</ejb-name>
-			<ejb-class>com.tramex.sisoprega.proxy.bean.RancherInvoice</ejb-class>
+			<ejb-class>com.tramex.sisoprega.proxy.bean.RancherInvoiceBean</ejb-class>
 		</session>
 		<session>
 			<ejb-name>RancherContactProxy</ejb-name>
-			<ejb-class>com.tramex.sisoprega.proxy.bean.RancherContact</ejb-class>
+			<ejb-class>com.tramex.sisoprega.proxy.bean.RancherContactBean</ejb-class>
 		</session>
 		<session>
 			<ejb-name>MeasurementUnitProxy</ejb-name>

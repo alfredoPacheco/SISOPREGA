@@ -86,7 +86,6 @@ public class InspectionBarnyardBean extends BaseBean implements Cruddable {
     } catch (Exception e) {
       log.severe("Exception found while creating InspectionBarnyardBean");
       log.throwing(this.getClass().getName(), "Create", e);
-
       if (e instanceof javax.persistence.PersistenceException)
         response.setError(new Error("DB01",
             "Los datos que usted ha intentado ingresar, no son permitidos por la base de datos, ",

@@ -1,7 +1,6 @@
 enyo.kind({
 	name: "catalogs.ranchers.person.create",	
-	kind: enyo.SlidingView,
-	layoutKind: enyo.VFlexLayout,
+	kind: "Control", layoutKind: "HFlexLayout",
 	events: {
 		"onAddRancher": "",
 		"onUpdateRancher": "",	
@@ -10,8 +9,9 @@ enyo.kind({
 	objRan:{},	
 	components: [	
 			{kind: enyo.Scroller, flex: 1,	
+			className:"formBG",
 			 components:[
-			{kind: "RowGroup", defaultKind: "HFlexBox", caption: "", style:"color:#FFF",
+			{kind: "RowGroup", defaultKind: "HFlexBox", caption: "",
 			 components: [
 				  {kind: "Input", name:"aka", hint:"Alias",
 				   inputClassName: "blankInput",focusClassName:"darkFocus"},	       
@@ -23,8 +23,8 @@ enyo.kind({
 				   inputClassName: "blankInput", focusClassName:"darkFocus"},
 				  {kind: "VFlexBox", style: "",
 				   components:[{content:"Fecha de Nacimiento",},
-						{kind: "DatePicker", name:"birth_date", minYear:1940, label: "", className:"picker-hbox"}]},						
-				  {kind: "Input", name:"email_add", hint:"Email",
+						{kind: "DatePicker", name:"birth_date", minYear:1940, maxYear:new Date().getFullYear(), label: "", className:"picker-hbox"}]},						
+				  {kind: "Input", name:"email_add", hint:"Email", inputType:"email",
 				   inputClassName: "blankInput", focusClassName:"darkFocus"},							 
 				  {kind: "Input", name:"phone_number", hint:"Telefono",
 				   inputClassName: "blankInput", focusClassName:"darkFocus"}]},
@@ -88,8 +88,15 @@ enyo.kind({
 		return objRan;
 	},
 	addRancher:function(){				
-		cacheRanchers.create(this.getRancher(),this,"doAddRancher");		
+		this.iCreated=cacheRanchers.create(this.getRancher(),this,"afteraddRancher");		
 	},
+	afteraddRancher:function(){
+		this.iCreated=cacheRanchers.iLastRanID;
+		this.doAddRancher();
+	},
+	getJustCreated:function(){
+		return this.iCreated;
+	},	
 	setRancher:function(objVar){
 		this.resetValues();		
 		this.objRan=objVar;
