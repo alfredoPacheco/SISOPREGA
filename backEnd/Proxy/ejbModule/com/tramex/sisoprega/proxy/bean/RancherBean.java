@@ -207,7 +207,7 @@ public class RancherBean extends BaseBean implements Cruddable {
       if (rancher.getRancherId() == 0) {
         log.warning("VAL04 - Entity ID Omission.");
         response.setError(new Error("VAL04", "Se ha omitido el id del ganadero al intentar eliminar el registro.",
-            "proxy.RancherBEan.Delete"));
+            "proxy.RancherBean.Delete"));
       } else {
         TypedQuery<Rancher> readQuery = em.createNamedQuery("RANCHER_BY_ID", Rancher.class);
         readQuery.setParameter("rancherId", rancher.getRancherId());

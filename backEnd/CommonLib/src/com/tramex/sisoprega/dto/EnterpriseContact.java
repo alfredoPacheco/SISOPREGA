@@ -35,7 +35,7 @@ import java.util.Date;
  * @author Diego Torres
  * 
  */
-public class ContactEnterprise {
+public class EnterpriseContact {
     private long enterpriseId;
     private long contactId;
     private String aka;
