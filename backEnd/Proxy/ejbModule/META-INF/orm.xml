@@ -451,8 +451,12 @@
 	<entity class="com.tramex.sisoprega.dto.FeedOrder">
 		<table name="ctrl_feed_order" />
 		<named-query name="CRT_FEEDORDER_BY_ID">
-			<description>Retrieves a single crtReceptionHeadcount record by ID</description>
+			<description>Retrieves a single Feed Order record by its ID</description>
 			<query>SELECT FeedOrd FROM FeedOrder FeedOrd WHERE FeedOrd.orderId = :orderId</query>
+		</named-query>
+		<named-query name="FEEDORDER_BY_RECEPTION_ID">
+			<description>Retrieves a list of feed orders using the reception id.</description>
+			<query>SELECT feed FROM FeedOrder feed WHERE feed.receptionId = :receptionId</query>
 		</named-query>
 		<attributes>
 			<id name="orderId">
