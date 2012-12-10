@@ -127,7 +127,7 @@ public class FeedOrderBean extends BaseBean implements Cruddable {
         readQuery = em.createNamedQuery("CRT_FEEDORDER_BY_ID", FeedOrder.class);
         log.fine("Query by Id: " + order.getOrderId());
         readQuery.setParameter("orderId", order.getOrderId());
-      } else if (order.getBarnyardId() != 0) {
+      } else if (order.getReceptionId() != 0) {
         readQuery = em.createNamedQuery("FEEDORDER_BY_RECEPTION_ID", FeedOrder.class);
         log.fine("Query by ReceptionId: " + order.getReceptionId());
         readQuery.setParameter("receptionId", order.getReceptionId());
