@@ -15,6 +15,7 @@
  */
 package com.tramex.sisoprega.proxy.bean;
 
+import javax.ejb.Stateless;
 import javax.persistence.TypedQuery;
 
 import com.tramex.sisoprega.common.BaseResponse;
@@ -46,6 +47,7 @@ import com.tramex.sisoprega.dto.FeedOrderBarnyard;
  * @author Jaime Figueroa
  * 
  */
+@Stateless
 public class FeedOrderBarnyardBean extends BaseBean implements Cruddable {
 
   /*
