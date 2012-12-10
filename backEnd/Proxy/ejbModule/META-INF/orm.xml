@@ -533,6 +533,9 @@
 				<column name="inspection_date" />
 				<temporal>TIMESTAMP</temporal>
 			</basic>
+			<basic name="receptionId">
+				<column name ="inspection_id"/>
+			</basic>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.InspectionBarnyard">
@@ -546,6 +549,12 @@
 				<column name="id" />
 				<generated-value strategy="IDENTITY" />
 			</id>
+			<basic name="inspectionId">
+				<column name = "inspection_id"/>
+			</basic>
+			<basic name="barnyardId">
+				<column name = "barnyard_Id"/>
+			</basic>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.InspectionCode">
