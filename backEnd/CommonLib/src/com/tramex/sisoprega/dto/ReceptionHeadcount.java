@@ -32,10 +32,23 @@ package com.tramex.sisoprega.dto;
  *
  */
 public class ReceptionHeadcount {
-    public long headcountId;
-    public long receptionId;
-    public double weight;
-    public long weightUom;
+    private long headcountId;
+    private long receptionId;
+    private long hc;
+    private double weight;
+    private long weightUom;
+    /**
+     * @return the hc
+     */
+    public long getHc() {
+      return hc;
+    }
+    /**
+     * @param hc the hc to set
+     */
+    public void setHc(long hc) {
+      this.hc = hc;
+    }
     /**
      * @return the headcountId
      */
