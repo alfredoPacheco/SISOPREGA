@@ -420,6 +420,15 @@
 				<column name="date_allotted" />
 				<temporal>TIMESTAMP</temporal>
 			</basic>
+			<basic name="rancherId">
+				<column name = "rancher_id"/>
+			</basic>
+			<basic name = "locationId">
+				<column name = "location_id"/>
+			</basic>
+			<basic name="cattleType">
+				<column name = "cattle_type"/>
+			</basic>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.ReceptionBarnyard">
@@ -433,6 +442,12 @@
 				<column name="rec_barnyard_id" />
 				<generated-value strategy="IDENTITY" />
 			</id>
+			<basic name = "barnyardId">
+				<column name = "barnyard_id"/>
+			</basic>
+			<basic name="receptionId">
+				<column name="receptio_id"/>
+			</basic>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.ReceptionHeadcount">
@@ -446,6 +461,18 @@
 				<column name="headcount_id" />
 				<generated-value strategy="IDENTITY" />
 			</id>
+			<basic name="receptionId">
+				<column name = "reception_id"/>
+			</basic>
+			<basic name="hc">
+				<column name = "hc"/>
+			</basic>
+			<basic name = "weight">
+				<column name = "weight"/>
+			</basic>
+			<basic name = "weightUom">
+				<column name = "weight_uom"/>
+			</basic>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.FeedOrder">
