@@ -254,6 +254,7 @@ enyo.kind({
 		this.$.spacerone.setContent("");
 	},
 	setDesc:function(sBY){
+		try {
 		var objRec=cacheReceptions.getByID(cacheBY.inUse()[sBY].reception_id);
 		var sBy="";
 		var iBy=0;
@@ -275,7 +276,10 @@ enyo.kind({
 									"  ("+ objRec.hc_aprox+"/"+objRec.weights[0].weight+")"+
 									"	 "+objRec.arrival_date+
 									"</br> Corrales ("+iBy+") - "+sBy);		
-		*/
+		*/}
+		catch(e){
+			_objMainHeader.setContent("");
+		}
 	},
 	actionSelected:function(inSender, inSelected){				
 		switch(inSelected.value){

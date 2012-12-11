@@ -276,6 +276,8 @@ enyo.kind({
 			objRan.billing = {};
 			objRan.contacts = [];
 			objRan.rfc = "";
+			
+			
 			this.arrObj.push(objRan);
 			_arrRancherList = this.arrObj;
 			if(cbMethod){

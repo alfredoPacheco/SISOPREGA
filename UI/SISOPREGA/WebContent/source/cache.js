@@ -1,6 +1,7 @@
 var _arrCattleReject=[{reject_id:1,reject_desc:"EMFERMEDAD"},
                       {reject_id:2,reject_desc:"HERIDA"},
                       {reject_id:3,reject_desc:"OTRAS"}];
+
 var _arrFeed=[{feed_id:1,feed_desc:"MOLIDA",feed_units:"KG"},
 			  {feed_id:2,feed_desc:"ALFALFA",feed_units:"PACAS"},
 			  {feed_id:3,feed_desc:"AVENA",feed_units:"PACAS"},

@@ -129,10 +129,6 @@ enyo.kind({
 		if (cgCreate.exceptionId == 0){ //Created successfully
 			objCat.cattype_id = cgCreate.generatedId;
 			
-//			objCat.billing = {};
-//			objCat.contacts = [];
-//			objCat.rfc = "";
-			
 			this.arrCattleType.push(objCat);
 			_arrCattleTypeList = this.arrCattleType;
 			if(cbMethod){

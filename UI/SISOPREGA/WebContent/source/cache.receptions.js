@@ -79,12 +79,7 @@ enyo.kind({
 		delete objToSend.receptionId;
 		var cgCreate = consumingGateway.Create("Reception", objToSend);
 		if (cgCreate.exceptionId == 0){ //Created successfully			
-			objRec.reception_id = cgCreate.generatedId;	
-			//TODO
-			objRec.billing = {};
-			objRec.contacts = [];
-			objRec.rfc = "";
-			
+			objRec.reception_id = cgCreate.generatedId;
 			
 			this.arrObj.push(objRec);
 			_arrReceptionList = this.arrObj;
@@ -140,12 +135,15 @@ enyo.kind({
 		}
 		return _arrCattleLS;
 	},
-	getByID:function(iID){
-		for(var i=0; i<this.get().length;i++){
-			if (this.get()[i].reception_id==iID){
-				return this.get()[i];
+	getByID:function(iID){		
+		var arrTemp=[];
+		arrTemp = this.get();
+		for(var i=0; i < arrTemp.length; i++){
+			if (arrTemp[i].reception_id==iID){
+				return arrTemp[i];
 			}
 		}
+		return null;
 	},
 	//TODO
 	deleteByID:function(iID){
@@ -180,10 +178,10 @@ enyo.kind({
 			cacheMan.setMessage("", "[Exception ID: " + cgDelete.exceptionId + "] Descripcion: " + cgDelete.exceptionDescription);
 			return false;
 		}	
-	},
+	},	
 	addWeight:function(objRec,objWeight,cbObj,cbMethod){
 		//AJAX
-		//Update Local	
+		//Update Local
 		objRec.weights.push(objWeight);	
 		if(cbMethod){
 			cbObj[cbMethod]();

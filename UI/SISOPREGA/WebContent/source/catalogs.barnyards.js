@@ -16,6 +16,6 @@ enyo.kind({
 	this.$.capList.toggleAdd();
 	this.$.mainPane.selectViewByName("capList");
 	return true;					  
-  },
+  }
 });
 
