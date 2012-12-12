@@ -176,7 +176,7 @@ enyo.kind({
 	},
 	adoken:function(){
 		this.resetValues();		
-		this.$.rancher_id.setValue(this.$.dynoco.getJustCreated())
+		this.$.rancher_id.setValue(this.$.dynoco.getJustCreated());
 		this.$.addRancherDialog.close();		
 	}
 });

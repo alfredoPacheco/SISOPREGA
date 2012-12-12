@@ -32,7 +32,7 @@ enyo.kind({
 		this.last=this.$.cells;
 		//this.addRow(true);
 		this.addRowHeader();
-		this.addCustomCell("corraman","Corrales de <br/> Manejo","99	px","50px");
+		this.addCustomCell("corraman","Corrales de <br/> Manejo","100px","50px");
 		this.createCells("1E",5,6,"50px","50px");
 		this.splitRow();
 		this.createCells("1E",17,8,"50px","50px");		
@@ -110,13 +110,15 @@ enyo.kind({
 	last:null,
 	addCustomCell:function(sName,sCaption,sWidth,sHeight,sClass){
 		if(!sClass){
-			sClass="customBYcell"
+			sClass="customBYcell";
 		}
 		objBarn.createComponent({kind:enyo.Control,
 		                         className:sClass,
 								 allowHtml:true,
 		                          style: "width:"+sWidth+
-						                 ";height:"+sHeight+";",
+						                 ";height:"+sHeight+";" +
+				                 		"text-align: center;" +
+				                 		"vertical-align: middle;",
 			                      name:sName,
 								  content:sCaption,
 								 },{owner: this});		
@@ -124,10 +126,10 @@ enyo.kind({
 	addRowHeader:function(){
 			this.last=objBarn=this.$.cells.createComponent({kind: "HFlexBox"});																								
 			this.addCustomCell("alaone","<strong>CHIHUAHUA</strong>",
-							  "815px","25px","customBYcellZone");
+							  "815px","30px","customBYcellZone");
 			this.splitRow();
 			this.addCustomCell("alatwo","<strong>ZONA SUR</strong>",
-			                   "200px","25px","customBYcellZone");			
+			                   "200px","30px","customBYcellZone");			
 			this.addRow();
 	},
 	addRow:function(bDiv){
@@ -146,6 +148,7 @@ enyo.kind({
 										""});
 	},
 	createCells:function(sLetter,iStart,iNumber,sWidth,sHeight){
+		//this.createCells("1E",5,6,"50px","50px");
 		objBarn=this.last;				
 		var sColor;
 		for (var i=0; i<iNumber; i++) {
@@ -157,7 +160,7 @@ enyo.kind({
 				iOccupied=0;				
 				sColor=this.sColorFree;				
 			}
-			var c=objBarn.createComponent({kind:enyo.Control,
+			objBarn.createComponent({kind:enyo.Control,
 										   className:"byCell",
 										   style:"width:"+sWidth+
 											   ";height:"+sHeight+
@@ -293,7 +296,7 @@ enyo.kind({
 				this.$.popMan.createComponent({kind: "receptions.create",
 										       onAddReception:"updateBY",onCancel:"closePopUp", 
 										       name:'dynocon',flex: 1},{owner:this});			
-				this.$.dynocon.setReception(null,this.arrSelected)
+				this.$.dynocon.setReception(null,this.arrSelected);
 				this.$.dynocon.toggleAdd();
 				this.$.popMan.render();
 				this.$.popMan.openAtCenter();												
@@ -340,7 +343,7 @@ enyo.kind({
 										onAddReception:"closePopUp", onCancel:"closePopUp",
 										name:'dynocon',flex: 1},{owner:this});
 				var objRec=cacheReceptions.getByID(cacheBY.inUse()[this.objSelected.name].reception_id);										
-				this.$.dynocon.set(objRec)		
+				this.$.dynocon.set(objRec);		
 				this.$.dynocon.toggleAdd();
 				this.$.popMan.render();
 				this.$.popMan.openAtCenter();												
@@ -367,7 +370,7 @@ enyo.kind({
 				break;
 			case 7:
 				var objRec=cacheReceptions.getByID(cacheBY.inUse()[this.objSelected.name].reception_id);
-				cacheReceptions.appendBY(objRec,this.arrSelected,this,"updateBY")
+				cacheReceptions.appendBY(objRec,this.arrSelected,this,"updateBY");
 				break;	
 			case 8:
 				delete this.arrSelectedOccupied[this.objSelected.name];	

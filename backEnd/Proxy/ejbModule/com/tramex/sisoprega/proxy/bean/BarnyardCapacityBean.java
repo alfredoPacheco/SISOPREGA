@@ -45,6 +45,7 @@ import com.tramex.sisoprega.dto.BarnyardCapacity;
  *             Jaime Figueroa                Initial Version.
  * 12/04/2012  Diego Torres                  Fixing delete operation, adding flower box
  *                                           and adding read functionality.
+ * 12/12/2012  Alfredo Pacheco				 Added sql for select all records.
  * ====================================================================================
  * </PRE>
  * 
@@ -133,9 +134,10 @@ public class BarnyardCapacityBean extends BaseBean implements Cruddable {
         query.setParameter("barnyardId", capacity.getBarnyardId());
         query.setParameter("cattleClassId", capacity.getCatclassId());
       } else {
-        response.setError(new Error("VAL03", "El filtro especificado no es válido en el catálogo de capacidades de corral",
-            "proxy.BarnyardCapacityBean.Read"));
-        return response;
+    	  query = em.createNamedQuery("ALL_BARNYARD_CAPACITIES", BarnyardCapacity.class);
+//        response.setError(new Error("VAL03", "El filtro especificado no es válido en el catálogo de capacidades de corral",
+//            "proxy.BarnyardCapacityBean.Read"));
+//        return response;
       }
 
       List<BarnyardCapacity> result = query.getResultList();

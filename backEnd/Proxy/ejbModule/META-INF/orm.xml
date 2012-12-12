@@ -363,6 +363,10 @@
 			<description>Retrieves a single barnyard capacity record using the barnyard and the cattle</description>
 			<query>SELECT capacity FROM BarnyardCapacity capacity WHERE capacity.barnyardId = :barnyardId AND capacity.catclassId = :cattleClassId</query>
 		</named-query>
+		<named-query name="ALL_BARNYARD_CAPACITIES">
+			<description>Get all records of barnyard capacities in database</description>
+			<query>SELECT barCa FROM BarnyardCapacity barCa ORDER BY barCa.barnyardId</query>
+		</named-query>
 		<attributes>
 			<id name="capacityId">
 				<column name="capacity_id" />
@@ -461,7 +465,7 @@
 				<column name = "barnyard_id"/>
 			</basic>
 			<basic name="receptionId">
-				<column name="receptio_id"/>
+				<column name="reception_id"/>
 			</basic>
 		</attributes>
 	</entity>
