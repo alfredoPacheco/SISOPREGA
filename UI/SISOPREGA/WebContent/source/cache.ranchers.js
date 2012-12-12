@@ -1,5 +1,6 @@
 enyo.kind({
 	name: "cache.ranchers",
+	iLastRanID:null,
 	arrObj:[],
 	rancherWasReadFromGateway: false,
 	invoiceWasReadFromGateway: false,
@@ -271,9 +272,12 @@ enyo.kind({
 		var cgCreate = consumingGateway.Create("Rancher", objToSend);
 		if (cgCreate.exceptionId == 0){ //Created successfully			
 			objRan.rancher_id = cgCreate.generatedId;
+			this.iLastRanID= objRan.rancher_id;
 			objRan.billing = {};
 			objRan.contacts = [];
 			objRan.rfc = "";
+			
+			
 			this.arrObj.push(objRan);
 			_arrRancherList = this.arrObj;
 			if(cbMethod){

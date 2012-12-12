@@ -5,7 +5,29 @@ enyo.kind({
 	arrObjAv:enyo.clone(_arrBarnyardsList),
 	reloadme:function(){
 		//AJAX
-	},	
+	},
+	barnyardAdapterToIn:function(objBarnyard){
+				
+		var objNew = {
+				barnyard_id:	objBarnyard.barnyardId,
+				barnyard_code:		objBarnyard.barnyardCode,
+				barnyard_capacity:	[]		
+			};
+		
+		return objNew;
+	},
+	receptionAdapterToOut:function(objReception){
+			
+		var objNew = {				
+				barnyardId:			objReception.barnyard_id,				
+				barnyardCode:		objReception.barnyard_code,
+				available: 			true,
+				barnyard_capacity:	[],
+				//locationId:
+			};
+		
+		return objNew;
+	},
 	get:function(){
 		return this.arrObj;
 	},
@@ -143,6 +165,34 @@ enyo.kind({
 		}
 	},
 	setOccupied:function(sID,iReceptionID){
+		var objToSend = this.receptionAdapterToOut(objRec);
+		delete objToSend.receptionId;
+		var cgCreate = consumingGateway.Create("Reception", objToSend);
+		if (cgCreate.exceptionId == 0){ //Created successfully			
+			objRec.reception_id = cgCreate.generatedId;
+			
+			this.arrObj.push(objRec);
+			_arrReceptionList = this.arrObj;
+			
+			//TODO
+			for (var sKey in objRec.barnyards){
+				cacheBY.setOccupied(sKey,objRec.reception_id);
+			}
+			
+			if(cbMethod){
+				cbObj[cbMethod]();
+			}
+			return true;
+		}
+		else{ //Error			
+			cacheMan.setMessage("", "[Exception ID: " + cgCreate.exceptionId + "] Descripcion: " + cgCreate.exceptionDescription);
+			return false;
+		}
+		
+		
+		
+		
+		
 		this.arrObjInUse[sID]={reception_id:iReceptionID,accepted_count:"",inspections:[],feed:[]};
 	},
 	releaseBY:function(objRec,sID,cbObj,cbMethod){

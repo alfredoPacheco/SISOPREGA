@@ -1,39 +1,131 @@
 enyo.kind({
 	name: "cache.receptions",
-	arrObj:_arrReceptionList,
+	arrObj:[],
+	receptionWasReadFromGateway:false,
 	reloadme:function(){
 		//AJAX
 	},	
+	receptionAdapterToIn:function(objReception){
+		
+		var objNew = {
+				reception_id:	objReception.receptionId,
+				rancher_id:		objReception.rancherId,
+				arrival_date:	objReception.dateAllotted,
+				cattype_name:	objReception.cattleType,
+				
+//				:	objReception.locationId
+			};
+		
+		objNew.company_name="";
+		objNew.cattype_id="";
+		objNew.hc_aprox="";
+		objNew.city_id="";
+		objNew.city_name="";
+		objNew.weights=[]; 
+		objNew.barnyards=[];
+		objNew.accepted_count="";
+		objNew.inspections=[];
+		objNew.feed=[];
+		
+		return objNew;
+	},
+	receptionAdapterToOut:function(objReception){
+
+		var objNew = {				
+				receptionId:	objReception.reception_id,				
+				rancherId:		objReception.rancher_id,
+				dateAllotted:	"" + DateOut(objReception.arrival_date),
+				cattleType:		objReception.cattype_id,
+				
+				locationId:	1
+			};
+		
+		return objNew;
+	},
 	get:function(){
-		return this.arrObj;
+		if (this.receptionWasReadFromGateway == false){
+			this.receptionWasReadFromGateway = true;
+			var objAux = {};
+			var arrAux = [];
+			var selfCacheReception = this;		
+			
+	//Retrieve Receptions
+			var cgReadAll = consumingGateway.Read("Reception", {});
+			
+			if (cgReadAll.exceptionId == 0){ //Read successfully
+				jQuery.each(cgReadAll.records, function() {       		
+		    		jQuery.each(this, function(key, value){
+		    			objAux[key] = value;	
+		    		});
+		    		objTmp = selfCacheReception.receptionAdapterToIn(objAux);		    		
+		    		arrAux.push(objTmp);
+		    	});
+			}else{ //Error
+				if (cgReadAll.exceptionId != "RR02"){ //No data found
+					cacheMan.setMessage("", "[Exception ID: " + cgReadAll.exceptionId + "] Descripción: " + cgReadAll.exceptionDescription);	
+				}			
+			}
+						
+			this.arrObj =  arrAux;
+			_arrReceptionList = arrAux;
+			
+//			cacheMan.hideScrim();
+		}
+		
+		return this.arrObj;		
 	},
 	create:function(objRec,cbObj,cbMethod){
-		//AJAX
-		//UPDATE INTERNAL
-		objRec.reception_id=Math.random().toString(36).substring(2, 15) + 
-		                    Math.random().toString(36).substring(2, 15); //CHANGE FOR DB ID
-		for (var sKey in objRec.barnyards){
-			cacheBY.setOccupied(sKey,objRec.reception_id);
+		var objToSend = this.receptionAdapterToOut(objRec);
+		delete objToSend.receptionId;
+		var cgCreate = consumingGateway.Create("Reception", objToSend);
+		if (cgCreate.exceptionId == 0){ //Created successfully			
+			objRec.reception_id = cgCreate.generatedId;
+			
+			this.arrObj.push(objRec);
+			_arrReceptionList = this.arrObj;
+			
+			//TODO
+			for (var sKey in objRec.barnyards){
+				cacheBY.setOccupied(sKey,objRec.reception_id);
+			}
+			
+			if(cbMethod){
+				cbObj[cbMethod]();
+			}
+			return true;
 		}
-		this.arrObj.push(objRec);
-		if(cbMethod){
-			cbObj[cbMethod]();
-		}				
-		return true;
+		else{ //Error			
+			cacheMan.setMessage("", "[Exception ID: " + cgCreate.exceptionId + "] Descripcion: " + cgCreate.exceptionDescription);
+			return false;
+		}
+		
 	},
 	upd:function(objOld,objNew,cbObj,cbMethod){
-		//AJAX
-		//Update Internal Object
-		for (var sKey in objNew){
-			if(objOld[sKey]!=null){
-				objOld[sKey]=objNew[sKey]
+		objNew.reception_id = objOld.reception_id;
+		var objToSend = this.receptionAdapterToOut(objNew);
+		var cgUpdate = consumingGateway.Update("Reception", objToSend);
+		if (cgUpdate.exceptionId == 0){ //Updated successfully
+			for(prop in objNew){
+				objOld[prop]=objNew[prop];
 			}
+			var tamanio = this.get().length;
+			for(var i=0;i<tamanio;i++){
+				if (this.arrObj[i].reception_id == objOld.reception_id){
+					this.arrObj[i] = objOld;
+					_arrReceptionList = this.arrObj;
+					cbObj.objRec = objOld;
+					if(cbMethod){
+						cbObj[cbMethod]();
+					}
+					return true;					
+				}
+			}
+			return false;
 		}
-		if(cbMethod){
-			cbObj[cbMethod]();
+		else{ //Error			
+			cacheMan.setMessage("", "[Exception ID: " + cgUpdate.exceptionId + "] Descripcion: " + cgUpdate.exceptionDescription);
+			return false;
 		}		
-		return true;
-		//return false;		
 	},
 	getLS:function(){
 		var _arrCattleLS=[];
@@ -43,13 +135,17 @@ enyo.kind({
 		}
 		return _arrCattleLS;
 	},
-	getByID:function(iID){
-		for(var i=0; i<this.get().length;i++){
-			if (this.get()[i].reception_id==iID){
-				return this.get()[i];
+	getByID:function(iID){		
+		var arrTemp=[];
+		arrTemp = this.get();
+		for(var i=0; i < arrTemp.length; i++){
+			if (arrTemp[i].reception_id==iID){
+				return arrTemp[i];
 			}
 		}
+		return null;
 	},
+	//TODO
 	deleteByID:function(iID){
 		for(var i=0; i<this.get().length;i++){
 			if (this.get()[i].reception_id==iID){
@@ -58,23 +154,34 @@ enyo.kind({
 		}
 	},	
 	del:function(delObj,cbObj,cbMethod){		
-		//AJAX
-		//Update Internal Object	
-		for(var i=0;i<this.get().length;i++){
-			if(this.get()[i]===delObj){
-				this.get().splice(i, 1);	
-				if(cbMethod){
-					cbObj[cbMethod]();
-				}		
-				return true;								
-				break;
+		var objToSend = {};
+		objToSend.receptionId = delObj.reception_id;
+		
+		var cgDelete = consumingGateway.Delete("Reception", objToSend);
+		if (cgDelete.exceptionId == 0){ //Deleted successfully
+			var tamanio = this.get().length;
+			for(var i=0;i<tamanio;i++){
+				if (this.arrObj[i].reception_id == delObj.reception_id){
+					this.arrObj.splice(i, 1);
+					_arrReceptionList = this.arrObj;
+					if(cbMethod){
+						cbObj[cbMethod]();
+					}
+					return true;	
+					//TODO
+					//break;
+				}
 			}
+			return false;
 		}
-		return false;			
-	},
+		else{ //Error
+			cacheMan.setMessage("", "[Exception ID: " + cgDelete.exceptionId + "] Descripcion: " + cgDelete.exceptionDescription);
+			return false;
+		}	
+	},	
 	addWeight:function(objRec,objWeight,cbObj,cbMethod){
 		//AJAX
-		//Update Local	
+		//Update Local
 		objRec.weights.push(objWeight);	
 		if(cbMethod){
 			cbObj[cbMethod]();
@@ -83,7 +190,7 @@ enyo.kind({
 	updateWeight:function(objRec,objOld,objNew,cbObj,cbMethod){
 		for (var sKey in objNew){
 			if(objOld[sKey]!=null){
-				objOld[sKey]=objNew[sKey]
+				objOld[sKey]=objNew[sKey];
 			}
 		}
 		if(cbMethod){
@@ -111,7 +218,7 @@ enyo.kind({
 		//AJAX
 		//Update Internal Object	
 		for(var sKey in arrRec){
-			this.deleteByID(sKey)
+			this.deleteByID(sKey);
 		}
 		if(cbMethod){
 			cbObj[cbMethod]();
@@ -127,7 +234,7 @@ enyo.kind({
 		for(var sKey in objBY){
 			cacheObj.setOccupied(sKey,objReception.reception_id);
 		}
-		cacheObj
+		//cacheObj
 		if(cbMethod){
 			cbObj[cbMethod]();
 		}		
@@ -143,7 +250,7 @@ enyo.kind({
 		//Update Local		
 		for(var sKey in objNew){
 			if(objNew[sKey]!=null){
-				objOld[sKey]=objNew[sKey]
+				objOld[sKey]=objNew[sKey];
 			}
 		}		
 		if(cbMethod){
@@ -198,3 +305,26 @@ enyo.kind({
 	},				
 });
 var cacheReceptions= new cache.receptions();
+
+
+
+function UTCtoNormalDate(strUTC){
+	var dateFmt = "";
+	if (strUTC != "" && strUTC !== undefined){
+		strAux = strUTC.split(" ");
+		var fmt = new enyo.g11n.DateFmt({format: "yyyy/MM/dd"});
+		var dateFromUTC = new Date(strUTC);			
+		dateFmt = fmt.format(dateFromUTC);
+	}
+	return dateFmt;
+}
+
+function DateOut(normalDate){
+	var dateFmt = "";
+	if (normalDate != "" && normalDate !== undefined){
+		var fmt = new enyo.g11n.DateFmt({format: "MM/dd/yyyy"});
+		var dateNew= new Date(normalDate);
+		dateFmt = fmt.format(dateNew);
+	}
+	return dateFmt;
+}

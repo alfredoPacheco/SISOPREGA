@@ -120,11 +120,19 @@
 				<method-name>*</method-name>
 			</method>
 			<method>
-				<ejb-name>RancherProxy</ejb-name>
+				<ejb-name>EnterpriseRancherProxy</ejb-name>
 				<method-name>*</method-name>
 			</method>
 			<method>
-				<ejb-name>EnterpriseRancherProxy</ejb-name>
+				<ejb-name>FeedOrderProxy</ejb-name>
+				<method-name>*</method-name>
+			</method>
+			<method>
+				<ejb-name>FeedOrderBarnyardProxy</ejb-name>
+				<method-name>*</method-name>
+			</method>
+			<method>
+				<ejb-name>RancherProxy</ejb-name>
 				<method-name>*</method-name>
 			</method>
 		</method-permission>
@@ -148,6 +156,14 @@
 			</method>
 			<method>
 				<ejb-name>EnterpriseContactProxy</ejb-name>
+				<method-name>*</method-name>
+			</method>
+			<method>
+				<ejb-name>FeedOrderProxy</ejb-name>
+				<method-name>*</method-name>
+			</method>
+			<method>
+				<ejb-name>FeedOrderBarnyardProxy</ejb-name>
 				<method-name>*</method-name>
 			</method>
 		</method-permission>
