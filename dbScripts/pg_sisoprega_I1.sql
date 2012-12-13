@@ -423,8 +423,7 @@ DROP TABLE IF EXISTS ctrl_feed_order CASCADE;
 
 CREATE TABLE ctrl_feed_order(
 	order_id SERIAL PRIMARY KEY,
-	reception_id integer NOT NULL REFERENCES ctrl_reception(reception_id),
-	barnyard_id integer NOT NULL REFERENCES cat_barnyard(barnyard_id),
+	reception_id integer NOT NULL REFERENCES ctrl_reception(reception_id),	
 	feed_date date NOT NULL,
 	feed_originator varchar(150)
 );

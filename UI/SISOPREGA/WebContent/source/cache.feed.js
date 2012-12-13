@@ -1,13 +1,15 @@
 enyo.kind({
 	name: "cache.feed",
 	arrObj:_arrFeed,
+	feedWasReadFromGateway:false,
 	reloadme:function(){
 		//AJAX
 	},	
 	get:function(){
-		//AJAX
+		
 		return this.arrObj;
-	},
+		
+	},	
 	create:function(objCat,cbObj,cbMethod){
 		//AJAX
 		//SCRIM.on
