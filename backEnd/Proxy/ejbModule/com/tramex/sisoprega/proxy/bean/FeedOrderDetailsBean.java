@@ -128,7 +128,7 @@ public class FeedOrderDetailsBean extends BaseBean implements Cruddable {
         readQuery.setParameter("fodId", order.getFodId());
       } else if (order.getOrderId() != 0) {
         readQuery = em.createNamedQuery("FOD_BY_ORDER_ID", FeedOrderDetails.class);
-        log.fine("Query by ReceptionId: " + order.getOrderId());
+        log.fine("Query by OrderId: " + order.getOrderId());
         readQuery.setParameter("orderId", order.getOrderId());
       } else {
         response.setError(new Error("VAL03", "El filtro especificado no es válido para las órdenes de alimento",

@@ -596,6 +596,10 @@
 			<description>Retrieves a single crtFood record by ID</description>
 			<query>SELECT InspBar FROM InspectionBarnyard InspBar WHERE InspBar.ibId = :ibId</query>
 		</named-query>
+		<named-query name="IB_BY_INSPECTION_ID">
+			<description>Retrieves all barnyards for a given inspection id</description>
+			<query>SELECT ins FROM InspectionBarnyard ins WHERE ins.inspectionId = :inspectionId ORDER BY ins.barnyardId</query>
+		</named-query>
 		<attributes>
 			<id name="ibId">
 				<column name="id" />
