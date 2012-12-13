@@ -37,7 +37,6 @@ public class FeedOrderDetails {
     private long orderId;
     private long foodId;
     private double quantity;
-    private String handling;
     /**
      * @return the id
      */
@@ -85,17 +84,5 @@ public class FeedOrderDetails {
      */
     public void setQuantity(double quantity) {
         this.quantity = quantity;
-    }
-    /**
-     * @return the handling
-     */
-    public String getHandling() {
-        return handling;
-    }
-    /**
-     * @param handling the handling to set
-     */
-    public void setHandling(String handling) {
-        this.handling = handling;
     }
 }

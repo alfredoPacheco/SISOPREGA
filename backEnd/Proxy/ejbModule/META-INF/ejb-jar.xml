@@ -136,6 +136,10 @@
 				<method-name>*</method-name>
 			</method>
 			<method>
+				<ejb-name>FoodProxy</ejb-name>
+				<method-name>Read</method-name>
+			</method>
+			<method>
 				<ejb-name>RancherProxy</ejb-name>
 				<method-name>*</method-name>
 			</method>
@@ -172,6 +176,10 @@
 			</method>
 			<method>
 				<ejb-name>FeedOrderDetailsProxy</ejb-name>
+				<method-name>*</method-name>
+			</method>
+			<method>
+				<ejb-name>FoodProxy</ejb-name>
 				<method-name>*</method-name>
 			</method>
 		</method-permission>

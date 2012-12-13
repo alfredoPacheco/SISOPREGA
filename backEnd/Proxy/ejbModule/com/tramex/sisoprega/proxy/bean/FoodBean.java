@@ -15,6 +15,8 @@
  */
 package com.tramex.sisoprega.proxy.bean;
 
+import java.util.List;
+
 import javax.ejb.Stateless;
 import javax.persistence.TypedQuery;
 
@@ -29,6 +31,21 @@ import com.tramex.sisoprega.common.crud.Cruddable;
 import com.tramex.sisoprega.dto.Food;
 
 /**
+ * This proxy knows the logic to evaluate Feed Order Details information and the
+ * way to the database in order to save their data. Also, it is contained in EJB
+ * container, we can apply security and life cycle methods for resources.<BR/>
+ * 
+ * <B>Revision History:</B>
+ * 
+ * <PRE>
+ * ====================================================================================
+ * Date        By                           Description
+ * MM/DD/YYYY
+ * ----------  ---------------------------  -------------------------------------------
+ * 12/08/2012  Jaime Figueroa                Initial Version.
+ * 12/13/2012  Diego Torres                  Activate read operation.
+ * ====================================================================================
+ * </PRE>
  * @author Jaime Figueroa
  * 
  */
@@ -93,8 +110,49 @@ public class FoodBean extends BaseBean implements Cruddable {
    */
   @Override
   public ReadGatewayResponse Read(GatewayRequest request) {
-    // TODO Auto-generated method stub
-    return null;
+    log.entering(this.getClass().getCanonicalName(), "Read");
+
+    ReadGatewayResponse response = new ReadGatewayResponse();
+    response.setEntityName(request.getEntityName());
+
+    Food food = null;
+    try {
+      food = entityFromRequest(request, Food.class);
+      log.fine("Got food from request: " + food);
+
+      TypedQuery<Food> readQuery = null;
+
+      if (food.getFoodId() != 0) {
+        readQuery = em.createNamedQuery("CAT_FOOD_BY_ID", Food.class);
+        log.fine("Query by Id: " + food.getFoodId());
+        readQuery.setParameter("fodId", food.getFoodId());
+      } else {
+        readQuery = em.createNamedQuery("ALL_FOOD", Food.class);
+      }
+
+      // Query the results through the jpa using a typedQuery
+      List<Food> queryResults = readQuery.getResultList();
+
+      if (queryResults.isEmpty()) {
+        response.setError(new Error("VAL02", "No se encontraron datos para el filtro seleccionado", "proxy.FoodBean.Read"));
+      } else {
+        // Add query results to response
+        response.getRecord().addAll(contentFromList(queryResults, Food.class));
+
+        // Add success message to response
+        response.setError(new Error("0", "SUCCESS", "proxy.Food.Read"));
+      }
+    } catch (Exception e) {
+      // something went wrong, alert the server and respond the client
+      log.severe("Exception found while reading feed food");
+      log.throwing(this.getClass().getCanonicalName(), "Read", e);
+
+      response.setError(new Error("DB02", "Read exception: " + e.getMessage(), "proxy.FoodBean.Read"));
+    }
+
+    // end and respond.
+    log.exiting(this.getClass().getCanonicalName(), "Read");
+    return response;
   }
 
   /*

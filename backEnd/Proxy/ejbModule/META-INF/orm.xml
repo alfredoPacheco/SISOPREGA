@@ -519,6 +519,9 @@
 			<basic name="feedOriginator">
 				<column name = "feed_originator"/>
 			</basic>
+			<basic name="handling">
+				<column name = "handling"/>
+			</basic>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.Food">
@@ -526,6 +529,10 @@
 		<named-query name="CAT_FOOD_BY_ID">
 			<description>Retrieves a single crtFood record by ID</description>
 			<query>SELECT fod FROM Food fod WHERE fod.foodId = :foodId</query>
+		</named-query>
+		<named-query name="ALL_FOOD">
+			<description>Retrieves all records for food in database.</description>
+			<query>SELECT f FROM Food f ORDER BY f.foodName</query>
 		</named-query>
 		<attributes>
 			<id name="foodId">
@@ -554,9 +561,6 @@
 			</id>
 			<basic name="foodId">
 				<column name = "food_id"/>
-			</basic>
-			<basic name="handling">
-				<column name = "handling"/>
 			</basic>
 			<basic name="orderId">
 				<column name = "order_id" />

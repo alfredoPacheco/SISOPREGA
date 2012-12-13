@@ -39,6 +39,7 @@ public class FeedOrder {
     private long  receptionId;
     private Date feedDate;
     private String feedOriginator;
+    private String handling;
     /**
      * @return the orderId
      */
@@ -87,5 +88,17 @@ public class FeedOrder {
     public void setFeedOriginator(String feedOriginator) {
         this.feedOriginator = feedOriginator;
     }
-    
+ 
+    /**
+     * @return the handling
+     */
+    public String getHandling() {
+        return handling;
+    }
+    /**
+     * @param handling the handling to set
+     */
+    public void setHandling(String handling) {
+        this.handling = handling;
+    }
 }
