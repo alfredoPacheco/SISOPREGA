@@ -45,7 +45,7 @@ enyo.kind({
 	get:function(){
 		if (this.receptionWasReadFromGateway == false){
 			this.receptionWasReadFromGateway = true;
-			var objAux = {};
+//			var objAux = {};
 			var arrAux = [];
 			var selfCacheReception = this;		
 			
@@ -53,13 +53,16 @@ enyo.kind({
 			var cgReadAll = consumingGateway.Read("Reception", {});
 			
 			if (cgReadAll.exceptionId == 0){ //Read successfully
-				jQuery.each(cgReadAll.records, function() {       		
-		    		jQuery.each(this, function(key, value){
-		    			objAux[key] = value;	
-		    		});
-		    		objTmp = selfCacheReception.receptionAdapterToIn(objAux);		    		
-		    		arrAux.push(objTmp);
-		    	});
+				for (item in cgReadAll.records){					
+					arrAux.push(selfCacheReception.receptionAdapterToIn(cgReadAll.records[item]));
+				}
+//				jQuery.each(cgReadAll.records, function() {       		
+//		    		jQuery.each(this, function(key, value){
+//		    			objAux[key] = value;	
+//		    		});
+//		    		objTmp = selfCacheReception.receptionAdapterToIn(objAux);		    		
+//		    		arrAux.push(objTmp);
+//		    	});
 			}else{ //Error
 				if (cgReadAll.exceptionId != "RR02"){ //No data found
 					cacheMan.setMessage("", "[Exception ID: " + cgReadAll.exceptionId + "] Descripción: " + cgReadAll.exceptionDescription);	
@@ -67,11 +70,11 @@ enyo.kind({
 			}
 						
 			this.arrObj =  arrAux;
-			_arrReceptionList = arrAux;
+//			_arrReceptionList = arrAux;
 			
 //			cacheMan.hideScrim();
 		}
-		
+		return _arrReceptionList;
 		return this.arrObj;		
 	},
 	create:function(objRec,cbObj,cbMethod){
@@ -167,7 +170,7 @@ enyo.kind({
 					if(cbMethod){
 						cbObj[cbMethod]();
 					}
-					return true;	
+					return true;
 					//TODO
 					//break;
 				}
@@ -225,15 +228,13 @@ enyo.kind({
 		}		
 	},
 	appendBY:function(objReception,objBY,cbObj,cbMethod){
-		//AJAX
-		//ADD TO REC
+		//TODO: ACTUAL
+
 		for (var sKey in objBY) {
+			cacheBY.setOccupied(sKey,objReception.reception_id);
 			objReception.barnyards[sKey] = objBY[sKey];
-		}		
-		var cacheObj= new cache.barnyards();
-		for(var sKey in objBY){
-			cacheObj.setOccupied(sKey,objReception.reception_id);
 		}
+		
 		//cacheObj
 		if(cbMethod){
 			cbObj[cbMethod]();
