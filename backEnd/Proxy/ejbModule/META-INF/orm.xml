@@ -576,6 +576,10 @@
 			<description>Retrieves a single crtFood record by ID</description>
 			<query>SELECT Insp FROM Inspection Insp WHERE Insp.inspectionId = :inspectionId</query>
 		</named-query>
+		<named-query name="INSPECTION_BY_RECEPTION_ID">
+			<description>Retrieves all inspection records from a given reception</description>
+			<query>SELECT insp FROM Inspection insp WHERE insp.receptionId = :receptionId ORDER BY insp.inspectionDate desc</query>
+		</named-query>
 		<attributes>
 			<id name="inspectionId">
 				<column name="inspection_id" />
