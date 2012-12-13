@@ -132,6 +132,10 @@
 				<method-name>*</method-name>
 			</method>
 			<method>
+				<ejb-name>FeedOrderDetailsProxy</ejb-name>
+				<method-name>*</method-name>
+			</method>
+			<method>
 				<ejb-name>RancherProxy</ejb-name>
 				<method-name>*</method-name>
 			</method>
@@ -164,6 +168,10 @@
 			</method>
 			<method>
 				<ejb-name>FeedOrderBarnyardProxy</ejb-name>
+				<method-name>*</method-name>
+			</method>
+			<method>
+				<ejb-name>FeedOrderDetailsProxy</ejb-name>
 				<method-name>*</method-name>
 			</method>
 		</method-permission>

@@ -543,6 +543,10 @@
 			<description>Retrieves a single crtFood record by ID</description>
 			<query>SELECT FeOrDls FROM FeedOrderDetails FeOrDls WHERE FeOrDls.fodId = :fodId</query>
 		</named-query>
+		<named-query name="FOD_BY_ORDER_ID">
+			<description>Retrieves a list of feed order details based in the feed orderId</description>
+			<query>SELECT fod FROM FeedOrderDetails fod WHERE fod.orderId = :orderId ORDER BY fod.foodId</query>
+		</named-query>
 		<attributes>
 			<id name="fodId">
 				<column name="id" />
