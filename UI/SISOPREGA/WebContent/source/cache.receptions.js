@@ -1,12 +1,12 @@
 enyo.kind({
 	name: "cache.receptions",
-	arrObj:[],
-	receptionWasReadFromGateway:false,
+	arrObj:_arrReceptionList,
+	receptionWasReadFromGateway:true,
 	reloadme:function(){
 		//AJAX
 	},	
 	receptionAdapterToIn:function(objReception){
-		
+		//TODO update cattleType to cattleClass and location to ?
 		var objNew = {
 				reception_id:	objReception.receptionId,
 				rancher_id:		objReception.rancherId,
@@ -70,11 +70,10 @@ enyo.kind({
 			}
 						
 			this.arrObj =  arrAux;
-//			_arrReceptionList = arrAux;
+			_arrReceptionList = arrAux;
 			
 //			cacheMan.hideScrim();
-		}
-		return _arrReceptionList;
+		}		
 		return this.arrObj;		
 	},
 	create:function(objRec,cbObj,cbMethod){
@@ -308,24 +307,24 @@ enyo.kind({
 var cacheReceptions= new cache.receptions();
 
 
-
-function UTCtoNormalDate(strUTC){
-	var dateFmt = "";
-	if (strUTC != "" && strUTC !== undefined){
-		strAux = strUTC.split(" ");
-		var fmt = new enyo.g11n.DateFmt({format: "yyyy/MM/dd"});
-		var dateFromUTC = new Date(strUTC);			
-		dateFmt = fmt.format(dateFromUTC);
-	}
-	return dateFmt;
-}
-
-function DateOut(normalDate){
-	var dateFmt = "";
-	if (normalDate != "" && normalDate !== undefined){
-		var fmt = new enyo.g11n.DateFmt({format: "MM/dd/yyyy"});
-		var dateNew= new Date(normalDate);
-		dateFmt = fmt.format(dateNew);
-	}
-	return dateFmt;
-}
+//
+//function UTCtoNormalDate(strUTC){
+//	var dateFmt = "";
+//	if (strUTC != "" && strUTC !== undefined){
+//		strAux = strUTC.split(" ");
+//		var fmt = new enyo.g11n.DateFmt({format: "yyyy/MM/dd"});
+//		var dateFromUTC = new Date(strUTC);			
+//		dateFmt = fmt.format(dateFromUTC);
+//	}
+//	return dateFmt;
+//}
+//
+//function DateOut(normalDate){
+//	var dateFmt = "";
+//	if (normalDate != "" && normalDate !== undefined){
+//		var fmt = new enyo.g11n.DateFmt({format: "MM/dd/yyyy"});
+//		var dateNew= new Date(normalDate.substr(0,4),normalDate.substr(5,7),normalDate.substr(8,10));
+//		dateFmt = fmt.format(dateNew);
+//	}
+//	return dateFmt;
+//}
