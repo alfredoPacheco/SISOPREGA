@@ -293,7 +293,8 @@ enyo.kind({
 			return false;
 		}
 	},
-	setOccupied:function(sID,iReceptionID){
+	setOccupied:function(sID,iReceptionID){ //example: setOccupied("1E2","79")
+		
 		objAux = {};
 		objAux.sID = this.getByBarnyard(sID);
 		objAux.iReceptionID = iReceptionID;

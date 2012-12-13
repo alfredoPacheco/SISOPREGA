@@ -514,7 +514,7 @@
 				<temporal>TIMESTAMP</temporal>
 			</basic>
 			<basic name="receptionId">
-				<column name = "recepcion_id"/>
+				<column name = "reception_id"/>
 			</basic>
 			<basic name="feedOriginator">
 				<column name = "feed_originator"/>

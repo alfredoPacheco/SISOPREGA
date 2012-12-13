@@ -1,12 +1,12 @@
 enyo.kind({
 	name: "cache.receptions",
-	arrObj:[],
-	receptionWasReadFromGateway:false,
+	arrObj:_arrReceptionList,
+	receptionWasReadFromGateway:true,
 	reloadme:function(){
 		//AJAX
 	},	
 	receptionAdapterToIn:function(objReception){
-		
+		//TODO update cattleType to cattleClass and location to ?
 		var objNew = {
 				reception_id:	objReception.receptionId,
 				rancher_id:		objReception.rancherId,
@@ -45,7 +45,7 @@ enyo.kind({
 	get:function(){
 		if (this.receptionWasReadFromGateway == false){
 			this.receptionWasReadFromGateway = true;
-			var objAux = {};
+//			var objAux = {};
 			var arrAux = [];
 			var selfCacheReception = this;		
 			
@@ -53,13 +53,16 @@ enyo.kind({
 			var cgReadAll = consumingGateway.Read("Reception", {});
 			
 			if (cgReadAll.exceptionId == 0){ //Read successfully
-				jQuery.each(cgReadAll.records, function() {       		
-		    		jQuery.each(this, function(key, value){
-		    			objAux[key] = value;	
-		    		});
-		    		objTmp = selfCacheReception.receptionAdapterToIn(objAux);		    		
-		    		arrAux.push(objTmp);
-		    	});
+				for (item in cgReadAll.records){					
+					arrAux.push(selfCacheReception.receptionAdapterToIn(cgReadAll.records[item]));
+				}
+//				jQuery.each(cgReadAll.records, function() {       		
+//		    		jQuery.each(this, function(key, value){
+//		    			objAux[key] = value;	
+//		    		});
+//		    		objTmp = selfCacheReception.receptionAdapterToIn(objAux);		    		
+//		    		arrAux.push(objTmp);
+//		    	});
 			}else{ //Error
 				if (cgReadAll.exceptionId != "RR02"){ //No data found
 					cacheMan.setMessage("", "[Exception ID: " + cgReadAll.exceptionId + "] Descripción: " + cgReadAll.exceptionDescription);	
@@ -70,8 +73,7 @@ enyo.kind({
 			_arrReceptionList = arrAux;
 			
 //			cacheMan.hideScrim();
-		}
-		
+		}		
 		return this.arrObj;		
 	},
 	create:function(objRec,cbObj,cbMethod){
@@ -84,7 +86,6 @@ enyo.kind({
 			this.arrObj.push(objRec);
 			_arrReceptionList = this.arrObj;
 			
-			//TODO
 			for (var sKey in objRec.barnyards){
 				cacheBY.setOccupied(sKey,objRec.reception_id);
 			}
@@ -167,7 +168,7 @@ enyo.kind({
 					if(cbMethod){
 						cbObj[cbMethod]();
 					}
-					return true;	
+					return true;
 					//TODO
 					//break;
 				}
@@ -225,26 +226,127 @@ enyo.kind({
 		}		
 	},
 	appendBY:function(objReception,objBY,cbObj,cbMethod){
-		//AJAX
-		//ADD TO REC
+
 		for (var sKey in objBY) {
+			cacheBY.setOccupied(sKey,objReception.reception_id);
 			objReception.barnyards[sKey] = objBY[sKey];
-		}		
-		var cacheObj= new cache.barnyards();
-		for(var sKey in objBY){
-			cacheObj.setOccupied(sKey,objReception.reception_id);
 		}
+		
 		//cacheObj
 		if(cbMethod){
 			cbObj[cbMethod]();
 		}		
 	},
-	addFeed:function(objRec,objFeed,cbObj,cbMethod){
-		objRec.feed.push(objFeed);
-		if(cbMethod){
-			cbObj[cbMethod]();
-		}					
+	createFeedOrder:function(objRec, objFeed){
+//		private long orderId;
+//	    private long  receptionId;
+//	    private Date feedDate;
+//	    private String feedOriginator;
+		
+		var objToSend = {};
+		objToSend.receptionId = objRec.reception_id;
+		objToSend.feedDate = "" + DateOut(new Date());
+		objToSend.feedOriginator = "alfredo";	
+		
+		var cgCreate = consumingGateway.Create("FeedOrder", objToSend);
+		if (cgCreate.exceptionId == 0){ //Created successfully			
+			if (cacheReceptions.createFeedOrderBarnyard(cgCreate.generatedId,objFeed)== true){
+				return true;
+			}else{
+				return false;
+			}
+			
+		}
+		else{ //Error			
+			cacheMan.setMessage("", "[Exception ID: " + cgCreate.exceptionId + "] Descripcion: " + cgCreate.exceptionDescription);
+			return false;
+		}
 	},
+	createFeedOrderBarnyard:function(order_id, objFeed){
+//		private long feedOrdBarnId;
+//		  private long barnyardId;
+//		  private long orderId;
+
+				
+		var objToSend = {};
+		objToSend.orderId = order_id;
+		for (prop in objFeed.barnyards){
+			objToSend.barnyardId = cacheBY.getByBarnyard(objFeed.barnyards[prop]);				
+		}
+		var cgCreate = consumingGateway.Create("FeedOrderBarnyard", objToSend);
+		if (cgCreate.exceptionId == 0){ //Created successfully			
+			if (cacheReceptions.createFeedOrderDetails(order_id,objFeed)== true){
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+		else{ //Error			
+			cacheMan.setMessage("", "[Exception ID: " + cgCreate.exceptionId + "] Descripcion: " + cgCreate.exceptionDescription);
+			return false;
+		}
+	},
+	createFeedOrderDetails:function(order_id, objFeed){
+
+//	    private long fodId;
+//	    private long orderId;
+//	    private long foodId;
+//	    private double quantity;
+//	    private String handling;
+		var objToSend = {};
+		objToSend.orderId = 	order_id;		
+		objToSend.handling = 	objFeed.handling;//TODO: CAMBIAR DE TABLA EL CAMPO HANDLING
+		for (obj in objFeed.feed){			
+			objToSend.foodId = 		objFeed.feed[obj].feed_id;				
+			objToSend.quantity =	objFeed.feed[obj].feed_units;
+			
+			var cgCreate = consumingGateway.Create("FeedOrderDetails", objToSend);
+			if (cgCreate.exceptionId != 0){			
+				cacheMan.setMessage("", "[Exception ID: " + cgCreate.exceptionId + "] Descripcion: " + cgCreate.exceptionDescription);
+				return false;
+			}			
+		}
+		return true;
+		
+	},
+	
+	addFeed:function(objRec,objFeed,cbObj,cbMethod){
+		//TODO ACTUAL	
+		
+		if (objRec.feed.length == 0){
+			if (cacheReceptions.createFeedOrder(objRec,objFeed)== true){								
+				objRec.feed.push(objFeed);
+				if(cbMethod){
+					cbObj[cbMethod]();
+				}	
+			}else { //TODO: do something else
+				objRec.feed.push(objFeed);
+				if(cbMethod){
+					cbObj[cbMethod]();
+				}	
+			}
+		}else{
+//			if (cacheReceptions.createFeedOrderDetails(objRec,objFeed)== true){								
+//				objRec.feed.push(objFeed);
+//				if(cbMethod){
+//					cbObj[cbMethod]();
+//				}	
+//			}else { //TODO: do something else
+				objRec.feed.push(objFeed);
+				if(cbMethod){
+					cbObj[cbMethod]();
+				}	
+			}
+//		}			
+	},
+//	addFeed:function(objRec,objFeed,cbObj,cbMethod){
+//		//TODO ACTUAL
+//		objRec.feed.push(objFeed);
+//		if(cbMethod){
+//			cbObj[cbMethod]();
+//		}					
+//	},
 	updateFeed:function(objOld,objNew,cbObj,cbMethod){
 		//AJAX
 		//Update Local		
@@ -307,24 +409,24 @@ enyo.kind({
 var cacheReceptions= new cache.receptions();
 
 
-
-function UTCtoNormalDate(strUTC){
-	var dateFmt = "";
-	if (strUTC != "" && strUTC !== undefined){
-		strAux = strUTC.split(" ");
-		var fmt = new enyo.g11n.DateFmt({format: "yyyy/MM/dd"});
-		var dateFromUTC = new Date(strUTC);			
-		dateFmt = fmt.format(dateFromUTC);
-	}
-	return dateFmt;
-}
-
-function DateOut(normalDate){
-	var dateFmt = "";
-	if (normalDate != "" && normalDate !== undefined){
-		var fmt = new enyo.g11n.DateFmt({format: "MM/dd/yyyy"});
-		var dateNew= new Date(normalDate);
-		dateFmt = fmt.format(dateNew);
-	}
-	return dateFmt;
-}
+//
+//function UTCtoNormalDate(strUTC){
+//	var dateFmt = "";
+//	if (strUTC != "" && strUTC !== undefined){
+//		strAux = strUTC.split(" ");
+//		var fmt = new enyo.g11n.DateFmt({format: "yyyy/MM/dd"});
+//		var dateFromUTC = new Date(strUTC);			
+//		dateFmt = fmt.format(dateFromUTC);
+//	}
+//	return dateFmt;
+//}
+//
+//function DateOut(normalDate){
+//	var dateFmt = "";
+//	if (normalDate != "" && normalDate !== undefined){
+//		var fmt = new enyo.g11n.DateFmt({format: "MM/dd/yyyy"});
+//		var dateNew= new Date(normalDate.substr(0,4),normalDate.substr(5,7),normalDate.substr(8,10));
+//		dateFmt = fmt.format(dateNew);
+//	}
+//	return dateFmt;
+//}
