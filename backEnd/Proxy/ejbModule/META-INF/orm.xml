@@ -438,6 +438,10 @@
 			<description>Retrieves a single crtReception record by ID</description>
 			<query>SELECT Recep FROM Reception Recep WHERE Recep.receptionId = :receptionId</query>
 		</named-query>
+		<named-query name="ALL_RECEPTIONS">
+			<description>Retrieves all reception records from database.</description>
+			<query>SELECT rec FROM Reception rec ORDER BY rec.rancherId</query>
+		</named-query>
 		<attributes>
 			<id name="receptionId">
 				<column name="reception_id" />
@@ -463,6 +467,14 @@
 		<named-query name="CRT_RECEPTIONBARNYARD_BY_ID">
 			<description>Retrieves a single crtReceptionBarnyard record by ID</description>
 			<query>SELECT RecepYard FROM ReceptionBarnyard RecepYard WHERE RecepYard.recBarnyardId = :recBarnyardId</query>
+		</named-query>
+		<named-query name="RECEPTION_BARNYARD_BY_RECEPTION_ID">
+			<description>Retrieves a list of barnyards for a given reception id</description>
+			<query>SELECT rec FROM ReceptionBarnyard rec WHERE rec.receptionId = :receptionId ORDER BY rec.barnyardId</query>
+		</named-query>
+		<named-query name="RECEPTION_BARNYARD_BY_BARNYARD_ID">
+			<description>Retrieves a list of receptions for a given barnyard_id</description>
+			<query>SELECT rec FROM ReceptionBarnyard rec WHERE rec.barnyardId = :barnyardId ORDER BY rec.receptionId</query>
 		</named-query>
 		<attributes>
 			<id name="recBarnyardId">

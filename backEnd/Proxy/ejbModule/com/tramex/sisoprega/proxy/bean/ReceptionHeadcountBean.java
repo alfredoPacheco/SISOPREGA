@@ -15,6 +15,8 @@
  */
 package com.tramex.sisoprega.proxy.bean;
 
+import java.util.List;
+
 import javax.ejb.Stateless;
 import javax.persistence.TypedQuery;
 
@@ -109,8 +111,49 @@ public class ReceptionHeadcountBean extends BaseBean implements Cruddable {
    */
   @Override
   public ReadGatewayResponse Read(GatewayRequest request) {
-    // TODO Auto-generated method stub
-    return null;
+    log.entering(this.getClass().getCanonicalName(), "Read");
+
+    ReadGatewayResponse response = new ReadGatewayResponse();
+    response.setEntityName(request.getEntityName());
+
+    ReceptionHeadcount recHc = null;
+    try {
+      recHc = entityFromRequest(request, ReceptionHeadcount.class);
+
+      log.fine("Got headcount query from request: " + recHc);
+
+      TypedQuery<ReceptionHeadcount> readQuery = null;
+
+      if (recHc.getHeadcountId() != 0) {
+        readQuery = em.createNamedQuery("CRT_RECEPTIONHEADCOUNT_BY_ID", ReceptionHeadcount.class);
+        readQuery.setParameter("headcountId", recHc.getHeadcountId());
+      } else if(recHc.getReceptionId() != 0 ){
+        readQuery = em.createNamedQuery("RECEPTION_HEADCOUNT_BY_RECEPTION_ID", ReceptionHeadcount.class);
+        readQuery.setParameter("receptionId", recHc.getReceptionId());
+      } else {
+        response.setError(new Error("VAL03", "El filtro especificado no es válido para datos de recepciones de ganado.",
+            "proxy.ReceptionHeadcount.Read"));
+        return response;
+      }
+
+      List<ReceptionHeadcount> queryResults = readQuery.getResultList();
+
+      if (queryResults.isEmpty()) {
+        response.setError(new Error("VAL02", "No se encontraron datos para el filtro seleccionado", "proxy.ReceptionHeadcount.Read"));
+      } else {
+        response.getRecord().addAll(contentFromList(queryResults, ReceptionHeadcount.class));
+
+        response.setError(new Error("0", "SUCCESS", "proxy.ReceptionHeadcount.Read"));
+      }
+    } catch (Exception e) {
+      log.severe("Exception found while reading rancher invoice filter");
+      log.throwing(this.getClass().getCanonicalName(), "Read", e);
+
+      response.setError(new Error("DB02", "Error en la base de datos: " + e.getMessage(), "proxy.ReceptionHeadcount.Read"));
+    }
+
+    log.exiting(this.getClass().getCanonicalName(), "Read");
+    return response;
   }
 
   /*

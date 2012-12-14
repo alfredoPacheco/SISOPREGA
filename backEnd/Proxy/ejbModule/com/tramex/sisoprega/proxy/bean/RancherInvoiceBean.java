@@ -137,7 +137,7 @@ public class RancherInvoiceBean extends BaseBean implements Cruddable {
       } else {
         response.getRecord().addAll(contentFromList(queryResults, RancherInvoice.class));
 
-        response.setError(new Error("0", "SUCCESS", "proxy.Rancher.Read"));
+        response.setError(new Error("0", "SUCCESS", "proxy.RancherInvoice.Read"));
       }
     } catch (Exception e) {
       log.severe("Exception found while reading rancher invoice filter");
