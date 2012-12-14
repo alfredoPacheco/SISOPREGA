@@ -152,6 +152,18 @@
 				<method-name>Read</method-name>
 			</method>
 			<method>
+				<ejb-name>LocationProxy</ejb-name>
+				<method-name>Read</method-name>
+			</method>
+			<method>
+				<ejb-name>MeasurementUnitProxy</ejb-name>
+				<method-name>Read</method-name>
+			</method>
+			<method>
+				<ejb-name>MeasurementUnitEquivalenceProxy</ejb-name>
+				<method-name>Read</method-name>
+			</method>
+			<method>
 				<ejb-name>RancherProxy</ejb-name>
 				<method-name>*</method-name>
 			</method>
@@ -204,6 +216,18 @@
 			</method>
 			<method>
 				<ejb-name>InspectionCodeProxy</ejb-name>
+				<method-name>*</method-name>
+			</method>
+			<method>
+				<ejb-name>LocationProxy</ejb-name>
+				<method-name>*</method-name>
+			</method>
+			<method>
+				<ejb-name>MeasurementUnitProxy</ejb-name>
+				<method-name>*</method-name>
+			</method>
+			<method>
+				<ejb-name>MeasurementUnitEquivalenceProxy</ejb-name>
 				<method-name>*</method-name>
 			</method>
 		</method-permission>

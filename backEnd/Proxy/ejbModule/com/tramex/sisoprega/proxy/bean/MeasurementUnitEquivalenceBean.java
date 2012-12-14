@@ -15,6 +15,8 @@
  */
 package com.tramex.sisoprega.proxy.bean;
 
+import java.util.List;
+
 import javax.ejb.Stateless;
 import javax.persistence.TypedQuery;
 
@@ -29,6 +31,22 @@ import com.tramex.sisoprega.common.crud.Cruddable;
 import com.tramex.sisoprega.dto.MeasurementUnitEquivalence;
 
 /**
+ * This proxy knows the logic to evaluate Measurement unit equivalences information and the
+ * way to the database in order to save their data. Also, it is contained in EJB
+ * container, we can apply security and life cycle methods for resources.<BR/>
+ * 
+ * <B>Revision History:</B>
+ * 
+ * <PRE>
+ * ====================================================================================
+ * Date        By                           Description
+ * MM/DD/YYYY
+ * ----------  ---------------------------  -------------------------------------------
+ * 12/09/2012  Jaime Figueroa                Initial Version.
+ * 12/13/2012  Diego Torres                  Enable read operation and standard error codes.
+ * ====================================================================================
+ * </PRE>
+ * 
  * @author Jaime Figueroa
  * 
  */
@@ -65,15 +83,20 @@ public class MeasurementUnitEquivalenceBean extends BaseBean implements Cruddabl
         response.setError(new Error("0", "SUCCESS", "proxy.MeasurementUnitEquivalenceBean.Create"));
       } else {
         log.warning("Validation error: " + error_description);
-        response.setError(new Error("MUEC1", "Validation error: " + error_description,
-            "proxy.MeasurementUnitEquivalenceBean.Create"));
+        response.setError(new Error("VAL01", "Error de validación: " + error_description, "proxy.MeasurementUnitEquivalenceBean.Create"));
       }
 
     } catch (Exception e) {
       log.severe("Exception found while creating MeasurementUnitEquivalenceBean");
       log.throwing(this.getClass().getName(), "Create", e);
 
-      response.setError(new Error("MUEC2", "Create exception: " + e.getMessage(), "proxy.MeasurementUnitEquivalenceBean.Create"));
+      if (e instanceof javax.persistence.PersistenceException)
+        response.setError(new Error("DB01",
+            "Los datos que usted ha intentado ingresar no son permitidos por la base de datos",
+            "proxy.MeasurementUnitEquivalenceBean.Create"));
+      else {
+        response.setError(new Error("DB02", "Create exception: " + e.getMessage(), "proxy.MeasurementUnitEquivalenceBean.Create"));
+      }
     }
 
     log.exiting(this.getClass().getCanonicalName(), "Create");
@@ -89,8 +112,54 @@ public class MeasurementUnitEquivalenceBean extends BaseBean implements Cruddabl
    */
   @Override
   public ReadGatewayResponse Read(GatewayRequest request) {
-    // TODO Auto-generated method stub
-    return null;
+    log.entering(this.getClass().getCanonicalName(), "Read");
+
+    ReadGatewayResponse response = new ReadGatewayResponse();
+    response.setEntityName(request.getEntityName());
+
+    MeasurementUnitEquivalence equivalence = null;
+    try {
+      equivalence = entityFromRequest(request, MeasurementUnitEquivalence.class);
+      log.fine("Got MeasurementUnit from request: " + equivalence);
+
+      TypedQuery<MeasurementUnitEquivalence> readQuery = null;
+
+      if (equivalence.getEquivalenceId() != 0) {
+        readQuery = em.createNamedQuery("CAT_MEASUREMENTUNITEQUIVALENCE_BY_ID", MeasurementUnitEquivalence.class);
+        log.fine("Query by unitId: " + equivalence.getEquivalenceId());
+        readQuery.setParameter("equivalenceId", equivalence.getEquivalenceId());
+      } else if(equivalence.getUnitSrc() != 0){
+        readQuery = em.createNamedQuery("EQUIVALENCE_BY_UNIT_ID", MeasurementUnitEquivalence.class);;
+        readQuery.setParameter("unitSrc", equivalence.getUnitSrc());
+      }else{
+        response.setError(new Error("VAL03", "El filtro especificado no es válido para las equivalencias de unidades de medida",
+            "proxy.MeasurementUnitEquivalence.Read"));
+        return response;
+      }
+
+      // Query the results through the jpa using a typedQuery
+      List<MeasurementUnitEquivalence> queryResults = readQuery.getResultList();
+
+      if (queryResults.isEmpty()) {
+        response.setError(new Error("VAL02", "No se encontraron datos para el filtro seleccionado", "proxy.MeasurementUnitEquivalence.Read"));
+      } else {
+        // Add query results to response
+        response.getRecord().addAll(contentFromList(queryResults, MeasurementUnitEquivalence.class));
+
+        // Add success message to response
+        response.setError(new Error("0", "SUCCESS", "proxy.MeasurementUnitEquivalence.Read"));
+      }
+    } catch (Exception e) {
+      // something went wrong, alert the server and respond the client
+      log.severe("Exception found while reading feed MeasurementUnitEquivalence");
+      log.throwing(this.getClass().getCanonicalName(), "Read", e);
+
+      response.setError(new Error("DB02", "Read exception: " + e.getMessage(), "proxy.MeasurementUnitEquivalence.Read"));
+    }
+
+    // end and respond.
+    log.exiting(this.getClass().getCanonicalName(), "Read");
+    return response;
   }
 
   /*

@@ -389,6 +389,10 @@
 			<description>Retrieves a single catMeasurementUnit record by ID</description>
 			<query>SELECT MeaUni FROM MeasurementUnit MeaUni WHERE MeaUni.unitId = :unitId</query>
 		</named-query>
+		<named-query name="ALL_MEASUREMENT_UNITS">
+			<description>Retrieves all measurement units from database.</description>
+			<query>SELECT mu FROM MeasurementUnit mu ORDER BY mu.unitAbreviation</query>
+		</named-query>
 		<attributes>
 			<id name="unitId">
 				<column name="unit_id" />
@@ -407,6 +411,10 @@
 		<named-query name="CAT_MEASUREMENTUNITEQUIVALENCE_BY_ID">
 			<description>Retrieves a single catMeasurementUnitEquivalence record by ID</description>
 			<query>SELECT MeaUnEq FROM MeasurementUnitEquivalence MeaUnEq WHERE MeaUnEq.equivalenceId = :equivalenceId</query>
+		</named-query>
+		<named-query name="EQUIVALENCE_BY_UNIT_ID">
+			<description>Retrieves the equivalence of a given unit id</description>
+			<query>SELECT equivalence FROM MeasurementUnitEquivalence equivalence WHERE equivalence.unitSrc = :unitId</query>
 		</named-query>
 		<attributes>
 			<id name="equivalenceId">
