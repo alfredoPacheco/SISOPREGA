@@ -574,7 +574,7 @@
 				<temporal>TIMESTAMP</temporal>
 			</basic>
 			<basic name="receptionId">
-				<column name ="inspection_id"/>
+				<column name ="reception_id"/>
 			</basic>
 		</attributes>
 	</entity>

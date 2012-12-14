@@ -8,7 +8,7 @@ INSERT INTO cat_barnyard(barnyard_code, location_id) VALUES('E7', 1);
 INSERT INTO cat_barnyard(barnyard_code, location_id) VALUES('E8', 1);
 INSERT INTO cat_barnyard(barnyard_code, location_id) VALUES('E9', 1);
 INSERT INTO cat_barnyard(barnyard_code, location_id) VALUES('E10', 1);
-INSERT INTO cat_barnyard(barnyard_code, location_id) VALUES('E411', 1);
+INSERT INTO cat_barnyard(barnyard_code, location_id) VALUES('E11', 1);
 INSERT INTO cat_barnyard(barnyard_code, location_id) VALUES('E12', 1);
 INSERT INTO cat_barnyard(barnyard_code, location_id) VALUES('E13', 1);
 INSERT INTO cat_barnyard(barnyard_code, location_id) VALUES('E14', 1);
