@@ -623,6 +623,10 @@
 			<description>Retrieves a single crtFood record by ID</description>
 			<query>SELECT InspCod FROM InspectionCode InspCod WHERE InspCod.inspectionCodeId = :inspectionCodeId</query>
 		</named-query>
+		<named-query name="ALL_INSPECTION_CODES">
+			<description>Retrieves all inspection codes from database</description>
+			<query>SELECT ic FROM InspectionCode ic ORDER BY ic.inspectionCodeDescription</query>
+		</named-query>
 		<attributes>
 			<id name="inspectionCodeId">
 				<column name="inspection_code_id" />

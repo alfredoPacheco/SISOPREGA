@@ -148,6 +148,10 @@
 				<method-name>*</method-name>
 			</method>
 			<method>
+				<ejb-name>InspectionCodeProxy</ejb-name>
+				<method-name>Read</method-name>
+			</method>
+			<method>
 				<ejb-name>RancherProxy</ejb-name>
 				<method-name>*</method-name>
 			</method>
@@ -196,6 +200,10 @@
 			</method>
 			<method>
 				<ejb-name>InspectionProxy</ejb-name>
+				<method-name>*</method-name>
+			</method>
+			<method>
+				<ejb-name>InspectionCodeProxy</ejb-name>
 				<method-name>*</method-name>
 			</method>
 		</method-permission>
