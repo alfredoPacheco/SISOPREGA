@@ -90,7 +90,7 @@ enyo.kind({
 					   cattype_id:"",cattype_name:"",hc_aprox:"",city_id:"",city_name:"",
 					   weights:[], barnyards:[],accepted_count:"",inspections:[],feed:[]};
 					   
-		var fmt = new enyo.g11n.DateFmt({format: "yyyy-MM-dd"});		
+		var fmt = new enyo.g11n.DateFmt({format: "yyyy/MM/dd"});		
 		var rancher=cacheRanchers.getByID(this.$.rancher_id.getValue());
 		if(rancher.rancher_type==1){			
 			receptionDef.rancher_name=rancher.aka+" / "+rancher.last_name+" "+
@@ -176,7 +176,7 @@ enyo.kind({
 	},
 	adoken:function(){
 		this.resetValues();		
-		this.$.rancher_id.setValue(this.$.dynoco.getJustCreated())
+		this.$.rancher_id.setValue(this.$.dynoco.getJustCreated());
 		this.$.addRancherDialog.close();		
 	}
 });

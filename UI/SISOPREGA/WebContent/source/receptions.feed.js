@@ -155,6 +155,7 @@ enyo.kind({
 		this.$.manejo.openAtCenter();		
 	},	
 	addFeed: function() {		
+		//TODO ACTUAL
 		cacheReceptions.addFeed(this._objRec,this.getFeed("add"),this,"resetValues");
 	},
 	getFeed:function(sOp){

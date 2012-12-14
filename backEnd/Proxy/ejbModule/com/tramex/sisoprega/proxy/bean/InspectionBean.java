@@ -15,6 +15,8 @@
  */
 package com.tramex.sisoprega.proxy.bean;
 
+import java.util.List;
+
 import javax.ejb.Stateless;
 import javax.persistence.TypedQuery;
 
@@ -41,6 +43,7 @@ import com.tramex.sisoprega.dto.Inspection;
  * MM/DD/YYYY
  * ----------  ---------------------------  -------------------------------------------
  * 12/09/2012  Jaime Figueroa                Initial Version.
+ * 12/13/2012  Diego Torres                  Enable read operation.
  * ====================================================================================
  * </PRE>
  * 
@@ -109,8 +112,55 @@ public class InspectionBean extends BaseBean implements Cruddable {
    */
   @Override
   public ReadGatewayResponse Read(GatewayRequest request) {
-    // TODO Auto-generated method stub
-    return null;
+    log.entering(this.getClass().getCanonicalName(), "Read");
+
+    ReadGatewayResponse response = new ReadGatewayResponse();
+    response.setEntityName(request.getEntityName());
+
+    Inspection inspection = null;
+    try {
+      inspection = entityFromRequest(request, Inspection.class);
+      log.fine("Got inspection from request: " + inspection);
+
+      TypedQuery<Inspection> readQuery = null;
+
+      if (inspection.getInspectionId() != 0) {
+        readQuery = em.createNamedQuery("CRT_INSPECTION_BY_ID", Inspection.class);
+        log.fine("Query by inspectionId: " + inspection.getInspectionId());
+        readQuery.setParameter("inspectionId", inspection.getInspectionId());
+      } else if (inspection.getReceptionId() != 0) {
+        readQuery = em.createNamedQuery("INSPECTION_BY_RECEPTION_ID", Inspection.class);
+        log.fine("Query by ReceptionId: " + inspection.getReceptionId());
+        readQuery.setParameter("receptionId", inspection.getReceptionId());
+      } else {
+        response.setError(new Error("VAL03", "El filtro especificado no es válido para las inspecciones de ganado",
+            "proxy.InspectionDetail.Read"));
+        return response;
+      }
+
+      // Query the results through the jpa using a typedQuery
+      List<Inspection> queryResults = readQuery.getResultList();
+
+      if (queryResults.isEmpty()) {
+        response.setError(new Error("VAL02", "No se encontraron datos para el filtro seleccionado", "proxy.InspectionBean.Read"));
+      } else {
+        // Add query results to response
+        response.getRecord().addAll(contentFromList(queryResults, Inspection.class));
+
+        // Add success message to response
+        response.setError(new Error("0", "SUCCESS", "proxy.Inspection.Read"));
+      }
+    } catch (Exception e) {
+      // something went wrong, alert the server and respond the client
+      log.severe("Exception found while reading feed inspection");
+      log.throwing(this.getClass().getCanonicalName(), "Read", e);
+
+      response.setError(new Error("DB02", "Read exception: " + e.getMessage(), "proxy.InspectionBean.Read"));
+    }
+
+    // end and respond.
+    log.exiting(this.getClass().getCanonicalName(), "Read");
+    return response;
   }
 
   /*

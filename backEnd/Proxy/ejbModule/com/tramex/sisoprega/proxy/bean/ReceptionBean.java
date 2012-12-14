@@ -15,6 +15,8 @@
  */
 package com.tramex.sisoprega.proxy.bean;
 
+import java.util.List;
+
 import javax.ejb.Stateless;
 import javax.persistence.TypedQuery;
 
@@ -40,7 +42,8 @@ import com.tramex.sisoprega.dto.Reception;
  * Date        By                           Description
  * MM/DD/YYYY
  * ----------  ---------------------------  -------------------------------------------
- * 12/07/2012  Jaime Figueroa                Initial Version.                                     
+ * 12/07/2012  Jaime Figueroa                Initial Version.
+ * 12/13/2012  Diego Torres                  Enable read operation                                     
  * ====================================================================================
  * </PRE>
  * @author Jaime Figueroa
@@ -107,8 +110,44 @@ public class ReceptionBean extends BaseBean implements Cruddable {
    */
   @Override
   public ReadGatewayResponse Read(GatewayRequest request) {
-    // TODO Auto-generated method stub
-    return null;
+    log.entering(this.getClass().getCanonicalName(), "Read");
+
+    ReadGatewayResponse response = new ReadGatewayResponse();
+    response.setEntityName(request.getEntityName());
+
+    Reception reception = null;
+    try {
+      reception = entityFromRequest(request, Reception.class);
+
+      log.fine("Got reception from request: " + reception);
+
+      TypedQuery<Reception> readQuery = null;
+
+      if (reception.getReceptionId() != 0) {
+        readQuery = em.createNamedQuery("CRT_RECEPTION_BY_ID", Reception.class);
+        readQuery.setParameter("receptionId", reception.getReceptionId());
+      } else {
+        readQuery = em.createNamedQuery("ALL_RECEPTIONS", Reception.class);
+      }
+
+      List<Reception> queryResults = readQuery.getResultList();
+
+      if (queryResults.isEmpty()) {
+        response.setError(new Error("VAL02", "No se encontraron datos para el filtro seleccionado", "proxy.Reception.Read"));
+      } else {
+        response.getRecord().addAll(contentFromList(queryResults, Reception.class));
+
+        response.setError(new Error("0", "SUCCESS", "proxy.Reception.Read"));
+      }
+    } catch (Exception e) {
+      log.severe("Exception found while reading rancher invoice filter");
+      log.throwing(this.getClass().getCanonicalName(), "Read", e);
+
+      response.setError(new Error("DB02", "Error en la base de datos: " + e.getMessage(), "proxy.Reception.Read"));
+    }
+
+    log.exiting(this.getClass().getCanonicalName(), "Read");
+    return response;
   }
 
   /*

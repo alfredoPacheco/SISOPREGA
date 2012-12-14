@@ -89,6 +89,10 @@
 			<ejb-name>FeedOrderBarnyardProxy</ejb-name>
 			<ejb-class>com.tramex.sisoprega.proxy.bean.FeedOrderBarnyardBean</ejb-class>
 		</session>
+		<session>
+			<ejb-name>LocationProxy</ejb-name>
+			<ejb-class>com.tramex.sisoprega.proxy.bean.LocationBean</ejb-class>
+		</session>
 	</enterprise-beans>
 	<assembly-descriptor>
 		<security-role>
@@ -132,7 +136,63 @@
 				<method-name>*</method-name>
 			</method>
 			<method>
+				<ejb-name>FeedOrderDetailsProxy</ejb-name>
+				<method-name>*</method-name>
+			</method>
+			<method>
+				<ejb-name>FoodProxy</ejb-name>
+				<method-name>Read</method-name>
+			</method>
+			<method>
+				<ejb-name>InspectionBarnyardProxy</ejb-name>
+				<method-name>*</method-name>
+			</method>
+			<method>
+				<ejb-name>InspectionProxy</ejb-name>
+				<method-name>*</method-name>
+			</method>
+			<method>
+				<ejb-name>InspectionCodeProxy</ejb-name>
+				<method-name>Read</method-name>
+			</method>
+			<method>
+				<ejb-name>LocationProxy</ejb-name>
+				<method-name>Read</method-name>
+			</method>
+			<method>
+				<ejb-name>MeasurementUnitProxy</ejb-name>
+				<method-name>Read</method-name>
+			</method>
+			<method>
+				<ejb-name>MeasurementUnitEquivalenceProxy</ejb-name>
+				<method-name>Read</method-name>
+			</method>
+			<method>
 				<ejb-name>RancherProxy</ejb-name>
+				<method-name>*</method-name>
+			</method>
+			<method>
+				<ejb-name>RancherContactProxy</ejb-name>
+				<method-name>*</method-name>
+			</method>
+			<method>
+				<ejb-name>RancherInvoiceProxy</ejb-name>
+				<method-name>*</method-name>
+			</method>
+			<method>
+				<ejb-name>ReceptionBarnyardProxy</ejb-name>
+				<method-name>*</method-name>
+			</method>
+			<method>
+				<ejb-name>ReceptionProxy</ejb-name>
+				<method-name>*</method-name>
+			</method>
+			<method>
+				<ejb-name>ReceptionBarnyardProxy</ejb-name>
+				<method-name>*</method-name>
+			</method>
+			<method>
+				<ejb-name>ReceptionProxy</ejb-name>
 				<method-name>*</method-name>
 			</method>
 		</method-permission>
@@ -164,6 +224,62 @@
 			</method>
 			<method>
 				<ejb-name>FeedOrderBarnyardProxy</ejb-name>
+				<method-name>*</method-name>
+			</method>
+			<method>
+				<ejb-name>FeedOrderDetailsProxy</ejb-name>
+				<method-name>*</method-name>
+			</method>
+			<method>
+				<ejb-name>FoodProxy</ejb-name>
+				<method-name>*</method-name>
+			</method>
+			<method>
+				<ejb-name>InspectionBarnyardProxy</ejb-name>
+				<method-name>*</method-name>
+			</method>
+			<method>
+				<ejb-name>InspectionProxy</ejb-name>
+				<method-name>*</method-name>
+			</method>
+			<method>
+				<ejb-name>InspectionCodeProxy</ejb-name>
+				<method-name>*</method-name>
+			</method>
+			<method>
+				<ejb-name>LocationProxy</ejb-name>
+				<method-name>*</method-name>
+			</method>
+			<method>
+				<ejb-name>MeasurementUnitProxy</ejb-name>
+				<method-name>*</method-name>
+			</method>
+			<method>
+				<ejb-name>MeasurementUnitEquivalenceProxy</ejb-name>
+				<method-name>*</method-name>
+			</method>
+			<method>
+				<ejb-name>RancherProxy</ejb-name>
+				<method-name>*</method-name>
+			</method>
+			<method>
+				<ejb-name>RancherContactProxy</ejb-name>
+				<method-name>*</method-name>
+			</method>
+			<method>
+				<ejb-name>RancherInvoiceProxy</ejb-name>
+				<method-name>*</method-name>
+			</method>
+			<method>
+				<ejb-name>ReceptionBarnyardProxy</ejb-name>
+				<method-name>*</method-name>
+			</method>
+			<method>
+				<ejb-name>ReceptionProxy</ejb-name>
+				<method-name>*</method-name>
+			</method>
+			<method>
+				<ejb-name>ReceptionHeadcountProxy</ejb-name>
 				<method-name>*</method-name>
 			</method>
 		</method-permission>

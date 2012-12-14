@@ -69,7 +69,12 @@ var _arrBarnyardsList=[
 		 barnyard_capacity:[{cattype_id:4,cattype_name:"VACAS",head_count:50}]}
 	];		
 
-
+var _arrBarnyardsListCatalog=[
+               		{barnyard_id:1,barnyard_code:"A1", location_id: "1",
+               		 barnyard_capacity:[{catclass_id:1,catclass_name:"EQUINO",head_count:75}]},
+               		{barnyard_id:2,barnyard_code:"A2", location_id: "2",
+               		 barnyard_capacity:[{catclass_id:4,cattype_name:"BOVINO",head_count:50}]}
+               	];		
 var _objMainHeader;
 
 function fillRancherLS(){

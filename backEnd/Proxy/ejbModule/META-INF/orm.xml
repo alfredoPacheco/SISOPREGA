@@ -363,6 +363,10 @@
 			<description>Retrieves a single barnyard capacity record using the barnyard and the cattle</description>
 			<query>SELECT capacity FROM BarnyardCapacity capacity WHERE capacity.barnyardId = :barnyardId AND capacity.catclassId = :cattleClassId</query>
 		</named-query>
+		<named-query name="ALL_BARNYARD_CAPACITIES">
+			<description>Get all records of barnyard capacities in database</description>
+			<query>SELECT barCa FROM BarnyardCapacity barCa ORDER BY barCa.barnyardId</query>
+		</named-query>
 		<attributes>
 			<id name="capacityId">
 				<column name="capacity_id" />
@@ -385,6 +389,10 @@
 			<description>Retrieves a single catMeasurementUnit record by ID</description>
 			<query>SELECT MeaUni FROM MeasurementUnit MeaUni WHERE MeaUni.unitId = :unitId</query>
 		</named-query>
+		<named-query name="ALL_MEASUREMENT_UNITS">
+			<description>Retrieves all measurement units from database.</description>
+			<query>SELECT mu FROM MeasurementUnit mu ORDER BY mu.unitAbreviation</query>
+		</named-query>
 		<attributes>
 			<id name="unitId">
 				<column name="unit_id" />
@@ -403,6 +411,10 @@
 		<named-query name="CAT_MEASUREMENTUNITEQUIVALENCE_BY_ID">
 			<description>Retrieves a single catMeasurementUnitEquivalence record by ID</description>
 			<query>SELECT MeaUnEq FROM MeasurementUnitEquivalence MeaUnEq WHERE MeaUnEq.equivalenceId = :equivalenceId</query>
+		</named-query>
+		<named-query name="EQUIVALENCE_BY_UNIT_ID">
+			<description>Retrieves the equivalence of a given unit id</description>
+			<query>SELECT equivalence FROM MeasurementUnitEquivalence equivalence WHERE equivalence.unitSrc = :unitId</query>
 		</named-query>
 		<attributes>
 			<id name="equivalenceId">
@@ -425,6 +437,10 @@
 		<named-query name="CRT_RECEPTION_BY_ID">
 			<description>Retrieves a single crtReception record by ID</description>
 			<query>SELECT Recep FROM Reception Recep WHERE Recep.receptionId = :receptionId</query>
+		</named-query>
+		<named-query name="ALL_RECEPTIONS">
+			<description>Retrieves all reception records from database.</description>
+			<query>SELECT rec FROM Reception rec ORDER BY rec.rancherId</query>
 		</named-query>
 		<attributes>
 			<id name="receptionId">
@@ -452,6 +468,14 @@
 			<description>Retrieves a single crtReceptionBarnyard record by ID</description>
 			<query>SELECT RecepYard FROM ReceptionBarnyard RecepYard WHERE RecepYard.recBarnyardId = :recBarnyardId</query>
 		</named-query>
+		<named-query name="RECEPTION_BARNYARD_BY_RECEPTION_ID">
+			<description>Retrieves a list of barnyards for a given reception id</description>
+			<query>SELECT rec FROM ReceptionBarnyard rec WHERE rec.receptionId = :receptionId ORDER BY rec.barnyardId</query>
+		</named-query>
+		<named-query name="RECEPTION_BARNYARD_BY_BARNYARD_ID">
+			<description>Retrieves a list of receptions for a given barnyard_id</description>
+			<query>SELECT rec FROM ReceptionBarnyard rec WHERE rec.barnyardId = :barnyardId ORDER BY rec.receptionId</query>
+		</named-query>
 		<attributes>
 			<id name="recBarnyardId">
 				<column name="rec_barnyard_id" />
@@ -461,7 +485,7 @@
 				<column name = "barnyard_id"/>
 			</basic>
 			<basic name="receptionId">
-				<column name="receptio_id"/>
+				<column name="reception_id"/>
 			</basic>
 		</attributes>
 	</entity>
@@ -510,10 +534,13 @@
 				<temporal>TIMESTAMP</temporal>
 			</basic>
 			<basic name="receptionId">
-				<column name = "recepcion_id"/>
+				<column name = "reception_id"/>
 			</basic>
 			<basic name="feedOriginator">
 				<column name = "feed_originator"/>
+			</basic>
+			<basic name="handling">
+				<column name = "handling"/>
 			</basic>
 		</attributes>
 	</entity>
@@ -522,6 +549,10 @@
 		<named-query name="CAT_FOOD_BY_ID">
 			<description>Retrieves a single crtFood record by ID</description>
 			<query>SELECT fod FROM Food fod WHERE fod.foodId = :foodId</query>
+		</named-query>
+		<named-query name="ALL_FOOD">
+			<description>Retrieves all records for food in database.</description>
+			<query>SELECT f FROM Food f ORDER BY f.foodName</query>
 		</named-query>
 		<attributes>
 			<id name="foodId">
@@ -539,6 +570,10 @@
 			<description>Retrieves a single crtFood record by ID</description>
 			<query>SELECT FeOrDls FROM FeedOrderDetails FeOrDls WHERE FeOrDls.fodId = :fodId</query>
 		</named-query>
+		<named-query name="FOD_BY_ORDER_ID">
+			<description>Retrieves a list of feed order details based in the feed orderId</description>
+			<query>SELECT fod FROM FeedOrderDetails fod WHERE fod.orderId = :orderId ORDER BY fod.foodId</query>
+		</named-query>
 		<attributes>
 			<id name="fodId">
 				<column name="id" />
@@ -546,9 +581,6 @@
 			</id>
 			<basic name="foodId">
 				<column name = "food_id"/>
-			</basic>
-			<basic name="handling">
-				<column name = "handling"/>
 			</basic>
 			<basic name="orderId">
 				<column name = "order_id" />
@@ -563,6 +595,10 @@
 		<named-query name="CRT_INSPECTION_BY_ID">
 			<description>Retrieves a single crtFood record by ID</description>
 			<query>SELECT Insp FROM Inspection Insp WHERE Insp.inspectionId = :inspectionId</query>
+		</named-query>
+		<named-query name="INSPECTION_BY_RECEPTION_ID">
+			<description>Retrieves all inspection records from a given reception</description>
+			<query>SELECT insp FROM Inspection insp WHERE insp.receptionId = :receptionId ORDER BY insp.inspectionDate desc</query>
 		</named-query>
 		<attributes>
 			<id name="inspectionId">
@@ -584,6 +620,10 @@
 			<description>Retrieves a single crtFood record by ID</description>
 			<query>SELECT InspBar FROM InspectionBarnyard InspBar WHERE InspBar.ibId = :ibId</query>
 		</named-query>
+		<named-query name="IB_BY_INSPECTION_ID">
+			<description>Retrieves all barnyards for a given inspection id</description>
+			<query>SELECT ins FROM InspectionBarnyard ins WHERE ins.inspectionId = :inspectionId ORDER BY ins.barnyardId</query>
+		</named-query>
 		<attributes>
 			<id name="ibId">
 				<column name="id" />
@@ -602,6 +642,10 @@
 		<named-query name="CAT_INSPECTIONCODE_BY_ID">
 			<description>Retrieves a single crtFood record by ID</description>
 			<query>SELECT InspCod FROM InspectionCode InspCod WHERE InspCod.inspectionCodeId = :inspectionCodeId</query>
+		</named-query>
+		<named-query name="ALL_INSPECTION_CODES">
+			<description>Retrieves all inspection codes from database</description>
+			<query>SELECT ic FROM InspectionCode ic ORDER BY ic.inspectionCodeDescription</query>
 		</named-query>
 		<attributes>
 			<id name="inspectionCodeId">

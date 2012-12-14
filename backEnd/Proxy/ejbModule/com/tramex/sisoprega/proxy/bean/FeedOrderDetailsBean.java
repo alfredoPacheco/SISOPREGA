@@ -15,6 +15,8 @@
  */
 package com.tramex.sisoprega.proxy.bean;
 
+import java.util.List;
+
 import javax.ejb.Stateless;
 import javax.persistence.TypedQuery;
 
@@ -108,8 +110,55 @@ public class FeedOrderDetailsBean extends BaseBean implements Cruddable {
    */
   @Override
   public ReadGatewayResponse Read(GatewayRequest request) {
-    // TODO Auto-generated method stub
-    return null;
+    log.entering(this.getClass().getCanonicalName(), "Read");
+
+    ReadGatewayResponse response = new ReadGatewayResponse();
+    response.setEntityName(request.getEntityName());
+
+    FeedOrderDetails order = null;
+    try {
+      order = entityFromRequest(request, FeedOrderDetails.class);
+      log.fine("Got Feed Order Details from request: " + order);
+
+      TypedQuery<FeedOrderDetails> readQuery = null;
+
+      if (order.getFodId() != 0) {
+        readQuery = em.createNamedQuery("CRT_FEEDORDERDETAILS_BY_ID", FeedOrderDetails.class);
+        log.fine("Query by Id: " + order.getFodId());
+        readQuery.setParameter("fodId", order.getFodId());
+      } else if (order.getOrderId() != 0) {
+        readQuery = em.createNamedQuery("FOD_BY_ORDER_ID", FeedOrderDetails.class);
+        log.fine("Query by OrderId: " + order.getOrderId());
+        readQuery.setParameter("orderId", order.getOrderId());
+      } else {
+        response.setError(new Error("VAL03", "El filtro especificado no es válido para las órdenes de alimento",
+            "proxy.FeedOrderDetailsDetail.Read"));
+        return response;
+      }
+
+      // Query the results through the jpa using a typedQuery
+      List<FeedOrderDetails> queryResults = readQuery.getResultList();
+
+      if (queryResults.isEmpty()) {
+        response.setError(new Error("VAL02", "No se encontraron datos para el filtro seleccionado", "proxy.FeedOrderDetailsBean.Read"));
+      } else {
+        // Add query results to response
+        response.getRecord().addAll(contentFromList(queryResults, FeedOrderDetails.class));
+
+        // Add success message to response
+        response.setError(new Error("0", "SUCCESS", "proxy.FeedOrderDetails.Read"));
+      }
+    } catch (Exception e) {
+      // something went wrong, alert the server and respond the client
+      log.severe("Exception found while reading feed order");
+      log.throwing(this.getClass().getCanonicalName(), "Read", e);
+
+      response.setError(new Error("DB02", "Read exception: " + e.getMessage(), "proxy.FeedOrderDetailsBean.Read"));
+    }
+
+    // end and respond.
+    log.exiting(this.getClass().getCanonicalName(), "Read");
+    return response;
   }
 
   /*
