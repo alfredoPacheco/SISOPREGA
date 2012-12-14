@@ -13,6 +13,7 @@
  * 10/03/2012  Diego Torres                  Initial Version.
  * 11/27/2012  Diego Torres                  Add tables for security management
  * 12/01/2012  Diego Torres                  System log will be provided by app server.
+ * 12/13/2012  Alfredo Pacheco               Field handling moved from ctrl_feed_order_details to ctrl_feed_order.
  * ====================================================================================
  * 
  * Author: Diego Torres
@@ -425,7 +426,8 @@ CREATE TABLE ctrl_feed_order(
 	order_id SERIAL PRIMARY KEY,
 	reception_id integer NOT NULL REFERENCES ctrl_reception(reception_id),	
 	feed_date date NOT NULL,
-	feed_originator varchar(150)
+	feed_originator varchar(150),
+	handling varchar(100)
 );
 
 GRANT ALL ON ctrl_feed_order TO sisoprega;
@@ -458,8 +460,8 @@ CREATE TABLE ctrl_feed_order_details(
 	id SERIAL PRIMARY KEY,
 	order_id integer NOT NULL REFERENCES ctrl_feed_order(order_id),
 	food_id integer NOT NULL REFERENCES cat_food(food_id),
-	quantity DECIMAL(10,2) NOT NULL DEFAULT 0.0,
-	handling varchar(100)
+	quantity DECIMAL(10,2) NOT NULL DEFAULT 0.0
+	
 );
 
 CREATE UNIQUE INDEX U_feed_order_food ON ctrl_feed_order_details(order_id, food_id);

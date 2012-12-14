@@ -247,6 +247,7 @@ enyo.kind({
 		objToSend.receptionId = objRec.reception_id;
 		objToSend.feedDate = "" + DateOut(new Date());
 		objToSend.feedOriginator = "alfredo";	
+		objToSend.handling = objFeed.handling;
 		
 		var cgCreate = consumingGateway.Create("FeedOrder", objToSend);
 		if (cgCreate.exceptionId == 0){ //Created successfully			
@@ -293,10 +294,10 @@ enyo.kind({
 //	    private long orderId;
 //	    private long foodId;
 //	    private double quantity;
-//	    private String handling;
+		
 		var objToSend = {};
 		objToSend.orderId = 	order_id;		
-		objToSend.handling = 	objFeed.handling;//TODO: CAMBIAR DE TABLA EL CAMPO HANDLING
+		
 		for (obj in objFeed.feed){			
 			objToSend.foodId = 		objFeed.feed[obj].feed_id;				
 			objToSend.quantity =	objFeed.feed[obj].feed_units;
