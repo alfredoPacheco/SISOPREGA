@@ -31,7 +31,8 @@ var	_arrReceptionList=[
 		 inspections:[],
 		 feed:[]		 
 		 },
-	];					
+	];	
+
 var _arrCities=[{city_id:1,city_name:"LOCAL"},{city_id:2,city_name:"FORANEA"}];
 
 var _arrRancherList =[
