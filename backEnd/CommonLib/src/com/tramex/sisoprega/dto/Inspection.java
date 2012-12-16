@@ -27,51 +27,66 @@ import java.util.Date;
  * Date        By                           Description
  * MM/DD/YYYY
  * ----------  ---------------------------  -------------------------------------------
- * 1/12/2012  Jaime Figueroa                 Initial Version.
+ * 12/12/2012  Jaime Figueroa                 Initial Version.
+ * 12/16/2012  Diego Torres                   Adding toString implementation.
  * ====================================================================================
  * </PRE>
  * 
  * @author Jaime Figueroa
- *
+ * 
  */
 public class Inspection {
-    private long inspectionId;
-    private long receptionId;
-    private Date inspectionDate;
-    /**
-     * @return the inspectionId
-     */
-    public long getInspectionId() {
-        return inspectionId;
-    }
-    /**
-     * @param inspectionId the inspectionId to set
-     */
-    public void setInspectionId(long inspectionId) {
-        this.inspectionId = inspectionId;
-    }
-    /**
-     * @return the receptionId
-     */
-    public long getReceptionId() {
-        return receptionId;
-    }
-    /**
-     * @param receptionId the receptionId to set
-     */
-    public void setReceptionId(long receptionId) {
-        this.receptionId = receptionId;
-    }
-    /**
-     * @return the inspectionDate
-     */
-    public Date getInspectionDate() {
-        return inspectionDate;
-    }
-    /**
-     * @param inspectionDate the inspectionDate to set
-     */
-    public void setInspectionDate(Date inspectionDate) {
-        this.inspectionDate = inspectionDate;
-    }
+  private long inspectionId;
+  private long receptionId;
+  private Date inspectionDate;
+
+  /**
+   * @return the inspectionId
+   */
+  public long getInspectionId() {
+    return inspectionId;
+  }
+
+  /**
+   * @param inspectionId
+   *          the inspectionId to set
+   */
+  public void setInspectionId(long inspectionId) {
+    this.inspectionId = inspectionId;
+  }
+
+  /**
+   * @return the receptionId
+   */
+  public long getReceptionId() {
+    return receptionId;
+  }
+
+  /**
+   * @param receptionId
+   *          the receptionId to set
+   */
+  public void setReceptionId(long receptionId) {
+    this.receptionId = receptionId;
+  }
+
+  /**
+   * @return the inspectionDate
+   */
+  public Date getInspectionDate() {
+    return inspectionDate;
+  }
+
+  /**
+   * @param inspectionDate
+   *          the inspectionDate to set
+   */
+  public void setInspectionDate(Date inspectionDate) {
+    this.inspectionDate = inspectionDate;
+  }
+
+  @Override
+  public String toString() {
+    return "inspectionDate:" + inspectionDate + ";inspectionId:" + inspectionId + ";receptionId:" + receptionId + ";";
+  }
 }

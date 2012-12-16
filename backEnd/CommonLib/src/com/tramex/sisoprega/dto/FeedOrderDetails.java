@@ -25,64 +25,82 @@ package com.tramex.sisoprega.dto;
  * Date        By                           Description
  * MM/DD/YYYY
  * ----------  ---------------------------  -------------------------------------------
- * 1/12/2012  Jaime Figueroa                 Initial Version.
+ * 12/12/2012  Jaime Figueroa                 Initial Version.
+ * 12/16/2012  Diego Torres                   Adding toString implementation.
  * ====================================================================================
  * </PRE>
  * 
  * @author Jaime Figueroa
- *
+ * 
  */
 public class FeedOrderDetails {
-    private long fodId;
-    private long orderId;
-    private long foodId;
-    private double quantity;
-    /**
-     * @return the id
-     */
-    public long getFodId() {
-        return fodId;
-    }
-    /**
-     * @param id the id to set
-     */
-    public void setFodId(long fodId) {
-       this.fodId = fodId;
-    }
-    /**
-     * @return the orderId
-     */
-    public long getOrderId() {
-        return orderId;
-    }
-    /**
-     * @param orderId the orderId to set
-     */
-    public void setOrderId(long orderId) {
-        this.orderId = orderId;
-    }
-    /**
-     * @return the foodId
-     */
-    public long getFoodId() {
-        return foodId;
-    }
-    /**
-     * @param foodId the foodId to set
-     */
-    public void setFoodId(long foodId) {
-        this.foodId = foodId;
-    }
-    /**
-     * @return the quantity
-     */
-    public double getQuantity() {
-        return quantity;
-    }
-    /**
-     * @param quantity the quantity to set
-     */
-    public void setQuantity(double quantity) {
-        this.quantity = quantity;
-    }
+  private long fodId;
+  private long orderId;
+  private long foodId;
+  private double quantity;
+
+  /**
+   * @return the id
+   */
+  public long getFodId() {
+    return fodId;
+  }
+
+  /**
+   * @param id
+   *          the id to set
+   */
+  public void setFodId(long fodId) {
+    this.fodId = fodId;
+  }
+
+  /**
+   * @return the orderId
+   */
+  public long getOrderId() {
+    return orderId;
+  }
+
+  /**
+   * @param orderId
+   *          the orderId to set
+   */
+  public void setOrderId(long orderId) {
+    this.orderId = orderId;
+  }
+
+  /**
+   * @return the foodId
+   */
+  public long getFoodId() {
+    return foodId;
+  }
+
+  /**
+   * @param foodId
+   *          the foodId to set
+   */
+  public void setFoodId(long foodId) {
+    this.foodId = foodId;
+  }
+
+  /**
+   * @return the quantity
+   */
+  public double getQuantity() {
+    return quantity;
+  }
+
+  /**
+   * @param quantity
+   *          the quantity to set
+   */
+  public void setQuantity(double quantity) {
+    this.quantity = quantity;
+  }
+
+  @Override
+  public String toString(){
+    return "fodId:" + fodId + ";foodId:" + foodId + ";orderId:" + orderId + ";quantity:" + quantity + ";";
+  }
 }

@@ -25,38 +25,50 @@ package com.tramex.sisoprega.dto;
  * Date        By                           Description
  * MM/DD/YYYY
  * ----------  ---------------------------  -------------------------------------------
- * 1/12/2012  Jaime Figueroa                 Initial Version.
+ * 12/12/2012  Jaime Figueroa                 Initial Version.
+ * 12/16/2012  Diego Torres                   Adding toString implementation.
  * ====================================================================================
  * </PRE>
  * 
  * @author Jaime Figueroa
- *
+ * 
  */
 public class InspectionCode {
-    private long inspectionCodeId;
-    private String inspectionCodeDescription;
-    /**
-     * @return the inspectionCodeId
-     */
-    public long getInspectionCodeId() {
-        return inspectionCodeId;
-    }
-    /**
-     * @param inspectionCodeId the inspectionCodeId to set
-     */
-    public void setInspectionCodeId(long inspectionCodeId) {
-        this.inspectionCodeId = inspectionCodeId;
-    }
-    /**
-     * @return the inspectionCodeDescription
-     */
-    public String getInspectionCodeDescription() {
-        return inspectionCodeDescription;
-    }
-    /**
-     * @param inspectionCodeDescription the inspectionCodeDescription to set
-     */
-    public void setInspectionCodeDescription(String inspectionCodeDescription) {
-        this.inspectionCodeDescription = inspectionCodeDescription;
-    }
+  private long inspectionCodeId;
+  private String inspectionCodeDescription;
+
+  /**
+   * @return the inspectionCodeId
+   */
+  public long getInspectionCodeId() {
+    return inspectionCodeId;
+  }
+
+  /**
+   * @param inspectionCodeId
+   *          the inspectionCodeId to set
+   */
+  public void setInspectionCodeId(long inspectionCodeId) {
+    this.inspectionCodeId = inspectionCodeId;
+  }
+
+  /**
+   * @return the inspectionCodeDescription
+   */
+  public String getInspectionCodeDescription() {
+    return inspectionCodeDescription;
+  }
+
+  /**
+   * @param inspectionCodeDescription
+   *          the inspectionCodeDescription to set
+   */
+  public void setInspectionCodeDescription(String inspectionCodeDescription) {
+    this.inspectionCodeDescription = inspectionCodeDescription;
+  }
+
+  @Override
+  public String toString() {
+    return "inspectionCodeDescription:" + inspectionCodeDescription + ";inspectionCodeId:" + inspectionCodeId + ";";
+  }
 }

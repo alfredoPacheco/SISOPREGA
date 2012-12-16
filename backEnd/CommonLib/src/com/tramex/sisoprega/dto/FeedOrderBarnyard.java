@@ -26,6 +26,7 @@ package com.tramex.sisoprega.dto;
  * MM/DD/YYYY
  * ----------  ---------------------------  -------------------------------------------
  * 12/09/2012  Jaime Figueroa                 Initial Version.
+ * 12/16/2012  Diego Torres                   Adding toString implementation.
  * ====================================================================================
  * </PRE>
  * 
@@ -71,5 +72,10 @@ public class FeedOrderBarnyard {
    */
   public void setOrderId(long orderId) {
     this.orderId = orderId;
+  }
+  
+  @Override
+  public String toString(){
+    return "barnyardId:" + barnyardId + ";feedOrdBarnId:" + feedOrdBarnId + ";orderId:" + orderId + ";";
   }
 }

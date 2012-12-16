@@ -25,50 +25,67 @@ package com.tramex.sisoprega.dto;
  * Date        By                           Description
  * MM/DD/YYYY
  * ----------  ---------------------------  -------------------------------------------
- * 1/12/2012  Jaime Figueroa                 Initial Version.
+ * 12/12/2012  Jaime Figueroa                 Initial Version.
+ * 12/16/2012  Diego Torres                   Adding toString implementation.
  * ====================================================================================
  * </PRE>
+ * 
  * @author Jaime Figueroa
- *
+ * 
  */
 public class ReceptionBarnyard {
-    private long recBarnyardId;
-    private long receptionId;
-    private long barnyardId;
-    /**
-     * @return the recBarnyardId
-     */
-    public long getRecBarnyardId() {
-        return recBarnyardId;
-    }
-    /**
-     * @param recBarnyardId the recBarnyardId to set
-     */
-    public void setRecBarnyardId(long recBarnyardId) {
-        this.recBarnyardId = recBarnyardId;
-    }
-    /**
-     * @return the receptionId
-     */
-    public long getReceptionId() {
-        return receptionId;
-    }
-    /**
-     * @param receptionId the receptionId to set
-     */
-    public void setReceptionId(long receptionId) {
-        this.receptionId = receptionId;
-    }
-    /**
-     * @return the barnyardId
-     */
-    public long getBarnyardId() {
-        return barnyardId;
-    }
-    /**
-     * @param barnyardId the barnyardId to set
-     */
-    public void setBarnyardId(long barnyardId) {
-        this.barnyardId = barnyardId;
-    }
+  private long recBarnyardId;
+  private long receptionId;
+  private long barnyardId;
+
+  /**
+   * @return the recBarnyardId
+   */
+  public long getRecBarnyardId() {
+    return recBarnyardId;
+  }
+
+  /**
+   * @param recBarnyardId
+   *          the recBarnyardId to set
+   */
+  public void setRecBarnyardId(long recBarnyardId) {
+    this.recBarnyardId = recBarnyardId;
+  }
+
+  /**
+   * @return the receptionId
+   */
+  public long getReceptionId() {
+    return receptionId;
+  }
+
+  /**
+   * @param receptionId
+   *          the receptionId to set
+   */
+  public void setReceptionId(long receptionId) {
+    this.receptionId = receptionId;
+  }
+
+  /**
+   * @return the barnyardId
+   */
+  public long getBarnyardId() {
+    return barnyardId;
+  }
+
+  /**
+   * @param barnyardId
+   *          the barnyardId to set
+   */
+  public void setBarnyardId(long barnyardId) {
+    this.barnyardId = barnyardId;
+  }
+
+  @Override
+  public String toString() {
+    return "barnyardId:" + barnyardId + ";recBarnyardId:" + recBarnyardId + ";receptionId:" + receptionId + ";";
+  }
+
 }
