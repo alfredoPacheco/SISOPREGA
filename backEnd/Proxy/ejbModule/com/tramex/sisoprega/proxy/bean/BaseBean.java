@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import javax.annotation.Resource;
+import javax.ejb.SessionContext;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -52,6 +54,9 @@ public class BaseBean {
 
   @PersistenceContext
   protected EntityManager em;
+  
+  @Resource
+  protected SessionContext ejbContext;
 
   /**
    * Validates the entity, default validation includes only null, will need to
@@ -155,6 +160,10 @@ public class BaseBean {
     }
 
     return entity;
+  }
+  
+  protected String getLoggedUser(){
+    return ejbContext.getCallerPrincipal().getName();
   }
 
 }

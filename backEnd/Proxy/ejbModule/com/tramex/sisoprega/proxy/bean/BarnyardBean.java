@@ -81,6 +81,7 @@ public class BarnyardBean extends BaseBean implements Cruddable {
         log.finer("Setting Barnyard id in response: " + sId);
         response.setGeneratedId(sId);
         response.setError(new Error("0", "SUCCESS", "proxy.BarnyardBean.Create"));
+        log.info("Barnyard[" + barnyard.toString() + "] created by principal[" + getLoggedUser() + "]");
       } else {
         log.warning("Error de validación: " + error_description);
         response.setError(new Error("VAL01", "Error de validación: " + error_description, "proxy.BarnyardBean.Create"));
@@ -123,14 +124,18 @@ public class BarnyardBean extends BaseBean implements Cruddable {
       log.fine("Got barnyard from request: " + barnyard);
 
       TypedQuery<Barnyard> tQuery = null;
+      String qryLogger = "";
       if (barnyard.getBarnyardId() != 0) {
         tQuery = em.createNamedQuery("BARNYARD_BY_ID", Barnyard.class);
         tQuery.setParameter("barnyardId", barnyard.getBarnyardId());
+        qryLogger = "By barnyardId [" + barnyard.getBarnyardId() + "]";
       } else if (barnyard.getLocationId() != 0) {
         tQuery = em.createNamedQuery("BARNYARD_BY_LOCATION", Barnyard.class);
         tQuery.setParameter("locationId", barnyard.getLocationId());
+        qryLogger = "By locationId [" + barnyard.getLocationId() + "]";
       } else {
         tQuery = em.createNamedQuery("ALL_BARNYARDS", Barnyard.class);
+        qryLogger = "By ALL_BARNYARDS";
       }
 
       List<Barnyard> results = tQuery.getResultList();
@@ -141,6 +146,7 @@ public class BarnyardBean extends BaseBean implements Cruddable {
         response.getRecord().addAll(records);
 
         response.setError(new Error("0", "SUCCESS", "proxy.BarnyardBean.Read"));
+        log.info("Read operation " + qryLogger + " executed by principal[" + getLoggedUser() + "]");
       }
 
     } catch (Exception e) {
@@ -181,6 +187,7 @@ public class BarnyardBean extends BaseBean implements Cruddable {
           response.setUpdatedRecord(content);
 
           response.setError(new Error("0", "SUCCESS", "proxy.Barnyard.Update"));
+          log.info("Barnyard[" + barnyard.toString() + "] updated by principal[" + getLoggedUser() + "]");
         } else {
           log.warning("Validation error:" + error_description);
           response.setError(new Error("VAL01", "Error de validación de datos:" + error_description, "proxy.BarnyardBean.Update"));
@@ -226,11 +233,13 @@ public class BarnyardBean extends BaseBean implements Cruddable {
         TypedQuery<Barnyard> readQuery = em.createNamedQuery("BARNYARD_BY_ID", Barnyard.class);
         readQuery.setParameter("barnyardId", barnyard.getBarnyardId());
         barnyard = readQuery.getSingleResult();
+        log.info("Deleting Barnyard[" + barnyard.toString() + "] by principal[" + getLoggedUser() + "]");
         em.merge(barnyard);
         em.remove(barnyard);
         em.flush();
 
         response.setError(new Error("0", "SUCCESS", "proxy.Barnyard.Delete"));
+        log.info("Barnyard successfully deleted by principal [" + getLoggedUser() + "]");
       }
     } catch (Exception e) {
       log.severe("Exception found while deleting barnyard");
