@@ -44,7 +44,9 @@ import com.tramex.sisoprega.dto.FeedOrderBarnyard;
  * ----------  ---------------------------  -------------------------------------------
  * 12/09/2012  Jaime Figueroa                Initial Version.
  * 12/09/2012  Diego Torres                  Set read functionality
- * 12/16/2012  Diego Torres                 Adding log activity
+ * 12/16/2012  Diego Torres                  Adding log activity
+ * 12/16/2012  Alfredo Pacheco				 Changed filter FEED_ORDER_FOR_BARNYARD_BY_RECEPTION_ID 
+ *                                           to FEED_ORDER_FOR_BARNYARD_BY_ORDER_ID
  * ====================================================================================
  * </PRE>
  * 
@@ -128,15 +130,14 @@ public class FeedOrderBarnyardBean extends BaseBean implements Cruddable {
       String qryLogger = "";
       if (order.getFeedOrdBarnId() != 0) {
         readQuery = em.createNamedQuery("CAT_FEEDORDERBARNYARD_BY_ID", FeedOrderBarnyard.class);
-        log.fine("Query by Id: " + order.getFeedOrdBarnId());
-        readQuery.setParameter("feedOrdBarnId", order.getFeedOrdBarnId());
+        log.fine("Query by Id: " + order.getOrderId());
+        readQuery.setParameter("feedOrdBarnId", order.getOrderId());
         qryLogger = "By feedOrdBarnId [" + order.getFeedOrdBarnId() + "]";
-      } else if (order.getOrderId() != 0 && order.getBarnyardId() != 0) {
-        readQuery = em.createNamedQuery("FEED_ORDER_FOR_BARNYARD_BY_REQUEST_ID", FeedOrderBarnyard.class);
-        log.fine("Query by ReceptionId: " + order.getOrderId() + " and barnYard: " + order.getBarnyardId());
-        readQuery.setParameter("orderId", order.getOrderId());
-        readQuery.setParameter("barnyardId", order.getBarnyardId());
-        qryLogger = "By orderId [" + order.getOrderId() + "] and barnyardId [" + order.getBarnyardId() + "]";
+      } else if (order.getOrderId() != 0) {
+        readQuery = em.createNamedQuery("FEED_ORDER_FOR_BARNYARD_BY_ORDER_ID", FeedOrderBarnyard.class);
+        log.fine("Query by OrderId: " + order.getOrderId());
+        readQuery.setParameter("orderId", order.getOrderId());  
+        qryLogger = "By orderId [" + order.getOrderId() + "]";
       } else {
         response.setError(new Error("VAL03", "El filtro especificado no es válido para las órdenes de alimento",
             "proxy.FeedOrderBarnyardDetail.Read"));

@@ -663,12 +663,10 @@
 			<description>Retrieves a single crtFood record by ID</description>
 			<query>SELECT FedOrBar FROM FeedOrderBarnyard FedOrBar WHERE FedOrBar.feedOrdBarnId = :feedOrdBarnId</query>
 		</named-query>
-		<named-query name="FEED_ORDER_FOR_BARNYARD_BY_REQUEST_ID">
-			<description>Retrieves a list with the feed orders for a given barnyard and request</description>
-			<query>SELECT fob FROM FeedOrderBarnyard fob, FeedOrder fo  
-			WHERE fob.orderId = fo.orderId 
-			  AND fob.barnyardId = :barnyardId
-			  AND fob.orderId = :orderId</query>
+		<named-query name="FEED_ORDER_FOR_BARNYARD_BY_ORDER_ID">
+			<description>Retrieves a list with the feed orders for a given order</description>
+			<query>SELECT fob FROM FeedOrderBarnyard fob  
+			WHERE fob.orderId = :orderId</query>
 		</named-query>			
 		<attributes>
 			<id name="feedOrdBarnId">
