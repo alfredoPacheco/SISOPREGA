@@ -46,6 +46,8 @@ import com.tramex.sisoprega.dto.BarnyardCapacity;
  * 12/04/2012  Diego Torres                  Fixing delete operation, adding flower box
  *                                           and adding read functionality.
  * 12/12/2012  Alfredo Pacheco				 Added sql for select all records.
+ * 12/16/2012  Diego Torres                  Removed commented set of lines on read else,
+ *                                           added log for users activity.
  * ====================================================================================
  * </PRE>
  * 
@@ -83,6 +85,7 @@ public class BarnyardCapacityBean extends BaseBean implements Cruddable {
         log.finer("Setting BarnyardCapacity id in response: " + sId);
         response.setGeneratedId(sId);
         response.setError(new Error("0", "SUCCESS", "proxy.BarnyardCapacityBean.Create"));
+        log.info("Barnyard capacity[" + barnyardCa.toString() + "] created by principal[" + getLoggedUser() + "]");
       } else {
         log.warning("Error de validación: " + error_description);
         response.setError(new Error("VAL01", "Error de validación: " + error_description, "proxy.BarnyardCapacityBean.Create"));
@@ -125,19 +128,19 @@ public class BarnyardCapacityBean extends BaseBean implements Cruddable {
       log.fine("Got barnyard capacity from request: " + capacity);
 
       TypedQuery<BarnyardCapacity> query = null;
-
+      String qryLogger = "";
       if (capacity.getCapacityId() != 0) {
         query = em.createNamedQuery("BARNYARD_CAPACITY_BY_ID", BarnyardCapacity.class);
         query.setParameter("capacityId", capacity.getCapacityId());
+        qryLogger = "By capacityId [" + capacity.getCapacityId() + "]";
       } else if (capacity.getBarnyardId() != 0 && capacity.getCatclassId() != 0) {
         query = em.createNamedQuery("BARNYARD_CAPACITY_BY_BARNYARD_AND_CATTLE", BarnyardCapacity.class);
         query.setParameter("barnyardId", capacity.getBarnyardId());
         query.setParameter("cattleClassId", capacity.getCatclassId());
+        qryLogger = "By barnyardId [" + capacity.getBarnyardId() + "] and cattleClassId [" + capacity.getCatclassId() + "]";
       } else {
-    	  query = em.createNamedQuery("ALL_BARNYARD_CAPACITIES", BarnyardCapacity.class);
-//        response.setError(new Error("VAL03", "El filtro especificado no es válido en el catálogo de capacidades de corral",
-//            "proxy.BarnyardCapacityBean.Read"));
-//        return response;
+        query = em.createNamedQuery("ALL_BARNYARD_CAPACITIES", BarnyardCapacity.class);
+        qryLogger = "By ALL_BARNYARD_CAPACITIES";
       }
 
       List<BarnyardCapacity> result = query.getResultList();
@@ -148,6 +151,7 @@ public class BarnyardCapacityBean extends BaseBean implements Cruddable {
         response.getRecord().addAll(records);
 
         response.setError(new Error("0", "SUCCESS", "proxy.BarnyardBean.Read"));
+        log.info("Read operation " + qryLogger + " executed by principal[" + getLoggedUser() + "] on BarnyardCapacityBean");
       }
 
     } catch (Exception e) {
@@ -190,6 +194,7 @@ public class BarnyardCapacityBean extends BaseBean implements Cruddable {
           response.setUpdatedRecord(content);
 
           response.setError(new Error("0", "SUCCESS", "proxy.BarnyardCapacity.Update"));
+          log.info("BarnyardCapacity[" + barnyardCa.toString() + "] updated by principal[" + getLoggedUser() + "]");
         } else {
           log.warning("Validation error: " + error_description);
           response.setError(new Error("VAL01", "Error de validación de datos:" + error_description,
@@ -237,11 +242,13 @@ public class BarnyardCapacityBean extends BaseBean implements Cruddable {
         TypedQuery<BarnyardCapacity> readQuery = em.createNamedQuery("BARNYARD_CAPACITY_BY_ID", BarnyardCapacity.class);
         readQuery.setParameter("capacityId", barnyardCa.getCapacityId());
         barnyardCa = readQuery.getSingleResult();
+        log.info("Deleting BarnyardCapacity[" + barnyardCa.toString() + "] by principal[" + getLoggedUser() + "]");
         em.merge(barnyardCa);
         em.remove(barnyardCa);
         em.flush();
 
         response.setError(new Error("0", "SUCCESS", "proxy.BarnyardCapacity.Delete"));
+        log.info("BarnyardCapacity successfully deleted by principal [" + getLoggedUser() + "]");
       }
     } catch (Exception e) {
       log.severe("Exception found while deleting barnyard capacity");

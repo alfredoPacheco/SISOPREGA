@@ -45,6 +45,7 @@ import com.tramex.sisoprega.dto.Barnyard;
  *             Jaime Figueroa                Initial Version.
  * 12/04/2012  Diego Torres                  Fixing delete operation, adding flower box
  *                                           and adding read functionality.
+ * 12/16/2012  Diego Torres                  Adding log functionality based on loggedUser.
  * ====================================================================================
  * </PRE>
  * 
@@ -146,7 +147,7 @@ public class BarnyardBean extends BaseBean implements Cruddable {
         response.getRecord().addAll(records);
 
         response.setError(new Error("0", "SUCCESS", "proxy.BarnyardBean.Read"));
-        log.info("Read operation " + qryLogger + " executed by principal[" + getLoggedUser() + "]");
+        log.info("Read operation " + qryLogger + " executed by principal[" + getLoggedUser() + "] on BarnyardBean");
       }
 
     } catch (Exception e) {

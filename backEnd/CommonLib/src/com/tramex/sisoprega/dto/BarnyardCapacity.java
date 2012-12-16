@@ -16,7 +16,7 @@
 package com.tramex.sisoprega.dto;
 
 /**
- *  Defines the model for the Barnyard entity.<BR/>
+ * Defines the model for the Barnyard entity.<BR/>
  * 
  * <B>Revision History:</B>
  * 
@@ -26,63 +26,82 @@ package com.tramex.sisoprega.dto;
  * MM/DD/YYYY
  * ----------  ---------------------------  -------------------------------------------
  * 11/25/2012  Jaime Figueroa                 Initial Version.
+ * 12/16/2012  Diego Torres                   Enable toString method functionality.
  * ====================================================================================
  * </PRE>
+ * 
  * @author Jaime Figueroa
- *
+ * 
  */
 public class BarnyardCapacity {
-    private long capacityId;
-    private long barnyardId;
-    private long catclassId;
-    private long headCount;
-    /**
-     * @return the capacityId
-     */
-    public long getCapacityId() {
-        return capacityId;
-    }
-    /**
-     * @param capacityId the capacityId to set
-     */
-    public void setCapacityId(long capacityId) {
-        this.capacityId = capacityId;
-    }
-    /**
-     * @return the barnyardId
-     */
-    public long getBarnyardId() {
-        return barnyardId;
-    }
-    /**
-     * @param barnyardId the barnyardId to set
-     */
-    public void setBarnyardId(long barnyardId) {
-        this.barnyardId = barnyardId;
-    }
-    /**
-     * @return the catclassId
-     */
-    public long getCatclassId() {
-        return catclassId;
-    }
-    /**
-     * @param catclassId the catclassId to set
-     */
-    public void setCatclassId(long catclassId) {
-        this.catclassId = catclassId;
-    }
-    /**
-     * @return the headCount
-     */
-    public long getHeadCount() {
-        return headCount;
-    }
-    /**
-     * @param headCount the headCount to set
-     */
-    public void setHeadCount(long headCount) {
-        this.headCount = headCount;
-    }
-    
+  private long capacityId;
+  private long barnyardId;
+  private long catclassId;
+  private long headCount;
+
+  /**
+   * @return the capacityId
+   */
+  public long getCapacityId() {
+    return capacityId;
+  }
+
+  /**
+   * @param capacityId
+   *          the capacityId to set
+   */
+  public void setCapacityId(long capacityId) {
+    this.capacityId = capacityId;
+  }
+
+  /**
+   * @return the barnyardId
+   */
+  public long getBarnyardId() {
+    return barnyardId;
+  }
+
+  /**
+   * @param barnyardId
+   *          the barnyardId to set
+   */
+  public void setBarnyardId(long barnyardId) {
+    this.barnyardId = barnyardId;
+  }
+
+  /**
+   * @return the catclassId
+   */
+  public long getCatclassId() {
+    return catclassId;
+  }
+
+  /**
+   * @param catclassId
+   *          the catclassId to set
+   */
+  public void setCatclassId(long catclassId) {
+    this.catclassId = catclassId;
+  }
+
+  /**
+   * @return the headCount
+   */
+  public long getHeadCount() {
+    return headCount;
+  }
+
+  /**
+   * @param headCount
+   *          the headCount to set
+   */
+  public void setHeadCount(long headCount) {
+    this.headCount = headCount;
+  }
+
+  @Override
+  public String toString() {
+    return "barnyardId:" + barnyardId + ";capacityId:" + capacityId + ";catclassId:" + catclassId + ";headCount:" + headCount
+        + ";";
+  }
 }
