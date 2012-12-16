@@ -153,24 +153,22 @@ enyo.kind({
 					}catch(e){}	
 //feedOrderBarnyard::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::					
 					if(feedAux.feeding_id){
-						var feedBarnyardAux =  this.getFeedOrderBarnyard(feedAux.feeding_id);
-						for (fb in feedBarnyardAux){
-							try{
-								var barnyardName = cacheBY.getByID(feedBarnyardAux[fb].barnyardId).barnyard_code;
-								feedAux.barnyards[barnyardName] = barnyardName;
-							}catch(e){}
+						var arrFeedBarnyardAux = this.getFeedOrderBarnyard(feedAux.feeding_id);
+						var feedBarnyardAux = {barnyards:{}};						
+						for (fb in arrFeedBarnyardAux){
+							var barnyardName = cacheBY.getByID(arrFeedBarnyardAux[fb].barnyardId).barnyard_code;
+							feedBarnyardAux.barnyards[barnyardName] = barnyardName;							
 						}
-					
+						feedAux.barnyards = feedBarnyardAux.barnyards;
 //feedOrderDetails:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::	
 						var arrFeedDetailsAux =  this.getFeedOrderDetails(feedAux.feeding_id);
 						var feedDetailsAux = {};
-						for (fd in arrFeedDetailsAux){							
-							try{
+						for (fd in arrFeedDetailsAux){
+							feedDetailsAux[fd] = {};
 							feedDetailsAux[fd].feed_desc = cacheFeed.getByID(arrFeedDetailsAux[fd].foodId).feed_desc;
-							feedDetailsAux[fd].feed_units = arrFeedDetailsAux[fd].quantity;							
-							}catch(e){}							
+							feedDetailsAux[fd].feed_units = arrFeedDetailsAux[fd].quantity;
 						}
-						feedAux.feed =feedDetailAux;					
+						feedAux.feed =feedDetailsAux;					
 					}										
 					objAux.feed.push(feedAux);
 				}					
@@ -250,7 +248,7 @@ enyo.kind({
 				}
 			}
 			else{ //Error
-				if (cgReadAll.exceptionId != "CTR2"){ //No data found
+				if (cgReadAll.exceptionId != "GW01"){ //No data found = GW01
 					cacheMan.setMessage("", "[Exception ID: " + cgReadAll.exceptionId + "] Descripcion: " + cgReadAll.exceptionDescription);	
 				}			
 			}				
@@ -276,7 +274,7 @@ enyo.kind({
 			}
 		}
 		else{ //Error
-			if (cgReadAll.exceptionId != "CTR2"){ //No data found
+			if (cgReadAll.exceptionId != "VAL02"){ //No data found = VAL02 for filter
 				cacheMan.setMessage("", "[Exception ID: " + cgReadAll.exceptionId + "] Descripcion: " + cgReadAll.exceptionDescription);	
 			}			
 		}				
