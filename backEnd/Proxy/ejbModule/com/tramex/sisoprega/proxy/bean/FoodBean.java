@@ -44,6 +44,7 @@ import com.tramex.sisoprega.dto.Food;
  * ----------  ---------------------------  -------------------------------------------
  * 12/08/2012  Jaime Figueroa                Initial Version.
  * 12/13/2012  Diego Torres                  Activate read operation.
+ * 12/16/2012  Diego Torres                  Adding log activity
  * ====================================================================================
  * </PRE>
  * @author Jaime Figueroa
@@ -80,6 +81,7 @@ public class FoodBean extends BaseBean implements Cruddable {
         log.finer("Setting Food id in response: " + sId);
         response.setGeneratedId(sId);
         response.setError(new Error("0", "SUCCESS", "proxy.FoodBean.Create"));
+        log.info("Food [" + food.toString() + "] created by principal[" + getLoggedUser() + "]");
       } else {
         log.warning("Error de validación: " + error_description);
         response.setError(new Error("VAL01", "Error de validación: " + error_description, "proxy.FoodBean.Create"));
@@ -121,13 +123,15 @@ public class FoodBean extends BaseBean implements Cruddable {
       log.fine("Got food from request: " + food);
 
       TypedQuery<Food> readQuery = null;
-
+      String qryLogger = "";
       if (food.getFoodId() != 0) {
         readQuery = em.createNamedQuery("CAT_FOOD_BY_ID", Food.class);
         log.fine("Query by Id: " + food.getFoodId());
         readQuery.setParameter("fodId", food.getFoodId());
+        qryLogger = "By foodId [" + food.getFoodId() + "]";
       } else {
         readQuery = em.createNamedQuery("ALL_FOOD", Food.class);
+        qryLogger = "By ALL_FOOD";
       }
 
       // Query the results through the jpa using a typedQuery
@@ -141,6 +145,7 @@ public class FoodBean extends BaseBean implements Cruddable {
 
         // Add success message to response
         response.setError(new Error("0", "SUCCESS", "proxy.Food.Read"));
+        log.info("Read operation " + qryLogger + " executed by principal[" + getLoggedUser() + "] on FoodBean");
       }
     } catch (Exception e) {
       // something went wrong, alert the server and respond the client
@@ -183,6 +188,7 @@ public class FoodBean extends BaseBean implements Cruddable {
           response.setUpdatedRecord(content);
 
           response.setError(new Error("0", "SUCCESS", "proxy.Food.Update"));
+          log.info("Food [" + food.toString() + "] updated by principal[" + getLoggedUser() + "]");
         } else {
           log.warning("Validation error:" + error_description);
           response.setError(new Error("VAL01", "Error de validación de datos:" + error_description, "proxy.FoodBean.Update"));
@@ -227,11 +233,13 @@ public class FoodBean extends BaseBean implements Cruddable {
         TypedQuery<Food> readQuery = em.createNamedQuery("CAT_FOOD_BY_ID", Food.class);
         readQuery.setParameter("foodId", food.getFoodId());
         food = readQuery.getSingleResult();
+        log.info("Deleting Food [" + food.toString() + "] by principal[" + getLoggedUser() + "]");
         em.merge(food);
         em.remove(food);
         em.flush();
 
         response.setError(new Error("0", "SUCCESS", "proxy.Food.Delete"));
+        log.info("Food successfully deleted by principal [" + getLoggedUser() + "]");
       }
     } catch (Exception e) {
       log.severe("Exception found while deleting Food");

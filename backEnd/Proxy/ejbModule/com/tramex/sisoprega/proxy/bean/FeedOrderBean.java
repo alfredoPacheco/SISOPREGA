@@ -31,8 +31,8 @@ import com.tramex.sisoprega.common.crud.Cruddable;
 import com.tramex.sisoprega.dto.FeedOrder;
 
 /**
- * This proxy knows the logic to evaluate Feed Order information and the
- * way to the database in order to save their data. Also, it is contained in EJB
+ * This proxy knows the logic to evaluate Feed Order information and the way to
+ * the database in order to save their data. Also, it is contained in EJB
  * container, we can apply security and life cycle methods for resources.<BR/>
  * 
  * <B>Revision History:</B>
@@ -44,6 +44,7 @@ import com.tramex.sisoprega.dto.FeedOrder;
  * ----------  ---------------------------  -------------------------------------------
  * 12/08/2012  Jaime Figueroa                 Initial Version.
  * 12/09/2012  Diego Torres                   Add standard error codes and validation.
+ * 12/16/2012  Diego Torres                   Adding log activity
  * ====================================================================================
  * </PRE>
  * 
@@ -81,6 +82,7 @@ public class FeedOrderBean extends BaseBean implements Cruddable {
         log.finer("Setting FeedOrder id in response: " + sId);
         response.setGeneratedId(sId);
         response.setError(new Error("0", "SUCCESS", "proxy.FeedOrderBean.Create"));
+        log.info("Feed Order [" + feedOrd.toString() + "] created by principal[" + getLoggedUser() + "]");
       } else {
         log.warning("Error de validación: " + error_description);
         response.setError(new Error("VAL01", "Error de validación: " + error_description, "proxy.FeedOrderBean.Create"));
@@ -122,15 +124,17 @@ public class FeedOrderBean extends BaseBean implements Cruddable {
       log.fine("Got Feed Order from request: " + order);
 
       TypedQuery<FeedOrder> readQuery = null;
-
+      String qryLogger = "";
       if (order.getOrderId() != 0) {
         readQuery = em.createNamedQuery("CRT_FEEDORDER_BY_ID", FeedOrder.class);
         log.fine("Query by Id: " + order.getOrderId());
         readQuery.setParameter("orderId", order.getOrderId());
+        qryLogger = "By orderId [" + order.getOrderId() + "]";
       } else if (order.getReceptionId() != 0) {
         readQuery = em.createNamedQuery("FEEDORDER_BY_RECEPTION_ID", FeedOrder.class);
         log.fine("Query by ReceptionId: " + order.getReceptionId());
         readQuery.setParameter("receptionId", order.getReceptionId());
+        qryLogger = "By receptionId [" + order.getReceptionId() + "]";
       } else {
         response.setError(new Error("VAL03", "El filtro especificado no es válido para las órdenes de alimento",
             "proxy.FeedOrderDetail.Read"));
@@ -148,6 +152,7 @@ public class FeedOrderBean extends BaseBean implements Cruddable {
 
         // Add success message to response
         response.setError(new Error("0", "SUCCESS", "proxy.FeedOrder.Read"));
+        log.info("Read operation " + qryLogger + " executed by principal[" + getLoggedUser() + "] on FeedOrderBean");
       }
     } catch (Exception e) {
       // something went wrong, alert the server and respond the client
@@ -190,6 +195,7 @@ public class FeedOrderBean extends BaseBean implements Cruddable {
           response.setUpdatedRecord(content);
 
           response.setError(new Error("0", "SUCCESS", "proxy.FeedOrder.Update"));
+          log.info("FeedOrder[" + feedOrd.toString() + "] updated by principal[" + getLoggedUser() + "]");
         } else {
           log.warning("Validation error:" + error_description);
           response
@@ -229,18 +235,20 @@ public class FeedOrderBean extends BaseBean implements Cruddable {
       FeedOrder feedOrd = entityFromRequest(request, FeedOrder.class);
       if (feedOrd.getOrderId() == 0) {
         log.warning("VAL04 - Entity ID Omission.");
-		
+
         response.setError(new Error("VAL04", "Se ha omitido el id de la orden de alimentación al intentar eliminar el registro.",
             "proxy.FeedOrder.Delete"));
       } else {
         TypedQuery<FeedOrder> readQuery = em.createNamedQuery("CRT_FEEDORDER_BY_ID", FeedOrder.class);
         readQuery.setParameter("orderId", feedOrd.getOrderId());
         feedOrd = readQuery.getSingleResult();
+        log.info("Deleting Feed Order [" + feedOrd.toString() + "] by principal[" + getLoggedUser() + "]");
         em.merge(feedOrd);
         em.remove(feedOrd);
         em.flush();
 
         response.setError(new Error("0", "SUCCESS", "proxy.FeedOrder.Delete"));
+        log.info("Feed Order successfully deleted by principal [" + getLoggedUser() + "]");
       }
     } catch (Exception e) {
       log.severe("Exception found while deleting FeedOrder");

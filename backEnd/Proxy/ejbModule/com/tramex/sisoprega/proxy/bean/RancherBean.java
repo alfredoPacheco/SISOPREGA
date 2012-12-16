@@ -44,6 +44,7 @@ import com.tramex.sisoprega.dto.Rancher;
  * ----------  ---------------------------  -------------------------------------------
  * 10/27/2012  Diego Torres                 Initial Version.
  * 12/03/2012  Diego Torres                 Refactor rename for RancherBean.
+ * 12/16/2012  Diego Torres                 Adding log activity
  * ====================================================================================
  * </PRE>
  * 
@@ -78,7 +79,7 @@ public class RancherBean extends BaseBean implements Cruddable {
         log.finer("Setting rancher id in response [" + sId + "]");
         response.setGeneratedId(sId);
         response.setError(new Error("0", "SUCCESS", "proxy.Rancher.Create"));
-        log.finer("built successfull response");
+        log.info("Rancher [" + rancher.toString() + "] created by principal[" + getLoggedUser() + "]");
       } else {
         log.warning("Validation error:" + error_description);
         response.setError(new Error("VAL01", "Error de validación de datos:" + error_description, "proxy.Rancher.Create"));
@@ -116,14 +117,16 @@ public class RancherBean extends BaseBean implements Cruddable {
       log.fine("Got rancher from request: " + rancher);
 
       TypedQuery<Rancher> readQuery = null;
-
+      String qryLogger = "";
       if (rancher.getRancherId() != 0) {
         readQuery = em.createNamedQuery("RANCHER_BY_ID", Rancher.class);
         log.fine("Query by Id [" + rancher.getRancherId() + "]");
         readQuery.setParameter("rancherId", rancher.getRancherId());
+        qryLogger = "By rancherId [" + rancher.getRancherId() + "]";
       } else {
         // No other filter expected for ranchers, only by Id
         readQuery = em.createNamedQuery("ALL_RANCHERS", Rancher.class);
+        qryLogger = "By ALL_RANCHERS";
       }
 
       // Query the results through the persistence
@@ -138,6 +141,7 @@ public class RancherBean extends BaseBean implements Cruddable {
 
         // Add success message to response
         response.setError(new Error("0", "SUCCESS", "proxy.Rancher.Read"));
+        log.info("Read operation " + qryLogger + " executed by principal[" + getLoggedUser() + "] on RancherBean");
       }
     } catch (Exception e) {
       // something went wrong, alert the server and respond the client
@@ -174,6 +178,7 @@ public class RancherBean extends BaseBean implements Cruddable {
           response.setUpdatedRecord(getContentFromEntity(rancher, Rancher.class));
           response.setEntityName(request.getEntityName());
           response.setError(new Error("0", "SUCCESS", "proxy.Rancher.Update"));
+          log.info("Rancher [" + rancher.toString() + "] updated by principal[" + getLoggedUser() + "]");
         } else {
           log.warning("Validation error: " + error_description);
           response.setError(new Error("VAL01", "Error de validación de datos: " + error_description, "proxy.Rancher.Update"));
@@ -212,11 +217,13 @@ public class RancherBean extends BaseBean implements Cruddable {
         TypedQuery<Rancher> readQuery = em.createNamedQuery("RANCHER_BY_ID", Rancher.class);
         readQuery.setParameter("rancherId", rancher.getRancherId());
         rancher = readQuery.getSingleResult();
+        log.info("Deleting Rancher [" + rancher.toString() + "] by principal[" + getLoggedUser() + "]");
         em.merge(rancher);
         em.remove(rancher);
         em.flush();
 
         response.setError(new Error("0", "SUCCESS", "proxy.Rancher.Delete"));
+        log.info("Rancher successfully deleted by principal [" + getLoggedUser() + "]");
       }
     } catch (Exception e) {
       log.severe("Exception found while deleting rancher");

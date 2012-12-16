@@ -43,6 +43,7 @@ import com.tramex.sisoprega.dto.FeedOrderDetails;
  * MM/DD/YYYY
  * ----------  ---------------------------  -------------------------------------------
  * 12/08/2012  Jaime Figueroa                Initial Version.
+ * 12/16/2012  Diego Torres                  Adding log activity
  * ====================================================================================
  * </PRE>
  * @author Jaime Figueroa
@@ -79,6 +80,7 @@ public class FeedOrderDetailsBean extends BaseBean implements Cruddable {
         log.finer("Setting FeedOrderDetails id in response: " + sId);
         response.setGeneratedId(sId);
         response.setError(new Error("0", "SUCCESS", "proxy.FeedOrderDetailsBean.Create"));
+        log.info("Feed Order Detail [" + feedOrdDeta.toString() + "] created by principal[" + getLoggedUser() + "]");
       } else {
         log.warning("Error de validación: " + error_description);
         response.setError(new Error("VAL01", "Error de validación: " + error_description, "proxy.FeedOrderDetailsBean.Create"));
@@ -121,15 +123,17 @@ public class FeedOrderDetailsBean extends BaseBean implements Cruddable {
       log.fine("Got Feed Order Details from request: " + order);
 
       TypedQuery<FeedOrderDetails> readQuery = null;
-
+      String qryLogger = "";
       if (order.getFodId() != 0) {
         readQuery = em.createNamedQuery("CRT_FEEDORDERDETAILS_BY_ID", FeedOrderDetails.class);
         log.fine("Query by Id: " + order.getFodId());
         readQuery.setParameter("fodId", order.getFodId());
+        qryLogger = "By fodId [" + order.getFodId() + "]";
       } else if (order.getOrderId() != 0) {
         readQuery = em.createNamedQuery("FOD_BY_ORDER_ID", FeedOrderDetails.class);
         log.fine("Query by OrderId: " + order.getOrderId());
         readQuery.setParameter("orderId", order.getOrderId());
+        qryLogger = "By orderId [" + order.getOrderId() + "]";
       } else {
         response.setError(new Error("VAL03", "El filtro especificado no es válido para las órdenes de alimento",
             "proxy.FeedOrderDetailsDetail.Read"));
@@ -147,6 +151,7 @@ public class FeedOrderDetailsBean extends BaseBean implements Cruddable {
 
         // Add success message to response
         response.setError(new Error("0", "SUCCESS", "proxy.FeedOrderDetails.Read"));
+        log.info("Read operation " + qryLogger + " executed by principal[" + getLoggedUser() + "] on FeedOrderDetailsBean");
       }
     } catch (Exception e) {
       // something went wrong, alert the server and respond the client
@@ -189,6 +194,7 @@ public class FeedOrderDetailsBean extends BaseBean implements Cruddable {
           response.setUpdatedRecord(content);
 
           response.setError(new Error("0", "SUCCESS", "proxy.FeedOrderDetails.Update"));
+          log.info("FeedOrderDetails[" + feedOrdDeta.toString() + "] updated by principal[" + getLoggedUser() + "]");
         } else {
           log.warning("Validation error:" + error_description);
           response.setError(new Error("VAL01", "Error de validación de datos:" + error_description,
@@ -227,20 +233,22 @@ public class FeedOrderDetailsBean extends BaseBean implements Cruddable {
     BaseResponse response = new BaseResponse();
 
     try {
-      FeedOrderDetails feedOrdDeta = entityFromRequest(request, FeedOrderDetails.class);
-      if (feedOrdDeta.getFodId() == 0) {
+      FeedOrderDetails details = entityFromRequest(request, FeedOrderDetails.class);
+      if (details.getFodId() == 0) {
         log.warning("VAL04 - Entity ID Omission.");
         response.setError(new Error("VAL04", "Se ha omitido el id del corral al intentar eliminar el registro.",
             "proxy.FeedOrderDetails.Delete"));
       } else {
         TypedQuery<FeedOrderDetails> readQuery = em.createNamedQuery("CRT_FEEDORDERDETAILS_BY_ID", FeedOrderDetails.class);
-        readQuery.setParameter("fodId", feedOrdDeta.getFodId());
-        feedOrdDeta = readQuery.getSingleResult();
-        em.merge(feedOrdDeta);
-        em.remove(feedOrdDeta);
+        readQuery.setParameter("fodId", details.getFodId());
+        details = readQuery.getSingleResult();
+        log.info("Deleting Feed Order Details [" + details.toString() + "] by principal[" + getLoggedUser() + "]");
+        em.merge(details);
+        em.remove(details);
         em.flush();
 
         response.setError(new Error("0", "SUCCESS", "proxy.FeedOrderDetails.Delete"));
+        log.info("Feed Order Details successfully deleted by principal [" + getLoggedUser() + "]");
       }
     } catch (Exception e) {
       log.severe("Exception found while deleting feedOrdDeta");
