@@ -25,76 +25,99 @@ package com.tramex.sisoprega.dto;
  * Date        By                           Description
  * MM/DD/YYYY
  * ----------  ---------------------------  -------------------------------------------
- * 1/12/2012  Jaime Figueroa                 Initial Version.
+ * 12/12/2012  Jaime Figueroa                 Initial Version.
+ * 12/16/2012  Diego Torres                   Adding toString implementation.
  * ====================================================================================
  * </PRE>
+ * 
  * @author Jaime Figueroa
- *
+ * 
  */
 public class ReceptionHeadcount {
-    private long headcountId;
-    private long receptionId;
-    private long hc;
-    private double weight;
-    private long weightUom;
-    /**
-     * @return the hc
-     */
-    public long getHc() {
-      return hc;
-    }
-    /**
-     * @param hc the hc to set
-     */
-    public void setHc(long hc) {
-      this.hc = hc;
-    }
-    /**
-     * @return the headcountId
-     */
-    public long getHeadcountId() {
-        return headcountId;
-    }
-    /**
-     * @param headcountId the headcountId to set
-     */
-    public void setHeadcountId(long headcountId) {
-        this.headcountId = headcountId;
-    }
-    /**
-     * @return the receptionId
-     */
-    public long getReceptionId() {
-        return receptionId;
-    }
-    /**
-     * @param receptionId the receptionId to set
-     */
-    public void setReceptionId(long receptionId) {
-        this.receptionId = receptionId;
-    }
-    /**
-     * @return the weight
-     */
-    public double getWeight() {
-        return weight;
-    }
-    /**
-     * @param weight the weight to set
-     */
-    public void setWeight(double weight) {
-        this.weight = weight;
-    }
-    /**
-     * @return the weightUom
-     */
-    public long getWeightUom() {
-        return weightUom;
-    }
-    /**
-     * @param weightUom the weightUom to set
-     */
-    public void setWeightUom(long weightUom) {
-        this.weightUom = weightUom;
-    }    
+  private long headcountId;
+  private long receptionId;
+  private long hc;
+  private double weight;
+  private long weightUom;
+
+  /**
+   * @return the hc
+   */
+  public long getHc() {
+    return hc;
+  }
+
+  /**
+   * @param hc
+   *          the hc to set
+   */
+  public void setHc(long hc) {
+    this.hc = hc;
+  }
+
+  /**
+   * @return the headcountId
+   */
+  public long getHeadcountId() {
+    return headcountId;
+  }
+
+  /**
+   * @param headcountId
+   *          the headcountId to set
+   */
+  public void setHeadcountId(long headcountId) {
+    this.headcountId = headcountId;
+  }
+
+  /**
+   * @return the receptionId
+   */
+  public long getReceptionId() {
+    return receptionId;
+  }
+
+  /**
+   * @param receptionId
+   *          the receptionId to set
+   */
+  public void setReceptionId(long receptionId) {
+    this.receptionId = receptionId;
+  }
+
+  /**
+   * @return the weight
+   */
+  public double getWeight() {
+    return weight;
+  }
+
+  /**
+   * @param weight
+   *          the weight to set
+   */
+  public void setWeight(double weight) {
+    this.weight = weight;
+  }
+
+  /**
+   * @return the weightUom
+   */
+  public long getWeightUom() {
+    return weightUom;
+  }
+
+  /**
+   * @param weightUom
+   *          the weightUom to set
+   */
+  public void setWeightUom(long weightUom) {
+    this.weightUom = weightUom;
+  }
+
+  @Override
+  public String toString() {
+    return "hc:" + hc + ";headcountId:" + headcountId + ";receptionId:" + receptionId + ";weight:" + weight + ";weightUom:"
+        + weightUom + ";";
+  }
 }

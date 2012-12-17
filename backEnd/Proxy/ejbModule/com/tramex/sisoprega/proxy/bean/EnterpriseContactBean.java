@@ -47,6 +47,7 @@ import com.tramex.sisoprega.dto.EnterpriseContact;
  * ----------  ---------------------------  -------------------------------------------
  * 11/11/2012  Diego Torres                 Initial Version.
  * 12/05/2012  Diego Torres                 Adding validation and standard error codes.
+ * 12/16/2012  Diego Torres                 Adding log activity
  * ====================================================================================
  * </PRE>
  * 
@@ -84,6 +85,7 @@ public class EnterpriseContactBean extends BaseBean implements Cruddable {
         log.finer("Setting contactId in response: " + sId);
         response.setGeneratedId(sId);
         response.setError(new Error("0", "SUCCESS", "proxy.EnterpriseContact.Create"));
+        log.info("Enterprise Contact [" + contact.toString() + "] created by principal[" + getLoggedUser() + "]");
       } else {
         log.warning("Error de validación: " + error_description);
         response.setError(new Error("VAL01", "Error de validación: " + error_description, "proxy.EnterpriseContact.Create"));
@@ -124,13 +126,15 @@ public class EnterpriseContactBean extends BaseBean implements Cruddable {
 
       log.fine("Got contact from request: " + contact);
       TypedQuery<EnterpriseContact> readQuery = null;
-
+      String qryLogger = "";
       if (contact.getEnterpriseId() != 0) {
         readQuery = em.createNamedQuery("ENTERPRISE_CONTACT_BY_ENTERPRISE_ID", EnterpriseContact.class);
         readQuery.setParameter("enterpriseId", contact.getEnterpriseId());
+        qryLogger = "By enterpriseId [" + contact.getEnterpriseId() + "]";
       } else if (contact.getContactId() != 0) {
         readQuery = em.createNamedQuery("ENTERPRISE_CONTACT_BY_ID", EnterpriseContact.class);
         readQuery.setParameter("contactId", contact.getContactId());
+        qryLogger = "By contactId [" + contact.getContactId() + "]";
       } else {
         response.setError(new Error("VAL03", "El filtro especificado no es válido en el catálogo de contactos",
             "proxy.EnterpriseContact.Read"));
@@ -147,6 +151,7 @@ public class EnterpriseContactBean extends BaseBean implements Cruddable {
         response.getRecord().addAll(records);
 
         response.setError(new Error("0", "SUCCESS", "proxy.EnterpriseContact.Read"));
+        log.info("Read operation " + qryLogger + " executed by principal[" + getLoggedUser() + "] on EnterpriseContactBean");
       }
 
     } catch (Exception e) {
@@ -188,6 +193,7 @@ public class EnterpriseContactBean extends BaseBean implements Cruddable {
           response.setUpdatedRecord(content);
 
           response.setError(new Error("0", "SUCCESS", "proxy.EnterpriseContact.Update"));
+          log.info("EnterpriseContact[" + contact.toString() + "] updated by principal[" + getLoggedUser() + "]");
         } else {
           log.warning("Validation error: " + error_description);
           response.setError(new Error("VAL01", "Error de validación de datos:" + error_description,
@@ -234,11 +240,13 @@ public class EnterpriseContactBean extends BaseBean implements Cruddable {
         TypedQuery<EnterpriseContact> readQuery = em.createNamedQuery("ENTERPRISE_CONTACT_BY_ID", EnterpriseContact.class);
         readQuery.setParameter("contactId", contact.getContactId());
         contact = readQuery.getSingleResult();
+        log.info("Deleting EnterpriseContact [" + contact.toString() + "] by principal[" + getLoggedUser() + "]");
         em.merge(contact);
         em.remove(contact);
         em.flush();
 
         response.setError(new Error("0", "SUCCESS", "proxy.EnterpriseContact.Delete"));
+        log.info("EnterpriseContact successfully deleted by principal [" + getLoggedUser() + "]");
       }
     } catch (Exception e) {
       log.severe("Exception found while deleting contact");

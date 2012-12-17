@@ -44,6 +44,7 @@ import com.tramex.sisoprega.dto.Location;
  * ----------  ---------------------------  -------------------------------------------
  * 11/23/2012  Jaime Figueroa                 Initial Version.
  * 12/08/2012  Diego Torres                   Add standard error codes and validation.
+ * 12/16/2012  Diego Torres                   Adding log activity
  * ====================================================================================
  * </PRE>
  * 
@@ -65,22 +66,23 @@ public class LocationBean extends BaseBean implements Cruddable {
     log.entering(this.getClass().getCanonicalName(), "Create");
 
     CreateGatewayResponse response = new CreateGatewayResponse();
-    Location catalog = null;
+    Location location = null;
     try {
-      catalog = entityFromRequest(request, Location.class);
+      location = entityFromRequest(request, Location.class);
 
-      log.fine("Received catalog location in request: " + catalog);
+      log.fine("Received catalog location in request: " + location);
 
-      if (validateEntity(catalog)) {
+      if (validateEntity(location)) {
         log.finer("cat location succesfully validated");
-        em.persist(catalog);
+        em.persist(location);
         log.finer("cat location persisted on database");
         em.flush();
 
-        String sId = String.valueOf(catalog.getLocationId());
+        String sId = String.valueOf(location.getLocationId());
         log.finer("Setting cat location id in response: " + sId);
         response.setGeneratedId(sId);
         response.setError(new Error("0", "SUCCESS", "proxy.LocationBean.Create"));
+        log.info("Location [" + location.toString() + "] created by principal[" + getLoggedUser() + "]");
       } else {
         log.warning("Error de validación: " + error_description);
         response.setError(new Error("VAL01", "Error de validación: " + error_description, "proxy.LocationBean.Create"));
@@ -123,13 +125,14 @@ public class LocationBean extends BaseBean implements Cruddable {
 
       log.fine("Got contact from request: " + catalog);
       TypedQuery<Location> readQuery = null;
-
+      String qryLogger = "";
       if (catalog.getLocationId() != 0) {
         readQuery = em.createNamedQuery("CAT_LOCATION_BY_ID", Location.class);
         readQuery.setParameter("catclassId", catalog.getLocationId());
+        qryLogger = "By catclassId [" + catalog.getLocationId() + "]";
       } else {
         readQuery = em.createNamedQuery("ALL_CAT_LOCATION", Location.class);
-
+        qryLogger = "By ALL_CAT_LOCATION";
       }
 
       List<Location> queryResults = readQuery.getResultList();
@@ -140,7 +143,7 @@ public class LocationBean extends BaseBean implements Cruddable {
         List<GatewayContent> records = contentFromList(queryResults, Location.class);
         response.getRecord().addAll(records);
         response.setError(new Error("0", "SUCCESS", "proxy.LocationBean.Read"));
-
+        log.info("Read operation " + qryLogger + " executed by principal[" + getLoggedUser() + "] on LocationBean");
       }
 
     } catch (Exception e) {
@@ -165,23 +168,24 @@ public class LocationBean extends BaseBean implements Cruddable {
   public UpdateGatewayResponse Update(GatewayRequest request) {
     log.entering(this.getClass().getCanonicalName(), "Update");
     UpdateGatewayResponse response = new UpdateGatewayResponse();
-    Location catalog = null;
+    Location location = null;
     try {
-      catalog = entityFromRequest(request, Location.class);
+      location = entityFromRequest(request, Location.class);
 
-      if (catalog.getLocationId() == 0) {
+      if (location.getLocationId() == 0) {
         log.warning("VAL04 - Entity ID Omission.");
         response.setError(new Error("VAL04", "Se ha omitido el id de la localización al intentar actualizar sus datos.",
             "proxy.LocationBean.Update"));
       } else {
-        if (validateEntity(catalog)) {
-          em.merge(catalog);
+        if (validateEntity(location)) {
+          em.merge(location);
           em.flush();
 
-          GatewayContent content = getContentFromEntity(catalog, Location.class);
+          GatewayContent content = getContentFromEntity(location, Location.class);
           response.setUpdatedRecord(content);
 
           response.setError(new Error("0", "SUCCESS", "proxy.CatLocation.Update"));
+          log.info("Location [" + location.toString() + "] updated by principal[" + getLoggedUser() + "]");
         } else {
           log.warning("Validation error: " + error_description);
           response.setError(new Error("VAL01", "Error de validación de datos:" + error_description, "proxy.LocationBean.Update"));
@@ -218,20 +222,22 @@ public class LocationBean extends BaseBean implements Cruddable {
     BaseResponse response = new BaseResponse();
 
     try {
-      Location catalog = entityFromRequest(request, Location.class);
-      if (catalog.getLocationId() == 0) {
+      Location location = entityFromRequest(request, Location.class);
+      if (location.getLocationId() == 0) {
         log.warning("VAL04 - Entity ID Omission.");
         response.setError(new Error("VAL04", "Se ha omitido el id de la localización al intentar eliminar el registro.",
             "proxy.LocationBean.Delete"));
       } else {
         TypedQuery<Location> readQuery = em.createNamedQuery("CAT_LOCATION_BY_ID", Location.class);
-        readQuery.setParameter("locationId", catalog.getLocationId());
-        catalog = readQuery.getSingleResult();
-        em.merge(catalog);
-        em.remove(catalog);
+        readQuery.setParameter("locationId", location.getLocationId());
+        location = readQuery.getSingleResult();
+        log.info("Deleting Location [" + location.toString() + "] by principal[" + getLoggedUser() + "]");
+        em.merge(location);
+        em.remove(location);
         em.flush();
 
         response.setError(new Error("0", "SUCCESS", "proxy.LocationBean.Delete"));
+        log.info("Location successfully deleted by principal [" + getLoggedUser() + "]");
       }
     } catch (Exception e) {
       log.severe("Exception found while deleting catalog");

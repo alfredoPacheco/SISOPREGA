@@ -46,6 +46,7 @@ import com.tramex.sisoprega.dto.RancherContact;
  * ----------  ---------------------------  -------------------------------------------
  * 11/11/2012  Diego Torres                 Initial Version.
  * 12/08/2012  Diego Torres                 Fixing standard error codes and validation.
+ * 12/16/2012  Diego Torres                 Adding log activity
  * ====================================================================================
  * </PRE>
  * 
@@ -80,6 +81,7 @@ public class RancherContactBean extends BaseBean implements Cruddable {
         String sId = String.valueOf(contact.getContactId());
         response.setGeneratedId(sId);
         response.setError(new Error("0", "SUCCESS", "proxy.RancherContact.Create"));
+        log.info("Rancher Contact [" + contact.toString() + "] created by principal[" + getLoggedUser() + "]");
       } else {
         log.warning("Validation error:" + error_description);
         response.setError(new Error("VAL01", "Error de validación de datos:" + error_description, "proxy.RancherContact.Create"));
@@ -121,13 +123,15 @@ public class RancherContactBean extends BaseBean implements Cruddable {
       log.fine("Got contact from request: " + contact);
 
       TypedQuery<RancherContact> readQuery = null;
-
+      String qryLogger  = "";
       if (contact.getRancherId() != 0) {
         readQuery = em.createNamedQuery("RANCHER_CONTACT_BY_RANCHER_ID", RancherContact.class);
         readQuery.setParameter("rancherId", contact.getRancherId());
+        qryLogger = "By rancherId [" + contact.getRancherId() + "]";
       } else if (contact.getContactId() != 0) {
         readQuery = em.createNamedQuery("RANCHER_CONTACT_BY_ID", RancherContact.class);
         readQuery.setParameter("contactId", contact.getContactId());
+        qryLogger = "By contactId [" + contact.getContactId() + "]";
       } else {
         response.setError(new Error("VAL03", "El filtro especificado no es válido en el catálogo de contactos.",
             "proxy.RancherContact.Read"));
@@ -143,6 +147,7 @@ public class RancherContactBean extends BaseBean implements Cruddable {
         response.getRecord().addAll(records);
 
         response.setError(new Error("0", "SUCCESS", "proxy.RancherContact.Read"));
+        log.info("Read operation " + qryLogger + " executed by principal[" + getLoggedUser() + "] on RancherContactBean");
       }
 
     } catch (Exception e) {
@@ -185,6 +190,7 @@ public class RancherContactBean extends BaseBean implements Cruddable {
           response.setUpdatedRecord(content);
 
           response.setError(new Error("0", "SUCCESS", "proxy.RancherContact.Update"));
+          log.info("Rancher Contact [" + contact.toString() + "] updated by principal[" + getLoggedUser() + "]");
         } else {
           log.warning("Validation error: " + error_description);
           response.setError(new Error("VAL01", "Error de validación de datos: " + error_description,
@@ -229,11 +235,13 @@ public class RancherContactBean extends BaseBean implements Cruddable {
         TypedQuery<RancherContact> readQuery = em.createNamedQuery("RANCHER_CONTACT_BY_ID", RancherContact.class);
         readQuery.setParameter("contactId", contact.getContactId());
         contact = readQuery.getSingleResult();
+        log.info("Deleting Rancher Contact [" + contact.toString() + "] by principal[" + getLoggedUser() + "]");
         em.merge(contact);
         em.remove(contact);
         em.flush();
 
         response.setError(new Error("0", "SUCCES", "proxy.RancherContact.Delete"));
+        log.info("Rancher Contact successfully deleted by principal [" + getLoggedUser() + "]");
       }
     } catch (Exception e) {
       log.severe("Exception found while deleting contact");

@@ -44,6 +44,7 @@ import com.tramex.sisoprega.dto.CattleClass;
  * ----------  ---------------------------  -------------------------------------------
  * 11/15/2012  Diego Torres                 Initial Version.
  * 12/05/2012  Diego Torres                 Standard error descriptions.
+ * 12/16/2012  Diego Torres                 Adding user log activity.
  * ====================================================================================
  * </PRE>
  * 
@@ -80,6 +81,7 @@ public class CattleClassBean extends BaseBean implements Cruddable {
         log.finer("Setting cattle class id in response: " + sId);
         response.setGeneratedId(sId);
         response.setError(new Error("0", "SUCCESS", "proxy.CattleClassBean.Create"));
+        log.info("Cattle class [" + cattle.toString() + "] created by principal[" + getLoggedUser() + "]");
       } else {
         log.warning("Error de validación: " + error_description);
         response.setError(new Error("VAL01", "Error de validación: " + error_description, "proxy.CattleClassBean.Create"));
@@ -121,13 +123,14 @@ public class CattleClassBean extends BaseBean implements Cruddable {
 
       log.fine("Got cattle class from request: " + cattle);
       TypedQuery<CattleClass> readQuery = null;
-
+      String qryLogger = "";
       if (cattle.getCatclassId() != 0) {
         readQuery = em.createNamedQuery("CATTLE_CLASS_BY_ID", CattleClass.class);
         readQuery.setParameter("catclassId", cattle.getCatclassId());
+        qryLogger = "By catclassId[" + cattle.getCatclassId() + "]";
       } else {
         readQuery = em.createNamedQuery("ALL_CATTLE_CLASSES", CattleClass.class);
-
+        qryLogger = "By ALL_CATTLE_CLASSES";
       }
 
       List<CattleClass> queryResults = readQuery.getResultList();
@@ -137,8 +140,9 @@ public class CattleClassBean extends BaseBean implements Cruddable {
       } else {
         List<GatewayContent> records = contentFromList(queryResults, CattleClass.class);
         response.getRecord().addAll(records);
+        
         response.setError(new Error("0", "SUCCESS", "proxy.CattleClass.Read"));
-
+        log.info("Read operation " + qryLogger + " executed by principal[" + getLoggedUser() + "] on CattleClassBean");
       }
 
     } catch (Exception e) {
@@ -178,6 +182,7 @@ public class CattleClassBean extends BaseBean implements Cruddable {
           response.setUpdatedRecord(content);
 
           response.setError(new Error("0", "SUCCESS", "proxy.CattleClass.Update"));
+          log.info("CattleClass[" + cattle.toString() + "] updated by principal[" + getLoggedUser() + "]");
         } else {
           log.warning("Validation error: " + error_description);
           response.setError(new Error("VAL01", "Error de validación de datos:" + error_description, "proxy.CattleClass.Update"));
@@ -214,19 +219,21 @@ public class CattleClassBean extends BaseBean implements Cruddable {
     BaseResponse response = new BaseResponse();
 
     try {
-      CattleClass contact = entityFromRequest(request, CattleClass.class);
-      if (contact.getCatclassId() == 0) {
+      CattleClass cattle = entityFromRequest(request, CattleClass.class);
+      if (cattle.getCatclassId() == 0) {
         log.warning("VAL04 - Entity ID Omission.");
         response.setError(new Error("VAL04", "Se ha omitido el id de la clase de ganado al intentar eliminar el registro.", "proxy.CattleClassBean.Delete"));
       } else {
         TypedQuery<CattleClass> readQuery = em.createNamedQuery("CATTLE_CLASS_BY_ID", CattleClass.class);
-        readQuery.setParameter("catclassId", contact.getCatclassId());
-        contact = readQuery.getSingleResult();
-        em.merge(contact);
-        em.remove(contact);
+        readQuery.setParameter("catclassId", cattle.getCatclassId());
+        cattle = readQuery.getSingleResult();
+        log.info("Deleting CattleClass[" + cattle.toString() + "] by principal[" + getLoggedUser() + "]");
+        em.merge(cattle);
+        em.remove(cattle);
         em.flush();
 
         response.setError(new Error("0", "SUCCESS", "proxy.CattleClass.Delete"));
+        log.info("CattleClass successfully deleted by principal [" + getLoggedUser() + "]");
       }
     } catch (Exception e) {
       log.severe("Exception found while deleting cattle class");

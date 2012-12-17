@@ -44,6 +44,7 @@ import com.tramex.sisoprega.dto.Inspection;
  * ----------  ---------------------------  -------------------------------------------
  * 12/09/2012  Jaime Figueroa                Initial Version.
  * 12/13/2012  Diego Torres                  Enable read operation.
+ * 12/16/2012  Diego Torres                  Adding log activity
  * ====================================================================================
  * </PRE>
  * 
@@ -81,6 +82,7 @@ public class InspectionBean extends BaseBean implements Cruddable {
         log.finer("Setting Inspection id in response: " + sId);
         response.setGeneratedId(sId);
         response.setError(new Error("0", "SUCCESS", "proxy.InspectionBean.Create"));
+        log.info("Inspection [" + inspection.toString() + "] created by principal[" + getLoggedUser() + "]");
       } else {
         log.warning("Error de validación: " + error_description);
         response.setError(new Error("VAL01", "Error de validación: " + error_description, "proxy.InspectionBean.Create"));
@@ -123,15 +125,17 @@ public class InspectionBean extends BaseBean implements Cruddable {
       log.fine("Got inspection from request: " + inspection);
 
       TypedQuery<Inspection> readQuery = null;
-
+      String qryLogger = "";
       if (inspection.getInspectionId() != 0) {
         readQuery = em.createNamedQuery("CRT_INSPECTION_BY_ID", Inspection.class);
         log.fine("Query by inspectionId: " + inspection.getInspectionId());
         readQuery.setParameter("inspectionId", inspection.getInspectionId());
+        qryLogger = "By inspectionId [" + inspection.getInspectionId() +  "]";
       } else if (inspection.getReceptionId() != 0) {
         readQuery = em.createNamedQuery("INSPECTION_BY_RECEPTION_ID", Inspection.class);
         log.fine("Query by ReceptionId: " + inspection.getReceptionId());
         readQuery.setParameter("receptionId", inspection.getReceptionId());
+        qryLogger = "By receptionId [" + inspection.getReceptionId() + "]";
       } else {
         response.setError(new Error("VAL03", "El filtro especificado no es válido para las inspecciones de ganado",
             "proxy.InspectionDetail.Read"));
@@ -149,6 +153,7 @@ public class InspectionBean extends BaseBean implements Cruddable {
 
         // Add success message to response
         response.setError(new Error("0", "SUCCESS", "proxy.Inspection.Read"));
+        log.info("Read operation " + qryLogger + " executed by principal[" + getLoggedUser() + "] on InspectionBean");
       }
     } catch (Exception e) {
       // something went wrong, alert the server and respond the client
@@ -191,6 +196,7 @@ public class InspectionBean extends BaseBean implements Cruddable {
           response.setUpdatedRecord(content);
 
           response.setError(new Error("0", "SUCCESS", "proxy.Inspection.Update"));
+          log.info("Inspection [" + inspection.toString() + "] updated by principal[" + getLoggedUser() + "]");
         } else {
           log.warning("Validation error:" + error_description);
           response.setError(new Error("VAL01", "Error de validación de datos:" + error_description, "proxy.InspectionBean.Update"));
@@ -234,11 +240,13 @@ public class InspectionBean extends BaseBean implements Cruddable {
         TypedQuery<Inspection> readQuery = em.createNamedQuery("CRT_INSPECTION_BY_ID", Inspection.class);
         readQuery.setParameter("inspectionId", inspection.getInspectionId());
         inspection = readQuery.getSingleResult();
+        log.info("Deleting Inspection [" + inspection.toString() + "] by principal[" + getLoggedUser() + "]");
         em.merge(inspection);
         em.remove(inspection);
         em.flush();
 
         response.setError(new Error("0", "SUCCESS", "proxy.Inspection.Delete"));
+        log.info("Inspection successfully deleted by principal [" + getLoggedUser() + "]");
       }
     } catch (Exception e) {
       log.severe("Exception found while deleting inspection");

@@ -44,6 +44,7 @@ import com.tramex.sisoprega.dto.MeasurementUnit;
  * ----------  ---------------------------  -------------------------------------------
  * 12/09/2012  Jaime Figueroa                Initial Version.
  * 12/13/2012  Diego Torres                  Enable read operation and standard error codes.
+ * 12/16/2012  Diego Torres                  Adding log activity
  * ====================================================================================
  * </PRE>
  * 
@@ -65,22 +66,23 @@ public class MeasurementUnitBean extends BaseBean implements Cruddable {
     log.entering(this.getClass().getCanonicalName(), "Create");
 
     CreateGatewayResponse response = new CreateGatewayResponse();
-    MeasurementUnit MeasurUni = null;
+    MeasurementUnit unit = null;
     try {
-      MeasurUni = entityFromRequest(request, MeasurementUnit.class);
+      unit = entityFromRequest(request, MeasurementUnit.class);
 
-      log.fine("Received MeasurementUnit in request: " + MeasurUni);
+      log.fine("Received MeasurementUnit in request: " + unit);
 
-      if (validateEntity(MeasurUni)) {
+      if (validateEntity(unit)) {
         log.finer("MeasurementUnit succesfully validated");
-        em.persist(MeasurUni);
+        em.persist(unit);
         log.finer("MeasurementUnit persisted on database");
         em.flush();
 
-        String sId = String.valueOf(MeasurUni.getUnitId());
+        String sId = String.valueOf(unit.getUnitId());
         log.finer("Setting MeasurementUnit id in response: " + sId);
         response.setGeneratedId(sId);
         response.setError(new Error("0", "SUCCESS", "proxy.MeasurementUnitdBean.Create"));
+        log.info("Measurement Unit [" + unit.toString() + "] created by principal[" + getLoggedUser() + "]");
       } else {
         log.warning("Error de validación: " + error_description);
         response.setError(new Error("VAL01", "Error de validación: " + error_description, "proxy.MeasurementUnitBean.Create"));
@@ -123,13 +125,16 @@ public class MeasurementUnitBean extends BaseBean implements Cruddable {
       log.fine("Got MeasurementUnit from request: " + mu);
 
       TypedQuery<MeasurementUnit> readQuery = null;
-
+      
+      String qryLogger = "";
       if (mu.getUnitId() != 0) {
         readQuery = em.createNamedQuery("CAT_MEASUREMENTUNIT_BY_ID", MeasurementUnit.class);
         log.fine("Query by unitId: " + mu.getUnitId());
         readQuery.setParameter("unitId", mu.getUnitId());
+        qryLogger = "By unitId [" + mu.getUnitId() + "]";
       } else {
         readQuery = em.createNamedQuery("ALL_MEASUREMENT_UNITS", MeasurementUnit.class);;
+        qryLogger = "By ALL_MEASUREMENT_UNITS";
       }
 
       // Query the results through the jpa using a typedQuery
@@ -143,6 +148,7 @@ public class MeasurementUnitBean extends BaseBean implements Cruddable {
 
         // Add success message to response
         response.setError(new Error("0", "SUCCESS", "proxy.MeasurementUnit.Read"));
+        log.info("Read operation " + qryLogger + " executed by principal[" + getLoggedUser() + "] on MeasurementUnitBean");
       }
     } catch (Exception e) {
       // something went wrong, alert the server and respond the client
@@ -168,23 +174,24 @@ public class MeasurementUnitBean extends BaseBean implements Cruddable {
   public UpdateGatewayResponse Update(GatewayRequest request) {
     log.entering(this.getClass().getCanonicalName(), "Update");
     UpdateGatewayResponse response = new UpdateGatewayResponse();
-    MeasurementUnit MeasurUni = null;
+    MeasurementUnit unit = null;
     try {
-      MeasurUni = entityFromRequest(request, MeasurementUnit.class);
+      unit = entityFromRequest(request, MeasurementUnit.class);
 
-      if (MeasurUni.getUnitId() == 0) {
+      if (unit.getUnitId() == 0) {
         log.warning("VAL04 - Entity ID Omission.");
         response.setError(new Error("VAL04", "Se ha omitido el id de la unidad de medida al intentar actualizar sus datos.",
             "proxy.MeasurementUnit.Update"));
       } else {
-        if (validateEntity(MeasurUni)) {
-          em.merge(MeasurUni);
+        if (validateEntity(unit)) {
+          em.merge(unit);
           em.flush();
 
-          GatewayContent content = getContentFromEntity(MeasurUni, MeasurementUnit.class);
+          GatewayContent content = getContentFromEntity(unit, MeasurementUnit.class);
           response.setUpdatedRecord(content);
 
           response.setError(new Error("0", "SUCCESS", "proxy.MeasurementUnit.Update"));
+          log.info("Measurement Unit [" + unit.toString() + "] updated by principal[" + getLoggedUser() + "]");
         } else {
           log.warning("Validation error: " + error_description);
           response.setError(new Error("VAL01", "Error de validación de datos:" + error_description,
@@ -223,20 +230,22 @@ public class MeasurementUnitBean extends BaseBean implements Cruddable {
     BaseResponse response = new BaseResponse();
 
     try {
-      MeasurementUnit MeasurUni = entityFromRequest(request, MeasurementUnit.class);
-      if (MeasurUni.getUnitId() == 0) {
+      MeasurementUnit unit = entityFromRequest(request, MeasurementUnit.class);
+      if (unit.getUnitId() == 0) {
         log.warning("VAL04 - Entity ID Omission.");
         response.setError(new Error("VAL04", "Se ha omitido el id de la unidad de medida al intentar eliminar el registro.",
             "proxy.MeasurementUnit.Delete"));
       } else {
         TypedQuery<MeasurementUnit> readQuery = em.createNamedQuery("CAT_MEASUREMENTUNIT_BY_ID", MeasurementUnit.class);
-        readQuery.setParameter("unitId", MeasurUni.getUnitId());
-        MeasurUni = readQuery.getSingleResult();
-        em.merge(MeasurUni);
-        em.remove(MeasurUni);
+        readQuery.setParameter("unitId", unit.getUnitId());
+        unit = readQuery.getSingleResult();
+        log.info("Deleting Measurement Unit [" + unit.toString() + "] by principal[" + getLoggedUser() + "]");
+        em.merge(unit);
+        em.remove(unit);
         em.flush();
 
         response.setError(new Error("0", "SUCCESS", "proxy.MeasurementUnit.Delete"));
+        log.info("Measurement Unit successfully deleted by principal [" + getLoggedUser() + "]");
       }
     } catch (Exception e) {
       log.severe("Exception found while deleting contact");

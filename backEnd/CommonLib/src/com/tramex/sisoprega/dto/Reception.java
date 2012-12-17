@@ -27,76 +27,99 @@ import java.util.Date;
  * Date        By                           Description
  * MM/DD/YYYY
  * ----------  ---------------------------  -------------------------------------------
- * 1/12/2012  Jaime Figueroa                 Initial Version.
+ * 12/12/2012  Jaime Figueroa                 Initial Version.
+ * 12/16/2012  Diego Torres                   Adding toString implementation.
  * ====================================================================================
  * </PRE>
+ * 
  * @author Jaime Figueroa
- *
+ * 
  */
 public class Reception {
-    private long receptionId;
-    private long rancherId;
-    private  Date dateAllotted;
-    private long cattleType;
-    private long locationId;
-    /**
-     * @return the receptionId
-     */
-    public long getReceptionId() {
-        return receptionId;
-    }
-    /**
-     * @param receptionId the receptionId to set
-     */
-    public void setReceptionId(long receptionId) {
-        this.receptionId = receptionId;
-    }
-    /**
-     * @return the rancherId
-     */
-    public long getRancherId() {
-        return rancherId;
-    }
-    /**
-     * @param rancherId the rancherId to set
-     */
-    public void setRancherId(long rancherId) {
-        this.rancherId = rancherId;
-    }
-    /**
-     * @return the dateAllotted
-     */
-    public Date getDateAllotted() {
-        return dateAllotted;
-    }
-    /**
-     * @param dateAllotted the dateAllotted to set
-     */
-    public void setDateAllotted(Date dateAllotted) {
-        this.dateAllotted = dateAllotted;
-    }
-    /**
-     * @return the cattleType
-     */
-    public long getCattleType() {
-        return cattleType;
-    }
-    /**
-     * @param cattleType the cattleType to set
-     */
-    public void setCattleType(long cattleType) {
-        this.cattleType = cattleType;
-    }
-    /**
-     * @return the locationId
-     */
-    public long getLocationId() {
-        return locationId;
-    }
-    /**
-     * @param locationId the locationId to set
-     */
-    public void setLocationId(long locationId) {
-        this.locationId = locationId;
-    }
+  private long receptionId;
+  private long rancherId;
+  private Date dateAllotted;
+  private long cattleType;
+  private long locationId;
+
+  /**
+   * @return the receptionId
+   */
+  public long getReceptionId() {
+    return receptionId;
+  }
+
+  /**
+   * @param receptionId
+   *          the receptionId to set
+   */
+  public void setReceptionId(long receptionId) {
+    this.receptionId = receptionId;
+  }
+
+  /**
+   * @return the rancherId
+   */
+  public long getRancherId() {
+    return rancherId;
+  }
+
+  /**
+   * @param rancherId
+   *          the rancherId to set
+   */
+  public void setRancherId(long rancherId) {
+    this.rancherId = rancherId;
+  }
+
+  /**
+   * @return the dateAllotted
+   */
+  public Date getDateAllotted() {
+    return dateAllotted;
+  }
+
+  /**
+   * @param dateAllotted
+   *          the dateAllotted to set
+   */
+  public void setDateAllotted(Date dateAllotted) {
+    this.dateAllotted = dateAllotted;
+  }
+
+  /**
+   * @return the cattleType
+   */
+  public long getCattleType() {
+    return cattleType;
+  }
+
+  /**
+   * @param cattleType
+   *          the cattleType to set
+   */
+  public void setCattleType(long cattleType) {
+    this.cattleType = cattleType;
+  }
+
+  /**
+   * @return the locationId
+   */
+  public long getLocationId() {
+    return locationId;
+  }
+
+  /**
+   * @param locationId
+   *          the locationId to set
+   */
+  public void setLocationId(long locationId) {
+    this.locationId = locationId;
+  }
+
+  @Override
+  public String toString() {
+    return "cattleType:" + cattleType + ";dateAllotted:" + dateAllotted + ";locationId:" + locationId + ";rancherId:" + rancherId
+        + ";receptionId:" + receptionId + ";";
+  }
 }
