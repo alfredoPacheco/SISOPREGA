@@ -74,7 +74,7 @@ enyo.kind({
 		    	});
 			}
 			else{ //Error
-				if (cgReadAll.exceptionId != "CTR2"){ //No data found
+				if (cgReadAll.exceptionId != "VAL02"){ //No data found
 					cacheMan.setMessage("", "[Exception ID: " + cgReadAll.exceptionId + "] Descripcion: " + cgReadAll.exceptionDescription);	
 				}			
 			}
@@ -108,7 +108,7 @@ enyo.kind({
 		    	});
 			}
 			else{ //Error
-				if (cgReadAll.exceptionId != "RR02"){ //No data found
+				if (cgReadAll.exceptionId != "VAL02"){ //No data found
 					cacheMan.setMessage("", "[Exception ID: " + cgReadAll.exceptionId + "] Descripcion: " + cgReadAll.exceptionDescription);	
 				}			
 			}

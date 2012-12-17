@@ -196,7 +196,7 @@ enyo.kind({
 					arrAux.push(self.receptionAdapterToIn(cgReadAll.records[item]));
 				}
 			}else{ //Error
-				if (cgReadAll.exceptionId != "RR02"){ //No data found
+				if (cgReadAll.exceptionId != "VAL02"){ //No data found
 					cacheMan.setMessage("", "[Exception ID: " + cgReadAll.exceptionId + "] Descripción: " + cgReadAll.exceptionDescription);	
 				}			
 			}						
@@ -214,18 +214,18 @@ enyo.kind({
 			var objToSend = {};
 			objToSend.receptionId = recID;
 			var cgReadAll = consumingGateway.Read("ReceptionBarnyard", objToSend);
-			
+
 			if (cgReadAll.exceptionId == 0){ //Read successfully
 				for (item in cgReadAll.records){
 					arrAux.push(cgReadAll.records[item]);
 				}		    	
 			}
 			else{ //Error
-				if (cgReadAll.exceptionId != "CTR2"){ //No data found
-					cacheMan.setMessage("", "[Exception ID: " + cgReadAll.exceptionId + "] Descripcion: " + cgReadAll.exceptionDescription);	
+				if (cgReadAll.exceptionId != "VAL02"){ //No data found
+					cacheMan.setMessage("", "[Exception ID: " + cgReadAll.exceptionId + "] Descripcion: " + cgReadAll.exceptionDescription);
 				}			
-			}			
-				
+			}
+
 		return arrAux;
 		
 	},
@@ -248,7 +248,7 @@ enyo.kind({
 				}
 			}
 			else{ //Error
-				if (cgReadAll.exceptionId != "GW01"){ //No data found = GW01
+				if (cgReadAll.exceptionId != "VAL02"){ //No data found = GW01
 					cacheMan.setMessage("", "[Exception ID: " + cgReadAll.exceptionId + "] Descripcion: " + cgReadAll.exceptionDescription);	
 				}			
 			}				
@@ -298,7 +298,7 @@ enyo.kind({
 			}
 		}
 		else{ //Error
-			if (cgReadAll.exceptionId != "CTR2"){ //No data found
+			if (cgReadAll.exceptionId != "VAL02"){ //No data found
 				cacheMan.setMessage("", "[Exception ID: " + cgReadAll.exceptionId + "] Descripcion: " + cgReadAll.exceptionDescription);	
 			}			
 		}				
@@ -323,7 +323,7 @@ enyo.kind({
 			}
 		}
 		else{ //Error
-			if (cgReadAll.exceptionId != "CTR2"){ //No data found
+			if (cgReadAll.exceptionId != "VAL02"){ //No data found
 				cacheMan.setMessage("", "[Exception ID: " + cgReadAll.exceptionId + "] Descripcion: " + cgReadAll.exceptionDescription);	
 			}			
 		}				

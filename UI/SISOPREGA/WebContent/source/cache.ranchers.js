@@ -37,7 +37,7 @@ enyo.kind({
 		    		arrAux.push(objTmp);
 		    	});
 			}else{ //Error
-				if (cgReadAllRanchers.exceptionId != "RR02"){ //No data found
+				if (cgReadAllRanchers.exceptionId != "VAL02"){ //No data found
 					cacheMan.setMessage("", "[Exception ID: " + cgReadAllRanchers.exceptionId + "] Descripción: " + cgReadAllRanchers.exceptionDescription);	
 				}			
 			}
@@ -56,7 +56,7 @@ enyo.kind({
 		    	});			
 			}
 			else{ //Error								
-				if (cgReadAllEnterpriseRanchers.exceptionId != "ERR2"){//No data found
+				if (cgReadAllEnterpriseRanchers.exceptionId != "VAL02"){//No data found
 					cacheMan.setMessage("", "[Exception ID: " + cgReadAllEnterpriseRanchers.exceptionId + "] Descripcion: " + cgReadAllEnterpriseRanchers.exceptionDescription);	
 				}			
 			}
