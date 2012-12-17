@@ -51,11 +51,6 @@ enyo.kind({
 		cacheMan.setMessage("", "Usuario o contraseña incorrecta.");
 	},
 	logOut:function(){
-
 		consumingGateway.LogOut();
-		this.$.tbHeader.hide();
-		cacheMan.clearBack();
-		enyo.$.sisoprega.destroy();
-		window.location = './'; 
 	}
 });

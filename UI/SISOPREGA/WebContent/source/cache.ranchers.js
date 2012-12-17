@@ -13,7 +13,7 @@ enyo.kind({
 		_arrRancherList = [];
 		this.rancherWasReadFromGateway = false;
 		this.invoiceWasReadFromGateway = false;
-		this.contactsReadFromGateway = [];		
+		this.contactsReadFromGateway = [];
 	},
 	get:function(){
 		
@@ -73,16 +73,16 @@ enyo.kind({
 		
 		var objNew = {
 				rancher_id:		objRan.rancherId,
-				aka:			objRan.aka,				
+				aka:			objRan.aka,
 				birth_date:		"" + UTCtoNormalDate(objRan.birthDate),
-				email_add:		objRan.emailAddress,				
-				first_name:		objRan.firstName,				
-				last_name:		objRan.lastName,				
-				mother_name:	objRan.motherName,				
+				email_add:		objRan.emailAddress,
+				first_name:		objRan.firstName,
+				last_name:		objRan.lastName,
+				mother_name:	objRan.motherName,
 				phone_number:	objRan.phone
 			};
 		
-//		Fields out of web service:		
+//		Fields out of web service:
 		objNew.rfc = "";
 		objNew.contacts=[];
 		objNew.billing=objRan.billing;

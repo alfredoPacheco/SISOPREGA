@@ -1,26 +1,24 @@
 enyo.kind({
 	name: "cache.receptions",
 	arrObj:[],//_arrReceptionList,
-	receptionWasReadFromGateway:false,	
+	receptionWasReadFromGateway:false,
 	arrObjWasFilledUpOnce:false,
 	arrReception:[],
 	reloadme:function(){
 		//AJAX
 	},	
 	receptionAdapterToIn:function(objReception){
-		
-		//TODO update cattleType to cattleClass
 		var objNew = {
 				reception_id:	objReception.receptionId,
 				rancher_id:		objReception.rancherId,
-				arrival_date:	objReception.dateAllotted,
-				cattype_name:	objReception.cattleType,				
+				arrival_date:	"" + UTCtoNormalDate(objReception.dateAllotted),
+				cattype_id:		objReception.cattleType,
 				city_id:		objReception.locationId
 			};
-		objNew.rancher_name="";		
-		objNew.cattype_id="";
-		objNew.hc_aprox="";		
-		objNew.city_name="";
+		objNew.rancher_name="";
+		objNew.cattype_name=cacheCattle.getByID(objNew.cattype_id).cattype_name;
+		objNew.hc_aprox="";
+		objNew.city_name= cacheMan.getCityByID(objNew.city_id).city_name;
 		objNew.weights=[]; 
 		objNew.barnyards=[];
 		objNew.accepted_count="";
@@ -29,85 +27,71 @@ enyo.kind({
 		
 		return objNew;
 	},
+	receptionBarnyardAdapterToIn:function(obj){		
+		var objNew = {			
+		};
+		objNew = obj;		
+		return objNew;
+	},
+	receptionHeadcountAdapterToIn:function(obj){		
+		var objNew = {			
+			};
+		objNew = obj;		
+		return objNew;
+	},
+	feedOrderAdapterToIn:function(obj){		
+		var objNew = {			
+			};
+		objNew = obj;		
+		return objNew;
+	},
+	feedOrderBarnyardAdapterToIn:function(obj){		
+		var objNew = {			
+			};
+		objNew = obj;		
+		return objNew;
+	},
+	feedOrderDetailsAdapterToIn:function(obj){		
+		var objNew = {			
+			};
+		objNew = obj;		
+		return objNew;
+	},
 	receptionAdapterToOut:function(objReception){
 
 		var objNew = {				
 				receptionId:	objReception.reception_id,				
 				rancherId:		objReception.rancher_id,
 				dateAllotted:	"" + DateOut(objReception.arrival_date),
-				cattleType:		objReception.cattype_id,
-				
-				locationId:	1
+				cattleType:		objReception.cattype_id,				
+				locationId:		objReception.city_id
+			};
+		
+		return objNew;
+	},
+	receptionHeadcountAdapterToOut:function(obj){
+		var objNew = {				
+				receptionId:	obj.reception_id,				
+				hc:				obj.hc,
+				weight:			obj.weight,
+				weightUom:		1 //hcw_id
 			};
 		
 		return objNew;
 	},
 	get:function(){
-		
-		
-//		var objNew = {
-//				reception_id:	objReception.receptionId,
-//				rancher_id:		objReception.rancherId,
-//				arrival_date:	objReception.dateAllotted,
-//				cattype_name:	objReception.cattleType,				
-//				city_id:		objReception.locationId
-//			};
-//		objNew.rancher_name="";		
-//		objNew.cattype_id="";
-//		objNew.hc_aprox="";		
-//		objNew.city_name="";
-//		objNew.weights=[]; 
-//		objNew.barnyards=[];
-//		objNew.accepted_count="";
-//		objNew.inspections=[];
-//		objNew.feed=[];
-		
-		
-//var	_arrReceptionList=[
-// {
-//					reception_id : 1,
-//					rancher_id : 1,
-//					rancher_name : "BALDOR / DEL RIO MENDEZ ALAN",
-//					arrival_date : "2012-09-15",
-//					cattype_id : 1,
-//					cattype_name : "CABALLOS",
-//					hc_aprox : 100,
-//					city_id : 1,
-//					city_name : "LOCAL",
-//					weights : [ {					receptionHeadcount
-//						hcw_id : 0,					?
-//						hc : 50,					hc
-//						weight : 1234				weight
-//					} ],
-//					barnyards : {
-//						"1E5" : "1E5"
-//					},
-//					accepted_count : "",
+
 //					inspections : [ {
 //						rejected_id : 1,
 //						rejected_count : 1,
 //						reject_id : 1,
 //						reject_desc : "ENFERMEDAD"
 //					} ],
-//					feed : [ {
-//						feeding_id : 1, 				feedOrder
-//						barnyards : {					
-//							"1E5" : "1E5"				feedOrderBarnyard
-//						},
-//						handling : "ETC",				feedOrder
-//						feed : {						
-//							"1" : {						feedOrderDetails
-//								feed_desc : "MOLIDA",	food.foodId  = feedOrderDetails.foodId
-//								feed_units : 1			feedOrderDetails
-//							}
-//						}
-//					} ]
-//				}
-					
+
 		if (this.arrObjWasFilledUpOnce == false){
-			this.arrObjWasFilledUpOnce = true;
-			
-			this.arrReception = this.getReception();			
+			this.arrObjWasFilledUpOnce = true;			
+//receptions::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+			this.arrReception = this.getReception();
 			
 			var objAux = {};
 			this.arrObj = [];
@@ -136,13 +120,6 @@ enyo.kind({
 //TODO inspections::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 				
 //feedOrder:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::				
-
-				
-//				private long ;
-//			    private long  receptionId;
-//			    private Date feedDate;
-//			    private String feedOriginator;
-//			    private String handling;
 				var arrFeedAux = this.getFeedOrder(objAux.reception_id);
 				for (f in arrFeedAux){
 					var feedAux = {};
@@ -164,9 +141,9 @@ enyo.kind({
 						var arrFeedDetailsAux =  this.getFeedOrderDetails(feedAux.feeding_id);
 						var feedDetailsAux = {};
 						for (fd in arrFeedDetailsAux){
-							feedDetailsAux[fd] = {};
-							feedDetailsAux[fd].feed_desc = cacheFeed.getByID(arrFeedDetailsAux[fd].foodId).feed_desc;
-							feedDetailsAux[fd].feed_units = arrFeedDetailsAux[fd].quantity;
+							feedDetailsAux["" + fd] = {};
+							feedDetailsAux["" + fd].feed_desc = cacheFeed.getByID(arrFeedDetailsAux[fd].foodId).feed_desc;
+							feedDetailsAux["" + fd].feed_units = arrFeedDetailsAux[fd].quantity;
 						}
 						feedAux.feed =feedDetailsAux;					
 					}										
@@ -186,14 +163,13 @@ enyo.kind({
 		    		    
 		if (this.receptionWasReadFromGateway == false){
 			this.receptionWasReadFromGateway = true;
-			var arrAux = [];					
-			var self = this;
-	//Retrieve Receptions
+			var arrAux = [];
+			
 			var cgReadAll = consumingGateway.Read("Reception", {});
 			
 			if (cgReadAll.exceptionId == 0){ //Read successfully
-				for (item in cgReadAll.records){					
-					arrAux.push(self.receptionAdapterToIn(cgReadAll.records[item]));
+				for (item in cgReadAll.records){
+					arrAux.push(this.receptionAdapterToIn(cgReadAll.records[item]));
 				}
 			}else{ //Error
 				if (cgReadAll.exceptionId != "VAL02"){ //No data found
@@ -207,8 +183,7 @@ enyo.kind({
 	getReceptionBarnyard:function(recID){
 //		private long recBarnyardId;
 //	    private long receptionId;
-//	    private long barnyardId;
-		    		    
+//	    private long barnyardId;		    		    
 				
 			var arrAux = [];
 			var objToSend = {};
@@ -217,7 +192,7 @@ enyo.kind({
 
 			if (cgReadAll.exceptionId == 0){ //Read successfully
 				for (item in cgReadAll.records){
-					arrAux.push(cgReadAll.records[item]);
+					arrAux.push(this.receptionBarnyardAdapterToIn(cgReadAll.records[item]));
 				}		    	
 			}
 			else{ //Error
@@ -234,8 +209,7 @@ enyo.kind({
 //	    private long receptionId;
 //	    private long hc;
 //	    private double weight;
-//	    private long weightUom;
-		    		    
+//	    private long weightUom;		    		    
 		
 			var arrAux = [];
 			var objToSend = {};
@@ -244,11 +218,11 @@ enyo.kind({
 			
 			if (cgReadAll.exceptionId == 0){ //Read successfully
 				for (item in cgReadAll.records){
-					arrAux.push(cgReadAll.records[item]);
+					arrAux.push(this.receptionHeadcountAdapterToIn(cgReadAll.records[item]));
 				}
 			}
 			else{ //Error
-				if (cgReadAll.exceptionId != "VAL02"){ //No data found = GW01
+				if (cgReadAll.exceptionId != "VAL02"){ //No data found
 					cacheMan.setMessage("", "[Exception ID: " + cgReadAll.exceptionId + "] Descripcion: " + cgReadAll.exceptionDescription);	
 				}			
 			}				
@@ -270,14 +244,14 @@ enyo.kind({
 		
 		if (cgReadAll.exceptionId == 0){ //Read successfully
 			for (item in cgReadAll.records){
-				arrAux.push(cgReadAll.records[item]);
+				arrAux.push(this.feedOrderAdapterToIn(cgReadAll.records[item]));
 			}
 		}
 		else{ //Error
 			if (cgReadAll.exceptionId != "VAL02"){ //No data found = VAL02 for filter
-				cacheMan.setMessage("", "[Exception ID: " + cgReadAll.exceptionId + "] Descripcion: " + cgReadAll.exceptionDescription);	
-			}			
-		}				
+				cacheMan.setMessage("", "[Exception ID: " + cgReadAll.exceptionId + "] Descripcion: " + cgReadAll.exceptionDescription);
+			}
+		}
 		
 		return arrAux;
 		
@@ -285,7 +259,7 @@ enyo.kind({
 	getFeedOrderBarnyard:function(oID){
 //		private long feedOrdBarnId;
 //		  private long barnyardId;
-//		  private long orderId;	    		    
+//		  private long orderId;
 		
 		var arrAux = [];
 		var objToSend = {};
@@ -294,7 +268,7 @@ enyo.kind({
 		
 		if (cgReadAll.exceptionId == 0){ //Read successfully
 			for (item in cgReadAll.records){
-				arrAux.push(cgReadAll.records[item]);
+				arrAux.push(this.feedOrderBarnyardAdapterToIn(cgReadAll.records[item]));
 			}
 		}
 		else{ //Error
@@ -310,7 +284,7 @@ enyo.kind({
 //		 private long fodId;
 //		 private long orderId;
 //		 private long foodId;
-//		 private double quantity;  		    
+//		 private double quantity;
 		
 		var arrAux = [];
 		var objToSend = {};
@@ -319,7 +293,7 @@ enyo.kind({
 		
 		if (cgReadAll.exceptionId == 0){ //Read successfully
 			for (item in cgReadAll.records){
-				arrAux.push(cgReadAll.records[item]);
+				arrAux.push(this.feedOrderDetailsAdapterToIn(cgReadAll.records[item]));
 			}
 		}
 		else{ //Error
@@ -344,6 +318,8 @@ enyo.kind({
 			for (var sKey in objRec.barnyards){
 				cacheBY.setOccupied(sKey,objRec.reception_id);
 			}
+			
+			this.createWeight(objRec.reception_id, objRec.weights[0]);
 			
 			if(cbMethod){
 				cbObj[cbMethod]();
@@ -435,13 +411,38 @@ enyo.kind({
 			return false;
 		}	
 	},	
+	createWeight:function(receptionID,objWeight){
+		//AJAX
+		var objToSend = objWeight;
+		objToSend.reception_id = receptionID;
+		objToSend = this.receptionHeadcountAdapterToOut(objToSend);
+		
+		var cgCreate = consumingGateway.Create("ReceptionHeadcount", objToSend);
+		if (cgCreate.exceptionId == 0){ //Created successfully
+			objWeight.hcw_id = cgCreate.generatedId;
+			return true;
+		}
+		else{ //Error			
+			cacheMan.setMessage("", "[Exception ID: " + cgCreate.exceptionId + "] Descripcion: " + cgCreate.exceptionDescription);
+			return false;
+		}
+	},
 	addWeight:function(objRec,objWeight,cbObj,cbMethod){
 		//AJAX
+
+		if(this.createWeight(objRec,objWeight) == true){
 		//Update Local
-		objRec.weights.push(objWeight);	
-		if(cbMethod){
-			cbObj[cbMethod]();
-		}	
+			objRec.weights.push(objWeight);
+			if(cbMethod){
+				cbObj[cbMethod]();
+			}
+		}
+		else{
+			//TODO do something with objRec.weights
+			if(cbMethod){
+				cbObj[cbMethod]();
+			}
+		}		
 	},
 	updateWeight:function(objRec,objOld,objNew,cbObj,cbMethod){
 		for (var sKey in objNew){
@@ -451,14 +452,14 @@ enyo.kind({
 		}
 		if(cbMethod){
 			cbObj[cbMethod]();
-		}		
+		}
 	},
 	deleteWeight:function(objRec,delObj,cbObj,cbMethod){
 		//AJAX
-		//Update Local	
+		//Update Local
 		for(var i=0;i<objRec.weights.length;i++){
 			if(objRec.weights[i]===delObj){
-				objRec.weights.splice(i, 1);	
+				objRec.weights.splice(i, 1);
 				if(cbMethod){
 					cbObj[cbMethod]();
 				}		
@@ -568,7 +569,6 @@ enyo.kind({
 	},
 	
 	addFeed:function(objRec,objFeed,cbObj,cbMethod){
-		//TODO ACTUAL	
 		
 		if (objRec.feed.length == 0){
 			if (cacheReceptions.createFeedOrder(objRec,objFeed)== true){								
@@ -656,26 +656,3 @@ enyo.kind({
 	},				
 });
 var cacheReceptions= new cache.receptions();
-
-
-//
-//function UTCtoNormalDate(strUTC){
-//	var dateFmt = "";
-//	if (strUTC != "" && strUTC !== undefined){
-//		strAux = strUTC.split(" ");
-//		var fmt = new enyo.g11n.DateFmt({format: "yyyy/MM/dd"});
-//		var dateFromUTC = new Date(strUTC);			
-//		dateFmt = fmt.format(dateFromUTC);
-//	}
-//	return dateFmt;
-//}
-//
-//function DateOut(normalDate){
-//	var dateFmt = "";
-//	if (normalDate != "" && normalDate !== undefined){
-//		var fmt = new enyo.g11n.DateFmt({format: "MM/dd/yyyy"});
-//		var dateNew= new Date(normalDate.substr(0,4),normalDate.substr(5,7),normalDate.substr(8,10));
-//		dateFmt = fmt.format(dateNew);
-//	}
-//	return dateFmt;
-//}
