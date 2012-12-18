@@ -506,13 +506,27 @@ enyo.kind({
 		objToSend.handling = objFeed.handling;
 		
 		var cgCreate = consumingGateway.Create("FeedOrder", objToSend);
-		if (cgCreate.exceptionId == 0){ //Created successfully			
-			if (cacheReceptions.createFeedOrderBarnyard(cgCreate.generatedId,objFeed)== true){
-				return true;
-			}else{
+		if (cgCreate.exceptionId == 0){ //Created successfully		
+			objFeed.feeding_id = cgCreate.generatedId;
+//			var objAuxFeed = {};
+//			objAuxFeed.handling = objFeed.handling;
+//			objAuxFeed.feeding_id = objFeed.feeding_id;
+//			objAuxFeed.barnyards = {};
+//			objAuxFeed.feed = {};
+//			objRec.feed.push(objAuxFeed);
+			if (cacheReceptions.createFeedOrderBarnyard(cgCreate.generatedId,objFeed)== true){				
+//				objRec.feed.barnyards = objFeed.barnyards;
+				if (cacheReceptions.createFeedOrderDetails(cgCreate.generatedId,objFeed)== true){
+//					objRec.feed.feed = objFeed.feed;
+					return true;
+				}else{
+					return false;
+				}
+			}
+			else
+			{
 				return false;
 			}
-			
 		}
 		else{ //Error			
 			cacheMan.setMessage("", "[Exception ID: " + cgCreate.exceptionId + "] Descripcion: " + cgCreate.exceptionDescription);
@@ -531,13 +545,8 @@ enyo.kind({
 			objToSend.barnyardId = cacheBY.getByBarnyard(objFeed.barnyards[prop]);				
 		}
 		var cgCreate = consumingGateway.Create("FeedOrderBarnyard", objToSend);
-		if (cgCreate.exceptionId == 0){ //Created successfully			
-			if (cacheReceptions.createFeedOrderDetails(order_id,objFeed)== true){
-				return true;
-			}
-			else {
-				return false;
-			}
+		if (cgCreate.exceptionId == 0){ //Created successfully
+			return true;			
 		}
 		else{ //Error			
 			cacheMan.setMessage("", "[Exception ID: " + cgCreate.exceptionId + "] Descripcion: " + cgCreate.exceptionDescription);
@@ -552,7 +561,7 @@ enyo.kind({
 //	    private double quantity;
 		
 		var objToSend = {};
-		objToSend.orderId = 	order_id;		
+		objToSend.orderId = order_id;		
 		
 		for (obj in objFeed.feed){			
 			objToSend.foodId = 		objFeed.feed[obj].feed_id;				
@@ -570,31 +579,18 @@ enyo.kind({
 	
 	addFeed:function(objRec,objFeed,cbObj,cbMethod){
 		
-		if (objRec.feed.length == 0){
-			if (cacheReceptions.createFeedOrder(objRec,objFeed)== true){								
-				objRec.feed.push(objFeed);
-				if(cbMethod){
-					cbObj[cbMethod]();
-				}	
-			}else { //TODO: do something else
-				objRec.feed.push(objFeed);
-				if(cbMethod){
-					cbObj[cbMethod]();
-				}	
-			}
-		}else{
-//			if (cacheReceptions.createFeedOrderDetails(objRec,objFeed)== true){								
+		
+		if (cacheReceptions.createFeedOrder(objRec,objFeed)== true){
+			objRec.feed.push(objFeed);
+			if(cbMethod){
+				cbObj[cbMethod]();
+			}	
+		}else { //TODO: do something else				
 //				objRec.feed.push(objFeed);
-//				if(cbMethod){
-//					cbObj[cbMethod]();
-//				}	
-//			}else { //TODO: do something else
-				objRec.feed.push(objFeed);
-				if(cbMethod){
-					cbObj[cbMethod]();
-				}	
-			}
-//		}			
+			if(cbMethod){
+				cbObj[cbMethod]();
+			}	
+		}		
 	},
 	updateFeed:function(objOld,objNew,cbObj,cbMethod){
 		//AJAX
@@ -609,7 +605,8 @@ enyo.kind({
 		}		
 	},
 	deleteFeed:function(arrFeed,objFeed,cbObj,cbMethod){
-		for(var i=0; i<arrFeed.length;i++){		
+		//TODO ACTUAL
+		for(var i=0; i<arrFeed.length;i++){
 			if (arrFeed[i]===objFeed){
 				arrFeed.splice(i, 1);
 				if(cbMethod){
