@@ -604,16 +604,43 @@ enyo.kind({
 			cbObj[cbMethod]();
 		}		
 	},
+	deleteRancher:function(delObj,cbObj,cbMethod){		
+		
+	},
 	deleteFeed:function(arrFeed,objFeed,cbObj,cbMethod){
 		//TODO ACTUAL
-		for(var i=0; i<arrFeed.length;i++){
-			if (arrFeed[i]===objFeed){
-				arrFeed.splice(i, 1);
-				if(cbMethod){
-					cbObj[cbMethod]();
+		//AJAX
+		//Update Internal Object
+		var objToSend = {};
+		objToSend.orderId = objFeed.feeding_id;
+		
+		var cgDelete = consumingGateway.Delete("FeedOrder", objToSend);
+		if (cgDelete.exceptionId == 0){ //Deleted successfully
+			for(var i=0; i<arrFeed.length;i++){
+				if (arrFeed[i]===objFeed){
+					arrFeed.splice(i, 1);
+					if(cbMethod){
+						cbObj[cbMethod]();
+					}
+					break;					
 				}
-				break;					
 			}
+//			var tamanio = this.get().length;
+//			for(var i=0;i<tamanio;i++){
+//				if (this.arrObj[i].rancher_id == delObj.rancher_id){
+//					this.arrObj.splice(i, 1);
+//					_arrRancherList = this.arrObj;
+//					if(cbMethod){
+//						cbObj[cbMethod]();
+//					}
+//					return true;					
+//				}
+//			}
+//			return false;
+		}
+		else{ //Error
+			cacheMan.setMessage("", "[Exception ID: " + cgDelete.exceptionId + "] Descripcion: " + cgDelete.exceptionDescription);
+//			return false;
 		}
 	},
 	addReject:function(iAccepted,objRec,objReject,cbObj,cbMethod){
