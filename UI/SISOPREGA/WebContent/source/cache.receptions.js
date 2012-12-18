@@ -508,16 +508,8 @@ enyo.kind({
 		var cgCreate = consumingGateway.Create("FeedOrder", objToSend);
 		if (cgCreate.exceptionId == 0){ //Created successfully		
 			objFeed.feeding_id = cgCreate.generatedId;
-//			var objAuxFeed = {};
-//			objAuxFeed.handling = objFeed.handling;
-//			objAuxFeed.feeding_id = objFeed.feeding_id;
-//			objAuxFeed.barnyards = {};
-//			objAuxFeed.feed = {};
-//			objRec.feed.push(objAuxFeed);
 			if (cacheReceptions.createFeedOrderBarnyard(cgCreate.generatedId,objFeed)== true){				
-//				objRec.feed.barnyards = objFeed.barnyards;
 				if (cacheReceptions.createFeedOrderDetails(cgCreate.generatedId,objFeed)== true){
-//					objRec.feed.feed = objFeed.feed;
 					return true;
 				}else{
 					return false;
@@ -534,11 +526,6 @@ enyo.kind({
 		}
 	},
 	createFeedOrderBarnyard:function(order_id, objFeed){
-//		private long feedOrdBarnId;
-//		  private long barnyardId;
-//		  private long orderId;
-
-				
 		var objToSend = {};
 		objToSend.orderId = order_id;
 		for (prop in objFeed.barnyards){
@@ -592,25 +579,50 @@ enyo.kind({
 			}	
 		}		
 	},
+	updateFeedOrderDetails:function(order_id, objFeed){
+		var objToSend = {};
+		objToSend.orderId = order_id;		
+		
+		for (obj in objFeed.feed){			
+			objToSend.foodId = 		objFeed.feed[obj].feed_id;				
+			objToSend.quantity =	objFeed.feed[obj].feed_units;
+			
+			var cgUpdate = consumingGateway.Update("FeedOrderDetails", objToSend);
+			if (cgUpdate.exceptionId != 0){
+				cacheMan.setMessage("", "[Exception ID: " + cgUpdate.exceptionId + "] Descripcion: " + cgUpdate.exceptionDescription);
+				return false;
+			}			
+		}
+		return true;
+			
+	},
 	updateFeed:function(objOld,objNew,cbObj,cbMethod){
-		//AJAX
-		//Update Local		
-		for(var sKey in objNew){
-			if(objNew[sKey]!=null){
-				objOld[sKey]=objNew[sKey];
+		objNew.feeding_id = objOld.feeding_id;
+		var objToSend = {};
+		objToSend.orderId = objNew.feeding_id;
+		objToSend.feedDate = "" + DateOut(new Date());
+		objToSend.feedOriginator = "alfredo";	
+		objToSend.handling = objNew.handling;
+		objToSend.receptionId = cbObj._objRec.reception_id;
+		
+		var cgUpdate = consumingGateway.Update("FeedOrder", objToSend);
+		if (cgUpdate.exceptionId == 0){ //Updated successfully
+			this.updateFeedOrderDetails(objOld.feeding_id,objNew)==true;
+			for(prop in objNew){
+				objOld[prop]=objNew[prop];
 			}
+		}
+		else{ //Error			
+			cacheMan.setMessage("", "[Exception ID: " + cgUpdate.exceptionId + "] Descripcion: " + cgUpdate.exceptionDescription);
+//			return false;
 		}		
 		if(cbMethod){
 			cbObj[cbMethod]();
-		}		
-	},
-	deleteRancher:function(delObj,cbObj,cbMethod){		
-		
+		}
+			
 	},
 	deleteFeed:function(arrFeed,objFeed,cbObj,cbMethod){
-		//TODO ACTUAL
-		//AJAX
-		//Update Internal Object
+		//TODO eliminar en cascada en proxy feedorderdetails y feedorderbarnyards
 		var objToSend = {};
 		objToSend.orderId = objFeed.feeding_id;
 		
