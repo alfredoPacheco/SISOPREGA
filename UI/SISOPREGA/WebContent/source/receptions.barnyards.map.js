@@ -146,7 +146,7 @@ enyo.kind({
 		                         style: "width:15px; height:"+sHeight+
 										";align:left"+
 										""});
-	},
+	},	
 	createCells:function(sLetter,iStart,iNumber,sWidth,sHeight){
 		//this.createCells("1E",5,6,"50px","50px");
 		objBarn=this.last;				
@@ -170,7 +170,8 @@ enyo.kind({
 			                               name:sLetter+iStart,
 										   occupied:iOccupied,
 										   content:sLetter.substr(1)+iStart,
-										   onclick: "cellClick",									   
+										   onclick: "cellClick",
+										   onmousehold:"cellHold",
 										  },{owner: this});
 			iStart=iStart+2;
 		}			
@@ -194,7 +195,7 @@ enyo.kind({
 	},	
 	cellClick:function(inSender, inEvent){
 		this.cellOut();
-		this.cellOver(inSender, inEvent);	
+		this.cellOver(inSender, inEvent);
 		this.objSelected=inSender;
 		switch(inSender.occupied){
 			case 0:
@@ -234,6 +235,65 @@ enyo.kind({
 					this.arrSelectedOccupied[inSender.name]=inSender.name;
 					inSender.applyStyle("background-color",this.sColorSelectOccupied);
 				}
+				break;							
+			case 2:
+				delete this.arrSelected[this.objSelected.name];	
+				this.objSelected.occupied=0;
+				this.objSelected.applyStyle("background-color",this.sColorFree);						
+				break;
+						
+			case 3:
+				delete this.arrSelectedOccupied[this.objSelected.name];	
+				this.objSelected.occupied=1;
+				this.objSelected.applyStyle("background-color",this.sColorOccupied);									
+				break;								
+				
+		}
+	},
+	cellHold:function(inSender, inEvent){
+		inEvent.stopPropagation();
+		
+		this.objSelected=inSender;
+		switch(inSender.occupied){
+			case 0:
+				this.clearDesc();
+				if(enyo.json.stringify(this.arrSelectedOccupied)!="{}"){
+					for(var sKey in this.arrSelectedOccupied){
+						if(cacheBY.isOccupied(sKey)){
+							this.$[sKey].occupied=1;
+							this.$[sKey].applyStyle("background-color",this.sColorOccupied);
+						}
+					}
+					this.arrSelectedOccupied={};
+				}
+				inSender.occupied=2;
+				this.arrSelected[inSender.name]=inSender.name;			
+				inSender.applyStyle("background-color",this.sColorSelect);
+				this.cellHold(inSender, inEvent);
+				break;
+			case 1:
+				this.setDesc(inSender.name);
+				if(enyo.json.stringify(this.arrSelected)!="{}"){
+					this.$.options.setItems([{caption:"Anexar",value:7}]);
+					this.$.options.render();
+					this.$.options.openAtEvent(inEvent);							
+				}else{
+					for(var sKey in this.arrSelectedOccupied){
+						if(cacheBY.inUse()[sKey].reception_id!=cacheBY.inUse()[inSender.name].reception_id){
+							for(var sKey in this.arrSelectedOccupied){
+								this.$[sKey].occupied=1;
+								this.$[sKey].applyStyle("background-color",this.sColorOccupied);
+							}
+							this.arrSelectedOccupied={};
+						}
+						break;
+					}
+					//cacheBY.get
+					inSender.occupied=3;					
+					this.arrSelectedOccupied[inSender.name]=inSender.name;
+					inSender.applyStyle("background-color",this.sColorSelectOccupied);
+				}
+				this.cellHold(inSender, inEvent);
 				break;							
 			case 2:
 				this.$.options.setItems(this.arrReception);
