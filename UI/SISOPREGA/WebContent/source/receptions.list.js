@@ -98,7 +98,7 @@ enyo.kind({
 	calcNetWeight:function(arrW){
 		var iHC=0;
 		var iW=0;
-		var iProm=0;
+//		var iProm=0;
 		var objW;
 		for (var i=0;i<arrW.length;i++){
 			objW=arrW[i];

@@ -26,7 +26,7 @@ enyo.kind({
 		//AJAX
 		//Update Internal Object
 		for (var sKey in objNew){
-			objOld[sKey]=objNew[sKey]
+			objOld[sKey]=objNew[sKey];
 		}
 		if(cbMethod){
 			cbObj[cbMethod]();

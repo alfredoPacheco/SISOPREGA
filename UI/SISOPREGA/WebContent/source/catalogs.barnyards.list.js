@@ -53,10 +53,10 @@ enyo.kind({
 	setupProductRow:function(inSender, inIndex) {	
 		var objBY;
 		var sText;	
-		var objCap;
+//		var objCap;
 		
 		if (objBY=cacheBY.get()[inIndex]) {						
-			this.$.code.setContent(objBY.barnyard_code)
+			this.$.code.setContent(objBY.barnyard_code);
 			if(objBY.barnyard_capacity.length>0){
 				sText="";
 				for (var i=0;i<objBY.barnyard_capacity.length;i++){

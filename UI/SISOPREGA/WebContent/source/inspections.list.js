@@ -141,10 +141,10 @@ enyo.kind({
 		return sText="("+arrBY.length+") "+sText;
 	},
 	releaseReceptions:function(){
-		cacheReceptions.releaseReceptions(this.arrRec,this,"afterRelease")
+		cacheReceptions.releaseReceptions(this.arrRec,this,"afterRelease");
 	},
 	afterRelease:function(){
 		this.updateList();
-		this.$.modalDialog.openAtCenter()	
+		this.$.modalDialog.openAtCenter();
 	}
 });

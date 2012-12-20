@@ -155,7 +155,6 @@ enyo.kind({
 		this.$.manejo.openAtCenter();		
 	},	
 	addFeed: function() {		
-		//TODO ACTUAL
 		cacheReceptions.addFeed(this._objRec,this.getFeed("add"),this,"resetValues");
 	},
 	getFeed:function(sOp){
@@ -252,7 +251,7 @@ enyo.kind({
 		//get last formula
 		//same by?
 		var bLast=true;
-		var feedLast;
+		//var feedLast;
 		if(bLoad===true && this._objRec.feed.length>0){
 			for(var sKey in this._arrBY){
 				if(!this._objRec.feed[this._objRec.feed.length-1].barnyards[sKey]){

@@ -1,7 +1,7 @@
 enyo.kind({
 	name: "cache.barnyards",
 	arrObj:_arrBarnyardsList,			//contains records from tables cat_barnyard and cat_barnyard_capacity
-	arrObjInUse:_arrBYOccupied,
+	arrObjInUse:{},//_arrBYOccupied,
 	arrObjAv:enyo.clone(_arrBarnyardsList),
 	arrObjWasFilledUpOnce: false,
 	barnyardWasReadFromGateway:false,	
@@ -74,9 +74,9 @@ enyo.kind({
 			this.arrCatBarnyardCapacity = this.getBarnyardCapacity();
 			var objAux = {};
 			this.arrObj = [];
-			var self = this;
+			
 			for (var a  in this.arrCatBarnyard){			
-				objAux = self.barnyardAdapterToIn(this.arrCatBarnyard[a]);
+				objAux = this.arrCatBarnyard[a];
 				objAux.barnyard_capacity=[{	catclass_id:"",												
 											catclass_name:"",
 											head_count:0
@@ -110,7 +110,7 @@ enyo.kind({
 			
 			if (cgReadAll.exceptionId == 0){ //Read successfully
 				for (item in cgReadAll.records){
-					arrAux.push(cgReadAll.records[item]);
+					arrAux.push(this.barnyardAdapterToIn(cgReadAll.records[item]));
 				}
 			}
 			else{ //Error
@@ -287,7 +287,7 @@ enyo.kind({
 		}		
 	},
 	isOccupied:function(sID){
-		if(_arrBYOccupied[sID]){
+		if(this.arrObjInUse[sID]){
 			return true;
 		}else{
 			return false;
@@ -303,7 +303,7 @@ enyo.kind({
 		var cgCreate = consumingGateway.Create("ReceptionBarnyard", objToSend);
 		if (cgCreate.exceptionId == 0){ //Created successfully			
 			objAux.recBarnyardId = cgCreate.generatedId;
-			this.arrObjInUse[sID]={reception_id:iReceptionID,accepted_count:"",inspections:[],feed:[]};
+			this.arrObjInUse[sID]={reception_id:parseInt(iReceptionID),accepted_count:"",inspections:[],feed:[]};
 		}
 		else{ //Error			
 			cacheMan.setMessage("", "[Exception ID: " + cgCreate.exceptionId + "] Descripcion: " + cgCreate.exceptionDescription);
@@ -321,16 +321,7 @@ enyo.kind({
 	},
 	inUse:function(){
 		return this.arrObjInUse;
-	},
-	getBYbyRecID:function(sID){
-		var arrBY={};
-		for(var sKey in this.arrObjInUse){
-			if(this.arrObjInUse[sKey].reception_id==sID){
-				arrBY[sKey]=this.arrObjInUse[sKey];
-			}
-		}
-		return arrBY;
-	},
+	},	
 	getBYbyRecID:function(sID){
 		var arrBY={};
 		for(var sKey in this.arrObjInUse){

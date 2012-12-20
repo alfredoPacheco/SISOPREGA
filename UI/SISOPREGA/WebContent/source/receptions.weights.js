@@ -85,7 +85,7 @@ enyo.kind({
 		                             this.getWeight(),this,"afterUpdate");
 	},
 	afterUpdate:function(){
-		this.toggleAdd()
+		this.toggleAdd();
 		this.updateList();		
 	},
 	ready:function(){

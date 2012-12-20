@@ -86,7 +86,7 @@ enyo.kind({
 							 this,"afterUpdate");
 	},
 	afterUpdate:function(){
-		this.toggleAdd()
+		this.toggleAdd();
 		this.updatetList();		
 	},
 	updatetList:function(){
@@ -117,7 +117,7 @@ enyo.kind({
 	},	
 	resetValues:function(){
 		this.$.rejected_count.setValue(this._objRec.accepted_count);
-		this.$.reject_id.setItems(cacheRejects.getLS())			
+		this.$.reject_id.setItems(cacheRejects.getLS());	
 		this.$.reject_id.setValue(0);
 		this.$.rejected_count.setValue("");		
 		this.updatetList();

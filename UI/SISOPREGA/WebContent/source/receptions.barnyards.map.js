@@ -287,13 +287,13 @@ enyo.kind({
 							this.arrSelectedOccupied={};
 						}
 						break;
-					}
+					}	
 					//cacheBY.get
 					inSender.occupied=3;					
 					this.arrSelectedOccupied[inSender.name]=inSender.name;
 					inSender.applyStyle("background-color",this.sColorSelectOccupied);
-				}
-				this.cellHold(inSender, inEvent);
+					this.cellHold(inSender, inEvent);
+				}				
 				break;							
 			case 2:
 				this.$.options.setItems(this.arrReception);

@@ -150,8 +150,15 @@ enyo.kind({
 					objAux.feed.push(feedAux);
 				}					
 				this.arrObj.push(objAux);
+//				var _arrBYOccupied={"1E5":{reception_id:1},
+//						"_B21":{reception_id:2,accepted_count:"",inspections:[]},
+//						 feed:[{}]};
+				for (sKey in objAux.barnyards){
+					cacheBY.arrObjInUse["" + objAux.city_id + sKey] = {reception_id:parseInt(objAux.reception_id)};//,accepted_count:"",inspections:[],feed:[]};
+				}
+				
 			}
-		}
+		}		
 		return this.arrObj;	
 	},
 	getReception:function(){
@@ -189,10 +196,11 @@ enyo.kind({
 			var objToSend = {};
 			objToSend.receptionId = recID;
 			var cgReadAll = consumingGateway.Read("ReceptionBarnyard", objToSend);
-
+			
 			if (cgReadAll.exceptionId == 0){ //Read successfully
 				for (item in cgReadAll.records){
 					arrAux.push(this.receptionBarnyardAdapterToIn(cgReadAll.records[item]));
+					
 				}		    	
 			}
 			else{ //Error
