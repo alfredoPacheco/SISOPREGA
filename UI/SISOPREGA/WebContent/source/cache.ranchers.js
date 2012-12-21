@@ -673,7 +673,7 @@ enyo.kind({
 //		}		
 	}
 });
-var cacheRanchers= new cache.ranchers();
+var cacheRanchers = new cache.ranchers();
 
 
 function UTCtoNormalDate(strUTC){
