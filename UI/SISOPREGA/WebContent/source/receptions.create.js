@@ -137,7 +137,7 @@ enyo.kind({
 										 ));
 			this.$.city_id.setValue(receptionDef.city_id);
 			this.$.cattype_id.setValue(receptionDef.cattype_id);
-			this.$.hc_aprox.setValue(receptionDef.hc_aprox);
+			this.$.hc_aprox.setValue(receptionDef.weights[0].hc);
 			if(receptionDef.weights.length==1){
 				this.$.weight.setValue(receptionDef.weights[0].weight);		
 			}
