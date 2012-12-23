@@ -644,33 +644,26 @@ enyo.kind({
 	},
 	updateBilling:function(objRancher,objBill,cbObj,cbMethod){
 		//AJAX
-		objBill.billing_id = cbObj.objRan.billing.billing_id;
-		objBill.rancher_id = cbObj.objRan.rancher_id;		
-		var objToSend = this.rancherInvoiceAdapterToOut(objBill);
-		var cgUpdateInvoice = consumingGateway.Update("RancherInvoice", objToSend);
-		if (cgUpdateInvoice.exceptionId == 0){ //Updated successfully			
-			objRancher.billing = objBill;
-			if(cbMethod){
-				cbObj[cbMethod]();
+		if (!objRancher.billing.billing_id){
+			this.createBilling(objRancher,objBill,cbObj,cbMethod);
+		}else{
+			objBill.billing_id = cbObj.objRan.billing.billing_id;
+			objBill.rancher_id = cbObj.objRan.rancher_id;		
+			var objToSend = this.rancherInvoiceAdapterToOut(objBill);
+			var cgUpdateInvoice = consumingGateway.Update("RancherInvoice", objToSend);
+			if (cgUpdateInvoice.exceptionId == 0){ //Updated successfully			
+				objRancher.billing = objBill;
+				cbObj.objRan.billing = objBill;
+				if(cbMethod){
+					cbObj[cbMethod]();
+				}
+				return true;
 			}
-			return true;
-		}
-		else{ //Error	
-			if (cgUpdateInvoice.exceptionId == "RIU3"){
-				this.createBilling(objRancher,objBill,cbObj,cbMethod);
-			}else{
+			else{ //Error
 				cacheMan.setMessage("", "[Exception ID: " + cgUpdateInvoice.exceptionId + "] Descripcion: " + cgUpdateInvoice.exceptionDescription);
-				return false;
+				return false;				
 			}
 		}
-//		for (var sKey in objBill){
-//			if(objBill[sKey]!=null){
-//				objRancher.billing[sKey]=objBill[sKey];
-//			}
-//		}		
-//		if(cbMethod){
-//			cbObj[cbMethod]();
-//		}		
 	}
 });
 var cacheRanchers = new cache.ranchers();
