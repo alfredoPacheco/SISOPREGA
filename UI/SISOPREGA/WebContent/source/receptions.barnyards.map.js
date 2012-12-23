@@ -1,33 +1,33 @@
 enyo.kind({
 	name: "receptions.barnyards.map",
-	arrReception:[{caption:"Recepcion",value:1},{caption:"Deseleccionar",value:2}],	
+	arrReception:[{caption:"Recepcion",value:1},{caption:"Deseleccionar",value:2}],
 	arrPostReception:[{caption:"Alimento",value:3},
 				      {caption:"Inspeccion",value:4},
 					  {caption:"Editar",value:5},
-					  {caption:"Liberar",value:6},					  
-					  {caption:"Deseleccionar",value:8},					  					  
-					  ],					  
+					  {caption:"Liberar",value:6},
+					  {caption:"Deseleccionar",value:8},
+					  ],
     kind: enyo.SlidingView,
 	arrByMOver:{},
 	objSelected:null,
-	arrSelected:{},  
-	arrSelectedOccupied:{},  	
+	arrSelected:{},
+	arrSelectedOccupied:{},
 	sColorOccupied:"#ff7200",
 	sColorFree:"white",	
-	sColorSelect:"lightgreen",	
-	sColorSelectOccupied:"#9b7eb1",			
+	sColorSelect:"lightgreen",
+	sColorSelectOccupied:"#9b7eb1",
 	components: [
 		{kind:"VFlexBox", flex:1, className:"mapBG",
 		 components:[
-			{name: "options", kind: enyo.PopupSelect, onSelect: "actionSelected",items:[]},	
+			{name: "options", kind: enyo.PopupSelect, onSelect: "actionSelected",items:[]},
 			{kind:enyo.BasicScroller,flex: 1,
 			components:[
 				{name: "cells", kind: "VFlexBox",align:"middle", onclick: "cellsClick"},
 			]},
-			{kind: "Popup",name: "popMan", showHideMode: "transition", openClassName: "zoomFadeIn", 
+			{kind: "Popup",name: "popMan", showHideMode: "transition", openClassName: "zoomFadeIn",
 			 className: "transitioner2", layoutKind: "VFlexLayout",
 			 style: "overflow: hidden", width: "95%", height: "95%",scrim: true,}]}
-	],	
+	],
 	ready: function() {
 		this.last=this.$.cells;
 		//this.addRow(true);
@@ -35,7 +35,7 @@ enyo.kind({
 		this.addCustomCell("corraman","Corrales de <br/> Manejo","100px","50px");
 		this.createCells("1E",5,6,"50px","50px");
 		this.splitRow();
-		this.createCells("1E",17,8,"50px","50px");		
+		this.createCells("1E",17,8,"50px","50px");
 		this.splitRow();		
 		this.createCells("2E",7,4,"50px","50px");				
 		this.addRow();

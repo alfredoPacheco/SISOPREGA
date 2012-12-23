@@ -8,7 +8,7 @@ enyo.kind({
 				{name:'btnGoBack',icon:"images/command-menu/menu-icon-back.png", onclick:"goBack"},
 				{kind: "Spacer"},
 				{kind: "VFlexBox", name:'lblMainCap', allowHtml:true,
-				 style:"color:#FFF;border:none", content: "Menu Principal"},  
+				 style:"color:#FFF;border:none;font-size:15px", content: "Menu Principal"},  
 				{kind: "Spacer"},
 				{name:'btnLogOut', onclick:"logOut",icon:"images/command-menu/icon-context.png"}]},
 				

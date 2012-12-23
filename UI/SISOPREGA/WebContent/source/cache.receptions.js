@@ -78,11 +78,12 @@ enyo.kind({
 		return objNew;
 	},
 	receptionHeadcountAdapterToOut:function(obj){
-		var objNew = {				
+		var objNew = {
+				headcountId:	obj.hcw_id,
 				receptionId:	obj.reception_id,				
 				hc:				obj.hc,
 				weight:			obj.weight,
-				weightUom:		1 //hcw_id
+				weightUom:		1 //TODO 
 			};
 		
 		return objNew;
@@ -353,6 +354,11 @@ enyo.kind({
 		var objToSend = this.receptionAdapterToOut(objNew);
 		var cgUpdate = consumingGateway.Update("Reception", objToSend);
 		if (cgUpdate.exceptionId == 0){ //Updated successfully
+			
+			//TODO UPDATE WEIGHT
+			if (this.updateWeight(objOld.weights[0], objNew.weights[0], cbObj)==true){
+				
+			}
 			for(prop in objNew){
 				objOld[prop]=objNew[prop];
 			}
@@ -361,14 +367,12 @@ enyo.kind({
 				if (this.arrObj[i].reception_id == objOld.reception_id){
 					this.arrObj[i] = objOld;
 					_arrReceptionList = this.arrObj;
-					cbObj.objRec = objOld;
-					if(cbMethod){
-						cbObj[cbMethod]();
-					}
-					return true;					
-				}
+				}				
 			}
-			return false;
+			if(cbMethod){
+				cbObj[cbMethod]();
+			}
+			return true;
 		}
 		else{ //Error			
 			cacheMan.setMessage("", "[Exception ID: " + cgUpdate.exceptionId + "] Descripcion: " + cgUpdate.exceptionDescription);
@@ -460,14 +464,23 @@ enyo.kind({
 			}
 		}		
 	},
-	updateWeight:function(objRec,objOld,objNew,cbObj,cbMethod){
-		for (var sKey in objNew){
-			if(objOld[sKey]!=null){
-				objOld[sKey]=objNew[sKey];
+	updateWeight:function(objOld,objNew,cbObj){		
+		//TODO updateWeight
+		
+		objNew.hcw_id = objOld.hcw_id;		
+		
+		var objToSend = this.receptionHeadcountAdapterToOut(objNew);
+		objToSend.receptionId = cbObj.objRec.reception_id;
+		var cgUpdate = consumingGateway.Update("ReceptionHeadcount", objToSend);
+		if (cgUpdate.exceptionId == 0){ //Updated successfully
+			for(prop in objNew){
+				objOld[prop]=objNew[prop];
 			}
+			return true;
 		}
-		if(cbMethod){
-			cbObj[cbMethod]();
+		else{ //Error			
+			cacheMan.setMessage("", "[Exception ID: " + cgUpdate.exceptionId + "] Descripcion: " + cgUpdate.exceptionDescription);
+			return false;
 		}
 	},
 	deleteWeight:function(objRec,delObj,cbObj,cbMethod){
