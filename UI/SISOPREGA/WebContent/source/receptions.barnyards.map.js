@@ -133,10 +133,10 @@ enyo.kind({
 			this.addRow();
 	},
 	addRow:function(bDiv){
-		if (bDiv){
-			this.$.cells.createComponent({kind: "Divider",caption:""});
+		if (bDiv){	
+			this.$.cells.createComponent({kind: "Divider",caption:"", style:"margin-left: -16px;"});
 		}else{
-			this.$.cells.createComponent({kind: "HFlexBox", style:"height:5px"});									
+			this.$.cells.createComponent({kind: "HFlexBox", style:"height:5px;"});									
 		}
 		this.last=objBarn=this.$.cells.createComponent({kind: "HFlexBox"});						
 	},
