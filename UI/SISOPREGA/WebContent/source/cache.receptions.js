@@ -112,7 +112,7 @@ enyo.kind({
 				for (b in barnyardAux){
 					try{
 						var barnyardName = cacheBY.getByID(barnyardAux[b].barnyardId).barnyard_code;
-						objAux.barnyards[barnyardName] = barnyardName;
+						objAux.barnyards["" + objAux.city_id + barnyardName] = "" + objAux.city_id + barnyardName;						
 					}catch(e){}					
 				}
 //weight:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::				
@@ -163,7 +163,7 @@ enyo.kind({
 //						"_B21":{reception_id:2,accepted_count:"",inspections:[]},
 //						 feed:[{}]};
 				for (sKey in objAux.barnyards){
-					cacheBY.arrObjInUse["" + objAux.city_id + sKey] = {reception_id:parseInt(objAux.reception_id)};//,accepted_count:"",inspections:[],feed:[]};
+					cacheBY.arrObjInUse[sKey] = {reception_id:parseInt(objAux.reception_id)};//,accepted_count:"",inspections:[],feed:[]};
 				}
 				
 			}
@@ -591,8 +591,7 @@ enyo.kind({
 		}
 		return true;
 		
-	},
-	
+	},	
 	addFeed:function(objRec,objFeed,cbObj,cbMethod){
 		
 		
@@ -684,17 +683,97 @@ enyo.kind({
 //			return false;
 		}
 	},
+	createReject:function(objRec, objRej){
+//		private long inspectionId;
+//		private long receptionId;
+//		private Date inspectionDate;
+
+		var objToSend = {};
+		objToSend.receptionId = objRec.reception_id;
+		objToSend.inspectionDate = "" + DateOut(new Date());
+
+		var cgCreate = consumingGateway.Create("Inspection", objToSend);
+		if (cgCreate.exceptionId == 0){ //Created successfully		
+			objRej.rejected_id = cgCreate.generatedId;
+			if (this.createInspectionBarnyard(cgCreate.generatedId,objRec)== true){
+				if (this.createInspectionDetails(cgCreate.generatedId,objRec)== true){
+					return true;
+				}
+				else{
+					return false;
+				}		
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else{ //Error			
+			cacheMan.setMessage("", "[Exception ID: " + cgCreate.exceptionId + "] Descripcion: " + cgCreate.exceptionDescription);
+			return false;
+		}
+	},
+	createInspectionBarnyard:function(inspection_id, objRec){
+		var objToSend = {};
+		objToSend.inspectionId = inspection_id;
+		for (prop in objRec.barnyards){
+			objToSend.barnyardId = cacheBY.getByBarnyard(objRec.barnyards[prop]);				
+		}
+		var cgCreate = consumingGateway.Create("InspectionBarnyard", objToSend);
+		if (cgCreate.exceptionId == 0){ //Created successfully
+			return true;
+		}
+		else{ //Error			
+			cacheMan.setMessage("", "[Exception ID: " + cgCreate.exceptionId + "] Descripcion: " + cgCreate.exceptionDescription);
+			return false;
+		}
+	},
+	createInspectionDetails:function(inspection_id, objRej){
+
+//		private long inspectionDetailsId;
+//		private long inspectionId;
+//		private long inspectionCodeId;
+//		private long hc;
+//		private double weight;
+//		private long weightUom;
+//		private String note;
+		
+		var objToSend = {};
+		objToSend.inspectionId = inspection_id;		
+		
+		for (obj in objRej.inspections){			
+			objToSend.inspectionId = 		objRej.inspections[obj].inspection_id;
+			objToSend.inspectionCodeId =	objRej.inspections[obj].inspection_id;
+			objToSend.hc = 					objRej.inspections[obj].inspection_id;
+			objToSend.weight = 				objRej.inspections[obj].inspection_id;
+			objToSend.weightUom = 			objRej.inspections[obj].inspection_id;
+			objToSend.note = 				objRej.inspections[obj].inspection_id;
+			
+			var cgCreate = consumingGateway.Create("FeedOrderDetails", objToSend);
+			if (cgCreate.exceptionId != 0){			
+				cacheMan.setMessage("", "[Exception ID: " + cgCreate.exceptionId + "] Descripcion: " + cgCreate.exceptionDescription);
+				return false;
+			}			
+		}
+		return true;
+		
+	},	
 	addReject:function(iAccepted,objRec,objReject,cbObj,cbMethod){
-		//AJAX
-		//REFRESH LOCAL
 		if(iAccepted==""){iAccepted=0;}
 		objRec.accepted_count=iAccepted;
 		if(objReject){
-			objRec.inspections.push(objReject);
-		}
-		if(cbMethod){			
+			if (this.createReject(objRec,objReject)== true){
+				objRec.inspections.push(objReject);
+					
+			}else { //TODO: do something else				
+//					objRec.inspections.push(objRej);
+					
+			}
+			
+		}		
+		if(cbMethod){
 			cbObj[cbMethod]();
-		}			
+		}
 	},
 	updateReject:function(iAccepted,objRec,iInspIdx,objReject,cbObj,cbMethod){
 		//AJAX

@@ -641,6 +641,41 @@
 			</basic>
 		</attributes>
 	</entity>
+	<entity class="com.tramex.sisoprega.dto.InspectionDetails">
+		<table name="ctrl_inspection_result" />
+		<named-query name="CRT_INSPECTION_DETAILS_BY_ID">
+			<description>Retrieves a single inspection details record by ID</description>
+			<query>SELECT InspDet FROM InspectionDetails InspDet WHERE InspDet.inspectionDetailsId = :inspDetId</query>
+		</named-query>
+		<named-query name="INSPECTION_DETAILS_BY_INSPECTION_ID">
+			<description>Retrieves all inspection details for a given inspection id</description>
+			<query>SELECT ins FROM InspectionDetails ins WHERE ins.inspectionId = :inspId ORDER BY ins.inspectionCodeId</query>
+		</named-query>
+		<attributes>
+			<id name="inspectionDetailsId">
+				<column name="id" />
+				<generated-value strategy="IDENTITY" />
+			</id>
+			<basic name="inspectionId">
+				<column name = "inspection_id"/>
+			</basic>
+			<basic name="inspectionCodeId">
+				<column name = "inspection_code_id"/>
+			</basic>
+			<basic name="hc">
+				<column name = "hc"/>
+			</basic>
+			<basic name="weight">
+				<column name = "weight"/>
+			</basic>
+			<basic name="weightUom">
+				<column name = "weight_uom"/>
+			</basic>
+			<basic name="note">
+				<column name = "note"/>
+			</basic>
+		</attributes>
+	</entity>
 	<entity class="com.tramex.sisoprega.dto.InspectionCode">
 		<table name="cat_inspection_code" />
 		<named-query name="CAT_INSPECTIONCODE_BY_ID">

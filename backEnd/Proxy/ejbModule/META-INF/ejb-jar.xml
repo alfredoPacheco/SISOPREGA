@@ -82,6 +82,10 @@
 			<ejb-class>com.tramex.sisoprega.proxy.bean.InspectionBarnyardBean</ejb-class>
 		</session>
 		<session>
+			<ejb-name>InspectionDetailsProxy</ejb-name>
+			<ejb-class>com.tramex.sisoprega.proxy.bean.InspectionDetailsBean</ejb-class>
+		</session>
+		<session>
 			<ejb-name>InspectionCodeProxy</ejb-name>
 			<ejb-class>com.tramex.sisoprega.proxy.bean.InspectionCodeBean</ejb-class>
 		</session>
@@ -145,6 +149,10 @@
 			</method>
 			<method>
 				<ejb-name>InspectionBarnyardProxy</ejb-name>
+				<method-name>*</method-name>
+			</method>
+			<method>
+				<ejb-name>InspectionDetailsProxy</ejb-name>
 				<method-name>*</method-name>
 			</method>
 			<method>
@@ -244,6 +252,10 @@
 			</method>
 			<method>
 				<ejb-name>InspectionBarnyardProxy</ejb-name>
+				<method-name>*</method-name>
+			</method>
+			<method>
+				<ejb-name>InspectionDetailsProxy</ejb-name>
 				<method-name>*</method-name>
 			</method>
 			<method>

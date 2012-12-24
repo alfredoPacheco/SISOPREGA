@@ -133,15 +133,15 @@ enyo.kind({
 			this.$.rancher_id.setValue(receptionDef.rancher_id);
 			this.$.arrival_date.setValue(new Date(receptionDef.arrival_date.substring(0,4),
 												  receptionDef.arrival_date.substring(5,7)-1,
-												  receptionDef.arrival_date.substring(8,10)																
+												  receptionDef.arrival_date.substring(8,10)
 										 ));
 			this.$.city_id.setValue(receptionDef.city_id);
 			this.$.cattype_id.setValue(receptionDef.cattype_id);
 			this.$.hc_aprox.setValue(receptionDef.weights[0].hc);
 			if(receptionDef.weights.length==1){
-				this.$.weight.setValue(receptionDef.weights[0].weight);		
+				this.$.weight.setValue(receptionDef.weights[0].weight);
 			}
-		}		
+		}
 	},
 	toggleUpdate:function(){
 		this.$.draAdd.setOpen(false);
@@ -159,11 +159,11 @@ enyo.kind({
 		switch(inSelected.value){ 
 			case 1:
 				this.$.addRancherDialog.createComponent({kind: "catalogs.ranchers.enterprise.create",
-														 onAddRancher:"adoken", name:'dynoco',flex: 1},{owner:this});				
+														 onAddRancher:"adoken", name:'dynoco',flex: 1},{owner:this});
 				break;
 			case 2:
 				this.$.addRancherDialog.createComponent({kind: "catalogs.ranchers.person.create",
-														 onAddRancher:"adoken", name:'dynoco',flex: 1},{owner:this});								
+														 onAddRancher:"adoken", name:'dynoco',flex: 1},{owner:this});
 				break;
 		}
 		this.$.addRancherDialog.render();
