@@ -436,7 +436,7 @@ enyo.kind({
 		var objToSend = objWeight;
 		objToSend.reception_id = receptionID;
 		objToSend = this.receptionHeadcountAdapterToOut(objToSend);
-		
+		delete objToSend.headcountId;
 		var cgCreate = consumingGateway.Create("ReceptionHeadcount", objToSend);
 		if (cgCreate.exceptionId == 0){ //Created successfully
 			objWeight.hcw_id = cgCreate.generatedId;
