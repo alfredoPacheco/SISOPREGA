@@ -74,7 +74,7 @@ enyo.kind({
 		    	});
 			}
 			else{ //Error
-				if (cgReadAll.exceptionId != "CTR2"){ //No data found
+				if (cgReadAll.exceptionId != "VAL02"){ //No data found
 					cacheMan.setMessage("", "[Exception ID: " + cgReadAll.exceptionId + "] Descripcion: " + cgReadAll.exceptionDescription);	
 				}			
 			}
@@ -108,7 +108,7 @@ enyo.kind({
 		    	});
 			}
 			else{ //Error
-				if (cgReadAll.exceptionId != "RR02"){ //No data found
+				if (cgReadAll.exceptionId != "VAL02"){ //No data found
 					cacheMan.setMessage("", "[Exception ID: " + cgReadAll.exceptionId + "] Descripcion: " + cgReadAll.exceptionDescription);	
 				}			
 			}
@@ -128,10 +128,6 @@ enyo.kind({
 		var cgCreate = consumingGateway.Create("CattleType", objToSend);
 		if (cgCreate.exceptionId == 0){ //Created successfully
 			objCat.cattype_id = cgCreate.generatedId;
-			
-//			objCat.billing = {};
-//			objCat.contacts = [];
-//			objCat.rfc = "";
 			
 			this.arrCattleType.push(objCat);
 			_arrCattleTypeList = this.arrCattleType;
@@ -181,6 +177,16 @@ enyo.kind({
 		for(var i=0;i<arrTemp.length;i++){		
 			_arrCattleLS.push({	caption:arrTemp[i].catclass_name,
 								value:	arrTemp[i].catclass_id});
+		}
+		return _arrCattleLS;
+	},
+	getCattleTypeLS:function(){
+		var _arrCattleLS=[];
+		var arrTemp=[];
+		arrTemp = this.getCattleType();
+		for(var i=0;i<arrTemp.length;i++){
+			_arrCattleLS.push({caption:arrTemp[i].cattype_name,
+									value:arrTemp[i].cattype_id});
 		}
 		return _arrCattleLS;
 	},

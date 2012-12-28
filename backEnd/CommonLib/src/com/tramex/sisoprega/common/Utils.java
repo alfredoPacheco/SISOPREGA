@@ -105,6 +105,10 @@ public class Utils {
         result = Boolean.parseBoolean(sValue);
         log.fine("found boolean: " + sValue);
       }
+      if(type.getName().equals("double")){
+          result = Double.parseDouble(sValue);
+          log.fine("found double: " + sValue);
+        }
     }
 
     log.exiting(Utils.class.getCanonicalName(), "valueFromRequest");

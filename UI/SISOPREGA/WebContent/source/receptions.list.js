@@ -8,7 +8,7 @@ enyo.kind({
 	iSelected:null,
 	components:[
 		{kind: enyo.Scroller,flex: 1,
-    	style: "background-image: url(images/practice_background.png); background-size: cover;",	
+		className:"listBG",    	
  		 components: [
 			{kind: enyo.VirtualRepeater, toggleSelected:true,
 				name: "receptionList", onSetupRow: "setupRow", onclick:"selectReception",								
@@ -98,7 +98,7 @@ enyo.kind({
 	calcNetWeight:function(arrW){
 		var iHC=0;
 		var iW=0;
-		var iProm=0;
+//		var iProm=0;
 		var objW;
 		for (var i=0;i<arrW.length;i++){
 			objW=arrW[i];

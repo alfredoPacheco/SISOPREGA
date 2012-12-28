@@ -26,6 +26,7 @@ package com.tramex.sisoprega.dto;
  * MM/DD/YYYY
  * ----------  ---------------------------  -------------------------------------------
  * 18/11/2012  Jaime Figueroa                 Initial Version.
+ * 12/16/2012  Diego Torres                   Adding toString method.
  * ====================================================================================
  * </PRE>
  * 
@@ -34,47 +35,57 @@ package com.tramex.sisoprega.dto;
  */
 
 public class CattleType {
-    private long cattypeId;
-    private long catclassId;
-    private String cattypeName;
-    /**
-     * @return the cattypeId
-     */
-    public long getCattypeId() {
-        return cattypeId;
-    }
-    /**
-     * @param cattypeId the cattypeId to set
-     */
-    public void setCattypeId(long cattypeId) {
-        this.cattypeId = cattypeId;
-    }
-    /**
-     * @return the catclassId
-     */
-    public long getCatclassId() {
-        return catclassId;
-    }
-    /**
-     * @param catclassId the catclassId to set
-     */
-    public void setCatclassId(long catclassId) {
-        this.catclassId = catclassId;
-    }
-    /**
-     * @return the cattypeName
-     */
-    public String getCattypeName() {
-        return cattypeName;
-    }
-    /**
-     * @param cattypeName the cattypeName to set
-     */
-    public void setCattypeName(String cattypeName) {
-        this.cattypeName = cattypeName;
-    }
-    
+  private long cattypeId;
+  private long catclassId;
+  private String cattypeName;
 
+  /**
+   * @return the cattypeId
+   */
+  public long getCattypeId() {
+    return cattypeId;
+  }
 
-    
+  /**
+   * @param cattypeId
+   *          the cattypeId to set
+   */
+  public void setCattypeId(long cattypeId) {
+    this.cattypeId = cattypeId;
+  }
+
+  /**
+   * @return the catclassId
+   */
+  public long getCatclassId() {
+    return catclassId;
+  }
+
+  /**
+   * @param catclassId
+   *          the catclassId to set
+   */
+  public void setCatclassId(long catclassId) {
+    this.catclassId = catclassId;
+  }
+
+  /**
+   * @return the cattypeName
+   */
+  public String getCattypeName() {
+    return cattypeName;
+  }
+
+  /**
+   * @param cattypeName
+   *          the cattypeName to set
+   */
+  public void setCattypeName(String cattypeName) {
+    this.cattypeName = cattypeName;
+  }
+
+  @Override
+  public String toString() {
+    return "catclassId:" + catclassId + ";cattypeId:" + cattypeId + ";cattypeName:" + cattypeName + ";";
+  }
 }

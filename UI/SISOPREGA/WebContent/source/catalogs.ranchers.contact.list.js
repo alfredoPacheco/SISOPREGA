@@ -10,7 +10,7 @@ enyo.kind({
 	objRancher:null,
 	components:[
 		{kind: enyo.Scroller, name:"scrollProductList",flex: 1,
-    	style: "background-image: url(images/practice_background.png); background-size: cover;",	
+			className:"listBG",
  		 components: [
 					{kind: enyo.VirtualRepeater, name: "productList", onSetupRow: "setupRow", 
 					 onclick: "selectContact",								
@@ -72,7 +72,7 @@ enyo.kind({
 		if(this.objRancher!=null){
 			if (objRan=this.objRancher.contacts[inIndex]) {
 				this.setupDivider(inIndex);
-				this.$.contact_name.setContent(objRan.first_name+' '+objRan.last_name);
+				this.$.contact_name.setContent(objRan.last_name+', '+objRan.first_name);
 				this.$.contact_info.setContent(objRan.phone_number);			
 				return true;
 			}

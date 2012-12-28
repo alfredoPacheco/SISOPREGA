@@ -15,6 +15,8 @@
  */
 package com.tramex.sisoprega.proxy.bean;
 
+import java.util.List;
+
 import javax.ejb.Stateless;
 import javax.persistence.TypedQuery;
 
@@ -41,6 +43,8 @@ import com.tramex.sisoprega.dto.InspectionBarnyard;
  * MM/DD/YYYY
  * ----------  ---------------------------  -------------------------------------------
  * 12/09/2012  Jaime Figueroa                Initial Version.
+ * 12/13/2012  Diego Torres                  Enable Read Operation.
+ * 12/16/2012  Diego Torres                  Adding log activity
  * ====================================================================================
  * </PRE>
  * 
@@ -78,6 +82,7 @@ public class InspectionBarnyardBean extends BaseBean implements Cruddable {
         log.finer("Setting InspectionBarnyard id in response: " + sId);
         response.setGeneratedId(sId);
         response.setError(new Error("0", "SUCCESS", "proxy.InspectionBarnyardBean.Create"));
+        log.info("Inspection Barnyard [" + inspBarnyard.toString() + "] created by principal[" + getLoggedUser() + "]");
       } else {
         log.warning("Error de validación: " + error_description);
         response.setError(new Error("VAL01", "Error de validación: " + error_description, "proxy.InspectionBarnyardBean.Create"));
@@ -108,8 +113,58 @@ public class InspectionBarnyardBean extends BaseBean implements Cruddable {
    */
   @Override
   public ReadGatewayResponse Read(GatewayRequest request) {
-    // TODO Auto-generated method stub
-    return null;
+    log.entering(this.getClass().getCanonicalName(), "Read");
+
+    ReadGatewayResponse response = new ReadGatewayResponse();
+    response.setEntityName(request.getEntityName());
+
+    InspectionBarnyard inspection = null;
+    try {
+      inspection = entityFromRequest(request, InspectionBarnyard.class);
+      log.fine("Got inspection from request: " + inspection);
+
+      TypedQuery<InspectionBarnyard> readQuery = null;
+      String qryLogger = "";
+      if (inspection.getIbId() != 0) {
+        readQuery = em.createNamedQuery("CRT_INSPECTIONBARNYARD_BY_ID", InspectionBarnyard.class);
+        log.fine("Query by Id: " + inspection.getIbId());
+        readQuery.setParameter("ibId", inspection.getIbId());
+        qryLogger = "By ibId [" + inspection.getIbId() + "]";
+      } else if (inspection.getInspectionId() != 0) {
+        readQuery = em.createNamedQuery("IB_BY_INSPECTION_ID", InspectionBarnyard.class);
+        log.fine("Query by InspectionId: " + inspection.getInspectionId());
+        readQuery.setParameter("inspectionId", inspection.getInspectionId());
+        qryLogger = "By inspectionId [" + inspection.getInspectionId() + "]";
+      } else {
+        response.setError(new Error("VAL03", "El filtro especificado no es válido para las inspecciones de ganado",
+            "proxy.InspectionBarnyardDetail.Read"));
+        return response;
+      }
+
+      // Query the results through the jpa using a typedQuery
+      List<InspectionBarnyard> queryResults = readQuery.getResultList();
+
+      if (queryResults.isEmpty()) {
+        response.setError(new Error("VAL02", "No se encontraron datos para el filtro seleccionado", "proxy.InspectionBarnyardBean.Read"));
+      } else {
+        // Add query results to response
+        response.getRecord().addAll(contentFromList(queryResults, InspectionBarnyard.class));
+
+        // Add success message to response
+        response.setError(new Error("0", "SUCCESS", "proxy.InspectionBarnyard.Read"));
+        log.info("Read operation " + qryLogger + " executed by principal[" + getLoggedUser() + "] on InspectionBarnyardBean");
+      }
+    } catch (Exception e) {
+      // something went wrong, alert the server and respond the client
+      log.severe("Exception found while reading feed inspection");
+      log.throwing(this.getClass().getCanonicalName(), "Read", e);
+
+      response.setError(new Error("DB02", "Read exception: " + e.getMessage(), "proxy.InspectionBarnyardBean.Read"));
+    }
+
+    // end and respond.
+    log.exiting(this.getClass().getCanonicalName(), "Read");
+    return response;
   }
 
   /*
@@ -140,6 +195,7 @@ public class InspectionBarnyardBean extends BaseBean implements Cruddable {
           response.setUpdatedRecord(content);
 
           response.setError(new Error("0", "SUCCESS", "proxy.InspectionBarnyard.Update"));
+          log.info("InspectionBarnyard [" + inspBarnyard.toString() + "] updated by principal[" + getLoggedUser() + "]");
         } else {
           log.warning("Validation error:" + error_description);
           response.setError(new Error("VAL01", "Error de validación de datos:" + error_description,
@@ -187,11 +243,13 @@ public class InspectionBarnyardBean extends BaseBean implements Cruddable {
         TypedQuery<InspectionBarnyard> readQuery = em.createNamedQuery("CRT_INSPECTIONBARNYARD_BY_ID", InspectionBarnyard.class);
         readQuery.setParameter("ibId", inspBarnyard.getBarnyardId());
         inspBarnyard = readQuery.getSingleResult();
+        log.info("Deleting InspectionBarnyard [" + inspBarnyard.toString() + "] by principal[" + getLoggedUser() + "]");
         em.merge(inspBarnyard);
         em.remove(inspBarnyard);
         em.flush();
 
         response.setError(new Error("0", "SUCCESS", "proxy.InspectionBarnyard.Delete"));
+        log.info("InspectionBarnyard successfully deleted by principal [" + getLoggedUser() + "]");
       }
     } catch (Exception e) {
       log.severe("Exception found while deleting inspBarnyard");

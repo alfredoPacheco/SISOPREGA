@@ -25,39 +25,50 @@ package com.tramex.sisoprega.dto;
  * Date        By                           Description
  * MM/DD/YYYY
  * ----------  ---------------------------  -------------------------------------------
- * 1/12/2012  Jaime Figueroa                 Initial Version.
+ * 12/12/2012  Jaime Figueroa                 Initial Version.
+ * 12/16/2012  Diego Torres                   Adding toString implementation.
  * ====================================================================================
  * </PRE>
  * 
  * @author Jaime Figueroa
- *
+ * 
  */
 public class Food {
-    private long foodId;
-    private String foodName;
-    /**
-     * @return the foodId
-     */
-    public long getFoodId() {
-        return foodId;
-    }
-    /**
-     * @param foodId the foodId to set
-     */
-    public void setFoodId(long foodId) {
-        this.foodId = foodId;
-    }
-    /**
-     * @return the foodName
-     */
-    public String getFoodName() {
-        return foodName;
-    }
-    /**
-     * @param foodName the foodName to set
-     */
-    public void setFoodName(String foodName) {
-        this.foodName = foodName;
-    }
-   
+  private long foodId;
+  private String foodName;
+
+  /**
+   * @return the foodId
+   */
+  public long getFoodId() {
+    return foodId;
+  }
+
+  /**
+   * @param foodId
+   *          the foodId to set
+   */
+  public void setFoodId(long foodId) {
+    this.foodId = foodId;
+  }
+
+  /**
+   * @return the foodName
+   */
+  public String getFoodName() {
+    return foodName;
+  }
+
+  /**
+   * @param foodName
+   *          the foodName to set
+   */
+  public void setFoodName(String foodName) {
+    this.foodName = foodName;
+  }
+  
+  @Override
+  public String toString(){
+    return "foodId:" + foodId + ";foodName:" + foodName + ";";
+  }
 }

@@ -44,6 +44,7 @@ import com.tramex.sisoprega.dto.EnterpriseRancher;
  * ----------  ---------------------------  -------------------------------------------
  * 11/05/2012  Diego Torres                 Initial Version.
  * 12/08/2012  Diego Torres                 Add standard error codes and validation.
+ * 12/16/2012  Diego Torres                 Adding log activity
  * ====================================================================================
  * </PRE>
  * 
@@ -78,6 +79,7 @@ public class EnterpriseRancherBean extends BaseBean implements Cruddable {
 
         response.setGeneratedId(sId);
         response.setError(new Error("0", "SUCCESS", "proxy.EnterpriseRancher.Create"));
+        log.info("Enterprise Rancher [" + enterpriseRancher.toString() + "] created by principal[" + getLoggedUser() + "]");
       } else {
         // Set validation error
         log.warning("Error de validación: " + error_description);
@@ -117,14 +119,16 @@ public class EnterpriseRancherBean extends BaseBean implements Cruddable {
       log.fine("Got rancher from request: " + enterpriseRancher);
 
       TypedQuery<EnterpriseRancher> readQuery = null;
-
+      String qryLogger = "";
       if (enterpriseRancher.getEnterpriseId() != 0) {
         readQuery = em.createNamedQuery("ENTERPRISE_RANCHER_BY_ID", EnterpriseRancher.class);
         log.fine("Query by Id: " + enterpriseRancher.getEnterpriseId());
         readQuery.setParameter("enterpriseId", enterpriseRancher.getEnterpriseId());
+        qryLogger = "By enterpriseId [" + enterpriseRancher.getEnterpriseId() + "]";
       } else {
         // No other filter expected for enterprise ranchers, return all
         readQuery = em.createNamedQuery("ALL_ENTERPRISE_RANCHERS", EnterpriseRancher.class);
+        qryLogger = "ALL_ENTERPRISE_RANCHERS";
       }
 
       // Query the results through the jpa using a typedQuery
@@ -139,6 +143,7 @@ public class EnterpriseRancherBean extends BaseBean implements Cruddable {
 
         // Add success message to response
         response.setError(new Error("0", "SUCCESS", "proxy.EnterpriseRancher.Read"));
+        log.info("Read operation " + qryLogger + " executed by principal[" + getLoggedUser() + "] on EnterpriseRancherBean");
       }
     } catch (Exception e) {
       // something went wrong, alert the server and respond the client
@@ -175,6 +180,7 @@ public class EnterpriseRancherBean extends BaseBean implements Cruddable {
           response.setUpdatedRecord(getContentFromEntity(enterpriseRancher, com.tramex.sisoprega.dto.EnterpriseRancher.class));
           response.setEntityName(request.getEntityName());
           response.setError(new Error("0", "SUCCESS", "proxy.EnterpriseRancher.Update"));
+          log.info("EnterpriseRancher[" + enterpriseRancher.toString() + "] updated by principal[" + getLoggedUser() + "]");
         } else {
           log.warning("Validation error: " + error_description);
           response.setError(new Error("VAL01", "Error de validación de datos:" + error_description,
@@ -218,11 +224,13 @@ public class EnterpriseRancherBean extends BaseBean implements Cruddable {
         TypedQuery<EnterpriseRancher> readQuery = em.createNamedQuery("ENTERPRISE_RANCHER_BY_ID", EnterpriseRancher.class);
         readQuery.setParameter("enterpriseId", enterpriseRancher.getEnterpriseId());
         enterpriseRancher = readQuery.getSingleResult();
+        log.info("Deleting EnterpriseRancher [" + enterpriseRancher.toString() + "] by principal[" + getLoggedUser() + "]");
         em.merge(enterpriseRancher);
         em.remove(enterpriseRancher);
         em.flush();
 
         response.setError(new Error("0", "SUCCESS", "proxy.EnterpriseRancher.Delete"));
+        log.info("EnterpriseRancher successfully deleted by principal [" + getLoggedUser() + "]");
       }
     } catch (Exception e) {
       log.severe("Exception found while deleting contact");

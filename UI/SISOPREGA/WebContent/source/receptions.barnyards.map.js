@@ -1,41 +1,41 @@
 enyo.kind({
 	name: "receptions.barnyards.map",
-	arrReception:[{caption:"Recepcion",value:1},{caption:"Deseleccionar",value:2}],	
+	arrReception:[{caption:"Recepcion",value:1},{caption:"Deseleccionar",value:2}],
 	arrPostReception:[{caption:"Alimento",value:3},
 				      {caption:"Inspeccion",value:4},
 					  {caption:"Editar",value:5},
-					  {caption:"Liberar",value:6},					  
-					  {caption:"Deseleccionar",value:8},					  					  
-					  ],					  
+					  {caption:"Liberar",value:6},
+					  {caption:"Deseleccionar",value:8},
+					  ],
     kind: enyo.SlidingView,
 	arrByMOver:{},
 	objSelected:null,
-	arrSelected:{},  
-	arrSelectedOccupied:{},  	
+	arrSelected:{},
+	arrSelectedOccupied:{},
 	sColorOccupied:"#ff7200",
 	sColorFree:"white",	
-	sColorSelect:"lightgreen",	
-	sColorSelectOccupied:"#9b7eb1",			
+	sColorSelect:"lightgreen",
+	sColorSelectOccupied:"#9b7eb1",
 	components: [
 		{kind:"VFlexBox", flex:1, className:"mapBG",
 		 components:[
-			{name: "options", kind: enyo.PopupSelect, onSelect: "actionSelected",items:[]},	
+			{name: "options", kind: enyo.PopupSelect, onSelect: "actionSelected",items:[]},
 			{kind:enyo.BasicScroller,flex: 1,
 			components:[
 				{name: "cells", kind: "VFlexBox",align:"middle", onclick: "cellsClick"},
 			]},
-			{kind: "Popup",name: "popMan", showHideMode: "transition", openClassName: "zoomFadeIn", 
+			{kind: "Popup",name: "popMan", showHideMode: "transition", openClassName: "zoomFadeIn",
 			 className: "transitioner2", layoutKind: "VFlexLayout",
 			 style: "overflow: hidden", width: "95%", height: "95%",scrim: true,}]}
-	],	
+	],
 	ready: function() {
 		this.last=this.$.cells;
 		//this.addRow(true);
 		this.addRowHeader();
-		this.addCustomCell("corraman","Corrales de <br/> Manejo","99	px","50px");
+		this.addCustomCell("corraman","Corrales de <br/> Manejo","100px","50px");
 		this.createCells("1E",5,6,"50px","50px");
 		this.splitRow();
-		this.createCells("1E",17,8,"50px","50px");		
+		this.createCells("1E",17,8,"50px","50px");
 		this.splitRow();		
 		this.createCells("2E",7,4,"50px","50px");				
 		this.addRow();
@@ -110,13 +110,15 @@ enyo.kind({
 	last:null,
 	addCustomCell:function(sName,sCaption,sWidth,sHeight,sClass){
 		if(!sClass){
-			sClass="customBYcell"
+			sClass="customBYcell";
 		}
 		objBarn.createComponent({kind:enyo.Control,
 		                         className:sClass,
 								 allowHtml:true,
 		                          style: "width:"+sWidth+
-						                 ";height:"+sHeight+";",
+						                 ";height:"+sHeight+";" +
+				                 		"text-align: center;" +
+				                 		"vertical-align: middle;",
 			                      name:sName,
 								  content:sCaption,
 								 },{owner: this});		
@@ -124,17 +126,17 @@ enyo.kind({
 	addRowHeader:function(){
 			this.last=objBarn=this.$.cells.createComponent({kind: "HFlexBox"});																								
 			this.addCustomCell("alaone","<strong>CHIHUAHUA</strong>",
-							  "815px","25px","customBYcellZone");
+							  "815px","30px","customBYcellZone");
 			this.splitRow();
 			this.addCustomCell("alatwo","<strong>ZONA SUR</strong>",
-			                   "200px","25px","customBYcellZone");			
+			                   "200px","30px","customBYcellZone");			
 			this.addRow();
 	},
 	addRow:function(bDiv){
-		if (bDiv){
-			this.$.cells.createComponent({kind: "Divider",caption:""});
+		if (bDiv){	
+			this.$.cells.createComponent({kind: "Divider",caption:"", style:"margin-left: -16px;"});
 		}else{
-			this.$.cells.createComponent({kind: "HFlexBox", style:"height:5px"});									
+			this.$.cells.createComponent({kind: "HFlexBox", style:"height:5px;"});									
 		}
 		this.last=objBarn=this.$.cells.createComponent({kind: "HFlexBox"});						
 	},
@@ -144,8 +146,9 @@ enyo.kind({
 		                         style: "width:15px; height:"+sHeight+
 										";align:left"+
 										""});
-	},
+	},	
 	createCells:function(sLetter,iStart,iNumber,sWidth,sHeight){
+		//this.createCells("1E",5,6,"50px","50px");
 		objBarn=this.last;				
 		var sColor;
 		for (var i=0; i<iNumber; i++) {
@@ -157,7 +160,7 @@ enyo.kind({
 				iOccupied=0;				
 				sColor=this.sColorFree;				
 			}
-			var c=objBarn.createComponent({kind:enyo.Control,
+			objBarn.createComponent({kind:enyo.Control,
 										   className:"byCell",
 										   style:"width:"+sWidth+
 											   ";height:"+sHeight+
@@ -167,7 +170,8 @@ enyo.kind({
 			                               name:sLetter+iStart,
 										   occupied:iOccupied,
 										   content:sLetter.substr(1)+iStart,
-										   onclick: "cellClick",									   
+										   onclick: "cellClick",
+										   onmousehold:"cellHold",
 										  },{owner: this});
 			iStart=iStart+2;
 		}			
@@ -191,7 +195,7 @@ enyo.kind({
 	},	
 	cellClick:function(inSender, inEvent){
 		this.cellOut();
-		this.cellOver(inSender, inEvent);	
+		this.cellOver(inSender, inEvent);
 		this.objSelected=inSender;
 		switch(inSender.occupied){
 			case 0:
@@ -233,6 +237,65 @@ enyo.kind({
 				}
 				break;							
 			case 2:
+				delete this.arrSelected[this.objSelected.name];	
+				this.objSelected.occupied=0;
+				this.objSelected.applyStyle("background-color",this.sColorFree);						
+				break;
+						
+			case 3:
+				delete this.arrSelectedOccupied[this.objSelected.name];	
+				this.objSelected.occupied=1;
+				this.objSelected.applyStyle("background-color",this.sColorOccupied);									
+				break;								
+				
+		}
+	},
+	cellHold:function(inSender, inEvent){
+		inEvent.stopPropagation();
+		
+		this.objSelected=inSender;
+		switch(inSender.occupied){
+			case 0:
+				this.clearDesc();
+				if(enyo.json.stringify(this.arrSelectedOccupied)!="{}"){
+					for(var sKey in this.arrSelectedOccupied){
+						if(cacheBY.isOccupied(sKey)){
+							this.$[sKey].occupied=1;
+							this.$[sKey].applyStyle("background-color",this.sColorOccupied);
+						}
+					}
+					this.arrSelectedOccupied={};
+				}
+				inSender.occupied=2;
+				this.arrSelected[inSender.name]=inSender.name;			
+				inSender.applyStyle("background-color",this.sColorSelect);
+				this.cellHold(inSender, inEvent);
+				break;
+			case 1:
+				this.setDesc(inSender.name);
+				if(enyo.json.stringify(this.arrSelected)!="{}"){
+					this.$.options.setItems([{caption:"Anexar",value:7}]);
+					this.$.options.render();
+					this.$.options.openAtEvent(inEvent);							
+				}else{
+					for(var sKey in this.arrSelectedOccupied){
+						if(cacheBY.inUse()[sKey].reception_id!=cacheBY.inUse()[inSender.name].reception_id){
+							for(var sKey in this.arrSelectedOccupied){
+								this.$[sKey].occupied=1;
+								this.$[sKey].applyStyle("background-color",this.sColorOccupied);
+							}
+							this.arrSelectedOccupied={};
+						}
+						break;
+					}	
+					//cacheBY.get
+					inSender.occupied=3;					
+					this.arrSelectedOccupied[inSender.name]=inSender.name;
+					inSender.applyStyle("background-color",this.sColorSelectOccupied);
+					this.cellHold(inSender, inEvent);
+				}				
+				break;							
+			case 2:
 				this.$.options.setItems(this.arrReception);
 				this.$.options.render();
 				this.$.options.openAtEvent(inEvent);		
@@ -254,6 +317,7 @@ enyo.kind({
 		this.$.spacerone.setContent("");
 	},
 	setDesc:function(sBY){
+		try {
 		var objRec=cacheReceptions.getByID(cacheBY.inUse()[sBY].reception_id);
 		var sBy="";
 		var iBy=0;
@@ -275,7 +339,10 @@ enyo.kind({
 									"  ("+ objRec.hc_aprox+"/"+objRec.weights[0].weight+")"+
 									"	 "+objRec.arrival_date+
 									"</br> Corrales ("+iBy+") - "+sBy);		
-		*/
+		*/}
+		catch(e){
+			_objMainHeader.setContent("");
+		}
 	},
 	actionSelected:function(inSender, inSelected){				
 		switch(inSelected.value){
@@ -289,7 +356,7 @@ enyo.kind({
 				this.$.popMan.createComponent({kind: "receptions.create",
 										       onAddReception:"updateBY",onCancel:"closePopUp", 
 										       name:'dynocon',flex: 1},{owner:this});			
-				this.$.dynocon.setReception(null,this.arrSelected)
+				this.$.dynocon.setReception(null,this.arrSelected);
 				this.$.dynocon.toggleAdd();
 				this.$.popMan.render();
 				this.$.popMan.openAtCenter();												
@@ -336,7 +403,7 @@ enyo.kind({
 										onAddReception:"closePopUp", onCancel:"closePopUp",
 										name:'dynocon',flex: 1},{owner:this});
 				var objRec=cacheReceptions.getByID(cacheBY.inUse()[this.objSelected.name].reception_id);										
-				this.$.dynocon.set(objRec)		
+				this.$.dynocon.set(objRec);		
 				this.$.dynocon.toggleAdd();
 				this.$.popMan.render();
 				this.$.popMan.openAtCenter();												
@@ -363,7 +430,7 @@ enyo.kind({
 				break;
 			case 7:
 				var objRec=cacheReceptions.getByID(cacheBY.inUse()[this.objSelected.name].reception_id);
-				cacheReceptions.appendBY(objRec,this.arrSelected,this,"updateBY")
+				cacheReceptions.appendBY(objRec,this.arrSelected,this,"updateBY");
 				break;	
 			case 8:
 				delete this.arrSelectedOccupied[this.objSelected.name];	

@@ -38,15 +38,20 @@ enyo.kind({
 				 ]},							  
 	],
 	checkLogIn:function(){
+		cacheMan.showScrim();
 		var consumirLogin = consumingGateway.Login(this.$.user.getValue(), this.$.password.getValue());
 		if(consumirLogin.exceptionId == 0){
-			cacheRanchers.get();
-			
+			cacheRanchers.get();			
 			cacheCattle.getCattleClass();
 			cacheCattle.getCattleType();
+			cacheBY.get();
+			cacheReceptions.get();
+			cacheMan.hideScrim();
 			this.doSucess();
 		}else{
+			cacheMan.hideScrim();
 			this.doFail();
-		}				
+		}			
+		
 	}
 });

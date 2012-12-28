@@ -105,7 +105,7 @@ enyo.kind({
 	afterAdd:function(){
 		this.arrBY={};
 		this.updateList();		
-		this.$.modalDialog.openAtCenter()		
+		this.$.modalDialog.openAtCenter();
 	},
 	setReception:function(objReception){
 		this.objReception=objReception;

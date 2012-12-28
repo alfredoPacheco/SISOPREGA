@@ -1,6 +1,7 @@
 var _arrCattleReject=[{reject_id:1,reject_desc:"EMFERMEDAD"},
                       {reject_id:2,reject_desc:"HERIDA"},
                       {reject_id:3,reject_desc:"OTRAS"}];
+
 var _arrFeed=[{feed_id:1,feed_desc:"MOLIDA",feed_units:"KG"},
 			  {feed_id:2,feed_desc:"ALFALFA",feed_units:"PACAS"},
 			  {feed_id:3,feed_desc:"AVENA",feed_units:"PACAS"},
@@ -30,7 +31,8 @@ var	_arrReceptionList=[
 		 inspections:[],
 		 feed:[]		 
 		 },
-	];					
+	];	
+
 var _arrCities=[{city_id:1,city_name:"LOCAL"},{city_id:2,city_name:"FORANEA"}];
 
 var _arrRancherList =[
@@ -68,7 +70,12 @@ var _arrBarnyardsList=[
 		 barnyard_capacity:[{cattype_id:4,cattype_name:"VACAS",head_count:50}]}
 	];		
 
-
+var _arrBarnyardsListCatalog=[
+               		{barnyard_id:1,barnyard_code:"A1", location_id: "1",
+               		 barnyard_capacity:[{catclass_id:1,catclass_name:"EQUINO",head_count:75}]},
+               		{barnyard_id:2,barnyard_code:"A2", location_id: "2",
+               		 barnyard_capacity:[{catclass_id:4,cattype_name:"BOVINO",head_count:50}]}
+               	];		
 var _objMainHeader;
 
 function fillRancherLS(){

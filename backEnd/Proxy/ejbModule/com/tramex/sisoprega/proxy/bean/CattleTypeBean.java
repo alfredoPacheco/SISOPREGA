@@ -47,6 +47,7 @@ import com.tramex.sisoprega.dto.CattleType;
  * 12/02/2012  Diego Torres                   Fixing Detele operation, change cattleClassId for cattleTypeId.
  * 12/02/2012  Jaime Figueroa                 Fixing Update operation, change cattleClassId for cattleTypeId.
  * 12/05/2012  Diego Torres                   Adding validation and standard error codes.
+ * 12/16/2012  Diego Torres                   Adding user log activity.
  * ====================================================================================
  * </PRE>
  * 
@@ -84,6 +85,7 @@ public class CattleTypeBean extends BaseBean implements Cruddable {
         log.finer("Setting cattle type id in response: " + sId);
         response.setGeneratedId(sId);
         response.setError(new Error("0", "SUCCESS", "proxy.CattleTypeBean.Create"));
+        log.info("Cattle type [" + cattle.toString() + "] created by principal[" + getLoggedUser() + "]");
       } else {
         log.warning("Error de validación: " + error_description);
         response.setError(new Error("VAL01", "Error de validación: " + error_description, "proxy.CattleTypeBean.Create"));
@@ -126,15 +128,18 @@ public class CattleTypeBean extends BaseBean implements Cruddable {
 
       log.fine("Got contact from request: " + cattle);
       TypedQuery<CattleType> readQuery = null;
-
+      String qryLogger = "";
       if (cattle.getCattypeId() != 0) {
         readQuery = em.createNamedQuery("CATTLE_TYPE_BY_ID", CattleType.class);
         readQuery.setParameter("cattypeId", cattle.getCattypeId());
+        qryLogger = "By cattypeId[" + cattle.getCattypeId() + "]";
       } else if (cattle.getCatclassId() != 0) {
         readQuery = em.createNamedQuery("CATTLE_TYPE_BY_CLASS_ID", CattleType.class);
         readQuery.setParameter("catClassId", cattle.getCatclassId());
+        qryLogger = "By catclassId[" + cattle.getCatclassId() + "]";
       } else {
         readQuery = em.createNamedQuery("ALL_CATTLE_TYPE", CattleType.class);
+        qryLogger = "By ALL_CATTLE_TYPE";
       }
 
       List<CattleType> queryResults = readQuery.getResultList();
@@ -145,7 +150,7 @@ public class CattleTypeBean extends BaseBean implements Cruddable {
         List<GatewayContent> records = contentFromList(queryResults, CattleType.class);
         response.getRecord().addAll(records);
         response.setError(new Error("0", "SUCCESS", "proxy.CattleType.Read"));
-
+        log.info("Read operation " + qryLogger + " executed by principal[" + getLoggedUser() + "] on CattleTypeBean");
       }
 
     } catch (Exception e) {
@@ -187,6 +192,7 @@ public class CattleTypeBean extends BaseBean implements Cruddable {
           response.setUpdatedRecord(content);
 
           response.setError(new Error("0", "SUCCESS", "proxy.CattleType.Update"));
+          log.info("CattleType[" + cattle.toString() + "] updated by principal[" + getLoggedUser() + "]");
         } else {
           log.warning("Validation error: " + error_description);
           response
@@ -233,11 +239,13 @@ public class CattleTypeBean extends BaseBean implements Cruddable {
         TypedQuery<CattleType> readQuery = em.createNamedQuery("CATTLE_TYPE_BY_ID", CattleType.class);
         readQuery.setParameter("cattypeId", cattleType.getCattypeId());
         cattleType = readQuery.getSingleResult();
+        log.info("Deleting CattleType[" + cattleType.toString() + "] by principal[" + getLoggedUser() + "]");
         em.merge(cattleType);
         em.remove(cattleType);
         em.flush();
 
         response.setError(new Error("0", "SUCCESS", "proxy.CattleType.Delete"));
+        log.info("CattleType successfully deleted by principal [" + getLoggedUser() + "]");
       }
     } catch (Exception e) {
       log.severe("Exception found while deleting cattle type");

@@ -27,6 +27,7 @@ package com.tramex.sisoprega.dto;
  * MM/DD/YYYY
  * ----------  ---------------------------  -------------------------------------------
  * 11/23/2012  Jaime Figueroa                Initial Version.
+ * 12/16/2012  Diego Torres                  Adding toString implementation.
  * ====================================================================================
  * </PRE>
  * 
@@ -35,32 +36,41 @@ package com.tramex.sisoprega.dto;
  */
 
 public class Location {
-    private long locationId;
-    private String locationName;
-    /**
-     * @return the locationId
-     */
-    public long getLocationId() {
-        return locationId;
-    }
-    /**
-     * @param locationId the locationId to set
-     */
-    public void setLocationId(long locationId) {
-        this.locationId = locationId;
-    }
-    /**
-     * @return the locationName
-     */
-    public String getLocationName() {
-        return locationName;
-    }
-    /**
-     * @param locationName the locationName to set
-     */
-    public void setLocationName(String locationName) {
-        this.locationName = locationName;
-    }
-    
+  private long locationId;
+  private String locationName;
 
+  /**
+   * @return the locationId
+   */
+  public long getLocationId() {
+    return locationId;
+  }
+
+  /**
+   * @param locationId
+   *          the locationId to set
+   */
+  public void setLocationId(long locationId) {
+    this.locationId = locationId;
+  }
+
+  /**
+   * @return the locationName
+   */
+  public String getLocationName() {
+    return locationName;
+  }
+
+  /**
+   * @param locationName
+   *          the locationName to set
+   */
+  public void setLocationName(String locationName) {
+    this.locationName = locationName;
+  }
+
+  @Override
+  public String toString() {
+    return "locationId:" + locationId + ";locationName:" + locationName + ";";
+  }
 }

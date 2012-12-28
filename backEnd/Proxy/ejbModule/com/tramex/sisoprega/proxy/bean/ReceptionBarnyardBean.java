@@ -15,6 +15,8 @@
  */
 package com.tramex.sisoprega.proxy.bean;
 
+import java.util.List;
+
 import javax.ejb.Stateless;
 import javax.persistence.TypedQuery;
 
@@ -40,8 +42,9 @@ import com.tramex.sisoprega.dto.ReceptionBarnyard;
  *  Date        By                           Description
  *  MM/DD/YYYY
  *  ----------  ---------------------------  -------------------------------------------
- * 12/04/2012    Jaime Figueroa                Initial Version.
- *   
+ *  12/04/2012  Jaime Figueroa                Initial Version.
+ *  12/13/2012  Diego Torres                  Enable Read Operation. 
+ *  12/16/2012  Diego Torres                  Adding log activity
  *  ====================================================================================
  * </PRE>
  * 
@@ -79,6 +82,7 @@ public class ReceptionBarnyardBean extends BaseBean implements Cruddable {
         log.finer("Setting ReceptionBarnyard id in response: " + sId);
         response.setGeneratedId(sId);
         response.setError(new Error("0", "SUCCESS", "proxy.ReceptionBarnyardBean.Create"));
+        log.info("Reception Barnyard [" + recepBarnyard.toString() + "] created by principal[" + getLoggedUser() + "]");
       } else {
         log.warning("Error de validación: " + error_description);
         response.setError(new Error("VAL01", "Error de validación: " + error_description, "proxy.ReceptionBarnyardBean.Create"));
@@ -110,8 +114,56 @@ public class ReceptionBarnyardBean extends BaseBean implements Cruddable {
    */
   @Override
   public ReadGatewayResponse Read(GatewayRequest request) {
-    // TODO Auto-generated method stub
-    return null;
+    log.entering(this.getClass().getCanonicalName(), "Read");
+
+    ReadGatewayResponse response = new ReadGatewayResponse();
+    response.setEntityName(request.getEntityName());
+
+    ReceptionBarnyard rBarnyard = null;
+    try {
+      rBarnyard = entityFromRequest(request, ReceptionBarnyard.class);
+
+      log.fine("Got reception barnyard from request: " + rBarnyard);
+
+      TypedQuery<ReceptionBarnyard> readQuery = null;
+      String qryLogger = "";
+      if (rBarnyard.getRecBarnyardId() != 0) {
+        readQuery = em.createNamedQuery("CRT_RECEPTIONBARNYARD_BY_ID", ReceptionBarnyard.class);
+        readQuery.setParameter("recBarnyardId", rBarnyard.getRecBarnyardId());
+        qryLogger = "By recBarnyardId [" + rBarnyard.getRecBarnyardId() + "]";
+      } else if (rBarnyard.getReceptionId() != 0) {
+        readQuery = em.createNamedQuery("RECEPTION_BARNYARD_BY_RECEPTION_ID", ReceptionBarnyard.class);
+        readQuery.setParameter("receptionId", rBarnyard.getReceptionId());
+        qryLogger = "By receptionId [" + rBarnyard.getReceptionId() + "]";
+      } else if(rBarnyard.getBarnyardId() != 0){
+        readQuery = em.createNamedQuery("RECEPTION_BARNYARD_BY_BARNYARD_ID", ReceptionBarnyard.class);
+        readQuery.setParameter("barnyardId", rBarnyard.getBarnyardId());
+        qryLogger = "By barnyardId [" + rBarnyard.getBarnyardId() + "]";
+      } else {
+        response.setError(new Error("VAL03", "El filtro especificado no es válido para las recepciones de ganado.",
+            "proxy.ReceptionBarnyard.Read"));
+        return response;
+      }
+
+      List<ReceptionBarnyard> queryResults = readQuery.getResultList();
+
+      if (queryResults.isEmpty()) {
+        response.setError(new Error("VAL02", "No se encontraron datos para el filtro seleccionado", "proxy.ReceptionBarnyard.Read"));
+      } else {
+        response.getRecord().addAll(contentFromList(queryResults, ReceptionBarnyard.class));
+
+        response.setError(new Error("0", "SUCCESS", "proxy.ReceptionBarnyard.Read"));
+        log.info("Read operation " + qryLogger + " executed by principal[" + getLoggedUser() + "] on ReceptionBarnyardBean");
+      }
+    } catch (Exception e) {
+      log.severe("Exception found while reading rancher invoice filter");
+      log.throwing(this.getClass().getCanonicalName(), "Read", e);
+
+      response.setError(new Error("DB02", "Error en la base de datos: " + e.getMessage(), "proxy.ReceptionBarnyard.Read"));
+    }
+
+    log.exiting(this.getClass().getCanonicalName(), "Read");
+    return response;
   }
 
   /*
@@ -142,6 +194,7 @@ public class ReceptionBarnyardBean extends BaseBean implements Cruddable {
           response.setUpdatedRecord(content);
 
           response.setError(new Error("0", "SUCCESS", "proxy.ReceptionBarnyard.Update"));
+          log.info("Reception Barnyard [" + recepBarnyard.toString() + "] updated by principal[" + getLoggedUser() + "]");
         } else {
           log.warning("Validation error:" + error_description);
           response.setError(new Error("VAL01", "Error de validación de datos:" + error_description,
@@ -189,11 +242,13 @@ public class ReceptionBarnyardBean extends BaseBean implements Cruddable {
         TypedQuery<ReceptionBarnyard> readQuery = em.createNamedQuery("CRT_RECEPTIONBARNYARD_BY_ID", ReceptionBarnyard.class);
         readQuery.setParameter("recBarnyardId", recepBarnyard.getRecBarnyardId());
         recepBarnyard = readQuery.getSingleResult();
+        log.info("Deleting Reception Barnyard [" + recepBarnyard.toString() + "] by principal[" + getLoggedUser() + "]");
         em.merge(recepBarnyard);
         em.remove(recepBarnyard);
         em.flush();
 
         response.setError(new Error("0", "SUCCESS", "proxy.ReceptionBarnyard.Delete"));
+        log.info("Reception Barnyard successfully deleted by principal [" + getLoggedUser() + "]");
       }
     } catch (Exception e) {
       log.severe("Exception found while deleting ReceptionBarnyard");

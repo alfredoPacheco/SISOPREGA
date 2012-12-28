@@ -16,7 +16,7 @@
 package com.tramex.sisoprega.dto;
 
 /**
- * Defines the model for the Cattle Type entity.<BR/>
+ * Defines the model for the Feed Order Barnyard Type entity.<BR/>
  * 
  * <B>Revision History:</B>
  * 
@@ -25,67 +25,57 @@ package com.tramex.sisoprega.dto;
  * Date        By                           Description
  * MM/DD/YYYY
  * ----------  ---------------------------  -------------------------------------------
- * 12/12/2012  Jaime Figueroa                 Initial Version.
+ * 12/09/2012  Jaime Figueroa                 Initial Version.
  * 12/16/2012  Diego Torres                   Adding toString implementation.
  * ====================================================================================
  * </PRE>
  * 
  * @author Jaime Figueroa
- * 
+ *
  */
-public class ReceptionBarnyard {
-  private long recBarnyardId;
-  private long receptionId;
+public class FeedOrderBarnyard {
+  private long feedOrdBarnId;
   private long barnyardId;
-
+  private long orderId;
   /**
-   * @return the recBarnyardId
+   * @return the feedOrdBarnId
    */
-  public long getRecBarnyardId() {
-    return recBarnyardId;
+  public long getFeedOrdBarnId() {
+    return feedOrdBarnId;
   }
-
   /**
-   * @param recBarnyardId
-   *          the recBarnyardId to set
+   * @param feedOrdBarnId the feedOrdBarnId to set
    */
-  public void setRecBarnyardId(long recBarnyardId) {
-    this.recBarnyardId = recBarnyardId;
+  public void setFeedOrdBarnId(long feedOrdBarnId) {
+    this.feedOrdBarnId = feedOrdBarnId;
   }
-
-  /**
-   * @return the receptionId
-   */
-  public long getReceptionId() {
-    return receptionId;
-  }
-
-  /**
-   * @param receptionId
-   *          the receptionId to set
-   */
-  public void setReceptionId(long receptionId) {
-    this.receptionId = receptionId;
-  }
-
   /**
    * @return the barnyardId
    */
   public long getBarnyardId() {
     return barnyardId;
   }
-
   /**
-   * @param barnyardId
-   *          the barnyardId to set
+   * @param barnyardId the barnyardId to set
    */
   public void setBarnyardId(long barnyardId) {
     this.barnyardId = barnyardId;
   }
-
-  @Override
-  public String toString() {
-    return "barnyardId:" + barnyardId + ";recBarnyardId:" + recBarnyardId + ";receptionId:" + receptionId + ";";
+  /**
+   * @return the orderId
+   */
+  public long getOrderId() {
+    return orderId;
   }
-
+  /**
+   * @param orderId the orderId to set
+   */
+  public void setOrderId(long orderId) {
+    this.orderId = orderId;
+  }
+  
+  @Override
+  public String toString(){
+    return "barnyardId:" + barnyardId + ";feedOrdBarnId:" + feedOrdBarnId + ";orderId:" + orderId + ";";
+  }
 }

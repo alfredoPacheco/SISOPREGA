@@ -1,13 +1,15 @@
 enyo.kind({
 	name: "cache.feed",
 	arrObj:_arrFeed,
+	feedWasReadFromGateway:false,
 	reloadme:function(){
 		//AJAX
 	},	
 	get:function(){
-		//AJAX
+		
 		return this.arrObj;
-	},
+		
+	},	
 	create:function(objCat,cbObj,cbMethod){
 		//AJAX
 		//SCRIM.on
@@ -24,7 +26,7 @@ enyo.kind({
 		//AJAX
 		//Update Internal Object
 		for (var sKey in objNew){
-			objOld[sKey]=objNew[sKey]
+			objOld[sKey]=objNew[sKey];
 		}
 		if(cbMethod){
 			cbObj[cbMethod]();

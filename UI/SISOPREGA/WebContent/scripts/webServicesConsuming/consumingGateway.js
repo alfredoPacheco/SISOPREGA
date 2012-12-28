@@ -302,6 +302,8 @@ var cConsumingGateway = {
 				output.exceptionDescription = error;
 			}
 		});
+		enyo.$.sisoprega.destroy();
+		window.location = './'; 
 		return output;
 	}
 

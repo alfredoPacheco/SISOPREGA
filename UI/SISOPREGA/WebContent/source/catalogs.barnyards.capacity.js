@@ -84,7 +84,7 @@ enyo.kind({
 		                           this.getCapacity(),this,"afterUpdate");
 	},
 	afterUpdate:function(){
-		this.toggleAdd()
+		this.toggleAdd();
 		this.updatetList();		
 	},
 	updatetList:function(){
@@ -114,7 +114,7 @@ enyo.kind({
 	},	
 	resetValues:function(){
 		this.$.head_count.setValue("");
-		this.$.cattype_id.setItems(cacheCattle.getLS())			
+		this.$.cattype_id.setItems(cacheCattle.getLS());
 		this.$.cattype_id.setValue(0);
 		this.updatetList();
 	}

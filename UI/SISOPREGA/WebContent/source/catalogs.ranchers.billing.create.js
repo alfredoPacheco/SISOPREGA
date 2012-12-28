@@ -10,7 +10,7 @@ enyo.kind({
 	objRan:{},
 	components: [	
 		{kind: enyo.Scroller,
-    	 style: "background-image: url(images/practice_background.png); background-size: cover; ",			 
+    	 className:"formBG",
 	     flex: 1,
 		 components: [
 			{kind: "RowGroup", defaultKind: "HFlexBox", caption: "",

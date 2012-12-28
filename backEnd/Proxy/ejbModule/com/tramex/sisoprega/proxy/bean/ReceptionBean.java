@@ -15,6 +15,8 @@
  */
 package com.tramex.sisoprega.proxy.bean;
 
+import java.util.List;
+
 import javax.ejb.Stateless;
 import javax.persistence.TypedQuery;
 
@@ -40,7 +42,9 @@ import com.tramex.sisoprega.dto.Reception;
  * Date        By                           Description
  * MM/DD/YYYY
  * ----------  ---------------------------  -------------------------------------------
- * 12/07/2012  Jaime Figueroa                Initial Version.                                     
+ * 12/07/2012  Jaime Figueroa                Initial Version.
+ * 12/13/2012  Diego Torres                  Enable read operation      
+ * 12/16/2012  Diego Torres                  Adding log activity                               
  * ====================================================================================
  * </PRE>
  * @author Jaime Figueroa
@@ -77,6 +81,7 @@ public class ReceptionBean extends BaseBean implements Cruddable {
         log.finer("Setting Reception id in response: " + sId);
         response.setGeneratedId(sId);
         response.setError(new Error("0", "SUCCESS", "proxy.Reception.Create"));
+        log.info("Reception [" + reception.toString() + "] created by principal[" + getLoggedUser() + "]");
       } else {
         log.warning("Validation error: " + error_description);
         response.setError(new Error("VAL01", "Validation error: " + error_description, "proxy.Reception.Create"));
@@ -107,8 +112,47 @@ public class ReceptionBean extends BaseBean implements Cruddable {
    */
   @Override
   public ReadGatewayResponse Read(GatewayRequest request) {
-    // TODO Auto-generated method stub
-    return null;
+    log.entering(this.getClass().getCanonicalName(), "Read");
+
+    ReadGatewayResponse response = new ReadGatewayResponse();
+    response.setEntityName(request.getEntityName());
+
+    Reception reception = null;
+    try {
+      reception = entityFromRequest(request, Reception.class);
+
+      log.fine("Got reception from request: " + reception);
+
+      TypedQuery<Reception> readQuery = null;
+      String qryLogger = "";
+      if (reception.getReceptionId() != 0) {
+        readQuery = em.createNamedQuery("CRT_RECEPTION_BY_ID", Reception.class);
+        readQuery.setParameter("receptionId", reception.getReceptionId());
+        qryLogger = "By receptionId [" + reception.getReceptionId() + "]";
+      } else {
+        readQuery = em.createNamedQuery("ALL_RECEPTIONS", Reception.class);
+        qryLogger = "By ALL_RECEPTIONS";
+      }
+
+      List<Reception> queryResults = readQuery.getResultList();
+
+      if (queryResults.isEmpty()) {
+        response.setError(new Error("VAL02", "No se encontraron datos para el filtro seleccionado", "proxy.Reception.Read"));
+      } else {
+        response.getRecord().addAll(contentFromList(queryResults, Reception.class));
+
+        response.setError(new Error("0", "SUCCESS", "proxy.Reception.Read"));
+        log.info("Read operation " + qryLogger + " executed by principal[" + getLoggedUser() + "] on ReceptionBean");
+      }
+    } catch (Exception e) {
+      log.severe("Exception found while reading rancher invoice filter");
+      log.throwing(this.getClass().getCanonicalName(), "Read", e);
+
+      response.setError(new Error("DB02", "Error en la base de datos: " + e.getMessage(), "proxy.Reception.Read"));
+    }
+
+    log.exiting(this.getClass().getCanonicalName(), "Read");
+    return response;
   }
 
   /*
@@ -139,6 +183,7 @@ public class ReceptionBean extends BaseBean implements Cruddable {
           response.setUpdatedRecord(content);
 
           response.setError(new Error("0", "SUCCESS", "proxy.Reception.Update"));
+          log.info("Reception [" + reception.toString() + "] updated by principal[" + getLoggedUser() + "]");
         } else {
           log.warning("Validation error:" + error_description);
           response.setError(new Error("VAL01", "Error de validación de datos:" + error_description, "proxy.ReceptionBean.Update"));
@@ -182,11 +227,13 @@ public class ReceptionBean extends BaseBean implements Cruddable {
         TypedQuery<Reception> readQuery = em.createNamedQuery("CRT_RECEPTION_BY_ID", Reception.class);
         readQuery.setParameter("receptionId", reception.getReceptionId());
         reception = readQuery.getSingleResult();
+        log.info("Deleting Reception [" + reception.toString() + "] by principal[" + getLoggedUser() + "]");
         em.merge(reception);
         em.remove(reception);
         em.flush();
 
         response.setError(new Error("0", "SUCCESS", "proxy.Reception.Delete"));
+        log.info("Reception successfully deleted by principal [" + getLoggedUser() + "]");
       }
     } catch (Exception e) {
       log.severe("Exception found while deleting reception");

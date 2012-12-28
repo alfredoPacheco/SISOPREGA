@@ -18,7 +18,8 @@ enyo.kind({
 			 components: [
 					  {kind: "Input", name:"company_name", hint:"Razon Social",},	       
 					  {kind: "Input", name:"address_one", hint:"Calle y Numero"},	       
-					  {kind: "Input", name:"address_two", hint:"Colonia"},	       														  					  {kind: "Input", name:"state_id", hint:"Entidad"},
+					  {kind: "Input", name:"address_two", hint:"Colonia"},	       														  					  
+					  {kind: "Input", name:"state_id", hint:"Entidad"},
 					  {kind: "Input", name:"city_id", hint:"Poblacion"},	
 					  {kind: "Input", name:"zip_code", hint:"Codigo Postal"},					
 					  {kind: "Input", name:"rfc", hint:"RFC"},	

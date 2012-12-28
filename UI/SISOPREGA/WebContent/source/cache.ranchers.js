@@ -1,5 +1,6 @@
 enyo.kind({
 	name: "cache.ranchers",
+	iLastRanID:null,
 	arrObj:[],
 	rancherWasReadFromGateway: false,
 	invoiceWasReadFromGateway: false,
@@ -12,7 +13,7 @@ enyo.kind({
 		_arrRancherList = [];
 		this.rancherWasReadFromGateway = false;
 		this.invoiceWasReadFromGateway = false;
-		this.contactsReadFromGateway = [];		
+		this.contactsReadFromGateway = [];
 	},
 	get:function(){
 		
@@ -36,7 +37,7 @@ enyo.kind({
 		    		arrAux.push(objTmp);
 		    	});
 			}else{ //Error
-				if (cgReadAllRanchers.exceptionId != "RR02"){ //No data found
+				if (cgReadAllRanchers.exceptionId != "VAL02"){ //No data found
 					cacheMan.setMessage("", "[Exception ID: " + cgReadAllRanchers.exceptionId + "] Descripción: " + cgReadAllRanchers.exceptionDescription);	
 				}			
 			}
@@ -55,7 +56,7 @@ enyo.kind({
 		    	});			
 			}
 			else{ //Error								
-				if (cgReadAllEnterpriseRanchers.exceptionId != "ERR2"){//No data found
+				if (cgReadAllEnterpriseRanchers.exceptionId != "VAL02"){//No data found
 					cacheMan.setMessage("", "[Exception ID: " + cgReadAllEnterpriseRanchers.exceptionId + "] Descripcion: " + cgReadAllEnterpriseRanchers.exceptionDescription);	
 				}			
 			}
@@ -72,16 +73,16 @@ enyo.kind({
 		
 		var objNew = {
 				rancher_id:		objRan.rancherId,
-				aka:			objRan.aka,				
+				aka:			objRan.aka,
 				birth_date:		"" + UTCtoNormalDate(objRan.birthDate),
-				email_add:		objRan.emailAddress,				
-				first_name:		objRan.firstName,				
-				last_name:		objRan.lastName,				
-				mother_name:	objRan.motherName,				
+				email_add:		objRan.emailAddress,
+				first_name:		objRan.firstName,
+				last_name:		objRan.lastName,
+				mother_name:	objRan.motherName,
 				phone_number:	objRan.phone
 			};
 		
-//		Fields out of web service:		
+//		Fields out of web service:
 		objNew.rfc = "";
 		objNew.contacts=[];
 		objNew.billing=objRan.billing;
@@ -271,9 +272,12 @@ enyo.kind({
 		var cgCreate = consumingGateway.Create("Rancher", objToSend);
 		if (cgCreate.exceptionId == 0){ //Created successfully			
 			objRan.rancher_id = cgCreate.generatedId;
+			this.iLastRanID= objRan.rancher_id;
 			objRan.billing = {};
 			objRan.contacts = [];
 			objRan.rfc = "";
+			
+			
 			this.arrObj.push(objRan);
 			_arrRancherList = this.arrObj;
 			if(cbMethod){
@@ -640,36 +644,29 @@ enyo.kind({
 	},
 	updateBilling:function(objRancher,objBill,cbObj,cbMethod){
 		//AJAX
-		objBill.billing_id = cbObj.objRan.billing.billing_id;
-		objBill.rancher_id = cbObj.objRan.rancher_id;		
-		var objToSend = this.rancherInvoiceAdapterToOut(objBill);
-		var cgUpdateInvoice = consumingGateway.Update("RancherInvoice", objToSend);
-		if (cgUpdateInvoice.exceptionId == 0){ //Updated successfully			
-			objRancher.billing = objBill;
-			if(cbMethod){
-				cbObj[cbMethod]();
+		if (!objRancher.billing.billing_id){
+			this.createBilling(objRancher,objBill,cbObj,cbMethod);
+		}else{
+			objBill.billing_id = cbObj.objRan.billing.billing_id;
+			objBill.rancher_id = cbObj.objRan.rancher_id;		
+			var objToSend = this.rancherInvoiceAdapterToOut(objBill);
+			var cgUpdateInvoice = consumingGateway.Update("RancherInvoice", objToSend);
+			if (cgUpdateInvoice.exceptionId == 0){ //Updated successfully			
+				objRancher.billing = objBill;
+				cbObj.objRan.billing = objBill;
+				if(cbMethod){
+					cbObj[cbMethod]();
+				}
+				return true;
 			}
-			return true;
-		}
-		else{ //Error	
-			if (cgUpdateInvoice.exceptionId == "RIU3"){
-				this.createBilling(objRancher,objBill,cbObj,cbMethod);
-			}else{
+			else{ //Error
 				cacheMan.setMessage("", "[Exception ID: " + cgUpdateInvoice.exceptionId + "] Descripcion: " + cgUpdateInvoice.exceptionDescription);
-				return false;
+				return false;				
 			}
 		}
-//		for (var sKey in objBill){
-//			if(objBill[sKey]!=null){
-//				objRancher.billing[sKey]=objBill[sKey];
-//			}
-//		}		
-//		if(cbMethod){
-//			cbObj[cbMethod]();
-//		}		
 	}
 });
-var cacheRanchers= new cache.ranchers();
+var cacheRanchers = new cache.ranchers();
 
 
 function UTCtoNormalDate(strUTC){

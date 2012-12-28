@@ -45,6 +45,7 @@ import com.tramex.sisoprega.dto.RancherInvoice;
  * ----------  ---------------------------  -------------------------------------------
  * 11/09/2012  Diego Torres                 Initial Version.
  * 12/08/2012  Diego Torres                 Fixing standard error codes and validation.
+ * 12/16/2012  Diego Torres                 Adding log activity
  * ====================================================================================
  * </PRE>
  * 
@@ -78,7 +79,7 @@ public class RancherInvoiceBean extends BaseBean implements Cruddable {
         String sId = String.valueOf(invoiceInfo.getRancherInvoiceId());
         response.setGeneratedId(sId);
         response.setError(new Error("0", "SUCCESS", "proxy.RancherInvoice.Create"));
-        log.finer("built successfull response");
+        log.info("Rancher Invoice [" + invoiceInfo.toString() + "] created by principal[" + getLoggedUser() + "]");
       } else {
         log.warning("Validation error:" + error_description);
         response.setError(new Error("VAL01", "Error de validación de datos:" + error_description, "proxy.RancherContact.Create"));
@@ -117,13 +118,15 @@ public class RancherInvoiceBean extends BaseBean implements Cruddable {
       log.fine("Got rancher from request: " + invoice);
 
       TypedQuery<RancherInvoice> readQuery = null;
-
+      String qryLogger = "";
       if (invoice.getRancherInvoiceId() != 0) {
         readQuery = em.createNamedQuery("RANCHER_INVOICE_BY_ID", RancherInvoice.class);
         readQuery.setParameter("rancherInvoiceId", invoice.getRancherInvoiceId());
+        qryLogger = "By rancherInvoiceId [" + invoice.getRancherInvoiceId() + "]";
       } else if (invoice.getRancherId() != 0) {
         readQuery = em.createNamedQuery("RANCHER_INVOICE_BY_RANCHER_ID", RancherInvoice.class);
         readQuery.setParameter("rancherId", invoice.getRancherId());
+        qryLogger = "By rancherId [" + invoice.getRancherId() + "]";
       } else {
         response.setError(new Error("VAL03", "El filtro especificado no es válido para datos de facturación.",
             "proxy.RancherInvoice.Read"));
@@ -137,7 +140,8 @@ public class RancherInvoiceBean extends BaseBean implements Cruddable {
       } else {
         response.getRecord().addAll(contentFromList(queryResults, RancherInvoice.class));
 
-        response.setError(new Error("0", "SUCCESS", "proxy.Rancher.Read"));
+        response.setError(new Error("0", "SUCCESS", "proxy.RancherInvoice.Read"));
+        log.info("Read operation " + qryLogger + " executed by principal[" + getLoggedUser() + "] on RancherInvoiceBean");
       }
     } catch (Exception e) {
       log.severe("Exception found while reading rancher invoice filter");
@@ -175,6 +179,7 @@ public class RancherInvoiceBean extends BaseBean implements Cruddable {
           response.setUpdatedRecord(getContentFromEntity(invoice, RancherInvoice.class));
           response.setEntityName(request.getEntityName());
           response.setError(new Error("0", "SUCCESS", "proxy.RancherInvoice.Update"));
+          log.info("Rancher Invoice [" + invoice.toString() + "] updated by principal[" + getLoggedUser() + "]");
         } else {
           log.warning("Validation error: " + error_description);
           response.setError(new Error("VAL01", "Error de validación de datos: " + error_description,
@@ -219,11 +224,14 @@ public class RancherInvoiceBean extends BaseBean implements Cruddable {
         readQuery.setParameter("rancherInvoiceId", invoice.getRancherInvoiceId());
         invoice = readQuery.getSingleResult();
 
+        log.info("Deleting Rancher Invoice [" + invoice.toString() + "] by principal[" + getLoggedUser() + "]");
+        
         em.merge(invoice);
         em.remove(invoice);
         em.flush();
 
         response.setError(new Error("0", "SUCCESS", "proxy.RancherInvoice.Delete"));
+        log.info("Rancher Invoice successfully deleted by principal [" + getLoggedUser() + "]");
       }
     } catch (Exception e) {
       log.severe("Exception found while deleting rancher invoicing info");

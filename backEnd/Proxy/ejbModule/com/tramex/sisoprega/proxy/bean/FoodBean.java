@@ -15,6 +15,8 @@
  */
 package com.tramex.sisoprega.proxy.bean;
 
+import java.util.List;
+
 import javax.ejb.Stateless;
 import javax.persistence.TypedQuery;
 
@@ -29,6 +31,22 @@ import com.tramex.sisoprega.common.crud.Cruddable;
 import com.tramex.sisoprega.dto.Food;
 
 /**
+ * This proxy knows the logic to evaluate Feed Order Details information and the
+ * way to the database in order to save their data. Also, it is contained in EJB
+ * container, we can apply security and life cycle methods for resources.<BR/>
+ * 
+ * <B>Revision History:</B>
+ * 
+ * <PRE>
+ * ====================================================================================
+ * Date        By                           Description
+ * MM/DD/YYYY
+ * ----------  ---------------------------  -------------------------------------------
+ * 12/08/2012  Jaime Figueroa                Initial Version.
+ * 12/13/2012  Diego Torres                  Activate read operation.
+ * 12/16/2012  Diego Torres                  Adding log activity
+ * ====================================================================================
+ * </PRE>
  * @author Jaime Figueroa
  * 
  */
@@ -63,6 +81,7 @@ public class FoodBean extends BaseBean implements Cruddable {
         log.finer("Setting Food id in response: " + sId);
         response.setGeneratedId(sId);
         response.setError(new Error("0", "SUCCESS", "proxy.FoodBean.Create"));
+        log.info("Food [" + food.toString() + "] created by principal[" + getLoggedUser() + "]");
       } else {
         log.warning("Error de validación: " + error_description);
         response.setError(new Error("VAL01", "Error de validación: " + error_description, "proxy.FoodBean.Create"));
@@ -93,8 +112,52 @@ public class FoodBean extends BaseBean implements Cruddable {
    */
   @Override
   public ReadGatewayResponse Read(GatewayRequest request) {
-    // TODO Auto-generated method stub
-    return null;
+    log.entering(this.getClass().getCanonicalName(), "Read");
+
+    ReadGatewayResponse response = new ReadGatewayResponse();
+    response.setEntityName(request.getEntityName());
+
+    Food food = null;
+    try {
+      food = entityFromRequest(request, Food.class);
+      log.fine("Got food from request: " + food);
+
+      TypedQuery<Food> readQuery = null;
+      String qryLogger = "";
+      if (food.getFoodId() != 0) {
+        readQuery = em.createNamedQuery("CAT_FOOD_BY_ID", Food.class);
+        log.fine("Query by Id: " + food.getFoodId());
+        readQuery.setParameter("fodId", food.getFoodId());
+        qryLogger = "By foodId [" + food.getFoodId() + "]";
+      } else {
+        readQuery = em.createNamedQuery("ALL_FOOD", Food.class);
+        qryLogger = "By ALL_FOOD";
+      }
+
+      // Query the results through the jpa using a typedQuery
+      List<Food> queryResults = readQuery.getResultList();
+
+      if (queryResults.isEmpty()) {
+        response.setError(new Error("VAL02", "No se encontraron datos para el filtro seleccionado", "proxy.FoodBean.Read"));
+      } else {
+        // Add query results to response
+        response.getRecord().addAll(contentFromList(queryResults, Food.class));
+
+        // Add success message to response
+        response.setError(new Error("0", "SUCCESS", "proxy.Food.Read"));
+        log.info("Read operation " + qryLogger + " executed by principal[" + getLoggedUser() + "] on FoodBean");
+      }
+    } catch (Exception e) {
+      // something went wrong, alert the server and respond the client
+      log.severe("Exception found while reading feed food");
+      log.throwing(this.getClass().getCanonicalName(), "Read", e);
+
+      response.setError(new Error("DB02", "Read exception: " + e.getMessage(), "proxy.FoodBean.Read"));
+    }
+
+    // end and respond.
+    log.exiting(this.getClass().getCanonicalName(), "Read");
+    return response;
   }
 
   /*
@@ -125,6 +188,7 @@ public class FoodBean extends BaseBean implements Cruddable {
           response.setUpdatedRecord(content);
 
           response.setError(new Error("0", "SUCCESS", "proxy.Food.Update"));
+          log.info("Food [" + food.toString() + "] updated by principal[" + getLoggedUser() + "]");
         } else {
           log.warning("Validation error:" + error_description);
           response.setError(new Error("VAL01", "Error de validación de datos:" + error_description, "proxy.FoodBean.Update"));
@@ -169,11 +233,13 @@ public class FoodBean extends BaseBean implements Cruddable {
         TypedQuery<Food> readQuery = em.createNamedQuery("CAT_FOOD_BY_ID", Food.class);
         readQuery.setParameter("foodId", food.getFoodId());
         food = readQuery.getSingleResult();
+        log.info("Deleting Food [" + food.toString() + "] by principal[" + getLoggedUser() + "]");
         em.merge(food);
         em.remove(food);
         em.flush();
 
         response.setError(new Error("0", "SUCCESS", "proxy.Food.Delete"));
+        log.info("Food successfully deleted by principal [" + getLoggedUser() + "]");
       }
     } catch (Exception e) {
       log.severe("Exception found while deleting Food");

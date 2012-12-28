@@ -16,7 +16,7 @@
 package com.tramex.sisoprega.dto;
 
 /**
- * Defines the model for the Cattle Type entity.<BR/>
+ * Defines the model for the Inspection Barnyard Type entity.<BR/>
  * 
  * <B>Revision History:</B>
  * 
@@ -25,51 +25,67 @@ package com.tramex.sisoprega.dto;
  * Date        By                           Description
  * MM/DD/YYYY
  * ----------  ---------------------------  -------------------------------------------
- * 1/12/2012  Jaime Figueroa                 Initial Version.
+ * 12/01/2012  Jaime Figueroa                 Initial Version.
+ * 12/16/2012  Diego Torres                   Adding toString implementation.
  * ====================================================================================
  * </PRE>
  * 
  * @author Jaime Figueroa
- *
+ * 
  */
 public class InspectionBarnyard {
-    private long ibId;
-    private long inspectionId;
-    private long barnyardId;
-    /**
-     * @return the ibId
-     */
-    public long getIbId() {
-        return ibId;
-    }
-    /**
-     * @param ibId the ibId to set
-     */
-    public void setIbId(long ibId) {
-        this.ibId = ibId;
-    }
-    /**
-     * @return the inspectionId
-     */
-    public long getInspectionId() {
-        return inspectionId;
-    }
-    /**
-     * @param inspectionId the inspectionId to set
-     */
-    public void setInspectionId(long inspectionId) {
-        this.inspectionId = inspectionId;
-    }
-    /**
-     * @return the barnyardId
-     */
-    public long getBarnyardId() {
-        return barnyardId;
-    }
-    /**
-     * @param barnyardId the barnyardId to set
-     */
-    public void setBarnyardId(long barnyardId) {
-        this.barnyardId = barnyardId;
-    }
+  private long ibId;
+  private long inspectionId;
+  private long barnyardId;
+
+  /**
+   * @return the ibId
+   */
+  public long getIbId() {
+    return ibId;
+  }
+
+  /**
+   * @param ibId
+   *          the ibId to set
+   */
+  public void setIbId(long ibId) {
+    this.ibId = ibId;
+  }
+
+  /**
+   * @return the inspectionId
+   */
+  public long getInspectionId() {
+    return inspectionId;
+  }
+
+  /**
+   * @param inspectionId
+   *          the inspectionId to set
+   */
+  public void setInspectionId(long inspectionId) {
+    this.inspectionId = inspectionId;
+  }
+
+  /**
+   * @return the barnyardId
+   */
+  public long getBarnyardId() {
+    return barnyardId;
+  }
+
+  /**
+   * @param barnyardId
+   *          the barnyardId to set
+   */
+  public void setBarnyardId(long barnyardId) {
+    this.barnyardId = barnyardId;
+  }
+  
+  @Override
+  public String toString(){
+    return "barnyardId:" + barnyardId + ";ibId:" + ibId + ";inspectionId:" + inspectionId + ";";
+  }
+  
 }
