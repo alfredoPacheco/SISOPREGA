@@ -17,10 +17,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 public class ClickatellProvider implements SmsProvider {
-	private enum response {
-	    OK,WARNING,ERROR 
-	}	
-	//Read this from XML Config File
 	private static final String REQUEST_GET="GET";
 	private static final String API_URL = "https://api.clickatell.com/http/sendmsg";
 	private String apiID;
@@ -65,7 +61,7 @@ public class ClickatellProvider implements SmsProvider {
     public response getResponse(){
     	return this.ack;    	
     }
-    public void setResponse(final HttpURLConnection conn) throws SendSmsException{    	
+    private void setResponse(final HttpURLConnection conn) throws SendSmsException{    	
 		try {
 	    	BufferedReader br;
 			if (conn.getResponseCode() != 200) {

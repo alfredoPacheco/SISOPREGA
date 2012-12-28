@@ -18,10 +18,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.sisoprega.envoy.sms.ClickatellProvider;
-import com.sisoprega.envoy.sms.InitSmsProviderException;
-
-public class SmtpEmailSender implements EmailProvider {
+public class SmtpEmailSender implements EmailSender {
 	private Properties props;
 	private String username=null;
 	private String password=null;
