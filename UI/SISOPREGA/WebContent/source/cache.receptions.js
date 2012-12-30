@@ -465,7 +465,6 @@ enyo.kind({
 		}		
 	},
 	updateWeight:function(objOld,objNew,cbObj){		
-		//TODO updateWeight
 		
 		objNew.hcw_id = objOld.hcw_id;		
 		
@@ -683,7 +682,7 @@ enyo.kind({
 //			return false;
 		}
 	},
-	createReject:function(objRec, objRej){
+	createInspection:function(objRec, objRej){
 //		private long inspectionId;
 //		private long receptionId;
 //		private Date inspectionDate;
@@ -696,7 +695,7 @@ enyo.kind({
 		if (cgCreate.exceptionId == 0){ //Created successfully		
 			objRej.rejected_id = cgCreate.generatedId;
 			if (this.createInspectionBarnyard(cgCreate.generatedId,objRec)== true){
-				if (this.createInspectionDetails(cgCreate.generatedId,objRec)== true){
+				if (this.createInspectionDetails(cgCreate.generatedId,objRec, objRej)== true){
 					return true;
 				}
 				else{
@@ -713,22 +712,23 @@ enyo.kind({
 			return false;
 		}
 	},
-	createInspectionBarnyard:function(inspection_id, objRec){
+	createInspectionBarnyard:function(inspection_id, objRec, objRej){
+		//private long ibId;
+		//private long inspectionId;
+		//private long barnyardId;
 		var objToSend = {};
 		objToSend.inspectionId = inspection_id;
 		for (prop in objRec.barnyards){
-			objToSend.barnyardId = cacheBY.getByBarnyard(objRec.barnyards[prop]);				
+			objToSend.barnyardId = cacheBY.getByBarnyard(objRec.barnyards[prop]);
+			var cgCreate = consumingGateway.Create("InspectionBarnyard", objToSend);
+			if (cgCreate.exceptionId != 0){ //Created successfully
+				cacheMan.setMessage("", "[Exception ID: " + cgCreate.exceptionId + "] Descripcion: " + cgCreate.exceptionDescription);
+				return false;
+			}			
 		}
-		var cgCreate = consumingGateway.Create("InspectionBarnyard", objToSend);
-		if (cgCreate.exceptionId == 0){ //Created successfully
-			return true;
-		}
-		else{ //Error			
-			cacheMan.setMessage("", "[Exception ID: " + cgCreate.exceptionId + "] Descripcion: " + cgCreate.exceptionDescription);
-			return false;
-		}
+		return true;
 	},
-	createInspectionDetails:function(inspection_id, objRej){
+	createInspectionDetails:function(inspection_id, objRec, objRej){
 
 //		private long inspectionDetailsId;
 //		private long inspectionId;
@@ -738,31 +738,29 @@ enyo.kind({
 //		private long weightUom;
 //		private String note;
 		
+//		inspections:[{rejected_id:1,rejected_count:1,reject_id:1,reject_desc:"ENFERMEDAD"}],
 		var objToSend = {};
-		objToSend.inspectionId = inspection_id;		
+		objToSend.inspectionId = 		objRej.rejected_id;		
+		objToSend.inspectionCodeId =	objRej.reject_id;
+		objToSend.hc = 					objRej.rejected_count;
+		objToSend.weight = 				2;
+		objToSend.weightUom = 			1;
+		objToSend.note = 				objRej.reject_desc;
 		
-		for (obj in objRej.inspections){			
-			objToSend.inspectionId = 		objRej.inspections[obj].inspection_id;
-			objToSend.inspectionCodeId =	objRej.inspections[obj].inspection_id;
-			objToSend.hc = 					objRej.inspections[obj].inspection_id;
-			objToSend.weight = 				objRej.inspections[obj].inspection_id;
-			objToSend.weightUom = 			objRej.inspections[obj].inspection_id;
-			objToSend.note = 				objRej.inspections[obj].inspection_id;
-			
-			var cgCreate = consumingGateway.Create("FeedOrderDetails", objToSend);
-			if (cgCreate.exceptionId != 0){			
-				cacheMan.setMessage("", "[Exception ID: " + cgCreate.exceptionId + "] Descripcion: " + cgCreate.exceptionDescription);
-				return false;
-			}			
+		var cgCreate = consumingGateway.Create("InspectionDetails", objToSend);
+		if (cgCreate.exceptionId == 0){			
+			return true;
+		}else{ //Error
+			cacheMan.setMessage("", "[Exception ID: " + cgCreate.exceptionId + "] Descripcion: " + cgCreate.exceptionDescription);
+			return false;
 		}
-		return true;
 		
 	},	
 	addReject:function(iAccepted,objRec,objReject,cbObj,cbMethod){
 		if(iAccepted==""){iAccepted=0;}
 		objRec.accepted_count=iAccepted;
 		if(objReject){
-			if (this.createReject(objRec,objReject)== true){
+			if (this.createInspection(objRec,objReject)== true){
 				objRec.inspections.push(objReject);
 					
 			}else { //TODO: do something else				
