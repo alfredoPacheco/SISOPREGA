@@ -774,15 +774,28 @@ enyo.kind({
 		}
 	},
 	updateReject:function(iAccepted,objRec,iInspIdx,objReject,cbObj,cbMethod){
-		//AJAX
-		//REFRESH LOCAL
-		if(iAccepted==""){iAccepted=0;}
-		objRec.accepted_count=iAccepted;
-		objRec.inspections[iInspIdx].rejected_count=objReject.rejected_count;
-		objRec.inspections[iInspIdx].reject_id=objReject.reject_id;
-		objRec.inspections[iInspIdx].reject_desc=objReject.reject_desc;				
-		if(cbMethod){
-			cbObj[cbMethod]();
+		var objToSend = {};
+		objToSend.inspectionDetailsId =	4;
+		objToSend.inspectionId = 		objRec.inspections[iInspIdx].rejected_id;		
+		objToSend.inspectionCodeId =	objReject.reject_id;
+		objToSend.hc = 					objReject.rejected_count;
+		objToSend.weight = 				2;
+		objToSend.weightUom = 			1;
+		objToSend.note = 				objReject.reject_desc;
+		
+		var cgUpdate = consumingGateway.Update("InspectionDetails", objToSend);
+		if (cgUpdate.exceptionId == 0){ //Updated successfully
+			if(iAccepted==""){iAccepted=0;}
+			objRec.accepted_count=iAccepted;
+			objRec.inspections[iInspIdx].rejected_count=objReject.rejected_count;
+			objRec.inspections[iInspIdx].reject_id=objReject.reject_id;
+			objRec.inspections[iInspIdx].reject_desc=objReject.reject_desc;				
+			if(cbMethod){
+				cbObj[cbMethod]();
+			}	
+		}
+		else{ //Error			
+			cacheMan.setMessage("", "[Exception ID: " + cgUpdate.exceptionId + "] Descripcion: " + cgUpdate.exceptionDescription);			
 		}			
 	},
 	deleteReject:function(arrRejects,objReject,cbObj,cbMethod){
