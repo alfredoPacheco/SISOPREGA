@@ -2,6 +2,7 @@ enyo.kind({
 	name: "cache.receptions",
 	arrObj:[],//_arrReceptionList,
 	receptionWasReadFromGateway:false,
+	inspectionWasReadFromGateway:false,
 	arrObjWasFilledUpOnce:false,
 	arrReception:[],
 	reloadme:function(){
@@ -65,6 +66,24 @@ enyo.kind({
 		objNew = obj;		
 		return objNew;
 	},
+	inspectionAdapterToIn:function(obj){		
+		var objNew = {			
+		};
+		objNew = obj;		
+		return objNew;
+	},
+	inspectionBarnyardAdapterToIn:function(obj){		
+		var objNew = {			
+		};
+		objNew = obj;		
+		return objNew;
+	},
+	inspectionDetailsAdapterToIn:function(obj){		
+		var objNew = {			
+		};
+		objNew = obj;		
+		return objNew;
+	},
 	receptionAdapterToOut:function(objReception){
 
 		var objNew = {				
@@ -119,15 +138,44 @@ enyo.kind({
 				var arrHeadcountAux = this.getReceptionHeadcount(objAux.reception_id);
 				for (h in arrHeadcountAux){
 					var headcountAux = {};
-					try{						
+					try{
 						headcountAux.hcw_id = 	arrHeadcountAux[h].headcountId;
 						headcountAux.hc = 		arrHeadcountAux[h].hc;
-						headcountAux.weight = 	arrHeadcountAux[h].weight;						
+						headcountAux.weight = 	arrHeadcountAux[h].weight;
 					}catch(e){}
 					objAux.weights.push(headcountAux);
 				}
 //TODO inspections::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-				
+//				inspections:[{reject_desc:"ENFERMEDAD"}],
+				var arrInspectionAux = this.getInspection(objAux.reception_id);
+				for (i in arrInspectionAux){
+					var inspectionAux = {	rejected_count:	undefined, 
+											reject_id:		undefined, 
+											feed_desc:		undefined, 
+											id:				undefined, 
+											weight:			undefined,
+											weight_uom:		undefined};
+					try{
+//						arrFeedAux[i].inspectionDate;
+						inspectionAux.rejected_id =	arrInspectionAux[i].inspectionId;
+//						arrFeedAux[i].receptionId;
+					}catch(e){}
+
+//TODO inspections Details::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+					var arrInspectionDetailsAux =  this.getInspectionDetails(inspectionAux.rejected_id);
+					
+					for (id in arrInspectionDetailsAux){						
+						inspectionAux.rejected_count = 	arrInspectionDetailsAux[id].hc;
+						inspectionAux.reject_id = 		arrInspectionDetailsAux[id].inspectionCodeId;
+						inspectionAux.reject_desc = 		arrInspectionDetailsAux[id].note;
+						inspectionAux.id = 				arrInspectionDetailsAux[id].inspectionDetailsId; 
+						inspectionAux.weight =			arrInspectionDetailsAux[id].weight;
+						inspectionAux.weight_uom =		arrInspectionDetailsAux[id].weightUom;						
+					
+						objAux.inspections.push(inspectionAux);
+					}		
+				}
+			
 //feedOrder:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::				
 				var arrFeedAux = this.getFeedOrder(objAux.reception_id);
 				for (f in arrFeedAux){
@@ -140,10 +188,10 @@ enyo.kind({
 //feedOrderBarnyard::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::					
 					if(feedAux.feeding_id){
 						var arrFeedBarnyardAux = this.getFeedOrderBarnyard(feedAux.feeding_id);
-						var feedBarnyardAux = {barnyards:{}};						
+						var feedBarnyardAux = {barnyards:{}};
 						for (fb in arrFeedBarnyardAux){
 							var barnyardName = cacheBY.getByID(arrFeedBarnyardAux[fb].barnyardId).barnyard_code;
-							feedBarnyardAux.barnyards[barnyardName] = barnyardName;							
+							feedBarnyardAux.barnyards[barnyardName] = barnyardName;
 						}
 						feedAux.barnyards = feedBarnyardAux.barnyards;
 //feedOrderDetails:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::	
@@ -155,9 +203,9 @@ enyo.kind({
 							feedDetailsAux["" + fd].feed_units = arrFeedDetailsAux[fd].quantity;
 						}
 						feedAux.feed =feedDetailsAux;					
-					}										
+					}
 					objAux.feed.push(feedAux);
-				}					
+				}
 				this.arrObj.push(objAux);
 //				var _arrBYOccupied={"1E5":{reception_id:1},
 //						"_B21":{reception_id:2,accepted_count:"",inspections:[]},
@@ -165,10 +213,9 @@ enyo.kind({
 				for (sKey in objAux.barnyards){
 					cacheBY.arrObjInUse[sKey] = {reception_id:parseInt(objAux.reception_id)};//,accepted_count:"",inspections:[],feed:[]};
 				}
-				
 			}
-		}		
-		return this.arrObj;	
+		}
+		return this.arrObj;
 	},
 	getReception:function(){
 //		private long receptionId;
@@ -321,6 +368,81 @@ enyo.kind({
 		
 		return arrAux;
 		
+	},
+	getInspection:function(recID){
+		//private long inspectionId;
+		//private long receptionId;
+		//private Date inspectionDate;
+		
+		var arrAux = [];
+		var objToSend = {};
+		objToSend.receptionId = recID;
+		var cgReadAll = consumingGateway.Read("Inspection", objToSend);
+		
+		if (cgReadAll.exceptionId == 0){ //Read successfully
+			for (item in cgReadAll.records){
+				arrAux.push(this.inspectionAdapterToIn(cgReadAll.records[item]));
+			}
+		}
+		else{ //Error
+			if (cgReadAll.exceptionId != "VAL02"){ //No data found = VAL02 for filter
+				cacheMan.setMessage("", "[Exception ID: " + cgReadAll.exceptionId + "] Descripcion: " + cgReadAll.exceptionDescription);
+			}
+		}
+		
+		return arrAux;
+			
+	},
+	getInspectionBarnyard:function(recID){
+//  private long ibId;
+//  private long inspectionId;
+//  private long barnyardId;
+		
+		var arrAux = [];
+		var objToSend = {};
+		objToSend.orderId = oID;
+		var cgReadAll = consumingGateway.Read("InspectionBarnyard", objToSend);
+		
+		if (cgReadAll.exceptionId == 0){ //Read successfully
+			for (item in cgReadAll.records){
+				arrAux.push(this.inspectionBarnyardAdapterToIn(cgReadAll.records[item]));
+			}
+		}
+		else{ //Error
+			if (cgReadAll.exceptionId != "VAL02"){ //No data found
+				cacheMan.setMessage("", "[Exception ID: " + cgReadAll.exceptionId + "] Descripcion: " + cgReadAll.exceptionDescription);	
+			}			
+		}				
+		
+		return arrAux;
+		
+	},
+	getInspectionDetails:function(inspID){		
+//		private long inspectionDetailsId;
+//		private long inspectionId;
+//		private long inspectionCodeId;
+//		private long hc;
+//		private double weight;
+//		private long weightUom;
+//		private String note;
+				
+		var arrAux = [];
+		var objToSend = {};
+		objToSend.inspectionId = inspID;
+		var cgReadAll = consumingGateway.Read("InspectionDetails", objToSend);
+		
+		if (cgReadAll.exceptionId == 0){ //Read successfully
+			for (item in cgReadAll.records){
+				arrAux.push(this.inspectionDetailsAdapterToIn(cgReadAll.records[item]));
+			}
+		}
+		else{ //Error
+			if (cgReadAll.exceptionId != "VAL02"){ //No data found
+				cacheMan.setMessage("", "[Exception ID: " + cgReadAll.exceptionId + "] Descripcion: " + cgReadAll.exceptionDescription);	
+			}			
+		}				
+		
+		return arrAux;		
 	},
 	create:function(objRec,cbObj,cbMethod){
 		var objToSend = this.receptionAdapterToOut(objRec);
@@ -799,6 +921,32 @@ enyo.kind({
 		}			
 	},
 	deleteReject:function(arrRejects,objReject,cbObj,cbMethod){
+//		var objToSend = {};
+//		objToSend.receptionId = delObj.reception_id;
+//		
+//		var cgDelete = consumingGateway.Delete("Reception", objToSend);
+//		if (cgDelete.exceptionId == 0){ //Deleted successfully
+//			var tamanio = this.get().length;
+//			for(var i=0;i<tamanio;i++){
+//				if (this.arrObj[i].reception_id == delObj.reception_id){
+//					this.arrObj.splice(i, 1);
+//					_arrReceptionList = this.arrObj;
+//					if(cbMethod){
+//						cbObj[cbMethod]();
+//					}
+//					return true;
+//					//TODO
+//					//break;
+//				}
+//			}
+//			return false;
+//		}
+//		else{ //Error
+//			cacheMan.setMessage("", "[Exception ID: " + cgDelete.exceptionId + "] Descripcion: " + cgDelete.exceptionDescription);
+//			return false;
+//		}
+		
+		
 		for(var i=0; i<arrRejects.length;i++){		
 			if (arrRejects[i]===objReject){
 				arrRejects.splice(i, 1);
