@@ -145,7 +145,7 @@ enyo.kind({
 					}catch(e){}
 					objAux.weights.push(headcountAux);
 				}
-//TODO inspections::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+//inspections::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 //				inspections:[{reject_desc:"ENFERMEDAD"}],
 				var arrInspectionAux = this.getInspection(objAux.reception_id);
 				for (i in arrInspectionAux){
@@ -161,7 +161,7 @@ enyo.kind({
 //						arrFeedAux[i].receptionId;
 					}catch(e){}
 
-//TODO inspections Details::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+//inspections Details::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 					var arrInspectionDetailsAux =  this.getInspectionDetails(inspectionAux.rejected_id);
 					
 					for (id in arrInspectionDetailsAux){						
@@ -541,9 +541,7 @@ enyo.kind({
 					if(cbMethod){
 						cbObj[cbMethod]();
 					}
-					return true;
-					//TODO
-					//break;
+					return true;					
 				}
 			}
 			return false;
@@ -897,7 +895,7 @@ enyo.kind({
 	},
 	updateReject:function(iAccepted,objRec,iInspIdx,objReject,cbObj,cbMethod){
 		var objToSend = {};
-		objToSend.inspectionDetailsId =	4;
+		objToSend.inspectionDetailsId =	objRec.inspections[iInspIdx].id;
 		objToSend.inspectionId = 		objRec.inspections[iInspIdx].rejected_id;		
 		objToSend.inspectionCodeId =	objReject.reject_id;
 		objToSend.hc = 					objReject.rejected_count;
@@ -921,41 +919,28 @@ enyo.kind({
 		}			
 	},
 	deleteReject:function(arrRejects,objReject,cbObj,cbMethod){
-//		var objToSend = {};
-//		objToSend.receptionId = delObj.reception_id;
-//		
-//		var cgDelete = consumingGateway.Delete("Reception", objToSend);
-//		if (cgDelete.exceptionId == 0){ //Deleted successfully
-//			var tamanio = this.get().length;
-//			for(var i=0;i<tamanio;i++){
-//				if (this.arrObj[i].reception_id == delObj.reception_id){
-//					this.arrObj.splice(i, 1);
-//					_arrReceptionList = this.arrObj;
-//					if(cbMethod){
-//						cbObj[cbMethod]();
-//					}
-//					return true;
-//					//TODO
-//					//break;
-//				}
-//			}
-//			return false;
-//		}
-//		else{ //Error
-//			cacheMan.setMessage("", "[Exception ID: " + cgDelete.exceptionId + "] Descripcion: " + cgDelete.exceptionDescription);
-//			return false;
-//		}
 		
+		var objToSend = {};
+		objToSend.inspectionDetailsId =	objReject.id;
 		
-		for(var i=0; i<arrRejects.length;i++){		
-			if (arrRejects[i]===objReject){
-				arrRejects.splice(i, 1);
-				if(cbMethod){
-					cbObj[cbMethod]();
+		var cgDelete = consumingGateway.Delete("InspectionDetails", objToSend);
+		if (cgDelete.exceptionId == 0){ //Deleted successfully
+			
+			for(var i=0; i<arrRejects.length;i++){		
+				if (arrRejects[i]===objReject){
+					arrRejects.splice(i, 1);
+					if(cbMethod){
+						cbObj[cbMethod]();
+					}
+					break;					
 				}
-				break;					
 			}
 		}
+		else{ //Error
+			cacheMan.setMessage("", "[Exception ID: " + cgDelete.exceptionId + "] Descripcion: " + cgDelete.exceptionDescription);			
+		}
+		
+		
 	},				
 });
 var cacheReceptions= new cache.receptions();

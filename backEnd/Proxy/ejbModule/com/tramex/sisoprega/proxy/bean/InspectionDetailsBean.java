@@ -229,8 +229,8 @@ public class InspectionDetailsBean extends BaseBean implements Cruddable {
         log.warning("VAL04 - Entity ID Omission.");
         response.setError(new Error("VAL04", "Se ha omitido el id de detalles de inspeccion al intentar eliminar el registro.", "proxy.InspectionDetails.Delete"));
       } else {
-        TypedQuery<InspectionDetails> readQuery = em.createNamedQuery("CRT_InspectionDetails_BY_ID", InspectionDetails.class);
-        readQuery.setParameter("inspectionDetailsId", inspectionDetails.getInspectionDetailsId());
+        TypedQuery<InspectionDetails> readQuery = em.createNamedQuery("CRT_INSPECTION_DETAILS_BY_ID", InspectionDetails.class);
+        readQuery.setParameter("inspDetId", inspectionDetails.getInspectionDetailsId());
         inspectionDetails = readQuery.getSingleResult();
         log.info("Deleting Reception inspectionDetails [" + inspectionDetails.toString() + "] by principal[" + getLoggedUser() + "]");
         em.merge(inspectionDetails);
