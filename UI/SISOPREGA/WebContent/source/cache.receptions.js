@@ -2,6 +2,7 @@ enyo.kind({
 	name: "cache.receptions",
 	arrObj:[],//_arrReceptionList,
 	receptionWasReadFromGateway:false,
+	inspectionWasReadFromGateway:false,
 	arrObjWasFilledUpOnce:false,
 	arrReception:[],
 	reloadme:function(){
@@ -65,6 +66,24 @@ enyo.kind({
 		objNew = obj;		
 		return objNew;
 	},
+	inspectionAdapterToIn:function(obj){		
+		var objNew = {			
+		};
+		objNew = obj;		
+		return objNew;
+	},
+	inspectionBarnyardAdapterToIn:function(obj){		
+		var objNew = {			
+		};
+		objNew = obj;		
+		return objNew;
+	},
+	inspectionDetailsAdapterToIn:function(obj){		
+		var objNew = {			
+		};
+		objNew = obj;		
+		return objNew;
+	},
 	receptionAdapterToOut:function(objReception){
 
 		var objNew = {				
@@ -119,15 +138,44 @@ enyo.kind({
 				var arrHeadcountAux = this.getReceptionHeadcount(objAux.reception_id);
 				for (h in arrHeadcountAux){
 					var headcountAux = {};
-					try{						
+					try{
 						headcountAux.hcw_id = 	arrHeadcountAux[h].headcountId;
 						headcountAux.hc = 		arrHeadcountAux[h].hc;
-						headcountAux.weight = 	arrHeadcountAux[h].weight;						
+						headcountAux.weight = 	arrHeadcountAux[h].weight;
 					}catch(e){}
 					objAux.weights.push(headcountAux);
 				}
-//TODO inspections::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-				
+//inspections::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+//				inspections:[{reject_desc:"ENFERMEDAD"}],
+				var arrInspectionAux = this.getInspection(objAux.reception_id);
+				for (i in arrInspectionAux){
+					var inspectionAux = {	rejected_count:	undefined, 
+											reject_id:		undefined, 
+											feed_desc:		undefined, 
+											id:				undefined, 
+											weight:			undefined,
+											weight_uom:		undefined};
+					try{
+//						arrFeedAux[i].inspectionDate;
+						inspectionAux.rejected_id =	arrInspectionAux[i].inspectionId;
+//						arrFeedAux[i].receptionId;
+					}catch(e){}
+
+//inspections Details::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+					var arrInspectionDetailsAux =  this.getInspectionDetails(inspectionAux.rejected_id);
+					
+					for (id in arrInspectionDetailsAux){						
+						inspectionAux.rejected_count = 	arrInspectionDetailsAux[id].hc;
+						inspectionAux.reject_id = 		arrInspectionDetailsAux[id].inspectionCodeId;
+						inspectionAux.reject_desc = 		arrInspectionDetailsAux[id].note;
+						inspectionAux.id = 				arrInspectionDetailsAux[id].inspectionDetailsId; 
+						inspectionAux.weight =			arrInspectionDetailsAux[id].weight;
+						inspectionAux.weight_uom =		arrInspectionDetailsAux[id].weightUom;						
+					
+						objAux.inspections.push(inspectionAux);
+					}		
+				}
+			
 //feedOrder:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::				
 				var arrFeedAux = this.getFeedOrder(objAux.reception_id);
 				for (f in arrFeedAux){
@@ -140,10 +188,10 @@ enyo.kind({
 //feedOrderBarnyard::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::					
 					if(feedAux.feeding_id){
 						var arrFeedBarnyardAux = this.getFeedOrderBarnyard(feedAux.feeding_id);
-						var feedBarnyardAux = {barnyards:{}};						
+						var feedBarnyardAux = {barnyards:{}};
 						for (fb in arrFeedBarnyardAux){
 							var barnyardName = cacheBY.getByID(arrFeedBarnyardAux[fb].barnyardId).barnyard_code;
-							feedBarnyardAux.barnyards[barnyardName] = barnyardName;							
+							feedBarnyardAux.barnyards[barnyardName] = barnyardName;
 						}
 						feedAux.barnyards = feedBarnyardAux.barnyards;
 //feedOrderDetails:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::	
@@ -155,9 +203,9 @@ enyo.kind({
 							feedDetailsAux["" + fd].feed_units = arrFeedDetailsAux[fd].quantity;
 						}
 						feedAux.feed =feedDetailsAux;					
-					}										
+					}
 					objAux.feed.push(feedAux);
-				}					
+				}
 				this.arrObj.push(objAux);
 //				var _arrBYOccupied={"1E5":{reception_id:1},
 //						"_B21":{reception_id:2,accepted_count:"",inspections:[]},
@@ -165,10 +213,9 @@ enyo.kind({
 				for (sKey in objAux.barnyards){
 					cacheBY.arrObjInUse[sKey] = {reception_id:parseInt(objAux.reception_id)};//,accepted_count:"",inspections:[],feed:[]};
 				}
-				
 			}
-		}		
-		return this.arrObj;	
+		}
+		return this.arrObj;
 	},
 	getReception:function(){
 //		private long receptionId;
@@ -322,6 +369,81 @@ enyo.kind({
 		return arrAux;
 		
 	},
+	getInspection:function(recID){
+		//private long inspectionId;
+		//private long receptionId;
+		//private Date inspectionDate;
+		
+		var arrAux = [];
+		var objToSend = {};
+		objToSend.receptionId = recID;
+		var cgReadAll = consumingGateway.Read("Inspection", objToSend);
+		
+		if (cgReadAll.exceptionId == 0){ //Read successfully
+			for (item in cgReadAll.records){
+				arrAux.push(this.inspectionAdapterToIn(cgReadAll.records[item]));
+			}
+		}
+		else{ //Error
+			if (cgReadAll.exceptionId != "VAL02"){ //No data found = VAL02 for filter
+				cacheMan.setMessage("", "[Exception ID: " + cgReadAll.exceptionId + "] Descripcion: " + cgReadAll.exceptionDescription);
+			}
+		}
+		
+		return arrAux;
+			
+	},
+	getInspectionBarnyard:function(recID){
+//  private long ibId;
+//  private long inspectionId;
+//  private long barnyardId;
+		
+		var arrAux = [];
+		var objToSend = {};
+		objToSend.orderId = oID;
+		var cgReadAll = consumingGateway.Read("InspectionBarnyard", objToSend);
+		
+		if (cgReadAll.exceptionId == 0){ //Read successfully
+			for (item in cgReadAll.records){
+				arrAux.push(this.inspectionBarnyardAdapterToIn(cgReadAll.records[item]));
+			}
+		}
+		else{ //Error
+			if (cgReadAll.exceptionId != "VAL02"){ //No data found
+				cacheMan.setMessage("", "[Exception ID: " + cgReadAll.exceptionId + "] Descripcion: " + cgReadAll.exceptionDescription);	
+			}			
+		}				
+		
+		return arrAux;
+		
+	},
+	getInspectionDetails:function(inspID){		
+//		private long inspectionDetailsId;
+//		private long inspectionId;
+//		private long inspectionCodeId;
+//		private long hc;
+//		private double weight;
+//		private long weightUom;
+//		private String note;
+				
+		var arrAux = [];
+		var objToSend = {};
+		objToSend.inspectionId = inspID;
+		var cgReadAll = consumingGateway.Read("InspectionDetails", objToSend);
+		
+		if (cgReadAll.exceptionId == 0){ //Read successfully
+			for (item in cgReadAll.records){
+				arrAux.push(this.inspectionDetailsAdapterToIn(cgReadAll.records[item]));
+			}
+		}
+		else{ //Error
+			if (cgReadAll.exceptionId != "VAL02"){ //No data found
+				cacheMan.setMessage("", "[Exception ID: " + cgReadAll.exceptionId + "] Descripcion: " + cgReadAll.exceptionDescription);	
+			}			
+		}				
+		
+		return arrAux;		
+	},
 	create:function(objRec,cbObj,cbMethod){
 		var objToSend = this.receptionAdapterToOut(objRec);
 		delete objToSend.receptionId;
@@ -419,9 +541,7 @@ enyo.kind({
 					if(cbMethod){
 						cbObj[cbMethod]();
 					}
-					return true;
-					//TODO
-					//break;
+					return true;					
 				}
 			}
 			return false;
@@ -436,7 +556,7 @@ enyo.kind({
 		var objToSend = objWeight;
 		objToSend.reception_id = receptionID;
 		objToSend = this.receptionHeadcountAdapterToOut(objToSend);
-		
+		delete objToSend.headcountId;
 		var cgCreate = consumingGateway.Create("ReceptionHeadcount", objToSend);
 		if (cgCreate.exceptionId == 0){ //Created successfully
 			objWeight.hcw_id = cgCreate.generatedId;
@@ -465,7 +585,6 @@ enyo.kind({
 		}		
 	},
 	updateWeight:function(objOld,objNew,cbObj){		
-		//TODO updateWeight
 		
 		objNew.hcw_id = objOld.hcw_id;		
 		
@@ -683,7 +802,7 @@ enyo.kind({
 //			return false;
 		}
 	},
-	createReject:function(objRec, objRej){
+	createInspection:function(objRec, objRej){
 //		private long inspectionId;
 //		private long receptionId;
 //		private Date inspectionDate;
@@ -696,7 +815,7 @@ enyo.kind({
 		if (cgCreate.exceptionId == 0){ //Created successfully		
 			objRej.rejected_id = cgCreate.generatedId;
 			if (this.createInspectionBarnyard(cgCreate.generatedId,objRec)== true){
-				if (this.createInspectionDetails(cgCreate.generatedId,objRec)== true){
+				if (this.createInspectionDetails(cgCreate.generatedId,objRec, objRej)== true){
 					return true;
 				}
 				else{
@@ -713,22 +832,23 @@ enyo.kind({
 			return false;
 		}
 	},
-	createInspectionBarnyard:function(inspection_id, objRec){
+	createInspectionBarnyard:function(inspection_id, objRec, objRej){
+		//private long ibId;
+		//private long inspectionId;
+		//private long barnyardId;
 		var objToSend = {};
 		objToSend.inspectionId = inspection_id;
 		for (prop in objRec.barnyards){
-			objToSend.barnyardId = cacheBY.getByBarnyard(objRec.barnyards[prop]);				
+			objToSend.barnyardId = cacheBY.getByBarnyard(objRec.barnyards[prop]);
+			var cgCreate = consumingGateway.Create("InspectionBarnyard", objToSend);
+			if (cgCreate.exceptionId != 0){ //Created successfully
+				cacheMan.setMessage("", "[Exception ID: " + cgCreate.exceptionId + "] Descripcion: " + cgCreate.exceptionDescription);
+				return false;
+			}			
 		}
-		var cgCreate = consumingGateway.Create("InspectionBarnyard", objToSend);
-		if (cgCreate.exceptionId == 0){ //Created successfully
-			return true;
-		}
-		else{ //Error			
-			cacheMan.setMessage("", "[Exception ID: " + cgCreate.exceptionId + "] Descripcion: " + cgCreate.exceptionDescription);
-			return false;
-		}
+		return true;
 	},
-	createInspectionDetails:function(inspection_id, objRej){
+	createInspectionDetails:function(inspection_id, objRec, objRej){
 
 //		private long inspectionDetailsId;
 //		private long inspectionId;
@@ -738,31 +858,29 @@ enyo.kind({
 //		private long weightUom;
 //		private String note;
 		
+//		inspections:[{rejected_id:1,rejected_count:1,reject_id:1,reject_desc:"ENFERMEDAD"}],
 		var objToSend = {};
-		objToSend.inspectionId = inspection_id;		
+		objToSend.inspectionId = 		objRej.rejected_id;		
+		objToSend.inspectionCodeId =	objRej.reject_id;
+		objToSend.hc = 					objRej.rejected_count;
+		objToSend.weight = 				2;
+		objToSend.weightUom = 			1;
+		objToSend.note = 				objRej.reject_desc;
 		
-		for (obj in objRej.inspections){			
-			objToSend.inspectionId = 		objRej.inspections[obj].inspection_id;
-			objToSend.inspectionCodeId =	objRej.inspections[obj].inspection_id;
-			objToSend.hc = 					objRej.inspections[obj].inspection_id;
-			objToSend.weight = 				objRej.inspections[obj].inspection_id;
-			objToSend.weightUom = 			objRej.inspections[obj].inspection_id;
-			objToSend.note = 				objRej.inspections[obj].inspection_id;
-			
-			var cgCreate = consumingGateway.Create("FeedOrderDetails", objToSend);
-			if (cgCreate.exceptionId != 0){			
-				cacheMan.setMessage("", "[Exception ID: " + cgCreate.exceptionId + "] Descripcion: " + cgCreate.exceptionDescription);
-				return false;
-			}			
+		var cgCreate = consumingGateway.Create("InspectionDetails", objToSend);
+		if (cgCreate.exceptionId == 0){			
+			return true;
+		}else{ //Error
+			cacheMan.setMessage("", "[Exception ID: " + cgCreate.exceptionId + "] Descripcion: " + cgCreate.exceptionDescription);
+			return false;
 		}
-		return true;
 		
 	},	
 	addReject:function(iAccepted,objRec,objReject,cbObj,cbMethod){
 		if(iAccepted==""){iAccepted=0;}
 		objRec.accepted_count=iAccepted;
 		if(objReject){
-			if (this.createReject(objRec,objReject)== true){
+			if (this.createInspection(objRec,objReject)== true){
 				objRec.inspections.push(objReject);
 					
 			}else { //TODO: do something else				
@@ -776,27 +894,53 @@ enyo.kind({
 		}
 	},
 	updateReject:function(iAccepted,objRec,iInspIdx,objReject,cbObj,cbMethod){
-		//AJAX
-		//REFRESH LOCAL
-		if(iAccepted==""){iAccepted=0;}
-		objRec.accepted_count=iAccepted;
-		objRec.inspections[iInspIdx].rejected_count=objReject.rejected_count;
-		objRec.inspections[iInspIdx].reject_id=objReject.reject_id;
-		objRec.inspections[iInspIdx].reject_desc=objReject.reject_desc;				
-		if(cbMethod){
-			cbObj[cbMethod]();
+		var objToSend = {};
+		objToSend.inspectionDetailsId =	objRec.inspections[iInspIdx].id;
+		objToSend.inspectionId = 		objRec.inspections[iInspIdx].rejected_id;		
+		objToSend.inspectionCodeId =	objReject.reject_id;
+		objToSend.hc = 					objReject.rejected_count;
+		objToSend.weight = 				2;
+		objToSend.weightUom = 			1;
+		objToSend.note = 				objReject.reject_desc;
+		
+		var cgUpdate = consumingGateway.Update("InspectionDetails", objToSend);
+		if (cgUpdate.exceptionId == 0){ //Updated successfully
+			if(iAccepted==""){iAccepted=0;}
+			objRec.accepted_count=iAccepted;
+			objRec.inspections[iInspIdx].rejected_count=objReject.rejected_count;
+			objRec.inspections[iInspIdx].reject_id=objReject.reject_id;
+			objRec.inspections[iInspIdx].reject_desc=objReject.reject_desc;				
+			if(cbMethod){
+				cbObj[cbMethod]();
+			}	
+		}
+		else{ //Error			
+			cacheMan.setMessage("", "[Exception ID: " + cgUpdate.exceptionId + "] Descripcion: " + cgUpdate.exceptionDescription);			
 		}			
 	},
 	deleteReject:function(arrRejects,objReject,cbObj,cbMethod){
-		for(var i=0; i<arrRejects.length;i++){		
-			if (arrRejects[i]===objReject){
-				arrRejects.splice(i, 1);
-				if(cbMethod){
-					cbObj[cbMethod]();
+		
+		var objToSend = {};
+		objToSend.inspectionDetailsId =	objReject.id;
+		
+		var cgDelete = consumingGateway.Delete("InspectionDetails", objToSend);
+		if (cgDelete.exceptionId == 0){ //Deleted successfully
+			
+			for(var i=0; i<arrRejects.length;i++){		
+				if (arrRejects[i]===objReject){
+					arrRejects.splice(i, 1);
+					if(cbMethod){
+						cbObj[cbMethod]();
+					}
+					break;					
 				}
-				break;					
 			}
 		}
+		else{ //Error
+			cacheMan.setMessage("", "[Exception ID: " + cgDelete.exceptionId + "] Descripcion: " + cgDelete.exceptionDescription);			
+		}
+		
+		
 	},				
 });
 var cacheReceptions= new cache.receptions();
