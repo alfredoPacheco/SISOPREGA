@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+       <sms>
+              <userid></userid>
+              <apiid></apiid>
+              <password></password>
+       </sms>
+       <email>
+              <from></from>
+              <host></host>
+              <port></port>
+	      <username></username>
+	      <password></password>
+       </email>
+</config>
