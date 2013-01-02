@@ -214,7 +214,9 @@ enyo.kind({
 		var arrAux = this.get();
 		for(var i=0; i<arrAux.length;i++){
 			if (arrAux[i].barnyard_code==barnyard.substr(1)){
-				return arrAux[i].barnyard_id;
+				if (arrAux[i].location_id==barnyard.charAt(0)){
+					return arrAux[i].barnyard_id;
+				}
 			}
 		}
 	},

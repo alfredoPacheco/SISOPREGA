@@ -130,8 +130,8 @@ enyo.kind({
 				var barnyardAux = this.getReceptionBarnyard(objAux.reception_id);
 				for (b in barnyardAux){
 					try{
-						var barnyardName = cacheBY.getByID(barnyardAux[b].barnyardId).barnyard_code;
-						objAux.barnyards["" + objAux.city_id + barnyardName] = "" + objAux.city_id + barnyardName;						
+						var barnyard = cacheBY.getByID(barnyardAux[b].barnyardId);
+						objAux.barnyards["" + barnyard.location_id + barnyard.barnyard_code] = "" + barnyard.location_id + barnyard.barnyard_code;						
 					}catch(e){}					
 				}
 //weight:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::				
@@ -167,7 +167,7 @@ enyo.kind({
 					for (id in arrInspectionDetailsAux){						
 						inspectionAux.rejected_count = 	arrInspectionDetailsAux[id].hc;
 						inspectionAux.reject_id = 		arrInspectionDetailsAux[id].inspectionCodeId;
-						inspectionAux.reject_desc = 		arrInspectionDetailsAux[id].note;
+						inspectionAux.reject_desc = 	arrInspectionDetailsAux[id].note;
 						inspectionAux.id = 				arrInspectionDetailsAux[id].inspectionDetailsId; 
 						inspectionAux.weight =			arrInspectionDetailsAux[id].weight;
 						inspectionAux.weight_uom =		arrInspectionDetailsAux[id].weightUom;						
