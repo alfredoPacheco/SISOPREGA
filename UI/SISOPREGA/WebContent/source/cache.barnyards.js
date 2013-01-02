@@ -82,10 +82,9 @@ enyo.kind({
 											head_count:0
 											}];			
 				for(var b in this.arrCatBarnyardCapacity){
-					if (this.arrCatBarnyardCapacity[b].barnyardId == this.arrCatBarnyard[a].barnyardId){
-						objAux.barnyard_capacity=[{	catclass_id:this.arrCatBarnyardCapacity[b].catclassId,
-													//TODO:
-													catclass_name:"PENDIENTE",
+					if (this.arrCatBarnyardCapacity[b].barnyardId == this.arrCatBarnyard[a].barnyard_id){
+						objAux.barnyard_capacity=[{	catclass_id:this.arrCatBarnyardCapacity[b].catclassId,													
+													catclass_name:cacheCattle.getCattleClassByID(this.arrCatBarnyardCapacity[b].catclassId).catclass_name,
 													head_count:this.arrCatBarnyardCapacity[b].headCount
 													}];
 					}
