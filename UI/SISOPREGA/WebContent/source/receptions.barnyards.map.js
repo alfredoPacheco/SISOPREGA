@@ -198,7 +198,7 @@ enyo.kind({
 		this.cellOver(inSender, inEvent);
 		this.objSelected=inSender;
 		switch(inSender.occupied){
-			case 0:
+			case 0: //Seleccionar corral disponible
 				this.clearDesc();
 				if(enyo.json.stringify(this.arrSelectedOccupied)!="{}"){
 					for(var sKey in this.arrSelectedOccupied){
@@ -236,7 +236,7 @@ enyo.kind({
 					inSender.applyStyle("background-color",this.sColorSelectOccupied);
 				}
 				break;							
-			case 2:
+			case 2: //Deseleccionar corral libre
 				delete this.arrSelected[this.objSelected.name];	
 				this.objSelected.occupied=0;
 				this.objSelected.applyStyle("background-color",this.sColorFree);						
@@ -271,7 +271,7 @@ enyo.kind({
 				inSender.applyStyle("background-color",this.sColorSelect);
 				this.cellHold(inSender, inEvent);
 				break;
-			case 1:
+			case 1: 
 				this.setDesc(inSender.name);
 				if(enyo.json.stringify(this.arrSelected)!="{}"){
 					this.$.options.setItems([{caption:"Anexar",value:7}]);
@@ -295,12 +295,12 @@ enyo.kind({
 					this.cellHold(inSender, inEvent);
 				}				
 				break;							
-			case 2:
+			case 2: //Abrir opciones para corral libre
 				this.$.options.setItems(this.arrReception);
 				this.$.options.render();
 				this.$.options.openAtEvent(inEvent);		
 				break;			
-			case 3:
+			case 3: //Abrir opciones para corral ocupado
 				if(enyo.json.stringify(this.arrSelected)=="{}"){
 					this.$.options.setItems(this.arrPostReception);
 				}else{
@@ -326,12 +326,12 @@ enyo.kind({
 			sBy+=sKey+", ";
 		}
 		sBy=sBy.slice(0,-2);
-		var iAc=0;				
-		if(objRec.accepted_count!=""){
-			iAc=objRec.accepted_count;
-		}
+//		var iAc=0;				
+//		if(objRec.accepted_count!=""){
+//			iAc=objRec.accepted_count;
+//		}
 		_objMainHeader.setContent(objRec.rancher_name+" - "+objRec.city_name+"<BR>"+objRec.cattype_name+
-								  "  ("+ objRec.hc_aprox+"/"+objRec.weights[0].weight+")"+
+								  "  ("+ objRec.weights[0].hc+"/"+objRec.weights[0].weight+")"+
 							  	  "	 "+objRec.arrival_date		
 		);	
 		/*this.$.spacerone.setContent("<strong>"+objRec.rancher_name +"</strong> "+
@@ -344,9 +344,9 @@ enyo.kind({
 			_objMainHeader.setContent("");
 		}
 	},
-	actionSelected:function(inSender, inSelected){				
+	actionSelected:function(inSender, inSelected){		
 		switch(inSelected.value){
-			case 1:
+			case 1: //Recepcion
 				if(this.$.dynocon){
 					this.$.dynocon.destroy();
 				}
@@ -361,12 +361,12 @@ enyo.kind({
 				this.$.popMan.render();
 				this.$.popMan.openAtCenter();												
 				break;
-			case 2:
+			case 2: //Deseleccionar
 				delete this.arrSelected[this.objSelected.name];	
 				this.objSelected.occupied=0;
 				this.objSelected.applyStyle("background-color",this.sColorFree);						
 				break;
-			case 3:
+			case 3: //Alimento
 				if(this.$.dynocon){
 					this.$.dynocon.destroy();
 				}
@@ -387,7 +387,7 @@ enyo.kind({
 				this.$.popMan.render();
 				this.$.popMan.openAtCenter();												
 				break;				
-			case 4:
+			case 4: //Inspeccion
 				if(this.$.dynocon){
 					this.$.dynocon.destroy();
 				}		
@@ -408,7 +408,7 @@ enyo.kind({
 				this.$.popMan.render();
 				this.$.popMan.openAtCenter();												
 				break;	
-			case 5:
+			case 5: //Editar
 				if(this.$.dynocon){
 					this.$.dynocon.destroy();
 				}
@@ -424,7 +424,7 @@ enyo.kind({
 				this.$.popMan.render();
 				this.$.popMan.openAtCenter();		
 				break;
-			case 6:
+			case 6: //Liberar
 				var objRec=cacheReceptions.getByID(cacheBY.inUse()[this.objSelected.name].reception_id);			
 				cacheBY.releaseBY(objRec,this.objSelected.name,this,"releaseBY");
 				break;
@@ -432,11 +432,11 @@ enyo.kind({
 				var objRec=cacheReceptions.getByID(cacheBY.inUse()[this.objSelected.name].reception_id);
 				cacheReceptions.appendBY(objRec,this.arrSelected,this,"updateBY");
 				break;	
-			case 8:
+			case 8: //Deseleccionar
 				delete this.arrSelectedOccupied[this.objSelected.name];	
 				this.objSelected.occupied=1;
 				this.objSelected.applyStyle("background-color",this.sColorOccupied);									
-				break;									
+				break;
 		}
 	},
 	closePopUp:function(){	

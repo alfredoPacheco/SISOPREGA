@@ -77,6 +77,7 @@ enyo.kind({
 				this.setupDivider(inIndex);										
 				var obj=this.objList[inIndex];
 				this.$.name.setContent(obj.rancher_name);
+				//TODO hc_aprox
 				this.$.cattle.setContent(obj.cattype_name + " (" + obj.hc_aprox + ")   " + obj.city_name );			
 				this.$.barnyards.setContent(this.getBarnyards(obj.barnyards));
 				this.$.weight.setContent(this.calcNetWeight(obj.weights));

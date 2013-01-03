@@ -28,7 +28,7 @@ enyo.kind({
 		objNew.cattype_name=cacheCattle.getByID(objNew.cattype_id).cattype_name;
 		objNew.hc_aprox="";
 		objNew.city_name= cacheMan.getCityByID(objNew.city_id).city_name;
-		objNew.weights=[]; 
+		objNew.weights=[{hcw_id:undefined, hc:undefined, weight:undefined} ]; 
 		objNew.barnyards=[];
 		objNew.accepted_count="";
 		objNew.inspections=[];
@@ -102,7 +102,7 @@ enyo.kind({
 				receptionId:	obj.reception_id,				
 				hc:				obj.hc,
 				weight:			obj.weight,
-				weightUom:		1 //TODO 
+				weightUom:		1 //TODO
 			};
 		
 		return objNew;
@@ -137,14 +137,14 @@ enyo.kind({
 //weight:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::				
 				var arrHeadcountAux = this.getReceptionHeadcount(objAux.reception_id);
 				for (h in arrHeadcountAux){
-					var headcountAux = {};
+					
 					try{
-						headcountAux.hcw_id = 	arrHeadcountAux[h].headcountId;
-						headcountAux.hc = 		arrHeadcountAux[h].hc;
-						headcountAux.weight = 	arrHeadcountAux[h].weight;
-					}catch(e){}
-					objAux.weights.push(headcountAux);
+						objAux.weights[0].hcw_id = 	arrHeadcountAux[h].headcountId;
+						objAux.weights[0].hc = 		arrHeadcountAux[h].hc;
+						objAux.weights[0].weight = 	arrHeadcountAux[h].weight;
+					}catch(e){}										
 				}
+				objAux.hc_aprox =  objAux.weights[0].hc;
 //inspections::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 //				inspections:[{reject_desc:"ENFERMEDAD"}],
 				var arrInspectionAux = this.getInspection(objAux.reception_id);
