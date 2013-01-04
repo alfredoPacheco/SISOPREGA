@@ -463,7 +463,8 @@ enyo.kind({
 	},
 	releaseBY:function(){
 		this.objSelected.occupied=0;
-		this.objSelected.applyStyle("background-color",this.sColorFree);								
+		this.objSelected.applyStyle("background-color",this.sColorFree);
+		delete this.arrSelectedOccupied[this.objSelected.name];
 		this.$[sKey].removeClass("selectCell");		
 	},
 	deselect:function(){
