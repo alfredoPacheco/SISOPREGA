@@ -78,20 +78,20 @@ var _arrBarnyardsListCatalog=[
                	];		
 var _objMainHeader;
 
-function fillRancherLS(){
-	_arrRancherListLS=[];
-	for(var i=0;i<_arrRancherList.length;i++){		
-		if(_arrRancherList[i].rancher_type==1){
-			_arrRancherListLS.push({caption:_arrRancherList[i].last_name  +' '+
-											_arrRancherList[i].mother_name+' '+
-											_arrRancherList[i].first_name,
-									value:_arrRancherList[i].rancher_id});
-		}else{
-			_arrRancherListLS.push({caption:_arrRancherList[i].company_name,
-									value:_arrRancherList[i].rancher_id});				
-		}
-	}	
-}
+//function fillRancherLS(){
+//	_arrRancherListLS=[];
+//	for(var i=0;i<_arrRancherList.length;i++){		
+//		if(_arrRancherList[i].rancher_type==1){
+//			_arrRancherListLS.push({caption:_arrRancherList[i].last_name  +' '+
+//											_arrRancherList[i].mother_name+' '+
+//											_arrRancherList[i].first_name,
+//									value:_arrRancherList[i].rancher_id});
+//		}else{
+//			_arrRancherListLS.push({caption:_arrRancherList[i].company_name,
+//									value:_arrRancherList[i].rancher_id});				
+//		}
+//	}	
+//}
 
 enyo.kind({
 	name: "cache",
@@ -104,11 +104,11 @@ enyo.kind({
 	setGlobalScrim:function(objVar){
 		this.gblScrim=objVar;
 	},
-	clearBack:function(){
-		for(var i=0;i<_gobackStack.length;i++){
-			this.goBack();
-		}
-	},
+//	clearBack:function(){
+//		for(var i=0;i<_gobackStack.length;i++){
+//			this.goBack();
+//		}
+//	},
 	showScrim:function(){
 		this.gblScrim.show();
 	},

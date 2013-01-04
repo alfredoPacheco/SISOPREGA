@@ -243,15 +243,15 @@ public class ReceptionBarnyardBean extends BaseBean implements Cruddable {
         log.info("Deleting Reception Barnyard [" + recepBarnyard.toString() + "] by principal[" + getLoggedUser() + "]");
         em.merge(recepBarnyard);
         em.remove(recepBarnyard);
-        em.flush();
-
+        em.flush();         
         response.setError(new Error("0", "SUCCESS", "proxy.ReceptionBarnyard.Delete"));
         log.info("Reception Barnyard successfully deleted by principal [" + getLoggedUser() + "]");
       }else if(recepBarnyard.getBarnyardId()!=0 && recepBarnyard.getReceptionId()!=0){
-        TypedQuery<ReceptionBarnyard> readQuery = em.createNamedQuery("CRT_RECEPTIONBARNYARD_BY_ID", ReceptionBarnyard.class);
-        readQuery.setParameter("recBarnyardId", recepBarnyard.getRecBarnyardId());
+        TypedQuery<ReceptionBarnyard> readQuery = em.createNamedQuery("RECEPTION_BARNYARD_BY_BARNYARD_ID_AND_RECEPTION_ID", ReceptionBarnyard.class);
+        readQuery.setParameter("barnyard_id", recepBarnyard.getBarnyardId());
+        readQuery.setParameter("reception_id", recepBarnyard.getReceptionId());
         recepBarnyard = readQuery.getSingleResult();
-        log.info("Deleting Reception Barnyard [" + recepBarnyard.toString() + "] by principal[" + getLoggedUser() + "]");
+        log.info("Deleting Reception Barnyard [" + recepBarnyard.toString() + "] by barnyardId and receptionId[" + getLoggedUser() + "]");
         em.merge(recepBarnyard);
         em.remove(recepBarnyard);
         em.flush();
