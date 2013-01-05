@@ -77,6 +77,8 @@ var _arrBarnyardsListCatalog=[
                		 barnyard_capacity:[{catclass_id:4,cattype_name:"BOVINO",head_count:50}]}
                	];		
 var _objMainHeader;
+var _objPopupHeader;
+
 
 //function fillRancherLS(){
 //	_arrRancherListLS=[];

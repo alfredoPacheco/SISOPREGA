@@ -398,6 +398,9 @@ enyo.kind({
 				}
 			    this.$.popMan.createComponent({kind: "Toolbar",name:"tbHeaderRec",style:"height:10px", 
 											 components: [
+												{kind: "Spacer"},												
+												{kind: "VFlexBox", name:'lblInfo', allowHtml:true,
+												 style:"color:#FFF;border:none;font-size:15px", content: "Texto"},  
 												{kind: "Spacer"},
 												{name:'btnLogOut', onclick:"closePopUp",
 												 icon:"images/command-menu/icon-context.png"}]},{owner:this});																		

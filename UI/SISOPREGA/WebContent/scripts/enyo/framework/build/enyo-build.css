@@ -1359,7 +1359,7 @@ html, body, input, button {
 }
 
 .enyo-divider-left-cap {
-	min-width: 3px;
+	min-width: 1050px;
 	border-width: 0px;
 	background: url(palm/themes/Onyx/images/divider.png) left top repeat-x;
 	background-size: 6px 4px;

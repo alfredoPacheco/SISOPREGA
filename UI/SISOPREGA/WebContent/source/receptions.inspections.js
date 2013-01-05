@@ -2,7 +2,7 @@ enyo.kind({
 	name: "receptions.inspections",
 	kind: enyo.VFlexBox,
 	iSelect:null,
-	_objRec:null,	
+	_objRec:null,		
 	components:[
 		{kind: enyo.Scroller, name:"scrollProductList",flex: 1,
 		 className:"listBG",			
@@ -49,12 +49,16 @@ enyo.kind({
 		]}
 		]},					 		
 	],
-	setupRow:function(inSender, inIndex){	
+	ready:function(){
+		_objPopupHeader = enyo.$.sisoprega_mainMenu_receptionsMap_map_lblInfo;
+	},
+	setupRow:function(inSender, inIndex){		
 		var objInspection;
 		if (this._objRec){
 			if (objInspection=this._objRec.inspections[inIndex]){
 				this.$.info.setContent(objInspection.reject_desc+
 											 " ( "+objInspection.rejected_count+" )");
+				this._totalRejected = this._totalRejected + parseInt(objInspection.rejected_count);
 				return true;
 			}
 		}
@@ -89,8 +93,9 @@ enyo.kind({
 		this.toggleAdd();
 		this.updatetList();		
 	},
-	updatetList:function(){
-		this.$.productList.render();					
+	updatetList:function(){		
+		this.$.productList.render();
+		this.updateHeader();		
 	},
 	set:function(objVar){
 		this.$.accepted_count.setValue(objVar.accepted_count);
@@ -121,5 +126,23 @@ enyo.kind({
 		this.$.reject_id.setValue(0);
 		this.$.rejected_count.setValue("");		
 		this.updatetList();
+	},
+	updateHeader:function(){
+		
+		var totalRejected = 0;
+		var totalHeads = 0;		
+		var totalAccepted = 0;
+		
+		if (this._objRec){
+			totalHeads = parseInt(this._objRec.hc_aprox);
+			for (i in this._objRec.inspections){
+				if (this._objRec.inspections[i]){					
+					totalRejected = totalRejected + parseInt(this._objRec.inspections[i].rejected_count);					
+				}	
+			}
+		}
+		
+		totalAccepted = totalHeads - totalRejected;
+		_objPopupHeader.setContent("Total HC: [" + totalHeads + "]   Total Aceptados: [" + totalAccepted + "]   Total Rechazados: [" + totalRejected + "]");
 	}
 });
