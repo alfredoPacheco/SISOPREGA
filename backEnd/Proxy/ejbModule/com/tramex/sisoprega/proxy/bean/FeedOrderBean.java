@@ -183,7 +183,8 @@ public class FeedOrderBean extends BaseBean implements Cruddable {
     FeedOrder feedOrd = null;
     try {
       feedOrd = entityFromRequest(request, FeedOrder.class);
-
+      feedOrd.setFeedOriginator(getLoggedUser());
+      
       if (feedOrd.getOrderId() == 0) {
         log.warning("VAL04 - Entity ID Omission.");
         response.setError(new Error("VAL04", "Se ha omitido el id de la orden de alimentación al intentar actualizar sus datos.",

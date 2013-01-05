@@ -44,7 +44,6 @@ import com.tramex.sisoprega.dto.FeedOrderDetails;
  * ----------  ---------------------------  -------------------------------------------
  * 12/08/2012  Jaime Figueroa                Initial Version.
  * 12/16/2012  Diego Torres                  Adding log activity
- * 01/04/2013  Alfredo Pacheco				 Update by orderId and foodId added
  * ====================================================================================
  * </PRE>
  * @author Jaime Figueroa
@@ -182,25 +181,13 @@ public class FeedOrderDetailsBean extends BaseBean implements Cruddable {
     try {
       feedOrdDeta = entityFromRequest(request, FeedOrderDetails.class);
 
-      if(feedOrdDeta.getOrderId()!=0 && feedOrdDeta.getFoodId()!=0){
-          TypedQuery<FeedOrderDetails> readQuery = em.createNamedQuery("FEED_ORDER_DETAILS_BY_ORDER_ID_AND_FOOD_ID", FeedOrderDetails.class);
-          readQuery.setParameter("order_id", feedOrdDeta.getOrderId());
-          readQuery.setParameter("food_id", feedOrdDeta.getFoodId());
-          feedOrdDeta = readQuery.getSingleResult();
-          log.info("Updating Feed Order Details [" + feedOrdDeta.toString() + "] by orderId and foodId[" + getLoggedUser() + "]");
-          em.merge(feedOrdDeta);          
-          em.flush();
-
-          response.setError(new Error("0", "SUCCESS", "proxy.FeedOrderDetails.Update"));
-          log.info("FeedOrderDetails[" + feedOrdDeta.toString() + "] updated by orderId and foodId [" + getLoggedUser() + "]");
-        }
-       	else if (feedOrdDeta.getFodId() == 0) {
-           log.warning("VAL04 - Entity ID Omission.");
-           response.setError(new Error("VAL04", "Se ha omitido el id del corral al intentar actualizar sus datos.",
-               "proxy.FeedOrderDetails.Update"));        
-         }else {
+      if (feedOrdDeta.getFodId() == 0) {
+        log.warning("VAL04 - Entity ID Omission.");
+        response.setError(new Error("VAL04", "Se ha omitido el id del corral al intentar actualizar sus datos.",
+            "proxy.FeedOrderDetails.Update"));
+      } else {
         if (validateEntity(feedOrdDeta)) {
-          em.merge(feedOrdDeta);         
+          em.merge(feedOrdDeta);
           em.flush();
 
           GatewayContent content = getContentFromEntity(feedOrdDeta, FeedOrderDetails.class);

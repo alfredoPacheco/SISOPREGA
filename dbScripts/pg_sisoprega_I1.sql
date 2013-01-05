@@ -14,6 +14,7 @@
  * 11/27/2012  Diego Torres                  Add tables for security management
  * 12/01/2012  Diego Torres                  System log will be provided by app server.
  * 12/13/2012  Alfredo Pacheco               Field handling moved from ctrl_feed_order_details to ctrl_feed_order.
+ * 01/04/2013  Alfredo Pacheco		     On Delete Cascade for ctrl_feed_order_barnyard and ctrl_feed_order_details.
  * ====================================================================================
  * 
  * Author: Diego Torres
@@ -424,7 +425,7 @@ DROP TABLE IF EXISTS ctrl_feed_order CASCADE;
 
 CREATE TABLE ctrl_feed_order(
 	order_id SERIAL PRIMARY KEY,
-	reception_id integer NOT NULL REFERENCES ctrl_reception(reception_id),	
+	reception_id integer NOT NULL REFERENCES ctrl_reception(reception_id),
 	feed_date date NOT NULL,
 	feed_originator varchar(150),
 	handling varchar(100)
@@ -437,8 +438,8 @@ DROP TABLE IF EXISTS ctrl_feed_order_barnyard CASCADE;
 
 CREATE TABLE ctrl_feed_order_barnyard(
 	feed_ord_barn_id SERIAL PRIMARY KEY,
-	order_id integer NOT NULL REFERENCES ctrl_feed_order(order_id),
-	barnyard_id integer NOT NULL REFERENCES cat_barnyard(barnyard_id)
+	order_id integer NOT NULL REFERENCES ctrl_feed_order(order_id) ON DELETE CASCADE,
+	barnyard_id integer NOT NULL REFERENCES cat_barnyard(barnyard_id) ON DELETE CASCADE
 );
 
 CREATE UNIQUE INDEX U_feed_order_barnyard ON ctrl_feed_order_barnyard(order_id, barnyard_id);
@@ -458,7 +459,7 @@ GRANT ALL ON cat_food_food_id_seq TO sisoprega;
 DROP TABLE IF EXISTS ctrl_feed_order_details CASCADE;
 CREATE TABLE ctrl_feed_order_details(
 	id SERIAL PRIMARY KEY,
-	order_id integer NOT NULL REFERENCES ctrl_feed_order(order_id),
+	order_id integer NOT NULL REFERENCES ctrl_feed_order(order_id) ON DELETE CASCADE,
 	food_id integer NOT NULL REFERENCES cat_food(food_id),
 	quantity DECIMAL(10,2) NOT NULL DEFAULT 0.0
 	

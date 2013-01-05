@@ -277,7 +277,7 @@ public class CattleTypeBean extends BaseBean implements Cruddable {
     if (result) {
       if (cattle.getCattypeName() == null || cattle.getCattypeName().trim().length() == 0) {
         result = false;
-        error_description = "El nombre del tipo de ganado es un capo requerido.";
+        error_description = "El nombre del tipo de ganado es un campo requerido.";
       }
     }
 

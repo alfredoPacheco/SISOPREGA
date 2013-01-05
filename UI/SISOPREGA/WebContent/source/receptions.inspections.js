@@ -31,7 +31,7 @@ enyo.kind({
 		components: [					 
 		{kind: "ToolInput", name:"accepted_count", width:"23%",  hint:"Aceptados",changeOnInput: true,},					
 		{kind: "ToolInput", name:"rejected_count", width:"23%",  hint:"Rechazados",changeOnInput: true,},			
-		{kind: "ListSelector", name: 'reject_id', label:"Ganado",width:"50%",
+		{kind: "ListSelector", name: 'reject_id', width:"50%",
 		 style:"width:100%;color:white", contentPack:"end",
 			items: [] ,flex: 1,contentPack:"end"},							
 		{kind: "Drawer", name:"draAdd", components: [ 										

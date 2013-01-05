@@ -278,6 +278,8 @@ enyo.kind({
 					this.$.options.render();
 					this.$.options.openAtEvent(inEvent);							
 				}else{
+					this.cellOut();
+					this.cellOver(inSender, inEvent);
 					for(var sKey in this.arrSelectedOccupied){
 						if(cacheBY.inUse()[sKey].reception_id!=cacheBY.inUse()[inSender.name].reception_id){
 							for(var sKey in this.arrSelectedOccupied){
