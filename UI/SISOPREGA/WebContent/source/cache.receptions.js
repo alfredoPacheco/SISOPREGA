@@ -197,10 +197,13 @@ enyo.kind({
 //feedOrderDetails:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::	
 						var arrFeedDetailsAux =  this.getFeedOrderDetails(feedAux.feeding_id);
 						var feedDetailsAux = {};
+						var contAux = 1;
 						for (fd in arrFeedDetailsAux){
-							feedDetailsAux["" + fd] = {};
-							feedDetailsAux["" + fd].feed_desc = cacheFeed.getByID(arrFeedDetailsAux[fd].foodId).feed_desc;
-							feedDetailsAux["" + fd].feed_units = arrFeedDetailsAux[fd].quantity;
+							feedDetailsAux[contAux] = {};
+							feedDetailsAux[contAux].feed_desc = cacheFeed.getByID(arrFeedDetailsAux[fd].foodId).feed_desc;
+							feedDetailsAux[contAux].feed_units = arrFeedDetailsAux[fd].quantity;
+							feedDetailsAux[contAux].fod_id = arrFeedDetailsAux[fd].fodId;
+							contAux++;
 						}
 						feedAux.feed =feedDetailsAux;					
 					}
@@ -702,10 +705,12 @@ enyo.kind({
 			objToSend.foodId = 		objFeed.feed[obj].feed_id;				
 			objToSend.quantity =	objFeed.feed[obj].feed_units;
 			
-			var cgCreate = consumingGateway.Create("FeedOrderDetails", objToSend);
-			if (cgCreate.exceptionId != 0){			
+			var cgCreate = consumingGateway.Create("FeedOrderDetails", objToSend);			
+			if (cgCreate.exceptionId != 0){
 				cacheMan.setMessage("", "[Exception ID: " + cgCreate.exceptionId + "] Descripcion: " + cgCreate.exceptionDescription);
 				return false;
+			}else{
+				objFeed.feed[obj].fod_id = cgCreate.generatedId; 
 			}			
 		}
 		return true;
@@ -726,13 +731,14 @@ enyo.kind({
 			}	
 		}		
 	},
-	updateFeedOrderDetails:function(order_id, objFeed){
+	updateFeedOrderDetails:function(order_id, objOld, objNew){
 		var objToSend = {};
 		objToSend.orderId = order_id;		
 		
-		for (obj in objFeed.feed){			
-			objToSend.foodId = 		objFeed.feed[obj].feed_id;				
-			objToSend.quantity =	objFeed.feed[obj].feed_units;
+		for (obj in objNew.feed){			
+			objToSend.foodId = 		objNew.feed[obj].feed_id;				
+			objToSend.quantity =	objNew.feed[obj].feed_units;
+			//objToSend.fodId =		objOld.feed[obj].fod_id;
 			
 			var cgUpdate = consumingGateway.Update("FeedOrderDetails", objToSend);
 			if (cgUpdate.exceptionId != 0){
@@ -754,7 +760,7 @@ enyo.kind({
 		
 		var cgUpdate = consumingGateway.Update("FeedOrder", objToSend);
 		if (cgUpdate.exceptionId == 0){ //Updated successfully
-			this.updateFeedOrderDetails(objOld.feeding_id,objNew)==true;
+			this.updateFeedOrderDetails(objOld.feeding_id,objOld,objNew)==true;
 			for(prop in objNew){
 				objOld[prop]=objNew[prop];
 			}
