@@ -8,13 +8,13 @@ enyo.kind({
 	reloadme:function(){
 		//AJAX
 	},	
-	clear:function(){
-		this.arrObj = [];
-		_arrRancherList = [];
-		this.rancherWasReadFromGateway = false;
-		this.invoiceWasReadFromGateway = false;
-		this.contactsReadFromGateway = [];
-	},
+//	clear:function(){
+//		this.arrObj = [];
+//		_arrRancherList = [];
+//		this.rancherWasReadFromGateway = false;
+//		this.invoiceWasReadFromGateway = false;
+//		this.contactsReadFromGateway = [];
+//	},
 	get:function(){
 		
 		if (this.rancherWasReadFromGateway == false){

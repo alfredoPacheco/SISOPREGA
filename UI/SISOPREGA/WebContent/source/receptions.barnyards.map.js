@@ -278,6 +278,8 @@ enyo.kind({
 					this.$.options.render();
 					this.$.options.openAtEvent(inEvent);							
 				}else{
+					this.cellOut();
+					this.cellOver(inSender, inEvent);
 					for(var sKey in this.arrSelectedOccupied){
 						if(cacheBY.inUse()[sKey].reception_id!=cacheBY.inUse()[inSender.name].reception_id){
 							for(var sKey in this.arrSelectedOccupied){
@@ -396,6 +398,9 @@ enyo.kind({
 				}
 			    this.$.popMan.createComponent({kind: "Toolbar",name:"tbHeaderRec",style:"height:10px", 
 											 components: [
+												{kind: "Spacer"},												
+												{kind: "VFlexBox", name:'lblInfo', allowHtml:true,
+												 style:"color:#FFF;border:none;font-size:15px", content: "Texto"},  
 												{kind: "Spacer"},
 												{name:'btnLogOut', onclick:"closePopUp",
 												 icon:"images/command-menu/icon-context.png"}]},{owner:this});																		
@@ -463,7 +468,8 @@ enyo.kind({
 	},
 	releaseBY:function(){
 		this.objSelected.occupied=0;
-		this.objSelected.applyStyle("background-color",this.sColorFree);								
+		this.objSelected.applyStyle("background-color",this.sColorFree);
+		delete this.arrSelectedOccupied[this.objSelected.name];
 		this.$[sKey].removeClass("selectCell");		
 	},
 	deselect:function(){

@@ -313,11 +313,20 @@ enyo.kind({
 		
 	},
 	releaseBY:function(objRec,sID,cbObj,cbMethod){
-		delete objRec.barnyards[sID];
-		delete this.arrObjInUse[sID];
-		//AJAX		
-		if(cbMethod){
-			cbObj[cbMethod]();
+		
+		var objToSend = {};
+		objToSend.receptionId = objRec.reception_id;
+		objToSend.barnyardId = cacheBY.getByBarnyard(sID);
+		var cgDelete = consumingGateway.Delete("ReceptionBarnyard", objToSend);
+		if (cgDelete.exceptionId == 0){ //Deleted successfully
+			delete objRec.barnyards[sID];
+			delete this.arrObjInUse[sID];					
+			if(cbMethod){
+				cbObj[cbMethod]();
+			}	
+		}
+		else{ //Error
+			cacheMan.setMessage("", "[Exception ID: " + cgDelete.exceptionId + "] Descripcion: " + cgDelete.exceptionDescription);			
 		}
 	},
 	inUse:function(){

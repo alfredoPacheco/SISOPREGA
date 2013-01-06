@@ -476,6 +476,10 @@
 			<description>Retrieves a list of receptions for a given barnyard_id</description>
 			<query>SELECT rec FROM ReceptionBarnyard rec WHERE rec.barnyardId = :barnyardId ORDER BY rec.receptionId</query>
 		</named-query>
+		<named-query name="RECEPTION_BARNYARD_BY_BARNYARD_ID_AND_RECEPTION_ID">
+			<description>Retrieves a list of receptions for a given barnyard_id and reception_id</description>
+			<query>SELECT rec FROM ReceptionBarnyard rec WHERE rec.barnyardId = :barnyard_id and rec.receptionId = :reception_id</query>
+		</named-query>
 		<attributes>
 			<id name="recBarnyardId">
 				<column name="rec_barnyard_id" />
@@ -577,7 +581,11 @@
 		<named-query name="FOD_BY_ORDER_ID">
 			<description>Retrieves a list of feed order details based in the feed orderId</description>
 			<query>SELECT fod FROM FeedOrderDetails fod WHERE fod.orderId = :orderId ORDER BY fod.foodId</query>
-		</named-query>
+		</named-query>		
+		<named-query name="FEED_ORDER_DETAILS_BY_ORDER_ID_AND_FOOD_ID">
+			<description>Retrieves a list of feed order details based in the feed orderId and foodId</description>
+			<query>SELECT fod FROM FeedOrderDetails fod WHERE fod.orderId = :order_id and fod.foodId = :food_id</query>
+		</named-query>		
 		<attributes>
 			<id name="fodId">
 				<column name="id" />
