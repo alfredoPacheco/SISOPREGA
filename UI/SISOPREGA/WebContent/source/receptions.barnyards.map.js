@@ -134,7 +134,7 @@ enyo.kind({
 	},
 	addRow:function(bDiv){
 		if (bDiv){	
-			this.$.cells.createComponent({kind: "Divider",caption:"", style:"margin-left: -16px;"});
+			this.$.cells.createComponent({kind: "Divider",caption:"", style:"margin-left: -16px;min-width: 1050px;"});
 		}else{
 			this.$.cells.createComponent({kind: "HFlexBox", style:"height:5px;"});									
 		}

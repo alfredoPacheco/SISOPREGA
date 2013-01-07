@@ -6,10 +6,11 @@ enyo.kind({
 			
 			components: [
 				{name:'btnGoBack',icon:"images/command-menu/menu-icon-back.png", onclick:"goBack"},
-				{kind: "Spacer"},
+				{kind: "Spacer", name:"spacerFirst"},
+				{kind: "Spacer", name:"spacerSecond"},
 				{kind: "VFlexBox", name:'lblMainCap', allowHtml:true,
 				 style:"color:#FFF;border:none;font-size:15px", content: "Menu Principal"},  
-				{kind: "Spacer"},
+				{kind: "Spacer", name:"spacerThird"},
 				{name:'btnLogOut', onclick:"logOut",icon:"images/command-menu/icon-context.png"}]},
 				
 				{kind: enyo.Pane, flex: 1, name: "mainPane",
@@ -36,9 +37,11 @@ enyo.kind({
 		cacheMan.goBack();
 		if (_objMainHeader.getContent() =="Menu Principal"){
 			this.$.btnGoBack.setShowing(!1);
+			enyo.$.sisoprega_spacerSecond.setShowing(1);
 		}
 		else{
 			this.$.btnGoBack.setShowing(1);
+			enyo.$.sisoprega_spacerSecond.setShowing(!1);
 		}
 			
 	},
