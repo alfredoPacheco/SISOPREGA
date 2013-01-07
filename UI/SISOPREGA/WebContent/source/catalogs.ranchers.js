@@ -24,12 +24,14 @@ enyo.kind({
 		this.addGoBackAction();
 		this.$.ranPerCreate.toggleAdd();
 		this.$.ranPerCreate.objList=cacheRanchers.get();
+		_objMainHeader.setContent('Ganadero - Persona Fisica');
 		this.$.mainPane.selectViewByName("ranPerCreate");		
 	},
 	showEnterprise:function(){
 		this.addGoBackAction();
 		this.$.ranEPCreate.toggleAdd();	
-		this.$.ranEPCreate.objList=cacheRanchers.get();	
+		this.$.ranEPCreate.objList=cacheRanchers.get();
+		_objMainHeader.setContent('Ganadero - Empresa / Sociedad');
 		this.$.mainPane.selectViewByName("ranEPCreate");		
 	},	
 	showCapacity:function(inSender, inEvent){
@@ -52,7 +54,8 @@ enyo.kind({
 	showContacts:function(){
 		_gobackStack.push({caption:"Ganaderos",paneMan:this.$.mainPane,paneName:"ranOptions"});		
 		this.$.contactList.setList(this.$.ranchersList.getSelected());
-		this.$.contactList.updateList();	
+		this.$.contactList.updateList();
+		_objMainHeader.setContent('Contactos');
 		this.$.mainPane.selectViewByName("contactList");
 	},
 	showAddContact:function(){		
@@ -60,17 +63,20 @@ enyo.kind({
 		this.$.acontact.objList=_arrRancherList[this.$.ranchersList.iSelected].contacts;
 		this.$.acontact.setRancher(this.$.ranchersList.getSelected());
 		this.$.acontact.toggleAdd();
+		_objMainHeader.setContent('Contacto');
 		this.$.mainPane.selectViewByName("acontact");
 	},
 	showEditContact:function(){
 		_gobackStack.push({caption:"Ganaderos",paneMan:this.$.mainPane,paneName:"contactList"});			
 		this.$.acontact.setContact(this.$.ranchersList.getSelected(),this.$.contactList.getContact());
+		_objMainHeader.setContent('Contacto');
 		this.$.mainPane.selectViewByName("acontact");
 	},
 	showBilling:function(){
 		_gobackStack.push({caption:"Ganaderos",paneMan:this.$.mainPane,paneName:"ranOptions"});			
 		this.$.billing.setRancher(this.$.ranchersList.getSelected());
 		this.$.billing.toggleUpdate();
+		_objMainHeader.setContent('Datos de Facturación');
 		this.$.mainPane.selectViewByName("billing");		
 	},
 	showEdit:function(){
@@ -81,10 +87,12 @@ enyo.kind({
 		if (objRan.rancher_type==1){
 			this.$.ranPerCreate.setRancher(objRan);
 			this.$.ranPerCreate.toggleUpdate();
+			_objMainHeader.setContent('Ganadero - Persona Fisica');
 			this.$.mainPane.selectViewByName("ranPerCreate");	
 		}else{
 			this.$.ranEPCreate.setRancher(objRan);
-			this.$.ranEPCreate.toggleUpdate();			
+			this.$.ranEPCreate.toggleUpdate();
+			_objMainHeader.setContent('Ganadero - Empresa / Sociedad');
 			this.$.mainPane.selectViewByName("ranEPCreate");	
 		}
 	},

@@ -86,7 +86,11 @@ enyo.kind({
 			this.setupDivider(inIndex);
 			if(objRan.rancher_type==1){
 				// Diego: Change label to sort order (lastname, name/alias).
-				this.$.name.setContent(objRan.last_name + ', ' + objRan.first_name + '/' +  objRan.aka);
+				if (objRan.aka != ""){
+					this.$.name.setContent(objRan.last_name + ', ' + objRan.first_name + ' / ' +  objRan.aka);
+				}else{
+					this.$.name.setContent(objRan.last_name + ', ' + objRan.first_name);
+				}
 				this.$.info.setContent(objRan.phone_number);							
 			}else{
 				this.$.name.setContent(objRan.company_name);
