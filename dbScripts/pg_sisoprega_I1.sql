@@ -175,14 +175,6 @@ AFTER DELETE ON cat_person_rancher
 FOR EACH ROW
 EXECUTE PROCEDURE proc_person_rancher_delete();
 
--- SAMPLE DATA FOR RANCHERS
-INSERT INTO cat_person_rancher(aka, first_name, last_name, mother_name, email_add, telephone) 
-VALUES('El Vato', 'Alfredo', 'Pacheco', 'Figueroa', 'j.alfredo.pacheco@gmail.com', '044 (656) 305-0450');
-INSERT INTO cat_person_rancher(first_name, last_name, mother_name, birth_date, email_add, telephone)
-VALUES('Diego A.', 'Torres', 'Fuerte', '1982-04-13', 'diego.torres.fuerte@gmail.com', '044 (656) 217-1598');
-INSERT INTO cat_enterprise_rancher(legal_name, address_one, address_two, city, address_state, zip_code, legal_id, telephone)
-VALUES('Ganaderia Apaloosa', 'Calle prueba #7357', 'Colonia foo bar', 'cd. Juarez', 'Chih.', '32590', 'GAAP339648IEA', '656 000-0000');
-
 
 DROP TABLE IF EXISTS cat_rancher_invoice CASCADE;
 
@@ -306,17 +298,6 @@ CREATE UNIQUE INDEX U_barnyard_code ON cat_barnyard(barnyard_code, location_id);
 GRANT ALL ON cat_barnyard TO sisoprega;
 GRANT ALL ON cat_barnyard_barnyard_id_seq TO sisoprega;
 
-/* Chihuahua (1) barnyards */
--- TODO: Retrieve from map pictures.
-INSERT INTO cat_barnyard(barnyard_code, location_id) VALUES('E1', 1);
-INSERT INTO cat_barnyard(barnyard_code, location_id) VALUES('E2', 1);
-INSERT INTO cat_barnyard(barnyard_code, location_id) VALUES('E3', 1);
-
-/* Zona Sur (2) barnyards */
--- TODO: Retrieve from map pictures.
-INSERT INTO cat_barnyard(barnyard_code, location_id) VALUES('E1', 2);
-INSERT INTO cat_barnyard(barnyard_code, location_id) VALUES('E2', 2);
-INSERT INTO cat_barnyard(barnyard_code, location_id) VALUES('E3', 2);
 
 /* 
   Table structure for table cat_barnyard_capacity.
