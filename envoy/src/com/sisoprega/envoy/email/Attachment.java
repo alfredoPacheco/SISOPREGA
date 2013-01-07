@@ -16,7 +16,7 @@
 package com.sisoprega.envoy.email;
 
 /**
- * Email details.<BR/>
+ * Attachment details.<BR/>
  * 
  * <B>Revision History:</B>
  * 
@@ -25,50 +25,57 @@ package com.sisoprega.envoy.email;
  * Date        By                           Description
  * MM/DD/YYYY
  * ----------  ---------------------------  -------------------------------------------
- *             Alan Del Rio                 Initial Version.
- * 01/05/2013  Diego Torres                 Add implementation for email attachment.
+ * 01/05/2013  Diego Torres                 Initial Version.
  * ====================================================================================
  * </PRE>
  * 
- * @author Alan Del Rio
+ * @author Diego Torres
  * 
  */
-public class Email {
-  private final String to;
-  private final String from;
-  private final String msg;
-  private final String subject;
-  private Attachment attachment;
-
-  public Email(final String to, final String from, final String subject, final String msg) {
-    this.from = from;
-    this.to = to;
-    this.msg = msg;
-    this.subject = subject;
-  }
-
-  public String getTo() {
-    return to;
-  }
-
-  public String getFrom() {
-    return from;
-  }
-
-  public String getMsg() {
-    return msg;
-  }
-
-  public String getSubject() {
-    return subject;
+public class Attachment {
+  private byte[] content;
+  private String fileName;
+  private String attachmentType;
+  
+  /**
+   * @return the content
+   */
+  public byte[] getContent() {
+    return content;
   }
   
-  public Attachment getAttachment(){
-    return attachment;
+  /**
+   * @param content the content to set
+   */
+  public void setContent(byte[] content) {
+    this.content = content;
   }
   
-  public void setAttachment(Attachment attachment){
-    this.attachment = attachment;
+  /**
+   * @return the fileName
+   */
+  public String getFileName() {
+    return fileName;
   }
   
+  /**
+   * @param fileName the fileName to set
+   */
+  public void setFileName(String fileName) {
+    this.fileName = fileName;
+  }
+  
+  /**
+   * @return the attachmentType
+   */
+  public String getAttachmentType() {
+    return attachmentType;
+  }
+  
+  /**
+   * @param attachmentType the attachmentType to set
+   */
+  public void setAttachmentType(String attachmentType) {
+    this.attachmentType = attachmentType;
+  }
 }
