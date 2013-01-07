@@ -26,15 +26,15 @@ enyo.kind({
 					 width:"50%;",
 			 	 	 style:"color:#FFF;margin-top:10%",
 			 	 	 components: [	
-						{kind:"Input", name:"user", hint:"Usuario",selectAllOnFocus: true, value:"alfredo"},
-						{kind:"PasswordInput", name:"password", hint:"Contraseña",selectAllOnFocus: true, value:"alfredo"}
+						{kind:"Input", name:"user", hint:"Usuario",selectAllOnFocus: true, value:"admin"},
+						{kind:"PasswordInput", name:"password", hint:"Contraseña",selectAllOnFocus: true, value:"admin"}
 					]},
 					{kind: "Spacer"}					 
 			]}]},		
 		{kind: "Toolbar",name:"tbHeader2",style:"", 
 			components: [
 				{kind: "Button", className: "enyo-button-affirmative",style:"background-color:#5f0712",
-				 flex:1, caption: "Entrar", onclick: "checkLogIn"},				
+				 flex:1, caption: "Entrar", onclick: "checkLogIn", isDefault:"true"},				
 				 ]},							  
 	],
 	checkLogIn:function(){

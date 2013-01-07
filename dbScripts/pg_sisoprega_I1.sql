@@ -462,7 +462,6 @@ CREATE TABLE ctrl_feed_order_details(
 	order_id integer NOT NULL REFERENCES ctrl_feed_order(order_id) ON DELETE CASCADE,
 	food_id integer NOT NULL REFERENCES cat_food(food_id),
 	quantity DECIMAL(10,2) NOT NULL DEFAULT 0.0
-	
 );
 
 CREATE UNIQUE INDEX U_feed_order_food ON ctrl_feed_order_details(order_id, food_id);
@@ -524,3 +523,33 @@ CREATE TABLE ctrl_inspection_result(
 
 GRANT ALL ON ctrl_inspection_result TO sisoprega;
 GRANT ALL ON ctrl_inspection_result_id_seq TO sisoprega;
+
+DROP TABLE IF EXISTS ctrl_inspection_forecast CASCADE;
+CREATE TABLE ctrl_inspection_forecast(
+	id SERIAL PRIMARY KEY,
+	forecast_date DATE not null default CURRENT_DATE
+);
+
+GRANT ALL ON ctrl_inspection_forecast TO sisoprega;
+GRANT ALL ON ctrl_inspection_forecast_id_seq TO sisoprega;
+
+DROP TABLE IF EXISTS ctrl_inspection_forecast_detail CASCADE;
+CREATE TABLE ctrl_inspection_forecast_detail(
+	id SERIAL PRIMARY KEY,
+	forecast_id integer NOT NULL REFERENCES ctrl_inspection_forecast(id) ON DELETE CASCADE,
+	rancher_id integer NOT NULL REFERENCES cat_rancher(rancher_id),
+	auth varchar(10),
+	origin varchar(20),
+	cattle_type integer NOT NULL REFERENCES cat_cattle_type(cattype_id),
+	quantity integer not null,
+);
+
+GRANT ALL ON ctrl_inspection_forecast_detail TO sisoprega;
+GRANT ALL ON ctrl_inspection_forecast_detail_id_seq TO sisoprega;
+
+DROP TABLE IF EXISTS ctrl_inspection_forecast_barnyard;
+CREATE TABLE ctrl_inspection_forecast_barnyard(
+	id SERIAL PRIMARY KEY,
+	detail_id integer NOT NULL REFERENCES ctrl_inspection_forecast_detail(id) ON DELETE CASCADE,
+	barnyard_id integer NOT NULL REFERENCES cat_barnyard(barnyard_id)
+);

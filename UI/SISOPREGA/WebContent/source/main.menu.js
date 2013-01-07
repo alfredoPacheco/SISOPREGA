@@ -12,16 +12,20 @@ enyo.kind({
 			{kind:"main.menu.options", name:"menuOptions",
 	     style:"background-image: url(images/practice_background.png); background-size: cover;",				 			
 			flex: 1, 
-			onOperations:"showOperations",onReceptions:"showReceptionsMap",
-			 onCatalogs:"showCatalogs", onReports:"showReports"},
+			onOperations:"showOperations",
+			onReceptions:"showReceptionsMap",
+			onCatalogs:"showCatalogs", 
+			onReports:"showReports",
+			onInspectionForecast:"showInspectionForecast"},
 	 		{kind:"operations.menu", name:"operations", onReceptions:"showReceptions", 
 			 onInspections:"showInspections",lazy:true},
 	 		{kind:"catalogs.main", name:"catalogs",lazy:true},
 	 		{kind:"receptions.main", name:"receptions",lazy:true},				
 	 		{kind:"receptions.main.fs", name:"receptionsMap",lazy:true},	
 	 		{kind:"reports.main", name:"reports",lazy:true},
-	 		{kind:"inspections.list", name:"inspections"},									
-		 ]}				 			
+	 		{kind:"inspections.list", name:"inspections"},
+	 		{kind:"inspection.forecast", name:"inspectionForecast", lazy:true}
+		 ]}
 	],
 	showReceptionsMap:function(){
 		enyo.$.sisoprega_btnGoBack.setShowing(1);
@@ -40,23 +44,13 @@ enyo.kind({
 		_objMainHeader.setContent('Reportes');		
 		this.addGoBackAction();
 		this.$.mainPane.selectViewByName("reports");
-	},	
-//	showOperations:function(){
-//		_objMainHeader.setContent('Operaciones');
-//		this.addGoBackAction();
-//		this.$.mainPane.selectViewByName("operations");
-//	},
-//	showReceptions:function(){
-//		_objMainHeader.setContent('Recepciones');
-//		_gobackStack.push({caption:"Operaciones",paneMan:this.$.mainPane,paneName:"operations"});	
-//		this.$.mainPane.selectViewByName("receptions");		
-//	},
-//	showInspections:function(){
-//		_objMainHeader.setContent('Inspecciones');
-//		_gobackStack.push({caption:"Operaciones",paneMan:this.$.mainPane,paneName:"operations"});
-//		this.$.inspections.updateList();
-//		this.$.mainPane.selectViewByName("inspections");		
-//	},
+	},
+	showInspectionForecast:function(){
+		enyo.$.sisoprega_btnGoBack.setShowing(1);
+		_objMainHeader.setContent('Lista de Inspección');
+		this.addGoBackAction();
+		this.$.mainPane.selectViewByName("inspectionForecast");
+	},
 	addGoBackAction:function(){		
 		_gobackStack.push({caption:"Menu Principal",paneMan:this.$.mainPane,paneName:"menuOptions"});		
 	}
