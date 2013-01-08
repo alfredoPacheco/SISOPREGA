@@ -1,16 +1,17 @@
 enyo.kind({
 	name: "main.menu",
 	kind: enyo.VFlexBox,
+	className:"buttonsBG",
 	events:{
 		onUpdateLabel:"",
 	},	
-	     style:"background-image: url(images/practice_background.png); background-size: cover;",				 	
+//	     style:"background-image: url(images/practice_background.png); background-size: cover;",				 	
 	components:[
 		{kind: enyo.Pane, flex: 1, name: "mainPane",
-	     style:"background-image: url(images/practice_background.png); background-size: cover;",				 		
+//	     style:"background-image: url(images/practice_background.png); background-size: cover;",				 		
 		 components:[	
 			{kind:"main.menu.options", name:"menuOptions",
-	     style:"background-image: url(images/practice_background.png); background-size: cover;",				 			
+//	     style:"background-image: url(images/practice_background.png); background-size: cover;",				 			
 			flex: 1, 
 			onOperations:"showOperations",
 			onReceptions:"showReceptionsMap",
@@ -31,7 +32,7 @@ enyo.kind({
 		enyo.$.sisoprega_btnGoBack.setShowing(1);
 		enyo.$.sisoprega_spacerSecond.setShowing(!1);
 		_objMainHeader.setContent('Corrales');
-		_gobackStack.push({caption:"Menu Principal",paneMan:this.$.mainPane,paneName:"menuOptions"});	
+		this.addGoBackAction();	
 		this.$.mainPane.selectViewByName("receptionsMap");		
 	},	
 	showCatalogs:function(){
@@ -50,6 +51,7 @@ enyo.kind({
 	},
 	showInspectionForecast:function(){
 		enyo.$.sisoprega_btnGoBack.setShowing(1);
+		enyo.$.sisoprega_spacerSecond.setShowing(!1);
 		_objMainHeader.setContent('Lista de Inspección');
 		this.addGoBackAction();
 		this.$.mainPane.selectViewByName("inspectionForecast");

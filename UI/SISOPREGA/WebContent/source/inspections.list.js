@@ -10,7 +10,7 @@ enyo.kind({
 	arrRec:{},	
 	components:[
 		{kind: enyo.Scroller,flex: 1,
-    	style: "background-image: url(images/practice_background.png); background-size: cover;",	
+//    	style: "background-image: url(images/practice_background.png); background-size: cover;",	
  		 components: [
 		{kind: "ModalDialog", caption: "Receptiones Liberadas", 
 			components: [

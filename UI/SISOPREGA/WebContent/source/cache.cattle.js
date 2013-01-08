@@ -109,8 +109,8 @@ enyo.kind({
 			}
 			else{ //Error
 				if (cgReadAll.exceptionId != "VAL02"){ //No data found
-					cacheMan.setMessage("", "[Exception ID: " + cgReadAll.exceptionId + "] Descripcion: " + cgReadAll.exceptionDescription);	
-				}			
+					cacheMan.setMessage("", "[Exception ID: " + cgReadAll.exceptionId + "] Descripcion: " + cgReadAll.exceptionDescription);					
+				}
 			}
 			
 			this.arrCattleClass =  arrAux;
