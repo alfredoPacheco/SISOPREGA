@@ -2,6 +2,7 @@ enyo.kind({
 	name: "main.menu.options",	
 	kind: enyo.SlidingView,
 	layoutKind: enyo.VFlexLayout,
+	align:"center",
 	events: {
 		onReceptions:"",
 		onOperations:"",		
@@ -9,16 +10,32 @@ enyo.kind({
 		onReports:"",
 		onInspectionForecast:""
 	},	
-	components: [				
+	components: [
 		{kind: enyo.HFlexBox,
 		 className:"buttonsBG",		
 	     flex: 1,
 		 align:"left",	    
 		 components: [
-			{kind: "IconButton", caption: "Recepciones", className: "enyo-button-option", style:"width:100px;height:100px;", onclick:"doReceptions"},		
-			{kind: "IconButton",caption: "Catalogos",className: "enyo-button-option", style:"width:100px;height:100px;", onclick:"doCatalogs",},
-			{kind: "IconButton",caption: "Reportes",className: "enyo-button-option", style:"width:100px;height:100px;", onclick:"doReports"},
-			{kind: "IconButton", caption:"Lista de Inspección", className:"enyo-button-option", style:"width:100px;height:100px;", onclick:"doInspectionForecast"},
-			{kind: "Spacer"}]
-		}]
+			{kind: "IconButton", caption: "Operaciones", className: "enyo-button-option", style:"width:75px;height:75px;", onclick:"doReceptions"},		
+			{kind: "IconButton",caption: "Catalogos",className: "enyo-button-option", style:"width:75px;height:75px;", onclick:"doCatalogs",},
+			{kind: "IconButton",caption: "Reportes",className: "enyo-button-option", style:"width:75px;height:75px;", onclick:"doReports"}]
+		},
+		{kind: enyo.HFlexBox,
+			 className:"buttonsBG",		
+		     flex: 1,
+			 align:"left",	    
+			 components: [				
+				{kind: "IconButton", caption:"Lista de Inspección", className:"enyo-button-option", style:"width:75px;height:75px;", onclick:"doInspectionForecast"},
+				{kind: "Spacer"},
+				{kind: "Spacer"}]
+			},
+			{kind: enyo.HFlexBox,
+				 className:"buttonsBG",		
+			     flex: 1,
+				 align:"left",	    
+				 components: [				
+					{kind: "Spacer"},
+					{kind: "Spacer"},
+					{kind: "Spacer"}]
+				}]
 });

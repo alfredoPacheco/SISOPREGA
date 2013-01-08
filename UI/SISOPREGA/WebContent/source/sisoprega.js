@@ -47,6 +47,7 @@ enyo.kind({
 	},
 	goAhead:function(){			
 		this.$.btnGoBack.setShowing(!1);
+		enyo.$.sisoprega_spacerSecond.setShowing(1);
 		this.$.tbHeader.show();	
 		this.$.mainPane.selectViewByName("mainMenu");
 	},
