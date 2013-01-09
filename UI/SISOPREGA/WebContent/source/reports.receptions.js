@@ -32,7 +32,7 @@ enyo.kind({
 			]}						  
 	],
 	getParams:function(){
-		var fmt = new enyo.g11n.DateFmt({format: "yyyy/MM/dd"});		
+		var fmt = new enyo.g11n.DateFmt({format: "yyyy/MM/dd", locale: new enyo.g11n.Locale("en_us")});		
 		var params={rancher_id:"",start_date:"",end_date:""};
 		params.rancher_id=this.$.rancher_id.getValue();
 		params.start_date=fmt.format(this.$.start_date.getValue());

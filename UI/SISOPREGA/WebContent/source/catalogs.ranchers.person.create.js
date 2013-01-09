@@ -60,7 +60,7 @@ enyo.kind({
 	},
 	getRancher:function(){				
 	
-		var fmt = new enyo.g11n.DateFmt({format: "yyyy/MM/dd"});
+		var fmt = new enyo.g11n.DateFmt({format: "yyyy/MM/dd", locale: new enyo.g11n.Locale("en_us")});
 		var objRan={
 						rancher_id:		"",
 						aka:			"",	
