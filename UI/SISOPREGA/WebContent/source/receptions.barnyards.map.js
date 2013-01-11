@@ -15,7 +15,7 @@ enyo.kind({
 	sColorOccupied:"#ff7200",
 	sColorFree:"white",	
 	sColorSelect:"lightgreen",
-	sColorSelectOccupied:"#9b7eb1",
+	sColorSelectOccupied:"#9b7eb1",	
 	components: [
 		{kind:"VFlexBox", flex:1, className:"mapBG",
 		 components:[
@@ -118,7 +118,8 @@ enyo.kind({
 		                          style: "width:"+sWidth+
 						                 ";height:"+sHeight+";" +
 				                 		"text-align: center;" +
-				                 		"vertical-align: middle;",
+				                 		"vertical-align: middle;" +
+				                 		"background-color:#DABD8B;",
 			                      name:sName,
 								  content:sCaption,
 								 },{owner: this});		

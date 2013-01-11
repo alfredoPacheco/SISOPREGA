@@ -3,17 +3,16 @@ enyo.kind({
 	kind: enyo.VFlexBox,
 	components: [
 		{kind: "Toolbar",name:"tbHeader",style:"height:10px", className:"headerMain", 
-			
 			components: [
-				{name:'btnGoBack',icon:"images/command-menu/menu-icon-back.png", onclick:"goBack"},
-				{kind: "Spacer", name:"spacerFirst"},
-				{kind: "Spacer", name:"spacerSecond"},
-				{kind: "VFlexBox", name:'lblMainCap', allowHtml:true,
-				 style:"color:#FFF;border:none;font-size:15px", content: "Menu Principal"},  
-				{kind: "Spacer", name:"spacerThird"},
-				{name:'btnLogOut', onclick:"logOut",icon:"images/command-menu/icon-context.png"}]},
-				
-				{kind: enyo.Pane, flex: 1, name: "mainPane",
+				{name:'btnGoBack',icon:"images/command-menu/menu-icon-back.png", onclick:"goBack", flex:1},				
+				{kind: "Spacer", flex:1, name:"spacerFirst"},
+				{kind: "Spacer", flex:1, name:"spacerSecond"},
+				{kind: "VFlexBox", name:'lblMainCap', allowHtml:true, flex:1,
+				 style:"color:#FFF;border:none;font-size:15px; text-align:center;", content: "Menu Principal"},  
+				{kind: "Spacer", flex:1, name:"spacerThird"},
+				{name:'btnLogOut', flex:1, onclick:"logOut",icon:"images/command-menu/icon-context.png"}]
+		},
+		{kind: enyo.Pane, flex: 1, name: "mainPane", transitionKind: "enyo.transitions.LeftRightFlyin",
 				 components:[
 				 {kind:"login", name:"login",onSucess:"goAhead",onFail:"noAccess"},
 				 {kind:"main.menu",name:"mainMenu"}

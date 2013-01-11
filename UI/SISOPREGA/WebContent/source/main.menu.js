@@ -2,17 +2,17 @@ enyo.kind({
 	name: "main.menu",
 	kind: enyo.VFlexBox,
 	className:"buttonsBG",
+	pack:"center",
 	events:{
 		onUpdateLabel:"",
 	},	
 //	     style:"background-image: url(images/practice_background.png); background-size: cover;",				 	
 	components:[
-		{kind: enyo.Pane, flex: 1, name: "mainPane",
-//	     style:"background-image: url(images/practice_background.png); background-size: cover;",				 		
+		{kind: enyo.Pane, className:"buttonsBG", flex: 1, name: "mainPane", transitionKind: "enyo.transitions.LeftRightFlyin", 
+	     style:"background-size: cover;",				 		
 		 components:[	
-			{kind:"main.menu.options", name:"menuOptions",
-//	     style:"background-image: url(images/practice_background.png); background-size: cover;",				 			
-			flex: 1, 
+			{kind:"main.menu.options", name:"menuOptions", className:"buttonsBG", align:"center",style:"width:300px;",
+			flex: 1,
 			onOperations:"showOperations",
 			onReceptions:"showReceptionsMap",
 			onCatalogs:"showCatalogs", 
@@ -25,7 +25,9 @@ enyo.kind({
 	 		{kind:"receptions.main.fs", name:"receptionsMap",lazy:true},	
 	 		{kind:"reports.main", name:"reports",lazy:true},
 	 		{kind:"inspections.list", name:"inspections"},
-	 		{kind:"inspection.forecast", name:"inspectionForecast", lazy:true}
+//	 		{kind:"inspection.forecast", name:"inspectionForecast", lazy:true}
+	 		{kind:"inspections.main.fs", name:"inspectionForecast", lazy:true}
+	 		
 		 ]}
 	],
 	showReceptionsMap:function(){

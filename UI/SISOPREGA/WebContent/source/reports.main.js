@@ -3,7 +3,7 @@ enyo.kind({
 	kind: enyo.VFlexBox,	
 	iProduct:"",
 	components: [
-		{ kind: enyo.Pane, flex: 1, name: "mainPane",		
+		{ kind: enyo.Pane, flex: 1, name: "mainPane",transitionKind: "enyo.transitions.LeftRightFlyin",		
 		 components:[
 			{kind:"reports.select",name:"selection", onReceptions:"showReceptions"},			
 			{kind:"reports.receptions",name:"receptions",onGetReport:"showReceptionsResults"},	

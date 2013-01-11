@@ -190,10 +190,6 @@
 			<method>
 				<ejb-name>ReceptionBarnyardProxy</ejb-name>
 				<method-name>*</method-name>
-			</method>			
-			<method>
-				<ejb-name>ReceptionBarnyardProxy</ejb-name>
-				<method-name>*</method-name>
 			</method>
 			<method>
 				<ejb-name>ReceptionHeadcountProxy</ejb-name>

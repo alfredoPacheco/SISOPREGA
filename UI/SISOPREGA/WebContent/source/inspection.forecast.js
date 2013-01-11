@@ -1,7 +1,7 @@
 enyo.kind({
   name: "inspection.forecast",	
   kind: enyo.SlidingView,	
-  layoutKind: enyo.VFlexLayout,	
+  layoutKind: enyo.VFlexLayout,
   events: {
     "onAddInspectionForecast": "",
 	"onUpdateInspectionForecast": "",

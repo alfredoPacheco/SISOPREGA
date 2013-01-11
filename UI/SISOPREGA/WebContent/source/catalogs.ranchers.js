@@ -2,7 +2,7 @@ enyo.kind({
 	name: "catalogs.ranchers",
 	kind: enyo.VFlexBox,
 	components:[
-		{kind: enyo.Pane, flex: 1, name: "mainPane",
+		{kind: enyo.Pane, flex: 1, name: "mainPane", transitionKind: "enyo.transitions.LeftRightFlyin",
 		 components:[	
 			{kind:"catalogs.ranchers.list",name:"ranchersList",flex: 1,onSelectRancher:"showOptions",
 			 onEnterprise:"showEnterprise", onPerson:"showPerson"},
