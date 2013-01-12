@@ -19,8 +19,8 @@ enyo.kind({
 			 align:"center",	    
 			 components: [
 				{kind: "CustomButton", flex:1, content: "", className: "menuButton", style:"width:75px;height:75px;background-image:url('images/cow-100px.png');", onclick:"doReceptions"},		
-				{kind: "CustomButton",flex:1, content: "",className: "menuButton", style:"width:75px;height:75px;background-image:url('images/ark_open.png');", onclick:"doCatalogs",},
-				{kind: "CustomButton",flex:1, content: "",className: "menuButton", style:"width:75px;height:75px;background-image:url('images/align_left.png');", onclick:"doReports"}]
+				{kind: "CustomButton",flex:1, content: "",className: "menuButton", style:"width:75px;height:75px;background-image:url('images/catalogos.png');", onclick:"doCatalogs",},
+				{kind: "CustomButton",flex:1, content: "",className: "menuButton", style:"width:75px;height:75px;background-image:url('images/reportes.png');", onclick:"doReports"}]
 			},
 			{kind: enyo.HFlexBox,
 				 className:"buttonsBG",		

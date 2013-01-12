@@ -8,7 +8,7 @@ enyo.kind({
 				{kind: "Spacer", flex:1, name:"spacerFirst"},
 				{kind: "Spacer", flex:1, name:"spacerSecond"},
 				{kind: "VFlexBox", name:'lblMainCap', allowHtml:true, flex:1,
-				 style:"color:#FFF;border:none;font-size:15px; text-align:center;", content: "Menu Principal"},  
+				 style:"color:#FFF;border:none;font-size:15px; text-align:center;min-width:100px;", content: "Menu Principal"},  
 				{kind: "Spacer", flex:1, name:"spacerThird"},
 				{name:'btnLogOut', flex:1, onclick:"logOut",icon:"images/command-menu/icon-context.png"}]
 		},
