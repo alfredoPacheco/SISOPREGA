@@ -306,18 +306,6 @@ CREATE UNIQUE INDEX U_barnyard_code ON cat_barnyard(barnyard_code, location_id);
 GRANT ALL ON cat_barnyard TO sisoprega;
 GRANT ALL ON cat_barnyard_barnyard_id_seq TO sisoprega;
 
-/* Chihuahua (1) barnyards */
--- TODO: Retrieve from map pictures.
-INSERT INTO cat_barnyard(barnyard_code, location_id) VALUES('E1', 1);
-INSERT INTO cat_barnyard(barnyard_code, location_id) VALUES('E2', 1);
-INSERT INTO cat_barnyard(barnyard_code, location_id) VALUES('E3', 1);
-
-/* Zona Sur (2) barnyards */
--- TODO: Retrieve from map pictures.
-INSERT INTO cat_barnyard(barnyard_code, location_id) VALUES('E1', 2);
-INSERT INTO cat_barnyard(barnyard_code, location_id) VALUES('E2', 2);
-INSERT INTO cat_barnyard(barnyard_code, location_id) VALUES('E3', 2);
-
 /* 
   Table structure for table cat_barnyard_capacity.
   it is pretendable to have different capacities by
@@ -541,7 +529,7 @@ CREATE TABLE ctrl_inspection_forecast_detail(
 	auth varchar(10),
 	origin varchar(20),
 	cattle_type integer NOT NULL REFERENCES cat_cattle_type(cattype_id),
-	quantity integer not null,
+	quantity integer not null
 );
 
 GRANT ALL ON ctrl_inspection_forecast_detail TO sisoprega;
