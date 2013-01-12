@@ -544,3 +544,5 @@ CREATE TABLE ctrl_inspection_forecast_barnyard(
 
 create or replace view vw_rancher as  select rancher_id, first_name || ' ' || last_name as rancher_name from cat_person_rancher union (select enterprise_id as rancher_id, legal_name as ran
 cher_name from cat_enterprise_rancher) order by rancher_name;
+
+GRANT ALL ON vw_rancher TO sisoprega;

@@ -327,7 +327,7 @@ var cConsumingGateway = {
 				output.exceptionId = 1;
 				output.exceptionDescription = error;
 				alert(output.exceptionDescription);
-				consumingGateway.LogOut();
+				
 			}
 		});
 		enyo.$.sisoprega.destroy();
