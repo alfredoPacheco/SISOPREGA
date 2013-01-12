@@ -705,26 +705,20 @@ var cacheRanchers = new cache.ranchers();
 
 function UTCtoNormalDate(strUTC) {
 	var dateFmt = "";
-	if (strUTC != "" && strUTC !== undefined) {
-		strAux = strUTC.split(" ");
-		var fmt = new enyo.g11n.DateFmt({
-			format : "yyyy/MM/dd",
-			locale : new enyo.g11n.Locale("en_us")
-		});
-		var dateFromUTC = new Date(strUTC);
+	if (strUTC != "" && strUTC !== undefined){		
+		var fmt = new enyo.g11n.DateFmt({format: "yyyy/MM/dd", locale: new enyo.g11n.Locale("es_es")}); 		
+		var dateFromUTC = new Date(parseInt(strUTC));
 		dateFmt = fmt.format(dateFromUTC);
 	}
+	
 	return dateFmt;
 }
 
 function DateOut(normalDate) {
 	var dateFmt = "";
-	if (normalDate != "" && normalDate !== undefined) {
-		var fmt = new enyo.g11n.DateFmt({
-			format : "MM/dd/yyyy",
-			locale : new enyo.g11n.Locale("en_us")
-		});
-		var dateNew = new Date(normalDate);
+	if (normalDate != "" && normalDate !== undefined){
+		var fmt = new enyo.g11n.DateFmt({format: "MM/dd/yyyy", locale: new enyo.g11n.Locale("es_es")});
+		var dateNew= new Date(normalDate);
 		dateFmt = fmt.format(dateNew);
 	}
 	return dateFmt;

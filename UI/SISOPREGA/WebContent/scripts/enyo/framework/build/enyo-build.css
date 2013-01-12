@@ -268,7 +268,8 @@ body {
 	position: relative;
 	/* make this color transparent; note only transparent actually removes this color */
 	-webkit-tap-highlight-color: transparent;
-	background-color: #d8d8d8;
+	/*background-color: #d8d8d8;*/
+	background-color: #DABD8B;
 	color: #333;
 }
 
@@ -285,7 +286,8 @@ html, body, input, button {
 }
 
 .enyo-bg {
-	background-color: #d8d8d8;
+	/*background-color: #d8d8d8;*/
+	background-color: #DABD8B;
 }
 
 .enyo-text-filter-highlight {

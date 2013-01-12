@@ -58,6 +58,8 @@ var cConsumingGateway = {
 			error : function OnError(request, status, error) {
 				output.exceptionId = 1;
 				output.exceptionDescription = error;
+				alert(output.exceptionDescription);
+				consumingGateway.LogOut();
 			}
 		});
 		return output;
@@ -97,7 +99,7 @@ var cConsumingGateway = {
 				output.exceptionDescription = jQuery(data).find(
 						"exceptionDescription").text();
 				output.exceptionId = jQuery(data).find("exceptionId").text();
-				if (output.exceptionId != "VAL02" && output.exceptionId != 0){
+				if (output.exceptionId == "GW01"){
 					alert(output.exceptionDescription);
 					consumingGateway.LogOut();
 				}
@@ -109,6 +111,8 @@ var cConsumingGateway = {
 			error : function OnError(request, status, error) {
 				output.exceptionId = 1;
 				output.exceptionDescription = error + ' :' + status;
+				alert(output.exceptionDescription);
+				consumingGateway.LogOut();
 			}
 		});
 		return output;
@@ -151,7 +155,7 @@ var cConsumingGateway = {
 				output.exceptionDescription = jQuery(data).find(
 						"exceptionDescription").text();
 				output.exceptionId = jQuery(data).find("exceptionId").text();
-				if (output.exceptionId != "VAL02" && output.exceptionId != 0){
+				if (output.exceptionId == "GW01"){
 					alert(output.exceptionDescription);
 					consumingGateway.LogOut();
 				}
@@ -174,6 +178,8 @@ var cConsumingGateway = {
 			error : function OnError(request, status, error) {
 				output.exceptionId = 1;
 				output.exceptionDescription = error;
+				alert(output.exceptionDescription);
+				consumingGateway.LogOut();
 			}
 		});
 		return output;
@@ -215,7 +221,7 @@ var cConsumingGateway = {
 				output.exceptionDescription = jQuery(data).find(
 						"exceptionDescription").text();
 				output.exceptionId = jQuery(data).find("exceptionId").text();
-				if (output.exceptionId != "VAL02" && output.exceptionId != 0){
+				if (output.exceptionId == "GW01"){
 					alert(output.exceptionDescription);
 					consumingGateway.LogOut();
 				}
@@ -237,6 +243,8 @@ var cConsumingGateway = {
 			error : function OnError(request, status, error) {
 				output.exceptionId = 1;
 				output.exceptionDescription = error;
+				alert(output.exceptionDescription);
+				consumingGateway.LogOut();
 			}
 		});
 		return output;
@@ -276,7 +284,7 @@ var cConsumingGateway = {
 				output.exceptionDescription = jQuery(data).find(
 						"exceptionDescription").text();
 				output.exceptionId = jQuery(data).find("exceptionId").text();
-				if (output.exceptionId != "VAL02" && output.exceptionId != 0){
+				if (output.exceptionId == "GW01"){
 					alert(output.exceptionDescription);
 					consumingGateway.LogOut();
 				}
@@ -285,6 +293,8 @@ var cConsumingGateway = {
 			error : function OnError(request, status, error) {
 				output.exceptionId = 1;
 				output.exceptionDescription = error;
+				alert(output.exceptionDescription);
+				consumingGateway.LogOut();
 			}
 		});
 		return output;
@@ -316,6 +326,8 @@ var cConsumingGateway = {
 			error : function OnError(request, status, error) {
 				output.exceptionId = 1;
 				output.exceptionDescription = error;
+				alert(output.exceptionDescription);
+				consumingGateway.LogOut();
 			}
 		});
 		enyo.$.sisoprega.destroy();

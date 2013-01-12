@@ -19,12 +19,11 @@ enyo.kind({
 		var rancherAux = cacheRanchers.getByID(objNew.rancher_id);
 		
 		if(rancherAux.rancher_type==1){			
-			objNew.rancher_name=rancherAux.aka+" / "+rancherAux.last_name+" "+
-			rancherAux.mother_name+" "+rancherAux.first_name;			
+			objNew.rancher_name=rancherAux.first_name + " " + rancherAux.last_name;
 		}else{
 			objNew.rancher_name=rancherAux.company_name;
 		}
-		
+
 		objNew.cattype_name=cacheCattle.getByID(objNew.cattype_id).cattype_name;
 		objNew.hc_aprox="";
 		objNew.city_name= cacheMan.getCityByID(objNew.city_id).city_name;

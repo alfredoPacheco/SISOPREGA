@@ -36,6 +36,102 @@
 	background-color: #5f0712;
 	width:90%;
 }
+
+/* INICIO Estilo para botones de menu principal */
+.menuButton {
+	font-size: 15px;
+	line-height: 20px;
+	text-align: center;
+	vertical-align: top;
+	padding: 4px 4px;
+	min-width: 14px;
+	min-height: 20px;
+	-webkit-border-image: url(../scripts/enyo/framework/build/palm/themes/Onyx/images/button-up.png) 4 4 4 4 stretch stretch;
+	border-width: 4px;
+	border-radius: 5px;
+	margin: 3px;
+	color: #292929;
+	/*background-color: #5f0712;*/
+	
+	background-repeat:no-repeat;
+	background-position:center center; 
+}
+
+.menuButton.enyo-button-down, .menuButton.enyo-button-depressed {
+	-webkit-border-image: url(../scripts/enyo/framework/build/palm/themes/Onyx/images/button-down.png) 4 4 4 4 stretch stretch;
+}
+
+@media (-webkit-min-device-pixel-ratio:1.5) {
+	.menuButton {
+		-webkit-border-image: url(../scripts/enyo/framework/build/palm/themes/Onyx/images-1.5/button-up.png) 6 6 6 6 stretch stretch;
+	}
+	
+	.menuButton.enyo-button-down, .enyo-button.enyo-button-depressed {
+		-webkit-border-image: url(../scripts/enyo/framework/build/palm/themes/Onyx/images-1.5/button-down.png) 6 6 6 6 stretch stretch;
+	}
+}
+
+.enyo-button.enyo-button-disabled {
+	opacity: 0.4;
+	/*color: rgba(255,254,255,0.4);*/
+}
+
+.enyo-button-natural-width {
+}
+
+.enyo-button-standard-width {
+	min-width: 120px;
+}
+
+.enyo-button img {
+	padding: 0px 3px;
+}
+
+/* light button (often cancel) */
+
+.enyo-button-light {
+	background-color: rgba(255,255,255,0.8);
+	color: #292929;
+}
+
+/* dark button */
+
+.enyo-button-dark {
+	color: white;
+	background-color: rgba(23,23,23,0.5);
+}
+
+/* affirmative (green) */
+
+.enyo-button-affirmative {
+	color: white;
+	background-color: #2aa100;
+}
+
+/* negative (red) */
+
+.enyo-button-negative {
+	color: white;
+	background-color: #be0003;
+}
+
+/* blue */
+
+.enyo-button-blue {
+	color: white;
+	background-color: #2071bb;
+}
+
+/* gray */
+
+.enyo-button-gray {
+	color: white;
+	background-color: #4b4b4b;
+}
+
+
+/* FIN Estilo para botones de menu principal */
+
 .enyo-button-optiondark {
 	color: white;
 	background-color: rgba(23,23,23,0.5);
