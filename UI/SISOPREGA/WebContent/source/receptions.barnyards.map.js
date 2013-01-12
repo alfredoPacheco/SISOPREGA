@@ -320,6 +320,7 @@ enyo.kind({
 		this.$.spacerone.setContent("");
 	},
 	setDesc:function(sBY){
+		_objMainHeader.setStyle("color:#FFF;border:none;font-size:12px; text-align:center;min-width:150px;");
 		try {
 		var objRec=cacheReceptions.getByID(cacheBY.inUse()[sBY].reception_id);
 		var sBy="";
@@ -334,7 +335,7 @@ enyo.kind({
 //			iAc=objRec.accepted_count;
 //		}
 		_objMainHeader.setContent(objRec.rancher_name+" - "+objRec.city_name+"<BR>"+objRec.cattype_name+
-								  "  ("+ objRec.weights[0].hc+"/"+objRec.weights[0].weight+")"+
+								  "  ("+ objRec.hc_aprox+"/"+objRec.weights[0].weight+")"+
 							  	  "	 "+objRec.arrival_date		
 		);	
 		/*this.$.spacerone.setContent("<strong>"+objRec.rancher_name +"</strong> "+

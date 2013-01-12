@@ -18,6 +18,7 @@ package com.tramex.sisoprega.proxy.bean;
 import java.lang.reflect.Field;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -97,9 +98,12 @@ public class BaseBean {
 
       com.tramex.sisoprega.common.Field contentField = new com.tramex.sisoprega.common.Field();
       contentField.setName(fieldName);
-      if (field.get(entity) != null)
+      if (field.get(entity) != null){
         contentField.setValue(field.get(entity).toString());
 
+	      if (field.getType().getName().equals(Date.class.getName()))
+	    	  contentField.setValue(String.valueOf(((Date)field.get(entity)).getTime()));
+      }
       content.getFields().add(contentField);
     }
     return content;
@@ -165,5 +169,5 @@ public class BaseBean {
   protected String getLoggedUser(){
     return ejbContext.getCallerPrincipal().getName();
   }
-
+  
 }
