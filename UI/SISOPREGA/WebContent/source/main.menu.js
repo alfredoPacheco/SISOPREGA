@@ -25,7 +25,6 @@ enyo.kind({
 	 		{kind:"receptions.main.fs", name:"receptionsMap",lazy:true},	
 	 		{kind:"reports.main", name:"reports",lazy:true},
 	 		{kind:"inspections.list", name:"inspections"},
-//	 		{kind:"inspection.forecast", name:"inspectionForecast", lazy:true}
 	 		{kind:"inspections.main.fs", name:"inspectionForecast", lazy:true}
 	 		
 		 ]}
