@@ -1,5 +1,4 @@
-enyo
-		.kind({
+enyo.kind({
 			name : "cache.ranchers",
 			iLastRanID : null,
 			arrObj : [],
@@ -699,6 +698,73 @@ enyo
 						return false;
 					}
 				}
+			},
+			findRancher: function(criteria){				
+				var result = [];
+				if (criteria != ""){
+				var ranchers = this.get();
+				var pattern = new RegExp(criteria.trim(), "ig");
+				for (property in ranchers){
+					if(ranchers[property].rancher_type==1){
+						if (pattern.test(ranchers[property].aka) || pattern.test(ranchers[property].first_name) || pattern.test(ranchers.last_name) || pattern.test(ranchers[property].mother_name)){
+							var rancher = {caption:"",value:ranchers[property].rancher_id};
+							if (ranchers[property].aka != "") {
+								rancher.caption = ranchers[property].last_name + ', '
+										+ ranchers[property].first_name + ' / ' + ranchers[property].aka;
+							} else {
+								rancher.caption = ranchers[property].last_name + ', '
+										+ ranchers[property].first_name;
+							};
+							
+							result.push(rancher);
+						}						
+					}else{
+						if(pattern.test(ranchers[property].company_name)){
+							var rancher = {caption:ranchers[property].company_name,value:ranchers[property].rancher_id}
+							result.push(rancher);
+						}
+					}
+										
+				}}
+				return result;
+				
+			},
+			getAllForList:function(){
+				var result = [];
+				var ranchers = this.get();
+				for (property in ranchers){
+					if(ranchers[property].rancher_type==1){						
+						var rancher = {caption:"",value:ranchers[property].rancher_id};
+						if (ranchers[property].aka != "") {
+							rancher.caption = ranchers[property].last_name + ', '
+									+ ranchers[property].first_name + ' / ' + ranchers[property].aka;
+						} else {
+							rancher.caption = ranchers[property].last_name + ', '
+									+ ranchers[property].first_name;
+						};
+						
+						result.push(rancher);												
+					}else{						
+						var rancher = {caption:ranchers[property].company_name,value:ranchers[property].rancher_id}
+						result.push(rancher);						
+					}
+				}
+				return result;
+									
+			},
+			find: function(criteria, arraySource){				
+				var result = [];
+				var pattern = new RegExp(criteria, "ig");
+				for (element in arraySource){
+					for (property in arraySource[element]){
+						if (pattern.test(arraySource[element][property])){
+							result.push(arraySource[element]);
+							break;
+						}
+					}
+				}
+				return result;
+				
 			}
 		});
 var cacheRanchers = new cache.ranchers();
