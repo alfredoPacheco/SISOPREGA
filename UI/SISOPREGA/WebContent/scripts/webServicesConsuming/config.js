@@ -27,7 +27,7 @@
  *
  */
 
-var serverHost = 'http://localhost:8080';
+var serverHost = 'http://sisoprega.com';
 var gatewayApp_path = '/Gateway/GatewayService';
 var gatewayWsURL = serverHost + gatewayApp_path;
 var soapHeader = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="http://ws.gateway.sisoprega.tramex.com/">';

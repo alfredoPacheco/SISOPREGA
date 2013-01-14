@@ -433,8 +433,8 @@ CREATE TABLE ctrl_feed_order_barnyard(
 CREATE UNIQUE INDEX U_feed_order_barnyard ON ctrl_feed_order_barnyard(order_id, barnyard_id);
 
 GRANT ALL ON ctrl_feed_order_barnyard TO sisoprega;
-GRANT ALL ON cctrl_feed_order_barnyard_feed_ord_barn_id_seq TO sisoprega;
-
+GRANT ALL ON ctrl_feed_order_barnyard_feed_ord_barn_id_seq TO sisoprega;
+             
 DROP TABLE IF EXISTS cat_food CASCADE;
 CREATE TABLE cat_food(
 	food_id SERIAL PRIMARY KEY,
@@ -542,7 +542,6 @@ CREATE TABLE ctrl_inspection_forecast_barnyard(
 	barnyard_id integer NOT NULL REFERENCES cat_barnyard(barnyard_id)
 );
 
-create or replace view vw_rancher as  select rancher_id, first_name || ' ' || last_name as rancher_name from cat_person_rancher union (select enterprise_id as rancher_id, legal_name as ran
-cher_name from cat_enterprise_rancher) order by rancher_name;
+create or replace view vw_rancher as  select rancher_id, first_name || ' ' || last_name as rancher_name from cat_person_rancher union (select enterprise_id as rancher_id, legal_name as rancher_name from cat_enterprise_rancher) order by rancher_name;
 
 GRANT ALL ON vw_rancher TO sisoprega;
