@@ -542,7 +542,19 @@ CREATE TABLE ctrl_inspection_forecast_barnyard(
 	barnyard_id integer NOT NULL REFERENCES cat_barnyard(barnyard_id)
 );
 
-create or replace view vw_rancher as  select rancher_id, first_name || ' ' || last_name as rancher_name from cat_person_rancher union (select enterprise_id as rancher_id, legal_name as ran
-cher_name from cat_enterprise_rancher) order by rancher_name;
+GRANT ALL ON ctrl_inspection_forecast_barnyard TO sisoprega;
+GRANT ALL ON ctrl_inspection_forecast_barnyard_id_seq TO sisoprega;
+
+CREATE OR REPLACE VIEW vw_rancher AS
+SELECT 
+  rancher_id, 
+  first_name || ' ' || last_name AS rancher_name 
+FROM 
+  cat_person_rancher 
+UNION (SELECT 
+  enterprise_id AS rancher_id, 
+  legal_name AS rancher_name 
+FROM cat_enterprise_rancher)
+ORDER BY rancher_name;
 
 GRANT ALL ON vw_rancher TO sisoprega;

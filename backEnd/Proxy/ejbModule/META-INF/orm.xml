@@ -399,10 +399,10 @@
 				<generated-value strategy="IDENTITY" />
 			</id>
 			<basic name="unitName">
-				<column name = "unit_name"/>
+				<column name="unit_name" />
 			</basic>
 			<basic name="unitAbreviation">
-				<column name = "Uni_abreviation"/>
+				<column name="Uni_abreviation" />
 			</basic>
 		</attributes>
 	</entity>
@@ -422,13 +422,13 @@
 				<generated-value strategy="IDENTITY" />
 			</id>
 			<basic name="equivalence">
-				<column name = "equivalence"/>
+				<column name="equivalence" />
 			</basic>
 			<basic name="unitDest">
-				<column name ="unit_dest"/>
+				<column name="unit_dest" />
 			</basic>
 			<basic name="unitSrc">
-				<column name = "unit_src"/>
+				<column name="unit_src" />
 			</basic>
 		</attributes>
 	</entity>
@@ -452,13 +452,13 @@
 				<temporal>TIMESTAMP</temporal>
 			</basic>
 			<basic name="rancherId">
-				<column name = "rancher_id"/>
+				<column name="rancher_id" />
 			</basic>
-			<basic name = "locationId">
-				<column name = "location_id"/>
+			<basic name="locationId">
+				<column name="location_id" />
 			</basic>
 			<basic name="cattleType">
-				<column name = "cattle_type"/>
+				<column name="cattle_type" />
 			</basic>
 		</attributes>
 	</entity>
@@ -485,11 +485,11 @@
 				<column name="rec_barnyard_id" />
 				<generated-value strategy="IDENTITY" />
 			</id>
-			<basic name = "barnyardId">
-				<column name = "barnyard_id"/>
+			<basic name="barnyardId">
+				<column name="barnyard_id" />
 			</basic>
 			<basic name="receptionId">
-				<column name="reception_id"/>
+				<column name="reception_id" />
 			</basic>
 		</attributes>
 	</entity>
@@ -509,16 +509,16 @@
 				<generated-value strategy="IDENTITY" />
 			</id>
 			<basic name="receptionId">
-				<column name = "reception_id"/>
+				<column name="reception_id" />
 			</basic>
 			<basic name="hc">
-				<column name = "hc"/>
+				<column name="hc" />
 			</basic>
-			<basic name = "weight">
-				<column name = "weight"/>
+			<basic name="weight">
+				<column name="weight" />
 			</basic>
-			<basic name = "weightUom">
-				<column name = "weight_uom"/>
+			<basic name="weightUom">
+				<column name="weight_uom" />
 			</basic>
 		</attributes>
 	</entity>
@@ -542,13 +542,13 @@
 				<temporal>TIMESTAMP</temporal>
 			</basic>
 			<basic name="receptionId">
-				<column name = "reception_id"/>
+				<column name="reception_id" />
 			</basic>
 			<basic name="feedOriginator">
-				<column name = "feed_originator"/>
+				<column name="feed_originator" />
 			</basic>
 			<basic name="handling">
-				<column name = "handling"/>
+				<column name="handling" />
 			</basic>
 		</attributes>
 	</entity>
@@ -568,7 +568,7 @@
 				<generated-value strategy="IDENTITY" />
 			</id>
 			<basic name="foodName">
-				<column name = "food_name"/>
+				<column name="food_name" />
 			</basic>
 		</attributes>
 	</entity>
@@ -581,24 +581,24 @@
 		<named-query name="FOD_BY_ORDER_ID">
 			<description>Retrieves a list of feed order details based in the feed orderId</description>
 			<query>SELECT fod FROM FeedOrderDetails fod WHERE fod.orderId = :orderId ORDER BY fod.foodId</query>
-		</named-query>		
+		</named-query>
 		<named-query name="FEED_ORDER_DETAILS_BY_ORDER_ID_AND_FOOD_ID">
 			<description>Retrieves a list of feed order details based in the feed orderId and foodId</description>
 			<query>SELECT fod FROM FeedOrderDetails fod WHERE fod.orderId = :order_id and fod.foodId = :food_id</query>
-		</named-query>		
+		</named-query>
 		<attributes>
 			<id name="fodId">
 				<column name="id" />
 				<generated-value strategy="IDENTITY" />
 			</id>
 			<basic name="foodId">
-				<column name = "food_id"/>
+				<column name="food_id" />
 			</basic>
 			<basic name="orderId">
-				<column name = "order_id" />
+				<column name="order_id" />
 			</basic>
 			<basic name="quantity">
-				<column name = "quantity"/>
+				<column name="quantity" />
 			</basic>
 		</attributes>
 	</entity>
@@ -622,7 +622,7 @@
 				<temporal>TIMESTAMP</temporal>
 			</basic>
 			<basic name="receptionId">
-				<column name ="reception_id"/>
+				<column name="reception_id" />
 			</basic>
 		</attributes>
 	</entity>
@@ -642,10 +642,10 @@
 				<generated-value strategy="IDENTITY" />
 			</id>
 			<basic name="inspectionId">
-				<column name = "inspection_id"/>
+				<column name="inspection_id" />
 			</basic>
 			<basic name="barnyardId">
-				<column name = "barnyard_Id"/>
+				<column name="barnyard_Id" />
 			</basic>
 		</attributes>
 	</entity>
@@ -665,22 +665,22 @@
 				<generated-value strategy="IDENTITY" />
 			</id>
 			<basic name="inspectionId">
-				<column name = "inspection_id"/>
+				<column name="inspection_id" />
 			</basic>
 			<basic name="inspectionCodeId">
-				<column name = "inspection_code_id"/>
+				<column name="inspection_code_id" />
 			</basic>
 			<basic name="hc">
-				<column name = "hc"/>
+				<column name="hc" />
 			</basic>
 			<basic name="weight">
-				<column name = "weight"/>
+				<column name="weight" />
 			</basic>
 			<basic name="weightUom">
-				<column name = "weight_uom"/>
+				<column name="weight_uom" />
 			</basic>
 			<basic name="note">
-				<column name = "note"/>
+				<column name="note" />
 			</basic>
 		</attributes>
 	</entity>
@@ -700,12 +700,12 @@
 				<generated-value strategy="IDENTITY" />
 			</id>
 			<basic name="inspectionCodeDescription">
-				<column name = "inspection_code_description"/>
+				<column name="inspection_code_description" />
 			</basic>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.FeedOrderBarnyard">
-		<table name = "ctrl_feed_order_barnyard" />
+		<table name="ctrl_feed_order_barnyard" />
 		<named-query name="CAT_FEEDORDERBARNYARD_BY_ID">
 			<description>Retrieves a single crtFood record by ID</description>
 			<query>SELECT FedOrBar FROM FeedOrderBarnyard FedOrBar WHERE FedOrBar.feedOrdBarnId = :feedOrdBarnId</query>
@@ -714,17 +714,83 @@
 			<description>Retrieves a list with the feed orders for a given order</description>
 			<query>SELECT fob FROM FeedOrderBarnyard fob  
 			WHERE fob.orderId = :orderId</query>
-		</named-query>			
+		</named-query>
 		<attributes>
 			<id name="feedOrdBarnId">
-				<column name= "feed_ord_barn_id"/>
+				<column name="feed_ord_barn_id" />
+				<generated-value strategy="IDENTITY" />
+			</id>
+			<basic name="barnyardId">
+				<column name="barnyard_id" />
+			</basic>
+			<basic name="orderId">
+				<column name="order_id" />
+			</basic>
+		</attributes>
+	</entity>
+	<entity class="com.tramex.sisoprega.dto.InspectionForecast">
+		<table name="ctrl_inspection_forecast" />
+		<named-query name="TODAY_INSPECTION_FORECAST">
+			<description>Retrieves a single record that represents todays forecast list</description>
+			<query>SELECT forecast FROM InspectionForecast forecast WHERE forecast.forecastDate = current_date</query>
+		</named-query>
+		<attributes>
+			<id name="forecastId">
+				<column name="id" />
+				<generated-value strategy="IDENTITY" />
+			</id>
+			<basic name="forecastDate">
+				<column name="forecast_date" />
+				<temporal>DATE</temporal>
+			</basic>
+		</attributes>
+	</entity>
+	<entity class="com.tramex.sisoprega.dto.InspectionForecastDetail">
+		<table name="ctrl_inspection_forecast_detail" />
+		<named-query name="FORECAST_DETAIL_BY_FORECAST_ID">
+			<description>Retrieves all records from a given forecast id</description>
+			<query>SELECT forecastDetail FROM InspectionForecastDetail forecastDetail WHERE forecastDetail.forecastId = :forecastId</query>
+		</named-query>
+		<named-query name="FORECAST_DETAIL_BY_ID">
+			<description>Retrieves a single record of forecast details by its given id.</description>
+			<query>SELECT forecastDetail FROM InspectionForecastDetail forecastDetail WHERE forecastDetail.fdId = :fdId</query>
+		</named-query>
+		<attributes>
+			<id name="fdId">
+				<column name="id" />
+				<generated-value strategy="IDENTITY" />
+			</id>
+			<basic name="forecastId">
+				<column name="forecast_id" />
+			</basic>
+			<basic name="rancherId">
+				<column name="rancher_id" />
+			</basic>
+			<basic name="cattleType">
+				<column name="cattle_type" />
+			</basic>
+		</attributes>
+	</entity>
+	<entity class="com.tramex.sisoprega.dto.InspectionForecastBarnyard">
+		<table name="ctrl_inspection_forecast_barnyard"/>
+		<named-query name="FORECAST_BARNAYARD_BY_ID">
+			<description>Retrieve a single record of forecast barnyard by its given id</description>
+			<query>SELECT forecastBarnyard FROM InspectionForecastBarnyard forecastBarnyard WHERE forecastBarnyard.ifbId = :ifbId</query>
+		</named-query>
+		<named-query name="FORECAST_BARNYARD_BY_FORECAST_DETAIL_ID">
+			<description>Retrieve all barnyard records of a given forecast id</description>
+			<query>SELECT forecastBarnyard FROM InspectionForecastBarnyard forecastBarnyard WHERE forecastBarnyard.fdId = :fdId</query>
+		</named-query>
+		<attributes>
+			<id name="ifbId">
+				<column name="id"/>
 				<generated-value strategy="IDENTITY"/>
 			</id>
 			<basic name="barnyardId">
-				<column name = "barnyard_id"/>
+				<column name="barnyard_id"/>
 			</basic>
-			<basic name="orderId">
-				<column name = "order_id"/>
+			<basic name="fdId">
+				<column name="forecast_id"/>
 			</basic>
 		</attributes>
 	</entity>
