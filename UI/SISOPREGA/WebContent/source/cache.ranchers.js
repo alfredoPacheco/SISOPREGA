@@ -197,7 +197,8 @@ enyo
 					billing : objRan.billing,
 					rancher_type : 2,
 					city_name : "",
-					state_name : ""
+					state_name : "",
+					email : ""
 				};
 				return objNew;
 			},
@@ -213,6 +214,7 @@ enyo
 					zipCode : objRan.zip_code,
 					legalId : objRan.rfc,
 					telephone : objRan.phone_number,
+					email: objRan.email
 				};
 				return objNew;
 			},

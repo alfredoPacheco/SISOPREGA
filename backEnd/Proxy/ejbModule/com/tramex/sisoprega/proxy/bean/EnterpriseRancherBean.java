@@ -27,6 +27,7 @@ import com.tramex.sisoprega.common.Error;
 import com.tramex.sisoprega.common.GatewayRequest;
 import com.tramex.sisoprega.common.ReadGatewayResponse;
 import com.tramex.sisoprega.common.UpdateGatewayResponse;
+import com.tramex.sisoprega.common.Utils;
 import com.tramex.sisoprega.common.crud.Cruddable;
 import com.tramex.sisoprega.dto.EnterpriseRancher;
 
@@ -338,6 +339,13 @@ public class EnterpriseRancherBean extends BaseBean implements Cruddable {
       valid = rancher.getZipCode().trim().length() > 0;
       if(!valid)
         error_description = "El código postal de la empresa es un campo requerido.";
+    }
+    
+    // && contact.getEmailAddress() != null && contact.getEmailAddress().length()>0
+    if(valid && rancher.getEmail() != null && rancher.getEmail().trim().length()>0){
+      valid = Utils.isValidEmail(rancher.getEmail());
+      if(!valid)
+        error_description = "La dirección de correo electrónico no cumple con un formato reconocible (correo@dominio.etc).";
     }
 
     if (valid) {

@@ -15,6 +15,7 @@
  * 12/01/2012  Diego Torres                  System log will be provided by app server.
  * 12/13/2012  Alfredo Pacheco               Field handling moved from ctrl_feed_order_details to ctrl_feed_order.
  * 01/04/2013  Alfredo Pacheco		     On Delete Cascade for ctrl_feed_order_barnyard and ctrl_feed_order_details.
+ * 01/13/2013  Diego Torres                  Add email to enterprise rancher.
  * ====================================================================================
  * 
  * Author: Diego Torres
@@ -89,7 +90,8 @@ CREATE TABLE cat_enterprise_rancher(
   address_state VARCHAR(80) NOT NULL,
   zip_code VARCHAR(9) NOT NULL,
   legal_id VARCHAR(13) NOT NULL,
-  telephone VARCHAR(20)
+  telephone VARCHAR(20),
+  email VARCHAR(150)
 );
 
 CREATE UNIQUE INDEX U_enterprise_rancher_legal_id ON cat_enterprise_rancher(legal_id);
@@ -433,7 +435,7 @@ CREATE TABLE ctrl_feed_order_barnyard(
 CREATE UNIQUE INDEX U_feed_order_barnyard ON ctrl_feed_order_barnyard(order_id, barnyard_id);
 
 GRANT ALL ON ctrl_feed_order_barnyard TO sisoprega;
-GRANT ALL ON cctrl_feed_order_barnyard_feed_ord_barn_id_seq TO sisoprega;
+GRANT ALL ON ctrl_feed_order_barnyard_feed_ord_barn_id_seq TO sisoprega;
 
 DROP TABLE IF EXISTS cat_food CASCADE;
 CREATE TABLE cat_food(
