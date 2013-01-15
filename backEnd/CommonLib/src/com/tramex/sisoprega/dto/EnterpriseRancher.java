@@ -26,6 +26,7 @@ package com.tramex.sisoprega.dto;
  * MM/DD/YYYY
  * ----------  ---------------------------  -------------------------------------------
  * 11/05/2012  Diego Torres                 Initial Version.
+ * 01/13/2013  Diego Torres                 Add email for messenger.
  * ====================================================================================
  * </PRE>
  * 
@@ -42,6 +43,7 @@ public class EnterpriseRancher {
     private String zipCode;
     private String legalId;
     private String telephone;
+    private String email;
 
     /**
      * @return the enterpriseId
@@ -184,5 +186,19 @@ public class EnterpriseRancher {
 		+ ";addressOne:" + addressOne + ";addressTwo:" + addressTwo
 		+ ";city:" + city + ";state:" + state + ";zipCode:" + zipCode
 		+ ";legalId:" + legalId + ";telephone:" + telephone + ";";
+    }
+
+    /**
+     * @return the email
+     */
+    public String getEmail() {
+      return email;
+    }
+
+    /**
+     * @param email the email to set
+     */
+    public void setEmail(String email) {
+      this.email = email;
     }
 }
