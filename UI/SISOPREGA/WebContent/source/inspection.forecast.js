@@ -18,14 +18,8 @@ enyo.kind({
 		kind : enyo.PopupList,
 		style:"width:300px;",
 		modal:false,
-		onSelect : "addNewRancher",
-		items : [ {
-			caption : "Empresa/Sociedad",
-			value : 1
-		}, {
-			caption : "Persona Física",
-			value : 2
-		} ]
+		onSelect : "selectRancher",
+		items : []		
 	}, {
 		kind : "Popup",
 		name : "addRancherDialog",
@@ -60,7 +54,8 @@ enyo.kind({
 							onkeypress : "rancherInputKeyPress",
 							onkeydown:"teclaPresionada",
 							onblur:"lostFocus",
-							flex:1
+							flex:1,
+							iSelected:null
 						}, {
 							kind : "IconButton",
 							icon : "images/menu-icon-new.png",
@@ -94,11 +89,14 @@ enyo.kind({
 				}, {
 					kind : "Item",
 					components : [ {
+						layoutKind : enyo.HFlexLayout,
+						components : [ {
 							kind : "Input",
 							name : "cattle_type_id",
 							hint : "Clase",
 							flex : 1
 						} ]
+					}]
 				}, {
 					kind : "Item",
 					components : [ {
@@ -183,7 +181,7 @@ enyo.kind({
 		// TODO: Reset form values
 	},
 	contextMenuClicked : function(inSender, inEvent) {
-		this.$.options.openAtEvent(inEvent);
+		this.$.options.openAtEvent(inEvent);		
 		return false;
 	},
 	lostFocus:function(){
@@ -218,9 +216,9 @@ enyo.kind({
 //		this.$.addRancherDialog.render();
 //		this.$.addRancherDialog.openAtCenter();
 //	},
-	addNewRancher : function(inSender, inSelected) {
+	selectRancher : function(inSender, inSelected) {
 		this.$.rancherInput.setValue(inSender.items[inSelected].caption);
-		
+		this.$.rancherInput.iSelected = inSender.items[inSelected];
 	},
 	adoken : function() {
 		this.resetValues();
@@ -228,13 +226,8 @@ enyo.kind({
 		this.$.addRancherDialog.close();
 	},
 	saveInspectionForecast : function() {
-		alert('Save inspection forecast');
+		this.getInspectionForecast();
 		// TODO: Implement
-	},
-	rancherInputKeyPress: function (inSender, inEvent){
-		// TODO: Implement
-		
-		
 	},
 	contextMenuClicked: function(inSender, inEvent ){
 		this.$.options.setItems(cacheRanchers.getAllForList());
@@ -261,6 +254,36 @@ enyo.kind({
 			this.$.options.setItems(cacheRanchers.getAllForList());
 			this.$.options.close();
 		}	
-	}
+	},
+	getInspectionForecast:function(){				
+	
+//		var fmt = new enyo.g11n.DateFmt({format: "yyyy/MM/dd", locale: new enyo.g11n.Locale("es_es")});
+		var objInspFore={
+						insp_fore_id:	"",
+						rancher_id:		"",
+						autorization:	"",	
+						origin:			"",
+						ins_class:		"",
+						quantity:		"",
+						barnyards:		"",						
+					};
+		
+		objInspFore.rancher_id 		= this.$.rancherInput.iSelected.value;
+		objInspFore.autorization 	= this.$.autorizacion.getValue();
+//		
+//		if(this.$.birth_date.getValue()!=null){			
+//			objRan.birth_date=fmt.format(this.$.birth_date.getValue());   
+//		}
+//		
+		objInspFore.origin			=	this.$.origen.getValue();
+		objInspFore.ins_class		=	this.$.cattle_type_id.getValue();
+		objInspFore.quantity		=	this.$.cantidad.getValue();
+		objInspFore.barnyards		=	this.$.barnyards.getValue();	
+		
+		return objInspFore;
+	},
+	addInspectionForecast:function(){				
+		this.iCreated=cacheRanchers.create(this.getRancher(),this,"afteraddRancher");		
+	},
 	
 });
