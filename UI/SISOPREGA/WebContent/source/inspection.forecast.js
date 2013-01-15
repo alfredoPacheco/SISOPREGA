@@ -59,6 +59,7 @@ enyo.kind({
 							hint: "Ganadero", 
 							onkeypress : "rancherInputKeyPress",
 							onkeydown:"teclaPresionada",
+							onblur:"lostFocus",
 							flex:1
 						}, {
 							kind : "IconButton",
@@ -185,6 +186,9 @@ enyo.kind({
 		this.$.options.openAtEvent(inEvent);
 		return false;
 	},
+	lostFocus:function(){
+//		this.$.options.close();
+	},
 //	addNewRancher : function(inSender, inSelected) {
 //		if (this.$.dynoco) {
 //			this.$.dynoco.destroy();
@@ -250,6 +254,7 @@ enyo.kind({
 		}
 		if (arrAux.length > 0){
 			this.$.options.setItems(arrAux);
+			this.$.options.$.list.$.client.controls[0].setStyle("background-color:yellow;");
 			this.$.options.openAroundControl(this.$.rancherInput, "", "left");
 		}else
 		{

@@ -705,8 +705,9 @@ enyo.kind({
 				var ranchers = this.get();
 				var pattern = new RegExp(criteria.trim(), "ig");
 				for (property in ranchers){
+					pattern.lastIndex = 0;
 					if(ranchers[property].rancher_type==1){
-						if (pattern.test(ranchers[property].aka) || pattern.test(ranchers[property].first_name) || pattern.test(ranchers.last_name) || pattern.test(ranchers[property].mother_name)){
+						if (pattern.test(ranchers[property].aka) || pattern.test(ranchers[property].first_name) || pattern.test(ranchers[property].last_name) || pattern.test(ranchers[property].mother_name)){
 							var rancher = {caption:"",value:ranchers[property].rancher_id};
 							if (ranchers[property].aka != "") {
 								rancher.caption = ranchers[property].last_name + ', '
@@ -720,7 +721,7 @@ enyo.kind({
 						}						
 					}else{
 						if(pattern.test(ranchers[property].company_name)){
-							var rancher = {caption:ranchers[property].company_name,value:ranchers[property].rancher_id}
+							var rancher = {caption:ranchers[property].company_name,value:ranchers[property].rancher_id};
 							result.push(rancher);
 						}
 					}
