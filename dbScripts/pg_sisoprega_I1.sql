@@ -433,7 +433,7 @@ CREATE TABLE ctrl_feed_order_barnyard(
 CREATE UNIQUE INDEX U_feed_order_barnyard ON ctrl_feed_order_barnyard(order_id, barnyard_id);
 
 GRANT ALL ON ctrl_feed_order_barnyard TO sisoprega;
-GRANT ALL ON cctrl_feed_order_barnyard_feed_ord_barn_id_seq TO sisoprega;
+GRANT ALL ON ctrl_feed_order_barnyard_feed_ord_barn_id_seq TO sisoprega;
 
 DROP TABLE IF EXISTS cat_food CASCADE;
 CREATE TABLE cat_food(
