@@ -21,10 +21,38 @@ enyo.kind({
 			});
 		}
 	},
+	addForecast:function(objForecast,cbObj,cbMethod){
+		if (this.saveForecast(objForecast)== true){
+			
+			objRec.feed.push(objFeed);
+			if(cbMethod){
+				cbObj[cbMethod]();
+			}
+		}
+	},
 	saveForecast : function(objForecast) {
-		saveForecastHeader(oForecast);
-		for ( var i = 0; i < oForecast.details.length; i++) {
-			oForecast.details[i] = saveForecastDetail(oForecast.details[i]);
+			
+		var cgCreate = consumingGateway.Create("InspectionForecast", {});
+		if (cgCreate.exceptionId == 0){ //Created successfully			
+			objForecast.insp_fore_id = cgCreate.generatedId;
+			
+			this.arrObj.push(objRec);
+			_arrReceptionList = this.arrObj;
+			
+			for (var sKey in objRec.barnyards){
+				cacheBY.setOccupied(sKey,objRec.reception_id);
+			}
+			
+			this.createWeight(objRec.reception_id, objRec.weights[0]);
+			
+			if(cbMethod){
+				cbObj[cbMethod]();
+			}
+			return true;
+		}
+		else{ //Error			
+			cacheMan.setMessage("", "[Exception ID: " + cgCreate.exceptionId + "] Descripcion: " + cgCreate.exceptionDescription);
+			return false;
 		}
 	},
 	saveForecastHeader : function(oForecast) {
@@ -175,3 +203,5 @@ enyo.kind({
 		return oFDetailsResponse;
 	}
 });
+
+var cacheInspFore = new cache.inspection.forecast();

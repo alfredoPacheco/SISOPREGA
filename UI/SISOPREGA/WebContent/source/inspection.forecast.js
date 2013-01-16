@@ -257,15 +257,16 @@ enyo.kind({
 	},
 	getInspectionForecast:function(){				
 	
-//		var fmt = new enyo.g11n.DateFmt({format: "yyyy/MM/dd", locale: new enyo.g11n.Locale("es_es")});
+		var fmt = new enyo.g11n.DateFmt({format: "yyyy/MM/dd", locale: new enyo.g11n.Locale("es_es")});
 		var objInspFore={
 						insp_fore_id:	"",
 						rancher_id:		"",
 						autorization:	"",	
 						origin:			"",
-						ins_class:		"",
-						quantity:		"",
-						barnyards:		"",						
+						cattle_type:	"",
+						quantity:		0,
+						barnyards:		"",	
+						fore_date:		null
 					};
 		
 		objInspFore.rancher_id 		= this.$.rancherInput.iSelected.value;
@@ -276,14 +277,14 @@ enyo.kind({
 //		}
 //		
 		objInspFore.origin			=	this.$.origen.getValue();
-		objInspFore.ins_class		=	this.$.cattle_type_id.getValue();
+		objInspFore.cattle_type		=	this.$.cattle_type_id.getValue();
 		objInspFore.quantity		=	this.$.cantidad.getValue();
 		objInspFore.barnyards		=	this.$.barnyards.getValue();	
 		
 		return objInspFore;
 	},
 	addInspectionForecast:function(){				
-		this.iCreated=cacheRanchers.create(this.getRancher(),this,"afteraddRancher");		
+		this.iCreated=cacheInspFore.addForecast(this.getInspectionForecast(),this,"afterAddInspFore");		
 	},
 	
 });
