@@ -913,6 +913,32 @@ enyo.kind({
 		}
 		
 		
-	},				
+	},
+	getActiveBYForListByRancherID:function(rancher_id){
+		var result = [];
+		var receptions = this.get();
+		for (i in receptions){			
+			if (receptions[i].rancher_id == rancher_id){
+				var barnyards = receptions[i].barnyards;
+				for (property in barnyards){					
+					var barnyard = {caption:"",value:""};
+					barnyard_id = cacheBY.getByBarnyard(barnyards[property]);
+					if(barnyards[property].charAt(0)==1){						
+						barnyard.caption = 	barnyards[property].substr(1) + " [Chihuahua]";
+						barnyard.value = 	barnyard_id;
+						result.push(barnyard);												
+					}else{						
+						barnyard.caption = barnyards[property].substr(1) + " [Zona Sur]";
+						barnyard.value = 	barnyard_id;
+						result.push(barnyard);						
+					}
+				}
+			}
+			
+		}
+		
+		return result;
+							
+	}
 });
 var cacheReceptions = new cache.receptions();

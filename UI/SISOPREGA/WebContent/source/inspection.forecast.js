@@ -10,15 +10,22 @@ enyo.kind({
 		"onAddRancher" : "",
 		"onCancel" : ""
 	},
-	objRec : null,
+	objRan : null,	
 	objList : [],
-	arrBY : null,
+	arrBY : [],
 	components : [ {
 		name : "options",		
 		kind : enyo.PopupList,
 		style:"width:300px;",
 		modal:false,
 		onSelect : "selectRancher",
+		items : []		
+	},{
+		name : "barnyardsMenu",		
+		kind : enyo.PopupList,
+		style:"width:300px;",
+		modal:false,
+		onSelect : "selectBarnyard",
 		items : []		
 	}, {
 		kind : "Popup",
@@ -54,8 +61,7 @@ enyo.kind({
 							onkeypress : "rancherInputKeyPress",
 							onkeydown:"teclaPresionada",
 							onblur:"lostFocus",
-							flex:1,
-							iSelected:null
+							flex:1							
 						}, {
 							kind : "IconButton",
 							icon : "images/menu-icon-new.png",
@@ -118,6 +124,10 @@ enyo.kind({
 							name : "barnyards",
 							hint : "Corrales",
 							flex : 1
+						},{
+							kind : "IconButton",
+							icon : "images/menu-icon-new.png",
+							onclick : "contextBarnyardsClicked"
 						} ]
 					} ]
 				}, {
@@ -218,7 +228,18 @@ enyo.kind({
 //	},
 	selectRancher : function(inSender, inSelected) {
 		this.$.rancherInput.setValue(inSender.items[inSelected].caption);
-		this.$.rancherInput.iSelected = inSender.items[inSelected];
+		this.objRan = inSender.items[inSelected];
+	},
+	selectBarnyard : function(inSender, inSelected) {
+		
+		this.arrBY.push(inSender.items[inSelected]);
+		var strAux = "";
+		for (i in this.arrBY){
+			strAux = strAux + this.arrBY[i].caption + ", ";
+		}
+		strAux.slice(0, -2);
+		this.$.barnyards.setValue(strAux);
+		
 	},
 	adoken : function() {
 		this.resetValues();
@@ -226,12 +247,23 @@ enyo.kind({
 		this.$.addRancherDialog.close();
 	},
 	saveInspectionForecast : function() {
-		this.getInspectionForecast();
+		this.addInspectionForecast();
 		// TODO: Implement
 	},
 	contextMenuClicked: function(inSender, inEvent ){
 		this.$.options.setItems(cacheRanchers.getAllForList());
 		this.$.options.openAtEvent(inEvent);		
+		//inSender.stopPropagation();
+		return false;
+	},
+	contextBarnyardsClicked: function(inSender, inEvent ){
+		if (this.objRan){
+			this.$.barnyardsMenu.setItems(cacheReceptions.getActiveBYForListByRancherID(this.objRan.value));
+		}else{
+			this.$.barnyardsMenu.setItems(cacheReceptions.getActiveBYForListByRancherID(1));
+		}
+//		this.$.options.setItems(cacheBY.getAllForList());
+		this.$.barnyardsMenu.openAtEvent(inEvent);		
 		//inSender.stopPropagation();
 		return false;
 	},
@@ -259,27 +291,26 @@ enyo.kind({
 	
 		var fmt = new enyo.g11n.DateFmt({format: "yyyy/MM/dd", locale: new enyo.g11n.Locale("es_es")});
 		var objInspFore={
-						insp_fore_id:	"",
-						rancher_id:		"",
-						autorization:	"",	
-						origin:			"",
-						cattle_type:	"",
-						quantity:		0,
-						barnyards:		"",	
-						fore_date:		null
+						id:					undefined,
+						fore_details_id:	undefined,
+						rancher_id:			undefined,
+						auth:				undefined,	
+						origin:				undefined,
+						cattle_type:		undefined,
+						quantity:			0,
+						barnyards:			undefined,	
+						fore_date:			undefined
 					};
 		
-		objInspFore.rancher_id 		= this.$.rancherInput.iSelected.value;
-		objInspFore.autorization 	= this.$.autorizacion.getValue();
-//		
-//		if(this.$.birth_date.getValue()!=null){			
-//			objRan.birth_date=fmt.format(this.$.birth_date.getValue());   
-//		}
-//		
+		objInspFore.rancher_id 		= 	this.objRan.value;
+		objInspFore.auth 			= 	this.$.autorizacion.getValue();
+		objInspFore.fore_date		=	fmt.format(new Date());   
 		objInspFore.origin			=	this.$.origen.getValue();
 		objInspFore.cattle_type		=	this.$.cattle_type_id.getValue();
 		objInspFore.quantity		=	this.$.cantidad.getValue();
-		objInspFore.barnyards		=	this.$.barnyards.getValue();	
+		
+				
+		objInspFore.barnyards		=	this.arrBY;	
 		
 		return objInspFore;
 	},

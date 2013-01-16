@@ -340,6 +340,24 @@ enyo.kind({
 			}
 		}
 		return arrBY;
+	},
+	getAllForList:function(){
+		var result = [];
+		var barnyards = this.get();
+		for (property in barnyards){
+			var barnyard = {caption:"",value:""};
+			if(barnyards[property].location_id==1){						
+				barnyard.caption = 	barnyards[property].barnyard_code + " [Chihuahua]";
+				barnyard.value = 	barnyards[property].barnyard_id;
+				result.push(barnyard);												
+			}else{						
+				barnyard.caption = barnyards[property].barnyard_code + " [Zona Sur]";
+				barnyard.value = 	barnyards[property].barnyard_id;
+				result.push(barnyard);						
+			}
+		}
+		return result;
+							
 	}
 });
 
