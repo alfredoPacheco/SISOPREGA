@@ -45,6 +45,7 @@ import com.tramex.sisoprega.dto.FeedOrder;
  * 12/08/2012  Jaime Figueroa                 Initial Version.
  * 12/09/2012  Diego Torres                   Add standard error codes and validation.
  * 12/16/2012  Diego Torres                   Adding log activity
+ * 12/17/2012  Diego Torres                   Setting originator from logged user on create operation.
  * ====================================================================================
  * </PRE>
  * 
@@ -69,6 +70,7 @@ public class FeedOrderBean extends BaseBean implements Cruddable {
     FeedOrder feedOrd = null;
     try {
       feedOrd = entityFromRequest(request, FeedOrder.class);
+      feedOrd.setFeedOriginator(getLoggedUser());
 
       log.fine("Received FeedOrder in request: " + feedOrd);
 
@@ -181,7 +183,8 @@ public class FeedOrderBean extends BaseBean implements Cruddable {
     FeedOrder feedOrd = null;
     try {
       feedOrd = entityFromRequest(request, FeedOrder.class);
-
+      feedOrd.setFeedOriginator(getLoggedUser());
+      
       if (feedOrd.getOrderId() == 0) {
         log.warning("VAL04 - Entity ID Omission.");
         response.setError(new Error("VAL04", "Se ha omitido el id de la orden de alimentación al intentar actualizar sus datos.",

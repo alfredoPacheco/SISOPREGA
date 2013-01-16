@@ -14,6 +14,8 @@
  * 11/27/2012  Diego Torres                  Add tables for security management
  * 12/01/2012  Diego Torres                  System log will be provided by app server.
  * 12/13/2012  Alfredo Pacheco               Field handling moved from ctrl_feed_order_details to ctrl_feed_order.
+ * 01/04/2013  Alfredo Pacheco		     On Delete Cascade for ctrl_feed_order_barnyard and ctrl_feed_order_details.
+ * 01/13/2013  Diego Torres                  Add email to enterprise rancher.
  * ====================================================================================
  * 
  * Author: Diego Torres
@@ -88,7 +90,8 @@ CREATE TABLE cat_enterprise_rancher(
   address_state VARCHAR(80) NOT NULL,
   zip_code VARCHAR(9) NOT NULL,
   legal_id VARCHAR(13) NOT NULL,
-  telephone VARCHAR(20)
+  telephone VARCHAR(20),
+  email VARCHAR(150)
 );
 
 CREATE UNIQUE INDEX U_enterprise_rancher_legal_id ON cat_enterprise_rancher(legal_id);
@@ -305,18 +308,6 @@ CREATE UNIQUE INDEX U_barnyard_code ON cat_barnyard(barnyard_code, location_id);
 GRANT ALL ON cat_barnyard TO sisoprega;
 GRANT ALL ON cat_barnyard_barnyard_id_seq TO sisoprega;
 
-/* Chihuahua (1) barnyards */
--- TODO: Retrieve from map pictures.
-INSERT INTO cat_barnyard(barnyard_code, location_id) VALUES('E1', 1);
-INSERT INTO cat_barnyard(barnyard_code, location_id) VALUES('E2', 1);
-INSERT INTO cat_barnyard(barnyard_code, location_id) VALUES('E3', 1);
-
-/* Zona Sur (2) barnyards */
--- TODO: Retrieve from map pictures.
-INSERT INTO cat_barnyard(barnyard_code, location_id) VALUES('E1', 2);
-INSERT INTO cat_barnyard(barnyard_code, location_id) VALUES('E2', 2);
-INSERT INTO cat_barnyard(barnyard_code, location_id) VALUES('E3', 2);
-
 /* 
   Table structure for table cat_barnyard_capacity.
   it is pretendable to have different capacities by
@@ -424,7 +415,7 @@ DROP TABLE IF EXISTS ctrl_feed_order CASCADE;
 
 CREATE TABLE ctrl_feed_order(
 	order_id SERIAL PRIMARY KEY,
-	reception_id integer NOT NULL REFERENCES ctrl_reception(reception_id),	
+	reception_id integer NOT NULL REFERENCES ctrl_reception(reception_id),
 	feed_date date NOT NULL,
 	feed_originator varchar(150),
 	handling varchar(100)
@@ -437,14 +428,14 @@ DROP TABLE IF EXISTS ctrl_feed_order_barnyard CASCADE;
 
 CREATE TABLE ctrl_feed_order_barnyard(
 	feed_ord_barn_id SERIAL PRIMARY KEY,
-	order_id integer NOT NULL REFERENCES ctrl_feed_order(order_id),
-	barnyard_id integer NOT NULL REFERENCES cat_barnyard(barnyard_id)
+	order_id integer NOT NULL REFERENCES ctrl_feed_order(order_id) ON DELETE CASCADE,
+	barnyard_id integer NOT NULL REFERENCES cat_barnyard(barnyard_id) ON DELETE CASCADE
 );
 
 CREATE UNIQUE INDEX U_feed_order_barnyard ON ctrl_feed_order_barnyard(order_id, barnyard_id);
 
 GRANT ALL ON ctrl_feed_order_barnyard TO sisoprega;
-GRANT ALL ON cctrl_feed_order_barnyard_feed_ord_barn_id_seq TO sisoprega;
+GRANT ALL ON ctrl_feed_order_barnyard_feed_ord_barn_id_seq TO sisoprega;
 
 DROP TABLE IF EXISTS cat_food CASCADE;
 CREATE TABLE cat_food(
@@ -458,10 +449,9 @@ GRANT ALL ON cat_food_food_id_seq TO sisoprega;
 DROP TABLE IF EXISTS ctrl_feed_order_details CASCADE;
 CREATE TABLE ctrl_feed_order_details(
 	id SERIAL PRIMARY KEY,
-	order_id integer NOT NULL REFERENCES ctrl_feed_order(order_id),
+	order_id integer NOT NULL REFERENCES ctrl_feed_order(order_id) ON DELETE CASCADE,
 	food_id integer NOT NULL REFERENCES cat_food(food_id),
 	quantity DECIMAL(10,2) NOT NULL DEFAULT 0.0
-	
 );
 
 CREATE UNIQUE INDEX U_feed_order_food ON ctrl_feed_order_details(order_id, food_id);
@@ -523,3 +513,50 @@ CREATE TABLE ctrl_inspection_result(
 
 GRANT ALL ON ctrl_inspection_result TO sisoprega;
 GRANT ALL ON ctrl_inspection_result_id_seq TO sisoprega;
+
+DROP TABLE IF EXISTS ctrl_inspection_forecast CASCADE;
+CREATE TABLE ctrl_inspection_forecast(
+	id SERIAL PRIMARY KEY,
+	forecast_date DATE not null default CURRENT_DATE
+);
+
+GRANT ALL ON ctrl_inspection_forecast TO sisoprega;
+GRANT ALL ON ctrl_inspection_forecast_id_seq TO sisoprega;
+
+DROP TABLE IF EXISTS ctrl_inspection_forecast_detail CASCADE;
+CREATE TABLE ctrl_inspection_forecast_detail(
+	id SERIAL PRIMARY KEY,
+	forecast_id integer NOT NULL REFERENCES ctrl_inspection_forecast(id) ON DELETE CASCADE,
+	rancher_id integer NOT NULL REFERENCES cat_rancher(rancher_id),
+	auth varchar(10),
+	origin varchar(20),
+	cattle_type integer NOT NULL REFERENCES cat_cattle_type(cattype_id),
+	quantity integer not null
+);
+
+GRANT ALL ON ctrl_inspection_forecast_detail TO sisoprega;
+GRANT ALL ON ctrl_inspection_forecast_detail_id_seq TO sisoprega;
+
+DROP TABLE IF EXISTS ctrl_inspection_forecast_barnyard;
+CREATE TABLE ctrl_inspection_forecast_barnyard(
+	id SERIAL PRIMARY KEY,
+	detail_id integer NOT NULL REFERENCES ctrl_inspection_forecast_detail(id) ON DELETE CASCADE,
+	barnyard_id integer NOT NULL REFERENCES cat_barnyard(barnyard_id)
+);
+
+GRANT ALL ON ctrl_inspection_forecast_barnyard TO sisoprega;
+GRANT ALL ON ctrl_inspection_forecast_barnyard_id_seq TO sisoprega;
+
+CREATE OR REPLACE VIEW vw_rancher AS
+SELECT 
+  rancher_id, 
+  first_name || ' ' || last_name AS rancher_name 
+FROM 
+  cat_person_rancher 
+UNION (SELECT 
+  enterprise_id AS rancher_id, 
+  legal_name AS rancher_name 
+FROM cat_enterprise_rancher)
+ORDER BY rancher_name;
+
+GRANT ALL ON vw_rancher TO sisoprega;

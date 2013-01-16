@@ -5,7 +5,7 @@ enyo.kind({
 	events:{
 	},
 	components: [
-		{ kind: enyo.Pane, flex: 1, name: "mainPane",
+		{ kind: enyo.Pane, flex: 1, name: "mainPane", transitionKind: "enyo.transitions.LeftRightFlyin",
 		 components:[
 			{kind:"catalogs.menu",name:"catMenu", onRanchers:"showRanchers",
 			 onReports:"showReports",onCattle:"showCattle"},			

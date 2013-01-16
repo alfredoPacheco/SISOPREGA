@@ -90,7 +90,7 @@ enyo.kind({
 					   cattype_id:"",cattype_name:"",hc_aprox:"",city_id:"",city_name:"",
 					   weights:[], barnyards:[],accepted_count:"",inspections:[],feed:[]};
 					   
-		var fmt = new enyo.g11n.DateFmt({format: "yyyy/MM/dd"});		
+		var fmt = new enyo.g11n.DateFmt({format: "yyyy/MM/dd", locale: new enyo.g11n.Locale("es_es")});		
 		var rancher=cacheRanchers.getByID(this.$.rancher_id.getValue());
 		if(rancher.rancher_type==1){			
 			receptionDef.rancher_name=rancher.aka+" / "+rancher.last_name+" "+
@@ -137,8 +137,8 @@ enyo.kind({
 										 ));
 			this.$.city_id.setValue(receptionDef.city_id);
 			this.$.cattype_id.setValue(receptionDef.cattype_id);
-			this.$.hc_aprox.setValue(receptionDef.weights[0].hc);
 			if(receptionDef.weights.length==1){
+				this.$.hc_aprox.setValue(receptionDef.weights[0].hc);			
 				this.$.weight.setValue(receptionDef.weights[0].weight);
 			}
 		}

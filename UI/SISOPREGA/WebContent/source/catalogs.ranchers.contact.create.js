@@ -76,7 +76,7 @@ enyo.kind({
 		cacheRanchers.updateContact(this.objRancher,this.objContact,this.getContact(),this,"doUpdateRancher");
 	},
 	getContact:function(){
-		var fmt = new enyo.g11n.DateFmt({format: "yyyy/MM/dd"});		
+		var fmt = new enyo.g11n.DateFmt({format: "yyyy/MM/dd", locale: new enyo.g11n.Locale("es_es")});		
 		
 		var objContact = {
 				contact_id:		"",

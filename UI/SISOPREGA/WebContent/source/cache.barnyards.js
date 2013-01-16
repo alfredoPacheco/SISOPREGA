@@ -82,10 +82,9 @@ enyo.kind({
 											head_count:0
 											}];			
 				for(var b in this.arrCatBarnyardCapacity){
-					if (this.arrCatBarnyardCapacity[b].barnyardId == this.arrCatBarnyard[a].barnyardId){
-						objAux.barnyard_capacity=[{	catclass_id:this.arrCatBarnyardCapacity[b].catclassId,
-													//TODO:
-													catclass_name:"PENDIENTE",
+					if (this.arrCatBarnyardCapacity[b].barnyardId == this.arrCatBarnyard[a].barnyard_id){
+						objAux.barnyard_capacity=[{	catclass_id:this.arrCatBarnyardCapacity[b].catclassId,													
+													catclass_name:cacheCattle.getCattleClassByID(this.arrCatBarnyardCapacity[b].catclassId).catclass_name,
 													head_count:this.arrCatBarnyardCapacity[b].headCount
 													}];
 					}
@@ -214,7 +213,9 @@ enyo.kind({
 		var arrAux = this.get();
 		for(var i=0; i<arrAux.length;i++){
 			if (arrAux[i].barnyard_code==barnyard.substr(1)){
-				return arrAux[i].barnyard_id;
+				if (arrAux[i].location_id==barnyard.charAt(0)){
+					return arrAux[i].barnyard_id;
+				}
 			}
 		}
 	},
@@ -312,11 +313,20 @@ enyo.kind({
 		
 	},
 	releaseBY:function(objRec,sID,cbObj,cbMethod){
-		delete objRec.barnyards[sID];
-		delete this.arrObjInUse[sID];
-		//AJAX		
-		if(cbMethod){
-			cbObj[cbMethod]();
+		
+		var objToSend = {};
+		objToSend.receptionId = objRec.reception_id;
+		objToSend.barnyardId = cacheBY.getByBarnyard(sID);
+		var cgDelete = consumingGateway.Delete("ReceptionBarnyard", objToSend);
+		if (cgDelete.exceptionId == 0){ //Deleted successfully
+			delete objRec.barnyards[sID];
+			delete this.arrObjInUse[sID];					
+			if(cbMethod){
+				cbObj[cbMethod]();
+			}	
+		}
+		else{ //Error
+			cacheMan.setMessage("", "[Exception ID: " + cgDelete.exceptionId + "] Descripcion: " + cgDelete.exceptionDescription);			
 		}
 	},
 	inUse:function(){

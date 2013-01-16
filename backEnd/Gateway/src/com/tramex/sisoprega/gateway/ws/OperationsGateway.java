@@ -454,7 +454,6 @@ public class OperationsGateway {
 
   private boolean logIn(ProgrammaticLogin pl) throws Exception {
     boolean propagateException = false;
-    log.fine("Login using: " + getSessionUserName() + ":" + getSessionPassword());
     return pl.login(getSessionUserName(), getSessionPassword().toCharArray(), REALM_NAME, propagateException);
   }
 

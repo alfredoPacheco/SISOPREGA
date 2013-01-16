@@ -7,14 +7,14 @@ enyo.kind({
 	reloadme:function(){
 		//AJAX
 	},
-	clear:function(){
-		this.arrCattleType = [];
-		arrCattleClass = [];
-		_arrCattleTypeList = [];
-		_arrCattleClassList = [];
-		this.cattleClassWasReadFromGateway = false;
-		this.cattleClassWasReadFromGateway = false;
-	},
+//	clear:function(){
+//		this.arrCattleType = [];
+//		arrCattleClass = [];
+//		_arrCattleTypeList = [];
+//		_arrCattleClassList = [];
+//		this.cattleClassWasReadFromGateway = false;
+//		this.cattleClassWasReadFromGateway = false;
+//	},
 	cattleTypeAdapterToIn:function(objCattle){
 
 		var objNew = {
@@ -44,15 +44,15 @@ enyo.kind({
 		
 		return objNew;
 	},
-	cattleClassAdapterToOut:function(objCattle){
-		
-		var objNew = {
-				catclassId:		objCattle.catclass_id,				
-				catclassName:	objCattle.catclass_name
-			};
-		
-		return objNew;
-	},
+//	cattleClassAdapterToOut:function(objCattle){
+//		
+//		var objNew = {
+//				catclassId:		objCattle.catclass_id,				
+//				catclassName:	objCattle.catclass_name
+//			};
+//		
+//		return objNew;
+//	},
 	getCattleType:function(){
 		if (this.cattleTypeWasReadFromGateway == false){
 //			cacheMan.showScrim();
@@ -109,8 +109,8 @@ enyo.kind({
 			}
 			else{ //Error
 				if (cgReadAll.exceptionId != "VAL02"){ //No data found
-					cacheMan.setMessage("", "[Exception ID: " + cgReadAll.exceptionId + "] Descripcion: " + cgReadAll.exceptionDescription);	
-				}			
+					cacheMan.setMessage("", "[Exception ID: " + cgReadAll.exceptionId + "] Descripcion: " + cgReadAll.exceptionDescription);					
+				}
 			}
 			
 			this.arrCattleClass =  arrAux;

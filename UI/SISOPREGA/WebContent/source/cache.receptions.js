@@ -19,16 +19,15 @@ enyo.kind({
 		var rancherAux = cacheRanchers.getByID(objNew.rancher_id);
 		
 		if(rancherAux.rancher_type==1){			
-			objNew.rancher_name=rancherAux.aka+" / "+rancherAux.last_name+" "+
-			rancherAux.mother_name+" "+rancherAux.first_name;			
+			objNew.rancher_name=rancherAux.first_name + " " + rancherAux.last_name;
 		}else{
 			objNew.rancher_name=rancherAux.company_name;
 		}
-		
+
 		objNew.cattype_name=cacheCattle.getByID(objNew.cattype_id).cattype_name;
 		objNew.hc_aprox="";
 		objNew.city_name= cacheMan.getCityByID(objNew.city_id).city_name;
-		objNew.weights=[]; 
+		objNew.weights=[{hcw_id:undefined, hc:undefined, weight:undefined} ]; 
 		objNew.barnyards=[];
 		objNew.accepted_count="";
 		objNew.inspections=[];
@@ -102,7 +101,7 @@ enyo.kind({
 				receptionId:	obj.reception_id,				
 				hc:				obj.hc,
 				weight:			obj.weight,
-				weightUom:		1 //TODO 
+				weightUom:		1 //TODO
 			};
 		
 		return objNew;
@@ -130,21 +129,21 @@ enyo.kind({
 				var barnyardAux = this.getReceptionBarnyard(objAux.reception_id);
 				for (b in barnyardAux){
 					try{
-						var barnyardName = cacheBY.getByID(barnyardAux[b].barnyardId).barnyard_code;
-						objAux.barnyards["" + objAux.city_id + barnyardName] = "" + objAux.city_id + barnyardName;						
+						var barnyard = cacheBY.getByID(barnyardAux[b].barnyardId);
+						objAux.barnyards["" + barnyard.location_id + barnyard.barnyard_code] = "" + barnyard.location_id + barnyard.barnyard_code;						
 					}catch(e){}					
 				}
 //weight:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::				
 				var arrHeadcountAux = this.getReceptionHeadcount(objAux.reception_id);
 				for (h in arrHeadcountAux){
-					var headcountAux = {};
+					
 					try{
-						headcountAux.hcw_id = 	arrHeadcountAux[h].headcountId;
-						headcountAux.hc = 		arrHeadcountAux[h].hc;
-						headcountAux.weight = 	arrHeadcountAux[h].weight;
-					}catch(e){}
-					objAux.weights.push(headcountAux);
+						objAux.weights[0].hcw_id = 	arrHeadcountAux[h].headcountId;
+						objAux.weights[0].hc = 		arrHeadcountAux[h].hc;
+						objAux.weights[0].weight = 	arrHeadcountAux[h].weight;
+					}catch(e){}										
 				}
+				objAux.hc_aprox =  objAux.weights[0].hc;
 //inspections::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 //				inspections:[{reject_desc:"ENFERMEDAD"}],
 				var arrInspectionAux = this.getInspection(objAux.reception_id);
@@ -167,7 +166,7 @@ enyo.kind({
 					for (id in arrInspectionDetailsAux){						
 						inspectionAux.rejected_count = 	arrInspectionDetailsAux[id].hc;
 						inspectionAux.reject_id = 		arrInspectionDetailsAux[id].inspectionCodeId;
-						inspectionAux.reject_desc = 		arrInspectionDetailsAux[id].note;
+						inspectionAux.reject_desc = 	arrInspectionDetailsAux[id].note;
 						inspectionAux.id = 				arrInspectionDetailsAux[id].inspectionDetailsId; 
 						inspectionAux.weight =			arrInspectionDetailsAux[id].weight;
 						inspectionAux.weight_uom =		arrInspectionDetailsAux[id].weightUom;						
@@ -197,10 +196,13 @@ enyo.kind({
 //feedOrderDetails:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::	
 						var arrFeedDetailsAux =  this.getFeedOrderDetails(feedAux.feeding_id);
 						var feedDetailsAux = {};
+						var contAux = 1;
 						for (fd in arrFeedDetailsAux){
-							feedDetailsAux["" + fd] = {};
-							feedDetailsAux["" + fd].feed_desc = cacheFeed.getByID(arrFeedDetailsAux[fd].foodId).feed_desc;
-							feedDetailsAux["" + fd].feed_units = arrFeedDetailsAux[fd].quantity;
+							feedDetailsAux[contAux] = {};
+							feedDetailsAux[contAux].feed_desc = cacheFeed.getByID(arrFeedDetailsAux[fd].foodId).feed_desc;
+							feedDetailsAux[contAux].feed_units = arrFeedDetailsAux[fd].quantity;
+							feedDetailsAux[contAux].fod_id = arrFeedDetailsAux[fd].fodId;
+							contAux++;
 						}
 						feedAux.feed =feedDetailsAux;					
 					}
@@ -568,17 +570,8 @@ enyo.kind({
 		}
 	},
 	addWeight:function(objRec,objWeight,cbObj,cbMethod){
-		//AJAX
-
 		if(this.createWeight(objRec,objWeight) == true){
-		//Update Local
 			objRec.weights.push(objWeight);
-			if(cbMethod){
-				cbObj[cbMethod]();
-			}
-		}
-		else{
-			//TODO do something with objRec.weights
 			if(cbMethod){
 				cbObj[cbMethod]();
 			}
@@ -650,7 +643,7 @@ enyo.kind({
 		var objToSend = {};
 		objToSend.receptionId = objRec.reception_id;
 		objToSend.feedDate = "" + DateOut(new Date());
-		objToSend.feedOriginator = "alfredo";	
+//		objToSend.feedOriginator = "";	
 		objToSend.handling = objFeed.handling;
 		
 		var cgCreate = consumingGateway.Create("FeedOrder", objToSend);
@@ -702,37 +695,34 @@ enyo.kind({
 			objToSend.foodId = 		objFeed.feed[obj].feed_id;				
 			objToSend.quantity =	objFeed.feed[obj].feed_units;
 			
-			var cgCreate = consumingGateway.Create("FeedOrderDetails", objToSend);
-			if (cgCreate.exceptionId != 0){			
+			var cgCreate = consumingGateway.Create("FeedOrderDetails", objToSend);			
+			if (cgCreate.exceptionId != 0){
 				cacheMan.setMessage("", "[Exception ID: " + cgCreate.exceptionId + "] Descripcion: " + cgCreate.exceptionDescription);
 				return false;
+			}else{
+				objFeed.feed[obj].fod_id = cgCreate.generatedId; 
 			}			
 		}
 		return true;
 		
 	},	
 	addFeed:function(objRec,objFeed,cbObj,cbMethod){
-		
-		
 		if (cacheReceptions.createFeedOrder(objRec,objFeed)== true){
 			objRec.feed.push(objFeed);
 			if(cbMethod){
 				cbObj[cbMethod]();
 			}	
-		}else { //TODO: do something else				
-//				objRec.feed.push(objFeed);
-			if(cbMethod){
-				cbObj[cbMethod]();
-			}	
 		}		
 	},
-	updateFeedOrderDetails:function(order_id, objFeed){
+	updateFeedOrderDetails:function(order_id, objOld, objNew){
 		var objToSend = {};
 		objToSend.orderId = order_id;		
 		
-		for (obj in objFeed.feed){			
-			objToSend.foodId = 		objFeed.feed[obj].feed_id;				
-			objToSend.quantity =	objFeed.feed[obj].feed_units;
+		for (obj in objNew.feed){			
+			objToSend.foodId = 			objNew.feed[obj].feed_id;				
+			objToSend.quantity =		objNew.feed[obj].feed_units;
+			objToSend.fodId =			objOld.feed[obj].fod_id;			
+			objNew.feed[obj].fod_id =	objOld.feed[obj].fod_id;
 			
 			var cgUpdate = consumingGateway.Update("FeedOrderDetails", objToSend);
 			if (cgUpdate.exceptionId != 0){
@@ -748,13 +738,13 @@ enyo.kind({
 		var objToSend = {};
 		objToSend.orderId = objNew.feeding_id;
 		objToSend.feedDate = "" + DateOut(new Date());
-		objToSend.feedOriginator = "alfredo";	
+//		objToSend.feedOriginator = "";	
 		objToSend.handling = objNew.handling;
 		objToSend.receptionId = cbObj._objRec.reception_id;
 		
 		var cgUpdate = consumingGateway.Update("FeedOrder", objToSend);
 		if (cgUpdate.exceptionId == 0){ //Updated successfully
-			this.updateFeedOrderDetails(objOld.feeding_id,objNew)==true;
+			this.updateFeedOrderDetails(objOld.feeding_id,objOld,objNew)==true;
 			for(prop in objNew){
 				objOld[prop]=objNew[prop];
 			}
@@ -769,7 +759,6 @@ enyo.kind({
 			
 	},
 	deleteFeed:function(arrFeed,objFeed,cbObj,cbMethod){
-		//TODO eliminar en cascada en proxy feedorderdetails y feedorderbarnyards
 		var objToSend = {};
 		objToSend.orderId = objFeed.feeding_id;
 		
@@ -784,22 +773,9 @@ enyo.kind({
 					break;					
 				}
 			}
-//			var tamanio = this.get().length;
-//			for(var i=0;i<tamanio;i++){
-//				if (this.arrObj[i].rancher_id == delObj.rancher_id){
-//					this.arrObj.splice(i, 1);
-//					_arrRancherList = this.arrObj;
-//					if(cbMethod){
-//						cbObj[cbMethod]();
-//					}
-//					return true;					
-//				}
-//			}
-//			return false;
 		}
 		else{ //Error
 			cacheMan.setMessage("", "[Exception ID: " + cgDelete.exceptionId + "] Descripcion: " + cgDelete.exceptionDescription);
-//			return false;
 		}
 	},
 	createInspection:function(objRec, objRej){
@@ -868,7 +844,8 @@ enyo.kind({
 		objToSend.note = 				objRej.reject_desc;
 		
 		var cgCreate = consumingGateway.Create("InspectionDetails", objToSend);
-		if (cgCreate.exceptionId == 0){			
+		if (cgCreate.exceptionId == 0){
+			objRej.id = cgCreate.generatedId;
 			return true;
 		}else{ //Error
 			cacheMan.setMessage("", "[Exception ID: " + cgCreate.exceptionId + "] Descripcion: " + cgCreate.exceptionDescription);
@@ -882,16 +859,11 @@ enyo.kind({
 		if(objReject){
 			if (this.createInspection(objRec,objReject)== true){
 				objRec.inspections.push(objReject);
-					
-			}else { //TODO: do something else				
-//					objRec.inspections.push(objRej);
-					
-			}
-			
+				if(cbMethod){
+					cbObj[cbMethod]();
+				}
+			}			
 		}		
-		if(cbMethod){
-			cbObj[cbMethod]();
-		}
 	},
 	updateReject:function(iAccepted,objRec,iInspIdx,objReject,cbObj,cbMethod){
 		var objToSend = {};
@@ -943,4 +915,4 @@ enyo.kind({
 		
 	},				
 });
-var cacheReceptions= new cache.receptions();
+var cacheReceptions = new cache.receptions();

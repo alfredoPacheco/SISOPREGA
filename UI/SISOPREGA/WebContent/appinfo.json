@@ -5,6 +5,6 @@
 	"type": "web",
 	"main": "index.jsp",
 	"title": "SISOPREGA",
-	"icon": "./images/mainMenu_logo.png",
+	"icon": "./images/eastman.png",
   	"uiRevision": "2"
 }

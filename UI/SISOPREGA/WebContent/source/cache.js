@@ -15,7 +15,7 @@ var	_arrReceptionList=[
 		{reception_id:1,rancher_id:1,
 		 rancher_name:"BALDOR / DEL RIO MENDEZ ALAN", arrival_date:"2012-09-15",
 		 cattype_id:1,cattype_name:"CABALLOS",hc_aprox:100,
-		 city_id:1,city_name:"LOCAL",
+		 city_id:1,city_name:"CHIHUAHUA",
 		 weights:[{hcw_id:0,hc:50,weight:1234}],barnyards:{"1E5":"1E5"},
 		 accepted_count:"",
 		 inspections:[{rejected_id:1,rejected_count:1,reject_id:1,reject_desc:"ENFERMEDAD"}],
@@ -33,7 +33,7 @@ var	_arrReceptionList=[
 		 },
 	];	
 
-var _arrCities=[{city_id:1,city_name:"LOCAL"},{city_id:2,city_name:"FORANEA"}];
+var _arrCities=[{city_id:1,city_name:"Chihuahua"},{city_id:2,city_name:"Zona Sur"}];
 
 var _arrRancherList =[
 					{rancher_id:1,aka:"BALDOR", first_name:"ALAN", last_name:"DEL RIO", mother_name:"MENDEZ",
@@ -77,21 +77,23 @@ var _arrBarnyardsListCatalog=[
                		 barnyard_capacity:[{catclass_id:4,cattype_name:"BOVINO",head_count:50}]}
                	];		
 var _objMainHeader;
+var _objPopupHeader;
 
-function fillRancherLS(){
-	_arrRancherListLS=[];
-	for(var i=0;i<_arrRancherList.length;i++){		
-		if(_arrRancherList[i].rancher_type==1){
-			_arrRancherListLS.push({caption:_arrRancherList[i].last_name  +' '+
-											_arrRancherList[i].mother_name+' '+
-											_arrRancherList[i].first_name,
-									value:_arrRancherList[i].rancher_id});
-		}else{
-			_arrRancherListLS.push({caption:_arrRancherList[i].company_name,
-									value:_arrRancherList[i].rancher_id});				
-		}
-	}	
-}
+
+//function fillRancherLS(){
+//	_arrRancherListLS=[];
+//	for(var i=0;i<_arrRancherList.length;i++){		
+//		if(_arrRancherList[i].rancher_type==1){
+//			_arrRancherListLS.push({caption:_arrRancherList[i].last_name  +' '+
+//											_arrRancherList[i].mother_name+' '+
+//											_arrRancherList[i].first_name,
+//									value:_arrRancherList[i].rancher_id});
+//		}else{
+//			_arrRancherListLS.push({caption:_arrRancherList[i].company_name,
+//									value:_arrRancherList[i].rancher_id});				
+//		}
+//	}	
+//}
 
 enyo.kind({
 	name: "cache",
@@ -104,11 +106,11 @@ enyo.kind({
 	setGlobalScrim:function(objVar){
 		this.gblScrim=objVar;
 	},
-	clearBack:function(){
-		for(var i=0;i<_gobackStack.length;i++){
-			this.goBack();
-		}
-	},
+//	clearBack:function(){
+//		for(var i=0;i<_gobackStack.length;i++){
+//			this.goBack();
+//		}
+//	},
 	showScrim:function(){
 		this.gblScrim.show();
 	},

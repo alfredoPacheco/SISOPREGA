@@ -45,6 +45,8 @@ import com.tramex.sisoprega.dto.ReceptionBarnyard;
  *  12/04/2012  Jaime Figueroa                Initial Version.
  *  12/13/2012  Diego Torres                  Enable Read Operation. 
  *  12/16/2012  Diego Torres                  Adding log activity
+ *  01/03/2013  Diego Torres                  Adding delete request using receptionId & 
+ *                                            barnyardId
  *  ====================================================================================
  * </PRE>
  * 
@@ -234,22 +236,34 @@ public class ReceptionBarnyardBean extends BaseBean implements Cruddable {
 
     try {
       ReceptionBarnyard recepBarnyard = entityFromRequest(request, ReceptionBarnyard.class);
-      if (recepBarnyard.getRecBarnyardId() == 0) {
-        log.warning("VAL04 - Entity ID Omission.");
-        response.setError(new Error("VAL04", "Se ha omitido el id del corral al intentar eliminar el registro.",
-            "proxy.ReceptionBarnyard.Delete"));
-      } else {
+      if(recepBarnyard.getRecBarnyardId()!=0){
         TypedQuery<ReceptionBarnyard> readQuery = em.createNamedQuery("CRT_RECEPTIONBARNYARD_BY_ID", ReceptionBarnyard.class);
         readQuery.setParameter("recBarnyardId", recepBarnyard.getRecBarnyardId());
         recepBarnyard = readQuery.getSingleResult();
         log.info("Deleting Reception Barnyard [" + recepBarnyard.toString() + "] by principal[" + getLoggedUser() + "]");
         em.merge(recepBarnyard);
         em.remove(recepBarnyard);
+        em.flush();         
+        response.setError(new Error("0", "SUCCESS", "proxy.ReceptionBarnyard.Delete"));
+        log.info("Reception Barnyard successfully deleted by principal [" + getLoggedUser() + "]");
+      }else if(recepBarnyard.getBarnyardId()!=0 && recepBarnyard.getReceptionId()!=0){
+        TypedQuery<ReceptionBarnyard> readQuery = em.createNamedQuery("RECEPTION_BARNYARD_BY_BARNYARD_ID_AND_RECEPTION_ID", ReceptionBarnyard.class);
+        readQuery.setParameter("barnyard_id", recepBarnyard.getBarnyardId());
+        readQuery.setParameter("reception_id", recepBarnyard.getReceptionId());
+        recepBarnyard = readQuery.getSingleResult();
+        log.info("Deleting Reception Barnyard [" + recepBarnyard.toString() + "] by barnyardId and receptionId[" + getLoggedUser() + "]");
+        em.merge(recepBarnyard);
+        em.remove(recepBarnyard);
         em.flush();
 
         response.setError(new Error("0", "SUCCESS", "proxy.ReceptionBarnyard.Delete"));
         log.info("Reception Barnyard successfully deleted by principal [" + getLoggedUser() + "]");
+      } else {
+        log.warning("VAL04 - Entity ID Omission.");
+        response.setError(new Error("VAL04", "Se ha omitido el id del corral al intentar eliminar el registro.",
+            "proxy.ReceptionBarnyard.Delete"));
       }
+      
     } catch (Exception e) {
       log.severe("Exception found while deleting ReceptionBarnyard");
       log.throwing(this.getClass().getName(), "Delete", e);

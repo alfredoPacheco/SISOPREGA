@@ -5,7 +5,7 @@ enyo.kind({
 	_arrBY:null,	
 	components:[
 		{kind: enyo.Scroller, name:"scrollProductList",flex: 1,
-    	style: "background-image: url(images/practice_background.png); background-size: cover;",			
+//    	style: "background-image: url(images/practice_background.png); background-size: cover;",			
  		 components: [
 				{kind: "RowGroup", name: "listProducts", defaultKind: "HFlexBox", caption: "", 
 				 components: [
