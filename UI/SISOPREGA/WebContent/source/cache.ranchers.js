@@ -748,7 +748,7 @@ enyo.kind({
 						
 						result.push(rancher);												
 					}else{						
-						var rancher = {caption:ranchers[property].company_name,value:ranchers[property].rancher_id}
+						var rancher = {caption:ranchers[property].company_name,value:ranchers[property].rancher_id};
 						result.push(rancher);						
 					}
 				}

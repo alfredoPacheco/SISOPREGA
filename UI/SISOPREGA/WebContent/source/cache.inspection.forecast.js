@@ -2,24 +2,41 @@ enyo.kind({
 	name : "cache.inspection.forecast",
 	iLastForecast : 0,
 	arrForecast : [],
+	arrForecastWasReadFromGateway:false,
 	get : function() {
-		var forecastAux = {};
-		var forecastArrAux = [];
-		var selfCacheForecast = this;
-		// Retrieve forecasts
-		var svcOp = consumingGateway.Read("InspectionForecast", {});
-		if (svcOp.exceptionId == 0) {
-			// InspectionForecast already uploaded
-			jQuery.each(svcOp.records, function() {
-				jQuery.each(this, function(key, value) {
-					forecastAux[key] = value;
+		if (this.arrForecastWasReadFromGateway == false){
+			arrForecastWasReadFromGateway =true;
+			var forecastAux = {};
+			var forecastArrAux = [];
+			var selfCacheForecast = this;
+			// Retrieve forecasts
+			var svcOp = consumingGateway.Read("InspectionForecast", {});
+			if (svcOp.exceptionId == 0) {
+				// InspectionForecast already uploaded
+				jQuery.each(svcOp.records, function() {
+					jQuery.each(this, function(key, value) {
+						forecastAux[key] = value;
+					});
+					var oForecastTemp = selfCacheForecast
+							.adaptForecastFromResponse(forecastAux);
+					
+					//Retrieve Forecast details:
+					var forecastDetails = consumingGateway.Read("InspectionForecastDetail", forecastAux.forecastId);
+					if (svcOp.exceptionId == 0) {
+						
+					}
+					oForecastTemp.details = getDetails(oForecastTemp.id);
+					forecastArrAux.push(oForecastTemp);
 				});
-				var oForecastTemp = selfCacheForecast
-						.adaptForecastFromResponse(oForecastAux);
-				oForecastTemp.details = getDetails(oForecastTemp.id);
-				forecastArrAux.push(oForecastTemp);
-			});
+			}
+			else{ //Error
+				if (cgReadAll.exceptionId != "VAL02"){ //No data found
+					cacheMan.setMessage("", "[Exception ID: " + cgReadAll.exceptionId + "] Descripcion: " + cgReadAll.exceptionDescription);	
+				}			
+			}
+			this.arrForecast = arrForecast;
 		}
+		return this.arrForecast;
 	},
 	addForecast:function(objForecast,cbObj,cbMethod){
 		if (this.saveForecast(objForecast)== true){
@@ -27,8 +44,9 @@ enyo.kind({
 				if (this.saveForecastBarnyard(objForecast)==true){
 					cbObj.objList.push(objForecast);
 					if(cbMethod){
-						cbObj[cbMethod]();
-					}					
+						cbObj[cbMethod](objForecast);
+					}
+					
 				}
 			}
 		}
@@ -90,9 +108,9 @@ enyo.kind({
 		var objToSend = {};
 		objToSend.fdId = objForecast.id;		
 		for (i in objForecast.barnyards){
-			objToSend.barnyardId = objForecast.barnyards[i].value;	
+			objToSend.barnyardId = objForecast.barnyards[i];	
 			var cgCreate = consumingGateway.Create("InspectionForecastBarnyard", objToSend);
-			objForecast.barnyards.ifbId = cgCreate.generatedId;
+//			objForecast.barnyards.ifbId = cgCreate.generatedId;
 			if (cgCreate.exceptionId != 0){ //Created successfully
 				cacheMan.setMessage("", "[Exception ID: " + cgCreate.exceptionId + "] Descripcion: " + cgCreate.exceptionDescription);
 				return false;

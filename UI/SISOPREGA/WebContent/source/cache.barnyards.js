@@ -349,10 +349,14 @@ enyo.kind({
 			if(barnyards[property].location_id==1){						
 				barnyard.caption = 	barnyards[property].barnyard_code + " [Chihuahua]";
 				barnyard.value = 	barnyards[property].barnyard_id;
+				barnyard.barnyard_code = barnyards[property].barnyard_code;
+				barnyard.location = "Chihuahua"; 
 				result.push(barnyard);												
 			}else{						
 				barnyard.caption = barnyards[property].barnyard_code + " [Zona Sur]";
 				barnyard.value = 	barnyards[property].barnyard_id;
+				barnyard.barnyard_code = barnyards[property].barnyard_code;
+				barnyard.location = "Zona Sur";
 				result.push(barnyard);						
 			}
 		}

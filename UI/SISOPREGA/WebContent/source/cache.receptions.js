@@ -107,14 +107,6 @@ enyo.kind({
 		return objNew;
 	},
 	get:function(){
-
-//					inspections : [ {
-//						rejected_id : 1,
-//						rejected_count : 1,
-//						reject_id : 1,
-//						reject_desc : "ENFERMEDAD"
-//					} ],
-
 		if (this.arrObjWasFilledUpOnce == false){
 			this.arrObjWasFilledUpOnce = true;			
 //receptions::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -926,10 +918,14 @@ enyo.kind({
 					if(barnyards[property].charAt(0)==1){						
 						barnyard.caption = 	barnyards[property].substr(1) + " [Chihuahua]";
 						barnyard.value = 	barnyard_id;
+						barnyard.barnyard_code = barnyards[property].substr(1);
+						barnyard.location = "Chihuahua"; 
 						result.push(barnyard);												
 					}else{						
 						barnyard.caption = barnyards[property].substr(1) + " [Zona Sur]";
 						barnyard.value = 	barnyard_id;
+						barnyard.barnyard_code = barnyards[property].substr(1);
+						barnyard.location = "Zona Sur"; 
 						result.push(barnyard);						
 					}
 				}

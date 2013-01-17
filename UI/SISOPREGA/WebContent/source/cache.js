@@ -158,3 +158,27 @@ enyo.kind({
 });
 
 var cacheMan = new cache();
+cacheMan.findLocation = function(criteria){				
+	var result = [];
+	if (criteria != ""){
+		var locations = _arrCities;
+		var pattern = new RegExp(criteria.trim(), "ig");
+		for (property in locations){
+			pattern.lastIndex = 0;
+			if (pattern.test(locations[property].city_name)){
+				var location = {caption:locations[property].city_name,value:locations[property].city_id};
+				result.push(location);
+			}
+		}	
+	}
+	return result;
+	};
+cacheMan.allLocationsForList = function() {
+	var result = [];
+	var locations = _arrCities;	
+	for (property in locations){
+		var location = {caption:locations[property].city_name,value:locations[property].city_id};
+		result.push(location);
+	}
+	return result;
+};
