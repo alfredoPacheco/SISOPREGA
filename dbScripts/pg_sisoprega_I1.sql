@@ -1,6 +1,6 @@
 /*
  * The database script is executed in mysql command line:
- * \. /path/to/sisoprega_I1.sql
+ * psql -d sisoprega -f /path/to/deploy/pg_sisoprega_I1.sql
  *
  * This script is intended to create only the necesary structure to accomplish iteration 1.
  * 
@@ -176,15 +176,6 @@ CREATE TRIGGER person_rancher_delete_trigger
 AFTER DELETE ON cat_person_rancher
 FOR EACH ROW
 EXECUTE PROCEDURE proc_person_rancher_delete();
-
--- SAMPLE DATA FOR RANCHERS
-INSERT INTO cat_person_rancher(aka, first_name, last_name, mother_name, email_add, telephone) 
-VALUES('El Vato', 'Alfredo', 'Pacheco', 'Figueroa', 'j.alfredo.pacheco@gmail.com', '044 (656) 305-0450');
-INSERT INTO cat_person_rancher(first_name, last_name, mother_name, birth_date, email_add, telephone)
-VALUES('Diego A.', 'Torres', 'Fuerte', '1982-04-13', 'diego.torres.fuerte@gmail.com', '044 (656) 217-1598');
-INSERT INTO cat_enterprise_rancher(legal_name, address_one, address_two, city, address_state, zip_code, legal_id, telephone)
-VALUES('Ganaderia Apaloosa', 'Calle prueba #7357', 'Colonia foo bar', 'cd. Juarez', 'Chih.', '32590', 'GAAP339648IEA', '656 000-0000');
-
 
 DROP TABLE IF EXISTS cat_rancher_invoice CASCADE;
 

@@ -459,10 +459,10 @@ enyo.kind({
 			}
 			
 			// TODO: Send communication to customer
-			var today = new Date();
+			/*var today = new Date();
 			var today_sf = today.getMonth() + '/' + today.getDate() + '/' + today.getFullYear(); 
 			consumingGateway.SendReport(objRec.rancherId, 'ReporteAlimento?rancherId=' + objRec.rancherId + '&fromDate=' + today_sf + '&toDate=' + today_sf);
-			
+			*/
 			return true;
 		}
 		else{ //Error			
