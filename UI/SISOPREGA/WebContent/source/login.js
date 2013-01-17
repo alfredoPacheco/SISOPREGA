@@ -26,8 +26,8 @@ enyo.kind({
 					 width:"50%;",
 			 	 	 style:"color:#FFF;margin-top:10%",
 			 	 	 components: [	
-						{kind:"Input", name:"user", hint:"Usuario",selectAllOnFocus: true, value:"admin"},
-						{kind:"PasswordInput", name:"password", hint:"Contraseña",selectAllOnFocus: true, value:"admin"}
+						{kind:"Input", name:"user", hint:"Usuario",selectAllOnFocus: true},
+						{kind:"PasswordInput", name:"password", hint:"Contraseña",selectAllOnFocus: true}
 					]},
 					{kind: "Spacer"}					 
 			]}]},		
