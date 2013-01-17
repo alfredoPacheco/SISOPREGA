@@ -39,6 +39,7 @@ import com.tramex.sisoprega.common.GatewayRequest;
 import com.tramex.sisoprega.common.ReadGatewayResponse;
 import com.tramex.sisoprega.common.UpdateGatewayResponse;
 import com.tramex.sisoprega.common.crud.Cruddable;
+import com.tramex.sisoprega.common.messenger.Messageable;
 
 /**
  * OperationsGateway provides the web service and the web methods that will be
@@ -415,6 +416,74 @@ public class OperationsGateway {
     return "OK";
   }
 
+  /**
+   * Operation to send email and sms reports to ranchers.
+   * 
+   * @param rancherId
+   * @param message
+   * @return
+   */
+  @WebMethod(operationName="SendSimpleMessage")
+  public String sendMessage(@WebParam(name="rancherId")long rancherId, @WebParam(name = "message") String message) {
+    Context jndiContext = null;
+    Messageable messenger = null;
+    String commonPrefix = "java:global/ComProxy/";
+    try {
+      jndiContext = new InitialContext();
+      messenger = (Messageable) jndiContext.lookup(commonPrefix + "Messenger");
+      log.fine("Messenger instance created.");
+    } catch (java.lang.Exception e) {
+      log.severe("Unable to load jndi context component");
+      log.throwing(this.getClass().getName(), "getCruddable", e);
+      return "El módulo de mensajería no está correctamente instalado.";
+    }
+
+    if (messenger != null) {
+      if (!messenger.sendSimpleMessage(rancherId, message)) {
+        return "Error al enviar mensaje.";
+      }
+    } else {
+      log.severe("No se pudo instanciar el módulo de mensajería.");
+      return "El módulo de mensajería no está correctamente instalado.";
+    }
+
+    return "OK";
+  }
+
+  /**
+   * Send a PDF file by email and route to the PDF file by SMS.
+   * @param rancherId
+   * @param reportName
+   * @return
+   */
+  @WebMethod(operationName="SendReport")
+  public String sendReport(@WebParam(name="rancherId")long rancherId, @WebParam(name="reportName")String reportName){
+    Context jndiContext = null;
+    Messageable messenger = null;
+    String commonPrefix = "java:global/ComProxy/";
+    try {
+      jndiContext = new InitialContext();
+      messenger = (Messageable) jndiContext.lookup(commonPrefix + "Messenger");
+      log.fine("Messenger instance created.");
+    } catch (java.lang.Exception e) {
+      log.severe("Unable to load jndi context component");
+      log.throwing(this.getClass().getName(), "getCruddable", e);
+      return "El módulo de mensajería no está correctamente instalado.";
+    }
+
+    if (messenger != null) {
+      if (!messenger.sendReport(rancherId, reportName)) {
+        return "Error al enviar mensaje.";
+      }
+    } else {
+      log.severe("No se pudo instanciar el módulo de mensajería.");
+      return "El módulo de mensajería no está correctamente instalado.";
+    }
+
+    return "OK";
+
+  }
+  
   private Cruddable getCruddable(String cruddableName) {
     Context jndiContext = null;
     Cruddable crud = null;

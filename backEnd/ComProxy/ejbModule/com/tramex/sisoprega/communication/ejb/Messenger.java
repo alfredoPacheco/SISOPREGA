@@ -15,14 +15,22 @@
  */
 package com.tramex.sisoprega.communication.ejb;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.logging.Logger;
 
-import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
+import com.sisoprega.envoy.email.Attachment;
 import com.sisoprega.envoy.email.Email;
 import com.sisoprega.envoy.email.EmailFactory;
 import com.sisoprega.envoy.email.EmailSender;
@@ -31,6 +39,7 @@ import com.sisoprega.envoy.sms.InitSmsProviderException;
 import com.sisoprega.envoy.sms.Sms;
 import com.sisoprega.envoy.sms.SmsFactory;
 import com.sisoprega.envoy.sms.SmsProvider;
+import com.tramex.sisoprega.common.messenger.Messageable;
 import com.tramex.sisoprega.dto.EnterpriseRancher;
 import com.tramex.sisoprega.dto.Rancher;
 
@@ -52,14 +61,14 @@ import com.tramex.sisoprega.dto.Rancher;
  * 
  */
 @Stateless
-@LocalBean
-public class Messenger implements MessengerLocal {
+public class Messenger implements Messageable {
 
-  @PersistenceContext
-  private EntityManager em;
-
+  private Logger log = Logger.getLogger(Messenger.class.getCanonicalName());
   SmsProvider smsMan = null;
   EmailSender smtp = null;
+
+  @PersistenceContext
+  EntityManager em;
 
   /**
    * Default constructor.
@@ -68,7 +77,7 @@ public class Messenger implements MessengerLocal {
    * @throws InitEmailProviderException
    */
   public Messenger() throws InitSmsProviderException, InitEmailProviderException {
-    // TODO: Configure using properties bean configurator
+    log.info("Loading configuration for messenger.");
     File xmlFile = new File("/sisoprega/config/envoyConfig.xml");
     smsMan = SmsFactory.getProvider("clickatell");
     smsMan.setConfiguration(xmlFile);
@@ -81,78 +90,28 @@ public class Messenger implements MessengerLocal {
    * (non-Javadoc)
    * 
    * @see
-   * com.tramex.sisoprega.communication.ejb.MessengerLocal#sendSimpleMessage
-   * (long, java.lang.String)
-   */
-  @Override
-  public boolean sendSimpleMessage(long rancherId, String message) {
-    Rancher rancher = null;
-    TypedQuery<Rancher> readQuery = em.createNamedQuery("RANCHER_BY_ID", Rancher.class);
-    readQuery.setParameter("rancherId", rancherId);
-
-    try {
-      rancher = readQuery.getSingleResult();
-      return sendSimpleMessage(rancher, message);
-    } catch (Exception e) {
-    }
-
-    EnterpriseRancher enterpriseRancher = null;
-    TypedQuery<EnterpriseRancher> readEnterpriseQuery = em.createNamedQuery("ENTERPRISE_RANCHER_BY_ID", EnterpriseRancher.class);
-    readEnterpriseQuery.setParameter("enterpriseId", rancherId);
-
-    try {
-      enterpriseRancher = readEnterpriseQuery.getSingleResult();
-      return sendSimpleMessage(enterpriseRancher, message);
-    } catch (Exception e) {
-    }
-
-    return false;
-  }
-
-  /*
-   * (non-Javadoc)
-   * 
-   * @see com.tramex.sisoprega.communication.ejb.MessengerLocal#sendReport(long,
-   * java.lang.String)
-   */
-  @Override
-  public boolean sendReport(long rancherId, String reportName) {
-    Rancher rancher = null;
-    TypedQuery<Rancher> readQuery = em.createNamedQuery("RANCHER_BY_ID", Rancher.class);
-    readQuery.setParameter("rancherId", rancherId);
-
-    try {
-      rancher = readQuery.getSingleResult();
-      return sendReport(rancher, reportName);
-    } catch (Exception e) {
-    }
-
-    EnterpriseRancher enterpriseRancher = null;
-    TypedQuery<EnterpriseRancher> readEnterpriseQuery = em.createNamedQuery("ENTERPRISE_RANCHER_BY_ID", EnterpriseRancher.class);
-    readEnterpriseQuery.setParameter("enterpriseId", rancherId);
-
-    try {
-      enterpriseRancher = readEnterpriseQuery.getSingleResult();
-      return sendReport(enterpriseRancher, reportName);
-    } catch (Exception e) {
-    }
-
-    return false;
-  }
-
-  /*
-   * (non-Javadoc)
-   * 
-   * @see
    * com.tramex.sisoprega.communication.ejb.MessengerLocal#sendReport(com.tramex
    * .sisoprega.dto.Rancher, java.lang.String)
    */
   @Override
   public boolean sendReport(Rancher rancher, String reportName) {
     String to = rancher.getPhone();
-    // TODO: Retrieve SMS Message from text output report bean.
-    String message = "TestMessage";
-    return sendSMS(to, message) && sendEmail(rancher.getEmailAddress(), reportName);
+    String message = "";
+
+    try {
+      URL url = new URL("http://localhost:8080/ReportingGateway/SMS/" + reportName);
+      BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
+      String str;
+      while ((str = in.readLine()) != null) {
+        message += str;
+      }
+      in.close();
+      return sendSMS(to, message) && sendEmail(rancher.getEmailAddress(), reportName);
+    } catch (Exception e) {
+      log.severe("Unable to read file from localhost." + e.getMessage());
+      log.throwing(this.getClass().getCanonicalName(), "sendReport(EnterpriseRancher, reportName)", e);
+    }
+    return false;
   }
 
   /*
@@ -164,9 +123,22 @@ public class Messenger implements MessengerLocal {
    */
   @Override
   public boolean sendReport(EnterpriseRancher rancher, String reportName) {
-    // TODO: Retrieve SMS Message from text output report bean.
-    String message = "TestMessage";
-    return sendSMS(rancher.getTelephone(), message) && sendEmail(rancher.getEmail(), reportName);
+    String message = "";
+    try {
+      URL url = new URL("http://localhost:8080/ReportingGateway/" + reportName);
+      BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
+      String str;
+      while ((str = in.readLine()) != null) {
+        message += str;
+      }
+      in.close();
+      return sendSMS(rancher.getTelephone(), message) && sendEmail(rancher.getEmail(), reportName);
+    } catch (Exception e) {
+      log.severe("Unable to read file from localhost." + e.getMessage());
+      log.throwing(this.getClass().getCanonicalName(), "sendReport(EnterpriseRancher, reportName)", e);
+    }
+
+    return false;
   }
 
   /*
@@ -198,17 +170,18 @@ public class Messenger implements MessengerLocal {
     Sms sms = new Sms(to, from, message);
     try {
       smsMan.sendSMS(sms);
+      log.info("SENT SMS: " + message);
       return true;
     } catch (Exception e) {
       return false;
     }
   }
 
-  private boolean sendSimpleEmail(String to, String message){
+  private boolean sendSimpleEmail(String to, String message) {
     String from = "tramex@sisoprega.com";
     String title = "Mensaje simple desde TRAMEX.";
     Email email = new Email(to, from, title, message);
-    
+
     try {
       smtp.sendEmail(email);
       return true;
@@ -216,25 +189,116 @@ public class Messenger implements MessengerLocal {
       return false;
     }
   }
-  
-  private boolean sendEmail(String to, String reportName) {
-    String from = "tramex@sisoprega.com";
-    String content = "Encuentre anexo el reporte con los detalles de este mensaje.";
-    Email email = new Email(to, from, reportName, content);
 
-    // TODO: Retrieve attachment from byte array output report bean.
-    // Attachment attachment = new Attachment();
-    // attachment.setAttachmentType("application/pdf");
-    // attachment.setFileName(reportName);
-    // attachment.setContent(content);
-    // email.setAttachment(attachment);
+  private boolean sendEmail(String to, String reportName) {
 
     try {
+      URL url = new URL("http://localhost:8080/ReportingGateway/" + reportName);
+
+      String from = "tramex@sisoprega.com";
+      String content = "Encuentre anexo el reporte con los detalles de este mensaje.";
+      Email email = new Email(to, from, reportName, content);
+
+      Attachment attachment = new Attachment();
+      attachment.setAttachmentType("application/pdf");
+      attachment.setFileName(reportName);
+
+      attachment.setContent(readPDF(url));
+      email.setAttachment(attachment);
+
       smtp.sendEmail(email);
+      log.info("sent email");
       return true;
     } catch (Exception e) {
+      log.severe("Unable to read file from localhost." + e.getMessage());
+      log.throwing(this.getClass().getCanonicalName(), "sendReport(EnterpriseRancher, reportName)", e);
       return false;
     }
+  }
+
+  private byte[] readPDF(URL url) throws IOException {
+
+    ByteArrayOutputStream tmpOut = new ByteArrayOutputStream();
+
+    URLConnection connection = url.openConnection();
+    InputStream in = connection.getInputStream();
+    int contentLength = connection.getContentLength();
+
+    if (contentLength != -1) {
+      tmpOut = new ByteArrayOutputStream(contentLength);
+    }
+
+    byte[] buf = new byte[512];
+    while (true) {
+      int len = in.read(buf);
+      if (len == -1) {
+        break;
+      }
+      tmpOut.write(buf, 0, len);
+    }
+    in.close();
+    tmpOut.close();
+
+    return tmpOut.toByteArray();
+  }
+
+  @Override
+  public boolean sendReport(long rancherId, String reportName) {
+
+    TypedQuery<Rancher> personQuery = em.createNamedQuery("RANCHER_BY_ID", Rancher.class);
+    personQuery.setParameter("rancherId", rancherId);
+
+    Rancher person = null;
+    try {
+      person = personQuery.getSingleResult();
+      if (person != null) {
+        return sendReport(person, reportName);
+      }
+    } catch (Exception e) {
+    }
+
+    TypedQuery<EnterpriseRancher> enterpriseQuery = em.createNamedQuery("ENTERPRISE_RANCHER_BY_ID", EnterpriseRancher.class);
+    enterpriseQuery.setParameter("enterpriseId", rancherId);
+
+    EnterpriseRancher enterprise = null;
+    try {
+      enterprise = enterpriseQuery.getSingleResult();
+      if (enterprise != null) {
+        return sendReport(enterprise, reportName);
+      }
+    } catch (Exception e) {
+    }
+
+    return false;
+  }
+
+  @Override
+  public boolean sendSimpleMessage(long rancherId, String message) {
+    TypedQuery<Rancher> personQuery = em.createNamedQuery("RANCHER_BY_ID", Rancher.class);
+    personQuery.setParameter("rancherId", rancherId);
+
+    Rancher person = null;
+    try {
+      person = personQuery.getSingleResult();
+      if (person != null) {
+        return sendSimpleMessage(person, message);
+      }
+    } catch (Exception e) {
+    }
+
+    TypedQuery<EnterpriseRancher> enterpriseQuery = em.createNamedQuery("ENTERPRISE_RANCHER_BY_ID", EnterpriseRancher.class);
+    enterpriseQuery.setParameter("enterpriseId", rancherId);
+
+    EnterpriseRancher enterprise = null;
+    try {
+      enterprise = enterpriseQuery.getSingleResult();
+      if (enterprise != null) {
+        return sendSimpleMessage(enterprise, message);
+      }
+    } catch (Exception e) {
+    }
+
+    return false;
   }
 
 }

@@ -28,6 +28,60 @@
 
 var cConsumingGateway = {
 
+	SendMessage : function(rancher_id, message){
+		var result = 'OK';
+		var soapMessage = soapHeader + '<ws:SendSimpleMessage>';
+		soapMessage += '<rancherId>' + rancher_id + '</rancherId><message>' + message + '</message>';
+		soapMessage += '</ws:SendSimpleMessage>';
+		soapMessage += soapFooter;
+		
+		jQuery.ajax({
+			url : gatewayWsURL,
+			type : "POST",
+			dataType : "xml",
+			data : soapMessage,
+			processData : false,
+			contentType : "text/xml;charset=UTF-8",
+			async : false,
+			success : function OnSuccess(data) {					
+				result = jQuery(data).find("response").text();
+			},
+			error : function OnError(request, status, error) {
+				result = 'Error al llamar el servicio web.';
+				alert(output.exceptionDescription);
+				consumingGateway.LogOut();
+			}
+		});
+		
+		return result;
+	},
+	SendReport : function(rancher_id, reportName){
+		var result = 'OK';
+		var soapMessage = soapHeader + '<ws:SendReport>';
+		soapMessage += '<rancherId>' + rancher_id + '</rancherId><reportName>' + reportName + '</reportName>';
+		soapMessage += '</ws:SendReport>';
+		soapMessage += soapFooter;
+		
+		jQuery.ajax({
+			url : gatewayWsURL,
+			type : "POST",
+			dataType : "xml",
+			data : soapMessage,
+			processData : false,
+			contentType : "text/xml;charset=UTF-8",
+			async : false,
+			success : function OnSuccess(data) {					
+				result = jQuery(data).find("response").text();
+			},
+			error : function OnError(request, status, error) {
+				result = 'Error al llamar el servicio web.';
+				alert(output.exceptionDescription);
+				consumingGateway.LogOut();
+			}
+		});
+		
+		return result;
+	},
 	Login : function(userId, password) {
 		// Se crea objeto que devolvera la funcion:
 		output = {
