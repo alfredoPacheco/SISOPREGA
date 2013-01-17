@@ -9,7 +9,8 @@ enyo.kind({
 		onFeedReport:"",
 		onInspectionReport:"",
 		onHistoricalReport:"",
-		onUpdateProfile:""
+		onUpdateProfile:"",
+		onGoBack:""
 	},
 	components: [
 		{kind: "FittableColumns",classes: "reportsBG", fit: true, components: [
@@ -24,7 +25,13 @@ enyo.kind({
 				{style: "height: 1%; position: relative; z-index: 1;"},								
 				{style: "height: 12%;width:92%",classes: "reportHistoricalBG", onclick:"doHistoricalReport"},
 				{style: "height: 1%; position: relative; z-index: 1;"},								
-				{style: "height: 12%;width:94%",classes: "rancherProfileBG", onclick:"doUpdateProfile"},												
+				{style: "height: 12%;width:94%",classes: "rancherProfileBG", onclick:"doUpdateProfile"},
+				{style: "height: 3%; position: relative; z-index: 1;"},								
+				{style: "height: 5%;",classes: "logOutBG", kind:"FittableColumns",
+				 components:[
+		 			{style: "width:85%"},
+				 	{kind:"onyx.Button", fit:true, content: "Salir", onclick:"doGoBack"}
+				]},																
 			]}
 		]}
 	],

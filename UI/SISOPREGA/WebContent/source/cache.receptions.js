@@ -457,13 +457,18 @@ enyo.kind({
 			if(cbMethod){
 				cbObj[cbMethod]();
 			}
+			
+			// TODO: Send communication to customer
+			var today = new Date();
+			var today_sf = today.getMonth() + '/' + today.getDate() + '/' + today.getFullYear(); 
+			consumingGateway.SendReport(objRec.rancherId, 'ReporteAlimento?rancherId=' + objRec.rancherId + '&fromDate=' + today_sf + '&toDate=' + today_sf);
+			
 			return true;
 		}
 		else{ //Error			
 			cacheMan.setMessage("", "[Exception ID: " + cgCreate.exceptionId + "] Descripcion: " + cgCreate.exceptionDescription);
 			return false;
 		}
-		
 	},
 	upd:function(objOld,objNew,cbObj,cbMethod){
 		objNew.reception_id = objOld.reception_id;
