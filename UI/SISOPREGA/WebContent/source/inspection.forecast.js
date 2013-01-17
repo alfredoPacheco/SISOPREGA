@@ -237,7 +237,7 @@ enyo.kind({
 		for (i in this.arrBY){
 			strAux = strAux + this.arrBY[i].caption + ", ";
 		}
-		strAux.slice(0, -2);
+		strAux = strAux.slice(0, -2);
 		this.$.barnyards.setValue(strAux);
 		
 	},
@@ -258,9 +258,15 @@ enyo.kind({
 	},
 	contextBarnyardsClicked: function(inSender, inEvent ){
 		if (this.objRan){
-			this.$.barnyardsMenu.setItems(cacheReceptions.getActiveBYForListByRancherID(this.objRan.value));
+			var items = cacheReceptions.getActiveBYForListByRancherID(this.objRan.value);
+			if (items.length > 0){
+				this.$.barnyardsMenu.setItems(items);	
+			}else{
+				this.$.barnyardsMenu.setItems(cacheBY.getAllForList());
+			}
+			
 		}else{
-			this.$.barnyardsMenu.setItems(cacheReceptions.getActiveBYForListByRancherID(1));
+			this.$.barnyardsMenu.setItems(cacheBY.getAllForList());
 		}
 //		this.$.options.setItems(cacheBY.getAllForList());
 		this.$.barnyardsMenu.openAtEvent(inEvent);		
@@ -268,24 +274,38 @@ enyo.kind({
 		return false;
 	},
 	teclaPresionada:function(inSender, inEvent){
-		console.log('input key press with value:' + inSender.value + ' and key: ' + String.fromCharCode(inEvent.keyCode));
-		console.log(cacheRanchers.findRancher(inSender.value + String.fromCharCode(inEvent.keyCode)));
 		var arrAux = [];
+		var value="";
 		if(inEvent.keyCode != 8 ){
-		arrAux = cacheRanchers.findRancher(inSender.value + String.fromCharCode(inEvent.keyCode));
+			value = inSender.value + String.fromCharCode(inEvent.keyCode);
 		}
 		else {
-			arrAux = cacheRanchers.findRancher(inSender.value.slice(0,inSender.value.length - 1));
+			value = inSender.value.slice(0,inSender.value.length - 1);
 		}
-		if (arrAux.length > 0){
-			this.$.options.setItems(arrAux);
-			this.$.options.$.list.$.client.controls[0].setStyle("background-color:yellow;");
-			this.$.options.openAroundControl(this.$.rancherInput, "", "left");
-		}else
-		{
-			this.$.options.setItems(cacheRanchers.getAllForList());
-			this.$.options.close();
-		}	
+		
+		switch(inSender.name){
+		case "rancherInput":
+			console.log('input key press with value:' + inSender.value + ' and key: ' + String.fromCharCode(inEvent.keyCode));
+			console.log('value = ' + cacheRanchers.findRancher(value));
+			
+			arrAux = cacheRanchers.findRancher(value);
+			if (arrAux.length > 0){
+				this.$.options.setItems(arrAux);
+				this.$.options.$.list.$.client.controls[0].setStyle("background-color:yellow;");
+				this.$.options.openAroundControl(this.$.rancherInput, "", "left");
+			}else
+			{
+				this.$.options.setItems(cacheRanchers.getAllForList());
+				this.$.options.close();
+			}	
+			break;
+		case "barnyards":
+			break;
+		}
+		
+		
+		
+		
 	},
 	getInspectionForecast:function(){				
 	
@@ -317,5 +337,8 @@ enyo.kind({
 	addInspectionForecast:function(){				
 		this.iCreated=cacheInspFore.addForecast(this.getInspectionForecast(),this,"afterAddInspFore");		
 	},
+	afterAddInspFore:function(){
+		alert("AddRancher");
+	}
 	
 });
