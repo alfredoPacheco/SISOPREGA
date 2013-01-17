@@ -9,7 +9,7 @@ enyo.kind({
 			{kind: "ranchers.login",onSucess:"loadReports"},
 			{kind: "ranchers.reports",onMBYReport:"loadBYMReport", onFeedReport:"loadFeedReport",
 			 onInspectionReport:"loadInspectionReport", onHistoricalReport:"loadHistoricalReport",
-			 onUpdateProfile:"loadUpdateProfile",onGoBack:"stepBack"},
+			 onUpdateProfile:"loadUpdateProfile",onGoBack:"loadLogIn"},
 			{kind: "receptions.barnyards.map",onGoBack:"stepBack"}
 		]},
 	],
@@ -17,6 +17,10 @@ enyo.kind({
 		this.inherited(arguments);
 		this.$.main.setIndex(0);		
 	},
+	loadLogIn:function(){
+        this.inherited(arguments);
+		this.$.main.setIndex(0);		
+	},	
 	loadUpdateProfile:function(){
 		alert('TODO:Profile')
 	},
