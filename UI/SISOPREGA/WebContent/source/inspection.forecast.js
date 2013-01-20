@@ -39,8 +39,9 @@ enyo.kind({
 		scrim : true,
 		components : []
 	}, {
-		kind : "SlidingPane",
+		kind : "SlidingPane",		
 		flex : 1,
+		name:"slidingpane",
 		components : [ {
 			name : "left",
 			width : "300px",
@@ -201,48 +202,60 @@ enyo.kind({
 				kind : enyo.Scroller,
 				flex : 1,
 				className : "listBG",
+				
+//				components : [{
+//					kind:"Scroller",
+				
 				components : [ {
 					kind : enyo.VirtualRepeater,
 					name : "forecastList",
 					onSetupRow : "setupForecastRow",
 					onclick : "selectForecast",
 					components : [ {
-						kind : "Divider"
-					}, {
 						kind : enyo.SwipeableItem,
 						onConfirm : "dropForecast",
+						layoutKind : enyo.HFlexLayout,
 						tapHighlight : true,
 						components : [ {
 							name : "listRancher",
 							className : "listFirst",
+							style:"width:300px;",
 							content : ""
 						}, {
 							name : "listAuth",
 							className : "listFirst",
+							style:"width:100px;",
 							content : ""
 						}, {
 							name : "listOrigin",
 							className : "listFirst",
+							style:"width:150px;",
 							content : ""
 						}, {
 							name : "listCattleType",
 							className : "listFirst",
+							style:"width:150px;",
 							content : ""
 						}, {
 							name : "listQuantity",
 							className : "listFirst",
+							style:"width:100px;",
 							content : ""
 						}, {
 							name : "listLocation",
 							className : "listFirst",
+							style:"width:150px;",
 							content : ""
 						}, {
 							name : "listBarnyards",
 							className : "listSecond",
+							style:"width:200px;",
 							content : ""
 						} ]
 					} ]
 				} ]
+			
+//			}]
 			} ]
 		} ]
 	} ],
@@ -259,16 +272,38 @@ enyo.kind({
 			this.doSelectForecast();
 		}
 	},
-	setupForestRow : function(inSender, inIndex) {
+	setupForecastRow : function(inSender, inIndex) {
 		var objFore;
 		if (objFore = this.objList[inIndex]) {
-			this.$.listRancher.setContent(objFore.rancher);
+			var auxRancher = cacheRanchers.getByID(objFore.rancher_id);
+			if (auxRancher){
+			if(auxRancher.rancher_type==1){			
+				this.$.listRancher.setContent(auxRancher.last_name+" "+
+						auxRancher.mother_name+" "+auxRancher.first_name);			
+			}else{
+				this.$.listRancher.setContent(auxRancher.company_name);
+			}}
 			this.$.listAuth.setContent(objFore.auth);
 			this.$.listOrigin.setContent(objFore.origin);
-			this.$.listCattleType.setContent(objFore.cattle_type);
+			this.$.listCattleType.setContent(cacheCattle.getByID(objFore.cattle_type).cattype_name);
 			this.$.listQuantity.setContent(objFore.quantity);
-			this.$.listLocation.setContent(objFore.location);
-			this.$.listBarnyards.setContent(objFore.barnyards);
+			try {
+				if (cacheBY.getByID(objFore.barnyards[0]).location_id == 1){
+					this.$.listLocation.setContent("Chihuahua");
+				}else
+				{
+						this.$.listLocation.setContent("Zona Sur");	
+				}
+			}catch(e){this.$.listLocation.setContent("");}
+			var strBarnyards = "";
+			for (i in objFore.barnyards){
+				strBarnyards = strBarnyards + cacheBY.getByID(objFore.barnyards[i]).barnyard_code + ", ";
+				
+			}
+			strBarnyards = strBarnyards.slice(0, -2);
+						
+			this.$.listBarnyards.setContent(strBarnyards);
+			this.$.middle.render();
 			return true;
 		}
 	},
@@ -282,7 +317,8 @@ enyo.kind({
 	updateList : function() {
 		this.objList = [];
 		this.objList = cacheInspFore.get();
-		this.$.forecastList.render();
+//		this.$.forecastList.render();
+		this.$.slidingpane.render();
 	},
 	getSelected : function() {
 		return this.objList[this.iSelected];
@@ -373,7 +409,14 @@ enyo.kind({
 			case "barnyards":
 				
 				break;
-			default:			
+			default:
+				if (inSelected){
+					this.$.rancherInput.setValue(inSender.items[inSelected].caption);
+					this.objRan = inSender.items[inSelected];
+				}else if (this.$.options.items[0]){
+					this.$.rancherInput.setValue(this.$.options.items[0].caption);
+					this.objRan = this.$.options.items[0];
+				}
 			
 		}
 		
@@ -550,6 +593,7 @@ enyo.kind({
 	},
 	afterAddInspFore:function(objForecast){
 		this.updateList();
+		
 	}
 	
 });

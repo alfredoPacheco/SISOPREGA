@@ -121,9 +121,10 @@ public class InspectionForecastBarnyardBean extends BaseBean implements Cruddabl
         readQuery = em.createNamedQuery("FORECAST_BARNAYARD_BY_ID", InspectionForecastBarnyard.class);
         readQuery.setParameter("fdId", forecastBarnyard.getIfbId());
         qryLogger = "By ifbId [" + forecastBarnyard.getIfbId() + "]";
-      } else if(forecastBarnyard.getFdId() != 0 ){
+      } else if(forecastBarnyard.getFdId() != 0 ){    	  
         readQuery = em.createNamedQuery("FORECAST_BARNYARD_BY_FORECAST_DETAIL_ID", InspectionForecastBarnyard.class);
-        readQuery.setParameter("getFdId", forecastBarnyard.getFdId());
+        log.info(String.valueOf(forecastBarnyard.getFdId()));
+        readQuery.setParameter("fdId", forecastBarnyard.getFdId());
         qryLogger = "By getFdId [" + forecastBarnyard.getFdId() + "]";
       } else {
         response.setError(new Error("VAL03", "El filtro especificado no es válido para detalles de la lista de inspección de ganado.",
