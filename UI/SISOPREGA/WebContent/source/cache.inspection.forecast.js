@@ -119,7 +119,8 @@ enyo.kind({
 		if (this.saveForecast(objForecast)== true){
 			if (this.saveForecastDetail(objForecast)==true){
 				if (this.saveForecastBarnyard(objForecast)==true){
-					cbObj.objList.push(objForecast);
+					this.arrForecast.push(objForecast);
+					cbObj.objList = this.arrForecast;					
 					if(cbMethod){
 						cbObj[cbMethod](objForecast);
 					}

@@ -7,9 +7,10 @@ enyo.kind({
 		"onUpdateInspectionForecast" : "",
 		"onRemoveInspectionForecast" : "",
 		"onRancherInputKeyPress" : "",
-		"onAddRancher" : "",
-		"onCancel" : ""
+		"onAddRancher" : ""
+		
 	},
+	iSelected:null,
 	objRan : null,
 	objLoc : null,
 	objCattleType : null,
@@ -190,76 +191,87 @@ enyo.kind({
 							className : "enyo-button-negative",
 							flex : 1,
 							caption : "Cancelar",
-							onclick : "doCancel"
+							onclick : "onCancel"
 						} ]
 					} ]
 				} ]
 			} ]
 		}, {
 			name : "middle",
+			kind:enyo.SlidingView,
+//			dragAnywhere :false,
+			edgeDragging :true,
 			peekwidth : 58,
-			components : [ {
+			components : [{
+				kind: "Header",
+				name:"encabezado",
+				className : "listFirst",
+				style:"font-size:13px;height:20px;width:1500px;background-color:#DABD8B;",
+				components:[
+				            {content:"Ganadero",style:"width:300px;text-align:center;"},
+				            {content:"Autorización",style:"width:100px;text-align:center;"},
+				            {content:"Origen",style:"width:100px;text-align:center;"},
+				            {content:"Clase",style:"width:100px;text-align:center;"},
+				            {content:"Cantidad",style:"width:100px;text-align:center;"},
+				            {content:"Localidad",style:"width:150px;text-align:center;"},
+				            {content:"Corrales",style:"width:200px;text-align:left;"}
+				            ]
+			}, {
 				kind : enyo.Scroller,
-				flex : 1,
-				className : "listBG",
-				
-//				components : [{
-//					kind:"Scroller",
-				
-				components : [ {
+				name:"listaScroller",
+				horizontal:false,
+				flex:1,
+				style: "width:1400px;",
+				className : "listBG",					
+				components : [ 
+				{
 					kind : enyo.VirtualRepeater,
 					name : "forecastList",
 					onSetupRow : "setupForecastRow",
 					onclick : "selectForecast",
 					components : [ {
-						kind : enyo.SwipeableItem,
+						kind : enyo.RowItem,
 						onConfirm : "dropForecast",
 						layoutKind : enyo.HFlexLayout,
 						tapHighlight : true,
+						style:"font-size:13px;",
 						components : [ {
-							name : "listRancher",
-							className : "listFirst",
-							style:"width:300px;",
+							name : "listRancher",							
+							style:"width:300px;text-align:center;",
 							content : ""
 						}, {
 							name : "listAuth",
-							className : "listFirst",
-							style:"width:100px;",
+							style:"width:100px;text-align:center;",
 							content : ""
 						}, {
 							name : "listOrigin",
-							className : "listFirst",
-							style:"width:150px;",
+							style:"width:100px;text-align:center;",
 							content : ""
 						}, {
 							name : "listCattleType",
-							className : "listFirst",
-							style:"width:150px;",
+							style:"width:100px;text-align:center;",
 							content : ""
 						}, {
 							name : "listQuantity",
-							className : "listFirst",
-							style:"width:100px;",
+							style:"width:100px;text-align:center;",
 							content : ""
 						}, {
 							name : "listLocation",
-							className : "listFirst",
-							style:"width:150px;",
+							style:"width:150px;text-align:center;",
 							content : ""
 						}, {
 							name : "listBarnyards",
-							className : "listSecond",
-							style:"width:200px;",
+							style:"width:200px;text-align:left;",
 							content : ""
 						} ]
 					} ]
-				} ]
-			
-//			}]
+//				} ]
+//				}]
+			}]
 			} ]
 		} ]
 	} ],
-	ready : function() {
+	ready : function() {		
 		this.resetValues();
 		this.updateList();
 	},
@@ -269,7 +281,7 @@ enyo.kind({
 	selectForecast : function(inSender, inEvent) {
 		if (this.objList[inEvent.rowIndex]) {
 			this.iSelected = inEvent.rowIndex;
-			this.doSelectForecast();
+			this.$.forecastList.render();
 		}
 	},
 	setupForecastRow : function(inSender, inIndex) {
@@ -303,7 +315,28 @@ enyo.kind({
 			strBarnyards = strBarnyards.slice(0, -2);
 						
 			this.$.listBarnyards.setContent(strBarnyards);
-			this.$.middle.render();
+			
+			if(inIndex==this.iSelected){
+				this.$.rowItem.applyStyle("background-color", "cadetblue");
+				this.$.listRancher.applyStyle("color", "white");
+				this.$.listAuth.applyStyle("color", "white");
+				this.$.listOrigin.applyStyle("color", "white");
+				this.$.listCattleType.applyStyle("color", "white");
+				this.$.listQuantity.applyStyle("color", "white");
+				this.$.listLocation.applyStyle("color", "white");
+				this.$.listBarnyards.applyStyle("color", "white");
+			}else{
+				this.$.rowItem.applyStyle("background-color", null);
+				this.$.listRancher.applyStyle("color", null);
+				this.$.listRancher.applyStyle("color", null);
+				this.$.listAuth.applyStyle("color", null);
+				this.$.listOrigin.applyStyle("color", null);
+				this.$.listCattleType.applyStyle("color", null);
+				this.$.listQuantity.applyStyle("color", null);
+				this.$.listLocation.applyStyle("color", null);
+				this.$.listBarnyards.applyStyle("color", null);
+			}
+			
 			return true;
 		}
 	},
@@ -594,6 +627,9 @@ enyo.kind({
 	afterAddInspFore:function(objForecast){
 		this.updateList();
 		
+	},
+	onCancel:function(){
+		alert("oprimio cancel");
 	}
 	
 });
