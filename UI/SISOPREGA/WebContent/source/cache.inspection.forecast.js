@@ -103,7 +103,7 @@ enyo.kind({
 			
 			if (cgReadAll.exceptionId == 0){ //Read successfully
 				for (item in cgReadAll.records){
-					arrAux.push(cgReadAll.records[item].barnyardId);					
+					arrAux.push(cacheBY.getByID(cgReadAll.records[item].barnyardId));					
 				}		    	
 			}
 			else{ //Error
@@ -186,7 +186,7 @@ enyo.kind({
 		var objToSend = {};
 		objToSend.fdId = objForecast.id;		
 		for (i in objForecast.barnyards){
-			objToSend.barnyardId = objForecast.barnyards[i];	
+			objToSend.barnyardId = objForecast.barnyards[i].barnyard_id;	
 			var cgCreate = consumingGateway.Create("InspectionForecastBarnyard", objToSend);
 //			objForecast.barnyards.ifbId = cgCreate.generatedId;
 			if (cgCreate.exceptionId != 0){ //Created successfully

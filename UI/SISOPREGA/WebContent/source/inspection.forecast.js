@@ -10,14 +10,22 @@ enyo
 				"onRancherInputKeyPress" : "",
 				"onAddRancher" : ""
 			},
+			create : function() {
+
+				this.inherited(arguments);
+				this.cambioDeFecha();
+			},
 			iSelected : null,
 			objRan : null,
 			objLoc : null,
 			objCattleType : null,
 			objList : [],
+			arrAllForecasts : [],
 			arrBY : [],
 			arrTempPopupSelection : [],
 			itemSelectedPopup : -1,
+			fecha : undefined,
+			totalItems : 0,
 			components : [
 					{
 						name : "options",
@@ -51,184 +59,198 @@ enyo
 									name : "left",
 									width : "300px",
 									kind : enyo.SlidingView,
-									components : [ {
-										kind : enyo.Scroller,
-										name : "FormScroller",
-										horizontal : false,
-										autoHorizontal : false,
-										flex : 1,
-										onScroll : "scroll",
-										components : [ {
-											kind : "RowGroup",
-											defaultKind : "HFlexBox",
-											caption : "",
-											style : "color:#FFF",
-											components : [
-													{
-														kind : "Item",
-														components : [ {
-															layoutKind : enyo.HFlexLayout,
-															components : [
-																	{
-																		kind : "Input",
-																		name : "rancherInput",
-																		hint : "Ganadero",
-																		onkeydown : "teclaPresionada",
-																		onblur : "lostFocus",
-																		flex : 1
-																	},
-																	{
-																		kind : "IconButton",
-																		icon : "images/menu-icon-new.png",
-																		onclick : "contextMenuClicked"
-																	} ]
-														} ],
+									components : [
+											{
+												kind : "Header",
+												name : "encabezadoFecha",
+												style : "background-color:#DABD8B;",
+												pack : "center",
+												components : [ {
+													kind : "DatePicker",
+													label : "",
+													name : "fechaPicker",
+													onChange : "cambioDeFecha"
+												} ]
+											},
+											{
+												kind : enyo.Scroller,
+												name : "FormScroller",
+												horizontal : false,
+												autoHorizontal : false,
+												flex : 1,
+												onScroll : "scroll",
+												components : [ {
+													kind : "RowGroup",
+													defaultKind : "HFlexBox",
+													caption : "",
+													style : "color:#FFF;",
+													components : [
+															{
+																kind : "Item",
+																components : [ {
+																	layoutKind : enyo.HFlexLayout,
+																	components : [
+																			{
+																				kind : "Input",
+																				name : "rancherInput",
+																				hint : "Ganadero",
+																				onkeydown : "teclaPresionada",
+																				onblur : "lostFocus",
+																				flex : 1
+																			},
+																			{
+																				kind : "IconButton",
+																				icon : "images/menu-icon-new.png",
+																				onclick : "contextMenuClicked"
+																			} ]
+																} ],
 
-													},
-													{
-														kind : "Item",
-														components : [ {
-															layoutKind : enyo.HFlexLayout,
-															components : [ {
-																kind : "Input",
-																name : "autorizacion",
-																hint : "Autorizacion",
-																flex : 1
-															} ]
-														} ]
-													},
-													{
-														kind : "Item",
-														components : [ {
-															layoutKind : enyo.HFlexLayout,
-															components : [ {
-																kind : "Input",
-																name : "origen",
-																hint : "Origen",
-																flex : 1
-															} ]
-														} ]
-													},
-													{
-														kind : "Item",
-														components : [ {
-															layoutKind : enyo.HFlexLayout,
-															components : [ {
-																kind : "Input",
-																name : "cattle_type_id",
-																hint : "Clase",
-																onkeydown : "teclaPresionada",
-																onblur : "lostFocus",
-																flex : 1
-															} ]
-														} ]
-													},
-													{
-														kind : "Item",
-														components : [ {
-															layoutKind : enyo.HFlexLayout,
-															components : [ {
-																kind : "Input",
-																name : "cantidad",
-																hint : "Cantidad",
-																inputType : "number",
-																flex : 1
-															} ]
-														} ]
-													},
-													{
-														kind : "Item",
-														components : [ {
-															layoutKind : enyo.HFlexLayout,
-															components : [
-																	{
+															},
+															{
+																kind : "Item",
+																components : [ {
+																	layoutKind : enyo.HFlexLayout,
+																	components : [ {
 																		kind : "Input",
-																		name : "localidad",
-																		hint : "Localidad",
+																		name : "autorizacion",
+																		hint : "Autorizacion",
+																		flex : 1
+																	} ]
+																} ]
+															},
+															{
+																kind : "Item",
+																components : [ {
+																	layoutKind : enyo.HFlexLayout,
+																	components : [ {
+																		kind : "Input",
+																		name : "origen",
+																		hint : "Origen",
+																		flex : 1
+																	} ]
+																} ]
+															},
+															{
+																kind : "Item",
+																components : [ {
+																	layoutKind : enyo.HFlexLayout,
+																	components : [ {
+																		kind : "Input",
+																		name : "cattle_type_id",
+																		hint : "Clase",
 																		onkeydown : "teclaPresionada",
 																		onblur : "lostFocus",
 																		flex : 1
-																	},
-															// {
-															// kind :
-															// "IconButton",
-															// icon :
-															// "images/menu-icon-new.png",
-															// onclick :
-															// "contextBarnyardsClicked"
-															// }
-															]
-														} ]
-													},
-													{
-														kind : "Item",
-														components : [ {
-															layoutKind : enyo.HFlexLayout,
-															components : [
-																	{
-																		kind : "Input",
-																		name : "corrales",
-																		hint : "Corrales",
-																		flex : 1
-																	},
-															// {
-															// kind :
-															// "IconButton",
-															// icon :
-															// "images/menu-icon-new.png",
-															// onclick :
-															// "contextBarnyardsClicked"
-															// }
-															]
-														} ]
-													},
-													// {
-													// kind : "Item",
-													// components : [ {
-													// layoutKind :
-													// enyo.HFlexLayout,
-													// style:"height:40px",
-													// components : [
-													// {kind:"Scroller",
-													// horizontal:true,vertical:false,
-													// flex:1,
-													// components: [
-													// { name: "bys",
-													// layoutKind:
-													// enyo.HFlexLayout,
-													// align:"left",
-													// style: "width:100px",
-													// components: []
-													// }]
-													// }
-													// ]
-													// }]
-													// },
-													{
-														kind : "Item",
-														components : [ {
-															layoutKind : enyo.HFlexLayout,
-															components : [
-																	{
-																		kind : "Button",
-																		name : "btnAdd",
-																		className : "enyo-button-affirmative",
-																		flex : 1,
-																		caption : "Guardar",
-																		onclick : "saveInspectionForecast"
-																	},
-																	{
-																		kind : "Button",
-																		name : "btnCancelCreate",
-																		className : "enyo-button-negative",
-																		flex : 1,
-																		caption : "Cancelar",
-																		onclick : "onCancel"
 																	} ]
-														} ]
-													} ]
-										} ]
-									} ]
+																} ]
+															},
+															{
+																kind : "Item",
+																components : [ {
+																	layoutKind : enyo.HFlexLayout,
+																	components : [ {
+																		kind : "Input",
+																		name : "cantidad",
+																		hint : "Cantidad",
+																		inputType : "number",
+																		flex : 1
+																	} ]
+																} ]
+															},
+															{
+																kind : "Item",
+																components : [ {
+																	layoutKind : enyo.HFlexLayout,
+																	components : [
+																			{
+																				kind : "Input",
+																				name : "localidad",
+																				hint : "Localidad",
+																				onkeydown : "teclaPresionada",
+																				onblur : "lostFocus",
+																				flex : 1
+																			},
+																	// {
+																	// kind :
+																	// "IconButton",
+																	// icon :
+																	// "images/menu-icon-new.png",
+																	// onclick :
+																	// "contextBarnyardsClicked"
+																	// }
+																	]
+																} ]
+															},
+															{
+																kind : "Item",
+																components : [ {
+																	layoutKind : enyo.HFlexLayout,
+																	components : [
+																			{
+																				kind : "Input",
+																				name : "corrales",
+																				hint : "Corrales",
+																				flex : 1
+																			},
+																	// {
+																	// kind :
+																	// "IconButton",
+																	// icon :
+																	// "images/menu-icon-new.png",
+																	// onclick :
+																	// "contextBarnyardsClicked"
+																	// }
+																	]
+																} ]
+															},
+															// {
+															// kind : "Item",
+															// components : [ {
+															// layoutKind :
+															// enyo.HFlexLayout,
+															// style:"height:40px",
+															// components : [
+															// {kind:"Scroller",
+															// horizontal:true,vertical:false,
+															// flex:1,
+															// components: [
+															// { name: "bys",
+															// layoutKind:
+															// enyo.HFlexLayout,
+															// align:"left",
+															// style:
+															// "width:100px",
+															// components: []
+															// }]
+															// }
+															// ]
+															// }]
+															// },
+															{
+																kind : "Item",
+																components : [ {
+																	layoutKind : enyo.HFlexLayout,
+																	components : [
+																			{
+																				kind : "Button",
+																				name : "btnAdd",
+																				className : "enyo-button-affirmative",
+																				flex : 1,
+																				caption : "Guardar",
+																				onclick : "saveInspectionForecast"
+																			},
+																			{
+																				kind : "Button",
+																				name : "btnCancelCreate",
+																				className : "enyo-button-negative",
+																				flex : 1,
+																				caption : "Cancelar",
+																				onclick : "onCancel"
+																			} ]
+																} ]
+															} ]
+												} ]
+											} ]
 
 								},
 								{
@@ -242,11 +264,11 @@ enyo
 												kind : "Header",
 												name : "encabezado",
 												className : "listFirst",
-												style : "font-size:13px;height:20px;width:1500px;background-color:#DABD8B;",
+												style : "font-size:13px;height:20px;background-color:#DABD8B;",
 												components : [
 														{
 															content : "Ganadero",
-															style : "width:300px;text-align:center;"
+															style : "width:250px;text-align:center;"
 														},
 														{
 															content : "Autorización",
@@ -279,7 +301,7 @@ enyo
 												horizontal : false,
 												autoHorizontal : false,
 												flex : 1,
-												style : "width:1500px;",
+												// style : "width:1500px;",
 												className : "listBG",
 												onScroll : "scroll",
 												components : [ {
@@ -296,7 +318,7 @@ enyo
 														components : [
 																{
 																	name : "listRancher",
-																	style : "width:300px;text-align:center;",
+																	style : "width:250px;text-align:left;",
 																	content : ""
 																},
 																{
@@ -344,21 +366,17 @@ enyo
 													components : [
 															{
 																kind : "enyo.IconButton",
-																flex : 1,
+																// flex : 1,
+																style : "width:100px;",
 																label : "Eliminar",
 																onclick : "onEliminar"
 															},
 															{
 																kind : "enyo.IconButton",
-																flex : 1,
-																label : "Mover Arriba",
-																onclick : "onMoverArriba"
-															},
-															{
-																kind : "enyo.IconButton",
-																flex : 1,
-																label : "Mover Abajo",
-																onclick : "onMoverAbajo"
+																// flex : 1,
+																style : "width:100px;",
+																label : "Cancelar",
+																onclick : "onCancel"
 															}, ]
 												}
 
@@ -372,14 +390,14 @@ enyo
 				switch (inSender.name) {
 				case "FormScroller":
 					if (this.$.FormScroller.getScrollTop() < -20) {
-						this.$.FormScroller.scrollTo(0, 0);
+						this.$.FormScroller.scrollTo(30, 0);
 					}
 					break;
 				case "listaScroller":
 					if (this.$.listaScroller.getScrollTop() < -20) {
 						// this.$.listaScroller.setScrollTop(0);
 						this.$.listaScroller.scrollTo(0, 0);
-					}else if (this.$.listaScroller.getScrollTop() > (this.objList.length * ))
+					}
 				}
 
 			},
@@ -389,6 +407,19 @@ enyo
 			},
 			resetValues : function() {
 				// TODO: Reset form values
+			},
+			cambioDeFecha : function() {
+				var fmt = new enyo.g11n.DateFmt({
+					format : "yyyy/MM/dd",
+					locale : new enyo.g11n.Locale("es_es")
+				});
+				if (this.$.fechaPicker.getValue() != null) {
+					this.fecha = fmt.format(this.$.fechaPicker.getValue());
+				} else {
+					this.fecha = undefined;
+				}
+				this.updateList();
+
 			},
 			selectForecast : function(inSender, inEvent) {
 				if (this.objList[inEvent.rowIndex]) {
@@ -416,20 +447,17 @@ enyo
 					this.$.listCattleType.setContent(cacheCattle
 							.getByID(objFore.cattle_type).cattype_name);
 					this.$.listQuantity.setContent(objFore.quantity);
-					try {
-						if (cacheBY.getByID(objFore.barnyards[0]).location_id == 1) {
-							this.$.listLocation.setContent("Chihuahua");
-						} else {
-							this.$.listLocation.setContent("Zona Sur");
-						}
-					} catch (e) {
-						this.$.listLocation.setContent("");
+
+					if (objFore.barnyards[0].location_id == 1) {
+						this.$.listLocation.setContent("Chihuahua");
+					} else {
+						this.$.listLocation.setContent("Zona Sur");
 					}
+
 					var strBarnyards = "";
 					for (i in objFore.barnyards) {
 						strBarnyards = strBarnyards
-								+ cacheBY.getByID(objFore.barnyards[i]).barnyard_code
-								+ ", ";
+								+ objFore.barnyards[i].barnyard_code + ", ";
 
 					}
 					strBarnyards = strBarnyards.slice(0, -2);
@@ -457,9 +485,11 @@ enyo
 						this.$.listLocation.applyStyle("color", null);
 						this.$.listBarnyards.applyStyle("color", null);
 					}
-
+					this.totalItems++;
 					return true;
 				}
+
+				return false;
 			},
 			dropForecast : function(inSender, inIndex) {
 				if (cacheInspFore
@@ -470,10 +500,16 @@ enyo
 				}
 			},
 			updateList : function() {
+				this.totalItems = 0;
 				this.objList = [];
-				this.objList = cacheInspFore.get();
+				this.arrAllForecasts = [];
+				this.arrAllForecasts = cacheInspFore.get();
+				for (i in this.arrAllForecasts) {
+					if (this.arrAllForecasts[i].fore_date == this.fecha) {
+						this.objList.push(this.arrAllForecasts[i]);
+					}
+				}
 				this.$.forecastList.render();
-				// this.$.slidingpane.render();
 			},
 			getSelected : function() {
 				return this.objList[this.iSelected];
@@ -771,8 +807,8 @@ enyo
 			addInspectionForecast : function() {
 				var objForecast = this.getInspectionForecast();
 				if (objForecast) {
-					this.iCreated = cacheInspFore.addForecast(this
-							.getInspectionForecast(), this, "afterAddInspFore");
+					this.iCreated = cacheInspFore.addForecast(objForecast,
+							this, "afterAddInspFore");
 				}
 			},
 			afterAddInspFore : function(objForecast) {
@@ -785,7 +821,7 @@ enyo
 			},
 			onMoverArriba : function() {
 				console.log("mover arriba");
-				
+
 			},
 			onMoverAbajo : function() {
 				console.log("mover abajo");
