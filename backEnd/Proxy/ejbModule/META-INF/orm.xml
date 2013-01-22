@@ -732,7 +732,7 @@
 		<table name="ctrl_inspection_forecast" />
 		<named-query name="TODAY_INSPECTION_FORECAST">
 			<description>Retrieves a single record that represents todays forecast list</description>
-			<query>SELECT forecast FROM InspectionForecast forecast WHERE forecast.forecastDate = current_date</query>
+			<query>SELECT forecast FROM InspectionForecast forecast ORDER BY forecast.forecastDate</query>
 		</named-query>
 		<attributes>
 			<id name="forecastId">

@@ -19,8 +19,7 @@ enyo
 			objRan : null,
 			objLoc : null,
 			objCattleType : null,
-			objList : [],
-			arrAllForecasts : [],
+			objList : [],			
 			arrBY : [],
 			arrTempPopupSelection : [],
 			itemSelectedPopup : -1,
@@ -492,21 +491,17 @@ enyo
 				return false;
 			},
 			dropForecast : function(inSender, inIndex) {
-				if (cacheInspFore
-						.del(this.objList[inIndex], this, "updateList")) {
-					return true;
-				} else {
-					return false;
-				}
+				cacheInspFore.deleteForecastDetail(this.objList[inIndex], this, "updateList");
+					
 			},
 			updateList : function() {
 				this.totalItems = 0;
 				this.objList = [];
-				this.arrAllForecasts = [];
-				this.arrAllForecasts = cacheInspFore.get();
-				for (i in this.arrAllForecasts) {
-					if (this.arrAllForecasts[i].fore_date == this.fecha) {
-						this.objList.push(this.arrAllForecasts[i]);
+				var arrAllForecasts = [];
+				arrAllForecasts = cacheInspFore.get();
+				for (i in arrAllForecasts) {
+					if (arrAllForecasts[i].fore_date == this.fecha) {
+						this.objList.push(arrAllForecasts[i]);
 					}
 				}
 				this.$.forecastList.render();

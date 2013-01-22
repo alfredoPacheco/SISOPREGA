@@ -119,8 +119,7 @@ enyo.kind({
 		if (this.saveForecast(objForecast)== true){
 			if (this.saveForecastDetail(objForecast)==true){
 				if (this.saveForecastBarnyard(objForecast)==true){
-					this.arrForecast.push(objForecast);
-					cbObj.objList = this.arrForecast;					
+					this.arrForecast.push(objForecast);										
 					if(cbMethod){
 						cbObj[cbMethod](objForecast);
 					}
@@ -134,7 +133,7 @@ enyo.kind({
 		objToSend.forecastDate =  "" + DateOut(objForecast.fore_date);
 		var cgCreate = consumingGateway.Create("InspectionForecast", objToSend);
 		if (cgCreate.exceptionId == 0){ //Created successfully			
-			objForecast.id = cgCreate.generatedId;			
+			objForecast.id = cgCreate.generatedId;
 			return true;
 		}
 		else{ //Error			
@@ -197,10 +196,29 @@ enyo.kind({
 		return true;
 		
 	},
-	deleteForecastDetail : function(iFDetail){
-		var objToSend = this.adaptFDetailsToRequest(oFDetail);
-		consumingGateway.Delete("InspectionForecastDetail", objToSend);
-		get();
+	deleteForecastDetail : function(objFore, cbObj, cbMethod){
+		var objToSend = {};
+		objToSend.fdId = objFore.fore_details_id;
+
+		var cgDelete = consumingGateway.Delete("InspectionForecastDetail",objToSend);
+		if (cgDelete.exceptionId == 0) { // Deleted successfully			
+			var tamanio = this.get().length;
+			for ( var i = 0; i < tamanio; i++) {
+				if (this.arrForecast[i].fore_details_id == objFore.fore_details_id) {
+					this.arrForecast.splice(i, 1);					
+					if (cbMethod) {
+						cbObj[cbMethod]();
+					}
+					return true;
+				}
+			}
+			return false;
+		} else { // Error
+			cacheMan.setMessage("", "[Exception ID: "
+					+ cgDelete.exceptionId + "] Descripcion: "
+					+ cgDelete.exceptionDescription);
+			return false;
+		}				
 	},
 	getDetails : function(iForecastId) {
 		var result = [];
