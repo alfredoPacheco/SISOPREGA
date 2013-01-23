@@ -115,7 +115,7 @@ enyo.kind({
 		return arrAux;
 		
 	},
-	addForecast:function(objForecast,cbObj,cbMethod){
+	createForecast:function(objForecast,cbObj,cbMethod){
 		if (this.saveForecast(objForecast)== true){
 			if (this.saveForecastDetail(objForecast)==true){
 				if (this.saveForecastBarnyard(objForecast)==true){
@@ -127,6 +127,19 @@ enyo.kind({
 				}
 			}
 		}
+	},
+	addForecast:function(objForecast,cbObj,cbMethod){
+		
+		if (this.saveForecastDetail(objForecast)==true){
+			if (this.saveForecastBarnyard(objForecast)==true){
+				this.arrForecast.push(objForecast);										
+				if(cbMethod){
+					cbObj[cbMethod](objForecast);
+				}
+				
+			}
+		}
+		
 	},
 	saveForecast : function(objForecast) {
 		var objToSend = {};
@@ -183,7 +196,7 @@ enyo.kind({
 	},
 	saveForecastBarnyard : function(objForecast) {
 		var objToSend = {};
-		objToSend.fdId = objForecast.id;		
+		objToSend.fdId = objForecast.fore_details_id;		
 		for (i in objForecast.barnyards){
 			objToSend.barnyardId = objForecast.barnyards[i].barnyard_id;	
 			var cgCreate = consumingGateway.Create("InspectionForecastBarnyard", objToSend);
@@ -212,6 +225,9 @@ enyo.kind({
 					return true;
 				}
 			}
+			//TODO: Definir descripcion de error local:
+			cacheMan.setMessage("", "[Exception ID: LOCAL] Descripcion: Ha ocurrido un error");
+					
 			return false;
 		} else { // Error
 			cacheMan.setMessage("", "[Exception ID: "

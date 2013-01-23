@@ -43,6 +43,7 @@ import com.tramex.sisoprega.dto.InspectionForecastDetail;
  * MM/DD/YYYY
  * ----------  ---------------------------  -------------------------------------------
  * 01/12/2013  Diego Torres                  Initial Version.
+ * 01/22/2013  Alfredo Pacheco				 Returning fdId instead forecastId when creating this.
  * ====================================================================================
  * </PRE>
  * 
@@ -72,7 +73,7 @@ public class InspectionForecastDetailBean extends BaseBean implements Cruddable 
         log.finer("InspectionForecastDetail persisted on database");
         em.flush();
 
-        String sId = String.valueOf(forecastDetail.getForecastId());
+        String sId = String.valueOf(forecastDetail.getFdId());
         log.finer("Setting InspectionForecastDetail id in response: " + sId);
         response.setGeneratedId(sId);
         response.setError(new Error("0", "SUCCESS", "proxy.InspectionForecastDetailBean.Create"));

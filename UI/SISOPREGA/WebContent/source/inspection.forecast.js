@@ -19,7 +19,7 @@ enyo
 			objRan : null,
 			objLoc : null,
 			objCattleType : null,
-			objList : [],			
+			objList : [],
 			arrBY : [],
 			arrTempPopupSelection : [],
 			itemSelectedPopup : -1,
@@ -412,11 +412,8 @@ enyo
 					format : "yyyy/MM/dd",
 					locale : new enyo.g11n.Locale("es_es")
 				});
-				if (this.$.fechaPicker.getValue() != null) {
-					this.fecha = fmt.format(this.$.fechaPicker.getValue());
-				} else {
-					this.fecha = undefined;
-				}
+				
+				this.fecha = fmt.format(this.$.fechaPicker.getValue());
 				this.updateList();
 
 			},
@@ -446,23 +443,26 @@ enyo
 					this.$.listCattleType.setContent(cacheCattle
 							.getByID(objFore.cattle_type).cattype_name);
 					this.$.listQuantity.setContent(objFore.quantity);
-
-					if (objFore.barnyards[0].location_id == 1) {
-						this.$.listLocation.setContent("Chihuahua");
-					} else {
-						this.$.listLocation.setContent("Zona Sur");
+					
+					if (objFore.barnyards.length > 0){
+						if (objFore.barnyards[0].location_id == 1) {
+							this.$.listLocation.setContent("Chihuahua");
+						} else {
+							this.$.listLocation.setContent("Zona Sur");
+						}
+	
+						var strBarnyards = "";
+						for (i in objFore.barnyards) {
+							strBarnyards = strBarnyards
+									+ objFore.barnyards[i].barnyard_code + ", ";
+	
+						}					
+						strBarnyards = strBarnyards.slice(0, -2);
+						this.$.listBarnyards.setContent(strBarnyards);
+					}else {
+						this.$.listLocation.setContent("");
+						this.$.listBarnyards.setContent("");
 					}
-
-					var strBarnyards = "";
-					for (i in objFore.barnyards) {
-						strBarnyards = strBarnyards
-								+ objFore.barnyards[i].barnyard_code + ", ";
-
-					}
-					strBarnyards = strBarnyards.slice(0, -2);
-
-					this.$.listBarnyards.setContent(strBarnyards);
-
 					if (inIndex == this.iSelected) {
 						this.$.rowItem.applyStyle("background-color",
 								"cadetblue");
@@ -490,9 +490,14 @@ enyo
 
 				return false;
 			},
-			dropForecast : function(inSender, inIndex) {
-				cacheInspFore.deleteForecastDetail(this.objList[inIndex], this, "updateList");
-					
+			dropForecast : function() {
+				if(cacheInspFore.deleteForecastDetail(this.objList[this.iSelected], this,
+						"updateList")==true){
+					return true;
+				}else{
+					return false;
+				}
+
 			},
 			updateList : function() {
 				this.totalItems = 0;
@@ -709,11 +714,6 @@ enyo
 
 				switch (inSender.name) {
 				case "rancherInput":
-					console.log('input key press with value:' + inSender.value
-							+ ' and key: '
-							+ String.fromCharCode(inEvent.keyCode));
-					console.log('value = ' + cacheRanchers.findRancher(value));
-
 					arrAux = cacheRanchers.findRancher(value);
 					if (arrAux.length > 0) {
 						this.$.options.setItems(arrAux);
@@ -756,10 +756,6 @@ enyo
 			},
 			getInspectionForecast : function() {
 
-				var fmt = new enyo.g11n.DateFmt({
-					format : "yyyy/MM/dd",
-					locale : new enyo.g11n.Locale("es_es")
-				});
 				var objInspFore = {
 					id : undefined,
 					fore_details_id : undefined,
@@ -774,7 +770,7 @@ enyo
 
 				objInspFore.rancher_id = this.objRan.value;
 				objInspFore.auth = this.$.autorizacion.getValue();
-				objInspFore.fore_date = fmt.format(new Date());
+				objInspFore.fore_date = this.fecha;
 				objInspFore.origin = this.$.origen.getValue();
 				objInspFore.cattle_type = this.objCattleType.value;
 				objInspFore.quantity = this.$.cantidad.getValue();
@@ -800,10 +796,18 @@ enyo
 				return objInspFore;
 			},
 			addInspectionForecast : function() {
-				var objForecast = this.getInspectionForecast();
+				var objForecast = this.getInspectionForecast();				
 				if (objForecast) {
-					this.iCreated = cacheInspFore.addForecast(objForecast,
-							this, "afterAddInspFore");
+					if (this.totalItems > 0){
+						objForecast.id = this.objList[0].id;
+						this.iCreated = cacheInspFore.addForecast(objForecast,
+								this, "afterAddInspFore");	
+					}else {
+						this.iCreated = cacheInspFore.createForecast(objForecast,
+								this, "afterAddInspFore");
+					}
+					
+					
 				}
 			},
 			afterAddInspFore : function(objForecast) {
@@ -822,7 +826,10 @@ enyo
 				console.log("mover abajo");
 			},
 			onEliminar : function() {
-				console.log("eliminar");
+				if(this.dropForecast()==true){
+					this.iSelected = null;
+					this.$.draAdd.setOpen(false);
+				}			
 			}
 
 		});
