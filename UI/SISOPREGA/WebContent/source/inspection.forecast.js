@@ -65,7 +65,13 @@ enyo
 												name : "encabezadoFecha",
 												style : "background-color:#DABD8B;",
 												pack : "center",
-												components : [ {
+												components : [{
+													kind: "Button",
+													content: "Hoy",
+													style : "background-color:#DABD8B;",
+													onclick:"cambiarAHoy"
+														
+												},{
 													kind : "DatePicker",
 													label : "",
 													name : "fechaPicker",
@@ -421,6 +427,10 @@ enyo
 
 				this.fecha = fmt.format(this.$.fechaPicker.getValue());
 				this.updateList();				
+			},
+			cambiarAHoy: function(){
+				this.$.fechaPicker.setValue(new Date());
+				this.cambioDeFecha();
 			},
 			selectForecast : function(inSender, inEvent) {
 				if (objFore = this.objList[inEvent.rowIndex]) {
