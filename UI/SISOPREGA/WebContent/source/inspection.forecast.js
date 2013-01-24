@@ -65,31 +65,33 @@ enyo
 												name : "encabezadoFecha",
 												style : "background-color:#DABD8B;",
 												pack : "center",
-												components : [{
-													kind: "Button",
-													content: "Hoy",
-													style : "background-color:#DABD8B;",
-													onclick:"cambiarAHoy"
-														
-												},{
-													kind : "DatePicker",
-													label : "",
-													name : "fechaPicker",
-													onChange : "cambioDeFecha"
-												} ]
+												components : [
+														{
+															kind : "Button",
+															content : "Hoy",
+															style : "background-color:#DABD8B;",
+															onclick : "cambiarAHoy"
+
+														},
+														{
+															kind : "DatePicker",
+															label : "",
+															name : "fechaPicker",
+															onChange : "cambioDeFecha"
+														} ]
 											},
 											{
 												kind : enyo.Scroller,
 												name : "FormScroller",
 												horizontal : false,
 												autoHorizontal : false,
-												flex : 1,
+												flex :1,
 												onScroll : "scroll",
 												components : [ {
 													kind : "RowGroup",
 													defaultKind : "HFlexBox",
 													caption : "",
-													style : "color:#FFF;",
+													style : "color:#FFF;",													
 													components : [
 															{
 																kind : "Item",
@@ -130,7 +132,7 @@ enyo
 																	layoutKind : enyo.HFlexLayout,
 																	components : [ {
 																		kind : "Input",
-																		name : "origen", 
+																		name : "origen",
 																		hint : "Origen",
 																		flex : 1
 																	} ]
@@ -142,7 +144,7 @@ enyo
 																	layoutKind : enyo.HFlexLayout,
 																	components : [ {
 																		kind : "Input",
-																		name : "cattle_type_id", 
+																		name : "cattle_type_id",
 																		hint : "Clase",
 																		onkeydown : "teclaPresionada",
 																		onblur : "lostFocus",
@@ -175,13 +177,16 @@ enyo
 																				onkeydown : "teclaPresionada",
 																				onblur : "lostFocus",
 																				flex : 1
-																			},
+																			}
 																	// {
-																	// kind :
+																	// kind
+																	// :
 																	// "IconButton",
-																	// icon :
+																	// icon
+																	// :
 																	// "images/menu-icon-new.png",
-																	// onclick :
+																	// onclick
+																	// :
 																	// "contextBarnyardsClicked"
 																	// }
 																	]
@@ -197,63 +202,72 @@ enyo
 																				name : "corrales",
 																				hint : "Corrales",
 																				flex : 1
-																			},
-																	// {
-																	// kind :
-																	// "IconButton",
-																	// icon :
-																	// "images/menu-icon-new.png",
-																	// onclick :
-																	// "contextBarnyardsClicked"
-																	// }
-																	]
+																			}]
 																} ]
-															},
-															// {
-															// kind : "Item",
-															// components : [ {
-															// layoutKind :
-															// enyo.HFlexLayout,
-															// style:"height:40px",
-															// components : [
-															// {kind:"Scroller",
-															// horizontal:true,vertical:false,
-															// flex:1,
-															// components: [
-															// { name: "bys",
-															// layoutKind:
-															// enyo.HFlexLayout,
-															// align:"left",
-															// style:
-															// "width:100px",
-															// components: []
-															// }]
-															// }
-															// ]
-															// }]
-															// },
+															}
+													// {
+													// kind : "Item",
+													// components : [ {
+													// layoutKind :
+													// enyo.HFlexLayout,
+													// style:"height:40px",
+													// components : [
+													// {kind:"Scroller",
+													// horizontal:true,vertical:false,
+													// flex:1,
+													// components: [
+													// { name: "bys",
+													// layoutKind:
+													// enyo.HFlexLayout,
+													// align:"left",
+													// style:
+													// "width:100px",
+													// components: []
+													// }]
+													// }
+													// ]
+													// }]
+													// },
+
+													]
+												} ]
+											},
+											{
+												kind : "Drawer",
+												name : "draAdd",
+												animate : false,
+												components : [ {
+													kind : "Button",
+													name : "btnAdd",
+													className : "enyo-button-affirmative",
+													caption : "Agregar",
+													onclick : "saveInspectionForecast"
+												} ]
+											},
+											{
+												kind : "Drawer",
+												name : "draUpdate",
+												animate : false,
+												open : false,
+												components : [ {
+													layoutKind : "HFlexLayout",
+													align : "center",
+													components : [
 															{
-																kind : "Item",
-																components : [ {
-																	layoutKind : enyo.HFlexLayout,
-																	components : [
-																			{
-																				kind : "Button",
-																				name : "btnAdd",
-																				className : "enyo-button-affirmative",
-																				flex : 1,
-																				caption : "Guardar",
-																				onclick : "saveInspectionForecast"
-																			},
-																			{
-																				kind : "Button",
-																				name : "btnCancelCreate",
-																				className : "enyo-button-negative",
-																				flex : 1,
-																				caption : "Cancelar",
-																				onclick : "onCancel"
-																			} ]
-																} ]
+																kind : "Button",
+																name : "btnUpdate",
+																className : "enyo-button-affirmative",
+																flex : 1,
+																caption : "Actualizar",
+																onclick : "updateRancher"
+															},
+															{
+																kind : "Button",
+																name : "btnCancel",
+																className : "enyo-button-negative",
+																flex : 1,
+																caption : "Cancelar",
+																onclick : "onCancel"
 															} ]
 												} ]
 											} ]
@@ -365,7 +379,7 @@ enyo
 
 											{
 												kind : "Drawer",
-												name : "draAdd",
+												name : "draDel",
 												open : false,
 												components : [ {
 													kind : "Toolbar",
@@ -407,12 +421,12 @@ enyo
 				}
 
 			},
-			ready : function() {				
+			ready : function() {
 				this.updateList();
 			},
 			resetValues : function() {
-				this.$.rancherInput.setValue(""); 
-				this.$.autorizacion.setValue(""); 
+				this.$.rancherInput.setValue("");
+				this.$.autorizacion.setValue("");
 				this.$.origen.setValue("");
 				this.$.cattle_type_id.setValue("");
 				this.$.cantidad.setValue("");
@@ -426,9 +440,9 @@ enyo
 				});
 
 				this.fecha = fmt.format(this.$.fechaPicker.getValue());
-				this.updateList();				
+				this.updateList();
 			},
-			cambiarAHoy: function(){
+			cambiarAHoy : function() {
 				this.$.fechaPicker.setValue(new Date());
 				this.cambioDeFecha();
 			},
@@ -441,7 +455,8 @@ enyo
 									+ " " + auxRancher.mother_name + " "
 									+ auxRancher.first_name);
 						} else {
-							this.$.rancherInput.setValue(auxRancher.company_name);
+							this.$.rancherInput
+									.setValue(auxRancher.company_name);
 						}
 					}
 					this.$.autorizacion.setValue(objFore.auth);
@@ -469,11 +484,14 @@ enyo
 						this.$.localidad.setValue("");
 						this.$.corrales.setValue("");
 					}
-										
+
 					this.iSelected = inEvent.rowIndex;
 					this.totalItems = 0;
 					this.$.forecastList.render();
-					this.$.draAdd.setOpen(true);
+					this.$.draDel.render();
+					this.$.draDel.setOpen(true);
+					this.$.draAdd.setOpen(false);
+					this.$.draUpdate.setOpen(true);
 				}
 			},
 			setupForecastRow : function(inSender, inIndex) {
@@ -558,7 +576,9 @@ enyo
 				this.objList = [];
 				var arrAllForecasts = [];
 				this.iSelected = null;
-				this.$.draAdd.setOpen(false);
+				this.$.draDel.setOpen(false);
+				this.$.draUpdate.setOpen(false);
+				this.$.draAdd.setOpen(true);
 				this.resetValues();
 				arrAllForecasts = cacheInspFore.get();
 				for (i in arrAllForecasts) {
@@ -874,7 +894,9 @@ enyo
 			},
 			onCancel : function() {
 				this.iSelected = null;
-				this.$.draAdd.setOpen(false);
+				this.$.draDel.setOpen(false);
+				this.$.draAdd.setOpen(true);
+				this.$.draUpdate.setOpen(false);
 				this.totalItems = 0;
 				this.resetValues();
 				this.$.forecastList.render();
