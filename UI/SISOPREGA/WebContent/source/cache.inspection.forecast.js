@@ -29,8 +29,6 @@ enyo.kind({
 				
 				objInsFore.fore_date = objAux.fore_date;
 				objInsFore.id		=	objAux.id;
-//ForecastBarnyards::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::			
-				objInsFore.barnyards = this.getForecastBarnyard(objAux.id);
 				
 //ForecastDetails:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::				
 				var arrForeDetailAux = this.getForecastDetails(objAux.id);
@@ -46,6 +44,12 @@ enyo.kind({
 					objInsFore.cattle_type=			arrForeDetailAux.cattle_type;
 					objInsFore.quantity=			arrForeDetailAux.quantity;
 				}
+				
+//ForecastBarnyards::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+				if(objInsFore.fore_details_id){
+					objInsFore.barnyards = this.getForecastBarnyard(objInsFore.fore_details_id);
+				}
+
 				
 				this.arrForecast[a]=objInsFore;				
 				
@@ -216,8 +220,38 @@ enyo.kind({
 		var cgDelete = consumingGateway.Delete("InspectionForecastDetail",objToSend);
 		if (cgDelete.exceptionId == 0) { // Deleted successfully			
 			var tamanio = this.get().length;
-			for ( var i = 0; i < tamanio; i++) {
+			var foreAux = {};
+			for ( var i = 0; i < tamanio; i++) {				
 				if (this.arrForecast[i].fore_details_id == objFore.fore_details_id) {
+					foreAux.id = this.arrForecast[i].id;
+					foreAux.fore_date = this.arrForecast[i].fore_date;					
+					this.arrForecast[i] = foreAux;					
+					if (cbMethod) {
+						cbObj[cbMethod]();
+					}
+					return true;
+				}
+			}
+			//TODO: Definir descripcion de error local:
+			cacheMan.setMessage("", "[Exception ID: LOCAL] Descripcion: Ha ocurrido un error");
+					
+			return false;
+		} else { // Error
+			cacheMan.setMessage("", "[Exception ID: "
+					+ cgDelete.exceptionId + "] Descripcion: "
+					+ cgDelete.exceptionDescription);
+			return false;
+		}				
+	},
+	deleteForecast: function(objFore, cbObj, cbMethod){
+		var objToSend = {};
+		objToSend.forecastId = objFore.id;
+
+		var cgDelete = consumingGateway.Delete("InspectionForecast",objToSend);
+		if (cgDelete.exceptionId == 0) { // Deleted successfully			
+			var tamanio = this.get().length;
+			for ( var i = 0; i < tamanio; i++) {
+				if (this.arrForecast[i].id == objFore.id) {
 					this.arrForecast.splice(i, 1);					
 					if (cbMethod) {
 						cbObj[cbMethod]();

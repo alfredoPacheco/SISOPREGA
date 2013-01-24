@@ -19,6 +19,7 @@ enyo
 			objRan : null,
 			objLoc : null,
 			objCattleType : null,
+			_id : undefined,
 			objList : [],
 			arrBY : [],
 			arrTempPopupSelection : [],
@@ -123,7 +124,7 @@ enyo
 																	layoutKind : enyo.HFlexLayout,
 																	components : [ {
 																		kind : "Input",
-																		name : "origen",
+																		name : "origen", 
 																		hint : "Origen",
 																		flex : 1
 																	} ]
@@ -135,7 +136,7 @@ enyo
 																	layoutKind : enyo.HFlexLayout,
 																	components : [ {
 																		kind : "Input",
-																		name : "cattle_type_id",
+																		name : "cattle_type_id", 
 																		hint : "Clase",
 																		onkeydown : "teclaPresionada",
 																		onblur : "lostFocus",
@@ -400,26 +401,67 @@ enyo
 				}
 
 			},
-			ready : function() {
-				this.resetValues();
+			ready : function() {				
 				this.updateList();
 			},
 			resetValues : function() {
-				// TODO: Reset form values
+				this.$.rancherInput.setValue(""); 
+				this.$.autorizacion.setValue(""); 
+				this.$.origen.setValue("");
+				this.$.cattle_type_id.setValue("");
+				this.$.cantidad.setValue("");
+				this.$.localidad.setValue("");
+				this.$.corrales.setValue("");
 			},
 			cambioDeFecha : function() {
 				var fmt = new enyo.g11n.DateFmt({
 					format : "yyyy/MM/dd",
 					locale : new enyo.g11n.Locale("es_es")
 				});
-				
-				this.fecha = fmt.format(this.$.fechaPicker.getValue());
-				this.updateList();
 
+				this.fecha = fmt.format(this.$.fechaPicker.getValue());
+				this.updateList();				
 			},
 			selectForecast : function(inSender, inEvent) {
-				if (this.objList[inEvent.rowIndex]) {
+				if (objFore = this.objList[inEvent.rowIndex]) {
+					var auxRancher = cacheRanchers.getByID(objFore.rancher_id);
+					if (auxRancher) {
+						if (auxRancher.rancher_type == 1) {
+							this.$.rancherInput.setValue(auxRancher.last_name
+									+ " " + auxRancher.mother_name + " "
+									+ auxRancher.first_name);
+						} else {
+							this.$.rancherInput.setValue(auxRancher.company_name);
+						}
+					}
+					this.$.autorizacion.setValue(objFore.auth);
+					this.$.origen.setValue(objFore.origin);
+					this.$.cattle_type_id.setValue(cacheCattle
+							.getByID(objFore.cattle_type).cattype_name);
+					this.$.cantidad.setValue(objFore.quantity);
+
+					if (objFore.barnyards.length > 0) {
+						if (objFore.barnyards[0].location_id == 1) {
+							this.$.localidad.setValue("Chihuahua");
+						} else {
+							this.$.localidad.setValue("Zona Sur");
+						}
+
+						var strBarnyards = "";
+						for (i in objFore.barnyards) {
+							strBarnyards = strBarnyards
+									+ objFore.barnyards[i].barnyard_code + ", ";
+
+						}
+						strBarnyards = strBarnyards.slice(0, -2);
+						this.$.corrales.setValue(strBarnyards);
+					} else {
+						this.$.localidad.setValue("");
+						this.$.corrales.setValue("");
+					}
+										
 					this.iSelected = inEvent.rowIndex;
+					this.totalItems = 0;
 					this.$.forecastList.render();
 					this.$.draAdd.setOpen(true);
 				}
@@ -443,23 +485,23 @@ enyo
 					this.$.listCattleType.setContent(cacheCattle
 							.getByID(objFore.cattle_type).cattype_name);
 					this.$.listQuantity.setContent(objFore.quantity);
-					
-					if (objFore.barnyards.length > 0){
+
+					if (objFore.barnyards.length > 0) {
 						if (objFore.barnyards[0].location_id == 1) {
 							this.$.listLocation.setContent("Chihuahua");
 						} else {
 							this.$.listLocation.setContent("Zona Sur");
 						}
-	
+
 						var strBarnyards = "";
 						for (i in objFore.barnyards) {
 							strBarnyards = strBarnyards
 									+ objFore.barnyards[i].barnyard_code + ", ";
-	
-						}					
+
+						}
 						strBarnyards = strBarnyards.slice(0, -2);
 						this.$.listBarnyards.setContent(strBarnyards);
-					}else {
+					} else {
 						this.$.listLocation.setContent("");
 						this.$.listBarnyards.setContent("");
 					}
@@ -491,22 +533,30 @@ enyo
 				return false;
 			},
 			dropForecast : function() {
-				if(cacheInspFore.deleteForecastDetail(this.objList[this.iSelected], this,
-						"updateList")==true){
+
+				if (cacheInspFore.deleteForecastDetail(
+						this.objList[this.iSelected], this, "updateList") == true) {
 					return true;
-				}else{
+				} else {
 					return false;
 				}
 
 			},
 			updateList : function() {
+				this._id = undefined;
 				this.totalItems = 0;
 				this.objList = [];
 				var arrAllForecasts = [];
+				this.iSelected = null;
+				this.$.draAdd.setOpen(false);
+				this.resetValues();
 				arrAllForecasts = cacheInspFore.get();
 				for (i in arrAllForecasts) {
 					if (arrAllForecasts[i].fore_date == this.fecha) {
-						this.objList.push(arrAllForecasts[i]);
+						this._id = arrAllForecasts[i].id;
+						if (arrAllForecasts[i].fore_details_id) {
+							this.objList.push(arrAllForecasts[i]);
+						}
 					}
 				}
 				this.$.forecastList.render();
@@ -796,18 +846,17 @@ enyo
 				return objInspFore;
 			},
 			addInspectionForecast : function() {
-				var objForecast = this.getInspectionForecast();				
+				var objForecast = this.getInspectionForecast();
 				if (objForecast) {
-					if (this.totalItems > 0){
-						objForecast.id = this.objList[0].id;
+					if (this._id) {
+						objForecast.id = this._id;
 						this.iCreated = cacheInspFore.addForecast(objForecast,
-								this, "afterAddInspFore");	
-					}else {
-						this.iCreated = cacheInspFore.createForecast(objForecast,
 								this, "afterAddInspFore");
+					} else {
+						this.iCreated = cacheInspFore.createForecast(
+								objForecast, this, "afterAddInspFore");
 					}
-					
-					
+
 				}
 			},
 			afterAddInspFore : function(objForecast) {
@@ -816,6 +865,8 @@ enyo
 			onCancel : function() {
 				this.iSelected = null;
 				this.$.draAdd.setOpen(false);
+				this.totalItems = 0;
+				this.resetValues();
 				this.$.forecastList.render();
 			},
 			onMoverArriba : function() {
@@ -826,10 +877,9 @@ enyo
 				console.log("mover abajo");
 			},
 			onEliminar : function() {
-				if(this.dropForecast()==true){
-					this.iSelected = null;
-					this.$.draAdd.setOpen(false);
-				}			
+				if (this.dropForecast() == true) {
+					this.onCancel();
+				}
 			}
 
 		});
