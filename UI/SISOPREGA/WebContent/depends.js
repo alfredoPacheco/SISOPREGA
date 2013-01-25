@@ -42,5 +42,6 @@ enyo.depends(
 	"source/catalogs.barnyards.capacity.js",
 	"source/catalogs.cattle.js",
 	"source/inspection.forecast.js",
-	"source/cache.inspection.forecast.js"
+	"source/cache.inspection.forecast.js",
+	"source/controls.autocomplete.js"	
 );
