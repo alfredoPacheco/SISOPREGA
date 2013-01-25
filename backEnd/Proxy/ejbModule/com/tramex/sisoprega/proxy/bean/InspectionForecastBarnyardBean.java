@@ -15,10 +15,11 @@
  */
 package com.tramex.sisoprega.proxy.bean;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.ejb.Stateless;
-import javax.persistence.TypedQuery;
 
 import com.tramex.sisoprega.common.BaseResponse;
 import com.tramex.sisoprega.common.CreateGatewayResponse;
@@ -44,6 +45,7 @@ import com.tramex.sisoprega.dto.InspectionForecastBarnyard;
  * ----------  ---------------------------  -------------------------------------------
  * 01/13/2013  Diego Torres                  Initial Version.
  * 01/24/2013  Alfredo Pacheco				 Added FORECAST_BARNYARD_BY_FORECAST_DETAIL_ID implementatino for delete.
+ * 01/22/2013  Diego Torres                  Implementing DataModel.
  * ====================================================================================
  * </PRE>
  * 
@@ -58,34 +60,32 @@ public class InspectionForecastBarnyardBean extends BaseBean implements Cruddabl
    */
   @Override
   public CreateGatewayResponse Create(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Create");
+    this.log.entering(this.getClass().getCanonicalName(), "Create");
 
     CreateGatewayResponse response = new CreateGatewayResponse();
     InspectionForecastBarnyard forecastBarnyard = null;
     try {
       forecastBarnyard = entityFromRequest(request, InspectionForecastBarnyard.class);
 
-      log.fine("Received InspectionForecastBarnard in request: " + forecastBarnyard);
+      this.log.fine("Received InspectionForecastBarnard in request: " + forecastBarnyard);
 
       if (validateEntity(forecastBarnyard)) {
-        log.finer("InspectionForecastBarnyard succesfully validated");
-        em.persist(forecastBarnyard);
-        log.finer("InspectionForecastBarnyard persisted on database");
-        em.flush();
+        this.log.finer("InspectionForecastBarnyard succesfully validated");
+        dataModel.createDataModel(forecastBarnyard);
 
         String sId = String.valueOf(forecastBarnyard.getIfbId());
-        log.finer("Setting InspectionForecastBarnyard id in response: " + sId);
+        this.log.finer("Setting InspectionForecastBarnyard id in response: " + sId);
         response.setGeneratedId(sId);
         response.setError(new Error("0", "SUCCESS", "proxy.InspectionForecastBarnyardBean.Create"));
-        log.info("Reception inspectionForecastBarnyard [" + forecastBarnyard.toString() + "] created by principal[" + getLoggedUser() + "]");
+        this.log.info("Reception inspectionForecastBarnyard [" + forecastBarnyard.toString() + "] created by principal[" + getLoggedUser() + "]");
       } else {
-        log.warning("Error de validación: " + error_description);
+        this.log.warning("Error de validación: " + error_description);
         response.setError(new Error("VAL01", "Error de validación: " + error_description, "proxy.InspectionForecastBarnyardBean.Create"));
       }
 
     } catch (Exception e) {
-      log.severe("Exception found while creating InspectionForecastBarnyardBean");
-      log.throwing(this.getClass().getName(), "Create", e);
+      this.log.severe("Exception found while creating InspectionForecastBarnyardBean");
+      this.log.throwing(this.getClass().getName(), "Create", e);
 
       if (e instanceof javax.persistence.PersistenceException)
         response.setError(new Error("DB01",
@@ -96,7 +96,7 @@ public class InspectionForecastBarnyardBean extends BaseBean implements Cruddabl
       }
     }
 
-    log.exiting(this.getClass().getCanonicalName(), "Create");
+    this.log.exiting(this.getClass().getCanonicalName(), "Create");
     return response;
   }
 
@@ -105,7 +105,7 @@ public class InspectionForecastBarnyardBean extends BaseBean implements Cruddabl
    */
   @Override
   public ReadGatewayResponse Read(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Read");
+    this.log.entering(this.getClass().getCanonicalName(), "Read");
 
     ReadGatewayResponse response = new ReadGatewayResponse();
     response.setEntityName(request.getEntityName());
@@ -114,18 +114,18 @@ public class InspectionForecastBarnyardBean extends BaseBean implements Cruddabl
     try {
       forecastBarnyard = entityFromRequest(request, InspectionForecastBarnyard.class);
 
-      log.fine("Got inspectionBarnyard query from request: " + forecastBarnyard);
+      this.log.fine("Got inspectionBarnyard query from request: " + forecastBarnyard);
 
-      TypedQuery<InspectionForecastBarnyard> readQuery = null;
       String qryLogger = "";
+      String queryName = "";
+      Map<String, Object> parameters = new HashMap<String, Object>();
       if (forecastBarnyard.getIfbId() != 0) {
-        readQuery = em.createNamedQuery("FORECAST_BARNAYARD_BY_ID", InspectionForecastBarnyard.class);
-        readQuery.setParameter("fdId", forecastBarnyard.getIfbId());
+        queryName = "FORECAST_BARNAYARD_BY_ID";
+        parameters.put("fdId", forecastBarnyard.getIfbId());
         qryLogger = "By ifbId [" + forecastBarnyard.getIfbId() + "]";
-      } else if(forecastBarnyard.getFdId() != 0 ){    	  
-        readQuery = em.createNamedQuery("FORECAST_BARNYARD_BY_FORECAST_DETAIL_ID", InspectionForecastBarnyard.class);
-        log.info(String.valueOf(forecastBarnyard.getFdId()));
-        readQuery.setParameter("fdId", forecastBarnyard.getFdId());
+      } else if(forecastBarnyard.getFdId() != 0 ){
+        queryName = "FORECAST_BARNYARD_BY_FORECAST_DETAIL_ID";
+        parameters.put("getFdId", forecastBarnyard.getFdId());
         qryLogger = "By getFdId [" + forecastBarnyard.getFdId() + "]";
       } else {
         response.setError(new Error("VAL03", "El filtro especificado no es válido para detalles de la lista de inspección de ganado.",
@@ -133,7 +133,7 @@ public class InspectionForecastBarnyardBean extends BaseBean implements Cruddabl
         return response;
       }
 
-      List<InspectionForecastBarnyard> queryResults = readQuery.getResultList();
+      List<InspectionForecastBarnyard> queryResults = dataModel.readDataModelList(queryName, parameters, InspectionForecastBarnyard.class);
 
       if (queryResults.isEmpty()) {
         response.setError(new Error("VAL02", "No se encontraron datos para el filtro seleccionado", "proxy.InspectionDetails.Read"));
@@ -141,16 +141,16 @@ public class InspectionForecastBarnyardBean extends BaseBean implements Cruddabl
         response.getRecord().addAll(contentFromList(queryResults, InspectionForecastBarnyard.class));
 
         response.setError(new Error("0", "SUCCESS", "proxy.InspectionForecastBarnayrd.Read"));
-        log.info("Read operation " + qryLogger + " executed by principal[" + getLoggedUser() + "] on InspectionForecastBarnayrd");
+        this.log.info("Read operation " + qryLogger + " executed by principal[" + getLoggedUser() + "] on InspectionForecastBarnayrd");
       }
     } catch (Exception e) {
-      log.severe("Exception found while reading inspection forecast details filter");
-      log.throwing(this.getClass().getCanonicalName(), "Read", e);
+      this.log.severe("Exception found while reading inspection forecast details filter");
+      this.log.throwing(this.getClass().getCanonicalName(), "Read", e);
 
       response.setError(new Error("DB02", "Error en la base de datos: " + e.getMessage(), "proxy.InspectionForecastBarnayrd.Read"));
     }
 
-    log.exiting(this.getClass().getCanonicalName(), "Read");
+    this.log.exiting(this.getClass().getCanonicalName(), "Read");
     return response;
   }
 
@@ -159,35 +159,34 @@ public class InspectionForecastBarnyardBean extends BaseBean implements Cruddabl
    */
   @Override
   public UpdateGatewayResponse Update(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Update");
+    this.log.entering(this.getClass().getCanonicalName(), "Update");
     UpdateGatewayResponse response = new UpdateGatewayResponse();
     InspectionForecastBarnyard forecastBarnyard = null;
     try {
       forecastBarnyard = entityFromRequest(request, InspectionForecastBarnyard.class);
 
       if (forecastBarnyard.getFdId() == 0) {
-        log.warning("VAL04 - Entity ID Omission.");
+        this.log.warning("VAL04 - Entity ID Omission.");
         response.setError(new Error("VAL04", "Se ha omitido el id del registro al intentar actualizar sus datos.",
             "proxy.InspectionForecastBarnyard.Update"));
       } else {
         if (validateEntity(forecastBarnyard)) {
-          em.merge(forecastBarnyard);
-          em.flush();
+          dataModel.updateDataModel(forecastBarnyard);
 
           GatewayContent content = getContentFromEntity(forecastBarnyard, InspectionForecastBarnyard.class);
           response.setUpdatedRecord(content);
 
           response.setError(new Error("0", "SUCCESS", "proxy.InspectionForecastBarnyard.Update"));
-          log.info("Forecast inspection barnyard [" + forecastBarnyard.toString() + "] updated by principal[" + getLoggedUser() + "]");
+          this.log.info("Forecast inspection barnyard [" + forecastBarnyard.toString() + "] updated by principal[" + getLoggedUser() + "]");
         } else {
-          log.warning("Validation error:" + error_description);
+          this.log.warning("Validation error:" + error_description);
           response.setError(new Error("VAL01", "Error de validación de datos:" + error_description, "proxy.InspectionForecastBarnyardBean.Update"));
         }
       }
 
     } catch (Exception e) {
-      log.severe("Exception found while updating ForecastInspectionBarnyard");
-      log.throwing(this.getClass().getName(), "Update", e);
+      this.log.severe("Exception found while updating ForecastInspectionBarnyard");
+      this.log.throwing(this.getClass().getName(), "Update", e);
 
       if (e instanceof javax.persistence.PersistenceException)
         response.setError(new Error("DB01", "Los datos que usted ha intentado ingresar, no son permitidos por la base de datos, ",
@@ -197,7 +196,7 @@ public class InspectionForecastBarnyardBean extends BaseBean implements Cruddabl
       }
     }
 
-    log.exiting(this.getClass().getCanonicalName(), "Update");
+    this.log.exiting(this.getClass().getCanonicalName(), "Update");
     return response;
   }
 
@@ -206,46 +205,36 @@ public class InspectionForecastBarnyardBean extends BaseBean implements Cruddabl
    */
   @Override
   public BaseResponse Delete(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Delete");
+    this.log.entering(this.getClass().getCanonicalName(), "Delete");
     BaseResponse response = new BaseResponse();
 
     try {
       InspectionForecastBarnyard forecastBarnyard = entityFromRequest(request, InspectionForecastBarnyard.class);
-      
-      if (forecastBarnyard.getFdId()!= 0){
-    	  TypedQuery<InspectionForecastBarnyard> readQuery = em.createNamedQuery("FORECAST_BARNYARD_BY_FORECAST_DETAIL_ID", InspectionForecastBarnyard.class);
-          readQuery.setParameter("fdId", forecastBarnyard.getFdId());
-          forecastBarnyard = readQuery.getSingleResult();
-          log.info("Deleting forecast barnyard [" + forecastBarnyard.toString() + "] by principal[" + getLoggedUser() + "]");
-          em.merge(forecastBarnyard);
-          em.remove(forecastBarnyard);
-          em.flush();
+      if (forecastBarnyard.getIfbId() != 0) {
+    	  forecastBarnyard = dataModel.readSingleDataModel("FORECAST_BARNYARD_BY_ID", "ifbId", forecastBarnyard.getIfbId(), InspectionForecastBarnyard.class);
+          this.log.info("Deleting InspectionForecastBarnyard [" + forecastBarnyard.toString() + "] by principal[" + getLoggedUser() + "]");
+          dataModel.deleteDataModel(forecastBarnyard, getLoggedUser());
           response.setError(new Error("0", "SUCCESS", "proxy.InspectionForecastBarnyard.Delete"));
-          log.info("InspectionForecastBarnyard successfully deleted by principal [" + getLoggedUser() + "]");
-      }else if(forecastBarnyard.getIfbId() != 0) {
-          TypedQuery<InspectionForecastBarnyard> readQuery = em.createNamedQuery("FORECAST_BARNAYARD_BY_ID", InspectionForecastBarnyard.class);
-          readQuery.setParameter("ifbId", forecastBarnyard.getIfbId());
-          forecastBarnyard = readQuery.getSingleResult();
-          log.info("Deleting forecast detail [" + forecastBarnyard.toString() + "] by principal[" + getLoggedUser() + "]");
-          em.merge(forecastBarnyard);
-          em.remove(forecastBarnyard);
-          em.flush();
-          response.setError(new Error("0", "SUCCESS", "proxy.InspectionForecastBarnyard.Delete"));
-          log.info("InspectionForecastBarnyard successfully deleted by principal [" + getLoggedUser() + "]");                  
-      } else {
-        log.warning("VAL04 - Entity ID Omission.");
-        response.setError(new Error("VAL04", "Se ha omitido el id de detalles de inspeccion al intentar eliminar el registro.", "proxy.InspectionDetails.Delete"));
+      } else if(forecastBarnyard.getFdId() != 0){
+    	  String queryDelete = "DELETE FROM ctrl_inspection_forecast_barnyard WHERE detail_id = :fdID";
+    	  Map<String, Object> parameters = new HashMap<String,Object>();
+    	  parameters.put("fdID", forecastBarnyard.getFdId());
+    	  dataModel.deleteBatch(queryDelete, parameters, getLoggedUser());
+    	  response.setError(new Error("0", "SUCCESS", "proxy.InspectionForecastBarnyard.Delete"));
+      }else {
+    	  this.log.warning("VAL04 - Entity ID Omission.");
+          response.setError(new Error("VAL04", "Se ha omitido el id de detalles de inspeccion al intentar eliminar el registro.", "proxy.InspectionDetails.Delete"));
       }
-    } catch (Exception e) {
-      log.severe("Exception found while deleting InspectionForecastBarnyard");
-      log.throwing(this.getClass().getName(), "Delete", e);
+    } catch(Exception e) {
+      this.log.severe("Exception found while deleting InspectionForecastBarnyard");
+      this.log.throwing(this.getClass().getName(), "Delete", e);
 
       response.setError(new Error("DEL01",
           "Error al intentar borrar datos, es probable que esta entidad tenga otras entidades relacionadas, ",
           "proxy.InspectionForecastBarnyard.Delete"));
     }
 
-    log.exiting(this.getClass().getCanonicalName(), "Delete");
+    this.log.exiting(this.getClass().getCanonicalName(), "Delete");
     return response;
   }
 

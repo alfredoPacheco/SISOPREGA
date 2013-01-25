@@ -402,7 +402,7 @@
 				<column name="unit_name" />
 			</basic>
 			<basic name="unitAbreviation">
-				<column name="Uni_abreviation" />
+				<column name="Unit_abreviation" />
 			</basic>
 		</attributes>
 	</entity>

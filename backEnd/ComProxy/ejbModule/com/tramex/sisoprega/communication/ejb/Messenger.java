@@ -25,10 +25,8 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.logging.Logger;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 
 import com.sisoprega.envoy.email.Attachment;
 import com.sisoprega.envoy.email.Email;
@@ -40,6 +38,7 @@ import com.sisoprega.envoy.sms.Sms;
 import com.sisoprega.envoy.sms.SmsFactory;
 import com.sisoprega.envoy.sms.SmsProvider;
 import com.tramex.sisoprega.common.messenger.Messageable;
+import com.tramex.sisoprega.datamodel.RemoteModelable;
 import com.tramex.sisoprega.dto.EnterpriseRancher;
 import com.tramex.sisoprega.dto.Rancher;
 
@@ -67,8 +66,8 @@ public class Messenger implements Messageable {
   SmsProvider smsMan = null;
   EmailSender smtp = null;
 
-  @PersistenceContext
-  EntityManager em;
+  @EJB(name = "java:global/DataModel/BaseDataModel")
+  protected RemoteModelable dataModel;
 
   /**
    * Default constructor.
@@ -245,28 +244,16 @@ public class Messenger implements Messageable {
   @Override
   public boolean sendReport(long rancherId, String reportName) {
 
-    TypedQuery<Rancher> personQuery = em.createNamedQuery("RANCHER_BY_ID", Rancher.class);
-    personQuery.setParameter("rancherId", rancherId);
+    Rancher person = dataModel.readSingleDataModel("RANCHER_BY_ID", "rancherId", rancherId, Rancher.class);
 
-    Rancher person = null;
-    try {
-      person = personQuery.getSingleResult();
-      if (person != null) {
-        return sendReport(person, reportName);
-      }
-    } catch (Exception e) {
+    if (person != null) {
+      return sendReport(person, reportName);
     }
 
-    TypedQuery<EnterpriseRancher> enterpriseQuery = em.createNamedQuery("ENTERPRISE_RANCHER_BY_ID", EnterpriseRancher.class);
-    enterpriseQuery.setParameter("enterpriseId", rancherId);
-
-    EnterpriseRancher enterprise = null;
-    try {
-      enterprise = enterpriseQuery.getSingleResult();
-      if (enterprise != null) {
-        return sendReport(enterprise, reportName);
-      }
-    } catch (Exception e) {
+    EnterpriseRancher enterprise = dataModel.readSingleDataModel("ENTERPRISE_RANCHER_BY_ID", "enterpriseId", rancherId,
+        EnterpriseRancher.class);
+    if (enterprise != null) {
+      return sendReport(enterprise, reportName);
     }
 
     return false;
@@ -274,31 +261,17 @@ public class Messenger implements Messageable {
 
   @Override
   public boolean sendSimpleMessage(long rancherId, String message) {
-    TypedQuery<Rancher> personQuery = em.createNamedQuery("RANCHER_BY_ID", Rancher.class);
-    personQuery.setParameter("rancherId", rancherId);
+    Rancher person = dataModel.readSingleDataModel("RANCHER_BY_ID", "rancherId", rancherId, Rancher.class);
 
-    Rancher person = null;
-    try {
-      person = personQuery.getSingleResult();
-      if (person != null) {
-        return sendSimpleMessage(person, message);
-      }
-    } catch (Exception e) {
+    if (person != null) {
+      return sendSimpleMessage(person, message);
     }
 
-    TypedQuery<EnterpriseRancher> enterpriseQuery = em.createNamedQuery("ENTERPRISE_RANCHER_BY_ID", EnterpriseRancher.class);
-    enterpriseQuery.setParameter("enterpriseId", rancherId);
-
-    EnterpriseRancher enterprise = null;
-    try {
-      enterprise = enterpriseQuery.getSingleResult();
-      if (enterprise != null) {
-        return sendSimpleMessage(enterprise, message);
-      }
-    } catch (Exception e) {
+    EnterpriseRancher enterprise = dataModel.readSingleDataModel("ENTERPRISE_RANCHER_BY_ID", "enterpriseId", rancherId, EnterpriseRancher.class);
+    if (enterprise != null) {
+      return sendSimpleMessage(enterprise, message);
     }
 
     return false;
   }
-
 }

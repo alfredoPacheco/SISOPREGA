@@ -15,10 +15,11 @@
  */
 package com.tramex.sisoprega.proxy.bean;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.ejb.Stateless;
-import javax.persistence.TypedQuery;
 
 import com.tramex.sisoprega.common.BaseResponse;
 import com.tramex.sisoprega.common.CreateGatewayResponse;
@@ -45,6 +46,7 @@ import com.tramex.sisoprega.dto.MeasurementUnitEquivalence;
  * 12/09/2012  Jaime Figueroa                Initial Version.
  * 12/13/2012  Diego Torres                  Enable read operation and standard error codes.
  * 12/16/2012  Diego Torres                  Adding log activity
+ * 01/22/2013  Diego Torres                  Implementing DataModel.
  * ====================================================================================
  * </PRE>
  * 
@@ -63,34 +65,32 @@ public class MeasurementUnitEquivalenceBean extends BaseBean implements Cruddabl
    */
   @Override
   public CreateGatewayResponse Create(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Create");
+    this.log.entering(this.getClass().getCanonicalName(), "Create");
 
     CreateGatewayResponse response = new CreateGatewayResponse();
     MeasurementUnitEquivalence equivalence = null;
     try {
       equivalence = entityFromRequest(request, MeasurementUnitEquivalence.class);
 
-      log.fine("Received MeasurementUnitEquivalence in request: " + equivalence);
+      this.log.fine("Received MeasurementUnitEquivalence in request: " + equivalence);
 
       if (validateEntity(equivalence)) {
-        log.finer("MeasurementUnitEquivalence succesfully validated");
-        em.persist(equivalence);
-        log.finer("MeasurementUnitEquivalence persisted on database");
-        em.flush();
+        this.log.finer("MeasurementUnitEquivalence succesfully validated");
+        dataModel.createDataModel(equivalence);
 
         String sId = String.valueOf(equivalence.getEquivalenceId());
-        log.finer("Setting MeasurementUnitEquivalence id in response: " + sId);
+        this.log.finer("Setting MeasurementUnitEquivalence id in response: " + sId);
         response.setGeneratedId(sId);
         response.setError(new Error("0", "SUCCESS", "proxy.MeasurementUnitEquivalenceBean.Create"));
-        log.info("Measurement Unit Equivalence [" + equivalence.toString() + "] created by principal[" + getLoggedUser() + "]");
+        this.log.info("Measurement Unit Equivalence [" + equivalence.toString() + "] created by principal[" + getLoggedUser() + "]");
       } else {
-        log.warning("Validation error: " + error_description);
+        this.log.warning("Validation error: " + error_description);
         response.setError(new Error("VAL01", "Error de validación: " + error_description, "proxy.MeasurementUnitEquivalenceBean.Create"));
       }
 
     } catch (Exception e) {
-      log.severe("Exception found while creating MeasurementUnitEquivalenceBean");
-      log.throwing(this.getClass().getName(), "Create", e);
+      this.log.severe("Exception found while creating MeasurementUnitEquivalenceBean");
+      this.log.throwing(this.getClass().getName(), "Create", e);
 
       if (e instanceof javax.persistence.PersistenceException)
         response.setError(new Error("DB01",
@@ -101,7 +101,7 @@ public class MeasurementUnitEquivalenceBean extends BaseBean implements Cruddabl
       }
     }
 
-    log.exiting(this.getClass().getCanonicalName(), "Create");
+    this.log.exiting(this.getClass().getCanonicalName(), "Create");
     return response;
   }
 
@@ -114,7 +114,7 @@ public class MeasurementUnitEquivalenceBean extends BaseBean implements Cruddabl
    */
   @Override
   public ReadGatewayResponse Read(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Read");
+    this.log.entering(this.getClass().getCanonicalName(), "Read");
 
     ReadGatewayResponse response = new ReadGatewayResponse();
     response.setEntityName(request.getEntityName());
@@ -122,18 +122,19 @@ public class MeasurementUnitEquivalenceBean extends BaseBean implements Cruddabl
     MeasurementUnitEquivalence equivalence = null;
     try {
       equivalence = entityFromRequest(request, MeasurementUnitEquivalence.class);
-      log.fine("Got MeasurementUnit from request: " + equivalence);
+      this.log.fine("Got MeasurementUnit from request: " + equivalence);
 
-      TypedQuery<MeasurementUnitEquivalence> readQuery = null;
       String qryLogger = "";
+      String queryName = "";
+      Map<String, Object> parameters = new HashMap<String, Object>();
       if (equivalence.getEquivalenceId() != 0) {
-        readQuery = em.createNamedQuery("CAT_MEASUREMENTUNITEQUIVALENCE_BY_ID", MeasurementUnitEquivalence.class);
-        log.fine("Query by unitId: " + equivalence.getEquivalenceId());
-        readQuery.setParameter("equivalenceId", equivalence.getEquivalenceId());
+        queryName = "CAT_MEASUREMENTUNITEQUIVALENCE_BY_ID";
+        this.log.fine("Query by unitId: " + equivalence.getEquivalenceId());
+        parameters.put("equivalenceId", equivalence.getEquivalenceId());
         qryLogger = "By equivalenceId [" + equivalence.getEquivalenceId() + "]";
       } else if(equivalence.getUnitSrc() != 0){
-        readQuery = em.createNamedQuery("EQUIVALENCE_BY_UNIT_ID", MeasurementUnitEquivalence.class);;
-        readQuery.setParameter("unitSrc", equivalence.getUnitSrc());
+        queryName = "EQUIVALENCE_BY_UNIT_ID";
+        parameters.put("unitSrc", equivalence.getUnitSrc());
         qryLogger = "By equivalence [" + equivalence.getUnitSrc() + "]";
       }else{
         response.setError(new Error("VAL03", "El filtro especificado no es válido para las equivalencias de unidades de medida",
@@ -142,7 +143,7 @@ public class MeasurementUnitEquivalenceBean extends BaseBean implements Cruddabl
       }
 
       // Query the results through the jpa using a typedQuery
-      List<MeasurementUnitEquivalence> queryResults = readQuery.getResultList();
+      List<MeasurementUnitEquivalence> queryResults = dataModel.readDataModelList(queryName, parameters, MeasurementUnitEquivalence.class);
 
       if (queryResults.isEmpty()) {
         response.setError(new Error("VAL02", "No se encontraron datos para el filtro seleccionado", "proxy.MeasurementUnitEquivalence.Read"));
@@ -152,18 +153,18 @@ public class MeasurementUnitEquivalenceBean extends BaseBean implements Cruddabl
 
         // Add success message to response
         response.setError(new Error("0", "SUCCESS", "proxy.MeasurementUnitEquivalence.Read"));
-        log.info("Read operation " + qryLogger + " executed by principal[" + getLoggedUser() + "] on MeasurementUnitEquivalenceBean");
+        this.log.info("Read operation " + qryLogger + " executed by principal[" + getLoggedUser() + "] on MeasurementUnitEquivalenceBean");
       }
     } catch (Exception e) {
       // something went wrong, alert the server and respond the client
-      log.severe("Exception found while reading feed MeasurementUnitEquivalence");
-      log.throwing(this.getClass().getCanonicalName(), "Read", e);
+      this.log.severe("Exception found while reading feed MeasurementUnitEquivalence");
+      this.log.throwing(this.getClass().getCanonicalName(), "Read", e);
 
       response.setError(new Error("DB02", "Read exception: " + e.getMessage(), "proxy.MeasurementUnitEquivalence.Read"));
     }
 
     // end and respond.
-    log.exiting(this.getClass().getCanonicalName(), "Read");
+    this.log.exiting(this.getClass().getCanonicalName(), "Read");
     return response;
   }
 
@@ -176,39 +177,38 @@ public class MeasurementUnitEquivalenceBean extends BaseBean implements Cruddabl
    */
   @Override
   public UpdateGatewayResponse Update(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Update");
+    this.log.entering(this.getClass().getCanonicalName(), "Update");
     UpdateGatewayResponse response = new UpdateGatewayResponse();
     MeasurementUnitEquivalence equivalence = null;
     try {
       equivalence = entityFromRequest(request, MeasurementUnitEquivalence.class);
 
       if (equivalence.getEquivalenceId() == 0) {
-        log.warning("MUEU1 - Invalid MeasurementUnitEquivalence id");
+        this.log.warning("MUEU1 - Invalid MeasurementUnitEquivalence id");
         response.setError(new Error("MUEU1", "Invalid MeasurementUnitEquivalence id", "proxy.MeasurementUnitEquivalence.Update"));
       } else {
         if (validateEntity(equivalence)) {
-          em.merge(equivalence);
-          em.flush();
+          dataModel.updateDataModel(equivalence);
 
           GatewayContent content = getContentFromEntity(equivalence, MeasurementUnitEquivalence.class);
           response.setUpdatedRecord(content);
 
           response.setError(new Error("0", "SUCCESS", "proxy.MeasurementUnitEquivalence.Update"));
-          log.info("MeasurementUnitEquivalence [" + equivalence.toString() + "] updated by principal[" + getLoggedUser() + "]");
+          this.log.info("MeasurementUnitEquivalence [" + equivalence.toString() + "] updated by principal[" + getLoggedUser() + "]");
         } else {
-          log.warning("Validation error: " + error_description);
+          this.log.warning("Validation error: " + error_description);
           response.setError(new Error("MUEU2", "Validation error: " + error_description, "proxy.MeasurementUnitEquivalence.Update"));
         }
       }
 
     } catch (Exception e) {
-      log.severe("Exception found while updating MeasurementUnitEquivalence");
-      log.throwing(this.getClass().getName(), "Update", e);
+      this.log.severe("Exception found while updating MeasurementUnitEquivalence");
+      this.log.throwing(this.getClass().getName(), "Update", e);
 
       response.setError(new Error("MUEU3", "Update exception " + e.getMessage(), "proxy.MeasurementUnitEquivalence.Update"));
     }
 
-    log.exiting(this.getClass().getCanonicalName(), "Update");
+    this.log.exiting(this.getClass().getCanonicalName(), "Update");
     return response;
   }
 
@@ -221,35 +221,28 @@ public class MeasurementUnitEquivalenceBean extends BaseBean implements Cruddabl
    */
   @Override
   public BaseResponse Delete(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Delete");
+    this.log.entering(this.getClass().getCanonicalName(), "Delete");
     BaseResponse response = new BaseResponse();
 
     try {
       MeasurementUnitEquivalence equivalence = entityFromRequest(request, MeasurementUnitEquivalence.class);
       if (equivalence.getEquivalenceId() == 0) {
-        log.warning("MUED1 - Invalid MeasurementUnitEquivalence");
+        this.log.warning("MUED1 - Invalid MeasurementUnitEquivalence");
         response.setError(new Error("MUED1", "Invalid EquivalenceId", "proxy.MeasurementUnitEquivalence.Delete"));
       } else {
-        TypedQuery<MeasurementUnitEquivalence> readQuery = em.createNamedQuery("CAT_MEASUREMENTUNITEQUIVALENCE_BY_ID",
-            MeasurementUnitEquivalence.class);
-        readQuery.setParameter("EquivalenceId", equivalence.getEquivalenceId());
-        equivalence = readQuery.getSingleResult();
-        log.info("Deleting Measurement Unit Equivalence [" + equivalence.toString() + "] by principal[" + getLoggedUser() + "]");
-        em.merge(equivalence);
-        em.remove(equivalence);
-        em.flush();
-
+        equivalence = dataModel.readSingleDataModel("CAT_MEASUREMENTUNITEQUIVALENCE_BY_ID", "equivalenceId", equivalence.getEquivalenceId(), MeasurementUnitEquivalence.class);
+        this.log.info("Deleting MeasurementUnitEquivalence [" + equivalence.toString() + "] by principal[" + getLoggedUser() + "]");
+        dataModel.deleteDataModel(equivalence, getLoggedUser());
         response.setError(new Error("0", "SUCCESS", "proxy.MeasurementUnitEquivalence.Delete"));
-        log.info("Measurement Unit Equivalence successfully deleted by principal [" + getLoggedUser() + "]");
       }
     } catch (Exception e) {
-      log.severe("Exception found while deleting contact");
-      log.throwing(this.getClass().getName(), "Delete", e);
+      this.log.severe("Exception found while deleting contact");
+      this.log.throwing(this.getClass().getName(), "Delete", e);
 
       response.setError(new Error("MUED2", "Delete exception: " + e.getMessage(), "proxy.MeasurementUnitEquivalence.Delete"));
     }
 
-    log.exiting(this.getClass().getCanonicalName(), "Delete");
+    this.log.exiting(this.getClass().getCanonicalName(), "Delete");
     return response;
   }
 

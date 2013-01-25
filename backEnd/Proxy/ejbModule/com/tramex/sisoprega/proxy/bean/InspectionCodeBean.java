@@ -15,10 +15,11 @@
  */
 package com.tramex.sisoprega.proxy.bean;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.ejb.Stateless;
-import javax.persistence.TypedQuery;
 
 import com.tramex.sisoprega.common.BaseResponse;
 import com.tramex.sisoprega.common.CreateGatewayResponse;
@@ -45,6 +46,7 @@ import com.tramex.sisoprega.dto.InspectionCode;
  * 12/09/2012  Jaime Figueroa                Initial Version.
  * 12/13/2012  Diego Torres                  Enable read operation.
  * 12/16/2012  Diego Torres                  Adding log activity
+ * 01/22/2013  Diego Torres                  Implementing DataModel.
  * ====================================================================================
  * </PRE>
  * 
@@ -63,34 +65,32 @@ public class InspectionCodeBean extends BaseBean implements Cruddable {
    */
   @Override
   public CreateGatewayResponse Create(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Create");
+    this.log.entering(this.getClass().getCanonicalName(), "Create");
 
     CreateGatewayResponse response = new CreateGatewayResponse();
     InspectionCode inspCode = null;
     try {
       inspCode = entityFromRequest(request, InspectionCode.class);
 
-      log.fine("Received InspectionCode in request: " + inspCode);
+      this.log.fine("Received InspectionCode in request: " + inspCode);
 
       if (validateEntity(inspCode)) {
-        log.finer("InspectionCode succesfully validated");
-        em.persist(inspCode);
-        log.finer("InspectionCode persisted on database");
-        em.flush();
+        this.log.finer("InspectionCode succesfully validated");
+        dataModel.createDataModel(inspCode);
 
         String sId = String.valueOf(inspCode.getInspectionCodeId());
-        log.finer("Setting InspectionCode id in response: " + sId);
+        this.log.finer("Setting InspectionCode id in response: " + sId);
         response.setGeneratedId(sId);
         response.setError(new Error("0", "SUCCESS", "proxy.InspectionCodeBean.Create"));
-        log.info("Inspection Code [" + inspCode.toString() + "] created by principal[" + getLoggedUser() + "]");
+        this.log.info("Inspection Code [" + inspCode.toString() + "] created by principal[" + getLoggedUser() + "]");
       } else {
-        log.warning("Error de validación: " + error_description);
+        this.log.warning("Error de validación: " + error_description);
         response.setError(new Error("VAL01", "Error de validación: " + error_description, "proxy.InspectionCodeBean.Create"));
       }
 
     } catch (Exception e) {
-      log.severe("Exception found while creating InspectionCodeBean");
-      log.throwing(this.getClass().getName(), "Create", e);
+      this.log.severe("Exception found while creating InspectionCodeBean");
+      this.log.throwing(this.getClass().getName(), "Create", e);
 
       if (e instanceof javax.persistence.PersistenceException)
         response.setError(new Error("DB01",
@@ -101,7 +101,7 @@ public class InspectionCodeBean extends BaseBean implements Cruddable {
       }
     }
 
-    log.exiting(this.getClass().getCanonicalName(), "Create");
+    this.log.exiting(this.getClass().getCanonicalName(), "Create");
     return response;
   }
 
@@ -114,7 +114,7 @@ public class InspectionCodeBean extends BaseBean implements Cruddable {
    */
   @Override
   public ReadGatewayResponse Read(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Read");
+    this.log.entering(this.getClass().getCanonicalName(), "Read");
 
     ReadGatewayResponse response = new ReadGatewayResponse();
     response.setEntityName(request.getEntityName());
@@ -122,22 +122,22 @@ public class InspectionCodeBean extends BaseBean implements Cruddable {
     InspectionCode ic = null;
     try {
       ic = entityFromRequest(request, InspectionCode.class);
-      log.fine("Got InspectionCode from request: " + ic);
+      this.log.fine("Got InspectionCode from request: " + ic);
 
-      TypedQuery<InspectionCode> readQuery = null;
       String qryLogger = "";
+      String queryName = "";
+      Map<String, Object> parameters = new HashMap<String, Object>();
       if (ic.getInspectionCodeId() != 0) {
-        readQuery = em.createNamedQuery("CAT_INSPECTIONCODE_BY_ID", InspectionCode.class);
-        log.fine("Query by InspectionCodeId: " + ic.getInspectionCodeId());
-        readQuery.setParameter("InspectionCodeId", ic.getInspectionCodeId());
+        queryName = "CAT_INSPECTIONCODE_BY_ID";
+        parameters.put("InspectionCodeId", ic.getInspectionCodeId());
         qryLogger = "By inspectionCodeId [" + ic.getInspectionCodeId() + "]";
       } else {
-        readQuery = em.createNamedQuery("ALL_INSPECTION_CODES", InspectionCode.class);;
+        queryName = "ALL_INSPECTION_CODES";
         qryLogger = "By ALL_INSPECTION_CODES";
       }
 
       // Query the results through the jpa using a typedQuery
-      List<InspectionCode> queryResults = readQuery.getResultList();
+      List<InspectionCode> queryResults = dataModel.readDataModelList(queryName, parameters, InspectionCode.class);
 
       if (queryResults.isEmpty()) {
         response.setError(new Error("VAL02", "No se encontraron datos para el filtro seleccionado", "proxy.InspectionCodeBean.Read"));
@@ -147,18 +147,18 @@ public class InspectionCodeBean extends BaseBean implements Cruddable {
 
         // Add success message to response
         response.setError(new Error("0", "SUCCESS", "proxy.InspectionCode.Read"));
-        log.info("Read operation " + qryLogger + " executed by principal[" + getLoggedUser() + "] on InspectionCodeBean");
+        this.log.info("Read operation " + qryLogger + " executed by principal[" + getLoggedUser() + "] on InspectionCodeBean");
       }
     } catch (Exception e) {
       // something went wrong, alert the server and respond the client
-      log.severe("Exception found while reading feed InspectionCode");
-      log.throwing(this.getClass().getCanonicalName(), "Read", e);
+      this.log.severe("Exception found while reading feed InspectionCode");
+      this.log.throwing(this.getClass().getCanonicalName(), "Read", e);
 
       response.setError(new Error("DB02", "Read exception: " + e.getMessage(), "proxy.InspectionCodeBean.Read"));
     }
 
     // end and respond.
-    log.exiting(this.getClass().getCanonicalName(), "Read");
+    this.log.exiting(this.getClass().getCanonicalName(), "Read");
     return response;
   }
 
@@ -171,36 +171,35 @@ public class InspectionCodeBean extends BaseBean implements Cruddable {
    */
   @Override
   public UpdateGatewayResponse Update(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Update");
+    this.log.entering(this.getClass().getCanonicalName(), "Update");
     UpdateGatewayResponse response = new UpdateGatewayResponse();
     InspectionCode inspCode = null;
     try {
       inspCode = entityFromRequest(request, InspectionCode.class);
 
       if (inspCode.getInspectionCodeId() == 0) {
-        log.warning("VAL04 - Entity ID Omission.");
+        this.log.warning("VAL04 - Entity ID Omission.");
         response.setError(new Error("VAL04", "Se ha omitido el id del corral al intentar actualizar sus datos.",
             "proxy.InspectionCode.Update"));
       } else {
         if (validateEntity(inspCode)) {
-          em.merge(inspCode);
-          em.flush();
+          dataModel.updateDataModel(inspCode);
 
           GatewayContent content = getContentFromEntity(inspCode, InspectionCode.class);
           response.setUpdatedRecord(content);
 
           response.setError(new Error("0", "SUCCESS", "proxy.InspectionCode.Update"));
-          log.info("Inspection Code [" + inspCode.toString() + "] updated by principal[" + getLoggedUser() + "]");
+          this.log.info("Inspection Code [" + inspCode.toString() + "] updated by principal[" + getLoggedUser() + "]");
         } else {
-          log.warning("Validation error:" + error_description);
+          this.log.warning("Validation error:" + error_description);
           response.setError(new Error("VAL01", "Error de validación de datos:" + error_description,
               "proxy.InspectionCodeBean.Update"));
         }
       }
 
     } catch (Exception e) {
-      log.severe("Exception found while updating InspectionCode");
-      log.throwing(this.getClass().getName(), "Update", e);
+      this.log.severe("Exception found while updating InspectionCode");
+      this.log.throwing(this.getClass().getName(), "Update", e);
 
       if (e instanceof javax.persistence.PersistenceException)
         response.setError(new Error("DB01", "Los datos que usted ha intentado ingresar, no son permitidos por la base de datos, "
@@ -212,7 +211,7 @@ public class InspectionCodeBean extends BaseBean implements Cruddable {
       }
     }
 
-    log.exiting(this.getClass().getCanonicalName(), "Update");
+    this.log.exiting(this.getClass().getCanonicalName(), "Update");
     return response;
   }
 
@@ -225,30 +224,25 @@ public class InspectionCodeBean extends BaseBean implements Cruddable {
    */
   @Override
   public BaseResponse Delete(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Delete");
+    this.log.entering(this.getClass().getCanonicalName(), "Delete");
     BaseResponse response = new BaseResponse();
 
     try {
       InspectionCode inspCode = entityFromRequest(request, InspectionCode.class);
       if (inspCode.getInspectionCodeId() == 0) {
-        log.warning("VAL04 - Entity ID Omission.");
+        this.log.warning("VAL04 - Entity ID Omission.");
         response.setError(new Error("VAL04", "Se ha omitido el id del corral al intentar eliminar el registro.",
             "proxy.InspectionCode.Delete"));
       } else {
-        TypedQuery<InspectionCode> readQuery = em.createNamedQuery("CAT_INSPECTIONCODE_BY_ID", InspectionCode.class);
-        readQuery.setParameter("inspectionCodeId", inspCode.getInspectionCodeId());
-        inspCode = readQuery.getSingleResult();
-        log.info("Deleting Inspection Code [" + inspCode.toString() + "] by principal[" + getLoggedUser() + "]");
-        em.merge(inspCode);
-        em.remove(inspCode);
-        em.flush();
-
+        
+        inspCode = dataModel.readSingleDataModel("CAT_INSPECTION_BY_ID", "inspectionCodeId", inspCode.getInspectionCodeId(), InspectionCode.class);
+        this.log.info("Deleting InspectionCode [" + inspCode.toString() + "] by principal[" + getLoggedUser() + "]");
+        dataModel.deleteDataModel(inspCode, getLoggedUser());
         response.setError(new Error("0", "SUCCESS", "proxy.InspectionCode.Delete"));
-        log.info("Inspection Code successfully deleted by principal [" + getLoggedUser() + "]");
       }
     } catch (Exception e) {
-      log.severe("Exception found while deleting inspCode");
-      log.throwing(this.getClass().getName(), "Delete", e);
+      this.log.severe("Exception found while deleting inspCode");
+      this.log.throwing(this.getClass().getName(), "Delete", e);
 
       response.setError(new Error("DEL01",
           "Error al intentar borrar datos, es probable que esta entidad tenga otras entidades relacionadas, "
@@ -256,7 +250,7 @@ public class InspectionCodeBean extends BaseBean implements Cruddable {
           "proxy.InspectionCode.Delete"));
     }
 
-    log.exiting(this.getClass().getCanonicalName(), "Delete");
+    this.log.exiting(this.getClass().getCanonicalName(), "Delete");
     return response;
   }
 
