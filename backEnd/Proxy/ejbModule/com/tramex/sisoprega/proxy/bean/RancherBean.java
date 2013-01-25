@@ -15,10 +15,11 @@
  */
 package com.tramex.sisoprega.proxy.bean;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.ejb.Stateless;
-import javax.persistence.TypedQuery;
 
 import com.tramex.sisoprega.common.BaseResponse;
 import com.tramex.sisoprega.common.CreateGatewayResponse;
@@ -45,6 +46,7 @@ import com.tramex.sisoprega.dto.Rancher;
  * 10/27/2012  Diego Torres                 Initial Version.
  * 12/03/2012  Diego Torres                 Refactor rename for RancherBean.
  * 12/16/2012  Diego Torres                 Adding log activity
+ * 01/22/2013  Diego Torres                  Implementing DataModel.
  * ====================================================================================
  * </PRE>
  * 
@@ -60,33 +62,31 @@ public class RancherBean extends BaseBean implements Cruddable {
    */
   @Override
   public CreateGatewayResponse Create(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Create");
+    this.log.entering(this.getClass().getCanonicalName(), "Create");
 
     CreateGatewayResponse response = new CreateGatewayResponse();
     Rancher rancher = null;
     try {
       rancher = entityFromRequest(request, Rancher.class);
 
-      log.fine("Received rancher in request:{" + rancher.toString() + "}");
+      this.log.fine("Received rancher in request:{" + rancher.toString() + "}");
 
       if (validateEntity(rancher)) {
-        log.finer("RancherBean succesfully validated");
-        em.persist(rancher);
-        log.finer("RancherBean persisted on database");
-        em.flush();
+        this.log.finer("RancherBean succesfully validated");
+        dataModel.createDataModel(rancher);
 
         String sId = String.valueOf(rancher.getRancherId());
-        log.finer("Setting rancher id in response [" + sId + "]");
+        this.log.finer("Setting rancher id in response [" + sId + "]");
         response.setGeneratedId(sId);
         response.setError(new Error("0", "SUCCESS", "proxy.Rancher.Create"));
-        log.info("Rancher [" + rancher.toString() + "] created by principal[" + getLoggedUser() + "]");
+        this.log.info("Rancher [" + rancher.toString() + "] created by principal[" + getLoggedUser() + "]");
       } else {
-        log.warning("Validation error:" + error_description);
+        this.log.warning("Validation error:" + error_description);
         response.setError(new Error("VAL01", "Error de validación de datos:" + error_description, "proxy.Rancher.Create"));
       }
     } catch (Exception e) {
-      log.severe("Exception found while creating rancher");
-      log.throwing(this.getClass().getName(), "Create", e);
+      this.log.severe("Exception found while creating rancher");
+      this.log.throwing(this.getClass().getName(), "Create", e);
 
       if (e instanceof javax.persistence.PersistenceException)
         response.setError(new Error("DB01", "Los datos que usted ha intentado ingresar, no son permitidos por la base de datos, "
@@ -96,7 +96,7 @@ public class RancherBean extends BaseBean implements Cruddable {
       }
     }
 
-    log.exiting(RancherBean.class.getCanonicalName(), "Create");
+    this.log.exiting(RancherBean.class.getCanonicalName(), "Create");
     return response;
   }
 
@@ -105,7 +105,7 @@ public class RancherBean extends BaseBean implements Cruddable {
    */
   @Override
   public ReadGatewayResponse Read(GatewayRequest request) {
-    log.entering(RancherBean.class.getCanonicalName(), "Read");
+    this.log.entering(RancherBean.class.getCanonicalName(), "Read");
 
     ReadGatewayResponse response = new ReadGatewayResponse();
     response.setEntityName(request.getEntityName());
@@ -114,24 +114,25 @@ public class RancherBean extends BaseBean implements Cruddable {
     try {
       rancher = entityFromRequest(request, Rancher.class);
 
-      log.fine("Got rancher from request: " + rancher);
+      this.log.fine("Got rancher from request: " + rancher);
 
-      TypedQuery<Rancher> readQuery = null;
       String qryLogger = "";
+      String queryName = "";
+      Map<String, Object> parameters = new HashMap<String, Object>();
       if (rancher.getRancherId() != 0) {
-        readQuery = em.createNamedQuery("RANCHER_BY_ID", Rancher.class);
-        log.fine("Query by Id [" + rancher.getRancherId() + "]");
-        readQuery.setParameter("rancherId", rancher.getRancherId());
+        queryName = "RANCHER_BY_ID";
+        this.log.fine("Query by Id [" + rancher.getRancherId() + "]");
+        parameters.put("rancherId", rancher.getRancherId());
         qryLogger = "By rancherId [" + rancher.getRancherId() + "]";
       } else {
         // No other filter expected for ranchers, only by Id
-        readQuery = em.createNamedQuery("ALL_RANCHERS", Rancher.class);
+        queryName = "ALL_RANCHERS";
         qryLogger = "By ALL_RANCHERS";
       }
 
       // Query the results through the persistence
       // Using a typedQuery to retrieve a list of Ranchers.
-      List<Rancher> queryResults = readQuery.getResultList();
+      List<Rancher> queryResults = dataModel.readDataModelList(queryName, parameters, Rancher.class);
 
       if (queryResults.isEmpty()) {
         response.setError(new Error("VAL02", "No se encontraron datos para el filtro seleccionado", "proxy.RancherBean.Read"));
@@ -141,18 +142,18 @@ public class RancherBean extends BaseBean implements Cruddable {
 
         // Add success message to response
         response.setError(new Error("0", "SUCCESS", "proxy.Rancher.Read"));
-        log.info("Read operation " + qryLogger + " executed by principal[" + getLoggedUser() + "] on RancherBean");
+        this.log.info("Read operation " + qryLogger + " executed by principal[" + getLoggedUser() + "] on RancherBean");
       }
     } catch (Exception e) {
       // something went wrong, alert the server and respond the client
-      log.severe("Exception found while reading rancher filter");
-      log.throwing(this.getClass().getName(), "Read", e);
+      this.log.severe("Exception found while reading rancher filter");
+      this.log.throwing(this.getClass().getName(), "Read", e);
 
       response.setError(new Error("DB02", "Error en la base de datos:[" + e.getMessage() + "]", "proxy.Rancher.Read"));
     }
 
     // end and respond.
-    log.exiting(RancherBean.class.getCanonicalName(), "Read");
+    this.log.exiting(RancherBean.class.getCanonicalName(), "Read");
     return response;
   }
 
@@ -161,32 +162,31 @@ public class RancherBean extends BaseBean implements Cruddable {
    */
   @Override
   public UpdateGatewayResponse Update(GatewayRequest request) {
-    log.entering(RancherBean.class.getCanonicalName(), "Update");
+    this.log.entering(RancherBean.class.getCanonicalName(), "Update");
     UpdateGatewayResponse response = new UpdateGatewayResponse();
     Rancher rancher = null;
     try {
       rancher = entityFromRequest(request, Rancher.class);
       if (rancher.getRancherId() == 0) {
-        log.warning("VAL04 - Entity ID Omission.");
+        this.log.warning("VAL04 - Entity ID Omission.");
         response.setError(new Error("VAL04", "Se ha omitido el id del ganadero al intentar actualizar sus datos.",
             "proxy.RancherBean.Update"));
       } else {
         if (validateEntity(rancher)) {
-          em.merge(rancher);
-          em.flush();
+          dataModel.updateDataModel(rancher);
 
           response.setUpdatedRecord(getContentFromEntity(rancher, Rancher.class));
           response.setEntityName(request.getEntityName());
           response.setError(new Error("0", "SUCCESS", "proxy.Rancher.Update"));
-          log.info("Rancher [" + rancher.toString() + "] updated by principal[" + getLoggedUser() + "]");
+          this.log.info("Rancher [" + rancher.toString() + "] updated by principal[" + getLoggedUser() + "]");
         } else {
-          log.warning("Validation error: " + error_description);
+          this.log.warning("Validation error: " + error_description);
           response.setError(new Error("VAL01", "Error de validación de datos: " + error_description, "proxy.Rancher.Update"));
         }
       }
     } catch (Exception e) {
-      log.severe("Exception found while updating rancher");
-      log.throwing(this.getClass().getName(), "Update", e);
+      this.log.severe("Exception found while updating rancher");
+      this.log.throwing(this.getClass().getName(), "Update", e);
 
       if (e instanceof javax.persistence.PersistenceException)
         response.setError(new Error("DB01", "Los datos que usted ha intentado ingresar, no son permitidos por la base de datos, "
@@ -196,7 +196,7 @@ public class RancherBean extends BaseBean implements Cruddable {
       }
     }
 
-    log.exiting(RancherBean.class.getCanonicalName(), "Update");
+    this.log.exiting(RancherBean.class.getCanonicalName(), "Update");
     return response;
   }
 
@@ -205,36 +205,30 @@ public class RancherBean extends BaseBean implements Cruddable {
    */
   @Override
   public BaseResponse Delete(GatewayRequest request) {
-    log.entering(RancherBean.class.getCanonicalName(), "Delete");
+    this.log.entering(RancherBean.class.getCanonicalName(), "Delete");
     BaseResponse response = new BaseResponse();
     try {
       Rancher rancher = entityFromRequest(request, Rancher.class);
       if (rancher.getRancherId() == 0) {
-        log.warning("VAL04 - Entity ID Omission.");
+        this.log.warning("VAL04 - Entity ID Omission.");
         response.setError(new Error("VAL04", "Se ha omitido el id del ganadero al intentar eliminar el registro.",
             "proxy.RancherBean.Delete"));
       } else {
-        TypedQuery<Rancher> readQuery = em.createNamedQuery("RANCHER_BY_ID", Rancher.class);
-        readQuery.setParameter("rancherId", rancher.getRancherId());
-        rancher = readQuery.getSingleResult();
-        log.info("Deleting Rancher [" + rancher.toString() + "] by principal[" + getLoggedUser() + "]");
-        em.merge(rancher);
-        em.remove(rancher);
-        em.flush();
-
+        rancher = dataModel.readSingleDataModel("RANCHER_BY_ID", "rancherId", rancher.getRancherId(), Rancher.class);
+        this.log.info("Deleting Rancher [" + rancher.toString() + "] by principal[" + getLoggedUser() + "]");
+        dataModel.deleteDataModel(rancher, getLoggedUser());
         response.setError(new Error("0", "SUCCESS", "proxy.Rancher.Delete"));
-        log.info("Rancher successfully deleted by principal [" + getLoggedUser() + "]");
       }
     } catch (Exception e) {
-      log.severe("Exception found while deleting rancher");
-      log.throwing(this.getClass().getName(), "Delete", e);
+      this.log.severe("Exception found while deleting rancher");
+      this.log.throwing(this.getClass().getName(), "Delete", e);
 
       response.setError(new Error("DEL01",
           "Error al intentar borrar datos. Es muy probable que la entidad que usted quiere eliminar "
               + "cuente con otras entidades relacionadas.", "proxy.RancherBean.Delete"));
     }
 
-    log.exiting(RancherBean.class.getCanonicalName(), "Delete");
+    this.log.exiting(RancherBean.class.getCanonicalName(), "Delete");
     return response;
   }
 

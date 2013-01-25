@@ -15,10 +15,11 @@
  */
 package com.tramex.sisoprega.proxy.bean;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.ejb.Stateless;
-import javax.persistence.TypedQuery;
 
 import com.tramex.sisoprega.common.BaseResponse;
 import com.tramex.sisoprega.common.CreateGatewayResponse;
@@ -48,6 +49,7 @@ import com.tramex.sisoprega.dto.BarnyardCapacity;
  * 12/12/2012  Alfredo Pacheco				 Added sql for select all records.
  * 12/16/2012  Diego Torres                  Removed commented set of lines on read else,
  *                                           added log for users activity.
+ * 01/22/2013  Diego Torres                  Apply data model interfacing.
  * ====================================================================================
  * </PRE>
  * 
@@ -66,34 +68,33 @@ public class BarnyardCapacityBean extends BaseBean implements Cruddable {
    */
   @Override
   public CreateGatewayResponse Create(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Create");
+    this.log.entering(this.getClass().getCanonicalName(), "Create");
 
     CreateGatewayResponse response = new CreateGatewayResponse();
     BarnyardCapacity barnyardCa = null;
     try {
       barnyardCa = entityFromRequest(request, BarnyardCapacity.class);
 
-      log.fine("Received BarnyardCapacity in request: " + barnyardCa);
+      this.log.fine("Received BarnyardCapacity in request: " + barnyardCa);
 
       if (validateEntity(barnyardCa)) {
-        log.finer("BarnyardCapacity succesfully validated");
-        em.persist(barnyardCa);
-        log.finer("BarnyardCapacity persisted on database");
-        em.flush();
+        this.log.finer("BarnyardCapacity succesfully validated");
+        dataModel.createDataModel(barnyardCa);
+        this.log.finer("BarnyardCapacity persisted on database");
 
         String sId = String.valueOf(barnyardCa.getCapacityId());
-        log.finer("Setting BarnyardCapacity id in response: " + sId);
+        this.log.finer("Setting BarnyardCapacity id in response: " + sId);
         response.setGeneratedId(sId);
         response.setError(new Error("0", "SUCCESS", "proxy.BarnyardCapacityBean.Create"));
-        log.info("Barnyard capacity[" + barnyardCa.toString() + "] created by principal[" + getLoggedUser() + "]");
+        this.log.info("Barnyard capacity[" + barnyardCa.toString() + "] created by principal[" + getLoggedUser() + "]");
       } else {
-        log.warning("Error de validación: " + error_description);
+        this.log.warning("Error de validación: " + error_description);
         response.setError(new Error("VAL01", "Error de validación: " + error_description, "proxy.BarnyardCapacityBean.Create"));
       }
 
     } catch (Exception e) {
-      log.severe("Exception found while creating BarnyardCapacityBean");
-      log.throwing(this.getClass().getName(), "Create", e);
+      this.log.severe("Exception found while creating BarnyardCapacityBean");
+      this.log.throwing(this.getClass().getName(), "Create", e);
 
       if (e instanceof javax.persistence.PersistenceException)
         response.setError(new Error("DB01", "Los datos que usted ha intentado ingresar, no son permitidos por la base de datos, "
@@ -104,7 +105,7 @@ public class BarnyardCapacityBean extends BaseBean implements Cruddable {
       }
     }
 
-    log.exiting(this.getClass().getCanonicalName(), "Create");
+    this.log.exiting(this.getClass().getCanonicalName(), "Create");
     return response;
   }
 
@@ -117,7 +118,7 @@ public class BarnyardCapacityBean extends BaseBean implements Cruddable {
    */
   @Override
   public ReadGatewayResponse Read(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Read");
+    this.log.entering(this.getClass().getCanonicalName(), "Read");
 
     ReadGatewayResponse response = new ReadGatewayResponse();
     response.setEntityName(request.getEntityName());
@@ -125,25 +126,27 @@ public class BarnyardCapacityBean extends BaseBean implements Cruddable {
     BarnyardCapacity capacity = null;
     try {
       capacity = entityFromRequest(request, BarnyardCapacity.class);
-      log.fine("Got barnyard capacity from request: " + capacity);
+      this.log.fine("Got barnyard capacity from request: " + capacity);
 
-      TypedQuery<BarnyardCapacity> query = null;
       String qryLogger = "";
+      Map<String, Object> parameters = new HashMap<String, Object>();
+      String queryName = "";
+      
       if (capacity.getCapacityId() != 0) {
-        query = em.createNamedQuery("BARNYARD_CAPACITY_BY_ID", BarnyardCapacity.class);
-        query.setParameter("capacityId", capacity.getCapacityId());
+        queryName = "BARNYARD_CAPACITY_BY_ID";
+        parameters.put("capacityId", capacity.getCapacityId());
         qryLogger = "By capacityId [" + capacity.getCapacityId() + "]";
       } else if (capacity.getBarnyardId() != 0 && capacity.getCatclassId() != 0) {
-        query = em.createNamedQuery("BARNYARD_CAPACITY_BY_BARNYARD_AND_CATTLE", BarnyardCapacity.class);
-        query.setParameter("barnyardId", capacity.getBarnyardId());
-        query.setParameter("cattleClassId", capacity.getCatclassId());
+        queryName = "BARNYARD_CAPACITY_BY_BARNYARD_AND_CATTLE";
+        parameters.put("barnyardId", capacity.getBarnyardId());
+        parameters.put("cattleClassId", capacity.getCatclassId());
         qryLogger = "By barnyardId [" + capacity.getBarnyardId() + "] and cattleClassId [" + capacity.getCatclassId() + "]";
       } else {
-        query = em.createNamedQuery("ALL_BARNYARD_CAPACITIES", BarnyardCapacity.class);
-        qryLogger = "By ALL_BARNYARD_CAPACITIES";
+        queryName = "ALL_BARNYARD_CAPACITIES";
+        qryLogger = "By ALL BARNYARD CAPACITIES";
       }
 
-      List<BarnyardCapacity> result = query.getResultList();
+      List<BarnyardCapacity> result = dataModel.readDataModelList(queryName, parameters, BarnyardCapacity.class);
       if (result.isEmpty()) {
         response.setError(new Error("VAL02", "No se encontraron datos para el filtro seleccionado", "proxy.BarnyardBean.Read"));
       } else {
@@ -151,18 +154,18 @@ public class BarnyardCapacityBean extends BaseBean implements Cruddable {
         response.getRecord().addAll(records);
 
         response.setError(new Error("0", "SUCCESS", "proxy.BarnyardBean.Read"));
-        log.info("Read operation " + qryLogger + " executed by principal[" + getLoggedUser() + "] on BarnyardCapacityBean");
+        this.log.info("Read operation " + qryLogger + " executed by principal[" + getLoggedUser() + "] on BarnyardCapacityBean");
       }
 
     } catch (Exception e) {
       // something went wrong, alert the server and respond the client
-      log.severe("Exception found while reading BarnyardCapacityBean");
-      log.throwing(this.getClass().getCanonicalName(), "Read", e);
+      this.log.severe("Exception found while reading BarnyardCapacityBean");
+      this.log.throwing(this.getClass().getCanonicalName(), "Read", e);
 
       response.setError(new Error("DB02", "Read exception: " + e.getMessage(), "proxy.BarnyardCapacityBean.Read"));
     }
 
-    log.exiting(this.getClass().getCanonicalName(), "Read");
+    this.log.exiting(this.getClass().getCanonicalName(), "Read");
     return response;
   }
 
@@ -175,36 +178,35 @@ public class BarnyardCapacityBean extends BaseBean implements Cruddable {
    */
   @Override
   public UpdateGatewayResponse Update(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Update");
+    this.log.entering(this.getClass().getCanonicalName(), "Update");
     UpdateGatewayResponse response = new UpdateGatewayResponse();
     BarnyardCapacity barnyardCa = null;
     try {
       barnyardCa = entityFromRequest(request, BarnyardCapacity.class);
 
       if (barnyardCa.getCapacityId() == 0) {
-        log.warning("VAL04 - Entity ID Omission.");
+        this.log.warning("VAL04 - Entity ID Omission.");
         response.setError(new Error("VAL04", "Se ha omitido el id de la capacidad del corral al intentar actualizar sus datos.",
             "proxy.BarnyardCapacity.Update"));
       } else {
         if (validateEntity(barnyardCa)) {
-          em.merge(barnyardCa);
-          em.flush();
+          dataModel.updateDataModel(barnyardCa);
 
           GatewayContent content = getContentFromEntity(barnyardCa, BarnyardCapacity.class);
           response.setUpdatedRecord(content);
 
           response.setError(new Error("0", "SUCCESS", "proxy.BarnyardCapacity.Update"));
-          log.info("BarnyardCapacity[" + barnyardCa.toString() + "] updated by principal[" + getLoggedUser() + "]");
+          this.log.info("BarnyardCapacity[" + barnyardCa.toString() + "] updated by principal[" + getLoggedUser() + "]");
         } else {
-          log.warning("Validation error: " + error_description);
+          this.log.warning("Validation error: " + error_description);
           response.setError(new Error("VAL01", "Error de validación de datos:" + error_description,
               "proxy.BarnyardCapacityBean.Update"));
         }
       }
 
     } catch (Exception e) {
-      log.severe("Exception found while updating BarnyardCapacity");
-      log.throwing(this.getClass().getName(), "Update", e);
+      this.log.severe("Exception found while updating BarnyardCapacity");
+      this.log.throwing(this.getClass().getName(), "Update", e);
 
       if (e instanceof javax.persistence.PersistenceException)
         response.setError(new Error("DB01", "Los datos que usted ha intentado ingresar, no son permitidos por la base de datos, "
@@ -216,7 +218,7 @@ public class BarnyardCapacityBean extends BaseBean implements Cruddable {
       }
     }
 
-    log.exiting(this.getClass().getCanonicalName(), "Update");
+    this.log.exiting(this.getClass().getCanonicalName(), "Update");
     return response;
   }
 
@@ -229,30 +231,28 @@ public class BarnyardCapacityBean extends BaseBean implements Cruddable {
    */
   @Override
   public BaseResponse Delete(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Delete");
+    this.log.entering(this.getClass().getCanonicalName(), "Delete");
     BaseResponse response = new BaseResponse();
 
     try {
       BarnyardCapacity barnyardCa = entityFromRequest(request, BarnyardCapacity.class);
       if (barnyardCa.getCapacityId() == 0) {
-        log.warning("VAL04 - Entity ID Omission.");
+        this.log.warning("VAL04 - Entity ID Omission.");
         response.setError(new Error("VAL04", "Se ha omitido el id de la capacidad del corral al intentar eliminar el registro.",
             "proxy.BarnyardCapacity.Delete"));
       } else {
-        TypedQuery<BarnyardCapacity> readQuery = em.createNamedQuery("BARNYARD_CAPACITY_BY_ID", BarnyardCapacity.class);
-        readQuery.setParameter("capacityId", barnyardCa.getCapacityId());
-        barnyardCa = readQuery.getSingleResult();
-        log.info("Deleting BarnyardCapacity[" + barnyardCa.toString() + "] by principal[" + getLoggedUser() + "]");
-        em.merge(barnyardCa);
-        em.remove(barnyardCa);
-        em.flush();
+        
+        
+        barnyardCa = dataModel.readSingleDataModel("BARNYARD_CAPACITY_BY_ID", "capacityId", barnyardCa.getCapacityId(), BarnyardCapacity.class);
+        this.log.info("Deleting BarnyardCapacity[" + barnyardCa.toString() + "] by principal[" + getLoggedUser() + "]");
+        dataModel.deleteDataModel(barnyardCa, getLoggedUser());
 
         response.setError(new Error("0", "SUCCESS", "proxy.BarnyardCapacity.Delete"));
-        log.info("BarnyardCapacity successfully deleted by principal [" + getLoggedUser() + "]");
+        this.log.info("BarnyardCapacity successfully deleted by principal [" + getLoggedUser() + "]");
       }
     } catch (Exception e) {
-      log.severe("Exception found while deleting barnyard capacity");
-      log.throwing(this.getClass().getName(), "Delete", e);
+      this.log.severe("Exception found while deleting barnyard capacity");
+      this.log.throwing(this.getClass().getName(), "Delete", e);
 
       response.setError(new Error("DEL01",
           "Error al intentar borrar datos, es probable que esta entidad tenga otras entidades relacionadas, "
@@ -260,7 +260,7 @@ public class BarnyardCapacityBean extends BaseBean implements Cruddable {
           "proxy.BarnyardCapacity.Delete"));
     }
 
-    log.exiting(this.getClass().getCanonicalName(), "Delete");
+    this.log.exiting(this.getClass().getCanonicalName(), "Delete");
     return response;
   }
 

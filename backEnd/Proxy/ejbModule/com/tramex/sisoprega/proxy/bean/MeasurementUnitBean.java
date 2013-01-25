@@ -15,10 +15,11 @@
  */
 package com.tramex.sisoprega.proxy.bean;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.ejb.Stateless;
-import javax.persistence.TypedQuery;
 
 import com.tramex.sisoprega.common.BaseResponse;
 import com.tramex.sisoprega.common.CreateGatewayResponse;
@@ -45,6 +46,7 @@ import com.tramex.sisoprega.dto.MeasurementUnit;
  * 12/09/2012  Jaime Figueroa                Initial Version.
  * 12/13/2012  Diego Torres                  Enable read operation and standard error codes.
  * 12/16/2012  Diego Torres                  Adding log activity
+ * 01/22/2013  Diego Torres                  Implementing DataModel.
  * ====================================================================================
  * </PRE>
  * 
@@ -63,34 +65,32 @@ public class MeasurementUnitBean extends BaseBean implements Cruddable {
    */
   @Override
   public CreateGatewayResponse Create(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Create");
+    this.log.entering(this.getClass().getCanonicalName(), "Create");
 
     CreateGatewayResponse response = new CreateGatewayResponse();
     MeasurementUnit unit = null;
     try {
       unit = entityFromRequest(request, MeasurementUnit.class);
 
-      log.fine("Received MeasurementUnit in request: " + unit);
+      this.log.fine("Received MeasurementUnit in request: " + unit);
 
       if (validateEntity(unit)) {
-        log.finer("MeasurementUnit succesfully validated");
-        em.persist(unit);
-        log.finer("MeasurementUnit persisted on database");
-        em.flush();
+        this.log.finer("MeasurementUnit succesfully validated");
+        dataModel.createDataModel(unit);
 
         String sId = String.valueOf(unit.getUnitId());
-        log.finer("Setting MeasurementUnit id in response: " + sId);
+        this.log.finer("Setting MeasurementUnit id in response: " + sId);
         response.setGeneratedId(sId);
         response.setError(new Error("0", "SUCCESS", "proxy.MeasurementUnitdBean.Create"));
-        log.info("Measurement Unit [" + unit.toString() + "] created by principal[" + getLoggedUser() + "]");
+        this.log.info("Measurement Unit [" + unit.toString() + "] created by principal[" + getLoggedUser() + "]");
       } else {
-        log.warning("Error de validación: " + error_description);
+        this.log.warning("Error de validación: " + error_description);
         response.setError(new Error("VAL01", "Error de validación: " + error_description, "proxy.MeasurementUnitBean.Create"));
       }
 
     } catch (Exception e) {
-      log.severe("Exception found while creating Measurement Unit");
-      log.throwing(this.getClass().getName(), "Create", e);
+      this.log.severe("Exception found while creating Measurement Unit");
+      this.log.throwing(this.getClass().getName(), "Create", e);
 
       if (e instanceof javax.persistence.PersistenceException)
         response.setError(new Error("DB01",
@@ -101,7 +101,7 @@ public class MeasurementUnitBean extends BaseBean implements Cruddable {
       }
     }
 
-    log.exiting(this.getClass().getCanonicalName(), "Create");
+    this.log.exiting(this.getClass().getCanonicalName(), "Create");
     return response;
   }
 
@@ -114,7 +114,7 @@ public class MeasurementUnitBean extends BaseBean implements Cruddable {
    */
   @Override
   public ReadGatewayResponse Read(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Read");
+    this.log.entering(this.getClass().getCanonicalName(), "Read");
 
     ReadGatewayResponse response = new ReadGatewayResponse();
     response.setEntityName(request.getEntityName());
@@ -122,23 +122,23 @@ public class MeasurementUnitBean extends BaseBean implements Cruddable {
     MeasurementUnit mu = null;
     try {
       mu = entityFromRequest(request, MeasurementUnit.class);
-      log.fine("Got MeasurementUnit from request: " + mu);
+      this.log.fine("Got MeasurementUnit from request: " + mu);
 
-      TypedQuery<MeasurementUnit> readQuery = null;
-      
       String qryLogger = "";
+      String queryName = "";
+      Map<String, Object> parameters = new HashMap<String, Object>();
       if (mu.getUnitId() != 0) {
-        readQuery = em.createNamedQuery("CAT_MEASUREMENTUNIT_BY_ID", MeasurementUnit.class);
-        log.fine("Query by unitId: " + mu.getUnitId());
-        readQuery.setParameter("unitId", mu.getUnitId());
+        queryName = "CAT_MEASUREMENTUNIT_BY_ID";
+        this.log.fine("Query by unitId: " + mu.getUnitId());
+        parameters.put("unitId", mu.getUnitId());
         qryLogger = "By unitId [" + mu.getUnitId() + "]";
       } else {
-        readQuery = em.createNamedQuery("ALL_MEASUREMENT_UNITS", MeasurementUnit.class);;
+        queryName = "ALL_MEASUREMENT_UNITS";
         qryLogger = "By ALL_MEASUREMENT_UNITS";
       }
 
       // Query the results through the jpa using a typedQuery
-      List<MeasurementUnit> queryResults = readQuery.getResultList();
+      List<MeasurementUnit> queryResults = dataModel.readDataModelList(queryName, parameters, MeasurementUnit.class);
 
       if (queryResults.isEmpty()) {
         response.setError(new Error("VAL02", "No se encontraron datos para el filtro seleccionado", "proxy.MeasurementUnit.Read"));
@@ -148,18 +148,18 @@ public class MeasurementUnitBean extends BaseBean implements Cruddable {
 
         // Add success message to response
         response.setError(new Error("0", "SUCCESS", "proxy.MeasurementUnit.Read"));
-        log.info("Read operation " + qryLogger + " executed by principal[" + getLoggedUser() + "] on MeasurementUnitBean");
+        this.log.info("Read operation " + qryLogger + " executed by principal[" + getLoggedUser() + "] on MeasurementUnitBean");
       }
     } catch (Exception e) {
       // something went wrong, alert the server and respond the client
-      log.severe("Exception found while reading feed MeasurementUnit");
-      log.throwing(this.getClass().getCanonicalName(), "Read", e);
+      this.log.severe("Exception found while reading feed MeasurementUnit");
+      this.log.throwing(this.getClass().getCanonicalName(), "Read", e);
 
       response.setError(new Error("DB02", "Read exception: " + e.getMessage(), "proxy.MeasurementUnit.Read"));
     }
 
     // end and respond.
-    log.exiting(this.getClass().getCanonicalName(), "Read");
+    this.log.exiting(this.getClass().getCanonicalName(), "Read");
     return response;
   }
 
@@ -172,36 +172,35 @@ public class MeasurementUnitBean extends BaseBean implements Cruddable {
    */
   @Override
   public UpdateGatewayResponse Update(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Update");
+    this.log.entering(this.getClass().getCanonicalName(), "Update");
     UpdateGatewayResponse response = new UpdateGatewayResponse();
     MeasurementUnit unit = null;
     try {
       unit = entityFromRequest(request, MeasurementUnit.class);
 
       if (unit.getUnitId() == 0) {
-        log.warning("VAL04 - Entity ID Omission.");
+        this.log.warning("VAL04 - Entity ID Omission.");
         response.setError(new Error("VAL04", "Se ha omitido el id de la unidad de medida al intentar actualizar sus datos.",
             "proxy.MeasurementUnit.Update"));
       } else {
         if (validateEntity(unit)) {
-          em.merge(unit);
-          em.flush();
+          dataModel.updateDataModel(unit);
 
           GatewayContent content = getContentFromEntity(unit, MeasurementUnit.class);
           response.setUpdatedRecord(content);
 
           response.setError(new Error("0", "SUCCESS", "proxy.MeasurementUnit.Update"));
-          log.info("Measurement Unit [" + unit.toString() + "] updated by principal[" + getLoggedUser() + "]");
+          this.log.info("Measurement Unit [" + unit.toString() + "] updated by principal[" + getLoggedUser() + "]");
         } else {
-          log.warning("Validation error: " + error_description);
+          this.log.warning("Validation error: " + error_description);
           response.setError(new Error("VAL01", "Error de validación de datos:" + error_description,
               "proxy.MeasurementUnit.Update"));
         }
       }
 
     } catch (Exception e) {
-      log.severe("Exception found while updating MeasurementUnit");
-      log.throwing(this.getClass().getName(), "Update", e);
+      this.log.severe("Exception found while updating MeasurementUnit");
+      this.log.throwing(this.getClass().getName(), "Update", e);
 
       if (e instanceof javax.persistence.PersistenceException)
         response.setError(new Error("DB01", "Los datos que usted ha intentado ingresar, no son permitidos por la base de datos, "
@@ -213,7 +212,7 @@ public class MeasurementUnitBean extends BaseBean implements Cruddable {
       }
     }
 
-    log.exiting(this.getClass().getCanonicalName(), "Update");
+    this.log.exiting(this.getClass().getCanonicalName(), "Update");
     return response;
   }
 
@@ -226,37 +225,31 @@ public class MeasurementUnitBean extends BaseBean implements Cruddable {
    */
   @Override
   public BaseResponse Delete(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Delete");
+    this.log.entering(this.getClass().getCanonicalName(), "Delete");
     BaseResponse response = new BaseResponse();
 
     try {
       MeasurementUnit unit = entityFromRequest(request, MeasurementUnit.class);
       if (unit.getUnitId() == 0) {
-        log.warning("VAL04 - Entity ID Omission.");
+        this.log.warning("VAL04 - Entity ID Omission.");
         response.setError(new Error("VAL04", "Se ha omitido el id de la unidad de medida al intentar eliminar el registro.",
             "proxy.MeasurementUnit.Delete"));
       } else {
-        TypedQuery<MeasurementUnit> readQuery = em.createNamedQuery("CAT_MEASUREMENTUNIT_BY_ID", MeasurementUnit.class);
-        readQuery.setParameter("unitId", unit.getUnitId());
-        unit = readQuery.getSingleResult();
-        log.info("Deleting Measurement Unit [" + unit.toString() + "] by principal[" + getLoggedUser() + "]");
-        em.merge(unit);
-        em.remove(unit);
-        em.flush();
-
+        unit = dataModel.readSingleDataModel("CAT_MEASUREMENTUNIT_BY_ID", "unitId", unit.getUnitId(), MeasurementUnit.class);
+        this.log.info("Deleting MeasurementUnit [" + unit.toString() + "] by principal[" + getLoggedUser() + "]");
+        dataModel.deleteDataModel(unit, getLoggedUser());
         response.setError(new Error("0", "SUCCESS", "proxy.MeasurementUnit.Delete"));
-        log.info("Measurement Unit successfully deleted by principal [" + getLoggedUser() + "]");
       }
     } catch (Exception e) {
-      log.severe("Exception found while deleting contact");
-      log.throwing(this.getClass().getName(), "Delete", e);
+      this.log.severe("Exception found while deleting contact");
+      this.log.throwing(this.getClass().getName(), "Delete", e);
 
       response.setError(new Error("DEL01",
           "Error al intentar borrar datos, es probable que esta entidad tenga otras entidades relacionadas",
           "proxy.MeasurementUnit.Delete"));
     }
 
-    log.exiting(this.getClass().getCanonicalName(), "Delete");
+    this.log.exiting(this.getClass().getCanonicalName(), "Delete");
     return response;
   }
 

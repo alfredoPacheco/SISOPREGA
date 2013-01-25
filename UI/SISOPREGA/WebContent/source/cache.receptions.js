@@ -238,9 +238,6 @@ enyo.kind({
 		return this.arrReception;	
 	},
 	getReceptionBarnyard:function(recID){
-//		private long recBarnyardId;
-//	    private long receptionId;
-//	    private long barnyardId;		    		    
 				
 			var arrAux = [];
 			var objToSend = {};
@@ -263,12 +260,6 @@ enyo.kind({
 		
 	},
 	getReceptionHeadcount:function(recID){
-//		private long headcountId;
-//	    private long receptionId;
-//	    private long hc;
-//	    private double weight;
-//	    private long weightUom;		    		    
-		
 			var arrAux = [];
 			var objToSend = {};
 			objToSend.receptionId = recID;
@@ -289,11 +280,6 @@ enyo.kind({
 		
 	},
 	getFeedOrder:function(recID){
-//		private long orderId;
-//	    private long  receptionId;
-//	    private Date feedDate;
-//	    private String feedOriginator;
-//	    private String handling;		    		    
 		
 		var arrAux = [];
 		var objToSend = {};
@@ -460,8 +446,10 @@ enyo.kind({
 			
 			// TODO: Send communication to customer
 			var today = new Date();
-			var today_sf = today.getMonth() + '/' + today.getDate() + '/' + today.getFullYear(); 
-			consumingGateway.SendReport(objRec.rancherId, 'ReporteAlimento?rancherId=' + objRec.rancherId + '&fromDate=' + today_sf + '&toDate=' + today_sf);
+			var month = today.getMonth() + 1; 
+			var today_sf = month + '/' + today.getDate() + '/' + today.getFullYear(); 
+			var report_name = 'ReporteAlimento?rancherId=' + objRec.rancherId + '&fromDate=' + today_sf + '&toDate=' + today_sf;
+			consumingGateway.SendReport(objRec.rancherId, report_name);
 			
 			return true;
 		}
@@ -908,8 +896,6 @@ enyo.kind({
 		else{ //Error
 			cacheMan.setMessage("", "[Exception ID: " + cgDelete.exceptionId + "] Descripcion: " + cgDelete.exceptionDescription);			
 		}
-		
-		
 	},
 	getActiveBYForListByRancherID:function(rancher_id){
 		var result = [];

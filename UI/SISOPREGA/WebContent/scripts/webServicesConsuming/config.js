@@ -23,11 +23,12 @@
  * MM/DD/YYYY
  * ----------  ---------------------------  -------------------------------------------
  * 11/28/2012  Diego Torres                 Initial Version.
+ * 01/22/2013  Diego Torres                 Cross site errors fixed by not specifying server host.
  * ====================================================================================
  *
  */
 
-var serverHost = 'http://localhost:8080';
+var serverHost = '';
 var gatewayApp_path = '/Gateway/GatewayService';
 var gatewayWsURL = serverHost + gatewayApp_path;
 var soapHeader = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="http://ws.gateway.sisoprega.tramex.com/">';

@@ -15,10 +15,11 @@
  */
 package com.tramex.sisoprega.proxy.bean;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.ejb.Stateless;
-import javax.persistence.TypedQuery;
 
 import com.tramex.sisoprega.common.BaseResponse;
 import com.tramex.sisoprega.common.CreateGatewayResponse;
@@ -45,6 +46,7 @@ import com.tramex.sisoprega.dto.InspectionBarnyard;
  * 12/09/2012  Jaime Figueroa                Initial Version.
  * 12/13/2012  Diego Torres                  Enable Read Operation.
  * 12/16/2012  Diego Torres                  Adding log activity
+ * 01/22/2013  Diego Torres                  Implementing DataModel.
  * ====================================================================================
  * </PRE>
  * 
@@ -63,34 +65,32 @@ public class InspectionBarnyardBean extends BaseBean implements Cruddable {
    */
   @Override
   public CreateGatewayResponse Create(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Create");
+    this.log.entering(this.getClass().getCanonicalName(), "Create");
 
     CreateGatewayResponse response = new CreateGatewayResponse();
     InspectionBarnyard inspBarnyard = null;
     try {
       inspBarnyard = entityFromRequest(request, InspectionBarnyard.class);
 
-      log.fine("Received InspectionBarnyard in request: " + inspBarnyard);
+      this.log.fine("Received InspectionBarnyard in request: " + inspBarnyard);
 
       if (validateEntity(inspBarnyard)) {
-        log.finer("InspectionBarnyard succesfully validated");
-        em.persist(inspBarnyard);
-        log.finer("InspectionBarnyard persisted on database");
-        em.flush();
+        this.log.finer("InspectionBarnyard succesfully validated");
+        dataModel.createDataModel(inspBarnyard);
 
         String sId = String.valueOf(inspBarnyard.getIbId());
-        log.finer("Setting InspectionBarnyard id in response: " + sId);
+        this.log.finer("Setting InspectionBarnyard id in response: " + sId);
         response.setGeneratedId(sId);
         response.setError(new Error("0", "SUCCESS", "proxy.InspectionBarnyardBean.Create"));
-        log.info("Inspection Barnyard [" + inspBarnyard.toString() + "] created by principal[" + getLoggedUser() + "]");
+        this.log.info("Inspection Barnyard [" + inspBarnyard.toString() + "] created by principal[" + getLoggedUser() + "]");
       } else {
-        log.warning("Error de validación: " + error_description);
+        this.log.warning("Error de validación: " + error_description);
         response.setError(new Error("VAL01", "Error de validación: " + error_description, "proxy.InspectionBarnyardBean.Create"));
       }
 
     } catch (Exception e) {
-      log.severe("Exception found while creating InspectionBarnyardBean");
-      log.throwing(this.getClass().getName(), "Create", e);
+      this.log.severe("Exception found while creating InspectionBarnyardBean");
+      this.log.throwing(this.getClass().getName(), "Create", e);
       if (e instanceof javax.persistence.PersistenceException)
         response.setError(new Error("DB01",
             "Los datos que usted ha intentado ingresar, no son permitidos por la base de datos, ",
@@ -100,7 +100,7 @@ public class InspectionBarnyardBean extends BaseBean implements Cruddable {
       }
     }
 
-    log.exiting(this.getClass().getCanonicalName(), "Create");
+    this.log.exiting(this.getClass().getCanonicalName(), "Create");
     return response;
   }
 
@@ -113,7 +113,7 @@ public class InspectionBarnyardBean extends BaseBean implements Cruddable {
    */
   @Override
   public ReadGatewayResponse Read(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Read");
+    this.log.entering(this.getClass().getCanonicalName(), "Read");
 
     ReadGatewayResponse response = new ReadGatewayResponse();
     response.setEntityName(request.getEntityName());
@@ -121,19 +121,18 @@ public class InspectionBarnyardBean extends BaseBean implements Cruddable {
     InspectionBarnyard inspection = null;
     try {
       inspection = entityFromRequest(request, InspectionBarnyard.class);
-      log.fine("Got inspection from request: " + inspection);
+      this.log.fine("Got inspection from request: " + inspection);
 
-      TypedQuery<InspectionBarnyard> readQuery = null;
       String qryLogger = "";
+      String queryName = "";
+      Map<String, Object> parameters = new HashMap<String, Object>();
       if (inspection.getIbId() != 0) {
-        readQuery = em.createNamedQuery("CRT_INSPECTIONBARNYARD_BY_ID", InspectionBarnyard.class);
-        log.fine("Query by Id: " + inspection.getIbId());
-        readQuery.setParameter("ibId", inspection.getIbId());
+        queryName = "CRT_INSPECTIONBARNYARD_BY_ID";
+        parameters.put("ibId", inspection.getIbId());
         qryLogger = "By ibId [" + inspection.getIbId() + "]";
       } else if (inspection.getInspectionId() != 0) {
-        readQuery = em.createNamedQuery("IB_BY_INSPECTION_ID", InspectionBarnyard.class);
-        log.fine("Query by InspectionId: " + inspection.getInspectionId());
-        readQuery.setParameter("inspectionId", inspection.getInspectionId());
+        queryName = "IB_BY_INSPECTION_ID";
+        parameters.put("inspectionId", inspection.getInspectionId());
         qryLogger = "By inspectionId [" + inspection.getInspectionId() + "]";
       } else {
         response.setError(new Error("VAL03", "El filtro especificado no es válido para las inspecciones de ganado",
@@ -142,7 +141,7 @@ public class InspectionBarnyardBean extends BaseBean implements Cruddable {
       }
 
       // Query the results through the jpa using a typedQuery
-      List<InspectionBarnyard> queryResults = readQuery.getResultList();
+      List<InspectionBarnyard> queryResults = dataModel.readDataModelList(queryName, parameters, InspectionBarnyard.class);
 
       if (queryResults.isEmpty()) {
         response.setError(new Error("VAL02", "No se encontraron datos para el filtro seleccionado", "proxy.InspectionBarnyardBean.Read"));
@@ -152,18 +151,18 @@ public class InspectionBarnyardBean extends BaseBean implements Cruddable {
 
         // Add success message to response
         response.setError(new Error("0", "SUCCESS", "proxy.InspectionBarnyard.Read"));
-        log.info("Read operation " + qryLogger + " executed by principal[" + getLoggedUser() + "] on InspectionBarnyardBean");
+        this.log.info("Read operation " + qryLogger + " executed by principal[" + getLoggedUser() + "] on InspectionBarnyardBean");
       }
     } catch (Exception e) {
       // something went wrong, alert the server and respond the client
-      log.severe("Exception found while reading feed inspection");
-      log.throwing(this.getClass().getCanonicalName(), "Read", e);
+      this.log.severe("Exception found while reading feed inspection");
+      this.log.throwing(this.getClass().getCanonicalName(), "Read", e);
 
       response.setError(new Error("DB02", "Read exception: " + e.getMessage(), "proxy.InspectionBarnyardBean.Read"));
     }
 
     // end and respond.
-    log.exiting(this.getClass().getCanonicalName(), "Read");
+    this.log.exiting(this.getClass().getCanonicalName(), "Read");
     return response;
   }
 
@@ -176,36 +175,35 @@ public class InspectionBarnyardBean extends BaseBean implements Cruddable {
    */
   @Override
   public UpdateGatewayResponse Update(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Update");
+    this.log.entering(this.getClass().getCanonicalName(), "Update");
     UpdateGatewayResponse response = new UpdateGatewayResponse();
     InspectionBarnyard inspBarnyard = null;
     try {
       inspBarnyard = entityFromRequest(request, InspectionBarnyard.class);
 
       if (inspBarnyard.getIbId() == 0) {
-        log.warning("VAL04 - Entity ID Omission.");
+        this.log.warning("VAL04 - Entity ID Omission.");
         response.setError(new Error("VAL04", "Se ha omitido el id del corral al intentar actualizar sus datos.",
             "proxy.InspectionBarnyard.Update"));
       } else {
         if (validateEntity(inspBarnyard)) {
-          em.merge(inspBarnyard);
-          em.flush();
+          dataModel.updateDataModel(inspBarnyard);
 
           GatewayContent content = getContentFromEntity(inspBarnyard, InspectionBarnyard.class);
           response.setUpdatedRecord(content);
 
           response.setError(new Error("0", "SUCCESS", "proxy.InspectionBarnyard.Update"));
-          log.info("InspectionBarnyard [" + inspBarnyard.toString() + "] updated by principal[" + getLoggedUser() + "]");
+          this.log.info("InspectionBarnyard [" + inspBarnyard.toString() + "] updated by principal[" + getLoggedUser() + "]");
         } else {
-          log.warning("Validation error:" + error_description);
+          this.log.warning("Validation error:" + error_description);
           response.setError(new Error("VAL01", "Error de validación de datos:" + error_description,
               "proxy.InspectionBarnyardBean.Update"));
         }
       }
 
     } catch (Exception e) {
-      log.severe("Exception found while updating inspBarnyard");
-      log.throwing(this.getClass().getName(), "Update", e);
+      this.log.severe("Exception found while updating inspBarnyard");
+      this.log.throwing(this.getClass().getName(), "Update", e);
 
       if (e instanceof javax.persistence.PersistenceException)
         response.setError(new Error("DB01",
@@ -217,7 +215,7 @@ public class InspectionBarnyardBean extends BaseBean implements Cruddable {
       }
     }
 
-    log.exiting(this.getClass().getCanonicalName(), "Update");
+    this.log.exiting(this.getClass().getCanonicalName(), "Update");
     return response;
   }
 
@@ -230,37 +228,31 @@ public class InspectionBarnyardBean extends BaseBean implements Cruddable {
    */
   @Override
   public BaseResponse Delete(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Delete");
+    this.log.entering(this.getClass().getCanonicalName(), "Delete");
     BaseResponse response = new BaseResponse();
 
     try {
       InspectionBarnyard inspBarnyard = entityFromRequest(request, InspectionBarnyard.class);
       if (inspBarnyard.getBarnyardId() == 0) {
-        log.warning("VAL04 - Entity ID Omission.");
+        this.log.warning("VAL04 - Entity ID Omission.");
         response.setError(new Error("VAL04", "Se ha omitido el id del corral al intentar eliminar el registro.",
             "proxy.Barnyard.Delete"));
       } else {
-        TypedQuery<InspectionBarnyard> readQuery = em.createNamedQuery("CRT_INSPECTIONBARNYARD_BY_ID", InspectionBarnyard.class);
-        readQuery.setParameter("ibId", inspBarnyard.getBarnyardId());
-        inspBarnyard = readQuery.getSingleResult();
-        log.info("Deleting InspectionBarnyard [" + inspBarnyard.toString() + "] by principal[" + getLoggedUser() + "]");
-        em.merge(inspBarnyard);
-        em.remove(inspBarnyard);
-        em.flush();
-
+        inspBarnyard = dataModel.readSingleDataModel("CRT_INSPECTIONBARNYARD_BY_ID", "ibId", inspBarnyard.getIbId(), InspectionBarnyard.class);
+        this.log.info("Deleting InspectionBarnyard [" + inspBarnyard.toString() + "] by principal[" + getLoggedUser() + "]");
+        dataModel.deleteDataModel(inspBarnyard, getLoggedUser());
         response.setError(new Error("0", "SUCCESS", "proxy.InspectionBarnyard.Delete"));
-        log.info("InspectionBarnyard successfully deleted by principal [" + getLoggedUser() + "]");
       }
     } catch (Exception e) {
-      log.severe("Exception found while deleting inspBarnyard");
-      log.throwing(this.getClass().getName(), "Delete", e);
+      this.log.severe("Exception found while deleting inspBarnyard");
+      this.log.throwing(this.getClass().getName(), "Delete", e);
 
       response.setError(new Error("DEL01",
           "Error al intentar borrar datos, es probable que esta entidad tenga otras entidades relacionadas, ",
           "proxy.InspectionBarnyard.Delete"));
     }
 
-    log.exiting(this.getClass().getCanonicalName(), "Delete");
+    this.log.exiting(this.getClass().getCanonicalName(), "Delete");
     return response;
   }
 

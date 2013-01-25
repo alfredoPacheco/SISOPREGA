@@ -15,11 +15,12 @@
  */
 package com.tramex.sisoprega.proxy.bean;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.ejb.Stateless;
 import javax.persistence.NoResultException;
-import javax.persistence.TypedQuery;
 
 import com.tramex.sisoprega.common.BaseResponse;
 import com.tramex.sisoprega.common.CreateGatewayResponse;
@@ -31,6 +32,7 @@ import com.tramex.sisoprega.common.UpdateGatewayResponse;
 import com.tramex.sisoprega.common.Utils;
 import com.tramex.sisoprega.common.crud.Cruddable;
 import com.tramex.sisoprega.dto.EnterpriseContact;
+import com.tramex.sisoprega.dto.EnterpriseRancher;
 
 /**
  * This proxy knows the logic to evaluate Enterprise rancher's Contact
@@ -48,6 +50,7 @@ import com.tramex.sisoprega.dto.EnterpriseContact;
  * 11/11/2012  Diego Torres                 Initial Version.
  * 12/05/2012  Diego Torres                 Adding validation and standard error codes.
  * 12/16/2012  Diego Torres                 Adding log activity
+ * 01/22/2013  Diego Torres                 Implementing DataModel interfacing.
  * ====================================================================================
  * </PRE>
  * 
@@ -65,7 +68,7 @@ public class EnterpriseContactBean extends BaseBean implements Cruddable {
    */
   @Override
   public CreateGatewayResponse Create(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Create");
+    this.log.entering(this.getClass().getCanonicalName(), "Create");
 
     CreateGatewayResponse response = new CreateGatewayResponse();
     EnterpriseContact contact = null;
@@ -73,26 +76,25 @@ public class EnterpriseContactBean extends BaseBean implements Cruddable {
     try {
       contact = entityFromRequest(request, EnterpriseContact.class);
 
-      log.fine("Received contact in request: {" + contact + "}");
+      this.log.fine("Received contact in request: {" + contact + "}");
 
       if (validateEntity(contact)) {
-        log.finer("Contact succesfully validated.");
-        em.persist(contact);
-        em.flush();
-        log.finer("Contact persisted on database");
+        this.log.finer("Contact succesfully validated.");
+        dataModel.createDataModel(contact);
+        this.log.finer("Contact persisted on database");
 
         String sId = String.valueOf(contact.getContactId());
-        log.finer("Setting contactId in response: " + sId);
+        this.log.finer("Setting contactId in response: " + sId);
         response.setGeneratedId(sId);
         response.setError(new Error("0", "SUCCESS", "proxy.EnterpriseContact.Create"));
-        log.info("Enterprise Contact [" + contact.toString() + "] created by principal[" + getLoggedUser() + "]");
+        this.log.info("Enterprise Contact [" + contact.toString() + "] created by principal[" + getLoggedUser() + "]");
       } else {
-        log.warning("Error de validación: " + error_description);
+        this.log.warning("Error de validación: " + error_description);
         response.setError(new Error("VAL01", "Error de validación: " + error_description, "proxy.EnterpriseContact.Create"));
       }
     } catch (Exception e) {
-      log.severe("Exception found while creating enterprise contact");
-      log.throwing(this.getClass().getName(), "Create", e);
+      this.log.severe("Exception found while creating enterprise contact");
+      this.log.throwing(this.getClass().getName(), "Create", e);
 
       if (e instanceof javax.persistence.PersistenceException)
         response.setError(new Error("DB01", "Los datos que usted ha intentado ingresar, no son permitidos por la base de datos, "
@@ -103,7 +105,7 @@ public class EnterpriseContactBean extends BaseBean implements Cruddable {
       }
     }
 
-    log.exiting(this.getClass().getCanonicalName(), "Create");
+    this.log.exiting(this.getClass().getCanonicalName(), "Create");
     return response;
   }
 
@@ -115,7 +117,7 @@ public class EnterpriseContactBean extends BaseBean implements Cruddable {
    */
   @Override
   public ReadGatewayResponse Read(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Read");
+    this.log.entering(this.getClass().getCanonicalName(), "Read");
 
     ReadGatewayResponse response = new ReadGatewayResponse();
     response.setEntityName(request.getEntityName());
@@ -124,16 +126,17 @@ public class EnterpriseContactBean extends BaseBean implements Cruddable {
     try {
       contact = entityFromRequest(request, EnterpriseContact.class);
 
-      log.fine("Got contact from request: " + contact);
-      TypedQuery<EnterpriseContact> readQuery = null;
+      this.log.fine("Got contact from request: " + contact);
       String qryLogger = "";
+      String queryName = "";
+      Map<String, Object> parameters = new HashMap<String, Object>();
       if (contact.getEnterpriseId() != 0) {
-        readQuery = em.createNamedQuery("ENTERPRISE_CONTACT_BY_ENTERPRISE_ID", EnterpriseContact.class);
-        readQuery.setParameter("enterpriseId", contact.getEnterpriseId());
+        queryName = "ENTERPRISE_CONTACT_BY_ENTERPRISE_ID";
+        parameters.put("enterpriseId", contact.getEnterpriseId());
         qryLogger = "By enterpriseId [" + contact.getEnterpriseId() + "]";
       } else if (contact.getContactId() != 0) {
-        readQuery = em.createNamedQuery("ENTERPRISE_CONTACT_BY_ID", EnterpriseContact.class);
-        readQuery.setParameter("contactId", contact.getContactId());
+        queryName = "ENTERPRISE_CONTACT_BY_ID";
+        parameters.put("contactId", contact.getContactId());
         qryLogger = "By contactId [" + contact.getContactId() + "]";
       } else {
         response.setError(new Error("VAL03", "El filtro especificado no es válido en el catálogo de contactos",
@@ -141,7 +144,7 @@ public class EnterpriseContactBean extends BaseBean implements Cruddable {
         return response;
       }
 
-      List<EnterpriseContact> queryResults = readQuery.getResultList();
+      List<EnterpriseContact> queryResults = dataModel.readDataModelList(queryName, parameters, EnterpriseContact.class);
 
       if (queryResults.isEmpty()) {
         response.setError(new Error("VAL02", "No se encontraron datos para el filtro seleccionado",
@@ -151,18 +154,18 @@ public class EnterpriseContactBean extends BaseBean implements Cruddable {
         response.getRecord().addAll(records);
 
         response.setError(new Error("0", "SUCCESS", "proxy.EnterpriseContact.Read"));
-        log.info("Read operation " + qryLogger + " executed by principal[" + getLoggedUser() + "] on EnterpriseContactBean");
+        this.log.info("Read operation " + qryLogger + " executed by principal[" + getLoggedUser() + "] on EnterpriseContactBean");
       }
 
     } catch (Exception e) {
       // something went wrong, alert the server and respond the client
-      log.severe("Exception found while reading enterprise contact");
-      log.throwing(this.getClass().getCanonicalName(), "Read", e);
+      this.log.severe("Exception found while reading enterprise contact");
+      this.log.throwing(this.getClass().getCanonicalName(), "Read", e);
 
       response.setError(new Error("DB02", "Read exception: " + e.getMessage(), "proxy.EnterpriseContact.Read"));
     }
 
-    log.exiting(this.getClass().getCanonicalName(), "Read");
+    this.log.exiting(this.getClass().getCanonicalName(), "Read");
     return response;
   }
 
@@ -174,36 +177,35 @@ public class EnterpriseContactBean extends BaseBean implements Cruddable {
    */
   @Override
   public UpdateGatewayResponse Update(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Update");
+    this.log.entering(this.getClass().getCanonicalName(), "Update");
     UpdateGatewayResponse response = new UpdateGatewayResponse();
     EnterpriseContact contact = null;
     try {
       contact = entityFromRequest(request, EnterpriseContact.class);
 
       if (contact.getContactId() == 0) {
-        log.warning("VAL04 - Entity ID Omission.");
+        this.log.warning("VAL04 - Entity ID Omission.");
         response.setError(new Error("VAL04", "Se ha omitido el id del contacto al intentar actualizar sus datos.",
             "proxy.EnterpriseContact.Update"));
       } else {
         if (validateEntity(contact)) {
-          em.merge(contact);
-          em.flush();
+          dataModel.updateDataModel(contact);
 
           GatewayContent content = getContentFromEntity(contact, EnterpriseContact.class);
           response.setUpdatedRecord(content);
 
           response.setError(new Error("0", "SUCCESS", "proxy.EnterpriseContact.Update"));
-          log.info("EnterpriseContact[" + contact.toString() + "] updated by principal[" + getLoggedUser() + "]");
+          this.log.info("EnterpriseContact[" + contact.toString() + "] updated by principal[" + getLoggedUser() + "]");
         } else {
-          log.warning("Validation error: " + error_description);
+          this.log.warning("Validation error: " + error_description);
           response.setError(new Error("VAL01", "Error de validación de datos:" + error_description,
               "proxy.EnterpriseContact.Update"));
         }
       }
 
     } catch (Exception e) {
-      log.severe("Exception found while updating EnterpriseContactBean");
-      log.throwing(this.getClass().getName(), "Update", e);
+      this.log.severe("Exception found while updating EnterpriseContactBean");
+      this.log.throwing(this.getClass().getName(), "Update", e);
 
       if (e instanceof javax.persistence.PersistenceException)
         response.setError(new Error("DB01", "Los datos que usted ha intentado ingresar, no son permitidos por la base de datos, "
@@ -215,7 +217,7 @@ public class EnterpriseContactBean extends BaseBean implements Cruddable {
       }
     }
 
-    log.exiting(this.getClass().getCanonicalName(), "Update");
+    this.log.exiting(this.getClass().getCanonicalName(), "Update");
     return response;
   }
 
@@ -227,37 +229,33 @@ public class EnterpriseContactBean extends BaseBean implements Cruddable {
    */
   @Override
   public BaseResponse Delete(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Delete");
+    this.log.entering(this.getClass().getCanonicalName(), "Delete");
     BaseResponse response = new BaseResponse();
 
     try {
       EnterpriseContact contact = entityFromRequest(request, EnterpriseContact.class);
       if (contact.getContactId() == 0) {
-        log.warning("VAL04 - Entity ID Omission.");
+        this.log.warning("VAL04 - Entity ID Omission.");
         response.setError(new Error("VAL04", "Se ha omitido el id del contacto al intentar eliminar el registro.",
             "proxy.EnterpriseContact.Delete"));
       } else {
-        TypedQuery<EnterpriseContact> readQuery = em.createNamedQuery("ENTERPRISE_CONTACT_BY_ID", EnterpriseContact.class);
-        readQuery.setParameter("contactId", contact.getContactId());
-        contact = readQuery.getSingleResult();
-        log.info("Deleting EnterpriseContact [" + contact.toString() + "] by principal[" + getLoggedUser() + "]");
-        em.merge(contact);
-        em.remove(contact);
-        em.flush();
+        contact = dataModel.readSingleDataModel("ENTERPRISE_CONTACT_BY_ID", "CONTACTiD", contact.getContactId(), EnterpriseContact.class);
+        this.log.info("Deleting EnterpriseContact [" + contact.toString() + "] by principal[" + getLoggedUser() + "]");
+        dataModel.deleteDataModel(contact, getLoggedUser());
 
         response.setError(new Error("0", "SUCCESS", "proxy.EnterpriseContact.Delete"));
-        log.info("EnterpriseContact successfully deleted by principal [" + getLoggedUser() + "]");
+        this.log.info("EnterpriseContact successfully deleted by principal [" + getLoggedUser() + "]");
       }
     } catch (Exception e) {
-      log.severe("Exception found while deleting contact");
-      log.throwing(this.getClass().getName(), "Delete", e);
+      this.log.severe("Exception found while deleting contact");
+      this.log.throwing(this.getClass().getName(), "Delete", e);
 
       response.setError(new Error("DEL01",
           "Error al intentar borrar datos. Por favor comunique el error al soporte de aplicaciones.",
           "proxy.EnterpriseContact.Delete"));
     }
 
-    log.exiting(this.getClass().getCanonicalName(), "Delete");
+    this.log.exiting(this.getClass().getCanonicalName(), "Delete");
     return response;
   }
 
@@ -361,13 +359,8 @@ public class EnterpriseContactBean extends BaseBean implements Cruddable {
   private boolean enterpriseExists(EnterpriseContact contact) {
     boolean exists = true;
 
-    TypedQuery<com.tramex.sisoprega.dto.EnterpriseRancher> readQuery = null;
-
-    readQuery = em.createNamedQuery("ENTERPRISE_RANCHER_BY_ID", com.tramex.sisoprega.dto.EnterpriseRancher.class);
-    readQuery.setParameter("enterpriseId", contact.getEnterpriseId());
-
     try {
-      com.tramex.sisoprega.dto.EnterpriseRancher enterprise = readQuery.getSingleResult();
+      EnterpriseRancher enterprise = dataModel.readSingleDataModel("ENTERPRISE_RANCHER_BY_ID", "enterpriseId", contact.getEnterpriseId(), EnterpriseRancher.class);
       exists = enterprise != null;
     } catch (NoResultException e) {
       exists = false;

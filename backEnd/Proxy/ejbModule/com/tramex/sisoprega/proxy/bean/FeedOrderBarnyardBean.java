@@ -15,10 +15,11 @@
  */
 package com.tramex.sisoprega.proxy.bean;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.ejb.Stateless;
-import javax.persistence.TypedQuery;
 
 import com.tramex.sisoprega.common.BaseResponse;
 import com.tramex.sisoprega.common.CreateGatewayResponse;
@@ -47,6 +48,7 @@ import com.tramex.sisoprega.dto.FeedOrderBarnyard;
  * 12/16/2012  Diego Torres                  Adding log activity
  * 12/16/2012  Alfredo Pacheco				 Changed filter FEED_ORDER_FOR_BARNYARD_BY_RECEPTION_ID 
  *                                           to FEED_ORDER_FOR_BARNYARD_BY_ORDER_ID
+ * 01/22/2013  Diego Torres                  Implementing DataModel.
  * ====================================================================================
  * </PRE>
  * 
@@ -65,34 +67,32 @@ public class FeedOrderBarnyardBean extends BaseBean implements Cruddable {
    */
   @Override
   public CreateGatewayResponse Create(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Create");
+    this.log.entering(this.getClass().getCanonicalName(), "Create");
 
     CreateGatewayResponse response = new CreateGatewayResponse();
     FeedOrderBarnyard feedOrdBarn = null;
     try {
       feedOrdBarn = entityFromRequest(request, FeedOrderBarnyard.class);
 
-      log.fine("Received FeedOrderBarnyard in request: " + feedOrdBarn);
+      this.log.fine("Received FeedOrderBarnyard in request: " + feedOrdBarn);
 
       if (validateEntity(feedOrdBarn)) {
-        log.finer("FeedOrderBarnyard succesfully validated");
-        em.persist(feedOrdBarn);
-        log.finer("FeedOrderBarnyard persisted on database");
-        em.flush();
+        this.log.finer("FeedOrderBarnyard succesfully validated");
+        dataModel.createDataModel(feedOrdBarn);
 
         String sId = String.valueOf(feedOrdBarn.getFeedOrdBarnId());
-        log.finer("Setting FeedOrderBarnyard id in response: " + sId);
+        this.log.finer("Setting FeedOrderBarnyard id in response: " + sId);
         response.setGeneratedId(sId);
         response.setError(new Error("0", "SUCCESS", "proxy.FeedOrderBarnyardBean.Create"));
-        log.info("Feed Order Barnyard [" + feedOrdBarn.toString() + "] created by principal[" + getLoggedUser() + "]");
+        this.log.info("Feed Order Barnyard [" + feedOrdBarn.toString() + "] created by principal[" + getLoggedUser() + "]");
       } else {
-        log.warning("Error de validación: " + error_description);
+        this.log.warning("Error de validación: " + error_description);
         response.setError(new Error("VAL01", "Error de validación: " + error_description, "proxy.FeedOrderBarnyardBean.Create"));
       }
 
     } catch (Exception e) {
-      log.severe("Exception found while creating FeedOrderBarnyardBean");
-      log.throwing(this.getClass().getName(), "Create", e);
+      this.log.severe("Exception found while creating FeedOrderBarnyardBean");
+      this.log.throwing(this.getClass().getName(), "Create", e);
 
       if (e instanceof javax.persistence.PersistenceException)
         response.setError(new Error("DB01",
@@ -103,7 +103,7 @@ public class FeedOrderBarnyardBean extends BaseBean implements Cruddable {
       }
     }
 
-    log.exiting(this.getClass().getCanonicalName(), "Create");
+    this.log.exiting(this.getClass().getCanonicalName(), "Create");
     return response;
   }
 
@@ -116,7 +116,7 @@ public class FeedOrderBarnyardBean extends BaseBean implements Cruddable {
    */
   @Override
   public ReadGatewayResponse Read(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Read");
+    this.log.entering(this.getClass().getCanonicalName(), "Read");
 
     ReadGatewayResponse response = new ReadGatewayResponse();
     response.setEntityName(request.getEntityName());
@@ -124,19 +124,18 @@ public class FeedOrderBarnyardBean extends BaseBean implements Cruddable {
     FeedOrderBarnyard order = null;
     try {
       order = entityFromRequest(request, FeedOrderBarnyard.class);
-      log.fine("Got Feed Order Barnyard from request: " + order);
+      this.log.fine("Got Feed Order Barnyard from request: " + order);
 
-      TypedQuery<FeedOrderBarnyard> readQuery = null;
       String qryLogger = "";
+      String queryName = "";
+      Map<String, Object> parameters = new HashMap<String, Object>();
       if (order.getFeedOrdBarnId() != 0) {
-        readQuery = em.createNamedQuery("CAT_FEEDORDERBARNYARD_BY_ID", FeedOrderBarnyard.class);
-        log.fine("Query by Id: " + order.getOrderId());
-        readQuery.setParameter("feedOrdBarnId", order.getOrderId());
+        queryName = "CAT_FEEDORDERBARNYARD_BY_ID";
+        parameters.put("feedOrdBarnId", order.getOrderId());
         qryLogger = "By feedOrdBarnId [" + order.getFeedOrdBarnId() + "]";
       } else if (order.getOrderId() != 0) {
-        readQuery = em.createNamedQuery("FEED_ORDER_FOR_BARNYARD_BY_ORDER_ID", FeedOrderBarnyard.class);
-        log.fine("Query by OrderId: " + order.getOrderId());
-        readQuery.setParameter("orderId", order.getOrderId());  
+        queryName = "FEED_ORDER_FOR_BARNYARD_BY_ORDER_ID";
+        parameters.put("orderId", order.getOrderId());  
         qryLogger = "By orderId [" + order.getOrderId() + "]";
       } else {
         response.setError(new Error("VAL03", "El filtro especificado no es válido para las órdenes de alimento",
@@ -145,7 +144,7 @@ public class FeedOrderBarnyardBean extends BaseBean implements Cruddable {
       }
 
       // Query the results through the jpa using a typedQuery
-      List<FeedOrderBarnyard> queryResults = readQuery.getResultList();
+      List<FeedOrderBarnyard> queryResults = dataModel.readDataModelList(queryName, parameters, FeedOrderBarnyard.class);
 
       if (queryResults.isEmpty()) {
         response.setError(new Error("VAL02", "No se encontraron datos para el filtro seleccionado",
@@ -156,18 +155,18 @@ public class FeedOrderBarnyardBean extends BaseBean implements Cruddable {
 
         // Add success message to response
         response.setError(new Error("0", "SUCCESS", "proxy.FeedOrderBarnyard.Read"));
-        log.info("Read operation " + qryLogger + " executed by principal[" + getLoggedUser() + "] on FeedOrderBarnyardBean");
+        this.log.info("Read operation " + qryLogger + " executed by principal[" + getLoggedUser() + "] on FeedOrderBarnyardBean");
       }
     } catch (Exception e) {
       // something went wrong, alert the server and respond the client
-      log.severe("Exception found while reading feed order");
-      log.throwing(this.getClass().getCanonicalName(), "Read", e);
+      this.log.severe("Exception found while reading feed order");
+      this.log.throwing(this.getClass().getCanonicalName(), "Read", e);
 
       response.setError(new Error("DB02", "Read exception: " + e.getMessage(), "proxy.FeedOrderBarnyardBean.Read"));
     }
 
     // end and respond.
-    log.exiting(this.getClass().getCanonicalName(), "Read");
+    this.log.exiting(this.getClass().getCanonicalName(), "Read");
     return response;
   }
 
@@ -180,36 +179,35 @@ public class FeedOrderBarnyardBean extends BaseBean implements Cruddable {
    */
   @Override
   public UpdateGatewayResponse Update(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Update");
+    this.log.entering(this.getClass().getCanonicalName(), "Update");
     UpdateGatewayResponse response = new UpdateGatewayResponse();
     FeedOrderBarnyard feedOrdBarn = null;
     try {
       feedOrdBarn = entityFromRequest(request, FeedOrderBarnyard.class);
 
       if (feedOrdBarn.getFeedOrdBarnId() == 0) {
-        log.warning("VAL04 - Entity ID Omission.");
+        this.log.warning("VAL04 - Entity ID Omission.");
         response.setError(new Error("VAL04", "Se ha omitido el id del corral al intentar actualizar sus datos.",
             "proxy.FeedOrderBarnyard.Update"));
       } else {
         if (validateEntity(feedOrdBarn)) {
-          em.merge(feedOrdBarn);
-          em.flush();
+          dataModel.updateDataModel(feedOrdBarn);
 
           GatewayContent content = getContentFromEntity(feedOrdBarn, FeedOrderBarnyard.class);
           response.setUpdatedRecord(content);
 
           response.setError(new Error("0", "SUCCESS", "proxy.FeedOrderBarnyard.Update"));
-          log.info("FeddOrderBarnyard[" + feedOrdBarn.toString() + "] updated by principal[" + getLoggedUser() + "]");
+          this.log.info("FeddOrderBarnyard[" + feedOrdBarn.toString() + "] updated by principal[" + getLoggedUser() + "]");
         } else {
-          log.warning("Validation error:" + error_description);
+          this.log.warning("Validation error:" + error_description);
           response.setError(new Error("VAL01", "Error de validación de datos:" + error_description,
               "proxy.FeedOrderBarnyardBean.Update"));
         }
       }
 
     } catch (Exception e) {
-      log.severe("Exception found while updating FeedOrderBarnyard");
-      log.throwing(this.getClass().getName(), "Update", e);
+      this.log.severe("Exception found while updating FeedOrderBarnyard");
+      this.log.throwing(this.getClass().getName(), "Update", e);
 
       if (e instanceof javax.persistence.PersistenceException)
         response.setError(new Error("DB01",
@@ -221,7 +219,7 @@ public class FeedOrderBarnyardBean extends BaseBean implements Cruddable {
       }
     }
 
-    log.exiting(this.getClass().getCanonicalName(), "Update");
+    this.log.exiting(this.getClass().getCanonicalName(), "Update");
     return response;
   }
 
@@ -234,37 +232,33 @@ public class FeedOrderBarnyardBean extends BaseBean implements Cruddable {
    */
   @Override
   public BaseResponse Delete(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Delete");
+    this.log.entering(this.getClass().getCanonicalName(), "Delete");
     BaseResponse response = new BaseResponse();
 
     try {
       FeedOrderBarnyard feedOrdBarn = entityFromRequest(request, FeedOrderBarnyard.class);
       if (feedOrdBarn.getFeedOrdBarnId() == 0) {
-        log.warning("VAL04 - Entity ID Omission.");
+        this.log.warning("VAL04 - Entity ID Omission.");
         response.setError(new Error("VAL04", "Se ha omitido el id al intentar eliminar el registro.",
             "proxy.FeedOrderBarnyard.Delete"));
       } else {
-        TypedQuery<FeedOrderBarnyard> readQuery = em.createNamedQuery("CAT_FEEDORDERBARNYARD_BY_ID", FeedOrderBarnyard.class);
-        readQuery.setParameter("feedOrdBarnId", feedOrdBarn.getFeedOrdBarnId());
-        feedOrdBarn = readQuery.getSingleResult();
-        log.info("Deleting FeedOrderBarnyard [" + feedOrdBarn.toString() + "] by principal[" + getLoggedUser() + "]");
-        em.merge(feedOrdBarn);
-        em.remove(feedOrdBarn);
-        em.flush();
+        feedOrdBarn = dataModel.readSingleDataModel("CAT_FEEDORDERBARNYARD_BY_ID", "feedOrdBarnId", feedOrdBarn.getFeedOrdBarnId(), FeedOrderBarnyard.class);
+        this.log.info("Deleting FeedOrderBarnyard [" + feedOrdBarn.toString() + "] by principal[" + getLoggedUser() + "]");
+        dataModel.deleteDataModel(feedOrdBarn, getLoggedUser());
 
         response.setError(new Error("0", "SUCCESS", "proxy.FeedOrderBarnyard.Delete"));
-        log.info("Feed Order Barnyard successfully deleted by principal [" + getLoggedUser() + "]");
+        this.log.info("Feed Order Barnyard successfully deleted by principal [" + getLoggedUser() + "]");
       }
     } catch (Exception e) {
-      log.severe("Exception found while deleting FeedOrderBarnyard");
-      log.throwing(this.getClass().getName(), "Delete", e);
+      this.log.severe("Exception found while deleting FeedOrderBarnyard");
+      this.log.throwing(this.getClass().getName(), "Delete", e);
 
       response.setError(new Error("DEL01",
           "Error al intentar borrar datos, es probable que esta entidad tenga otras entidades relacionadas, ",
           "proxy.FeedOrderBarnyard.Delete"));
     }
 
-    log.exiting(this.getClass().getCanonicalName(), "Delete");
+    this.log.exiting(this.getClass().getCanonicalName(), "Delete");
     return response;
   }
 

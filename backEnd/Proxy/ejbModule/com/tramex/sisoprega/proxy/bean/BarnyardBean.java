@@ -15,10 +15,11 @@
  */
 package com.tramex.sisoprega.proxy.bean;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.ejb.Stateless;
-import javax.persistence.TypedQuery;
 
 import com.tramex.sisoprega.common.BaseResponse;
 import com.tramex.sisoprega.common.CreateGatewayResponse;
@@ -46,6 +47,7 @@ import com.tramex.sisoprega.dto.Barnyard;
  * 12/04/2012  Diego Torres                  Fixing delete operation, adding flower box
  *                                           and adding read functionality.
  * 12/16/2012  Diego Torres                  Adding log functionality based on loggedUser.
+ * 01/22/2013  Diego Torres                  Apply data model interfacing.
  * ====================================================================================
  * </PRE>
  * 
@@ -54,7 +56,7 @@ import com.tramex.sisoprega.dto.Barnyard;
  */
 @Stateless
 public class BarnyardBean extends BaseBean implements Cruddable {
-
+  
   /*
    * (non-Javadoc)
    * 
@@ -63,46 +65,12 @@ public class BarnyardBean extends BaseBean implements Cruddable {
    */
   @Override
   public CreateGatewayResponse Create(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Create");
+    this.log.entering(this.getClass().getCanonicalName(), "Create");
 
     CreateGatewayResponse response = new CreateGatewayResponse();
-    Barnyard barnyard = null;
-    try {
-      barnyard = entityFromRequest(request, Barnyard.class);
+    response.setError(new Error("VAL04", "No se permite la creación de Corrales por este medio.", "proxy.BarnyardBean.Create"));
 
-      log.fine("Received Barnyard in request: " + barnyard);
-
-      if (validateEntity(barnyard)) {
-        log.finer("Barnyard succesfully validated");
-        em.persist(barnyard);
-        log.finer("Barnyard persisted on database");
-        em.flush();
-
-        String sId = String.valueOf(barnyard.getBarnyardId());
-        log.finer("Setting Barnyard id in response: " + sId);
-        response.setGeneratedId(sId);
-        response.setError(new Error("0", "SUCCESS", "proxy.BarnyardBean.Create"));
-        log.info("Barnyard[" + barnyard.toString() + "] created by principal[" + getLoggedUser() + "]");
-      } else {
-        log.warning("Error de validación: " + error_description);
-        response.setError(new Error("VAL01", "Error de validación: " + error_description, "proxy.BarnyardBean.Create"));
-      }
-
-    } catch (Exception e) {
-      log.severe("Exception found while creating BarnyardBean");
-      log.throwing(this.getClass().getName(), "Create", e);
-
-      if (e instanceof javax.persistence.PersistenceException)
-        response
-            .setError(new Error("DB01", "Los datos que usted ha intentado ingresar, no son permitidos por la base de datos, "
-                + "muy probablemente el corral que usted quiere agregar ya existe en la base de datos.",
-                "proxy.BarnyardBean.Create"));
-      else {
-        response.setError(new Error("DB02", "Create exception: " + e.getMessage(), "proxy.BarnyardBean.Create"));
-      }
-    }
-
-    log.exiting(this.getClass().getCanonicalName(), "Create");
+    this.log.exiting(this.getClass().getCanonicalName(), "Create");
     return response;
   }
 
@@ -114,7 +82,7 @@ public class BarnyardBean extends BaseBean implements Cruddable {
    */
   @Override
   public ReadGatewayResponse Read(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Read");
+    this.log.entering(this.getClass().getCanonicalName(), "Read");
 
     ReadGatewayResponse response = new ReadGatewayResponse();
     response.setEntityName(request.getEntityName());
@@ -122,24 +90,26 @@ public class BarnyardBean extends BaseBean implements Cruddable {
     Barnyard barnyard = null;
     try {
       barnyard = entityFromRequest(request, Barnyard.class);
-      log.fine("Got barnyard from request: " + barnyard);
+      this.log.fine("Got barnyard from request: " + barnyard);
 
-      TypedQuery<Barnyard> tQuery = null;
       String qryLogger = "";
+      Map<String, Object> parameters = new HashMap<String, Object>();
+      String queryName = "";
+      
       if (barnyard.getBarnyardId() != 0) {
-        tQuery = em.createNamedQuery("BARNYARD_BY_ID", Barnyard.class);
-        tQuery.setParameter("barnyardId", barnyard.getBarnyardId());
+        queryName = "BARNYARD_BY_ID";
+        parameters.put("barnyardId", barnyard.getBarnyardId());
         qryLogger = "By barnyardId [" + barnyard.getBarnyardId() + "]";
       } else if (barnyard.getLocationId() != 0) {
-        tQuery = em.createNamedQuery("BARNYARD_BY_LOCATION", Barnyard.class);
-        tQuery.setParameter("locationId", barnyard.getLocationId());
+        queryName = "BARNYARD_BY_LOCATION";
+        parameters.put("locationId", barnyard.getLocationId());
         qryLogger = "By locationId [" + barnyard.getLocationId() + "]";
       } else {
-        tQuery = em.createNamedQuery("ALL_BARNYARDS", Barnyard.class);
+        queryName = "ALL_BARNYARDS";
         qryLogger = "By ALL_BARNYARDS";
       }
 
-      List<Barnyard> results = tQuery.getResultList();
+      List<Barnyard> results = dataModel.readDataModelList(queryName, parameters, Barnyard.class);
       if (results.isEmpty()) {
         response.setError(new Error("VAL02", "No se encontraron datos para el filtro seleccionado", "proxy.BarnyardBean.Read"));
       } else {
@@ -147,18 +117,18 @@ public class BarnyardBean extends BaseBean implements Cruddable {
         response.getRecord().addAll(records);
 
         response.setError(new Error("0", "SUCCESS", "proxy.BarnyardBean.Read"));
-        log.info("Read operation " + qryLogger + " executed by principal[" + getLoggedUser() + "] on BarnyardBean");
+        this.log.info("Read operation " + qryLogger + " executed by principal[" + getLoggedUser() + "] on BarnyardBean");
       }
 
     } catch (Exception e) {
       // something went wrong, alert the server and respond the client
-      log.severe("Exception found while reading BarnyardBean");
-      log.throwing(this.getClass().getCanonicalName(), "Read", e);
+      this.log.severe("Exception found while reading BarnyardBean");
+      this.log.throwing(this.getClass().getCanonicalName(), "Read", e);
 
       response.setError(new Error("DB02", "Read exception: " + e.getMessage(), "proxy.BarnyardBean.Read"));
     }
 
-    log.exiting(this.getClass().getCanonicalName(), "Read");
+    this.log.exiting(this.getClass().getCanonicalName(), "Read");
     return response;
   }
 
@@ -170,34 +140,33 @@ public class BarnyardBean extends BaseBean implements Cruddable {
    */
   @Override
   public UpdateGatewayResponse Update(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Update");
+    this.log.entering(this.getClass().getCanonicalName(), "Update");
     UpdateGatewayResponse response = new UpdateGatewayResponse();
     Barnyard barnyard = null;
     try {
       barnyard = entityFromRequest(request, Barnyard.class);
 
       if (barnyard.getBarnyardId() == 0) {
-        log.warning("VAL04 - Entity ID Omission.");
+        this.log.warning("VAL04 - Entity ID Omission.");
         response.setError(new Error("VAL04", "Se ha omitido el id del corral al intentar actualizar sus datos.", "proxy.Barnyard.Update"));
       } else {
         if (validateEntity(barnyard)) {
-          em.merge(barnyard);
-          em.flush();
+          dataModel.updateDataModel(barnyard);
 
           GatewayContent content = getContentFromEntity(barnyard, Barnyard.class);
           response.setUpdatedRecord(content);
 
           response.setError(new Error("0", "SUCCESS", "proxy.Barnyard.Update"));
-          log.info("Barnyard[" + barnyard.toString() + "] updated by principal[" + getLoggedUser() + "]");
+          this.log.info("Barnyard[" + barnyard.toString() + "] updated by principal[" + getLoggedUser() + "]");
         } else {
-          log.warning("Validation error:" + error_description);
+          this.log.warning("Validation error:" + error_description);
           response.setError(new Error("VAL01", "Error de validación de datos:" + error_description, "proxy.BarnyardBean.Update"));
         }
       }
 
     } catch (Exception e) {
-      log.severe("Exception found while updating Barnyard");
-      log.throwing(this.getClass().getName(), "Update", e);
+      this.log.severe("Exception found while updating Barnyard");
+      this.log.throwing(this.getClass().getName(), "Update", e);
 
       if (e instanceof javax.persistence.PersistenceException)
         response
@@ -209,7 +178,7 @@ public class BarnyardBean extends BaseBean implements Cruddable {
       }
     }
 
-    log.exiting(this.getClass().getCanonicalName(), "Update");
+    this.log.exiting(this.getClass().getCanonicalName(), "Update");
     return response;
   }
 
@@ -221,38 +190,11 @@ public class BarnyardBean extends BaseBean implements Cruddable {
    */
   @Override
   public BaseResponse Delete(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Delete");
+    this.log.entering(this.getClass().getCanonicalName(), "Delete");
+    
     BaseResponse response = new BaseResponse();
-
-    try {
-      Barnyard barnyard = entityFromRequest(request, Barnyard.class);
-      if (barnyard.getBarnyardId() == 0) {
-        log.warning("VAL04 - Entity ID Omission.");
-        response.setError(new Error("VAL04", "Se ha omitido el id del corral al intentar eliminar el registro.",
-            "proxy.Barnyard.Delete"));
-      } else {
-        TypedQuery<Barnyard> readQuery = em.createNamedQuery("BARNYARD_BY_ID", Barnyard.class);
-        readQuery.setParameter("barnyardId", barnyard.getBarnyardId());
-        barnyard = readQuery.getSingleResult();
-        log.info("Deleting Barnyard[" + barnyard.toString() + "] by principal[" + getLoggedUser() + "]");
-        em.merge(barnyard);
-        em.remove(barnyard);
-        em.flush();
-
-        response.setError(new Error("0", "SUCCESS", "proxy.Barnyard.Delete"));
-        log.info("Barnyard successfully deleted by principal [" + getLoggedUser() + "]");
-      }
-    } catch (Exception e) {
-      log.severe("Exception found while deleting barnyard");
-      log.throwing(this.getClass().getName(), "Delete", e);
-
-      response.setError(new Error("DEL01",
-          "Error al intentar borrar datos, es probable que esta entidad tenga otras entidades relacionadas, "
-              + "por ejemplo, un corral que cuenta con recepciones no puede ser eliminado sin antes resolver la recepción.",
-          "proxy.Barnyard.Delete"));
-    }
-
-    log.exiting(this.getClass().getCanonicalName(), "Delete");
+    response.setError(new Error("VAL04", "No se permite la eliminación de Corrales por este medio.", "proxy.BarnyardBean.Delete"));
+    
     return response;
   }
 }

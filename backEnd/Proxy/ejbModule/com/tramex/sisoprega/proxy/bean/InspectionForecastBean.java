@@ -18,7 +18,6 @@ package com.tramex.sisoprega.proxy.bean;
 import java.util.List;
 
 import javax.ejb.Stateless;
-import javax.persistence.TypedQuery;
 
 import com.tramex.sisoprega.common.BaseResponse;
 import com.tramex.sisoprega.common.CreateGatewayResponse;
@@ -42,6 +41,7 @@ import com.tramex.sisoprega.dto.InspectionForecast;
  * MM/DD/YYYY
  * ----------  ---------------------------  -------------------------------------------
  * 01/12/2013  Diego Torres              Initial Version.
+ * 01/22/2013  Diego Torres                  Implementing DataModel.
  * ====================================================================================
  * </PRE>
  * 
@@ -56,34 +56,32 @@ public class InspectionForecastBean extends BaseBean implements Cruddable {
    */
   @Override
   public CreateGatewayResponse Create(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Create");
+    this.log.entering(this.getClass().getCanonicalName(), "Create");
 
     CreateGatewayResponse response = new CreateGatewayResponse();
     InspectionForecast forecast = null;
     try {
       forecast = entityFromRequest(request, InspectionForecast.class);
 
-      log.fine("Received InspectionForecast in request: " + forecast);
+      this.log.fine("Received InspectionForecast in request: " + forecast);
 
       if (validateEntity(forecast)) {
-        log.finer("InspectionForecast succesfully validated");
-        em.persist(forecast);
-        log.finer("InspectionForecast persisted on database");
-        em.flush();
+        this.log.finer("InspectionForecast succesfully validated");
+        dataModel.createDataModel(forecast);
 
         String sId = String.valueOf(forecast.getForecastId());
-        log.finer("Setting InspectionForecast id in response: " + sId);
+        this.log.finer("Setting InspectionForecast id in response: " + sId);
         response.setGeneratedId(sId);
         response.setError(new Error("0", "SUCCESS", "proxy.InspectionForecastBean.Create"));
-        log.info("Reception inspectionForecast [" + forecast.toString() + "] created by principal[" + getLoggedUser() + "]");
+        this.log.info("Reception inspectionForecast [" + forecast.toString() + "] created by principal[" + getLoggedUser() + "]");
       } else {
-        log.warning("Error de validación: " + error_description);
+        this.log.warning("Error de validación: " + error_description);
         response.setError(new Error("VAL01", "Error de validación: " + error_description, "proxy.InspectionForecastBean.Create"));
       }
 
     } catch (Exception e) {
-      log.severe("Exception found while creating InspectionForecastBean");
-      log.throwing(this.getClass().getName(), "Create", e);
+      this.log.severe("Exception found while creating InspectionForecastBean");
+      this.log.throwing(this.getClass().getName(), "Create", e);
 
       if (e instanceof javax.persistence.PersistenceException)
         response.setError(new Error("DB01",
@@ -94,7 +92,7 @@ public class InspectionForecastBean extends BaseBean implements Cruddable {
       }
     }
 
-    log.exiting(this.getClass().getCanonicalName(), "Create");
+    this.log.exiting(this.getClass().getCanonicalName(), "Create");
     return response;
   }
 
@@ -103,7 +101,7 @@ public class InspectionForecastBean extends BaseBean implements Cruddable {
    */
   @Override
   public ReadGatewayResponse Read(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Read");
+    this.log.entering(this.getClass().getCanonicalName(), "Read");
 
     ReadGatewayResponse response = new ReadGatewayResponse();
     response.setEntityName(request.getEntityName());
@@ -112,13 +110,12 @@ public class InspectionForecastBean extends BaseBean implements Cruddable {
     try {
       forecast = entityFromRequest(request, InspectionForecast.class);
 
-      log.fine("Got inspection forecast query from request: " + forecast);
+      this.log.fine("Got inspection forecast query from request: " + forecast);
 
-      TypedQuery<InspectionForecast> readQuery = null;
+      String queryName = "TODAY_INSPECTION_FORECAST";
       String qryLogger = "By TODAY_INSPECTION_FORECAST";
-      readQuery = em.createNamedQuery("TODAY_INSPECTION_FORECAST", InspectionForecast.class);
 
-      List<InspectionForecast> queryResults = readQuery.getResultList();
+      List<InspectionForecast> queryResults = dataModel.readDataModelList(queryName, null, InspectionForecast.class);
 
       if (queryResults.isEmpty()) {
         response.setError(new Error("VAL02", "No se encontraron datos para el filtro seleccionado", "proxy.InspectionDetails.Read"));
@@ -126,16 +123,16 @@ public class InspectionForecastBean extends BaseBean implements Cruddable {
         response.getRecord().addAll(contentFromList(queryResults, InspectionForecast.class));
 
         response.setError(new Error("0", "SUCCESS", "proxy.InspectionForecast.Read"));
-        log.info("Read operation " + qryLogger + " executed by principal[" + getLoggedUser() + "] on InspectionForecastBean");
+        this.log.info("Read operation " + qryLogger + " executed by principal[" + getLoggedUser() + "] on InspectionForecastBean");
       }
     } catch (Exception e) {
-      log.severe("Exception found while reading inspection forecast filter");
-      log.throwing(this.getClass().getCanonicalName(), "Read", e);
+      this.log.severe("Exception found while reading inspection forecast filter");
+      this.log.throwing(this.getClass().getCanonicalName(), "Read", e);
 
       response.setError(new Error("DB02", "Error en la base de datos: " + e.getMessage(), "proxy.InspectionForecast.Read"));
     }
 
-    log.exiting(this.getClass().getCanonicalName(), "Read");
+    this.log.exiting(this.getClass().getCanonicalName(), "Read");
     return response;
   }
 
@@ -144,11 +141,11 @@ public class InspectionForecastBean extends BaseBean implements Cruddable {
    */
   @Override
   public UpdateGatewayResponse Update(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Update");
+    this.log.entering(this.getClass().getCanonicalName(), "Update");
     UpdateGatewayResponse response = new UpdateGatewayResponse();
     response.setError(new Error("VAL01", "La actualización no es permitida para la lista de inspección", "proxy.InspectionForecastBean.Update"));
 
-    log.exiting(this.getClass().getCanonicalName(), "Update");
+    this.log.exiting(this.getClass().getCanonicalName(), "Update");
     return response;
   }
 
@@ -157,7 +154,7 @@ public class InspectionForecastBean extends BaseBean implements Cruddable {
    */
   @Override
   public BaseResponse Delete(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Delete");
+    this.log.entering(this.getClass().getCanonicalName(), "Delete");
     BaseResponse response = new BaseResponse();
     response.setError(new Error("VAL04", "Borrado no permitido en la lista de inspección.", "proxy.InspectionDetails.Delete"));
     return response;
