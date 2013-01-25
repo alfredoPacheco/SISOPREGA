@@ -259,7 +259,7 @@ enyo
 																className : "enyo-button-affirmative",
 																flex : 1,
 																caption : "Actualizar",
-																onclick : "updateRancher"
+																onclick : "updateForecast"
 															},
 															{
 																kind : "Button",
@@ -781,10 +781,12 @@ enyo
 							inSender.value.length - 1);
 					break;
 				case 9:
-					if (inSender.value != "") {
-						this.clickOption(inSender);
+					if(this.$.options.isOpen==true){
+						if (inSender.value != "") {
+							this.clickOption(inSender);
+						}
+						return;
 					}
-					return;
 				case 40:
 					return;
 				default:
@@ -870,7 +872,6 @@ enyo
 					barnyardsAux[i] = auxBarn;
 
 				}
-
 				objInspFore.barnyards = barnyardsAux;
 
 				return objInspFore;
@@ -880,13 +881,22 @@ enyo
 				if (objForecast) {
 					if (this._id) {
 						objForecast.id = this._id;
-						this.iCreated = cacheInspFore.addForecast(objForecast,
+						cacheInspFore.addForecast(objForecast,
 								this, "afterAddInspFore");
 					} else {
-						this.iCreated = cacheInspFore.createForecast(
+						cacheInspFore.createForecast(
 								objForecast, this, "afterAddInspFore");
 					}
 
+				}
+			},
+			updateForecast : function() {
+				var objForecast = this.getInspectionForecast();
+				if (objForecast) {
+					objForecast.id = this._id;
+					objForecast.fore_details_id = this.getSelected().fore_details_id;
+					cacheInspFore.updateForecastDetails(objForecast, this,
+							 "afterAddInspFore");
 				}
 			},
 			afterAddInspFore : function(objForecast) {

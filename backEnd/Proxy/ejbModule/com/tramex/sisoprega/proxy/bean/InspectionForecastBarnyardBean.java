@@ -43,6 +43,7 @@ import com.tramex.sisoprega.dto.InspectionForecastBarnyard;
  * MM/DD/YYYY
  * ----------  ---------------------------  -------------------------------------------
  * 01/13/2013  Diego Torres                  Initial Version.
+ * 01/24/2013  Alfredo Pacheco				 Added FORECAST_BARNYARD_BY_FORECAST_DETAIL_ID implementatino for delete.
  * ====================================================================================
  * </PRE>
  * 
@@ -210,20 +211,30 @@ public class InspectionForecastBarnyardBean extends BaseBean implements Cruddabl
 
     try {
       InspectionForecastBarnyard forecastBarnyard = entityFromRequest(request, InspectionForecastBarnyard.class);
-      if (forecastBarnyard.getIfbId() == 0) {
+      
+      if (forecastBarnyard.getFdId()!= 0){
+    	  TypedQuery<InspectionForecastBarnyard> readQuery = em.createNamedQuery("FORECAST_BARNYARD_BY_FORECAST_DETAIL_ID", InspectionForecastBarnyard.class);
+          readQuery.setParameter("fdId", forecastBarnyard.getFdId());
+          forecastBarnyard = readQuery.getSingleResult();
+          log.info("Deleting forecast barnyard [" + forecastBarnyard.toString() + "] by principal[" + getLoggedUser() + "]");
+          em.merge(forecastBarnyard);
+          em.remove(forecastBarnyard);
+          em.flush();
+          response.setError(new Error("0", "SUCCESS", "proxy.InspectionForecastBarnyard.Delete"));
+          log.info("InspectionForecastBarnyard successfully deleted by principal [" + getLoggedUser() + "]");
+      }else if(forecastBarnyard.getIfbId() != 0) {
+          TypedQuery<InspectionForecastBarnyard> readQuery = em.createNamedQuery("FORECAST_BARNAYARD_BY_ID", InspectionForecastBarnyard.class);
+          readQuery.setParameter("ifbId", forecastBarnyard.getIfbId());
+          forecastBarnyard = readQuery.getSingleResult();
+          log.info("Deleting forecast detail [" + forecastBarnyard.toString() + "] by principal[" + getLoggedUser() + "]");
+          em.merge(forecastBarnyard);
+          em.remove(forecastBarnyard);
+          em.flush();
+          response.setError(new Error("0", "SUCCESS", "proxy.InspectionForecastBarnyard.Delete"));
+          log.info("InspectionForecastBarnyard successfully deleted by principal [" + getLoggedUser() + "]");                  
+      } else {
         log.warning("VAL04 - Entity ID Omission.");
         response.setError(new Error("VAL04", "Se ha omitido el id de detalles de inspeccion al intentar eliminar el registro.", "proxy.InspectionDetails.Delete"));
-      } else {
-        TypedQuery<InspectionForecastBarnyard> readQuery = em.createNamedQuery("FORECAST_BARNAYARD_BY_ID", InspectionForecastBarnyard.class);
-        readQuery.setParameter("ifbId", forecastBarnyard.getIfbId());
-        forecastBarnyard = readQuery.getSingleResult();
-        log.info("Deleting forecast detail [" + forecastBarnyard.toString() + "] by principal[" + getLoggedUser() + "]");
-        em.merge(forecastBarnyard);
-        em.remove(forecastBarnyard);
-        em.flush();
-
-        response.setError(new Error("0", "SUCCESS", "proxy.InspectionForecastBarnyard.Delete"));
-        log.info("InspectionForecastDetail successfully deleted by principal [" + getLoggedUser() + "]");
       }
     } catch (Exception e) {
       log.severe("Exception found while deleting InspectionForecastBarnyard");

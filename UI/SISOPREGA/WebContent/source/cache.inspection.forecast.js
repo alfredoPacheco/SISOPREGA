@@ -162,41 +162,60 @@ enyo.kind({
 	},	
 	saveForecastDetail : function(oFDetail) {
 		var objToSend = this.adaptFDetailsToRequest(oFDetail);
-		if (oFDetail.fore_details_id == null || oFDetail.fore_details_id == undefined || oFDetail.fore_details_id == "") {
-			delete objToSend.id;
-			var svcOp = consumingGateway.Create("InspectionForecastDetail",
-					objToSend);
-			if (svcOp.exceptionId == 0) {
-				oFDetail.fore_details_id = svcOp.generatedId;
-				return true;
-			}else {
-				cacheMan.setMessage("", "[Exception ID: " 
-						+ svcOp.exceptionId + "] Descripcion: " 
-						+ svcOp.exceptionDescription);
+		delete objToSend.id;
+		var svcOp = consumingGateway.Create("InspectionForecastDetail",
+				objToSend);
+		if (svcOp.exceptionId == 0) {
+			oFDetail.fore_details_id = svcOp.generatedId;
+			return true;
+		}else {
+			cacheMan.setMessage("", "[Exception ID: " 
+					+ svcOp.exceptionId + "] Descripcion: " 
+					+ svcOp.exceptionDescription);
+			return false;
+		}		
+	},
+	updateForecastDetails : function(oFDetail, cbObj, cbMethod){
+		var objToSend = {};
+		objToSend = this.adaptFDetailsToRequest(oFDetail);		
+		var svcOp = consumingGateway.Update("InspectionForecastDetail", objToSend);
+		if (svcOp.exceptionId == 0) {				
+			if (this.updateForecastBarnyards(oFDetail)==true){
+				for (i in this.arrForecast){
+					if(this.arrForecast[i].fore_details_id == oFDetail.fore_details_id){
+						this.arrForecast[i] = ofDetail;
+						if(cbMethod){
+							cbObj[cbMethod](objForecast);
+						}
+						return true;
+					}
+				}
+//				TODO: Crear descripcion generica en errores locales:
+				cacheMan.setMessage("", "[Exception ID: LOCAL] Descripcion: Ha ocurrido un error en cache.");
 				return false;
 			}
-		} else {
-			var svcOp = consumingGateway.Update("InspectionForecastDetail", objToSend);
-			if (svcOp.exceptionId == 0) {				
+		}else {
+			cacheMan.setMessage("", "[Exception ID: " 
+					+ svcOp.exceptionId + "] Descripcion: " 
+					+ svcOp.exceptionDescription);			
+		}
+		return false;
+	},
+	updateForecastBarnyards : function(objForecast){
+		var objToSend = {};
+		objToSend.fdId = objForecast.fore_details_id;
+		
+		var svcOp = consumingGateway.Delete("InspectionForecastBarnyard", objToSend);
+		if (svcOp.exceptionId == 0) {				
+			if (this.saveForecastBarnyard(objForecast)==true){
 				return true;
-			}else {
-				cacheMan.setMessage("", "[Exception ID: " 
-						+ svcOp.exceptionId + "] Descripcion: " 
-						+ svcOp.exceptionDescription);
-				return false;
 			}
+		}else {
+			cacheMan.setMessage("", "[Exception ID: " 
+					+ svcOp.exceptionId + "] Descripcion: " 
+					+ svcOp.exceptionDescription);			
 		}
-
-		consumingGateway.Delete("InspectionForecastBarnyard", {
-			forecastDetailId : oFDetail.id
-		});
-
-		for ( var i = 0; i < oFDetail.barnyards.length; i++) {
-			oFDetail.barnyards[i].detailId = oFDetail.id;
-			oFDetail.barnyards[i] = saveForecastBarnyard(oFDetail.barnyards[i]);
-		}
-
-		return oFDetail;
+		return false;
 	},
 	saveForecastBarnyard : function(objForecast) {
 		var objToSend = {};
@@ -338,7 +357,7 @@ enyo.kind({
 	},
 	adaptFDetailsToRequest : function(oFDetails) {
 		var oFDetailsResponse = {
-			id : 			oFDetails.fore_details_id,
+			fdId : 			oFDetails.fore_details_id,
 			forecastId : 	oFDetails.id,
 			rancherId : 	oFDetails.rancher_id,
 			auth : 			oFDetails.auth,

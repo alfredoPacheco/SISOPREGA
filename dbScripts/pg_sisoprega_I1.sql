@@ -190,7 +190,7 @@ DROP TABLE IF EXISTS cat_rancher_invoice CASCADE;
 
 CREATE TABLE cat_rancher_invoice (
   rancher_invoice_id  SERIAL PRIMARY KEY,
-  rancher_id integer NOT NULL REFERENCES cat_person_rancher(rancher_id),
+  rancher_id integer NOT NULL REFERENCES cat_person_rancher(rancher_id) ON DELETE CASCADE,
   legal_name VARCHAR(100) NOT NULL,
   address_one VARCHAR(100) NOT NULL,
   address_two VARCHAR(100),
