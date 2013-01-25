@@ -96,12 +96,12 @@ public class BaseDataModel implements RemoteModelable {
   }
 
 @Override
-public boolean deleteBatch(String query, Map<String, Object> parameters,
+public boolean deleteBatch(String query, Map<Integer, Object> parameters,
 		String principal) {
 	Query deleteQuery = em.createNativeQuery(query);
     
     if(parameters != null){
-      for(Map.Entry<String, Object> entry : parameters.entrySet()){
+      for(Map.Entry<Integer, Object> entry : parameters.entrySet()){
     	  deleteQuery.setParameter(entry.getKey(), entry.getValue());
         this.log.finer("Set query parameter [" + entry.getKey() + "] with value [" + entry.getValue() + "]");
       }

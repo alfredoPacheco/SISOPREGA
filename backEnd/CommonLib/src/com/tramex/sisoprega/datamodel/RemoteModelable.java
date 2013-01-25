@@ -81,7 +81,7 @@ public interface RemoteModelable {
    * @param principal
    * @return
    */
-  boolean deleteBatch(String query, Map<String, Object> parameters, String principal);
+  boolean deleteBatch(String query, Map<Integer, Object> parameters, String principal);
   
   
 }
