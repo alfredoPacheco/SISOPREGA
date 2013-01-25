@@ -45,6 +45,7 @@ import com.tramex.sisoprega.dto.InspectionForecastDetail;
  * ----------  ---------------------------  -------------------------------------------
  * 01/12/2013  Diego Torres                  Initial Version.
  * 01/22/2013  Diego Torres                  Implementing DataModel.
+ * 01/22/2013  Alfredo Pacheco				 Returning fdId instead forecastId when creating this.
  * ====================================================================================
  * </PRE>
  * 
@@ -72,8 +73,9 @@ public class InspectionForecastDetailBean extends BaseBean implements Cruddable 
         this.log.finer("InspectionForecastDetail succesfully validated");
         dataModel.createDataModel(forecastDetail);
 
-        String sId = String.valueOf(forecastDetail.getForecastId());
-        this.log.finer("Setting InspectionForecastDetail id in response: " + sId);
+        String sId = String.valueOf(forecastDetail.getFdId());
+        log.finer("Setting InspectionForecastDetail id in response: " + sId);
+		
         response.setGeneratedId(sId);
         response.setError(new Error("0", "SUCCESS", "proxy.InspectionForecastDetailBean.Create"));
         this.log.info("Reception inspectionForecastDetail [" + forecastDetail.toString() + "] created by principal[" + getLoggedUser() + "]");

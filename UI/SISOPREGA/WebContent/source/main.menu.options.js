@@ -4,7 +4,7 @@ enyo.kind({
 	layoutKind: enyo.VFlexLayout,	
 	align:"center",
 	//pack:"center",	
-	style:"height:340px;width:320px;",
+	style:"width:320px;",
 	events: {
 		onReceptions:"",
 		onOperations:"",		

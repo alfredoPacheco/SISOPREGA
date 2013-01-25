@@ -1,48 +1,129 @@
 enyo.kind({
 	name : "cache.inspection.forecast",
 	iLastForecast : 0,
-	arrForecast : [],
-	arrForecastWasReadFromGateway:false,
+	arrForecast : [],	
+	forecastWasReadFromGateway:false,
+	arrObjWasFilledUpOnce:false,
 	get : function() {
-		if (this.arrForecastWasReadFromGateway == false){
-			arrForecastWasReadFromGateway =true;
-			var forecastAux = {};
-			var forecastArrAux = [];
-			var selfCacheForecast = this;
-			// Retrieve forecasts
-			var svcOp = consumingGateway.Read("InspectionForecast", {});
-			if (svcOp.exceptionId == 0) {
-				// InspectionForecast already uploaded
-				jQuery.each(svcOp.records, function() {
-					jQuery.each(this, function(key, value) {
-						forecastAux[key] = value;
-					});
-					var oForecastTemp = selfCacheForecast
-							.adaptForecastFromResponse(forecastAux);
+		if (this.arrObjWasFilledUpOnce == false){
+			this.arrObjWasFilledUpOnce =true;
+			
+//ForecastHead::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+			this.arrForecast = this.getForecast();
+			
+			for (var a in this.arrForecast){
+				
+				var objInsFore={
+						id:					undefined,
+						fore_details_id:	undefined,
+						rancher_id:			undefined,
+						auth:				undefined,	
+						origin:				undefined,
+						cattle_type:		undefined,
+						quantity:			0,
+						barnyards:			[],	
+						fore_date:			undefined
+					};
+				
+				var objAux = this.arrForecast[a];
+				
+				objInsFore.fore_date = objAux.fore_date;
+				objInsFore.id		=	objAux.id;
+				
+//ForecastDetails:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::				
+				var arrForeDetailAux = this.getForecastDetails(objAux.id);
+				
+				
+				if (arrForeDetailAux.length > 0){
+					arrForeDetailAux = arrForeDetailAux[0];
 					
-					//Retrieve Forecast details:
-					var forecastDetails = consumingGateway.Read("InspectionForecastDetail", forecastAux.forecastId);
-					if (svcOp.exceptionId == 0) {
-						
-					}
-					oForecastTemp.details = getDetails(oForecastTemp.id);
-					forecastArrAux.push(oForecastTemp);
-				});
+					objInsFore.fore_details_id=		arrForeDetailAux.fore_details_id;
+					objInsFore.rancher_id=			arrForeDetailAux.rancher_id;
+					objInsFore.auth=				arrForeDetailAux.auth;	
+					objInsFore.origin=				arrForeDetailAux.origin;
+					objInsFore.cattle_type=			arrForeDetailAux.cattle_type;
+					objInsFore.quantity=			arrForeDetailAux.quantity;
+				}
+				
+//ForecastBarnyards::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+				if(objInsFore.fore_details_id){
+					objInsFore.barnyards = this.getForecastBarnyard(objInsFore.fore_details_id);
+				}
+
+				
+				this.arrForecast[a]=objInsFore;				
+				
 			}
-			else{ //Error
-				if (cgReadAll.exceptionId != "VAL02"){ //No data found
-					cacheMan.setMessage("", "[Exception ID: " + cgReadAll.exceptionId + "] Descripcion: " + cgReadAll.exceptionDescription);	
-				}			
-			}
-			this.arrForecast = arrForecast;
+			
 		}
 		return this.arrForecast;
 	},
-	addForecast:function(objForecast,cbObj,cbMethod){
+	getForecast:function(){
+		if (this.forecastWasReadFromGateway == false){
+			this.forecastWasReadFromGateway = true;
+			var arrAux = [];
+			
+			var cgReadAll = consumingGateway.Read("InspectionForecast", {});
+			
+			if (cgReadAll.exceptionId == 0){ //Read successfully
+				for (item in cgReadAll.records){
+					arrAux.push(this.adaptForecastFromResponse(cgReadAll.records[item]));
+				}
+			}else{ //Error
+				if (cgReadAll.exceptionId != "VAL02"){ //No data found
+					cacheMan.setMessage("", "[Exception ID: " + cgReadAll.exceptionId + "] Descripción: " + cgReadAll.exceptionDescription);	
+				}			
+			}						
+			this.arrForecast =  arrAux;			
+		}		
+		return this.arrForecast;	
+	},
+	getForecastDetails:function(foreID){
+		
+		var arrAux = [];
+		var objToSend = {};
+		objToSend.forecastID = foreID;
+		var cgReadAll = consumingGateway.Read("InspectionForecastDetail", objToSend);
+		
+		if (cgReadAll.exceptionId == 0){ //Read successfully
+			for (item in cgReadAll.records){
+				arrAux.push(this.adaptFDetailsFromResponse(cgReadAll.records[item]));
+			}
+		}else{ //Error
+			if (cgReadAll.exceptionId != "VAL02"){ //No data found
+				cacheMan.setMessage("", "[Exception ID: " + cgReadAll.exceptionId + "] Descripción: " + cgReadAll.exceptionDescription);	
+			}			
+		}						
+			
+				
+		return arrAux;	
+	},
+	getForecastBarnyard:function(foreID){
+				
+			var arrAux = [];
+			var objToSend = {};
+			objToSend.fdId = foreID;
+			var cgReadAll = consumingGateway.Read("InspectionForecastBarnyard", objToSend);
+			
+			if (cgReadAll.exceptionId == 0){ //Read successfully
+				for (item in cgReadAll.records){
+					arrAux.push(cacheBY.getByID(cgReadAll.records[item].barnyardId));					
+				}		    	
+			}
+			else{ //Error
+				if (cgReadAll.exceptionId != "VAL02"){ //No data found
+					cacheMan.setMessage("", "[Exception ID: " + cgReadAll.exceptionId + "] Descripcion: " + cgReadAll.exceptionDescription);
+				}			
+			}
+
+		return arrAux;
+		
+	},
+	createForecast:function(objForecast,cbObj,cbMethod){
 		if (this.saveForecast(objForecast)== true){
 			if (this.saveForecastDetail(objForecast)==true){
 				if (this.saveForecastBarnyard(objForecast)==true){
-					cbObj.objList.push(objForecast);
+					this.arrForecast.push(objForecast);										
 					if(cbMethod){
 						cbObj[cbMethod](objForecast);
 					}
@@ -51,12 +132,25 @@ enyo.kind({
 			}
 		}
 	},
+	addForecast:function(objForecast,cbObj,cbMethod){
+		
+		if (this.saveForecastDetail(objForecast)==true){
+			if (this.saveForecastBarnyard(objForecast)==true){
+				this.arrForecast.push(objForecast);										
+				if(cbMethod){
+					cbObj[cbMethod](objForecast);
+				}
+				
+			}
+		}
+		
+	},
 	saveForecast : function(objForecast) {
 		var objToSend = {};
 		objToSend.forecastDate =  "" + DateOut(objForecast.fore_date);
 		var cgCreate = consumingGateway.Create("InspectionForecast", objToSend);
 		if (cgCreate.exceptionId == 0){ //Created successfully			
-			objForecast.id = cgCreate.generatedId;			
+			objForecast.id = cgCreate.generatedId;
 			return true;
 		}
 		else{ //Error			
@@ -106,9 +200,9 @@ enyo.kind({
 	},
 	saveForecastBarnyard : function(objForecast) {
 		var objToSend = {};
-		objToSend.fdId = objForecast.id;		
+		objToSend.fdId = objForecast.fore_details_id;		
 		for (i in objForecast.barnyards){
-			objToSend.barnyardId = objForecast.barnyards[i];	
+			objToSend.barnyardId = objForecast.barnyards[i].barnyard_id;	
 			var cgCreate = consumingGateway.Create("InspectionForecastBarnyard", objToSend);
 //			objForecast.barnyards.ifbId = cgCreate.generatedId;
 			if (cgCreate.exceptionId != 0){ //Created successfully
@@ -119,10 +213,62 @@ enyo.kind({
 		return true;
 		
 	},
-	deleteForecastDetail : function(iFDetail){
-		var objToSend = this.adaptFDetailsToRequest(oFDetail);
-		consumingGateway.Delete("InspectionForecastDetail", objToSend);
-		get();
+	deleteForecastDetail : function(objFore, cbObj, cbMethod){
+		var objToSend = {};
+		objToSend.fdId = objFore.fore_details_id;
+
+		var cgDelete = consumingGateway.Delete("InspectionForecastDetail",objToSend);
+		if (cgDelete.exceptionId == 0) { // Deleted successfully			
+			var tamanio = this.get().length;
+			var foreAux = {};
+			for ( var i = 0; i < tamanio; i++) {				
+				if (this.arrForecast[i].fore_details_id == objFore.fore_details_id) {
+					foreAux.id = this.arrForecast[i].id;
+					foreAux.fore_date = this.arrForecast[i].fore_date;					
+					this.arrForecast[i] = foreAux;					
+					if (cbMethod) {
+						cbObj[cbMethod]();
+					}
+					return true;
+				}
+			}
+			//TODO: Definir descripcion de error local:
+			cacheMan.setMessage("", "[Exception ID: LOCAL] Descripcion: Ha ocurrido un error");
+					
+			return false;
+		} else { // Error
+			cacheMan.setMessage("", "[Exception ID: "
+					+ cgDelete.exceptionId + "] Descripcion: "
+					+ cgDelete.exceptionDescription);
+			return false;
+		}				
+	},
+	deleteForecast: function(objFore, cbObj, cbMethod){
+		var objToSend = {};
+		objToSend.forecastId = objFore.id;
+
+		var cgDelete = consumingGateway.Delete("InspectionForecast",objToSend);
+		if (cgDelete.exceptionId == 0) { // Deleted successfully			
+			var tamanio = this.get().length;
+			for ( var i = 0; i < tamanio; i++) {
+				if (this.arrForecast[i].id == objFore.id) {
+					this.arrForecast.splice(i, 1);					
+					if (cbMethod) {
+						cbObj[cbMethod]();
+					}
+					return true;
+				}
+			}
+			//TODO: Definir descripcion de error local:
+			cacheMan.setMessage("", "[Exception ID: LOCAL] Descripcion: Ha ocurrido un error");
+					
+			return false;
+		} else { // Error
+			cacheMan.setMessage("", "[Exception ID: "
+					+ cgDelete.exceptionId + "] Descripcion: "
+					+ cgDelete.exceptionDescription);
+			return false;
+		}				
 	},
 	getDetails : function(iForecastId) {
 		var result = [];
@@ -165,27 +311,28 @@ enyo.kind({
 	},
 	adaptForecastFromResponse : function(oForecast) {
 		var oForecastResponse = {
-			id : oForecast.id,
-			forecast_date : oForecast.forecastDate
+			id :			oForecast.forecastId,
+			fore_date : 	"" + UTCtoNormalDate(oForecast.forecastDate)
 		};
 		return oForecastResponse;
 	},
 	adaptForecastToRequest : function(oForecast) {
 		var oForecastResponse = {
-			id : oForecast.id,
-			forecastDate : "" + DateOut(oForecast.forecastDate)
+			forecastId : oForecast.id,
+			forecastDate : "" + DateOut(oForecast.fore_date)
 		};
 		return oForecastResponse;
 	},
 	adaptFDetailsFromResponse : function(oFDetails) {
+
 		var oFDetailsResponse = {
-			id : oFDetails.id,
-			forecast_id : oFDetails.forecastId,
-			rancher_id : oFDetails.rancherId,
-			auth : oFDetails.auth,
-			origin : oFDetails.origin,
-			cattle_type : oFDetails.cattleType,
-			quantity : oFDetails.quantity
+			fore_details_id : 	oFDetails.fdId,
+			id : 				oFDetails.forecastId,
+			rancher_id : 		oFDetails.rancherId,
+			auth :	 			oFDetails.auth,
+			origin : 			oFDetails.origin,
+			cattle_type : 		oFDetails.cattleType,
+			quantity : 			oFDetails.quantity
 		};
 		return oFDetailsResponse;
 	},
@@ -203,9 +350,9 @@ enyo.kind({
 	},
 	adaptFBarnyardFromResponse : function(oFBarnyard) {
 		var oFDetailsResponse = {
-			id : 			oFBarnyard.id,
-			detail_id : 	oFBarnyard.detail_id,
-			barnyard_id : 	oFBarnyard.barnyardId
+				barnyardId : 	oFBarnyard.barnyardId,
+				fdId : 			oFBarnyard.fdId,
+				ifbId : 		oFBarnyard.ifbId
 		};
 		return oFDetailsResponse;
 	},

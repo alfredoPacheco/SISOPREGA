@@ -214,7 +214,7 @@ enyo.kind({
 		for(var i=0; i<arrAux.length;i++){
 			if (arrAux[i].barnyard_code==barnyard.substr(1)){
 				if (arrAux[i].location_id==barnyard.charAt(0)){
-					return arrAux[i].barnyard_id;
+					return arrAux[i];
 				}
 			}
 		}
@@ -297,7 +297,7 @@ enyo.kind({
 	setOccupied:function(sID,iReceptionID){ //example: setOccupied("1E2","79")
 		
 		objAux = {};
-		objAux.sID = this.getByBarnyard(sID);
+		objAux.sID = this.getByBarnyard(sID).barnyard_id;
 		objAux.iReceptionID = iReceptionID;
 		var objToSend = this.rec_barnAdapterToOut(objAux);
 		delete objToSend.recBarnyardId;
@@ -316,7 +316,7 @@ enyo.kind({
 		
 		var objToSend = {};
 		objToSend.receptionId = objRec.reception_id;
-		objToSend.barnyardId = cacheBY.getByBarnyard(sID);
+		objToSend.barnyardId = cacheBY.getByBarnyard(sID).barnyard_id;
 		var cgDelete = consumingGateway.Delete("ReceptionBarnyard", objToSend);
 		if (cgDelete.exceptionId == 0){ //Deleted successfully
 			delete objRec.barnyards[sID];

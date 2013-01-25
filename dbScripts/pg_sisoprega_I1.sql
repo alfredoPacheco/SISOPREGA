@@ -84,7 +84,7 @@ DROP TABLE IF EXISTS cat_enterprise_rancher CASCADE;
 CREATE TABLE cat_enterprise_rancher(
   enterprise_id integer PRIMARY KEY,
   legal_name VARCHAR(100) NOT NULL,
-  address_one VARCHAR(100) NOT NULL,
+  address_one VARCHAR(100),
   address_two VARCHAR(100),
   city VARCHAR(80) NOT NULL,
   address_state VARCHAR(80) NOT NULL,
@@ -540,7 +540,7 @@ GRANT ALL ON ctrl_inspection_forecast_detail_id_seq TO sisoprega;
 DROP TABLE IF EXISTS ctrl_inspection_forecast_barnyard;
 CREATE TABLE ctrl_inspection_forecast_barnyard(
 	id SERIAL PRIMARY KEY,
-	forecast_id integer NOT NULL REFERENCES ctrl_inspection_forecast(id) ON DELETE CASCADE,
+	detail_id integer NOT NULL REFERENCES ctrl_inspection_forecast_detail(id) ON DELETE CASCADE,
 	barnyard_id integer NOT NULL REFERENCES cat_barnyard(barnyard_id)
 );
 

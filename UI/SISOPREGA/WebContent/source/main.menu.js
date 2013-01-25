@@ -11,14 +11,15 @@ enyo.kind({
 		{kind: enyo.Pane, className:"buttonsBG", flex: 1, name: "mainPane", transitionKind: "enyo.transitions.LeftRightFlyin", 
 	     style:"background-size: cover;",				 		
 		 components:[	
-			{kind:"main.menu.options", name:"menuOptions", className:"buttonsBG", align:"center",style:"width:300px;",
+			{kind:"main.menu.options", name:"menuOptions", className:"buttonsBG", align:"center",style:"width:300px;margin-left: auto;margin-right: auto;",
 			flex: 1,
 			onOperations:"showOperations",
 			onReceptions:"showReceptionsMap",
 			onCatalogs:"showCatalogs", 
 			onReports:"showReports",
 			onInspectionForecast:"showInspectionForecast"},
-	 		{kind:"operations.menu", name:"operations", onReceptions:"showReceptions", 
+	 		
+			{kind:"operations.menu", name:"operations", onReceptions:"showReceptions", 
 			 onInspections:"showInspections",lazy:true},
 	 		{kind:"catalogs.main", name:"catalogs",lazy:true},
 	 		{kind:"receptions.main", name:"receptions",lazy:true},				

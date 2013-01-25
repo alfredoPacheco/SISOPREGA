@@ -655,7 +655,7 @@ enyo.kind({
 		var objToSend = {};
 		objToSend.orderId = order_id;
 		for (prop in objFeed.barnyards){
-			objToSend.barnyardId = cacheBY.getByBarnyard(objFeed.barnyards[prop]);				
+			objToSend.barnyardId = cacheBY.getByBarnyard(objFeed.barnyards[prop]).barnyard_id;				
 		}
 		var cgCreate = consumingGateway.Create("FeedOrderBarnyard", objToSend);
 		if (cgCreate.exceptionId == 0){ //Created successfully
@@ -800,7 +800,7 @@ enyo.kind({
 		var objToSend = {};
 		objToSend.inspectionId = inspection_id;
 		for (prop in objRec.barnyards){
-			objToSend.barnyardId = cacheBY.getByBarnyard(objRec.barnyards[prop]);
+			objToSend.barnyardId = cacheBY.getByBarnyard(objRec.barnyards[prop]).barnyard_id;
 			var cgCreate = consumingGateway.Create("InspectionBarnyard", objToSend);
 			if (cgCreate.exceptionId != 0){ //Created successfully
 				cacheMan.setMessage("", "[Exception ID: " + cgCreate.exceptionId + "] Descripcion: " + cgCreate.exceptionDescription);
@@ -905,7 +905,7 @@ enyo.kind({
 				var barnyards = receptions[i].barnyards;
 				for (property in barnyards){					
 					var barnyard = {caption:"",value:""};
-					barnyard_id = cacheBY.getByBarnyard(barnyards[property]);
+					barnyard_id = cacheBY.getByBarnyard(barnyards[property]).barnyard_id;
 					if(barnyards[property].charAt(0)==1){						
 						barnyard.caption = 	barnyards[property].substr(1) + " [Chihuahua]";
 						barnyard.value = 	barnyard_id;
