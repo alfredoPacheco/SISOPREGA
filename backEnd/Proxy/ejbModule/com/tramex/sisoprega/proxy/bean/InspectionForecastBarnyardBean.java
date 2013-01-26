@@ -121,11 +121,11 @@ public class InspectionForecastBarnyardBean extends BaseBean implements Cruddabl
       Map<String, Object> parameters = new HashMap<String, Object>();
       if (forecastBarnyard.getIfbId() != 0) {
         queryName = "FORECAST_BARNAYARD_BY_ID";
-        parameters.put("fdId", forecastBarnyard.getIfbId());
+        parameters.put("ifbId", forecastBarnyard.getIfbId());
         qryLogger = "By ifbId [" + forecastBarnyard.getIfbId() + "]";
       } else if(forecastBarnyard.getFdId() != 0 ){
         queryName = "FORECAST_BARNYARD_BY_FORECAST_DETAIL_ID";
-        parameters.put("getFdId", forecastBarnyard.getFdId());
+        parameters.put("fdId", forecastBarnyard.getFdId());
         qryLogger = "By getFdId [" + forecastBarnyard.getFdId() + "]";
       } else {
         response.setError(new Error("VAL03", "El filtro especificado no es válido para detalles de la lista de inspección de ganado.",
@@ -216,9 +216,9 @@ public class InspectionForecastBarnyardBean extends BaseBean implements Cruddabl
           dataModel.deleteDataModel(forecastBarnyard, getLoggedUser());
           response.setError(new Error("0", "SUCCESS", "proxy.InspectionForecastBarnyard.Delete"));
       } else if(forecastBarnyard.getFdId() != 0){
-    	  String queryDelete = "DELETE FROM ctrl_inspection_forecast_barnyard WHERE detail_id = :fdID";
-    	  Map<String, Object> parameters = new HashMap<String,Object>();
-    	  parameters.put("fdID", forecastBarnyard.getFdId());
+    	  String queryDelete = "DELETE FROM ctrl_inspection_forecast_barnyard WHERE detail_id = ?";
+    	  Map<Integer, Object> parameters = new HashMap<Integer,Object>();
+    	  parameters.put(1, forecastBarnyard.getFdId());
     	  dataModel.deleteBatch(queryDelete, parameters, getLoggedUser());
     	  response.setError(new Error("0", "SUCCESS", "proxy.InspectionForecastBarnyard.Delete"));
       }else {

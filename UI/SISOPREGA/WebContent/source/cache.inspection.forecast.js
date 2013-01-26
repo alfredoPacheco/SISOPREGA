@@ -125,7 +125,7 @@ enyo.kind({
 				if (this.saveForecastBarnyard(objForecast)==true){
 					this.arrForecast.push(objForecast);										
 					if(cbMethod){
-						cbObj[cbMethod](objForecast);
+						cbObj[cbMethod]();
 					}
 					
 				}
@@ -138,7 +138,7 @@ enyo.kind({
 			if (this.saveForecastBarnyard(objForecast)==true){
 				this.arrForecast.push(objForecast);										
 				if(cbMethod){
-					cbObj[cbMethod](objForecast);
+					cbObj[cbMethod]();
 				}
 				
 			}
@@ -163,6 +163,7 @@ enyo.kind({
 	saveForecastDetail : function(oFDetail) {
 		var objToSend = this.adaptFDetailsToRequest(oFDetail);
 		delete objToSend.id;
+		delete objToSend.fdId;
 		var svcOp = consumingGateway.Create("InspectionForecastDetail",
 				objToSend);
 		if (svcOp.exceptionId == 0) {
@@ -183,9 +184,9 @@ enyo.kind({
 			if (this.updateForecastBarnyards(oFDetail)==true){
 				for (i in this.arrForecast){
 					if(this.arrForecast[i].fore_details_id == oFDetail.fore_details_id){
-						this.arrForecast[i] = ofDetail;
+						this.arrForecast[i] = oFDetail;
 						if(cbMethod){
-							cbObj[cbMethod](objForecast);
+							cbObj[cbMethod]();
 						}
 						return true;
 					}

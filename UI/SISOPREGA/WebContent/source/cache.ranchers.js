@@ -706,31 +706,35 @@ enyo.kind({
 				if (criteria != ""){
 				var ranchers = this.get();
 				var pattern = new RegExp(criteria.trim(), "ig");
-				for (property in ranchers){
-					pattern.lastIndex = 0;
-					if(ranchers[property].rancher_type==1){
-						if (pattern.test(ranchers[property].aka) || pattern.test(ranchers[property].first_name) || pattern.test(ranchers[property].last_name) || pattern.test(ranchers[property].mother_name)){
-							var rancher = {caption:"",value:ranchers[property].rancher_id};
-							if (ranchers[property].aka != "") {
-								rancher.caption = ranchers[property].last_name + ', '
-										+ ranchers[property].first_name + ' / ' + ranchers[property].aka;
-							} else {
-								rancher.caption = ranchers[property].last_name + ', '
-										+ ranchers[property].first_name;
-							};
-							
-							result.push(rancher);
-						}						
+				for (index in ranchers){
+					
+					if(ranchers[index].rancher_type==1){
+						for (prop in ranchers[index]){
+							pattern.lastIndex = 0;
+							if(pattern.test(ranchers[index][prop])){
+								var rancher = {caption:"",value:ranchers[index].rancher_id};
+								if (ranchers[index].aka != "") {
+									rancher.caption = ranchers[index].last_name + ', '
+											+ ranchers[index].first_name + ' / ' + ranchers[index].aka;
+								} else {
+									rancher.caption = ranchers[index].last_name + ', '
+											+ ranchers[index].first_name;
+								};
+								
+								result.push(rancher);
+								break;
+							}
+						}											
 					}else{
-						if(pattern.test(ranchers[property].company_name)){
-							var rancher = {caption:ranchers[property].company_name,value:ranchers[property].rancher_id};
+						pattern.lastIndex = 0;
+						if(pattern.test(ranchers[index].company_name)){
+							var rancher = {caption:ranchers[index].company_name,value:ranchers[index].rancher_id};
 							result.push(rancher);
 						}
 					}
 										
 				}}
-				return result;
-				
+				return result;				
 			},
 			getAllForList:function(){
 				var result = [];
