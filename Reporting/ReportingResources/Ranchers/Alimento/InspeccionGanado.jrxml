@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="InspeccionGanado" language="groovy" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ef431430-236f-47a8-b58f-be3dc8905f51">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="CUS_FROM_DATE" class="java.util.Date"/>
+	<parameter name="CUS_TO_DATE" class="java.util.Date"/>
+	<parameter name="CUS_RANCHER_ID" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     sum(ctrl_inspection_result."hc") AS HeadCount,
+     ctrl_inspection_result."note" AS ctrl_inspection_result_note,
+     vw_rancher."rancher_name" AS vw_rancher_rancher_name,
+     ctrl_reception."reception_id" AS ctrl_reception_reception_id,
+     cat_cattle_type."cattype_name" AS cat_cattle_type_cattype_name,
+     ctrl_inspection."inspection_date" AS ctrl_inspection_inspection_date,
+     ctrl_reception_headcount."hc" AS ctrl_reception_headcount_hc,
+     ctrl_reception_headcount."hc" - sum(ctrl_inspection_result."hc") AS Resta
+FROM
+     "public"."ctrl_reception" ctrl_reception INNER JOIN "public"."ctrl_inspection" ctrl_inspection ON ctrl_reception."reception_id" = ctrl_inspection."reception_id"
+     INNER JOIN "public"."ctrl_inspection_result" ctrl_inspection_result ON ctrl_inspection."inspection_id" = ctrl_inspection_result."inspection_id"
+     INNER JOIN "public"."vw_rancher" vw_rancher ON ctrl_reception."rancher_id" = vw_rancher."rancher_id"
+     INNER JOIN "public"."cat_cattle_type" cat_cattle_type ON ctrl_reception."cattle_type" = cat_cattle_type."cattype_id"
+     INNER JOIN "public"."ctrl_reception_headcount" ctrl_reception_headcount ON ctrl_reception."reception_id" = ctrl_reception_headcount."reception_id"
+WHERE
+     ctrl_inspection."inspection_date" >= $P{CUS_FROM_DATE}
+ AND ctrl_inspection."inspection_date" <= $P{CUS_TO_DATE}
+ AND ctrl_reception."rancher_id" = $P{CUS_RANCHER_ID}
+GROUP BY
+     ctrl_reception_reception_id,
+     vw_rancher_rancher_name,
+     ctrl_inspection_result_note,
+     cat_cattle_type_cattype_name,
+     ctrl_inspection_inspection_date,
+     ctrl_reception_headcount_hc
+ORDER BY
+     ctrl_inspection."inspection_date" ASC,
+     vw_rancher."rancher_name" ASC]]>
+	</queryString>
+	<field name="headcount" class="java.lang.Long"/>
+	<field name="ctrl_inspection_result_note" class="java.lang.String"/>
+	<field name="vw_rancher_rancher_name" class="java.lang.String"/>
+	<field name="ctrl_reception_reception_id" class="java.lang.Integer"/>
+	<field name="cat_cattle_type_cattype_name" class="java.lang.String"/>
+	<field name="ctrl_inspection_inspection_date" class="java.sql.Date"/>
+	<field name="ctrl_reception_headcount_hc" class="java.lang.String"/>
+	<field name="Resta" class="java.lang.Integer"/>
+	<variable name="headcount_1" class="java.lang.Long" resetType="Group" resetGroup="Lotes" calculation="Sum">
+		<variableExpression><![CDATA[$F{headcount}]]></variableExpression>
+	</variable>
+	<variable name="ctrl_reception_headcount_hc_1" class="java.lang.Integer" resetType="Group" resetGroup="Lotes" calculation="DistinctCount">
+		<variableExpression><![CDATA[$F{ctrl_reception_headcount_hc}]]></variableExpression>
+	</variable>
+	<variable name="Resta_1" class="java.lang.Integer" resetType="Group" resetGroup="Lotes" calculation="Sum">
+		<variableExpression><![CDATA[$F{Resta}]]></variableExpression>
+	</variable>
+	<variable name="Resta_2" class="java.lang.Integer" resetType="Group" resetGroup="Lotes" calculation="DistinctCount">
+		<variableExpression><![CDATA[$F{Resta}]]></variableExpression>
+	</variable>
+	<variable name="Resta_3" class="java.lang.Integer" resetType="Group" resetGroup="Lotes" calculation="Variance">
+		<variableExpression><![CDATA[$F{Resta}]]></variableExpression>
+	</variable>
+	<group name="Lotes">
+		<groupExpression><![CDATA[$F{ctrl_reception_reception_id}]]></groupExpression>
+		<groupHeader>
+			<band height="25">
+				<staticText>
+					<reportElement uuid="d7735f7d-7515-4234-b1fa-e057065e93f7" x="523" y="-21" width="100" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Razón]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="a3663a6c-be9a-454d-bbf6-497654a1d06a" x="628" y="-21" width="100" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Rechazos]]></text>
+				</staticText>
+				<textField>
+					<reportElement uuid="b57e4a1e-5aca-4fc2-a022-4885a90881b3" x="370" y="2" width="65" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$F{ctrl_reception_headcount_hc} - $V{headcount_1}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement uuid="6429a33a-7fae-4aca-bc0c-3014db975b35" x="199" y="2" width="167" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$F{vw_rancher_rancher_name}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement uuid="1263105b-6b5b-4ab7-bdd4-5bf0a40758f9" x="131" y="2" width="64" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$F{ctrl_reception_reception_id}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement uuid="ab63da09-449c-4a1e-a212-bf5a43952039" x="439" y="2" width="80" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$F{cat_cattle_type_cattype_name}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="37">
+				<textField>
+					<reportElement uuid="b3cdab5b-c7e0-4896-af71-269dc3598ed2" x="629" y="7" width="100" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="12" isBold="true" isUnderline="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{headcount_1}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="5e157d09-70e2-4cb6-a59e-08017239d4df" x="523" y="7" width="100" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="12" isBold="true" isUnderline="true"/>
+					</textElement>
+					<text><![CDATA[TOTAL]]></text>
+				</staticText>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="60" splitType="Stretch">
+			<textField>
+				<reportElement uuid="543cb1eb-76aa-46fc-9d8b-3fd7d9fbb064" x="277" y="36" width="100" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isUnderline="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format($P{CUS_FROM_DATE})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="5d7212aa-10a7-4f00-aa8f-74758c753390" x="419" y="36" width="100" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isUnderline="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format($P{CUS_TO_DATE})]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="87f56901-7602-49ee-b34f-f77f6406f57e" x="238" y="36" width="39" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Del]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="87f56901-7602-49ee-b34f-f77f6406f57e" x="0" y="0" width="752" height="33"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="24" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Inspección de Ganado]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="87f56901-7602-49ee-b34f-f77f6406f57e" x="390" y="36" width="29" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Al]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="30" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="d7735f7d-7515-4234-b1fa-e057065e93f7" x="0" y="10" width="123" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha de Inspeccón]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="24" splitType="Stretch">
+			<textField>
+				<reportElement uuid="490b43cb-4c64-4645-8017-e6e47821b3c4" x="0" y="4" width="123" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isUnderline="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format($F{ctrl_inspection_inspection_date})]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="a3663a6c-be9a-454d-bbf6-497654a1d06a" x="199" y="3" width="167" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ganadero]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d7735f7d-7515-4234-b1fa-e057065e93f7" x="131" y="3" width="64" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[No. Lote]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a3663a6c-be9a-454d-bbf6-497654a1d06a" x="370" y="3" width="65" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Aceptadas]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f11e4118-74d9-471a-a5ea-4fb3df4d07e2" x="439" y="3" width="80" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ganado]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="24" splitType="Stretch">
+			<textField>
+				<reportElement uuid="bea19503-f2d8-448a-a0b8-00319c4d9791" x="628" y="2" width="100" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{headcount}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="e6fbbe22-c3fa-42ce-802a-786f140b1f16" x="523" y="2" width="100" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{ctrl_inspection_result_note}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch">
+			<textField pattern="dd/MM/yyyy h.mm a">
+				<reportElement uuid="9916aed1-7e9e-48a2-82d6-fb21002c1d24" x="10" y="34" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="d3d616c4-b460-4747-bf42-91a9bb326659" x="608" y="34" width="80" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement uuid="47800622-b2ec-424a-90ca-f7b811d7cda7" x="688" y="34" width="40" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

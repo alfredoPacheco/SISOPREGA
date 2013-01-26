@@ -416,7 +416,7 @@ DROP TABLE IF EXISTS ctrl_feed_order CASCADE;
 CREATE TABLE ctrl_feed_order(
 	order_id SERIAL PRIMARY KEY,
 	reception_id integer NOT NULL REFERENCES ctrl_reception(reception_id),
-	feed_date date NOT NULL,
+	feed_date timestamp without time zone NOT NULL DEFAULT now(),
 	feed_originator varchar(150),
 	handling varchar(100)
 );

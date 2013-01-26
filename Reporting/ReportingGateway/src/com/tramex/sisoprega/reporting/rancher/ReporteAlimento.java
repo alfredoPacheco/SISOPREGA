@@ -87,7 +87,7 @@ public class ReporteAlimento extends HttpServlet {
    */
   protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     try {
-      response.setContentType("application/pdf");
+      response.setContentType("application/pdjaimef");
       ServletOutputStream out = response.getOutputStream();
       Class.forName("org.postgresql.Driver");
       Connection conexion = DriverManager.getConnection("jdbc:postgresql://localhost/sisoprega", "sisoprega", "sisoprega");
