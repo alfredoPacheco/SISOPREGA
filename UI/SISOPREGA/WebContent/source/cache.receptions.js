@@ -627,7 +627,7 @@ enyo.kind({
 		
 		var objToSend = {};
 		objToSend.receptionId = objRec.reception_id;
-		objToSend.feedDate = "" + DateOut(new Date());
+		//objToSend.feedDate = "" + DateOut(new Date());
 //		objToSend.feedOriginator = "";	
 		objToSend.handling = objFeed.handling;
 		
@@ -722,7 +722,7 @@ enyo.kind({
 		objNew.feeding_id = objOld.feeding_id;
 		var objToSend = {};
 		objToSend.orderId = objNew.feeding_id;
-		objToSend.feedDate = "" + DateOut(new Date());
+		//objToSend.feedDate = "" + DateOut(new Date());
 //		objToSend.feedOriginator = "";	
 		objToSend.handling = objNew.handling;
 		objToSend.receptionId = cbObj._objRec.reception_id;

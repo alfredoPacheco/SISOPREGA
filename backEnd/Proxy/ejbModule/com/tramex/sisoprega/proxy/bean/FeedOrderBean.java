@@ -15,6 +15,7 @@
  */
 package com.tramex.sisoprega.proxy.bean;
 
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -73,6 +74,7 @@ public class FeedOrderBean extends BaseBean implements Cruddable {
     try {
       feedOrd = entityFromRequest(request, FeedOrder.class);
       feedOrd.setFeedOriginator(getLoggedUser());
+      feedOrd.setFeedDate(GregorianCalendar.getInstance().getTime());
 
       this.log.fine("Received FeedOrder in request: " + feedOrd);
 
@@ -183,6 +185,7 @@ public class FeedOrderBean extends BaseBean implements Cruddable {
     try {
       feedOrd = entityFromRequest(request, FeedOrder.class);
       feedOrd.setFeedOriginator(getLoggedUser());
+      feedOrd.setFeedDate(GregorianCalendar.getInstance().getTime());
       
       if (feedOrd.getOrderId() == 0) {
         this.log.warning("VAL04 - Entity ID Omission.");
