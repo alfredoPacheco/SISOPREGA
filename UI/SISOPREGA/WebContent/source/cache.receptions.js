@@ -838,9 +838,9 @@ enyo.kind({
 		}
 		
 	},	
-	addReject:function(iAccepted,objRec,objReject,cbObj,cbMethod){
-		if(iAccepted==""){iAccepted=0;}
-		objRec.accepted_count=iAccepted;
+	addReject:function(objRec,objReject,cbObj,cbMethod){
+//		if(iAccepted==""){iAccepted=0;}
+//		objRec.accepted_count=iAccepted;
 		if(objReject){
 			if (this.createInspection(objRec,objReject)== true){
 				objRec.inspections.push(objReject);
@@ -850,7 +850,7 @@ enyo.kind({
 			}			
 		}		
 	},
-	updateReject:function(iAccepted,objRec,iInspIdx,objReject,cbObj,cbMethod){
+	updateReject:function(objRec,iInspIdx,objReject,cbObj,cbMethod){
 		var objToSend = {};
 		objToSend.inspectionDetailsId =	objRec.inspections[iInspIdx].id;
 		objToSend.inspectionId = 		objRec.inspections[iInspIdx].rejected_id;		
@@ -862,8 +862,8 @@ enyo.kind({
 		
 		var cgUpdate = consumingGateway.Update("InspectionDetails", objToSend);
 		if (cgUpdate.exceptionId == 0){ //Updated successfully
-			if(iAccepted==""){iAccepted=0;}
-			objRec.accepted_count=iAccepted;
+//			if(iAccepted==""){iAccepted=0;}
+//			objRec.accepted_count=iAccepted;
 			objRec.inspections[iInspIdx].rejected_count=objReject.rejected_count;
 			objRec.inspections[iInspIdx].reject_id=objReject.reject_id;
 			objRec.inspections[iInspIdx].reject_desc=objReject.reject_desc;				
