@@ -7,11 +7,12 @@ enyo.kind({
 	get : function() {
 		if (this.arrObjWasFilledUpOnce == false){
 			this.arrObjWasFilledUpOnce =true;
+			var arrResult = [];
 			
 //ForecastHead::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-			this.arrForecast = this.getForecast();
+			var arrForecasts = this.getForecast();
 			
-			for (var a in this.arrForecast){
+			for (var a in arrForecasts){
 				
 				var objInsFore={
 						id:					undefined,
@@ -25,36 +26,30 @@ enyo.kind({
 						fore_date:			undefined
 					};
 				
-				var objAux = this.arrForecast[a];
-				
-				objInsFore.fore_date = objAux.fore_date;
-				objInsFore.id		=	objAux.id;
+				objInsFore.fore_date = 	arrForecasts[a].fore_date;
+				objInsFore.id		 =	arrForecasts[a].id;
 				
 //ForecastDetails:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::				
-				var arrForeDetailAux = this.getForecastDetails(objAux.id);
+				var arrForeDetailAux = this.getForecastDetails(objInsFore.id);
 				
-				
-				if (arrForeDetailAux.length > 0){
-					arrForeDetailAux = arrForeDetailAux[0];
-					
-					objInsFore.fore_details_id=		arrForeDetailAux.fore_details_id;
-					objInsFore.rancher_id=			arrForeDetailAux.rancher_id;
-					objInsFore.auth=				arrForeDetailAux.auth;	
-					objInsFore.origin=				arrForeDetailAux.origin;
-					objInsFore.cattle_type=			arrForeDetailAux.cattle_type;
-					objInsFore.quantity=			arrForeDetailAux.quantity;
-				}
-				
-//ForecastBarnyards::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-				if(objInsFore.fore_details_id){
-					objInsFore.barnyards = this.getForecastBarnyard(objInsFore.fore_details_id);
-				}
+				for (i in arrForeDetailAux){
+					objInsFore.fore_details_id=		arrForeDetailAux[i].fore_details_id;
+					objInsFore.rancher_id=			arrForeDetailAux[i].rancher_id;
+					objInsFore.auth=				arrForeDetailAux[i].auth;	
+					objInsFore.origin=				arrForeDetailAux[i].origin;
+					objInsFore.cattle_type=			arrForeDetailAux[i].cattle_type;
+					objInsFore.quantity=			arrForeDetailAux[i].quantity;
 
-				
-				this.arrForecast[a]=objInsFore;				
-				
+//ForecastBarnyards::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+					if(objInsFore.fore_details_id){
+						objInsFore.barnyards = this.getForecastBarnyard(objInsFore.fore_details_id);
+					}
+
+					
+					arrResult.push(enyo.clone(objInsFore));
+				}
 			}
-			
+			this.arrForecast = arrResult;
 		}
 		return this.arrForecast;
 	},

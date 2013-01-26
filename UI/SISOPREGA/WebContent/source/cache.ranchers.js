@@ -700,42 +700,7 @@ enyo.kind({
 						return false;
 					}
 				}
-			},
-			findRancher: function(criteria){				
-				var result = [];
-				if (criteria != ""){
-				var ranchers = this.get();
-				var pattern = new RegExp(criteria.trim(), "ig");
-				for (index in ranchers){
-					
-					if(ranchers[index].rancher_type==1){
-						for (prop in ranchers[index]){
-							pattern.lastIndex = 0;
-							if(pattern.test(ranchers[index][prop])){
-								var rancher = {caption:"",value:ranchers[index].rancher_id};
-								if (ranchers[index].aka != "") {
-									rancher.caption = ranchers[index].last_name + ', '
-											+ ranchers[index].first_name + ' / ' + ranchers[index].aka;
-								} else {
-									rancher.caption = ranchers[index].last_name + ', '
-											+ ranchers[index].first_name;
-								};
-								
-								result.push(rancher);
-								break;
-							}
-						}											
-					}else{
-						pattern.lastIndex = 0;
-						if(pattern.test(ranchers[index].company_name)){
-							var rancher = {caption:ranchers[index].company_name,value:ranchers[index].rancher_id};
-							result.push(rancher);
-						}
-					}
-										
-				}}
-				return result;				
-			},
+			},			
 			getAllForList:function(){
 				var result = [];
 				var ranchers = this.get();
@@ -770,8 +735,7 @@ enyo.kind({
 						}
 					}
 				}
-				return result;
-				
+				return result;				
 			}
 		});
 var cacheRanchers = new cache.ranchers();

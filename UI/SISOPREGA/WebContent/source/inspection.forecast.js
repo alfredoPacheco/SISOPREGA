@@ -3,20 +3,14 @@ enyo
 			name : "inspection.forecast",
 			kind : enyo.SlidingView,
 			layoutKind : enyo.VFlexLayout,
-			events : {
-				"onAddInspectionForecast" : "",
-				"onUpdateInspectionForecast" : "",
-				"onRemoveInspectionForecast" : "",
-				"onAddRancher" : ""
-			},
 			create : function() {
 				this.inherited(arguments);
 				this.cambioDeFecha();
+				this.$.rancherInput.setItems(cacheRanchers.getAllForList());
+				this.$.cattle_type_id.setItems(cacheCattle.getAllCattleType());
+				this.$.localidad.setItems(cacheMan.allLocationsForList());
 			},
 			iSelected : null,
-			objRan : null,
-			objLoc : null,
-			objCattleType : null,
 			_id : undefined,
 			objList : [],
 			arrBY : [],
@@ -67,28 +61,9 @@ enyo
 											components : [
 													{
 														kind : "controls.autocomplete",
-														name : "Autocomplete",
-														hint : "Autocomplete"
-													},
-													{
-														kind : "Item",
-														components : [ {
-															layoutKind : enyo.HFlexLayout,
-															components : [
-																	{
-																		kind : "Input",
-																		name : "rancherInput",
-																		hint : "Ganadero",
-																		onblur : "lostFocus",
-																		flex : 1
-																	},
-																	{
-																		kind : "IconButton",
-																		icon : "images/menu-icon-new.png",
-																		onclick : "contextMenuClicked"
-																	} ]
-														} ],
-													},
+														name : "rancherInput",
+														hint:"Ganadero"
+													},													
 													{
 														kind : "Item",
 														components : [ {
@@ -114,18 +89,10 @@ enyo
 														} ]
 													},
 													{
-														kind : "Item",
-														components : [ {
-															layoutKind : enyo.HFlexLayout,
-															components : [ {
-																kind : "Input",
-																name : "cattle_type_id",
-																hint : "Clase",
-																onblur : "lostFocus",
-																flex : 1
-															} ]
-														} ]
-													},
+														kind : "controls.autocomplete",
+														name : "cattle_type_id",
+														hint:"Ganado"
+													},													
 													{
 														kind : "Item",
 														components : [ {
@@ -140,18 +107,10 @@ enyo
 														} ]
 													},
 													{
-														kind : "Item",
-														components : [ {
-															layoutKind : enyo.HFlexLayout,
-															components : [ {
-																kind : "Input",
-																name : "localidad",
-																hint : "Localidad",
-																onblur : "lostFocus",
-																flex : 1
-															} ]
-														} ]
-													},
+														kind : "controls.autocomplete",
+														name : "localidad",
+														hint:"Localidad"
+													},													
 													{
 														kind : "Item",
 														components : [ {
@@ -367,6 +326,7 @@ enyo
 			},
 			selectForecast : function(inSender, inEvent) {
 				if (objFore = this.objList[inEvent.rowIndex]) {
+					
 					var auxRancher = cacheRanchers.getByID(objFore.rancher_id);
 					if (auxRancher) {
 						if (auxRancher.rancher_type == 1) {
@@ -377,14 +337,16 @@ enyo
 							this.$.rancherInput
 									.setValue(auxRancher.company_name);
 						}
-						this.objRan = {};
-						this.objRan.caption = this.$.rancherInput.getValue();
-						this.objRan.value = objFore.rancher_id;
+						this.$.rancherInput.objSelected.caption = this.$.rancherInput.getValue();
+						this.$.rancherInput.objSelected.value = objFore.rancher_id;
 					}
 					this.$.autorizacion.setValue(objFore.auth);
 					this.$.origen.setValue(objFore.origin);
 					this.$.cattle_type_id.setValue(cacheCattle
 							.getByID(objFore.cattle_type).cattype_name);
+					this.$.cattle_type_id.objSelected.value = objFore.cattle_type;
+					this.$.cattle_type_id.objSelected.caption = this.$.cattle_type_id.getValue();
+					
 					this.$.cantidad.setValue(objFore.quantity);
 
 					if (objFore.barnyards.length > 0) {
@@ -393,7 +355,8 @@ enyo
 						} else {
 							this.$.localidad.setValue("Zona Sur");
 						}
-
+						this.$.localidad.objSelected.value = objFore.barnyards[0].location_id;
+						this.$.localidad.objSelected.caption = this.$.localidad.getValue();
 						var strBarnyards = "";
 						for (i in objFore.barnyards) {
 							strBarnyards = strBarnyards
@@ -527,33 +490,24 @@ enyo
 					barnyards : undefined,
 					fore_date : undefined
 				};
-				if (this.iSelected > -1 && this.iSelected != null) {
-					this.objRan = {};
-					this.objCattleType = {};
-					this.objLoc = {};
-					this.objRan.value = this.objList[this.iSelected].rancher_id;
-					this.objCattleType.value = this.objList[this.iSelected].cattle_type;
-					this.objLoc.value = this.objList[this.iSelected].barnyards[0].location_id;
-				}
-
-				objInspFore.rancher_id = this.objRan.value;
-				objInspFore.cattle_type = this.objCattleType.value;
+				
+				objInspFore.rancher_id = this.$.rancherInput.objSelected.value;
+				objInspFore.cattle_type = this.$.cattle_type_id.objSelected.value;
 				objInspFore.auth = this.$.autorizacion.getValue();
 				objInspFore.fore_date = this.fecha;
 				objInspFore.origin = this.$.origen.getValue();
-
 				objInspFore.quantity = this.$.cantidad.getValue();
 
 				var barnyardsAux = this.$.corrales.getValue().split(",");
 				for (i in barnyardsAux) {
 					barnyardsAux[i] = barnyardsAux[i].replace(" ", "");
-					barnyardsAux[i] = this.objLoc.value + barnyardsAux[i];
+					barnyardsAux[i] = this.$.localidad.objSelected.value + barnyardsAux[i];
 					var auxBarn = cacheBY.getByBarnyard(barnyardsAux[i]);
 					if (auxBarn == undefined) {
 						cacheMan.setMessage("", "[Exception ID: LOCAL"
 								+ "] Descripción: No existe el corral: "
 								+ barnyardsAux[i].slice(1)
-								+ " para la localidad: " + this.objLoc.caption);
+								+ " para la localidad: " + this.$.localidad.objSelected.caption);
 						return null;
 					}
 					barnyardsAux[i] = auxBarn;
