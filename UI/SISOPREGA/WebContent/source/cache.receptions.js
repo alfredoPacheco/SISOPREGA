@@ -837,19 +837,7 @@ enyo.kind({
 		}
 		
 	},	
-<<<<<<< HEAD
-<<<<<<< HEAD
 	addReject:function(objRec,objReject,cbObj,cbMethod){				
-=======
-	addReject:function(objRec,objReject,cbObj,cbMethod){
-//		if(iAccepted==""){iAccepted=0;}
-//		objRec.accepted_count=iAccepted;
->>>>>>> fe8a7154ce8c56dd299703f2c507be3a175bcb6e
-=======
-	addReject:function(objRec,objReject,cbObj,cbMethod){
-//		if(iAccepted==""){iAccepted=0;}
-//		objRec.accepted_count=iAccepted;
->>>>>>> fe8a7154ce8c56dd299703f2c507be3a175bcb6e
 		if(objReject){
 			if (this.createInspection(objRec,objReject)== true){
 				objRec.inspections.push(objReject);
@@ -871,17 +859,6 @@ enyo.kind({
 		
 		var cgUpdate = consumingGateway.Update("InspectionDetails", objToSend);
 		if (cgUpdate.exceptionId == 0){ //Updated successfully
-<<<<<<< HEAD
-<<<<<<< HEAD
-			
-=======
-//			if(iAccepted==""){iAccepted=0;}
-//			objRec.accepted_count=iAccepted;
->>>>>>> fe8a7154ce8c56dd299703f2c507be3a175bcb6e
-=======
-//			if(iAccepted==""){iAccepted=0;}
-//			objRec.accepted_count=iAccepted;
->>>>>>> fe8a7154ce8c56dd299703f2c507be3a175bcb6e
 			objRec.inspections[iInspIdx].rejected_count=objReject.rejected_count;
 			objRec.inspections[iInspIdx].reject_id=objReject.reject_id;
 			objRec.inspections[iInspIdx].reject_desc=objReject.reject_desc;				

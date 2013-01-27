@@ -29,14 +29,6 @@ enyo.kind({
 		},
 		{kind: "Toolbar",	
 		components: [					 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-//		{kind: "ToolInput", name:"accepted_count", width:"23%",  hint:"Aceptados",changeOnInput: true,},					
->>>>>>> fe8a7154ce8c56dd299703f2c507be3a175bcb6e
-=======
-//		{kind: "ToolInput", name:"accepted_count", width:"23%",  hint:"Aceptados",changeOnInput: true,},					
->>>>>>> fe8a7154ce8c56dd299703f2c507be3a175bcb6e
 		{kind: "ToolInput", name:"rejected_count", width:"23%",  hint:"Rechazados",changeOnInput: true,},			
 		{kind: "ListSelector", name: 'reject_id', width:"50%",
 		 style:"width:100%;color:white", contentPack:"end",
@@ -91,15 +83,7 @@ enyo.kind({
 		return objData; 
 	},
 	updateReject:function(){
-<<<<<<< HEAD
-<<<<<<< HEAD
 		cacheReceptions.updateReject(this._objRec,this.iSelect,this.getReject(),this,"afterUpdate");
-=======
-=======
->>>>>>> fe8a7154ce8c56dd299703f2c507be3a175bcb6e
-		cacheReceptions.updateReject(this._objRec,this.iSelect,this.getReject(),
-							 this,"afterUpdate");
->>>>>>> fe8a7154ce8c56dd299703f2c507be3a175bcb6e
 	},
 	afterUpdate:function(){
 		this.toggleAdd();
@@ -110,14 +94,6 @@ enyo.kind({
 		this.updateHeader();		
 	},
 	set:function(objVar){
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-//		this.$.accepted_count.setValue(objVar.accepted_count);
->>>>>>> fe8a7154ce8c56dd299703f2c507be3a175bcb6e
-=======
-//		this.$.accepted_count.setValue(objVar.accepted_count);
->>>>>>> fe8a7154ce8c56dd299703f2c507be3a175bcb6e
 		this._objRec=objVar;
 	},
 	setReject:function(inSender, inEvent){
@@ -140,14 +116,6 @@ enyo.kind({
 		this.resetValues();	
 	},	
 	resetValues:function(){
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-//		this.$.rejected_count.setValue(this._objRec.accepted_count);
->>>>>>> fe8a7154ce8c56dd299703f2c507be3a175bcb6e
-=======
-//		this.$.rejected_count.setValue(this._objRec.accepted_count);
->>>>>>> fe8a7154ce8c56dd299703f2c507be3a175bcb6e
 		this.$.reject_id.setItems(cacheRejects.getLS());	
 		this.$.reject_id.setValue(0);
 		this.$.rejected_count.setValue("");		
