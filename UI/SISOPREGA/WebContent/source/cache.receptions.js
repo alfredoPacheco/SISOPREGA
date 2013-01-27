@@ -29,7 +29,6 @@ enyo.kind({
 		objNew.city_name= cacheMan.getCityByID(objNew.city_id).city_name;
 		objNew.weights=[{hcw_id:undefined, hc:undefined, weight:undefined} ]; 
 		objNew.barnyards=[];
-		objNew.accepted_count="";
 		objNew.inspections=[];
 		objNew.feed=[];
 		
@@ -838,9 +837,7 @@ enyo.kind({
 		}
 		
 	},	
-	addReject:function(objRec,objReject,cbObj,cbMethod){
-//		if(iAccepted==""){iAccepted=0;}
-//		objRec.accepted_count=iAccepted;
+	addReject:function(objRec,objReject,cbObj,cbMethod){				
 		if(objReject){
 			if (this.createInspection(objRec,objReject)== true){
 				objRec.inspections.push(objReject);
@@ -862,8 +859,6 @@ enyo.kind({
 		
 		var cgUpdate = consumingGateway.Update("InspectionDetails", objToSend);
 		if (cgUpdate.exceptionId == 0){ //Updated successfully
-//			if(iAccepted==""){iAccepted=0;}
-//			objRec.accepted_count=iAccepted;
 			objRec.inspections[iInspIdx].rejected_count=objReject.rejected_count;
 			objRec.inspections[iInspIdx].reject_id=objReject.reject_id;
 			objRec.inspections[iInspIdx].reject_desc=objReject.reject_desc;				
