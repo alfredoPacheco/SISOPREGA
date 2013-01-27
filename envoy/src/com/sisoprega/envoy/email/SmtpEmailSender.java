@@ -76,17 +76,8 @@ public class SmtpEmailSender implements EmailSender {
         return new PasswordAuthentication(SmtpEmailSender.this.username, SmtpEmailSender.this.password);
       }
     });
-
-    try {
-      Message message =getMessage(email, session);
-      Transport transport = session.getTransport("smtp");
-      transport.connect();
-      Transport.send(message);
-      transport.close();
-    } catch (MessagingException e) {
-      throw new RuntimeException(e);
-    }
-    return false;
+    
+    return sendEmail(email, session);    
   }
 
   @Override
@@ -143,6 +134,17 @@ public class SmtpEmailSender implements EmailSender {
     }
     
     return result;
+  }
+
+  @Override
+  public boolean sendEmail(Email email, Session session) {
+    try {
+      Message message = getMessage(email, session);
+      Transport.send(message);
+      return true;
+    } catch (MessagingException e) {
+      throw new RuntimeException(e);
+    }
   }
 
 }

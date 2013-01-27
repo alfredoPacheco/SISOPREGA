@@ -48,8 +48,7 @@ var cConsumingGateway = {
 			},
 			error : function OnError(request, status, error) {
 				result = 'Error al llamar el servicio web.';
-				alert(output.exceptionDescription);
-				consumingGateway.LogOut();
+				alert(error);
 			}
 		});
 		
@@ -75,8 +74,7 @@ var cConsumingGateway = {
 			},
 			error : function OnError(request, status, error) {
 				result = 'Error al llamar el servicio web.';
-				alert(output.exceptionDescription);
-				consumingGateway.LogOut();
+				alert(result + ': ' + error);
 			}
 		});
 		

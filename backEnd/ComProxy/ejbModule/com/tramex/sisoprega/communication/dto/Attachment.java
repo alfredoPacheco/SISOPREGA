@@ -13,14 +13,10 @@
  * 
  * &copy; COPYRIGHT 2012 TRAMEX. ALL RIGHTS RESERVED.
  */
-package com.sisoprega.envoy.email;
-
-import java.io.File;
-
-import javax.mail.Session;
+package com.tramex.sisoprega.communication.dto;
 
 /**
- * Defines the contract that each email sender must implement.<BR/>
+ * Attachment details.<BR/>
  * 
  * <B>Revision History:</B>
  * 
@@ -29,37 +25,58 @@ import javax.mail.Session;
  * Date        By                           Description
  * MM/DD/YYYY
  * ----------  ---------------------------  -------------------------------------------
- *             Alan Del Rio                 Initial Version.
+ * 01/05/2013  Diego Torres                 Initial Version.
  * ====================================================================================
  * </PRE>
  * 
- * @author Alan Del Rio
+ * @author Diego Torres
  * 
  */
-public interface EmailSender {
-  /**
-   * Build and send the email to the configured recipient.
-   * 
-   * @param email
-   * @return
-   */
-  boolean sendEmail(final Email email);
-  
+public class Attachment {
+  private byte[] content;
+  private String fileName;
+  private String attachmentType;
   
   /**
-   * Build and send the email to the configured recipient using a given session.
-   * 
-   * @param email
-   * @param session
-   * @return
+   * @return the content
    */
-  boolean sendEmail(final Email email, Session session);
-
+  public byte[] getContent() {
+    return content;
+  }
+  
   /**
-   * Configures the email communication.
-   * 
-   * @param xmlFile
-   * @throws InitEmailProviderException
+   * @param content the content to set
    */
-  void setConfiguration(File xmlFile) throws InitEmailProviderException;
+  public void setContent(byte[] content) {
+    this.content = content;
+  }
+  
+  /**
+   * @return the fileName
+   */
+  public String getFileName() {
+    return fileName;
+  }
+  
+  /**
+   * @param fileName the fileName to set
+   */
+  public void setFileName(String fileName) {
+    this.fileName = fileName;
+  }
+  
+  /**
+   * @return the attachmentType
+   */
+  public String getAttachmentType() {
+    return attachmentType;
+  }
+  
+  /**
+   * @param attachmentType the attachmentType to set
+   */
+  public void setAttachmentType(String attachmentType) {
+    this.attachmentType = attachmentType;
+  }
 }
+

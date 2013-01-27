@@ -13,14 +13,10 @@
  * 
  * &copy; COPYRIGHT 2012 TRAMEX. ALL RIGHTS RESERVED.
  */
-package com.sisoprega.envoy.email;
-
-import java.io.File;
-
-import javax.mail.Session;
+package com.tramex.sisoprega.communication.email;
 
 /**
- * Defines the contract that each email sender must implement.<BR/>
+ * Thrown exception when sending the email.<BR/>
  * 
  * <B>Revision History:</B>
  * 
@@ -36,30 +32,6 @@ import javax.mail.Session;
  * @author Alan Del Rio
  * 
  */
-public interface EmailSender {
-  /**
-   * Build and send the email to the configured recipient.
-   * 
-   * @param email
-   * @return
-   */
-  boolean sendEmail(final Email email);
-  
-  
-  /**
-   * Build and send the email to the configured recipient using a given session.
-   * 
-   * @param email
-   * @param session
-   * @return
-   */
-  boolean sendEmail(final Email email, Session session);
-
-  /**
-   * Configures the email communication.
-   * 
-   * @param xmlFile
-   * @throws InitEmailProviderException
-   */
-  void setConfiguration(File xmlFile) throws InitEmailProviderException;
+public class SendEmailException extends Exception{
+	private static final long serialVersionUID = 365901123598968177L;
 }

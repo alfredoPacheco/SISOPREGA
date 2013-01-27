@@ -161,7 +161,7 @@ public class Rancher {
     public String toString() {
 	return "rancherId:" + rancherId + "; name:" + lastName + " "
 		+ motherName + ", " + firstName + ";alias:" + aka + ";email:"
-		+ emailAddress + ";birthDate:" + birthDate + ";";
+		+ emailAddress + ";birthDate:" + birthDate + ";phone:" + phone + ";";
     }
 
 }

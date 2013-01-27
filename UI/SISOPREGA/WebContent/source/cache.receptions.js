@@ -444,12 +444,12 @@ enyo.kind({
 				cbObj[cbMethod]();
 			}
 			
-			// TODO: Send communication to customer
+			// Send communication to customer
 			var today = new Date();
 			var month = today.getMonth() + 1; 
 			var today_sf = month + '/' + today.getDate() + '/' + today.getFullYear(); 
-			var report_name = 'ReporteAlimento?rancherId=' + objRec.rancherId + '&fromDate=' + today_sf + '&toDate=' + today_sf;
-			consumingGateway.SendReport(objRec.rancherId, report_name);
+			var report_name = 'RecibidoPorGanadero?rancherId=' + objRec.rancher_id + '&amp;fromDate=' + today_sf + '&amp;toDate=' + today_sf;
+			consumingGateway.SendReport(objRec.rancher_id, report_name);
 			
 			return true;
 		}

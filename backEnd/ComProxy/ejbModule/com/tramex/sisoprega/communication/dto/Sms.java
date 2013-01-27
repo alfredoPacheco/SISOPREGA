@@ -13,14 +13,10 @@
  * 
  * &copy; COPYRIGHT 2012 TRAMEX. ALL RIGHTS RESERVED.
  */
-package com.sisoprega.envoy.email;
-
-import java.io.File;
-
-import javax.mail.Session;
+package com.tramex.sisoprega.communication.dto;
 
 /**
- * Defines the contract that each email sender must implement.<BR/>
+ * This object provides the data model for SMS messages.<BR/>
  * 
  * <B>Revision History:</B>
  * 
@@ -29,37 +25,30 @@ import javax.mail.Session;
  * Date        By                           Description
  * MM/DD/YYYY
  * ----------  ---------------------------  -------------------------------------------
- *             Alan Del Rio                 Initial Version.
+ *             Alan del Rio                 Initial Version.
  * ====================================================================================
  * </PRE>
  * 
- * @author Alan Del Rio
+ * @author Alan del Rio
  * 
  */
-public interface EmailSender {
-  /**
-   * Build and send the email to the configured recipient.
-   * 
-   * @param email
-   * @return
-   */
-  boolean sendEmail(final Email email);
-  
-  
-  /**
-   * Build and send the email to the configured recipient using a given session.
-   * 
-   * @param email
-   * @param session
-   * @return
-   */
-  boolean sendEmail(final Email email, Session session);
-
-  /**
-   * Configures the email communication.
-   * 
-   * @param xmlFile
-   * @throws InitEmailProviderException
-   */
-  void setConfiguration(File xmlFile) throws InitEmailProviderException;
+public class Sms {
+    private final String sTo;
+    private final String sFrom;
+    private final String sMsg;
+    public Sms(final String sTo, final String sFrom, final String sMsg){
+        this.sFrom=sFrom;
+        this.sTo=sTo;
+        this.sMsg=sMsg;
+    }
+    public String getTo() {
+        return sTo;
+    }
+    public String getFrom() {
+        return sFrom;
+    }
+    public String getMsg() {
+        return sMsg;
+    }
 }
+

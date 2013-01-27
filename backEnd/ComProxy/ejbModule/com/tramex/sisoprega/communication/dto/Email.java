@@ -13,14 +13,10 @@
  * 
  * &copy; COPYRIGHT 2012 TRAMEX. ALL RIGHTS RESERVED.
  */
-package com.sisoprega.envoy.email;
-
-import java.io.File;
-
-import javax.mail.Session;
+package com.tramex.sisoprega.communication.dto;
 
 /**
- * Defines the contract that each email sender must implement.<BR/>
+ * Email details.<BR/>
  * 
  * <B>Revision History:</B>
  * 
@@ -30,36 +26,50 @@ import javax.mail.Session;
  * MM/DD/YYYY
  * ----------  ---------------------------  -------------------------------------------
  *             Alan Del Rio                 Initial Version.
+ * 01/05/2013  Diego Torres                 Add implementation for email attachment.
  * ====================================================================================
  * </PRE>
  * 
  * @author Alan Del Rio
  * 
  */
-public interface EmailSender {
-  /**
-   * Build and send the email to the configured recipient.
-   * 
-   * @param email
-   * @return
-   */
-  boolean sendEmail(final Email email);
-  
-  
-  /**
-   * Build and send the email to the configured recipient using a given session.
-   * 
-   * @param email
-   * @param session
-   * @return
-   */
-  boolean sendEmail(final Email email, Session session);
+public class Email {
+  private final String to;
+  private final String from;
+  private final String msg;
+  private final String subject;
+  private Attachment attachment;
 
-  /**
-   * Configures the email communication.
-   * 
-   * @param xmlFile
-   * @throws InitEmailProviderException
-   */
-  void setConfiguration(File xmlFile) throws InitEmailProviderException;
+  public Email(final String to, final String from, final String subject, final String msg) {
+    this.from = from;
+    this.to = to;
+    this.msg = msg;
+    this.subject = subject;
+  }
+
+  public String getTo() {
+    return to;
+  }
+
+  public String getFrom() {
+    return from;
+  }
+
+  public String getMsg() {
+    return msg;
+  }
+
+  public String getSubject() {
+    return subject;
+  }
+  
+  public Attachment getAttachment(){
+    return attachment;
+  }
+  
+  public void setAttachment(Attachment attachment){
+    this.attachment = attachment;
+  }
+  
 }
+

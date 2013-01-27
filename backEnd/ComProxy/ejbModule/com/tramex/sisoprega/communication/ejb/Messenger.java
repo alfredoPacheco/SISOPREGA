@@ -17,27 +17,27 @@ package com.tramex.sisoprega.communication.ejb;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Properties;
 import java.util.logging.Logger;
 
+import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.mail.Session;
 
-import com.sisoprega.envoy.email.Attachment;
-import com.sisoprega.envoy.email.Email;
-import com.sisoprega.envoy.email.EmailFactory;
-import com.sisoprega.envoy.email.EmailSender;
-import com.sisoprega.envoy.email.InitEmailProviderException;
-import com.sisoprega.envoy.sms.InitSmsProviderException;
-import com.sisoprega.envoy.sms.Sms;
-import com.sisoprega.envoy.sms.SmsFactory;
-import com.sisoprega.envoy.sms.SmsProvider;
 import com.tramex.sisoprega.common.messenger.Messageable;
+import com.tramex.sisoprega.communication.dto.Attachment;
+import com.tramex.sisoprega.communication.dto.Email;
+import com.tramex.sisoprega.communication.dto.Sms;
+import com.tramex.sisoprega.communication.email.EmailSender;
+import com.tramex.sisoprega.communication.email.InitEmailProviderException;
+import com.tramex.sisoprega.communication.sms.InitSmsProviderException;
+import com.tramex.sisoprega.communication.sms.SmsProvider;
 import com.tramex.sisoprega.datamodel.RemoteModelable;
 import com.tramex.sisoprega.dto.EnterpriseRancher;
 import com.tramex.sisoprega.dto.Rancher;
@@ -63,11 +63,23 @@ import com.tramex.sisoprega.dto.Rancher;
 public class Messenger implements Messageable {
 
   private Logger log = Logger.getLogger(Messenger.class.getCanonicalName());
-  SmsProvider smsMan = null;
-  EmailSender smtp = null;
 
   @EJB(name = "java:global/DataModel/BaseDataModel")
-  protected RemoteModelable dataModel;
+  private RemoteModelable dataModel;
+  
+  @EJB(name="java:global/ComProxy/SmtpEmailSender")
+  private EmailSender smtp;
+  
+  @EJB(name="java:global/ComProxy/ClickatellProvider")
+  private SmsProvider smsMan;
+  
+  @Resource(name="mail/sisoprega")
+  private Session mailSession;
+  
+  @Resource(name="comProxy/Properties")
+  private Properties comProxyProps;
+  
+  private final static String REPORTING_URL = "http://localhost:8080/ReportingGateway/";
 
   /**
    * Default constructor.
@@ -76,13 +88,6 @@ public class Messenger implements Messageable {
    * @throws InitEmailProviderException
    */
   public Messenger() throws InitSmsProviderException, InitEmailProviderException {
-    log.info("Loading configuration for messenger.");
-    File xmlFile = new File("/sisoprega/config/envoyConfig.xml");
-    smsMan = SmsFactory.getProvider("clickatell");
-    smsMan.setConfiguration(xmlFile);
-
-    smtp = EmailFactory.getSender("smtp");
-    smtp.setConfiguration(xmlFile);
   }
 
   /*
@@ -94,23 +99,8 @@ public class Messenger implements Messageable {
    */
   @Override
   public boolean sendReport(Rancher rancher, String reportName) {
-    String to = rancher.getPhone();
-    String message = "";
-
-    try {
-      URL url = new URL("http://localhost:8080/ReportingGateway/SMS/" + reportName);
-      BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
-      String str;
-      while ((str = in.readLine()) != null) {
-        message += str;
-      }
-      in.close();
-      return sendSMS(to, message) && sendEmail(rancher.getEmailAddress(), reportName);
-    } catch (Exception e) {
-      log.severe("Unable to read file from localhost." + e.getMessage());
-      log.throwing(this.getClass().getCanonicalName(), "sendReport(EnterpriseRancher, reportName)", e);
-    }
-    return false;
+    log.entering(this.getClass().getCanonicalName(), "sendReport");
+    return sendReport(reportName, rancher.getPhone(), rancher.getEmailAddress());
   }
 
   /*
@@ -122,22 +112,8 @@ public class Messenger implements Messageable {
    */
   @Override
   public boolean sendReport(EnterpriseRancher rancher, String reportName) {
-    String message = "";
-    try {
-      URL url = new URL("http://localhost:8080/ReportingGateway/" + reportName);
-      BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
-      String str;
-      while ((str = in.readLine()) != null) {
-        message += str;
-      }
-      in.close();
-      return sendSMS(rancher.getTelephone(), message) && sendEmail(rancher.getEmail(), reportName);
-    } catch (Exception e) {
-      log.severe("Unable to read file from localhost." + e.getMessage());
-      log.throwing(this.getClass().getCanonicalName(), "sendReport(EnterpriseRancher, reportName)", e);
-    }
-
-    return false;
+    log.entering(this.getClass().getCanonicalName(), "sendReport(EnterpriseRancher, reportName)");
+    return sendReport(reportName, rancher.getTelephone(), rancher.getEmail());
   }
 
   /*
@@ -165,9 +141,16 @@ public class Messenger implements Messageable {
   }
 
   private boolean sendSMS(String to, String message) {
-    String from = "SISOPREGA";
+    String from = comProxyProps.getProperty("clickatell.from");
     Sms sms = new Sms(to, from, message);
     try {
+      smsMan.setConfiguration(comProxyProps);
+      
+      String userId, password;
+      userId = comProxyProps.getProperty("clickatell.user");
+      password = comProxyProps.getProperty("clickatell.password");
+      smsMan.doLogin(userId, password);
+      
       smsMan.sendSMS(sms);
       log.info("SENT SMS: " + message);
       return true;
@@ -182,7 +165,7 @@ public class Messenger implements Messageable {
     Email email = new Email(to, from, title, message);
 
     try {
-      smtp.sendEmail(email);
+      smtp.sendEmail(email, mailSession);
       return true;
     } catch (Exception e) {
       return false;
@@ -192,7 +175,7 @@ public class Messenger implements Messageable {
   private boolean sendEmail(String to, String reportName) {
 
     try {
-      URL url = new URL("http://localhost:8080/ReportingGateway/" + reportName);
+      URL url = new URL(REPORTING_URL + reportName);
 
       String from = "tramex@sisoprega.com";
       String content = "Encuentre anexo el reporte con los detalles de este mensaje.";
@@ -200,12 +183,14 @@ public class Messenger implements Messageable {
 
       Attachment attachment = new Attachment();
       attachment.setAttachmentType("application/pdf");
-      attachment.setFileName(reportName);
+      String[] pathParts = url.getPath().split("/");
+      int iFileNamePart = pathParts.length-1;
+      attachment.setFileName(pathParts[iFileNamePart] + ".pdf");
 
       attachment.setContent(readPDF(url));
       email.setAttachment(attachment);
 
-      smtp.sendEmail(email);
+      smtp.sendEmail(email, mailSession);
       log.info("sent email");
       return true;
     } catch (Exception e) {
@@ -213,6 +198,58 @@ public class Messenger implements Messageable {
       log.throwing(this.getClass().getCanonicalName(), "sendReport(EnterpriseRancher, reportName)", e);
       return false;
     }
+  }
+
+  @Override
+  public boolean sendReport(long rancherId, String reportName) {
+    log.entering(this.getClass().getCanonicalName(), "sendReport(rancherId, reportName)");
+    
+    
+    Rancher person = null;
+    try{
+      log.fine("Reading person rancher [" + rancherId + "] from dataModel");
+      person = dataModel.readSingleDataModel("RANCHER_BY_ID", "rancherId", rancherId, Rancher.class);
+      log.finer("person obtained from dataModel:" + person);
+      
+      if (person != null) {
+        log.fine("Sending reportName: " + reportName);
+        return sendReport(person, reportName);
+      }
+    }catch(Exception e){
+      log.fine("Person not found with provided id [" + rancherId + "]");
+    }
+
+    EnterpriseRancher enterprise = null;
+    try{
+      log.fine("Reading enterprise rancher [" + rancherId + "] from dataModel");
+      enterprise = dataModel.readSingleDataModel("ENTERPRISE_RANCHER_BY_ID", "enterpriseId", rancherId,
+          EnterpriseRancher.class);
+      log.finer("enterprise obtained from dataModel: " + enterprise);
+      if (enterprise != null) {
+        log.fine("Sending reportName: " + reportName);
+        return sendReport(enterprise, reportName);
+      }
+    }catch(Exception e){
+      log.fine("Enterprise not found with provided id [" + rancherId + "]");
+    }
+
+    return false;
+  }
+
+  @Override
+  public boolean sendSimpleMessage(long rancherId, String message) {
+    Rancher person = dataModel.readSingleDataModel("RANCHER_BY_ID", "rancherId", rancherId, Rancher.class);
+
+    if (person != null) {
+      return sendSimpleMessage(person, message);
+    }
+
+    EnterpriseRancher enterprise = dataModel.readSingleDataModel("ENTERPRISE_RANCHER_BY_ID", "enterpriseId", rancherId, EnterpriseRancher.class);
+    if (enterprise != null) {
+      return sendSimpleMessage(enterprise, message);
+    }
+
+    return false;
   }
 
   private byte[] readPDF(URL url) throws IOException {
@@ -240,38 +277,27 @@ public class Messenger implements Messageable {
 
     return tmpOut.toByteArray();
   }
-
-  @Override
-  public boolean sendReport(long rancherId, String reportName) {
-
-    Rancher person = dataModel.readSingleDataModel("RANCHER_BY_ID", "rancherId", rancherId, Rancher.class);
-
-    if (person != null) {
-      return sendReport(person, reportName);
-    }
-
-    EnterpriseRancher enterprise = dataModel.readSingleDataModel("ENTERPRISE_RANCHER_BY_ID", "enterpriseId", rancherId,
-        EnterpriseRancher.class);
-    if (enterprise != null) {
-      return sendReport(enterprise, reportName);
-    }
-
-    return false;
-  }
-
-  @Override
-  public boolean sendSimpleMessage(long rancherId, String message) {
-    Rancher person = dataModel.readSingleDataModel("RANCHER_BY_ID", "rancherId", rancherId, Rancher.class);
-
-    if (person != null) {
-      return sendSimpleMessage(person, message);
-    }
-
-    EnterpriseRancher enterprise = dataModel.readSingleDataModel("ENTERPRISE_RANCHER_BY_ID", "enterpriseId", rancherId, EnterpriseRancher.class);
-    if (enterprise != null) {
-      return sendSimpleMessage(enterprise, message);
+  
+  private boolean sendReport(String reportName, String phone, String email){
+    log.entering(this.getClass().getCanonicalName(), "sendReport(reportName, phone, email)");
+    String message = "";
+    try {
+      URL url = new URL(REPORTING_URL + "SMS/" + reportName);
+      log.fine("Formed url: " + url.getPath());
+      BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
+      String str;
+      while ((str = in.readLine()) != null) {
+        message += str;
+      }
+      in.close();
+      log.fine("Message from report: " + message);
+      return sendSMS(phone, message) && sendEmail(email, reportName);
+    } catch (Exception e) {
+      log.severe("Unable to read file from localhost." + e.getMessage());
+      log.throwing(this.getClass().getCanonicalName(), "sendReport(EnterpriseRancher, reportName)", e);
     }
 
     return false;
   }
+  
 }
