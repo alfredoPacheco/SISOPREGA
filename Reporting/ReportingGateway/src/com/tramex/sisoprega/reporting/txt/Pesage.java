@@ -72,7 +72,6 @@ public class Pesage extends BaseReportServlet {
       if (!rs.next()) {
         throw new ServletException("Error al obtener registro de recepción.");
       } else {
-        rs.next();
 
         PrintWriter out = response.getWriter();
         out.println("Ganado Recibido: " + rs.getLong("cabezas") + " cabezas de " + rs.getString("ganado") + ", "
