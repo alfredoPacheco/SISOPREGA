@@ -78,6 +78,7 @@ public class Pesage extends BaseReportServlet {
             + rs.getDouble("kilos") + " kg. (" + rs.getDouble("libras") + " lbs.). Prom por Kg.: " + rs.getDouble("pkilos")
             + "; Prom por Lb.: " + rs.getDouble("plibras") + ". Corrales: " + rs.getString("corrales") + ".");
 
+        out.close();
       }
 
     } catch (SQLException e) {
