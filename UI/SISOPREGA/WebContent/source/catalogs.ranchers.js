@@ -32,7 +32,7 @@ enyo
 					onGoback : "goBack",
 					onEdit : "showEdit",
 					onContacts : "showContacts",
-					onBilling : "showBilling"
+					onBilling : "showBillings"
 				}, {
 					kind : "catalogs.ranchers.contact.list",
 					name : "contactList",
@@ -46,11 +46,17 @@ enyo
 					onAddRancher : "goBack",
 					onUpdateRancher : "goBack"
 				}, {
-					kind : "catalogs.ranchers.billing.create",
-					name : "billing",
+					kind : "catalogs.ranchers.billing.list",
+					name : "billingList",
 					onGoback : "goBack",
-					onAddRancher : "goBack",
-					onUpdateRancher : "goBack"
+					onAddBilling : "showAddBilling",
+					onSelect : "showEditBilling"
+				}, {
+					kind : "catalogs.ranchers.billing.create",
+					name : "abilling",
+					onGoback : "goBack",
+					onAddBilling : "goBack",
+					onUpdateBilling : "goBack"
 				}, ]
 			} ],
 			showPerson : function() {
@@ -63,6 +69,34 @@ enyo
 				this.$.ranPerCreate.objList = cacheRanchers.get();
 				_objMainHeader.setContent('Nuevo Ganadero - Persona Fisica');
 				this.$.mainPane.selectViewByName("ranPerCreate");
+			},
+			showEdit : function() {
+
+				var objRan = this.$.ranchersList.getSelected();
+				objRan.first_name = objRan.first_name;
+				if (objRan.rancher_type == 1) {
+					_gobackStack.push({
+						caption : "Ganadero - Persona Fisica",
+						paneMan : this.$.mainPane,
+						paneName : "ranOptions"
+					});
+					this.$.ranPerCreate.setRancher(objRan);
+					this.$.ranPerCreate.toggleUpdate();
+					_objMainHeader
+							.setContent('Editar Ganadero - Persona Fisica');
+					this.$.mainPane.selectViewByName("ranPerCreate");
+				} else {
+					_gobackStack.push({
+						caption : "Ganadero - Empresa / Sociedad",
+						paneMan : this.$.mainPane,
+						paneName : "ranOptions"
+					});
+					this.$.ranEPCreate.setRancher(objRan);
+					this.$.ranEPCreate.toggleUpdate();
+					_objMainHeader
+							.setContent('Editar Ganadero - Empresa / Sociedad');
+					this.$.mainPane.selectViewByName("ranEPCreate");
+				}
 			},
 			showEnterprise : function() {
 				_gobackStack.push({
@@ -173,44 +207,79 @@ enyo
 				_objMainHeader.setContent('Editar Contacto');
 				this.$.mainPane.selectViewByName("acontact");
 			},
-			showBilling : function() {
-				_gobackStack.push({
-					caption : "Ganadero - Persona Fisica",
-					paneMan : this.$.mainPane,
-					paneName : "ranOptions"
-				});
-				this.$.billing.setRancher(this.$.ranchersList.getSelected());
-				this.$.billing.toggleUpdate();
-				_objMainHeader.setContent('Datos de Facturación');
-				this.$.mainPane.selectViewByName("billing");
-			},
-			showEdit : function() {
+			showBillings : function() {
 
 				var objRan = this.$.ranchersList.getSelected();
-				objRan.first_name = objRan.first_name;
-				if (objRan.rancher_type == 1) {
-					_gobackStack.push({
-						caption : "Ganadero - Persona Fisica",
-						paneMan : this.$.mainPane,
-						paneName : "ranOptions"
-					});
-					this.$.ranPerCreate.setRancher(objRan);
-					this.$.ranPerCreate.toggleUpdate();
-					_objMainHeader
-							.setContent('Editar Ganadero - Persona Fisica');
-					this.$.mainPane.selectViewByName("ranPerCreate");
-				} else {
+				if (objRan.rancher_type == 2) {
 					_gobackStack.push({
 						caption : "Ganadero - Empresa / Sociedad",
 						paneMan : this.$.mainPane,
 						paneName : "ranOptions"
 					});
-					this.$.ranEPCreate.setRancher(objRan);
-					this.$.ranEPCreate.toggleUpdate();
 					_objMainHeader
-							.setContent('Editar Ganadero - Empresa / Sociedad');
-					this.$.mainPane.selectViewByName("ranEPCreate");
+							.setContent('Facturación - (Empresa / Sociedad)');
+					this.$.ranOptions.$.button3.setShowing(!1);
+				} else {
+					_gobackStack.push({
+						caption : "Ganadero - Persona Fisica",
+						paneMan : this.$.mainPane,
+						paneName : "ranOptions"
+					});
+					_objMainHeader.setContent('Facturación - (Persona Fisica)');
+					this.$.ranOptions.$.button3.setShowing(1);
 				}
+				this.$.billingList.setList(this.$.ranchersList.getSelected());
+
+				this.$.billingList.updateList();
+
+				this.$.mainPane.selectViewByName("billingList");
+			},
+			showAddBilling : function() {
+
+				var objRan = this.$.ranchersList.getSelected();
+				if (objRan.rancher_type == 2) {
+					_gobackStack.push({
+						caption : "Facturación - (Empresa / Sociedad)",
+						paneMan : this.$.mainPane,
+						paneName : "billingList"
+					});
+				} else {
+					_gobackStack.push({
+						caption : "Facturación - (Persona Fisica)",
+						paneMan : this.$.mainPane,
+						paneName : "billingList"
+					});
+				}
+				this.$.abilling.objList = _arrRancherList[this.$.ranchersList.iSelected].billings;
+				this.$.abilling.setBilling(this.$.ranchersList.getSelected());
+				this.$.abilling.toggleAdd();
+				_objMainHeader.setContent('Nuevos Datos De Facturación');
+				this.$.mainPane.selectViewByName("abilling");
+			},
+			showEditBilling : function() {
+				var objRan = this.$.ranchersList.getSelected();
+				if (objRan.rancher_type == 2) {
+					_gobackStack.push({
+						caption : "Facturación - (Empresa / Sociedad)",
+						paneMan : this.$.mainPane,
+						paneName : "billingList"
+					});
+				} else {
+					_gobackStack.push({
+						caption : "Facturación - (Persona Fisica)",
+						paneMan : this.$.mainPane,
+						paneName : "billingList"
+					});
+				}
+				_gobackStack.push({
+					caption : "Ganaderos",
+					paneMan : this.$.mainPane,
+					paneName : "billingList"
+				});
+				this.$.abilling.setBilling(this.$.ranchersList.getSelected(),
+						this.$.billingList.getBilling());
+				_objMainHeader.setContent('Editar Datos De Facturación');
+				this.$.mainPane.selectViewByName("abilling");
 			},
 			addGoBackAction : function() {
 				_gobackStack.push({

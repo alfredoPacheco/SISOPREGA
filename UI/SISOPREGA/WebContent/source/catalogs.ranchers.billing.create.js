@@ -3,8 +3,8 @@ enyo.kind({
 	kind: enyo.SlidingView,
 	layoutKind: enyo.VFlexLayout,
 	events: {
-		"onAddRancher": "",
-		"onUpdateRancher": "",		
+		"onAddBilling": "",
+		"onUpdateBilling": "",		
 		"onCancel":""
 	},
 	objRan:{},
@@ -26,7 +26,7 @@ enyo.kind({
 			]},
 			{kind: "Drawer", name:"draAdd", components: [ 					
 				{kind: "Button",name:"btnAdd", className: "enyo-button-affirmative", 
-				 caption: "Crear", onclick: "addRancher"},										
+				 caption: "Crear", onclick: "addBilling"},										
 			]},
 			{kind: "Drawer", name:"draUpdate", components: [		
 			    {layoutKind: "HFlexLayout", align: "center",components: [			
@@ -52,7 +52,7 @@ enyo.kind({
 		this.$.rfc.setValue("");
 		this.$.phone_number.setValue("");		
 	},
-	updateRancher:function(){
+	updateBilling:function(){
 		cacheRanchers.updateBilling(this.objRan,this.getBilling(),this,"doUpdateRancher");
 	},
 	getBilling:function(){
@@ -78,7 +78,10 @@ enyo.kind({
 		objBilling.phone_number=this.$.phone_number.getValue();
 		return objBilling;
 	},
-	setRancher:function(objRan){
+	addBilling:function(){
+		cacheRanchers.addBilling(this.objRan,this.getBilling(),this,"doAddBilling");		
+	},
+	setBilling:function(objRan){
 		this.resetValues();		
 		this.objRan=objRan;
 		if(this.objRan.billing.rfc){
