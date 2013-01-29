@@ -33,17 +33,17 @@ enyo.kind({
 		this.$.main.setIndex(2);		
 	},
 	loadFeedReport:function(){	
-		var sURL="http://localhost:9090/ReportingGateway/RecibidoPorGanadero?fromDate=01/01/2010&toDate=01/01/2014&rancherId=692"
+		var sURL="/ReportingGateway/RecibidoPorGanadero?fromDate=01/01/2010&toDate=01/01/2014&rancherId=692"
 		window.open(sURL,"reception")
 		//alert('TODO:Feed')
 	},
 	loadInspectionReport:function(){	
-		var sURL="http://localhost:9090/ReportingGateway/CattleInspection?fromDate=01/01/2010&toDate=01/01/2014&rancherId=692"
+		var sURL="/ReportingGateway/CattleInspection?fromDate=01/01/2010&toDate=01/01/2014&rancherId=692"
 		window.open(sURL,"inspection")
 		//alert('TODO:Inspection')	
 	},
 	loadHistoricalReport:function(){
-		http://localhost:9090/ReportingGateway/CattleInspection?fromDate=01/01/2010&toDate=01/01/2014&rancherId=692
+		sURL="/ReportingGateway/CattleInspection?fromDate=01/01/2010&toDate=01/01/2014&rancherId=692"
 		alert('TODO:Historical')		
 	},		
 	stepBack:function(){
