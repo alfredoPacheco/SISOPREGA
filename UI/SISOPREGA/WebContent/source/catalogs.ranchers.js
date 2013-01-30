@@ -125,11 +125,10 @@ enyo
 				});
 				var objRan = this.$.ranchersList.getSelected();
 				if (objRan.rancher_type == 2) {
-					_objMainHeader.setContent('Ganadero - Empresa / Sociedad');
-					this.$.ranOptions.$.button3.setShowing(!1);
+					_objMainHeader.setContent(objRan.company_name);
+					
 				} else {
-					_objMainHeader.setContent('Ganadero - Persona Fisica');
-					this.$.ranOptions.$.button3.setShowing(1);
+					_objMainHeader.setContent(objRan.last_name + ' ' + objRan.mother_name + ' ' + objRan.first_name);
 				}
 				this.$.mainPane.selectViewByName("ranOptions");
 			},
@@ -138,26 +137,21 @@ enyo
 				var objRan = this.$.ranchersList.getSelected();
 				if (objRan.rancher_type == 2) {
 					_gobackStack.push({
-						caption : "Ganadero - Empresa / Sociedad",
+						caption : objRan.company_name,
 						paneMan : this.$.mainPane,
 						paneName : "ranOptions"
-					});
-					_objMainHeader
-							.setContent('Contacto - (Empresa / Sociedad)');
-					this.$.ranOptions.$.button3.setShowing(!1);
+					});					
+					_objMainHeader.setContent("Contactos de " + objRan.company_name);
 				} else {
 					_gobackStack.push({
-						caption : "Ganadero - Persona Fisica",
+						caption : objRan.last_name + ' ' + objRan.mother_name + ' ' + objRan.first_name,
 						paneMan : this.$.mainPane,
 						paneName : "ranOptions"
-					});
-					_objMainHeader.setContent('Contacto - (Persona Fisica)');
-					this.$.ranOptions.$.button3.setShowing(1);
+					});					
+					_objMainHeader.setContent("Contactos de " + objRan.last_name + ' ' + objRan.mother_name + ' ' + objRan.first_name);
 				}
 				this.$.contactList.setList(this.$.ranchersList.getSelected());
-
 				this.$.contactList.updateList();
-
 				this.$.mainPane.selectViewByName("contactList");
 			},
 			showAddContact : function() {
@@ -165,13 +159,13 @@ enyo
 				var objRan = this.$.ranchersList.getSelected();
 				if (objRan.rancher_type == 2) {
 					_gobackStack.push({
-						caption : "Contacto - (Empresa / Sociedad)",
+						caption : "Contacto - " + objRan.company_name,
 						paneMan : this.$.mainPane,
 						paneName : "contactList"
 					});
 				} else {
 					_gobackStack.push({
-						caption : "Contacto - (Persona Fisica)",
+						caption : "Contacto - " + objRan.last_name + ' ' + objRan.mother_name + ' ' + objRan.first_name,
 						paneMan : this.$.mainPane,
 						paneName : "contactList"
 					});
@@ -186,13 +180,13 @@ enyo
 				var objRan = this.$.ranchersList.getSelected();
 				if (objRan.rancher_type == 2) {
 					_gobackStack.push({
-						caption : "Contacto - (Empresa / Sociedad)",
+						caption : "Contacto - " + objRan.company_name,
 						paneMan : this.$.mainPane,
 						paneName : "contactList"
 					});
 				} else {
 					_gobackStack.push({
-						caption : "Contacto - (Persona Fisica)",
+						caption : "Contacto - " + objRan.last_name + ' ' + objRan.mother_name + ' ' + objRan.first_name,
 						paneMan : this.$.mainPane,
 						paneName : "contactList"
 					});
@@ -218,7 +212,7 @@ enyo
 					});
 					_objMainHeader
 							.setContent('Facturación - (Empresa / Sociedad)');
-					this.$.ranOptions.$.button3.setShowing(!1);
+					
 				} else {
 					_gobackStack.push({
 						caption : "Ganadero - Persona Fisica",
@@ -226,7 +220,7 @@ enyo
 						paneName : "ranOptions"
 					});
 					_objMainHeader.setContent('Facturación - (Persona Fisica)');
-					this.$.ranOptions.$.button3.setShowing(1);
+					
 				}
 				this.$.billingList.setList(this.$.ranchersList.getSelected());
 
@@ -251,7 +245,7 @@ enyo
 					});
 				}
 				this.$.abilling.objList = _arrRancherList[this.$.ranchersList.iSelected].billings;
-				this.$.abilling.setBilling(this.$.ranchersList.getSelected());
+				this.$.abilling.setRancher(this.$.ranchersList.getSelected());
 				this.$.abilling.toggleAdd();
 				_objMainHeader.setContent('Nuevos Datos De Facturación');
 				this.$.mainPane.selectViewByName("abilling");
@@ -291,6 +285,7 @@ enyo
 			goBack : function() {
 				this.$.ranchersList.filterRanchers();
 				this.$.contactList.updateList();
+				this.$.billingList.updateList();
 				cacheMan.goBack();
 			}
 		});

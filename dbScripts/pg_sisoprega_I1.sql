@@ -16,6 +16,8 @@
  * 12/13/2012  Alfredo Pacheco               Field handling moved from ctrl_feed_order_details to ctrl_feed_order.
  * 01/04/2013  Alfredo Pacheco		     On Delete Cascade for ctrl_feed_order_barnyard and ctrl_feed_order_details.
  * 01/13/2013  Diego Torres                  Add email to enterprise rancher.
+ * 01/29/2013  Alfredo Pacheco               Index rancher_id removed from cat_rancher_invoice.
+
  * ====================================================================================
  * 
  * Author: Diego Torres
@@ -200,7 +202,6 @@ CREATE TABLE cat_rancher_invoice (
   legal_id VARCHAR(13) NOT NULL
 );
 
-CREATE UNIQUE INDEX U_rancher_invoice_rancher_id ON cat_rancher_invoice(rancher_id);
 CREATE UNIQUE INDEX U_rancher_invoice_legal_name ON cat_rancher_invoice(legal_name);
 CREATE UNIQUE INDEX U_rancher_invoice_legal_ID ON cat_rancher_invoice(legal_id);
 
