@@ -1,6 +1,7 @@
 enyo.kind({
 	name: "catalogs.ranchers.person.create",	
 	kind: "Control", layoutKind: "HFlexLayout",
+	iCreated : null,
 	events: {
 		"onAddRancher": "",
 		"onUpdateRancher": "",	
@@ -88,7 +89,7 @@ enyo.kind({
 		return objRan;
 	},
 	addRancher:function(){				
-		this.iCreated=cacheRanchers.create(this.getRancher(),this,"afteraddRancher");		
+		cacheRanchers.create(this.getRancher(),this,"afteraddRancher");		
 	},
 	afteraddRancher:function(){
 		this.iCreated=cacheRanchers.iLastRanID;

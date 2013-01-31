@@ -26,8 +26,8 @@ enyo
 							});
 							objTmp = selfCacheRancher
 									.rancherAdapterToIn(objAux);
-//							objTmp.billing = selfCacheRancher
-//									.getInvoice(objTmp);
+							// objTmp.billing = selfCacheRancher
+							// .getInvoice(objTmp);
 							arrAux.push(objTmp);
 						});
 					} else { // Error
@@ -54,8 +54,8 @@ enyo
 											});
 											objTmp = selfCacheRancher
 													.enterpriseRancherAdapterToIn(objAux);
-//											objTmp.billing = selfCacheRancher
-//													.getInvoice(objTmp);
+											// objTmp.billing = selfCacheRancher
+											// .getInvoice(objTmp);
 											arrAux.push(objTmp);
 										});
 					} else { // Error
@@ -150,7 +150,7 @@ enyo
 			},
 			rancherBillingAdapterToIn : function(objBill) {
 				var objNew = {
-					billing_id : objBill.rancherBillingId,
+					billing_id : objBill.rancherInvoiceId,
 					rancher_id : objBill.rancherId,
 					company_name : objBill.legalName,
 					address_one : objBill.addressOne,
@@ -167,7 +167,7 @@ enyo
 			},
 			rancherBillingAdapterToOut : function(objBill) {
 				var objNew = {
-					rancherBillingId : objBill.billing_id,
+					rancherInvoiceId : objBill.billing_id,
 					rancherId : objBill.rancher_id,
 					legalName : objBill.company_name,
 					addressOne : objBill.address_one,
@@ -258,10 +258,9 @@ enyo
 			create : function(objRan, cbObj, cbMethod) {
 
 				if (objRan.rancher_type == 1) {
-					return this.createRancher(objRan, cbObj, cbMethod);
+					this.createRancher(objRan, cbObj, cbMethod);
 				} else {
-					return this
-							.createEnterpriseRancher(objRan, cbObj, cbMethod);
+					this.createEnterpriseRancher(objRan, cbObj, cbMethod);
 				}
 			},
 			createRancher : function(objRan, cbObj, cbMethod) {
@@ -298,6 +297,7 @@ enyo
 				if (cgCreateEnterpriseRancher.exceptionId == 0) { // Created
 					// successfully
 					objRan.rancher_id = cgCreateEnterpriseRancher.generatedId;
+					this.iLastRanID = objRan.rancher_id;
 					// Fields out of webservice
 					objRan.billing = [];
 					objRan.contacts = [];
@@ -663,7 +663,7 @@ enyo
 				objCon.rancher_id = objRancher.rancher_id;
 
 				objToSend = this.rancherBillingAdapterToOut(objCon);
-				delete objToSend.billingId;
+				delete objToSend.rancherInvoiceId;
 				cgCreateBilling = consumingGateway.Create("RancherInvoice",
 						objToSend);
 
@@ -715,7 +715,7 @@ enyo
 			},
 			deleteBilling : function(objRancher, objCon, cbObj, cbMethod) {
 				var objToSend = {};
-				objToSend.billingId = objCon.billing_id;
+				objToSend.rancherInvoiceId = objCon.billing_id;
 				var cgDeleteBilling = null;
 				cgDeleteBilling = consumingGateway.Delete("RancherInvoice",
 						objToSend);
