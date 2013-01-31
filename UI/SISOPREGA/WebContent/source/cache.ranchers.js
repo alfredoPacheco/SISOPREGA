@@ -9,6 +9,10 @@ enyo
 			reloadme : function() {
 				// AJAX
 			},
+			refreshData:function(){
+				this.rancherWasReadFromGateway=false;
+				this.get();
+			},			
 			get : function() {
 				if (this.rancherWasReadFromGateway == false) {
 					this.rancherWasReadFromGateway = true;

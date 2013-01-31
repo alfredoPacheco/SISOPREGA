@@ -511,6 +511,8 @@ enyo.kind({
 	},
 	refreshMap:function(){
 		cacheMan.showScrim();
+		cacheRanchers.refreshData();			
+		cacheCattle.refreshData();
 		cacheBY.refreshData();
 		cacheReceptions.refreshData();	
 		cacheMan.hideScrim();
