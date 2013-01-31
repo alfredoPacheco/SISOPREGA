@@ -37,84 +37,95 @@ enyo.kind({
         this.inherited(arguments);
     },		
 	create: function() {
-		this.inherited(arguments); 
+		this.inherited(arguments);
 		this.last=this.$.cells;
-		//this.addRow(true);
-		this.addRowHeader();
-		this.addCustomCell("corraman","Corrales de <br/> Manejo","99px","50px");
+		//this.addRow(true);		
+		this.addRowHeader();		
+		this.createCells("2E",7,4,"50px","50px");
+		this.splitRow();
+		this.addCustomCell("corraman","Corrales de <br/> Manejo","100px","50px");
 		this.createCells("1E",5,6,"50px","50px");
 		this.splitRow();
-		this.createCells("1E",17,8,"50px","50px");		
-		this.splitRow();		
-		this.createCells("2E",7,4,"50px","50px");				
-		this.addRow();
+		this.createCells("1E",17,8,"50px","50px");
+						
+		this.addRow();		
+		this.createCells("2E",8,4,"50px","50px");
+		this.splitRow();
 		this.createCells("1E",2,8,"50px","50px");		
 		this.splitRow();
 		this.createCells("1E",18,8,"50px","50px");		
-		this.splitRow();		
-		this.createCells("2E",8,4,"50px","50px");						
+								
 		this.addRow(true);		
+		this.createCells("2D",11,4,"50px","50px");
+		this.splitRow();
 		this.createCells("1D",1,8,"50px","50px");				
 		this.splitRow();
 		this.createCells("1D",17,8,"50px","50px");
+								
+		this.addRow();	
+		this.createCells("2D",12,6,"33.33px","25px");
 		this.splitRow();
-		this.createCells("2D",11,4,"50px","50px");						
-		this.addRow();		
 		this.createCells("1D",2,12,"33.33px","25px");
 		this.splitRow();
 		this.createCells("1D",26,4,"100px","25px");		
+		
+		this.addRow(true);	
+		this.createCells("2C",11,6,"33.33px","25px");
 		this.splitRow();
-		this.createCells("2D",12,6,"33.33px","25px");
-		this.addRow(true);			
 		this.createCells("1C",1,12,"33.33px","25px");
 		this.splitRow();
 		this.createCells("1C",25,4,"100px","25px");	
+							
+		this.addRow();
+		this.createCells("2C",12,6,"33.33px","25px");
 		this.splitRow();
-		this.createCells("2C",11,6,"33.33px","25px");					
-		this.addRow();		
 		this.createCells("1C",2,12,"33.33px","25px");
 		this.splitRow();
 		this.createCells("1C",26,4,"100px","25px");		
-		this.splitRow();
-		this.createCells("2C",12,6,"33.33px","25px");							
+									
 		this.addRow(true);			
+		this.createCells("2B",11,6,"33.33px","25px");
+		this.splitRow();
 		this.createCells("1B",1,12,"33.33px","25px");
 		this.splitRow();
 		this.createCells("1B",25,4,"100px","25px");						
-		this.splitRow();
-		this.createCells("2B",11,6,"33.33px","25px");							
+									
 		
 		this.addRow(true);
+		this.createCells("2B",8,4,"50px","50px");
+		this.splitRow();
 		this.createCells("1B",2,8,"50px","50px");
 		this.splitRow();
 		this.createCells("1B",18,6,"50px","50px");		
 		this.addCustomCell("lagoxi","Laguna de <br/> Oxidacion","98px","50px");		
-		this.splitRow();
-		this.createCells("2B",8,4,"50px","50px");									
+											
 		this.addRow(true);
+		this.createCells("2A",7,4,"50px","50px");
+		this.splitRow();
 		this.createCells("1A",1,8,"50px","50px");		
 		this.splitRow();
 		this.createCells("1A",17,8,"50px","50px");		
+											
+		this.addRow();		
+		this.createCells("2A",8,4,"50px","50px");
 		this.splitRow();
-		this.createCells("2A",7,4,"50px","50px");									
-		this.addRow();			
 		this.addCustomCell("cabaA","Caballerizas A","99px","50px");
 		this.addCustomCell("cabaB","Caballerizas B","100px","50px");		
 		this.createCells("1A",10,4,"50px","50px");
 		this.splitRow();
 		this.createCells("1A",18,8,"50px","50px");		
-		this.splitRow();
-		this.createCells("2A",8,4,"50px","50px");
 		
-		this.addRow();			
-		this.addCustomCell("spacerone","","813px","50px","customBYCellDesc");		
-		this.splitRow();
+		
+		this.addRow();	
 		this.createCells("2R",7,4,"50px","50px");
+		this.splitRow();
+		this.addCustomCell("spacerone","","813px","50px","customBYCellDesc");		
+		
 													
 		this.addRow();
-		this.addCustomCell("spacertwo","","813px","50px");
+		this.createCells("2R",8,4,"50px","50px");
 		this.splitRow();
-		this.createCells("2R",8,4,"50px","50px");		
+		this.addCustomCell("spacertwo","","813px","50px");	
 	},
 	last:null,
 	addQuitButton:function(sName,sCaption,sWidth,sHeight,sClass){
@@ -123,7 +134,7 @@ enyo.kind({
 		}
 		objBarn.createComponent({kind:onyx.Button,
 		                         onclick:"doGoBack",
-								 style:"height:25px; width:50px; padding:0",
+								 style:"height:30px; width:50px; padding:0",
 								 content:"X"
 								 },{owner: this});		
 	},
@@ -143,11 +154,11 @@ enyo.kind({
 	addRowHeader:function(){
 			this.inherited(arguments);
 			this.last=objBarn=this.$.cells.createComponent({kind: "FittableColumns"});																								
-			this.addCustomCell("alaone","<strong>CHIHUAHUA</strong>",
-							  "815px","25px","customBYcellZone");
-			this.splitRow();
 			this.addCustomCell("alatwo","<strong>ZONA SUR</strong>",
-			                   "150px","25px","customBYcellZone");			
+			           "200px","30px","customBYcellZone");
+			this.splitRow();
+			this.addCustomCell("alaone","<strong>CHIHUAHUA</strong>",
+					           "765px","30px","customBYcellZone");	
 			this.addQuitButton();										   
 			this.addRow();
 	},
