@@ -26,8 +26,8 @@ enyo
 							});
 							objTmp = selfCacheRancher
 									.rancherAdapterToIn(objAux);
-//							objTmp.billing = selfCacheRancher
-//									.getInvoice(objTmp);
+							// objTmp.billing = selfCacheRancher
+							// .getInvoice(objTmp);
 							arrAux.push(objTmp);
 						});
 					} else { // Error
@@ -54,8 +54,8 @@ enyo
 											});
 											objTmp = selfCacheRancher
 													.enterpriseRancherAdapterToIn(objAux);
-//											objTmp.billing = selfCacheRancher
-//													.getInvoice(objTmp);
+											// objTmp.billing = selfCacheRancher
+											// .getInvoice(objTmp);
 											arrAux.push(objTmp);
 										});
 					} else { // Error
@@ -258,10 +258,9 @@ enyo
 			create : function(objRan, cbObj, cbMethod) {
 
 				if (objRan.rancher_type == 1) {
-					return this.createRancher(objRan, cbObj, cbMethod);
+					this.createRancher(objRan, cbObj, cbMethod);
 				} else {
-					return this
-							.createEnterpriseRancher(objRan, cbObj, cbMethod);
+					this.createEnterpriseRancher(objRan, cbObj, cbMethod);
 				}
 			},
 			createRancher : function(objRan, cbObj, cbMethod) {
@@ -298,6 +297,7 @@ enyo
 				if (cgCreateEnterpriseRancher.exceptionId == 0) { // Created
 					// successfully
 					objRan.rancher_id = cgCreateEnterpriseRancher.generatedId;
+					this.iLastRanID = objRan.rancher_id;
 					// Fields out of webservice
 					objRan.billing = [];
 					objRan.contacts = [];
