@@ -72,8 +72,8 @@ enyo.kind({
 	},
 	launchReport:function(){
 		this.inherited(arguments);
-		var sURL=""
-		var sTitle=""
+		var sURL="";
+		var sTitle="";
 			
 		var dFrom=this.$.dFrom.getValue();
 		var sFrom=dFrom.getDate()+"/"+dFrom.getMonth()+1+"/"+dFrom.getFullYear();
