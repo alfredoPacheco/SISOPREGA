@@ -84,20 +84,20 @@ enyo.kind({
 			//Alimentacion
 			case 1:
 				sTitle="feed"
-				sURL="/ReportingGateway/RecibidoPorGanadero?fromDate="+sFrom+"&toDate="+sTo+"&rancherId=692"				
+				sURL="/ReportingGateway/ReporteAlimento?fromDate="+sFrom+"&toDate="+sTo+"&rancherId=692";				
 				break;
 			//Inspeccion
 			case 2:
 				sTitle="inspection"				
-				sURL="/ReportingGateway/CattleInspection?fromDate="+sFrom+"&toDate="+sTo+"&rancherId=692"				
+				sURL="/ReportingGateway/CattleInspection?fromDate="+sFrom+"&toDate="+sTo+"&rancherId=692";				
 				break;
 			//Recepcion
 			case 3:
 				sTitle="reception"
-				sURL="/ReportingGateway/RecibidoPorGanadero?fromDate="+sFrom+"&toDate="+sTo+"&rancherId=692"				
+				sURL="/ReportingGateway/RecibidoPorGanadero?fromDate="+sFrom+"&toDate="+sTo+"&rancherId=692";				
 				break;				
 		}
-		window.open(sURL,"inspection");
+		window.open(sURL,sTitle);
 		this.closePopUp();
 	},
 	closePopUp:function(){
