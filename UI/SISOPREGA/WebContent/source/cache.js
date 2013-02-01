@@ -75,7 +75,11 @@ var _arrBarnyardsListCatalog=[
                		 barnyard_capacity:[{catclass_id:1,catclass_name:"EQUINO",head_count:75}]},
                		{barnyard_id:2,barnyard_code:"A2", location_id: "2",
                		 barnyard_capacity:[{catclass_id:4,cattype_name:"BOVINO",head_count:50}]}
-               	];		
+               	];	
+
+var _arrCountryPhoneCodes = [
+                             {caption:"Cd. Juarez, 	MX",		value:"52656"},
+                             {caption:"El Paso, 	US",		value:"1915"}];
 var _objMainHeader;
 var _objPopupHeader;
 

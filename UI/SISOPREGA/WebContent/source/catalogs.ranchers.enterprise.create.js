@@ -45,11 +45,26 @@ enyo.kind({
 				kind : "Input",
 				name : "rfc",
 				hint : "RFC"
-			}, {
-				kind : "Input",
-				name : "phone_number",
-				hint : "Telefono"
-			}, {
+			},
+
+			{
+				kind : enyo.HFlexBox,
+				pack : "start",
+				components : [ {
+					name : 'countryCodes',
+					kind : "ListSelector",
+					style : "width:150px;",
+					contentPack : "Start",
+					items : []
+				}, {
+					kind : "Input",
+					name : "phone_number",
+					hint : "Telefono",
+					inputClassName : "blankInput",
+					focusClassName : "darkFocus",
+					onfocus : "applyMask"
+				} ]
+			},{
 				kind : "Input",
 				name : "email",
 				hint : "E Mail"
@@ -102,6 +117,7 @@ enyo.kind({
 		this.$.zip_code.setValue("");
 		this.$.rfc.setValue("");
 		this.$.phone_number.setValue("");
+		this.$.countryCodes.setItems(_arrCountryPhoneCodes);
 		this.$.email.setValue("");
 	},
 	updateRancher : function() {
@@ -124,6 +140,7 @@ enyo.kind({
 			zip_code : "",
 			rfc : "",
 			phone_number : "",
+			country_code: "",
 			email : ""
 		};
 		objRan.company_name = this.$.company_name.getValue();
@@ -134,6 +151,7 @@ enyo.kind({
 		objRan.zip_code = this.$.zip_code.getValue();
 		objRan.rfc = this.$.rfc.getValue();
 		objRan.phone_number = this.$.phone_number.getValue();
+		objRan.country_code = this.$.countryCodes.getValue();
 		objRan.email = this.$.email.getValue();
 		return objRan;
 	},
@@ -158,6 +176,7 @@ enyo.kind({
 		this.$.zip_code.setValue(this.objRan.zip_code);
 		this.$.rfc.setValue(this.objRan.rfc);
 		this.$.phone_number.setValue(this.objRan.phone_number);
+		this.$.countryCodes.setValue(this.objRan.country_code);
 		this.$.email.setValue(this.objRan.email);
 		this.toggleUpdate();
 
@@ -171,4 +190,10 @@ enyo.kind({
 		this.$.draUpdate.setOpen(false);
 		this.resetValues();
 	},
+	applyMask : function(inSender) {
+		var _id = inSender.$.input.getId();
+		jQuery(function(j) {
+			j(document.getElementById(_id)).mask('(999) 999-9999');
+		});
+	}
 });

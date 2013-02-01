@@ -2,7 +2,6 @@ enyo.kind({
 	name : "controls.autocomplete",
 	kind : enyo.Control,
 	itemSelectedPopup : -1,
-	hint : "",
 	layoutKind : enyo.HFlexLayout,
 	allItems : [],
 	published : {

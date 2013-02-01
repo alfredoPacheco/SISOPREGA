@@ -84,14 +84,15 @@ enyo
 			rancherAdapterToIn : function(objRan) {
 
 				var objNew = {
-					rancher_id : objRan.rancherId,
-					aka : objRan.aka,
-					birth_date : "" + UTCtoNormalDate(objRan.birthDate),
-					email_add : objRan.emailAddress,
-					first_name : objRan.firstName,
-					last_name : objRan.lastName,
-					mother_name : objRan.motherName,
-					phone_number : objRan.phone
+					rancher_id : 	objRan.rancherId,
+					aka : 			objRan.aka,
+					birth_date : 	"" + UTCtoNormalDate(objRan.birthDate),
+					email_add : 	objRan.emailAddress,
+					first_name : 	objRan.firstName,
+					last_name : 	objRan.lastName,
+					mother_name : 	objRan.motherName,
+					phone_number : 	phoneToMask(objRan.phone),
+					country_code:	countryCodeByPhone(objRan.phone)
 				};
 				// Fields out of web service:
 				objNew.rfc = "";
@@ -110,7 +111,7 @@ enyo
 					firstName : objRan.first_name,
 					lastName : objRan.last_name,
 					motherName : objRan.mother_name,
-					phone : objRan.phone_number,
+					phone : phoneOut(objRan.country_code, objRan.phone_number)
 				};
 				return objNew;
 			},
@@ -124,7 +125,8 @@ enyo
 					mother_name : objCon.motherName,
 					birth_date : "" + UTCtoNormalDate(objCon.birthDate),
 					email_add : objCon.emailAddress,
-					phone_number : objCon.telephone,
+					phone_number : phoneToMask(objCon.telephone),
+					country_code:	countryCodeByPhone(objCon.telephone),
 					address_one : objCon.addressOne,
 					address_two : objCon.addressTwo,
 					city : objCon.city,
@@ -143,7 +145,7 @@ enyo
 					motherName : objCon.mother_name,
 					birthDate : "" + DateOut(objCon.birth_date),
 					emailAddress : objCon.email_add,
-					telephone : objCon.phone_number,
+					telephone : phoneOut(objCon.country_code, objCon.phone_number),
 					addressOne : objCon.address_one,
 					addressTwo : objCon.address_two,
 					city : objCon.city,
@@ -193,8 +195,8 @@ enyo
 					state_id : objRan.state,
 					zip_code : objRan.zipCode,
 					rfc : objRan.legalId,
-					phone_number : objRan.telephone,
-
+					phone_number : phoneToMask(objRan.telephone),
+					country_code:	countryCodeByPhone(objRan.telephone),
 					// Fields out of web service:
 					contacts : [],
 					billing : [],
@@ -216,7 +218,7 @@ enyo
 					state : objRan.state_id,
 					zipCode : objRan.zip_code,
 					legalId : objRan.rfc,
-					telephone : objRan.phone_number,
+					telephone : phoneOut(objRan.country_code, objRan.phone_number),
 					email : objRan.email
 				};
 				return objNew;
@@ -231,7 +233,8 @@ enyo
 					mother_name : objCon.motherName,
 					birth_date : "" + UTCtoNormalDate(objCon.birthDate),
 					email_add : objCon.emailAddress,
-					phone_number : objCon.telephone,
+					phone_number : phoneToMask(objCon.telephone),
+					country_code:	countryCodeByPhone(objCon.telephone),
 					address_one : objCon.addressOne,
 					address_two : objCon.addressTwo,
 					city : objCon.city,
@@ -250,7 +253,7 @@ enyo
 					motherName : objCon.mother_name,
 					birthDate : "" + DateOut(objCon.birth_date),
 					emailAddress : objCon.email_add,
-					telephone : objCon.phone_number,
+					telephone : phoneOut(objCon.country_code, objCon.phone_number),
 					addressOne : objCon.address_one,
 					addressTwo : objCon.address_two,
 					city : objCon.city,
@@ -815,4 +818,38 @@ function DateOut(normalDate) {
 		dateFmt = fmt.format(dateNew);
 	}
 	return dateFmt;
+}
+
+function phoneOut(country_code, phone){
+	if(phone !== undefined){
+		phone = phone.replace("(","");
+		phone = phone.replace(")","");
+		phone = phone.replace("-","");
+		phone = phone.replace(" ","");
+		phone = phone.replace("_","");
+	}
+	if (phone.length == 10){
+		return "" + country_code + phone;	
+	}else{
+		return "";
+	}
+}
+function phoneToMask(phone){
+	if(phone!==undefined && phone!= ""){
+		if (phone.length>=10){
+			phone = phone.slice(-10);
+			phone = "(" + phone.substr(0,3) + ") " + phone.substr(3,3) + "-" + phone.substr(6);
+		}
+	}
+	return phone;	
+}
+function countryCodeByPhone(phone){
+	if(phone!==undefined && phone!= ""){
+		if (phone.length>10){
+			phone = phone.split('').reverse().join('');;
+			phone = phone.substr(10);
+			phone = phone.split('').reverse().join('');;			
+		}
+	}
+	return phone;
 }

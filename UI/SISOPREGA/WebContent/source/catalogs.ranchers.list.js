@@ -116,11 +116,10 @@ enyo.kind({
 					this.$.name.setContent(objRan.last_name + ', '
 							+ objRan.first_name);
 				}
-				this.$.info.setContent(objRan.phone_number);
 			} else {
 				this.$.name.setContent(objRan.company_name);
-				this.$.info.setContent(objRan.phone_number);
 			}
+			this.$.info.setContent(objRan.country_code + " " + objRan.phone_number);
 			return true;
 		}
 	},
