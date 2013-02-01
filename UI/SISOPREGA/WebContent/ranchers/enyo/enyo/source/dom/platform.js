@@ -25,9 +25,9 @@
 */
 enyo.platform = {
 	//* True if the platform has native single finger events
-	touch: Boolean(("ontouchstart" in window) || window.navigator.msPointerEnabled),
+	touch: Boolean(("ontouchstart" in window) || window.navigator.msMaxTouchPoints),
 	//* True if the platform has native double finger events
-	gesture: Boolean(("ongesturestart" in window) || window.navigator.msPointerEnabled)
+	gesture: Boolean(("ongesturestart" in window) || window.navigator.msMaxTouchPoints)
 };
 
 //* @protected
@@ -41,7 +41,10 @@ enyo.platform = {
 		{platform: "android", regex: /Android (\d+)/},
 		// Kindle Fire
 		// Force version to 2, (desktop mode does not list android version)
-		{platform: "android", regex: /Silk\//, forceVersion: 2},
+		{platform: "android", regex: /Silk\/1./, forceVersion: 2, extra: {silk: 1}},
+		// Kindle Fire HD
+		// Force version to 4
+		{platform: "android", regex: /Silk\/2./, forceVersion: 4, extra: {silk: 2}},
 		// IE 8 - 10
 		{platform: "ie", regex: /MSIE (\d+)/},
 		// iOS 3 - 5
@@ -49,10 +52,16 @@ enyo.platform = {
 		{platform: "ios", regex: /iP(?:hone|ad;(?: U;)? CPU) OS (\d+)/},
 		// webOS 1 - 3
 		{platform: "webos", regex: /(?:web|hpw)OS\/(\d+)/},
-		// desktop safari
+		// desktop Safari
 		{platform: "safari", regex: /Version\/(\d+)[.\d]+\s+Safari/},
 		// desktop Chrome
-		{platform: "chrome", regex: /Chrome\/(\d+)[.\d]+/}
+		{platform: "chrome", regex: /Chrome\/(\d+)[.\d]+/},
+		// Firefox on Android
+		{platform: "androidFirefox", regex: /Android;.*Firefox\/(\d+)/},
+		// desktop Firefox
+		{platform: "firefox", regex: /Firefox\/(\d+)/},
+		// Blackberry 10+
+		{platform: "blackberry", regex: /BB1\d;.*Version\/(\d+\.\d+)/}
 	];
 	for (var i = 0, p, m, v; p = platforms[i]; i++) {
 		m = p.regex.exec(ua);
@@ -63,6 +72,9 @@ enyo.platform = {
 				v = Number(m[1]);
 			}
 			ep[p.platform] = v;
+			if (p.extra) {
+				enyo.mixin(ep, p.extra);
+			}
 			break;
 		}
 	}

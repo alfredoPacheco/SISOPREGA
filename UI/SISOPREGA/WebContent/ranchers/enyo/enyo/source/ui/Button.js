@@ -11,6 +11,11 @@ enyo.kind({
 	//* @protected
 	kind: enyo.ToolDecorator,
 	tag: "button",
+	attributes: { 
+		// set to button, as default is "submit" which can cause unexpected
+		// problems when controls are used inside a form
+		type: "button"
+	},
 	//* @public
 	published: {
 		//* When true, button is shown as disabled and does not generate tap
@@ -26,6 +31,12 @@ enyo.kind({
 		this.setAttribute("disabled", this.disabled);
 	},
 	tap: function() {
-		this.setActive(true);
+		if (this.disabled) {
+			// work around for platforms like Chrome on Android or Opera that send
+			// mouseup to disabled form controls
+			return true;
+		} else {
+			this.setActive(true);
+		}
 	}
 });

@@ -16,6 +16,7 @@
 						{content: "1"},
 						{content: "2"},
 						{classes: "onyx-menu-divider"},
+						{content: "Label", classes: "onyx-menu-label"},
 						{content: "3"},
 					]}
 				]}
@@ -28,8 +29,6 @@
 enyo.kind({
 	name: "onyx.MenuItem",
 	kind: "enyo.Button",
-	tag: "div",
-	classes: "onyx-menu-item",
 	events: {
 		/**
 			Fires when the menu item is selected.
@@ -40,6 +39,9 @@ enyo.kind({
 		*/
 		onSelect: ""
 	},
+	//* @protected
+	classes: "onyx-menu-item",
+	tag: "div",
 	tap: function(inSender) {
 		this.inherited(arguments);
 		this.bubble("onRequestHideMenu");

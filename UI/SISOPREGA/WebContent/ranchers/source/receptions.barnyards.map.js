@@ -7,7 +7,7 @@ enyo.kind({
 					  {content:"Liberar",value:6},					  
 					  {content:"Deseleccionar",value:8},					  					  
 					  ],		
-	style:"cursor:pointer;	",					  
+	style:"cursor:pointer;",					  
 	kind: "Scroller", touch:true,
 	events:{onGoBack:""},
 	fit: true,
@@ -25,7 +25,7 @@ enyo.kind({
 		{kind:"FittableRows", flex:1, classes:"mapBG",
 		 components:[
 			{name: "options", kind: "onyx.Picker", onSelect: "actionSelected",items:[]},	
-			{kind:enyo.BasicScroller,flex: 1,
+			{
 			components:[
 				{name: "cells", kind: "FittableRows",align:"middle", onclick: "cellsClick"},
 			]},
@@ -33,9 +33,6 @@ enyo.kind({
 			 classes: "transitioner2", layoutKind: "VFlexLayout",
 			 style: "overflow: hidden; posiposition:absolute", width: "95%", height: "95%",scrim: true,}]}
 	],
-   constructor: function() {
-        this.inherited(arguments);
-    },		
 	create: function() {
 		this.inherited(arguments);
 		this.last=this.$.cells;
@@ -46,8 +43,7 @@ enyo.kind({
 		this.addCustomCell("corraman","Corrales de <br/> Manejo","100px","50px");
 		this.createCells("1E",5,6,"50px","50px");
 		this.splitRow();
-		this.createCells("1E",17,8,"50px","50px");
-						
+		this.createCells("1E",17,8,"50px","50px");						
 		this.addRow();		
 		this.createCells("2E",8,4,"50px","50px");
 		this.splitRow();

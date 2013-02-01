@@ -26,6 +26,11 @@ enyo.kind({
 	published: {
 		//* Number of rows to render
 		count: 0,
+		/**
+			If true, the selection mechanism is disabled. Tap events are still
+			sent, but items won't be automatically re-rendered when tapped.
+		*/
+		noSelect: false,
 		//* If true, multiple selections are allowed
 		multiSelect: false,
 		//* If true, the selected item will toggle
@@ -52,18 +57,26 @@ enyo.kind({
 		*/
 		onSetupItem: ""
 	},
+	//* design-time attribute, indicates if row indices run 
+	//* from [0.._count_-1] (false) or [_count_-1..0] (true)
+	bottomUp: false,
+	//* @protected
 	components: [
 		{kind: "Selection", onSelect: "selectDeselect", onDeselect: "selectDeselect"},
 		{name: "client"}
 	],
 	rowOffset: 0,
-	bottomUp: false,
-	//* @protected
 	create: function() {
 		this.inherited(arguments);
+		this.noSelectChanged();
 		this.multiSelectChanged();
 		this.clientClassesChanged();
 		this.clientStyleChanged();
+	},
+	noSelectChanged: function() {
+		if (this.noSelect) {
+			this.$.selection.clear();
+		}
 	},
 	multiSelectChanged: function() {
 		this.$.selection.setMulti(this.multiSelect);
@@ -86,7 +99,7 @@ enyo.kind({
 		for (var i=0, r=0; i<this.count; i++) {
 			r = this.rowOffset + (this.bottomUp ? this.count - i-1 : i);
 			this.setupItem(r);
-			this.$.client.setAttribute("index", r);
+			this.$.client.setAttribute("data-enyo-index", r);
 			h += this.inherited(arguments);
 			this.$.client.teardownRender();
 		}
@@ -107,6 +120,9 @@ enyo.kind({
 		this.inherited(arguments);
 	},
 	tap: function(inSender, inEvent) {
+		if (this.noSelect) {
+			return;
+		}
 		if (this.toggleSelected) {
 			this.$.selection.toggle(inEvent.index);
 		} else {
@@ -138,7 +154,7 @@ enyo.kind({
 	//* Fetches the DOM node for the given row index.
 	fetchRowNode: function(inIndex) {
 		if (this.hasNode()) {
-			var n$ = this.node.querySelectorAll('[index="' + inIndex + '"]');
+			var n$ = this.node.querySelectorAll('[data-enyo-index="' + inIndex + '"]');
 			return n$ && n$[0];
 		}
 	},
@@ -147,7 +163,7 @@ enyo.kind({
 		var n = inEvent.target;
 		var id = this.hasNode().id;
 		while (n && n.parentNode && n.id != id) {
-			var i = n.getAttribute && n.getAttribute("index");
+			var i = n.getAttribute && n.getAttribute("data-enyo-index");
 			if (i !== null) {
 				return Number(i);
 			}
@@ -189,7 +205,7 @@ enyo.kind({
 			} else {
 				//enyo.log("Failed to find node for",  inControl.id, inControl.generated);
 			}
-			for (var i=0, c$=inControl.children, c; c=c$[i]; i++) {
+			for (var i=0, c$=inControl.children, c; (c=c$[i]); i++) {
 				this.claimNode(c, inNode);
 			}
 		}
