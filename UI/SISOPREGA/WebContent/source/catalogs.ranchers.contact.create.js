@@ -27,13 +27,15 @@ enyo.kind({
 				   components:[{content:"Fecha de Nacimiento",},
 						{kind: "DatePicker", name:"birth_date", label: "", minYear:1940, maxYear:new Date().getFullYear(), className:"picker-hbox"}]},						
 				  {kind: "Input", name:"email_add", hint:"Email",
-				   inputClassName: "blankInput", focusClassName:"darkFocus"},							 
-				  
-				   {kind: "Input", name:"phone_number", hint:"Telefono",
 				   inputClassName: "blankInput", focusClassName:"darkFocus"},
-				   
-				   {kind: "controls.mask", name:"telefonoControl", inputClassName: "blankInput", focusClassName:"darkFocus"},
-				   
+				   {
+						kind : "Input",
+						name : "phone_number",
+						hint : "Telefono",
+						inputClassName : "blankInput",
+						focusClassName : "darkFocus",
+						onfocus : "applyMask"
+					} ,
 				   {kind: "Input", name:"address_one", hint:"Domicilio",
 					   inputClassName: "blankInput", focusClassName:"darkFocus"},
 				   {kind: "Input", name:"address_two", hint:"",
@@ -155,5 +157,11 @@ enyo.kind({
 		this.$.draAdd.setOpen(true);
 		this.$.draUpdate.setOpen(false);				
 		this.resetValues();	
+	},
+	applyMask : function(inSender) {
+		var _id = inSender.$.input.getId();
+		jQuery(function(j) {
+			j(document.getElementById(_id)).mask('(999) 999-9999');
+		});
 	}
 });

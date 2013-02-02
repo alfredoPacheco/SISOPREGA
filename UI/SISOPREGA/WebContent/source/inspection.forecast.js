@@ -4,8 +4,7 @@ enyo
 			kind : enyo.SlidingView,
 			layoutKind : enyo.VFlexLayout,
 			create : function() {
-				this.inherited(arguments);
-				this.cambioDeFecha();
+				this.inherited(arguments);				
 				this.$.rancherInput.setItems(cacheRanchers.getAllForList());
 				this.$.cattle_type_id.setItems(cacheCattle.getAllCattleType());
 				this.$.localidad.setItems(cacheMan.allLocationsForList());
@@ -293,7 +292,8 @@ enyo
 				}
 			},
 			ready : function() {
-				this.updateList();
+				this.$.fechaPicker.setValue(new Date());
+				this.cambioDeFecha();
 			},
 			resetValues : function() {
 				this.$.rancherInput.setIndex(-1);

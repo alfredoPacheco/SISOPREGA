@@ -17,7 +17,7 @@
  * 01/04/2013  Alfredo Pacheco		     On Delete Cascade for ctrl_feed_order_barnyard and ctrl_feed_order_details.
  * 01/13/2013  Diego Torres                  Add email to enterprise rancher.
  * 01/29/2013  Alfredo Pacheco               Index rancher_id removed from cat_rancher_invoice.
-
+ * 02/01/2013  Alfredo Pacheco               cat_rancher_invoice.rancher_id now references cat_rancher.rancher_id
  * ====================================================================================
  * 
  * Author: Diego Torres
@@ -181,18 +181,18 @@ EXECUTE PROCEDURE proc_person_rancher_delete();
 
 -- SAMPLE DATA FOR RANCHERS
 INSERT INTO cat_person_rancher(aka, first_name, last_name, mother_name, email_add, telephone) 
-VALUES('El Vato', 'Alfredo', 'Pacheco', 'Figueroa', 'j.alfredo.pacheco@gmail.com', '044 (656) 305-0450');
+VALUES('El Vato', 'Alfredo', 'Pacheco', 'Figueroa', 'j.alfredo.pacheco@gmail.com', '6563050450');
 INSERT INTO cat_person_rancher(first_name, last_name, mother_name, birth_date, email_add, telephone)
-VALUES('Diego A.', 'Torres', 'Fuerte', '1982-04-13', 'diego.torres.fuerte@gmail.com', '044 (656) 217-1598');
+VALUES('Diego A.', 'Torres', 'Fuerte', '1982-04-13', 'diego.torres.fuerte@gmail.com', '6562171598');
 INSERT INTO cat_enterprise_rancher(legal_name, address_one, address_two, city, address_state, zip_code, legal_id, telephone)
-VALUES('Ganaderia Apaloosa', 'Calle prueba #7357', 'Colonia foo bar', 'cd. Juarez', 'Chih.', '32590', 'GAAP339648IEA', '656 000-0000');
+VALUES('Ganaderia Apaloosa', 'Calle prueba #7357', 'Colonia foo bar', 'cd. Juarez', 'Chih.', '32590', 'GAAP339648IEA', '6560000000');
 
 
 DROP TABLE IF EXISTS cat_rancher_invoice CASCADE;
 
 CREATE TABLE cat_rancher_invoice (
   rancher_invoice_id  SERIAL PRIMARY KEY,
-  rancher_id integer NOT NULL REFERENCES cat_person_rancher(rancher_id) ON DELETE CASCADE,
+  rancher_id integer NOT NULL REFERENCES cat_rancher(rancher_id) ON DELETE CASCADE,
   legal_name VARCHAR(100) NOT NULL,
   address_one VARCHAR(100) NOT NULL,
   address_two VARCHAR(100),

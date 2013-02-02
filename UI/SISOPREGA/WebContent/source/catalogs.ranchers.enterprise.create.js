@@ -45,11 +45,16 @@ enyo.kind({
 				kind : "Input",
 				name : "rfc",
 				hint : "RFC"
-			}, {
+			},
+
+			{
 				kind : "Input",
 				name : "phone_number",
-				hint : "Telefono"
-			}, {
+				hint : "Telefono",
+				inputClassName : "blankInput",
+				focusClassName : "darkFocus",
+				onfocus : "applyMask"
+			},{
 				kind : "Input",
 				name : "email",
 				hint : "E Mail"
@@ -171,4 +176,10 @@ enyo.kind({
 		this.$.draUpdate.setOpen(false);
 		this.resetValues();
 	},
+	applyMask : function(inSender) {
+		var _id = inSender.$.input.getId();
+		jQuery(function(j) {
+			j(document.getElementById(_id)).mask('(999) 999-9999');
+		});
+	}
 });
