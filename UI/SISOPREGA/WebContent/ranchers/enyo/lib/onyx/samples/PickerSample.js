@@ -19,7 +19,7 @@ enyo.kind({
 		{tag: "br"},
 		{content: "Picker with Static Button", classes:"onyx-sample-divider"},
 		{kind: "onyx.PickerDecorator", components: [
-			{kind: "onyx.Button", content: "Pick One...", style: "width: 200px"},
+			{kind: "onyx.PickerButton", content: "Pick One...", style: "width: 200px"},
 			{kind: "onyx.Picker", components: [
 				{content: "Hello!"},
 				{content: "I am busy."},
@@ -46,11 +46,13 @@ enyo.kind({
 				{style: "min-width: 60px;"},
 				{name: "dayPicker", kind: "onyx.Picker"}
 			]},
-			{content: "Year", classes: "onyx-sample-label"},
-			{kind: "onyx.PickerDecorator", components: [
-				{style: "min-width: 80px;"},
-				{name: "yearPicker", kind: "onyx.FlyweightPicker", count: 200, onSetupItem: "setupYear", components: [
-					{name: "year"}
+			{classes: "onyx-toolbar-inline", style:"margin: 0px;", components: [
+				{content: "Year", classes: "onyx-sample-label"},
+				{kind: "onyx.PickerDecorator", components: [
+					{style: "min-width: 80px;"},
+					{name: "yearPicker", kind: "onyx.FlyweightPicker", count: 200, onSetupItem: "setupYear", components: [
+						{name: "year"}
+					]}
 				]}
 			]}
 		]},

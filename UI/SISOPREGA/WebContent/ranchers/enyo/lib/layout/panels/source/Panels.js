@@ -65,7 +65,8 @@ enyo.kind({
 	handlers: {
 		ondragstart: "dragstart",
 		ondrag: "drag",
-		ondragfinish: "dragfinish"
+		ondragfinish: "dragfinish",
+		onscroll: "domScroll"
 	},
 	tools: [
 		{kind: "Animator", onStep: "step", onEnd: "completed"}
@@ -77,6 +78,15 @@ enyo.kind({
 		this.arrangerKindChanged();
 		this.narrowFitChanged();
 		this.indexChanged();
+		this.setAttribute("onscroll", enyo.bubbler);
+	},
+	domScroll: function(inSender, inEvent) {
+		if (this.hasNode()) {
+			if (this.node.scrollLeft > 0) {
+				// Reset scrollLeft position
+				this.node.scrollLeft = 0;
+			}
+		}
 	},
 	initComponents: function() {
 		this.createChrome(this.tools);
@@ -88,9 +98,15 @@ enyo.kind({
 	narrowFitChanged: function() {
 		this.addRemoveClass("enyo-panels-fit-narrow", this.narrowFit);
 	},
+	destroy: function() {
+		// When the entire panels is going away, take note so we don't try and do single-panel 
+		// remove logic such as changing the index and reflowing when each panel is destroyed
+		this.destroying = true;
+		this.inherited(arguments);
+	},
 	removeControl: function(inControl) {
 		this.inherited(arguments);
-		if (this.controls.length > 1 && this.isPanel(inControl)) {
+		if (this.destroying && this.controls.length > 0 && this.isPanel(inControl)) {
 			this.setIndex(Math.max(this.index - 1, 0));
 			this.flow();
 			this.reflow();
@@ -122,7 +138,10 @@ enyo.kind({
 	//* Returns a reference to the active panel--i.e., the panel at the specified index.
 	getActive: function() {
 		var p$ = this.getPanels();
-		return p$[this.index];
+		//Constrain the index within the array of panels, needed if wrapping is enabled
+		var index = this.index % p$.length;
+		index < 0 ? (index += p$.length) : enyo.nop;
+		return p$[index];
 	},
 	/**
 		Returns a reference to the <a href="#enyo.Animator">enyo.Animator</a> 
@@ -177,7 +196,7 @@ enyo.kind({
 	indexChanged: function(inOld) {
 		this.lastIndex = inOld;
 		this.index = this.clamp(this.index);
-		if (!this.dragging) {
+		if (!this.dragging && this.$.animator) {
 			if (this.$.animator.isAnimating()) {
 				this.completed();
 			}
@@ -294,7 +313,7 @@ enyo.kind({
 		this.toIndex = t;
 	},
 	refresh: function() {
-		if (this.$.animator.isAnimating()) {
+		if (this.$.animator && this.$.animator.isAnimating()) {
 			this.$.animator.stop();
 		}
 		this.startTransition();

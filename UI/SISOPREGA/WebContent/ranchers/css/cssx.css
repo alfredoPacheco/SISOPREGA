@@ -18,39 +18,47 @@
 	cursor:pointer;	
 	background-image: url(../images/data.png);
 	background-size:100% 100%;
+	background-repeat: no-repeat;
 }
 .mainBG{
 	background-image: url(../images/background.png);
-	background-size:100% 100%;
+	background-size:100% 100%;	
+	background-repeat: no-repeat;
 /*	background-color:#DABD8B;*/
 }
 .introMiddleBG{
 	margin-top:2%;
 	background-image: url(../images/intro.png);
 	background-size:100% 100%;
+	background-repeat: no-repeat;
 }
 .reportFeedBG{
 	cursor:pointer;	
 	background-image: url(../images/feed.png);
 	background-size:100% 100%;
+	background-repeat: no-repeat;
 }
 .reportMapBYBG{
 	cursor:pointer;
 	background-image: url(../images/mapadecorrales.png);
 	background-size:100% 100%;
+	background-repeat: no-repeat;
 }
 .reportInspectionBG{
 	cursor:pointer;	
 	background-image: url(../images/inspection.png);
 	background-size:100% 100%;
+	background-repeat: no-repeat;
 }
 .reportHistoricalBG{
 	cursor:pointer;	
 	background-image: url(../images/historical.png);
 	background-size:100% 100%;
+	background-repeat: no-repeat;
 }
 .reportsBG{
 	background-image: url(../images/reportBack.png);
+	background-repeat: no-repeat;
 	background-size:100% 100%;
 }
 .headerMain{		
