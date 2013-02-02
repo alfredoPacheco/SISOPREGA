@@ -425,6 +425,10 @@ public class OperationsGateway {
    */
   @WebMethod(operationName="SendSimpleMessage")
   public String sendMessage(@WebParam(name="rancherId")long rancherId, @WebParam(name = "message") String message) {
+    
+    if (getSessionUserName() == null)
+      throw new WebServiceException("User is not logged in");
+    
     Context jndiContext = null;
     Messageable messenger = null;
     String commonPrefix = "java:global/ComProxy/";
@@ -458,6 +462,10 @@ public class OperationsGateway {
    */
   @WebMethod(operationName="SendReport")
   public String sendReport(@WebParam(name="rancherId")long rancherId, @WebParam(name="reportName")String reportName){
+    
+    if (getSessionUserName() == null)
+      throw new WebServiceException("User is not logged in");
+    
     Context jndiContext = null;
     Messageable messenger = null;
     String commonPrefix = "java:global/ComProxy/";
