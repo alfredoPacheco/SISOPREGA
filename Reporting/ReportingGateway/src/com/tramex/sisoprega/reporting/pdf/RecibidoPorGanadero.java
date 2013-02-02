@@ -37,7 +37,7 @@ import com.tramex.sisoprega.reporting.BaseReportServlet;
  * Servlet implementation class ReceivedCattleRacher
  * 
  * This report shows feed order using dateAlloted and rancherId as parameters.
- * http://host/ReportingGateway/ReceivedCattleRacher?fromDate=[MM/dd/yyyy]&toDate=[MM/dd/yyyy]&rancherId=[0]
+ * http://host/ReportingGateway/RecibidoPorGanadero?fromDate=[MM/dd/yyyy]&toDate=[MM/dd/yyyy]&rancherId=[0]
  * 
  * <B>Revision History:</B>
  * 
@@ -56,14 +56,14 @@ import com.tramex.sisoprega.reporting.BaseReportServlet;
  */
 
 @WebServlet("/RecibidoPorGanadero")
-public class ReceivedCattleRacher extends BaseReportServlet {
+public class RecibidoPorGanadero extends BaseReportServlet {
   
   private static final long serialVersionUID = -6219583962715558016L;
 
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public ReceivedCattleRacher() {
+    public RecibidoPorGanadero() {
         super();
     }
 
@@ -82,7 +82,7 @@ public class ReceivedCattleRacher extends BaseReportServlet {
       params.put("CUS_TO_DATE", toDate);
       params.put("CUS_RANCHER_ID", Integer.parseInt(request.getParameter("rancherId")));
 
-      String reportURL = "WEB-INF/Reports/Ranchers/GanadoRecibidoRanchero.jasper";
+      String reportURL = "WEB-INF/Reports/Ranchers/RecibidoPorGanadero.jasper";
 
       processRequest(reportURL, params, response);
 
