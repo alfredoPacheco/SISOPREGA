@@ -19,7 +19,7 @@ enyo.kind({
 				{style: "height: 21%; position: relative; z-index: 1;"},
 				{style: "height: 12%;width:100%", classes: "reportMapBYBG", onclick:"doMBYReport"},
 				{style: "height: 1%; position: relative; z-index: 1;"},				
-				{style: "height: 12%;width:94%",classes: "reportFeedBG", onclick:"doFeedReport"},
+				{style: "height: 12%;width:88%",classes: "reportFeedBG", onclick:"doFeedReport"},
 				{style: "height: 1%; position: relative; z-index: 1;"},				
 				{style: "height: 12%;width:94%",classes: "reportInspectionBG", onclick:"doInspectionReport"},				
 				{style: "height: 1%; position: relative; z-index: 1;"},								
