@@ -16,6 +16,7 @@
  * 12/13/2012  Alfredo Pacheco               Field handling moved from ctrl_feed_order_details to ctrl_feed_order.
  * 01/04/2013  Alfredo Pacheco		     On Delete Cascade for ctrl_feed_order_barnyard and ctrl_feed_order_details.
  * 01/13/2013  Diego Torres                  Add email to enterprise rancher.
+ * 01/29/2013  Diego Torres                  Add rancher user.
  * ====================================================================================
  * 
  * Author: Diego Torres
@@ -34,7 +35,7 @@
  */
 DROP TABLE IF EXISTS sys_sisoprega_user CASCADE;
 CREATE TABLE sys_sisoprega_user(
-	user_name varchar(10) NOT NULL PRIMARY KEY,
+	user_name varchar(30) NOT NULL PRIMARY KEY,
 	user_password varchar(32) NOT NULL
 );
  
@@ -42,9 +43,14 @@ GRANT ALL ON sys_sisoprega_user TO sisoprega;
  
 DROP TABLE IF EXISTS sys_sisoprega_role CASCADE;
 CREATE TABLE sys_sisoprega_role(
-	user_name varchar(10) NOT NULL REFERENCES sys_sisoprega_user(user_name),
+    record_id SERIAL PRIMARY KEY,
+	user_name varchar(30) NOT NULL REFERENCES sys_sisoprega_user(user_name),
 	role_name varchar(20) NOT NULL
 );
+
+GRANT ALL ON sys_sisoprega_user to sisoprega;
+GRANT ALL ON sys_sisoprega_role to sisoprega;
+GRANT ALL ON sys_sisoprega_role_record_id_seq to sisoprega;
  
 CREATE UNIQUE INDEX U_user_role ON sys_sisoprega_role(user_name, role_name);
 
@@ -177,14 +183,17 @@ AFTER DELETE ON cat_person_rancher
 FOR EACH ROW
 EXECUTE PROCEDURE proc_person_rancher_delete();
 
--- SAMPLE DATA FOR RANCHERS
-INSERT INTO cat_person_rancher(aka, first_name, last_name, mother_name, email_add, telephone) 
-VALUES('El Vato', 'Alfredo', 'Pacheco', 'Figueroa', 'j.alfredo.pacheco@gmail.com', '044 (656) 305-0450');
-INSERT INTO cat_person_rancher(first_name, last_name, mother_name, birth_date, email_add, telephone)
-VALUES('Diego A.', 'Torres', 'Fuerte', '1982-04-13', 'diego.torres.fuerte@gmail.com', '044 (656) 217-1598');
-INSERT INTO cat_enterprise_rancher(legal_name, address_one, address_two, city, address_state, zip_code, legal_id, telephone)
-VALUES('Ganaderia Apaloosa', 'Calle prueba #7357', 'Colonia foo bar', 'cd. Juarez', 'Chih.', '32590', 'GAAP339648IEA', '656 000-0000');
+DROP TABLE IF EXISTS cat_rancher_user CASCADE;
+CREATE TABLE cat_rancher_user(
+  record_id SERIAL PRIMARY KEY,
+  rancher_id integer NOT NULL REFERENCES cat_rancher(rancher_id) ON DELETE CASCADE,
+  user_name VARCHAR(30) NOT NULL REFERENCES sys_sisoprega_user(user_name) ON DELETE CASCADE
+);
 
+CREATE UNIQUE INDEX U_rancher_user ON cat_rancher_user(rancher_id, user_name);
+
+GRANT ALL ON cat_rancher_user TO sisoprega;
+GRANT ALL ON cat_rancher_user_record_id TO sisoprega;
 
 DROP TABLE IF EXISTS cat_rancher_invoice CASCADE;
 

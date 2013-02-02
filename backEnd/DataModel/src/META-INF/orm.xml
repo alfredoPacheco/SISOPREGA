@@ -5,6 +5,7 @@
 	<persistence-unit-metadata>
 		<persistence-unit-defaults>
 			<access>PROPERTY</access>
+			<cascade-persist/>
 		</persistence-unit-defaults>
 	</persistence-unit-metadata>
 	<entity class="com.tramex.sisoprega.dto.Rancher">
@@ -790,8 +791,63 @@
 				<column name="barnyard_id"/>
 			</basic>
 			<basic name="fdId">
-				<column name="detail_id"/>
+				<column name="forecast_id"/>
 			</basic>
+		</attributes>
+	</entity>
+	<entity class="com.tramex.sisoprega.dto.RancherUser">
+		<table name="cat_rancher_user"/>
+		<named-query name="RANCHER_USER_BY_RECORD_ID">
+			<description>Retrieve a single record of rancher user by its record id</description>
+			<query>SELECT rUser FROM RancherUser rUser WHERE rUser.recordId = :recordId</query>
+		</named-query>
+		<named-query name="RANCHER_USER_BY_RANCHER_ID">
+			<description>Retrieves all users belonging to a given rancher id</description>
+			<query>SELECT rUser FROM RancherUser rUser WHERE rUser.rancherId = :rancherId</query>
+		</named-query>
+		<named-query name="RANCHER_USER_BY_USER_NAME">
+			<description>Retrieves a single record of rancher user by its user id</description>
+			<query>SELECT rUser FROM RancherUser rUser WHERE rUser.user_name = :userName</query>
+		</named-query>
+		<attributes>
+			<id name="recordId">
+				<column name="record_id"/>
+				<generated-value strategy="IDENTITY"/>
+			</id>
+			<basic name="rancherId">
+				<column name="rancher_id"/>
+			</basic>
+			<basic name="user_name">
+				<column name="user_name"/>
+			</basic>
+		</attributes>
+	</entity>
+	<entity class="com.tramex.sisoprega.identity.dto.User">
+		<table name="sys_sisoprega_user"/>
+		<named-query name="USER_BY_NAME">
+			<description>Retrieves a single record by the given user name</description>
+			<query>SELECT u FROM User u WHERE u.userName = :userName</query>
+		</named-query>
+		<attributes>
+			<id name="userName">
+				<column name="user_name"/>
+			</id>
+			<basic name="password">
+				<column name="user_password"/>
+			</basic>
+			<one-to-many name="groups" target-entity="com.tramex.sisoprega.identity.dto.Role" mapped-by="user"/>
+		</attributes>
+	</entity>
+	<entity class="com.tramex.sisoprega.identity.dto.Role">
+		<table name="sys_sisoprega_role"/>
+		<attributes>
+			<id name="recordId">
+				<column name="record_id"/>
+				<generated-value strategy="IDENTITY"/>
+			</id>
+			<many-to-one name="user" fetch="LAZY" >
+				<join-column name="user_name"/>
+			</many-to-one>
 		</attributes>
 	</entity>
 </entity-mappings>
