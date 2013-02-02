@@ -151,7 +151,7 @@ enyo.kind({
 		return this.arrCatBarnyardCapacity;
 		
 	},
-	create:function(objCat,cbObj,cbMethod){
+	Create:function(objCat,cbObj,cbMethod){
 		//AJAX
 		this.arrObj.push(objCat);
 		if(cbMethod){

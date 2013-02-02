@@ -70,7 +70,7 @@ enyo.kind({
 		}
 	},
 	addProduct: function() {		
-		cacheCattle.create(this.getCattle(),this,"afterCreate");		
+		cacheCattle.Create(this.getCattle(),this,"afterCreate");		
 	},
 	afterDelete:function(){
 		this.updateList();	

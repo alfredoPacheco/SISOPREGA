@@ -92,7 +92,7 @@ enyo.kind({
 		this.resetValues();
 	},
 	addReception:function(){
-		cacheReceptions.create(this.getReception(),this,"doAddReception");
+		cacheReceptions.Create(this.getReception(),this,"doAddReception");
 	},
 	getReception:function(){
 		var receptionDef;		

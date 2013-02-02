@@ -259,7 +259,7 @@ enyo
 				};
 				return objNew;
 			},
-			create : function(objRan, cbObj, cbMethod) {
+			Create: function(objRan, cbObj, cbMethod) {
 
 				if (objRan.rancher_type == 1) {
 					this.createRancher(objRan, cbObj, cbMethod);

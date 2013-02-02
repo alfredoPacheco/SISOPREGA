@@ -10,7 +10,7 @@ enyo.kind({
 		return this.arrObj;
 		
 	},	
-	create:function(objCat,cbObj,cbMethod){
+	Create:function(objCat,cbObj,cbMethod){
 		//AJAX
 		//SCRIM.on
 		//scrimoff
