@@ -9,6 +9,9 @@ enyo.kind({
 		index : -1,
 		items : [],
 	},
+	events:{
+		"onSelectItem":""
+	},
 	getValue : function(){
 		return this.$.textField.getValue();
 	},
@@ -21,6 +24,7 @@ enyo.kind({
 		}else{
 			this.$.textField.setValue("");
 		}
+		this.doSelectItem();
 	},
 	itemsChanged : function(inOldValue) {
 		this.$.drop_down.setItems(this.getItems());

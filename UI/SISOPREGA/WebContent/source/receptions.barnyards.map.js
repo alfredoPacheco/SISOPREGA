@@ -18,9 +18,11 @@ enyo.kind({
 	sColorSelect:"lightgreen",
 	sColorSelectOccupied:"#9b7eb1",	
 	className:"mapBG",
+	create : function() {
+		this.inherited(arguments);
+		this.$.rancherFilter.setItems(cacheRanchers.getAllForList());		
+	},
 	components: [
-//		{kind:"VFlexBox", flex:1,className:"mapBG",
-//		 components:[
 			{name: "options", kind: enyo.PopupSelect, onSelect: "actionSelected",items:[]},
 			{kind:enyo.BasicScroller,flex: 1, 
 			components:[
@@ -28,7 +30,14 @@ enyo.kind({
 			]},
 			{kind: "Popup",name: "popMan", showHideMode: "transition", openClassName: "zoomFadeIn",
 			 className: "transitioner2", layoutKind: "VFlexLayout",
-			 style: "overflow: hidden", width: "95%", height: "95%",scrim: true,}//]}
+			 style: "overflow: hidden", width: "95%", height: "95%",scrim: true},
+			 
+			 {kind: "Toolbar",style:"height:20px;",components: [    		
+						{kind: "controls.autocomplete",width:"60%", name:"rancherFilter",
+							  hint:"Filtro por Ganadero", onSelectItem:"rancherFilterChanged"},
+							{kind: "Button",name:"btnCancel", className: "enyo-button-negative",
+                    		   caption: "X", onclick: "toggleAdd"}	
+			]}
 	],
 	ready: function() {
 		this.last=this.$.cells;
@@ -538,5 +547,9 @@ enyo.kind({
 		this.objSelected=null;
 		this.arrSelected={};
 		this.arrSelectedOccupied={};		
+	},
+	rancherFilterChanged:function(inSender, inEvent){
+		console.debug(inSender);
+		console.debug(inEvent);
 	}
 });		
