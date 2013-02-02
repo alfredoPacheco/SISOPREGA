@@ -109,6 +109,14 @@
 			<ejb-name>InspectionForecastBarnyardProxy</ejb-name>
 			<ejb-class>com.tramex.sisoprega.proxy.bean.InspectionForecastBarnyardBean</ejb-class>
 		</session>
+		<session>
+			<ejb-name>RancherUserProxy</ejb-name>
+			<ejb-class>com.tramex.sisoprega.proxy.bean.RancherUserBean</ejb-class>
+		</session>
+		<session>
+			<ejb-name>IdentityManager</ejb-name>
+			<ejb-class>com.tramex.sisoprega.identity.proxy.bean.IdentityManagerBean</ejb-class>
+		</session>
 	</enterprise-beans>
 	<assembly-descriptor>
 		<security-role>
@@ -223,6 +231,14 @@
 				<ejb-name>ReceptionProxy</ejb-name>
 				<method-name>*</method-name>
 			</method>
+			<method>
+				<ejb-name>RancherUserProxy</ejb-name>
+				<method-name>Read</method-name>
+			</method>
+			<method>
+				<ejb-name>RancherUserProxy</ejb-name>
+				<method-name>Create</method-name>
+			</method>
 		</method-permission>
 		<method-permission>
 			<role-name>sisoprega_admin</role-name>
@@ -256,6 +272,10 @@
 			</method>
 			<method>
 				<ejb-name>MeasurementUnitEquivalenceProxy</ejb-name>
+				<method-name>*</method-name>
+			</method>
+			<method>
+				<ejb-name>RancherUserProxy</ejb-name>
 				<method-name>*</method-name>
 			</method>
 		</method-permission>

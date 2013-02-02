@@ -29,6 +29,7 @@ import com.tramex.sisoprega.common.GatewayRequest;
 import com.tramex.sisoprega.common.ReadGatewayResponse;
 import com.tramex.sisoprega.common.UpdateGatewayResponse;
 import com.tramex.sisoprega.common.crud.Cruddable;
+import com.tramex.sisoprega.dto.RancherInvoice;
 import com.tramex.sisoprega.dto.ReceptionBarnyard;
 
 /**
@@ -273,4 +274,9 @@ public class ReceptionBarnyardBean extends BaseBean implements Cruddable {
     return response;
   }
 
+  /**
+  * Override functionality, evaluating over ReceptionBarnyardBean for
+  * duplicates.
+  */
+ 
 }

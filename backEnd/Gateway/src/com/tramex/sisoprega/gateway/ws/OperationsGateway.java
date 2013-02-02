@@ -16,18 +16,14 @@
 package com.tramex.sisoprega.gateway.ws;
 
 import java.util.List;
-import java.util.logging.Logger;
 
-import javax.annotation.Resource;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.servlet.http.HttpSession;
-import javax.xml.ws.WebServiceContext;
 import javax.xml.ws.WebServiceException;
-import javax.xml.ws.handler.MessageContext;
 
 import com.sun.appserv.security.ProgrammaticLogin;
 import com.tramex.sisoprega.common.BaseResponse;
@@ -63,14 +59,7 @@ import com.tramex.sisoprega.common.messenger.Messageable;
  * 
  */
 @WebService(serviceName = "GatewayService")
-public class OperationsGateway {
-
-  @Resource
-  WebServiceContext wsContext;
-
-  private Logger log = Logger.getLogger(OperationsGateway.class.getCanonicalName());
-
-  private final static String REALM_NAME = "security";
+public class OperationsGateway extends CommonGateway {
 
   /**
    * 
@@ -430,6 +419,10 @@ public class OperationsGateway {
    */
   @WebMethod(operationName="SendSimpleMessage")
   public String sendMessage(@WebParam(name="rancherId")long rancherId, @WebParam(name = "message") String message) {
+    
+    if (getSessionUserName() == null)
+      throw new WebServiceException("User is not logged in");
+    
     Context jndiContext = null;
     Messageable messenger = null;
     String commonPrefix = "java:global/ComProxy/";
@@ -463,6 +456,10 @@ public class OperationsGateway {
    */
   @WebMethod(operationName="SendReport")
   public String sendReport(@WebParam(name="rancherId")long rancherId, @WebParam(name="reportName")String reportName){
+    
+    if (getSessionUserName() == null)
+      throw new WebServiceException("User is not logged in");
+    
     Context jndiContext = null;
     Messageable messenger = null;
     String commonPrefix = "java:global/ComProxy/";
@@ -503,36 +500,6 @@ public class OperationsGateway {
       log.throwing(this.getClass().getName(), "getCruddable", e);
     }
     return crud;
-  }
-
-  private String getSessionUserName() {
-    HttpSession session = getSession();
-    if (session == null)
-      throw new WebServiceException("No session in WebServiceContext");
-
-    return (String) session.getAttribute("userName");
-  }
-
-  private String getSessionPassword() {
-    HttpSession session = getSession();
-    if (session == null)
-      throw new WebServiceException("No session in WebServiceContext");
-
-    return (String) session.getAttribute("password");
-  }
-
-  private HttpSession getSession() {
-    MessageContext mc = wsContext.getMessageContext();
-    return ((javax.servlet.http.HttpServletRequest) mc.get(MessageContext.SERVLET_REQUEST)).getSession();
-  }
-
-  private boolean logIn(ProgrammaticLogin pl) throws Exception {
-    boolean propagateException = false;
-    return pl.login(getSessionUserName(), getSessionPassword().toCharArray(), REALM_NAME, propagateException);
-  }
-
-  private boolean logOut(ProgrammaticLogin pl) {
-    return pl.logout();
   }
 
 }
