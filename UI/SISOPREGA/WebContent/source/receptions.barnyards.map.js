@@ -1,5 +1,5 @@
 enyo.kind({
-	name: "receptions.barnyards.map",
+	name: "receptions.barnyards.map",	
 	arrReception:[{caption:"Recepcion",value:1},{caption:"Deseleccionar",value:2}],
 	arrPostReception:[{caption:"Alimento",value:3},
 				      {caption:"Inspeccion",value:4},
@@ -7,7 +7,8 @@ enyo.kind({
 					  {caption:"Liberar",value:6},
 					  {caption:"Deseleccionar",value:8},
 					  ],
-    kind: enyo.SlidingView,
+    kind: enyo.VFlexBox,
+    flex:1,
 	arrByMOver:{},
 	objSelected:null,
 	arrSelected:{},
@@ -16,21 +17,32 @@ enyo.kind({
 	sColorFree:"white",	
 	sColorSelect:"lightgreen",
 	sColorSelectOccupied:"#9b7eb1",	
+	className:"mapBG",
+	create : function() {
+		this.inherited(arguments);
+		this.$.rancherFilter.setItems(cacheRanchers.getAllForList());		
+	},
 	components: [
-		{kind:"VFlexBox", flex:1, className:"mapBG",
-		 components:[
 			{name: "options", kind: enyo.PopupSelect, onSelect: "actionSelected",items:[]},
-			{kind:enyo.BasicScroller,flex: 1,
+			{kind:enyo.BasicScroller,flex: 1, 
 			components:[
-				{name: "cells", kind: "VFlexBox",align:"middle", onclick: "cellsClick"},
+				{name: "cells", kind: "VFlexBox",align:"center",pack:"center", onclick: "cellsClick"},
 			]},
 			{kind: "Popup",name: "popMan", showHideMode: "transition", openClassName: "zoomFadeIn",
 			 className: "transitioner2", layoutKind: "VFlexLayout",
-			 style: "overflow: hidden", width: "95%", height: "95%",scrim: true,}]}
+			 style: "overflow: hidden", width: "95%", height: "95%",scrim: true},
+			 
+			 {kind: "Toolbar",style:"height:20px;",components: [    		
+						{kind: "controls.autocomplete",width:"60%", name:"rancherFilter",
+							  hint:"Filtro por Ganadero", onSelectItem:"rancherFilterChanged"},
+							{kind: "Button",name:"btnCancel", className: "enyo-button-negative",
+                    		   caption: "X", onclick: "toggleAdd"}	
+			]}
 	],
 	ready: function() {
 		this.last=this.$.cells;
 		//this.addRow(true);
+		this.addRow();
 		this.addRowHeader();		
 		this.createCells("2E",7,4,"50px","50px");
 		this.splitRow();
@@ -127,11 +139,12 @@ enyo.kind({
 		objBarn.createComponent({kind:enyo.Control,
 		                         className:sClass,
 								 allowHtml:true,
-		                          style: "width:"+sWidth+
-						                 ";height:"+sHeight+";" +
+		                          style:"width:"+sWidth+
+						                ";height:"+sHeight+";" +
 				                 		"text-align: center;" +
 				                 		"vertical-align: middle;" +
-				                 		"background-color:#DABD8B;",
+				                 		"background-color:#DABD8B;" +
+				                 		"display: table-cell;",
 			                      name:sName,
 								  content:sCaption,
 								 },{owner: this});		
@@ -142,14 +155,24 @@ enyo.kind({
 					           "200px","30px","customBYcellZone");
 			this.splitRow();
 			this.addCustomCell("alaone","<strong>CHIHUAHUA</strong>",
-					           "815px","30px","customBYcellZone");			
+					           "765px","30px","customBYcellZone");
+			this.addRefreshButton();		
 			this.addRow();
 	},
+	addRefreshButton:function(sName,sCaption,sWidth,sHeight,sClass){
+		if(!sClass){
+			sClass="customBYcell";
+		}
+		objBarn.createComponent({kind: "IconButton",  onclick:"refreshMap",
+		                         icon:"images/command-menu/menu-icon-music-repeat.png",
+								 style:"height:23px; width:45px; padding:0;margin:0px",
+								 },{owner: this});		
+	},	
 	addRow:function(bDiv){
 		if (bDiv){	
-			this.$.cells.createComponent({kind: "Divider",caption:"", style:"margin-left: -16px;min-width: 1050px;"});
+			this.$.cells.createComponent({kind: "Divider",caption:"", style:"margin-left:-15px;width: 1040px;"});
 		}else{
-			this.$.cells.createComponent({kind: "HFlexBox", style:"height:5px;"});									
+			this.$.cells.createComponent({kind: "HFlexBox",style:"height:5px;"});									
 		}
 		this.last=objBarn=this.$.cells.createComponent({kind: "HFlexBox"});						
 	},
@@ -157,8 +180,7 @@ enyo.kind({
   		objBarn=this.last;		
 		objBarn.createComponent({kind:enyo.Control,
 		                         style: "width:15px; height:"+sHeight+
-										";align:left"+
-										""});
+										";align:center"});
 	},	
 	createCells:function(sLetter,iStart,iNumber,sWidth,sHeight){
 		//this.createCells("1E",5,6,"50px","50px");
@@ -182,6 +204,7 @@ enyo.kind({
 											   ";", 										
 			                               name:sLetter+iStart,
 										   occupied:iOccupied,
+										   bBY:true,
 										   content:sLetter.substr(1)+iStart,
 										   onclick: "cellClick",
 										   onmousehold:"cellHold",
@@ -496,6 +519,61 @@ enyo.kind({
 			delete this.arrSelectedOccupied[sKey];	
 			this.$[sKey].occupied=1;
 			this.$[sKey].applyStyle("background-color",this.sColorOccupied);							
+		}
+	},
+	refreshMap:function(){
+		cacheMan.showScrim();
+		cacheRanchers.refreshData();			
+		cacheCattle.refreshData();
+		cacheBY.refreshData();
+		cacheReceptions.refreshData();	
+		cacheMan.hideScrim();
+		for (var i = 0, a; (a=this.$.cells.children[i]); i++) {			
+			for (var j = 0, b; (b =a.children[j]); j++) {				
+				if(b.bBY==true){
+					this.$[b.name].removeClass("selectCell");
+					if(cacheBY.isOccupied(b.name)){
+						//alert(b.name)
+						this.$[b.name].occupied=1;						
+						this.$[b.name].applyStyle("background-color",this.sColorOccupied);						
+					}else{
+						this.$[b.name].occupied=0;								
+						this.$[b.name].applyStyle("background-color",this.sColorFree);																	
+					}
+				}
+			}
+		}
+		this.arrByMOver={};
+		this.objSelected=null;
+		this.arrSelected={};
+		this.arrSelectedOccupied={};		
+	},
+	rancherFilterChanged:function(inSender){
+		console.debug(inSender);
+		if(this.$.rancherFilter.getValue()!=""){
+			for (var i = 0, a; (a=this.$.cells.children[i]); i++) {			
+				for (var j = 0, b; (b =a.children[j]); j++) {				
+					if(b.bBY==true){
+						this.$[b.name].removeClass("selectCell");
+						
+						if(this.$[b.name])
+						if(cacheBY.isOccupied(b.name)){
+							//alert(b.name)
+							this.$[b.name].occupied=1;						
+							this.$[b.name].applyStyle("background-color",this.sColorOccupied);						
+						}else{
+							this.$[b.name].occupied=0;								
+							this.$[b.name].applyStyle("background-color",this.sColorFree);																	
+						}
+						
+						
+					}
+				}
+			}
+			this.arrByMOver={};
+			this.objSelected=null;
+			this.arrSelected={};
+			this.arrSelectedOccupied={};	
 		}
 	}
 });		

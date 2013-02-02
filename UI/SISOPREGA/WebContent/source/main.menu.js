@@ -11,7 +11,7 @@ enyo.kind({
 		{kind: enyo.Pane, className:"buttonsBG", flex: 1, name: "mainPane", transitionKind: "enyo.transitions.LeftRightFlyin", 
 	     style:"background-size: cover;",				 		
 		 components:[	
-			{kind:"main.menu.options", name:"menuOptions", className:"buttonsBG", align:"center",style:"width:300px;margin-left: auto;margin-right: auto;",
+			{kind:"main.menu.options", name:"menuOptions", className:"buttonsBG",style:"width:1030px;margin-left: auto;margin-right: auto;",
 			flex: 1,
 			onOperations:"showOperations",
 			onReceptions:"showReceptionsMap",
@@ -23,7 +23,7 @@ enyo.kind({
 			 onInspections:"showInspections",lazy:true},
 	 		{kind:"catalogs.main", name:"catalogs",lazy:true},
 	 		{kind:"receptions.main", name:"receptions",lazy:true},				
-	 		{kind:"receptions.main.fs", name:"receptionsMap",lazy:true},	
+	 		{kind:"receptions.barnyards.map", name:"receptionsMap",lazy:true, flex:1},	 		
 	 		{kind:"reports.main", name:"reports",lazy:true},
 	 		{kind:"inspections.list", name:"inspections"},
 	 		{kind:"inspections.main.fs", name:"inspectionForecast", lazy:true}

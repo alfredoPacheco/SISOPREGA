@@ -99,6 +99,11 @@ public class OperationsGateway extends CommonGateway {
         // context
         Cruddable crud = getCruddable(request.getEntityName());
         // Generate the result from the cruddable operation
+        for(Field fld : content ){        	
+	        if(fld.getValue()=="~:~getUserID"){
+	        	fld.setValue(getSessionUserName());
+	        }
+        }        
         result = crud.Create(request);
       } else {
         result = new CreateGatewayResponse();
@@ -414,6 +419,10 @@ public class OperationsGateway extends CommonGateway {
    */
   @WebMethod(operationName="SendSimpleMessage")
   public String sendMessage(@WebParam(name="rancherId")long rancherId, @WebParam(name = "message") String message) {
+    
+    if (getSessionUserName() == null)
+      throw new WebServiceException("User is not logged in");
+    
     Context jndiContext = null;
     Messageable messenger = null;
     String commonPrefix = "java:global/ComProxy/";
@@ -447,6 +456,10 @@ public class OperationsGateway extends CommonGateway {
    */
   @WebMethod(operationName="SendReport")
   public String sendReport(@WebParam(name="rancherId")long rancherId, @WebParam(name="reportName")String reportName){
+    
+    if (getSessionUserName() == null)
+      throw new WebServiceException("User is not logged in");
+    
     Context jndiContext = null;
     Messageable messenger = null;
     String commonPrefix = "java:global/ComProxy/";

@@ -35,22 +35,22 @@ var cConsumingGateway = {
 		soapMessage += '</ws:SendSimpleMessage>';
 		soapMessage += soapFooter;
 		
-		jQuery.ajax({
-			url : gatewayWsURL,
-			type : "POST",
-			dataType : "xml",
-			data : soapMessage,
-			processData : false,
-			contentType : "text/xml;charset=UTF-8",
-			async : false,
-			success : function OnSuccess(data) {					
-				result = jQuery(data).find("response").text();
-			},
-			error : function OnError(request, status, error) {
-				result = 'Error al llamar el servicio web.';
-				alert(error);
-			}
-		});
+//		jQuery.ajax({
+//			url : gatewayWsURL,
+//			type : "POST",
+//			dataType : "xml",
+//			data : soapMessage,
+//			processData : false,
+//			contentType : "text/xml;charset=UTF-8",
+//			async : false,
+//			success : function OnSuccess(data) {					
+//				result = jQuery(data).find("response").text();
+//			},
+//			error : function OnError(request, status, error) {
+//				result = 'Error al llamar el servicio web.';
+//				alert(error);
+//			}
+//		});
 		
 		return result;
 	},
@@ -61,22 +61,22 @@ var cConsumingGateway = {
 		soapMessage += '</ws:SendReport>';
 		soapMessage += soapFooter;
 		
-		jQuery.ajax({
-			url : gatewayWsURL,
-			type : "POST",
-			dataType : "xml",
-			data : soapMessage,
-			processData : false,
-			contentType : "text/xml;charset=UTF-8",
-			async : false,
-			success : function OnSuccess(data) {					
-				result = jQuery(data).find("response").text();
-			},
-			error : function OnError(request, status, error) {
-				result = 'Error al llamar el servicio web.';
-				alert(result + ': ' + error);
-			}
-		});
+//		jQuery.ajax({
+//			url : gatewayWsURL,
+//			type : "POST",
+//			dataType : "xml",
+//			data : soapMessage,
+//			processData : false,
+//			contentType : "text/xml;charset=UTF-8",
+//			async : false,
+//			success : function OnSuccess(data) {					
+//				result = jQuery(data).find("response").text();
+//			},
+//			error : function OnError(request, status, error) {
+//				result = 'Error al llamar el servicio web.';
+//				alert(result + ': ' + error);
+//			}
+//		});
 		
 		return result;
 	},

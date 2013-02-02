@@ -81,7 +81,7 @@ public class CattleInspection extends BaseReportServlet {
     params.put("CUS_TO_DATE", toDate);
     params.put("CUS_RANCHER_ID", Integer.parseInt(request.getParameter("rancherId")));
 
-    String reportURL = "WEB-INF/Reports/Ranchers/InspeccionGanado.jasper";
+    String reportURL = "WEB-INF/Reports/Ranchers/CattleInspection.jasper";
 
     processRequest(reportURL, params, response);
 

@@ -17,6 +17,8 @@
  * 01/04/2013  Alfredo Pacheco		     On Delete Cascade for ctrl_feed_order_barnyard and ctrl_feed_order_details.
  * 01/13/2013  Diego Torres                  Add email to enterprise rancher.
  * 01/29/2013  Diego Torres                  Add rancher user.
+ * 01/29/2013  Alfredo Pacheco               Index rancher_id removed from cat_rancher_invoice.
+ * 02/01/2013  Alfredo Pacheco               cat_rancher_invoice.rancher_id now references cat_rancher.rancher_id
  * ====================================================================================
  * 
  * Author: Diego Torres
@@ -199,7 +201,7 @@ DROP TABLE IF EXISTS cat_rancher_invoice CASCADE;
 
 CREATE TABLE cat_rancher_invoice (
   rancher_invoice_id  SERIAL PRIMARY KEY,
-  rancher_id integer NOT NULL REFERENCES cat_person_rancher(rancher_id) ON DELETE CASCADE,
+  rancher_id integer NOT NULL REFERENCES cat_rancher(rancher_id) ON DELETE CASCADE,
   legal_name VARCHAR(100) NOT NULL,
   address_one VARCHAR(100) NOT NULL,
   address_two VARCHAR(100),
@@ -209,7 +211,6 @@ CREATE TABLE cat_rancher_invoice (
   legal_id VARCHAR(13) NOT NULL
 );
 
-CREATE UNIQUE INDEX U_rancher_invoice_rancher_id ON cat_rancher_invoice(rancher_id);
 CREATE UNIQUE INDEX U_rancher_invoice_legal_name ON cat_rancher_invoice(legal_name);
 CREATE UNIQUE INDEX U_rancher_invoice_legal_ID ON cat_rancher_invoice(legal_id);
 

@@ -423,7 +423,7 @@ enyo.kind({
 		
 		return arrAux;		
 	},
-	create:function(objRec,cbObj,cbMethod){
+	Create:function(objRec,cbObj,cbMethod){
 		var objToSend = this.receptionAdapterToOut(objRec);
 		delete objToSend.receptionId;
 		var cgCreate = consumingGateway.Create("Reception", objToSend);
@@ -921,6 +921,12 @@ enyo.kind({
 		
 		return result;
 							
-	}
+	},
+	refreshData:function(){
+		this.receptionWasReadFromGateway=false;
+		this.inspectionWasReadFromGateway=false;
+		this.arrObjWasFilledUpOnce=false;	
+		this.get();
+	}	
 });
 var cacheReceptions = new cache.receptions();

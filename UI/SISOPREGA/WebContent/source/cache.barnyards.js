@@ -151,7 +151,7 @@ enyo.kind({
 		return this.arrCatBarnyardCapacity;
 		
 	},
-	create:function(objCat,cbObj,cbMethod){
+	Create:function(objCat,cbObj,cbMethod){
 		//AJAX
 		this.arrObj.push(objCat);
 		if(cbMethod){
@@ -362,7 +362,14 @@ enyo.kind({
 		}
 		return result;
 							
+	},
+	refreshData:function(){
+		this.arrObjWasFilledUpOnce=false;
+		this.barnyardWasReadFromGateway=false,	
+		this.barnyardCapacityWasReadFromGateway=false,		
+		this.get();
 	}
+	
 });
 
 var cacheBY= new cache.barnyards();

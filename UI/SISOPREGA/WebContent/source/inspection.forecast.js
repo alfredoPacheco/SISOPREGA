@@ -4,8 +4,7 @@ enyo
 			kind : enyo.SlidingView,
 			layoutKind : enyo.VFlexLayout,
 			create : function() {
-				this.inherited(arguments);
-				this.cambioDeFecha();
+				this.inherited(arguments);				
 				this.$.rancherInput.setItems(cacheRanchers.getAllForList());
 				this.$.cattle_type_id.setItems(cacheCattle.getAllCattleType());
 				this.$.localidad.setItems(cacheMan.allLocationsForList());
@@ -27,143 +26,135 @@ enyo
 							name : "left",
 							width : "300px",
 							kind : enyo.SlidingView,
-							components : [
-									{
-										kind : "Header",
-										name : "encabezadoFecha",
-										style : "background-color:#DABD8B;",
-										pack : "center",
-										components : [
-												{
-													kind : "Button",
-													content : "Hoy",
-													style : "background-color:#DABD8B;",
-													onclick : "cambiarAHoy"
-												}, {
-													kind : "DatePicker",
-													label : "",
-													name : "fechaPicker",
-													onChange : "cambioDeFecha"
-												} ]
-									},
-									{
-										kind : enyo.Scroller,
-										name : "FormScroller",
-										horizontal : false,
-										autoHorizontal : false,
-										flex : 1,
-										onScroll : "scroll",
+							components : [ {
+								kind : "Header",
+								name : "encabezadoFecha",
+								style : "background-color:#DABD8B;",
+								pack : "center",
+								components : [ {
+									kind : "Button",
+									content : "Hoy",
+									style : "background-color:#DABD8B;",
+									onclick : "cambiarAHoy"
+								}, {
+									kind : "DatePicker",
+									label : "",
+									name : "fechaPicker",
+									onChange : "cambioDeFecha"
+								} ]
+							}, {
+								kind : enyo.Scroller,
+								name : "FormScroller",
+								horizontal : false,
+								autoHorizontal : false,
+								flex : 1,
+								onScroll : "scroll",
+								components : [ {
+									kind : "RowGroup",
+									defaultKind : "HFlexBox",
+									caption : "",
+									style : "color:#FFF;",
+									components : [ {
+										kind : "Item",
 										components : [ {
-											kind : "RowGroup",
-											defaultKind : "HFlexBox",
-											caption : "",
-											style : "color:#FFF;",
-											components : [
-													{
-														kind : "controls.autocomplete",
-														name : "rancherInput",
-														hint:"Ganadero"
-													},													
-													{
-														kind : "Item",
-														components : [ {
-															layoutKind : enyo.HFlexLayout,
-															components : [ {
-																kind : "Input",
-																name : "autorizacion",
-																hint : "Autorizacion",
-																flex : 1
-															} ]
-														} ]
-													},
-													{
-														kind : "Item",
-														components : [ {
-															layoutKind : enyo.HFlexLayout,
-															components : [ {
-																kind : "Input",
-																name : "origen",
-																hint : "Origen",
-																flex : 1
-															} ]
-														} ]
-													},
-													{
-														kind : "controls.autocomplete",
-														name : "cattle_type_id",
-														hint:"Ganado"
-													},													
-													{
-														kind : "Item",
-														components : [ {
-															layoutKind : enyo.HFlexLayout,
-															components : [ {
-																kind : "Input",
-																name : "cantidad",
-																hint : "Cantidad",
-																inputType : "number",
-																flex : 1
-															} ]
-														} ]
-													},
-													{
-														kind : "controls.autocomplete",
-														name : "localidad",
-														hint:"Localidad"
-													},													
-													{
-														kind : "Item",
-														components : [ {
-															layoutKind : enyo.HFlexLayout,
-															components : [ {
-																kind : "Input",
-																name : "corrales",
-																hint : "Corrales",
-																flex : 1
-															} ]
-														} ]
-													} ]
+											layoutKind : enyo.HFlexLayout,
+											components : [ {
+												kind : "controls.autocomplete",
+												name : "rancherInput",
+												hint : "Ganadero"
+											} ]
 										} ]
-									},
-									{
-										kind : "Drawer",
-										name : "draAdd",
-										animate : false,
+									},  {
+										kind : "Item",
 										components : [ {
-											kind : "Button",
-											name : "btnAdd",
-											className : "enyo-button-affirmative",
-											caption : "Agregar",
-											onclick : "saveInspectionForecast"
+											layoutKind : enyo.HFlexLayout,
+											components : [ {
+												kind : "Input",
+												name : "autorizacion",
+												hint : "Autorizacion",
+												flex : 1
+											} ]
 										} ]
-									},
-									{
-										kind : "Drawer",
-										name : "draUpdate",
-										animate : false,
-										open : false,
+									}, {
+										kind : "Item",
 										components : [ {
-											layoutKind : "HFlexLayout",
-											align : "center",
-											components : [
-													{
-														kind : "Button",
-														name : "btnUpdate",
-														className : "enyo-button-affirmative",
-														flex : 1,
-														caption : "Actualizar",
-														onclick : "updateForecast"
-													},
-													{
-														kind : "Button",
-														name : "btnCancel",
-														className : "enyo-button-negative",
-														flex : 1,
-														caption : "Cancelar",
-														onclick : "onCancel"
-													} ]
+											layoutKind : enyo.HFlexLayout,
+											components : [ {
+												kind : "Input",
+												name : "origen",
+												hint : "Origen",
+												flex : 1
+											} ]
+										} ]
+									}, {
+										kind : "controls.autocomplete",
+										name : "cattle_type_id",
+										hint : "Ganado"
+									}, {
+										kind : "Item",
+										components : [ {
+											layoutKind : enyo.HFlexLayout,
+											components : [ {
+												kind : "Input",
+												name : "cantidad",
+												hint : "Cantidad",
+												inputType : "number",
+												flex : 1
+											} ]
+										} ]
+									}, {
+										kind : "controls.autocomplete",
+										name : "localidad",
+										hint : "Localidad"
+									}, {
+										kind : "Item",
+										components : [ {
+											layoutKind : enyo.HFlexLayout,
+											components : [ {
+												kind : "Input",
+												name : "corrales",
+												hint : "Corrales",
+												flex : 1
+											} ]
 										} ]
 									} ]
+								} ]
+							}, {
+								kind : "Drawer",
+								name : "draAdd",
+								animate : false,
+								components : [ {
+									kind : "Button",
+									name : "btnAdd",
+									className : "enyo-button-affirmative",
+									caption : "Agregar",
+									onclick : "saveInspectionForecast"
+								} ]
+							}, {
+								kind : "Drawer",
+								name : "draUpdate",
+								animate : false,
+								open : false,
+								components : [ {
+									layoutKind : "HFlexLayout",
+									align : "center",
+									components : [ {
+										kind : "Button",
+										name : "btnUpdate",
+										className : "enyo-button-affirmative",
+										flex : 1,
+										caption : "Actualizar",
+										onclick : "updateForecast"
+									}, {
+										kind : "Button",
+										name : "btnCancel",
+										className : "enyo-button-negative",
+										flex : 1,
+										caption : "Cancelar",
+										onclick : "onCancel"
+									} ]
+								} ]
+							} ]
 
 						},
 						{
@@ -301,15 +292,16 @@ enyo
 				}
 			},
 			ready : function() {
-				this.updateList();
+				this.$.fechaPicker.setValue(new Date());
+				this.cambioDeFecha();
 			},
 			resetValues : function() {
-				this.$.rancherInput.setValue("");
+				this.$.rancherInput.setIndex(-1);
 				this.$.autorizacion.setValue("");
 				this.$.origen.setValue("");
-				this.$.cattle_type_id.setValue("");
+				this.$.cattle_type_id.setIndex(-1);
 				this.$.cantidad.setValue("");
-				this.$.localidad.setValue("");
+				this.$.localidad.setIndex(-1);
 				this.$.corrales.setValue("");
 			},
 			cambioDeFecha : function() {
@@ -326,37 +318,15 @@ enyo
 			},
 			selectForecast : function(inSender, inEvent) {
 				if (objFore = this.objList[inEvent.rowIndex]) {
-					
-					var auxRancher = cacheRanchers.getByID(objFore.rancher_id);
-					if (auxRancher) {
-						if (auxRancher.rancher_type == 1) {
-							this.$.rancherInput.setValue(auxRancher.last_name
-									+ " " + auxRancher.mother_name + " "
-									+ auxRancher.first_name);
-						} else {
-							this.$.rancherInput
-									.setValue(auxRancher.company_name);
-						}
-						this.$.rancherInput.objSelected.caption = this.$.rancherInput.getValue();
-						this.$.rancherInput.objSelected.value = objFore.rancher_id;
-					}
+					this.$.rancherInput.setIndex(objFore.rancher_id);
 					this.$.autorizacion.setValue(objFore.auth);
 					this.$.origen.setValue(objFore.origin);
-					this.$.cattle_type_id.setValue(cacheCattle
-							.getByID(objFore.cattle_type).cattype_name);
-					this.$.cattle_type_id.objSelected.value = objFore.cattle_type;
-					this.$.cattle_type_id.objSelected.caption = this.$.cattle_type_id.getValue();
+					this.$.cattle_type_id.setIndex(objFore.cattle_type);
 					
 					this.$.cantidad.setValue(objFore.quantity);
 
 					if (objFore.barnyards.length > 0) {
-						if (objFore.barnyards[0].location_id == 1) {
-							this.$.localidad.setValue("Chihuahua");
-						} else {
-							this.$.localidad.setValue("Zona Sur");
-						}
-						this.$.localidad.objSelected.value = objFore.barnyards[0].location_id;
-						this.$.localidad.objSelected.caption = this.$.localidad.getValue();
+						this.$.localidad.setIndex(objFore.barnyards[0].location_id);						
 						var strBarnyards = "";
 						for (i in objFore.barnyards) {
 							strBarnyards = strBarnyards
@@ -366,7 +336,7 @@ enyo
 						strBarnyards = strBarnyards.slice(0, -2);
 						this.$.corrales.setValue(strBarnyards);
 					} else {
-						this.$.localidad.setValue("");
+						this.$.localidad.setIndex(-1);
 						this.$.corrales.setValue("");
 					}
 					this.iSelected = inEvent.rowIndex;
@@ -490,9 +460,9 @@ enyo
 					barnyards : undefined,
 					fore_date : undefined
 				};
-				
-				objInspFore.rancher_id = this.$.rancherInput.objSelected.value;
-				objInspFore.cattle_type = this.$.cattle_type_id.objSelected.value;
+
+				objInspFore.rancher_id = this.$.rancherInput.getIndex();
+				objInspFore.cattle_type = this.$.cattle_type_id.getIndex();
 				objInspFore.auth = this.$.autorizacion.getValue();
 				objInspFore.fore_date = this.fecha;
 				objInspFore.origin = this.$.origen.getValue();
@@ -501,13 +471,15 @@ enyo
 				var barnyardsAux = this.$.corrales.getValue().split(",");
 				for (i in barnyardsAux) {
 					barnyardsAux[i] = barnyardsAux[i].replace(" ", "");
-					barnyardsAux[i] = this.$.localidad.objSelected.value + barnyardsAux[i];
+					barnyardsAux[i] = this.$.localidad.getIndex()
+							+ barnyardsAux[i];
 					var auxBarn = cacheBY.getByBarnyard(barnyardsAux[i]);
 					if (auxBarn == undefined) {
 						cacheMan.setMessage("", "[Exception ID: LOCAL"
 								+ "] Descripción: No existe el corral: "
 								+ barnyardsAux[i].slice(1)
-								+ " para la localidad: " + this.$.localidad.objSelected.caption);
+								+ " para la localidad: "
+								+ this.$.localidad.getValue());
 						return null;
 					}
 					barnyardsAux[i] = auxBarn;
