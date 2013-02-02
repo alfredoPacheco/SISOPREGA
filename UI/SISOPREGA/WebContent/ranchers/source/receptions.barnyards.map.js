@@ -303,8 +303,8 @@ enyo.kind({
 		}
 		this.$.spacerone.setContent("<strong>"+objRec.rancher_name +"</strong> "+
 									"- "+objRec.city_name+" - "+objRec.cattype_name+
-									"  ("+ objRec.weights[0].weight+"/"+objRec.hc_aprox+" KG) "+ (objRec.weights[0].weight/objRec.hc_aprox)+
-									"	 "+objRec.arrival_date+
+									"  ("+ objRec.weights[0].weight+"/"+objRec.hc_aprox+" KG) Promedio: "+ (objRec.weights[0].weight/objRec.hc_aprox)+
+									"KG	 "+objRec.arrival_date+
 									"</br> Corrales ("+iBy+") - "+sBy);		
 		
 	},
