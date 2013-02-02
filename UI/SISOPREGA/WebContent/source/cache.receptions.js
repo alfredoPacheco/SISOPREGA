@@ -916,11 +916,8 @@ enyo.kind({
 					}
 				}
 			}
-			
 		}
-		
-		return result;
-							
+		return result;	
 	},
 	refreshData:function(){
 		this.receptionWasReadFromGateway=false;
