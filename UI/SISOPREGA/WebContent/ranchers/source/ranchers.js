@@ -77,9 +77,9 @@ enyo.kind({
 		var sTitle="";
 			
 		var dFrom=this.$.dFrom.getValue();
-		var sFrom=dFrom.getDate()+"/"+dFrom.getMonth()+1+"/"+dFrom.getFullYear();
+		var sFrom=dFrom.getDate()+"/"+(dFrom.getMonth()+1)+"/"+dFrom.getFullYear();
 		var dTo=this.$.dTo.getValue();
-		var sTo=dTo.getDate()+"/"+dTo.getMonth()+1+"/"+dTo.getFullYear();
+		var sTo=dTo.getDate()+"/"+(dTo.getMonth()+1)+"/"+dTo.getFullYear();
 		
 		switch(this.reportID){
 			//Alimentacion
