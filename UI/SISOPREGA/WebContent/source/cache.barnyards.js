@@ -362,7 +362,14 @@ enyo.kind({
 		}
 		return result;
 							
+	},
+	refreshData:function(){
+		this.arrObjWasFilledUpOnce=false;
+		this.barnyardWasReadFromGateway=false,	
+		this.barnyardCapacityWasReadFromGateway=false,		
+		this.get();
 	}
+	
 });
 
 var cacheBY= new cache.barnyards();

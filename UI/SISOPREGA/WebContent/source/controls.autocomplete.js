@@ -1,21 +1,27 @@
 enyo.kind({
 	name : "controls.autocomplete",
-	kind : enyo.Item,
+	kind : enyo.Control,
 	itemSelectedPopup : -1,
-	hint : "assdfs",
+	hint : "",
 	layoutKind : enyo.HFlexLayout,
 	allItems : [],
 	published : {
 		hint : "",
-		value : "",
+		index : -1,
 		items : [],
-		objSelected : {}
+	},
+	getValue : function(){
+		return this.$.textField.getValue();
 	},
 	hintChanged : function(inOldValue) {
 		this.$.textField.setHint(this.getHint());
 	},
-	valueChanged : function(inOldValue) {
-		this.$.textField.setValue(this.getValue());
+	indexChanged : function(inOldValue) {
+		if(this.getIndex()>-1){
+			this.$.textField.setValue(this.getCaptionByIndex(this.getIndex()));
+		}else{
+			this.$.textField.setValue("");
+		}
 	},
 	itemsChanged : function(inOldValue) {
 		this.$.drop_down.setItems(this.getItems());
@@ -24,7 +30,7 @@ enyo.kind({
 	create : function() {
 		this.inherited(arguments);
 		this.hintChanged();
-		this.valueChanged();
+		this.indexChanged();
 	},
 	components : [ {
 		name : "drop_down",
@@ -34,9 +40,9 @@ enyo.kind({
 		onSelect : "select_item",
 		onBeforeOpen : "setupItem",
 		items : []
-	}, {
-		layoutKind : enyo.HFlexLayout,
-		components : [ {
+	}, 
+//	{layoutKind : enyo.HFlexLayout,	components : [ 
+		               {
 			kind : "Input",
 			name : "textField",
 			hint : "",
@@ -48,8 +54,9 @@ enyo.kind({
 			kind : "IconButton",
 			icon : "images/icon-arrows-down.png",
 			onclick : "click_button"
-		} ]
-	}
+		} 
+		
+//		]	}
 
 	],
 
@@ -61,14 +68,12 @@ enyo.kind({
 	},
 	lostFocus : function(inSender, inEvent) {
 		if (this.$.drop_down.isOpen) {
-			this.$.textField.setValue(this.$.drop_down.items[0].caption);
-			this.objSelected = this.$.drop_down.items[0];
+			this.setIndex(this.$.drop_down.items[0].value);
 		}
 		this.$.drop_down.close();
 	},
 	select_item : function(inSender, inSelected) {
-		this.$.textField.setValue(inSender.items[inSelected].caption);
-		this.objSelected = inSender.items[inSelected];
+		this.setIndex(inSender.items[inSelected].value);
 	},
 	click_button : function(inSender, inEvent) {
 		this.$.drop_down.setItems(this.allItems);
@@ -120,5 +125,12 @@ enyo.kind({
 			}
 		}
 		return result;
+	},
+	getCaptionByIndex:function(index){
+		for(i in this.allItems){
+			if(this.allItems[i].value==index){
+				return this.allItems[i].caption;
+			}
+		}
 	}
 });

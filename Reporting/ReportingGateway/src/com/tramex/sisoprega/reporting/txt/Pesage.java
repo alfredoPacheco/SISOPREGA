@@ -72,13 +72,13 @@ public class Pesage extends BaseReportServlet {
       if (!rs.next()) {
         throw new ServletException("Error al obtener registro de recepción.");
       } else {
-        rs.next();
 
         PrintWriter out = response.getWriter();
         out.println("Ganado Recibido: " + rs.getLong("cabezas") + " cabezas de " + rs.getString("ganado") + ", "
             + rs.getDouble("kilos") + " kg. (" + rs.getDouble("libras") + " lbs.). Prom por Kg.: " + rs.getDouble("pkilos")
             + "; Prom por Lb.: " + rs.getDouble("plibras") + ". Corrales: " + rs.getString("corrales") + ".");
 
+        out.close();
       }
 
     } catch (SQLException e) {

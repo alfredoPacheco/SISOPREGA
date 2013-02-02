@@ -79,7 +79,7 @@ public class Messenger implements Messageable {
   @Resource(name="comProxy/Properties")
   private Properties comProxyProps;
   
-  private final static String REPORTING_URL = "http://localhost:8080/ReportingGateway/";
+  private final static String REPORTING_URL = "http://localhost:9090/ReportingGateway/";
 
   /**
    * Default constructor.
