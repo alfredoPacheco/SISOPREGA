@@ -27,7 +27,7 @@ enyo.kind({
 			{kind: "ranchers.reports",onMBYReport:"loadBYMReport", onFeedReport:"loadFeedReport",
 			 onInspectionReport:"loadInspectionReport", onHistoricalReport:"loadHistoricalReport",
 			 onUpdateProfile:"loadUpdateProfile",onGoBack:"loadLogIn"},
-			{kind: "receptions.barnyards.map",onGoBack:"stepBack"},			
+			{kind: "receptions.barnyards.map",name:"rancherMap",onGoBack:"stepBack"},			
 		]},
 	],
 	rendered:function(){
@@ -47,6 +47,7 @@ enyo.kind({
 	},
 	loadBYMReport:function(){
         this.inherited(arguments);
+        this.$.rancherMap.refreshMap();		        
 		this.$.main.setIndex(2);		
 	},
 	loadFeedReport:function(){
@@ -76,9 +77,9 @@ enyo.kind({
 		var sTitle="";
 			
 		var dFrom=this.$.dFrom.getValue();
-		var sFrom=dFrom.getDate()+"/"+dFrom.getMonth()+1+"/"+dFrom.getFullYear();
+		var sFrom=dFrom.getDate()+"/"+(dFrom.getMonth()+1)+"/"+dFrom.getFullYear();
 		var dTo=this.$.dTo.getValue();
-		var sTo=dTo.getDate()+"/"+dTo.getMonth()+1+"/"+dTo.getFullYear();
+		var sTo=dTo.getDate()+"/"+(dTo.getMonth()+1)+"/"+dTo.getFullYear();
 		
 		switch(this.reportID){
 			//Alimentacion

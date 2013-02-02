@@ -18,9 +18,11 @@ enyo.kind({
 	sColorSelect:"lightgreen",
 	sColorSelectOccupied:"#9b7eb1",	
 	className:"mapBG",
+	create : function() {
+		this.inherited(arguments);
+		this.$.rancherFilter.setItems(cacheRanchers.getAllForList());		
+	},
 	components: [
-//		{kind:"VFlexBox", flex:1,className:"mapBG",
-//		 components:[
 			{name: "options", kind: enyo.PopupSelect, onSelect: "actionSelected",items:[]},
 			{kind:enyo.BasicScroller,flex: 1, 
 			components:[
@@ -28,7 +30,14 @@ enyo.kind({
 			]},
 			{kind: "Popup",name: "popMan", showHideMode: "transition", openClassName: "zoomFadeIn",
 			 className: "transitioner2", layoutKind: "VFlexLayout",
-			 style: "overflow: hidden", width: "95%", height: "95%",scrim: true,}//]}
+			 style: "overflow: hidden", width: "95%", height: "95%",scrim: true},
+			 
+			 {kind: "Toolbar",style:"height:20px;",components: [    		
+						{kind: "controls.autocomplete",width:"60%", name:"rancherFilter",
+							  hint:"Filtro por Ganadero", onSelectItem:"rancherFilterChanged"},
+							{kind: "Button",name:"btnCancel", className: "enyo-button-negative",
+                    		   caption: "X", onclick: "toggleAdd"}	
+			]}
 	],
 	ready: function() {
 		this.last=this.$.cells;
@@ -135,7 +144,7 @@ enyo.kind({
 				                 		"text-align: center;" +
 				                 		"vertical-align: middle;" +
 				                 		"background-color:#DABD8B;" +
-				                 		"padding-top: 5px;",
+				                 		"display: table-cell;",
 			                      name:sName,
 								  content:sCaption,
 								 },{owner: this});		
@@ -147,12 +156,12 @@ enyo.kind({
 			this.splitRow();
 			this.addCustomCell("alaone","<strong>CHIHUAHUA</strong>",
 					           "765px","30px","customBYcellZone");
-			this.addRefreshButton()		
+			this.addRefreshButton();		
 			this.addRow();
 	},
 	addRefreshButton:function(sName,sCaption,sWidth,sHeight,sClass){
 		if(!sClass){
-			sClass="customBYcell"
+			sClass="customBYcell";
 		}
 		objBarn.createComponent({kind: "IconButton",  onclick:"refreshMap",
 		                         icon:"images/command-menu/menu-icon-music-repeat.png",
@@ -538,5 +547,33 @@ enyo.kind({
 		this.objSelected=null;
 		this.arrSelected={};
 		this.arrSelectedOccupied={};		
+	},
+	rancherFilterChanged:function(inSender){
+		console.debug(inSender);
+		if(this.$.rancherFilter.getValue()!=""){
+			for (var i = 0, a; (a=this.$.cells.children[i]); i++) {			
+				for (var j = 0, b; (b =a.children[j]); j++) {				
+					if(b.bBY==true){
+						this.$[b.name].removeClass("selectCell");
+						
+						if(this.$[b.name])
+						if(cacheBY.isOccupied(b.name)){
+							//alert(b.name)
+							this.$[b.name].occupied=1;						
+							this.$[b.name].applyStyle("background-color",this.sColorOccupied);						
+						}else{
+							this.$[b.name].occupied=0;								
+							this.$[b.name].applyStyle("background-color",this.sColorFree);																	
+						}
+						
+						
+					}
+				}
+			}
+			this.arrByMOver={};
+			this.objSelected=null;
+			this.arrSelected={};
+			this.arrSelectedOccupied={};	
+		}
 	}
 });		

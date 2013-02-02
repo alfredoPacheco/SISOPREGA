@@ -2,13 +2,15 @@ enyo.kind({
 	name : "controls.autocomplete",
 	kind : enyo.Control,
 	itemSelectedPopup : -1,
-	hint : "",
 	layoutKind : enyo.HFlexLayout,
 	allItems : [],
 	published : {
 		hint : "",
 		index : -1,
 		items : [],
+	},
+	events:{
+		"onSelectItem":""
 	},
 	getValue : function(){
 		return this.$.textField.getValue();
@@ -22,6 +24,7 @@ enyo.kind({
 		}else{
 			this.$.textField.setValue("");
 		}
+		this.doSelectItem();
 	},
 	itemsChanged : function(inOldValue) {
 		this.$.drop_down.setItems(this.getItems());

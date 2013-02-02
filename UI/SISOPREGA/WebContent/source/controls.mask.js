@@ -2,14 +2,17 @@ enyo
 		.kind({
 			name : "controls.mask",
 			kind : enyo.Control,
-			hint : "",
 //			layoutKind : enyo.HFlexLayout,
 			published : {
 				hint : "",
-				mask : ""
+				mask : "",
+				value : ""
 			},
 			getValue : function() {
 				return this.$.textField.getValue();
+			},
+			setValue : function(value){
+				this.$.textField.setValue(value);
 			},
 			hintChanged : function(inOldValue) {
 				this.$.textField.setHint(this.getHint());
@@ -18,10 +21,14 @@ enyo
 				// this.$.drop_down.setItems(this.getItems());
 				// this.allItems = this.getItems();
 			},
+			valueChanged : function(inOldValue) {
+				this.$.textField.setValue(this.$.textField.getValue());
+			},
 			create : function() {
 				this.inherited(arguments);
 				this.hintChanged();
 				this.maskChanged();
+				this.valueChanged();
 			},
 			components : [ {
 				kind : "Input",

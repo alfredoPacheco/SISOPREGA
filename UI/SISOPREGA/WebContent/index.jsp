@@ -21,10 +21,6 @@
 		enyo.create({
 			kind : "sisoprega"
 		}).renderInto(document.body);
-		
-		jQuery(function(R) {
-		      R('#phone').mask('(999) 999-9999');		      
-		   });
 	});
 	</script>
 </body>

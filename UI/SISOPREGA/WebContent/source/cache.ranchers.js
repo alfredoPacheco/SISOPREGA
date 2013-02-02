@@ -30,6 +30,7 @@ enyo
 							});
 							objTmp = selfCacheRancher
 									.rancherAdapterToIn(objAux);
+							objAux = {};
 							// objTmp.billing = selfCacheRancher
 							// .getInvoice(objTmp);
 							arrAux.push(objTmp);
@@ -59,8 +60,9 @@ enyo
 											objTmp = selfCacheRancher
 													.enterpriseRancherAdapterToIn(objAux);
 											// objTmp.billing = selfCacheRancher
-											// .getInvoice(objTmp);
+											// .getInvoice(objTmp);											
 											arrAux.push(objTmp);
+											objAux = {};
 										});
 					} else { // Error
 						if (cgReadAllEnterpriseRanchers.exceptionId != "VAL02") {// No
@@ -84,14 +86,14 @@ enyo
 			rancherAdapterToIn : function(objRan) {
 
 				var objNew = {
-					rancher_id : objRan.rancherId,
-					aka : objRan.aka,
-					birth_date : "" + UTCtoNormalDate(objRan.birthDate),
-					email_add : objRan.emailAddress,
-					first_name : objRan.firstName,
-					last_name : objRan.lastName,
-					mother_name : objRan.motherName,
-					phone_number : objRan.phone
+					rancher_id : 	objRan.rancherId,
+					aka : 			objRan.aka,
+					birth_date : 	"" + UTCtoNormalDate(objRan.birthDate),
+					email_add : 	objRan.emailAddress,
+					first_name : 	objRan.firstName,
+					last_name : 	objRan.lastName,
+					mother_name : 	objRan.motherName,
+					phone_number : 	phoneToMask(objRan.phone),
 				};
 				// Fields out of web service:
 				objNew.rfc = "";
@@ -110,7 +112,7 @@ enyo
 					firstName : objRan.first_name,
 					lastName : objRan.last_name,
 					motherName : objRan.mother_name,
-					phone : objRan.phone_number,
+					phone : phoneOut(objRan.phone_number)
 				};
 				return objNew;
 			},
@@ -124,7 +126,7 @@ enyo
 					mother_name : objCon.motherName,
 					birth_date : "" + UTCtoNormalDate(objCon.birthDate),
 					email_add : objCon.emailAddress,
-					phone_number : objCon.telephone,
+					phone_number : phoneToMask(objCon.telephone),
 					address_one : objCon.addressOne,
 					address_two : objCon.addressTwo,
 					city : objCon.city,
@@ -143,7 +145,7 @@ enyo
 					motherName : objCon.mother_name,
 					birthDate : "" + DateOut(objCon.birth_date),
 					emailAddress : objCon.email_add,
-					telephone : objCon.phone_number,
+					telephone : phoneOut(objCon.phone_number),
 					addressOne : objCon.address_one,
 					addressTwo : objCon.address_two,
 					city : objCon.city,
@@ -193,15 +195,15 @@ enyo
 					state_id : objRan.state,
 					zip_code : objRan.zipCode,
 					rfc : objRan.legalId,
-					phone_number : objRan.telephone,
-
+					phone_number : phoneToMask(objRan.telephone),
+					email : objRan.email,
 					// Fields out of web service:
 					contacts : [],
 					billing : [],
 					rancher_type : 2,
 					city_name : "",
-					state_name : "",
-					email : ""
+					state_name : ""
+					
 				};
 				return objNew;
 			},
@@ -216,7 +218,7 @@ enyo
 					state : objRan.state_id,
 					zipCode : objRan.zip_code,
 					legalId : objRan.rfc,
-					telephone : objRan.phone_number,
+					telephone : phoneOut(objRan.phone_number),
 					email : objRan.email
 				};
 				return objNew;
@@ -231,7 +233,7 @@ enyo
 					mother_name : objCon.motherName,
 					birth_date : "" + UTCtoNormalDate(objCon.birthDate),
 					email_add : objCon.emailAddress,
-					phone_number : objCon.telephone,
+					phone_number : phoneToMask(objCon.telephone),
 					address_one : objCon.addressOne,
 					address_two : objCon.addressTwo,
 					city : objCon.city,
@@ -250,7 +252,7 @@ enyo
 					motherName : objCon.mother_name,
 					birthDate : "" + DateOut(objCon.birth_date),
 					emailAddress : objCon.email_add,
-					telephone : objCon.phone_number,
+					telephone : phoneOut(objCon.phone_number),
 					addressOne : objCon.address_one,
 					addressTwo : objCon.address_two,
 					city : objCon.city,
@@ -259,7 +261,7 @@ enyo
 				};
 				return objNew;
 			},
-			create : function(objRan, cbObj, cbMethod) {
+			Create: function(objRan, cbObj, cbMethod) {
 
 				if (objRan.rancher_type == 1) {
 					this.createRancher(objRan, cbObj, cbMethod);
@@ -815,4 +817,29 @@ function DateOut(normalDate) {
 		dateFmt = fmt.format(dateNew);
 	}
 	return dateFmt;
+}
+
+function phoneOut(p){
+	
+	var phone = p;
+	if(phone !== undefined){
+		phone = phone.replace("(","");
+		phone = phone.replace(")","");
+		phone = phone.replace("-","");
+		phone = phone.replace(" ","");
+		phone = phone.replace("_","");
+	}
+	
+	return "" + phone;	
+	
+}
+function phoneToMask(p){
+	var phone = p;
+	if(phone!==undefined && phone!= ""){
+		if (phone.length>=10){
+			phone = phone.slice(-10);
+			phone = "(" + phone.substr(0,3) + ") " + phone.substr(3,3) + "-" + phone.substr(6);
+		}
+	}
+	return phone;	
 }

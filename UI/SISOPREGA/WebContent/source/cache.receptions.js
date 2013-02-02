@@ -423,7 +423,7 @@ enyo.kind({
 		
 		return arrAux;		
 	},
-	create:function(objRec,cbObj,cbMethod){
+	Create:function(objRec,cbObj,cbMethod){
 		var objToSend = this.receptionAdapterToOut(objRec);
 		delete objToSend.receptionId;
 		var cgCreate = consumingGateway.Create("Reception", objToSend);
