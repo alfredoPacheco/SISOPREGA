@@ -28,8 +28,12 @@ enyo.kind({
 						{kind: "DatePicker", name:"birth_date", label: "", minYear:1940, maxYear:new Date().getFullYear(), className:"picker-hbox"}]},						
 				  {kind: "Input", name:"email_add", hint:"Email",
 				   inputClassName: "blankInput", focusClassName:"darkFocus"},							 
-				  {kind: "Input", name:"phone_number", hint:"Telefono",
+				  
+				   {kind: "Input", name:"phone_number", hint:"Telefono",
 				   inputClassName: "blankInput", focusClassName:"darkFocus"},
+				   
+				   {kind: "controls.mask", name:"telefonoControl", inputClassName: "blankInput", focusClassName:"darkFocus"},
+				   
 				   {kind: "Input", name:"address_one", hint:"Domicilio",
 					   inputClassName: "blankInput", focusClassName:"darkFocus"},
 				   {kind: "Input", name:"address_two", hint:"",
@@ -39,7 +43,7 @@ enyo.kind({
 				   {kind: "Input", name:"address_state", hint:"Estado",
 					   inputClassName: "blankInput", focusClassName:"darkFocus"},
 				   {kind: "Input", name:"zip_code", hint:"Codigo Postal",
-					   inputClassName: "blankInput", focusClassName:"darkFocus"},
+					   inputClassName: "blankInput", focusClassName:"darkFocus"},					   
 				   ]},
 			{kind: "Drawer", name:"draAdd", 
 			 components: [ 					
@@ -55,7 +59,8 @@ enyo.kind({
 	],
 	ready: function() {		
 		this.$.draAdd.setOpen(true);
-		this.$.draUpdate.setOpen(false);					
+		this.$.draUpdate.setOpen(false);		
+		
 	},
 	resetValues:function(){
 		this.objContact=null;		
@@ -70,7 +75,8 @@ enyo.kind({
 		this.$.address_two.setValue("");
 		this.$.city.setValue("");
 		this.$.address_state.setValue("");
-		this.$.zip_code.setValue("");		
+		this.$.zip_code.setValue("");	
+		
 	},
 	updateRancher:function(){		
 		cacheRanchers.updateContact(this.objRancher,this.objContact,this.getContact(),this,"doUpdateRancher");

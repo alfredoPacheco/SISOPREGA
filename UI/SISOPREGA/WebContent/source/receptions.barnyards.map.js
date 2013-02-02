@@ -146,9 +146,19 @@ enyo.kind({
 					           "200px","30px","customBYcellZone");
 			this.splitRow();
 			this.addCustomCell("alaone","<strong>CHIHUAHUA</strong>",
-					           "815px","30px","customBYcellZone");			
+					           "765px","30px","customBYcellZone");
+			this.addRefreshButton()		
 			this.addRow();
 	},
+	addRefreshButton:function(sName,sCaption,sWidth,sHeight,sClass){
+		if(!sClass){
+			sClass="customBYcell"
+		}
+		objBarn.createComponent({kind: "IconButton",  onclick:"refreshMap",
+		                         icon:"images/command-menu/menu-icon-music-repeat.png",
+								 style:"height:23px; width:45px; padding:0;margin:0px",
+								 },{owner: this});		
+	},	
 	addRow:function(bDiv){
 		if (bDiv){	
 			this.$.cells.createComponent({kind: "Divider",caption:"", style:"margin-left:-15px;width: 1040px;"});
@@ -185,6 +195,7 @@ enyo.kind({
 											   ";", 										
 			                               name:sLetter+iStart,
 										   occupied:iOccupied,
+										   bBY:true,
 										   content:sLetter.substr(1)+iStart,
 										   onclick: "cellClick",
 										   onmousehold:"cellHold",
@@ -500,5 +511,32 @@ enyo.kind({
 			this.$[sKey].occupied=1;
 			this.$[sKey].applyStyle("background-color",this.sColorOccupied);							
 		}
+	},
+	refreshMap:function(){
+		cacheMan.showScrim();
+		cacheRanchers.refreshData();			
+		cacheCattle.refreshData();
+		cacheBY.refreshData();
+		cacheReceptions.refreshData();	
+		cacheMan.hideScrim();
+		for (var i = 0, a; (a=this.$.cells.children[i]); i++) {			
+			for (var j = 0, b; (b =a.children[j]); j++) {				
+				if(b.bBY==true){
+					this.$[b.name].removeClass("selectCell");
+					if(cacheBY.isOccupied(b.name)){
+						//alert(b.name)
+						this.$[b.name].occupied=1;						
+						this.$[b.name].applyStyle("background-color",this.sColorOccupied);						
+					}else{
+						this.$[b.name].occupied=0;								
+						this.$[b.name].applyStyle("background-color",this.sColorFree);																	
+					}
+				}
+			}
+		}
+		this.arrByMOver={};
+		this.objSelected=null;
+		this.arrSelected={};
+		this.arrSelectedOccupied={};		
 	}
 });		

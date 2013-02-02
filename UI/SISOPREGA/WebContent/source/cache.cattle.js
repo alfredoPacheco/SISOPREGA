@@ -256,6 +256,12 @@ enyo.kind({
 			result.push(cattletype);
 		}
 		return result;
+	},
+	refreshData:function(){		
+		this.cattleTypeWasReadFromGateway=false;
+		this.cattleClassWasReadFromGateway=false;
+		this.getCattleClass();
+		this.getCattleType();		
 	}
 });
 var cacheCattle= new cache.cattle();

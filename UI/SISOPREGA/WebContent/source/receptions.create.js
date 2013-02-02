@@ -11,6 +11,10 @@ enyo.kind({
 	objRec:null,
 	objList:[],
 	arrBY:null,
+	create : function() {
+		this.inherited(arguments);
+		this.$.rancher_id.setItems(cacheRanchers.getAllForList());		
+	},
 	components: [	
 		{kind: enyo.Scroller,
     	 className:"formBG",			 
@@ -33,7 +37,13 @@ enyo.kind({
 						components: [
 							{content: "Ganadero", className: "enyo-label", flex: 1},
 							{layoutKind: enyo.HFlexLayout,components:[
-								{name: 'rancher_id', flex:1, kind: "ListSelector",contentPack:"end", items: []},
+								{
+									kind : "controls.autocomplete",
+									name : "rancher_id",
+									hint:"",
+									flex:1,
+									contentPack:"end"
+								},	
 								{kind: enyo.IconButton, icon: "images/menu-icon-new.png", 
 								 onclick: "contextMenuClicked" },	
 							]}							
@@ -56,8 +66,9 @@ enyo.kind({
 						 {kind: "Input", name:"hc_aprox",   hint:"Cabezas",inputClassName: "blankInput",
 					 	  changeOnInput: true,inputType:"number",},
 						 {kind: "Input", name:"weight", hint:"Peso",inputClassName: "blankInput",
-					 	  changeOnInput: true,inputType:"number",}]},
-			{kind: "Drawer", name:"draAdd", 
+					 	  changeOnInput: true,inputType:"number",}]}
+		]},
+		{kind: "Drawer", name:"draAdd", 
 			 components: [ 					
 			    {layoutKind: "HFlexLayout", align: "center",components: [			
 				{kind: "Button",name:"btnAdd", className: "enyo-button-affirmative", 
@@ -70,8 +81,7 @@ enyo.kind({
 					{kind: "Button",name:"btnUpdate", className: "enyo-button-affirmative", 
 					 flex:1, caption: "Actualizar", onclick: "updateReception"},							
 					{kind: "Button",name:"btnCancelUpd", className: "enyo-button-negative", 
-					 flex:1,caption: "Cancelar", onclick: "doCancel"},]}]},			
-		]},
+					 flex:1,caption: "Cancelar", onclick: "doCancel"},]}]}
 	],
 	categoryChanged: function(inSender, inValue, inOldValue) {
 		//enyo.log(enyo.json.stringify(this._arrDefinitions[inValue]));
@@ -91,16 +101,11 @@ enyo.kind({
 					   weights:[], barnyards:[],accepted_count:"",inspections:[],feed:[]};
 					   
 		var fmt = new enyo.g11n.DateFmt({format: "yyyy/MM/dd", locale: new enyo.g11n.Locale("es_es")});		
-		var rancher=cacheRanchers.getByID(this.$.rancher_id.getValue());
-		if(rancher.rancher_type==1){			
-			receptionDef.rancher_name=rancher.aka+" / "+rancher.last_name+" "+
-									  rancher.mother_name+" "+rancher.first_name;			
-		}else{
-			receptionDef.rancher_name=rancher.company_name;
-		}
-		receptionDef.rancher_id=this.$.rancher_id.getValue();				
-		receptionDef.city_id=this.$.city_id.getValue();
-		receptionDef.city_name=cacheMan.getCityByID(this.$.city_id.getValue()).city_name;
+					
+		receptionDef.rancher_name=	this.$.rancher_id.getValue();
+		receptionDef.rancher_id=	this.$.rancher_id.getIndex();						
+		receptionDef.city_id=		this.$.city_id.getValue();
+		receptionDef.city_name=		cacheMan.getCityByID(this.$.city_id.getValue()).city_name;
 		
 		if(this.$.arrival_date.getValue()!=null){	
 			receptionDef.arrival_date=fmt.format(this.$.arrival_date.getValue());
@@ -116,12 +121,11 @@ enyo.kind({
 		cacheReceptions.upd(this.objRec,this.getReception(),this,"doUpdateReception");				
 	},
 	resetValues:function(){
-		this.$.rancher_id.setValue(0);
+		this.$.rancher_id.setIndex(-1);
 		this.$.cattype_id.setValue(0);
 		this.$.city_id.setValue(0);		
 		this.$.arrival_date.setValue(new Date());
 		this.$.hc_aprox.setValue("");
-		this.$.rancher_id.setItems(cacheRanchers.ls());
 		this.$.cattype_id.setItems(cacheCattle.getCattleTypeLS());
 		this.$.city_id.setItems(cacheMan.getCitiesLS());
 	},
@@ -130,7 +134,8 @@ enyo.kind({
 		this.arrBY=arrBY;
 		if(receptionDef){
 			this.objRec=receptionDef;
-			this.$.rancher_id.setValue(receptionDef.rancher_id);
+			this.$.rancher_id.setIndex(receptionDef.rancher_id);
+			
 			this.$.arrival_date.setValue(new Date(receptionDef.arrival_date.substring(0,4),
 												  receptionDef.arrival_date.substring(5,7)-1,
 												  receptionDef.arrival_date.substring(8,10)
@@ -175,8 +180,9 @@ enyo.kind({
 		return false;
 	},
 	adoken:function(){
+		this.$.rancher_id.setItems(cacheRanchers.getAllForList());
 		this.resetValues();		
-		this.$.rancher_id.setValue(this.$.dynoco.getJustCreated());
+		this.$.rancher_id.setIndex(this.$.dynoco.getJustCreated());
 		this.$.addRancherDialog.close();		
 	}
 });

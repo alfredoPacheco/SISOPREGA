@@ -11,6 +11,7 @@
 				{content: "1"},
 				{content: "2"},
 				{classes: "onyx-menu-divider"},
+				{content: "Label", classes: "onyx-menu-label"},
 				{content: "3"},
 			]}
 		]}
@@ -21,6 +22,7 @@ enyo.kind({
 	defaultKind: "onyx.Button",
 	// selection on ios prevents tap events, so avoid.
 	classes: "onyx-popup-decorator enyo-unselectable",
+	//* @protected
 	handlers: {
 		onActivate: "activated",
 		onHide: "menuHidden"
