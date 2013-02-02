@@ -303,7 +303,7 @@ enyo.kind({
 		}
 		this.$.spacerone.setContent("<strong>"+objRec.rancher_name +"</strong> "+
 									"- "+objRec.city_name+" - "+objRec.cattype_name+
-									"  ("+ objRec.hc_aprox+"/"+objRec.weights[0].weight+")"+
+									"  ("+ objRec.weights[0].weight+"/"+objRec.hc_aprox+" KG) "+ (objRec.weights[0].weight/objRec.hc_aprox)+
 									"	 "+objRec.arrival_date+
 									"</br> Corrales ("+iBy+") - "+sBy);		
 		
