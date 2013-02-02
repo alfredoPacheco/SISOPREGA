@@ -73,7 +73,7 @@ enyo.kind({
 			if (objRan=this.objRancher.contacts[inIndex]) {
 				this.setupDivider(inIndex);
 				this.$.contact_name.setContent(objRan.last_name+', '+objRan.first_name);
-				this.$.contact_info.setContent(objRan.country_code + " " + objRan.phone_number);			
+				this.$.contact_info.setContent(objRan.phone_number);			
 				return true;
 			}
 		}

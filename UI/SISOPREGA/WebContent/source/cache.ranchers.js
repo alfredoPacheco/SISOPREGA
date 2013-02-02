@@ -30,6 +30,7 @@ enyo
 							});
 							objTmp = selfCacheRancher
 									.rancherAdapterToIn(objAux);
+							objAux = {};
 							// objTmp.billing = selfCacheRancher
 							// .getInvoice(objTmp);
 							arrAux.push(objTmp);
@@ -59,8 +60,9 @@ enyo
 											objTmp = selfCacheRancher
 													.enterpriseRancherAdapterToIn(objAux);
 											// objTmp.billing = selfCacheRancher
-											// .getInvoice(objTmp);
+											// .getInvoice(objTmp);											
 											arrAux.push(objTmp);
+											objAux = {};
 										});
 					} else { // Error
 						if (cgReadAllEnterpriseRanchers.exceptionId != "VAL02") {// No
@@ -92,7 +94,6 @@ enyo
 					last_name : 	objRan.lastName,
 					mother_name : 	objRan.motherName,
 					phone_number : 	phoneToMask(objRan.phone),
-					country_code:	countryCodeByPhone(objRan.phone)
 				};
 				// Fields out of web service:
 				objNew.rfc = "";
@@ -111,7 +112,7 @@ enyo
 					firstName : objRan.first_name,
 					lastName : objRan.last_name,
 					motherName : objRan.mother_name,
-					phone : phoneOut(objRan.country_code, objRan.phone_number)
+					phone : phoneOut(objRan.phone_number)
 				};
 				return objNew;
 			},
@@ -126,7 +127,6 @@ enyo
 					birth_date : "" + UTCtoNormalDate(objCon.birthDate),
 					email_add : objCon.emailAddress,
 					phone_number : phoneToMask(objCon.telephone),
-					country_code:	countryCodeByPhone(objCon.telephone),
 					address_one : objCon.addressOne,
 					address_two : objCon.addressTwo,
 					city : objCon.city,
@@ -145,7 +145,7 @@ enyo
 					motherName : objCon.mother_name,
 					birthDate : "" + DateOut(objCon.birth_date),
 					emailAddress : objCon.email_add,
-					telephone : phoneOut(objCon.country_code, objCon.phone_number),
+					telephone : phoneOut(objCon.phone_number),
 					addressOne : objCon.address_one,
 					addressTwo : objCon.address_two,
 					city : objCon.city,
@@ -196,14 +196,14 @@ enyo
 					zip_code : objRan.zipCode,
 					rfc : objRan.legalId,
 					phone_number : phoneToMask(objRan.telephone),
-					country_code:	countryCodeByPhone(objRan.telephone),
+					email : objRan.email,
 					// Fields out of web service:
 					contacts : [],
 					billing : [],
 					rancher_type : 2,
 					city_name : "",
-					state_name : "",
-					email : ""
+					state_name : ""
+					
 				};
 				return objNew;
 			},
@@ -218,7 +218,7 @@ enyo
 					state : objRan.state_id,
 					zipCode : objRan.zip_code,
 					legalId : objRan.rfc,
-					telephone : phoneOut(objRan.country_code, objRan.phone_number),
+					telephone : phoneOut(objRan.phone_number),
 					email : objRan.email
 				};
 				return objNew;
@@ -234,7 +234,6 @@ enyo
 					birth_date : "" + UTCtoNormalDate(objCon.birthDate),
 					email_add : objCon.emailAddress,
 					phone_number : phoneToMask(objCon.telephone),
-					country_code:	countryCodeByPhone(objCon.telephone),
 					address_one : objCon.addressOne,
 					address_two : objCon.addressTwo,
 					city : objCon.city,
@@ -253,7 +252,7 @@ enyo
 					motherName : objCon.mother_name,
 					birthDate : "" + DateOut(objCon.birth_date),
 					emailAddress : objCon.email_add,
-					telephone : phoneOut(objCon.country_code, objCon.phone_number),
+					telephone : phoneOut(objCon.phone_number),
 					addressOne : objCon.address_one,
 					addressTwo : objCon.address_two,
 					city : objCon.city,
@@ -820,7 +819,9 @@ function DateOut(normalDate) {
 	return dateFmt;
 }
 
-function phoneOut(country_code, phone){
+function phoneOut(p){
+	
+	var phone = p;
 	if(phone !== undefined){
 		phone = phone.replace("(","");
 		phone = phone.replace(")","");
@@ -828,13 +829,12 @@ function phoneOut(country_code, phone){
 		phone = phone.replace(" ","");
 		phone = phone.replace("_","");
 	}
-	if (phone.length == 10){
-		return "" + country_code + phone;	
-	}else{
-		return "";
-	}
+	
+	return "" + phone;	
+	
 }
-function phoneToMask(phone){
+function phoneToMask(p){
+	var phone = p;
 	if(phone!==undefined && phone!= ""){
 		if (phone.length>=10){
 			phone = phone.slice(-10);
@@ -842,14 +842,4 @@ function phoneToMask(phone){
 		}
 	}
 	return phone;	
-}
-function countryCodeByPhone(phone){
-	if(phone!==undefined && phone!= ""){
-		if (phone.length>10){
-			phone = phone.split('').reverse().join('');;
-			phone = phone.substr(10);
-			phone = phone.split('').reverse().join('');;			
-		}
-	}
-	return phone;
 }

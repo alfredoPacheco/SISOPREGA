@@ -135,7 +135,7 @@ enyo.kind({
 				                 		"text-align: center;" +
 				                 		"vertical-align: middle;" +
 				                 		"background-color:#DABD8B;" +
-				                 		"padding-top: 5px;",
+				                 		"display: table-cell;",
 			                      name:sName,
 								  content:sCaption,
 								 },{owner: this});		
@@ -147,12 +147,12 @@ enyo.kind({
 			this.splitRow();
 			this.addCustomCell("alaone","<strong>CHIHUAHUA</strong>",
 					           "765px","30px","customBYcellZone");
-			this.addRefreshButton()		
+			this.addRefreshButton();		
 			this.addRow();
 	},
 	addRefreshButton:function(sName,sCaption,sWidth,sHeight,sClass){
 		if(!sClass){
-			sClass="customBYcell"
+			sClass="customBYcell";
 		}
 		objBarn.createComponent({kind: "IconButton",  onclick:"refreshMap",
 		                         icon:"images/command-menu/menu-icon-music-repeat.png",

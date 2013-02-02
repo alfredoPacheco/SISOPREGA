@@ -62,37 +62,24 @@ enyo.kind({
 				inputClassName : "blankInput",
 				focusClassName : "darkFocus"
 			}, {
-				kind : enyo.HFlexBox,
-				pack : "start",
-				components : [ {
-					name : 'countryCodes',
-					kind : "ListSelector",
-					style : "width:150px;",
-					contentPack : "Start",
-					items : []
-				}, {
-					kind : "Input",
-					name : "phone_number",
-					hint : "Telefono",
-					inputClassName : "blankInput",
-					focusClassName : "darkFocus",
-					onfocus : "applyMask"
-				} ]
-			} ]
+				kind : "Input",
+				name : "phone_number",
+				hint : "Telefono",
+				inputClassName : "blankInput",
+				focusClassName : "darkFocus",
+				onfocus : "applyMask"
+			}]
 		},
 		{
 			kind : "Drawer",
 			name : "draAdd",
-			layoutKind : "HFlexLayout",
-			align : "center",
 			components : [ {
 				kind : "Button",
 				name : "btnAdd",
 				className : "enyo-button-affirmative",
-				flex:1,
 				caption : "Crear",
 				onclick : "addRancher"
-			} ]
+			}, ]
 		}, {
 			kind : "Drawer",
 			name : "draUpdate",
@@ -128,10 +115,8 @@ enyo.kind({
 		this.$.last_name.setValue("");
 		this.$.mother_name.setValue("");
 		this.$.birth_date.setValue(new Date());
-		this.$.birth_date.setNull();
 		this.$.email_add.setValue("");
 		this.$.phone_number.setValue("");
-		this.$.countryCodes.setItems(_arrCountryPhoneCodes);
 	},
 	updateRancher : function() {
 		cacheRanchers.upd(this.objRan, this.getRancher(), this,
@@ -152,7 +137,6 @@ enyo.kind({
 			last_name : "",
 			mother_name : "",
 			phone_number : "",
-			country_code : "",
 			rancher_type : 1,
 		};
 
@@ -167,7 +151,6 @@ enyo.kind({
 		objRan.last_name = this.$.last_name.getValue();
 		objRan.mother_name = this.$.mother_name.getValue();
 		objRan.phone_number = this.$.phone_number.getValue();
-		objRan.country_code = this.$.countryCodes.getValue();
 
 		return objRan;
 	},
@@ -199,7 +182,6 @@ enyo.kind({
 		this.$.last_name.setValue(this.objRan.last_name);
 		this.$.mother_name.setValue(this.objRan.mother_name);
 		this.$.phone_number.setValue(this.objRan.phone_number);
-		this.$.countryCodes.setValue(this.objRan.country_code);
 		this.toggleUpdate();
 	},
 	toggleUpdate : function() {

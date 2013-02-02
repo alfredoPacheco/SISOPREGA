@@ -119,7 +119,7 @@ enyo.kind({
 			} else {
 				this.$.name.setContent(objRan.company_name);
 			}
-			this.$.info.setContent(objRan.country_code + " " + objRan.phone_number);
+			this.$.info.setContent(objRan.phone_number);
 			return true;
 		}
 	},
