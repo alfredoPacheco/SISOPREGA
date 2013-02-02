@@ -143,7 +143,7 @@ enyo.kind({
 		return objRan;
 	},
 	addRancher : function() {
-		cacheRanchers.create(this.getRancher(), this, "afteraddRancher");
+		cacheRanchers.Create(this.getRancher(), this, "afteraddRancher");
 	},
 	afteraddRancher : function() {
 		this.iCreated = cacheRanchers.iLastRanID;

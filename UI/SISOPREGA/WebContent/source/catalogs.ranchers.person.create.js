@@ -115,6 +115,7 @@ enyo.kind({
 		this.$.last_name.setValue("");
 		this.$.mother_name.setValue("");
 		this.$.birth_date.setValue(new Date());
+//		this.$.birth_date.setNull();
 		this.$.email_add.setValue("");
 		this.$.phone_number.setValue("");
 	},
@@ -154,8 +155,8 @@ enyo.kind({
 
 		return objRan;
 	},
-	addRancher : function() {
-		cacheRanchers.create(this.getRancher(), this, "afteraddRancher");
+	addRancher:function(){				
+		cacheRanchers.Create(this.getRancher(),this,"afteraddRancher");		
 	},
 	afteraddRancher : function() {
 		this.iCreated = cacheRanchers.iLastRanID;

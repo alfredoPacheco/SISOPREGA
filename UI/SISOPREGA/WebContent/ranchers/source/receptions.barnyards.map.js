@@ -193,6 +193,7 @@ enyo.kind({
 											   ";background-color:"+sColor+
 											   ";", 										
 			                               name:sLetter+iStart,
+			                               bBY:true,
 										   occupied:iOccupied,
 										   content:sLetter.substr(1)+iStart,
 										   onclick: "cellClick",									   
@@ -302,7 +303,7 @@ enyo.kind({
 		}
 		this.$.spacerone.setContent("<strong>"+objRec.rancher_name +"</strong> "+
 									"- "+objRec.city_name+" - "+objRec.cattype_name+
-									"  ("+ objRec.hc_aprox+"/"+objRec.weights[0].weight+")"+
+									"  ("+ objRec.weights[0].weight+"/"+objRec.hc_aprox+" KG) "+ (objRec.weights[0].weight/objRec.hc_aprox)+
 									"	 "+objRec.arrival_date+
 									"</br> Corrales ("+iBy+") - "+sBy);		
 		
@@ -440,5 +441,30 @@ enyo.kind({
 			this.$[sKey].occupied=1;
 			this.$[sKey].applyStyle("background-color",this.sColorOccupied);							
 		}
-	}
+	},
+	refreshMap:function(){		
+		cacheRanchers.refreshData();			
+		cacheCattle.refreshData();
+		cacheBY.refreshData();
+		cacheReceptions.refreshData();
+		for (var i = 0, a; (a=this.$.cells.children[i]); i++) {			
+			for (var j = 0, b; (b =a.children[j]); j++) {				
+				if(b.bBY==true){
+					this.$[b.name].removeClass("selectCell");
+					if(cacheBY.isOccupied(b.name)){
+						//alert(b.name)
+						this.$[b.name].occupied=1;						
+						this.$[b.name].applyStyle("background-color",this.sColorOccupied);						
+					}else{
+						this.$[b.name].occupied=0;								
+						this.$[b.name].applyStyle("background-color",this.sColorFree);																	
+					}
+				}
+			}
+		}
+		this.arrByMOver={};
+		this.objSelected=null;
+		this.arrSelected={};
+		this.arrSelectedOccupied={};		
+	}	
 });		

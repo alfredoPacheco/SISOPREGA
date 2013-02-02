@@ -548,8 +548,32 @@ enyo.kind({
 		this.arrSelected={};
 		this.arrSelectedOccupied={};		
 	},
-	rancherFilterChanged:function(inSender, inEvent){
+	rancherFilterChanged:function(inSender){
 		console.debug(inSender);
-		console.debug(inEvent);
+		if(this.$.rancherFilter.getValue()!=""){
+			for (var i = 0, a; (a=this.$.cells.children[i]); i++) {			
+				for (var j = 0, b; (b =a.children[j]); j++) {				
+					if(b.bBY==true){
+						this.$[b.name].removeClass("selectCell");
+						
+						if(this.$[b.name])
+						if(cacheBY.isOccupied(b.name)){
+							//alert(b.name)
+							this.$[b.name].occupied=1;						
+							this.$[b.name].applyStyle("background-color",this.sColorOccupied);						
+						}else{
+							this.$[b.name].occupied=0;								
+							this.$[b.name].applyStyle("background-color",this.sColorFree);																	
+						}
+						
+						
+					}
+				}
+			}
+			this.arrByMOver={};
+			this.objSelected=null;
+			this.arrSelected={};
+			this.arrSelectedOccupied={};	
+		}
 	}
 });		

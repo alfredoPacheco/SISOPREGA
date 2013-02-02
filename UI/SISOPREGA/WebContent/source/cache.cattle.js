@@ -121,7 +121,7 @@ enyo.kind({
 		
 		return this.arrCattleClass;
 	},
-	create:function(objCat,cbObj,cbMethod){
+	Create:function(objCat,cbObj,cbMethod){
 		
 		var objToSend = this.cattleTypeAdapterToOut(objCat);
 		delete objToSend.cattypeId;

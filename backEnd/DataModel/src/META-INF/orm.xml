@@ -442,6 +442,10 @@
 			<description>Retrieves all reception records from database.</description>
 			<query>SELECT rec FROM Reception rec ORDER BY rec.rancherId</query>
 		</named-query>
+		<named-query name="RECEPTIONS_BY_RANCHER_ID">
+			<description>Retrieves all reception records from database by rancher ID</description>
+			<query>SELECT rec FROM Reception rec WHERE rec.rancherId=:rancherID</query>
+		</named-query>		
 		<attributes>
 			<id name="receptionId">
 				<column name="reception_id" />
