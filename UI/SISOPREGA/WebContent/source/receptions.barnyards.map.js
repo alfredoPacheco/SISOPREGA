@@ -35,8 +35,8 @@ enyo.kind({
 			 {kind: "Toolbar",style:"height:20px;",components: [    		
 						{kind: "controls.autocomplete",width:"60%", name:"rancherFilter",
 							  hint:"Filtro por Ganadero", onSelectItem:"rancherFilterChanged"},
-							{kind: "Button",name:"btnCancel", className: "enyo-button-negative",
-                    		   caption: "X", onclick: "toggleAdd"}	
+							{kind: "Button",name:"btnClearFilter", className: "enyo-button-negative",
+                    		   caption: "X", onclick: "clearFilter"}	
 			]}
 	],
 	ready: function() {
@@ -521,6 +521,7 @@ enyo.kind({
 			this.$[sKey].applyStyle("background-color",this.sColorOccupied);							
 		}
 	},
+	
 	refreshMap:function(){
 		cacheMan.showScrim();
 		cacheRanchers.refreshData();			
@@ -549,14 +550,44 @@ enyo.kind({
 		this.arrSelectedOccupied={};		
 	},
 	rancherFilterChanged:function(inSender){
-		console.debug(inSender);
-		if(this.$.rancherFilter.getValue()!=""){
+		if(this.$.rancherFilter.getIndex()>-1){
+			var receptions = cacheReceptions.getActiveBYForListByRancherID(this.$.rancherFilter.getIndex());
+			if(receptions.length > 0){
+				for (var i = 0, a; (a=this.$.cells.children[i]); i++) {
+					for (var j = 0, b; (b =a.children[j]); j++) {
+						if(b.bBY==true){
+							this.$[b.name].removeClass("selectCell");
+							this.$[b.name].occupied=0;
+							this.$[b.name].applyStyle("background-color",this.sColorFree);
+							for(x in receptions){
+								var byFinded = cacheBY.getByBarnyard(b.name);
+								if(byFinded){
+									if(byFinded.barnyard_id == receptions[x].value){
+										this.$[b.name].occupied=1;
+										this.$[b.name].applyStyle("background-color",this.sColorOccupied);
+										break;
+									}
+								}
+							}
+						}
+					}
+				}
+			}else{
+				for (var i = 0, a; (a=this.$.cells.children[i]); i++) {
+					for (var j = 0, b; (b =a.children[j]); j++) {
+						if(b.bBY==true){
+							this.$[b.name].removeClass("selectCell");
+							this.$[b.name].occupied=0;
+							this.$[b.name].applyStyle("background-color",this.sColorFree);							
+						}
+					}
+				}
+			}	
+		}else{
 			for (var i = 0, a; (a=this.$.cells.children[i]); i++) {			
 				for (var j = 0, b; (b =a.children[j]); j++) {				
 					if(b.bBY==true){
 						this.$[b.name].removeClass("selectCell");
-						
-						if(this.$[b.name])
 						if(cacheBY.isOccupied(b.name)){
 							//alert(b.name)
 							this.$[b.name].occupied=1;						
@@ -565,15 +596,17 @@ enyo.kind({
 							this.$[b.name].occupied=0;								
 							this.$[b.name].applyStyle("background-color",this.sColorFree);																	
 						}
-						
-						
 					}
 				}
-			}
-			this.arrByMOver={};
-			this.objSelected=null;
-			this.arrSelected={};
-			this.arrSelectedOccupied={};	
+			}					
 		}
+		this.arrByMOver={};
+		this.objSelected=null;
+		this.arrSelected={};
+		this.arrSelectedOccupied={};
+	},
+	
+	clearFilter:function(){		
+		this.$.rancherFilter.setIndex(-1);		
 	}
 });		
