@@ -99,8 +99,6 @@ public class User {
    */
   public void removeGroup(Role group){
     this.groups.remove(group);
-    if(!group.getUser().equals(this))
-      group.setUser(this);
   }
   
   @Override

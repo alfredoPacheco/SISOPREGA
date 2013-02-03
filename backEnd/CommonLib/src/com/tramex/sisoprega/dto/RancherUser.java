@@ -15,6 +15,8 @@
  */
 package com.tramex.sisoprega.dto;
 
+import java.util.List;
+
 /**
  * Defines the model for the Rancher invoice information.
  * 
@@ -38,6 +40,7 @@ public class RancherUser {
   private long recordId;
   private long rancherId;
   private String user_name;
+  private List<Reception> receptions;
   
   /**
    * @return the recordId
@@ -75,4 +78,25 @@ public class RancherUser {
   public void setUser_name(String user_name) {
     this.user_name = user_name;
   }
+  /**
+   * @return the receptions
+   */
+  public List<Reception> getReceptions() {
+    return receptions;
+  }
+  /**
+   * @param receptions the receptions to set
+   */
+  public void setReceptions(List<Reception> receptions) {
+    this.receptions = receptions;
+  }
+  
+  public void addReception(Reception reception){
+    this.receptions.add(reception);
+  }
+  
+  public void remoreReception(Reception reception){
+    this.receptions.remove(reception);
+  }
+  
 }

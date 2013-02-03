@@ -5,7 +5,6 @@
 	<persistence-unit-metadata>
 		<persistence-unit-defaults>
 			<access>PROPERTY</access>
-			<cascade-persist/>
 		</persistence-unit-defaults>
 	</persistence-unit-metadata>
 	<entity class="com.tramex.sisoprega.dto.Rancher">
@@ -446,7 +445,7 @@
 		<named-query name="RECEPTIONS_BY_RANCHER_ID">
 			<description>Retrieves all reception records from database by rancher ID</description>
 			<query>SELECT rec FROM Reception rec WHERE rec.rancherId=:rancherID</query>
-		</named-query>		
+		</named-query>
 		<attributes>
 			<id name="receptionId">
 				<column name="reception_id" />
@@ -824,6 +823,10 @@
 			<basic name="user_name">
 				<column name="user_name"/>
 			</basic>
+			<one-to-many name="receptions">
+				<join-column name="rancher_id" referenced-column-name="rancher_id"  />
+				<cascade><cascade-all/></cascade>
+			</one-to-many>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.identity.dto.User">
@@ -834,24 +837,25 @@
 		</named-query>
 		<attributes>
 			<id name="userName">
-				<column name="user_name"/>
+				<column name="user_name"/>	
 			</id>
 			<basic name="password">
 				<column name="user_password"/>
 			</basic>
-			<one-to-many name="groups" target-entity="com.tramex.sisoprega.identity.dto.Role" mapped-by="user"/>
+			<one-to-many name="groups">
+				<join-column name="user_name" referenced-column-name="user_name"/>
+				<cascade> 
+					<cascade-all />
+				</cascade>
+			</one-to-many>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.identity.dto.Role">
 		<table name="sys_sisoprega_role"/>
 		<attributes>
-			<id name="recordId">
-				<column name="record_id"/>
+			<id name="record_id">
 				<generated-value strategy="IDENTITY"/>
 			</id>
-			<many-to-one name="user" fetch="LAZY" >
-				<join-column name="user_name"/>
-			</many-to-one>
 		</attributes>
 	</entity>
 </entity-mappings>

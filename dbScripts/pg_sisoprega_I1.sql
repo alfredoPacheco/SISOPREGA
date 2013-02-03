@@ -19,6 +19,7 @@
  * 01/29/2013  Diego Torres                  Add rancher user.
  * 01/29/2013  Alfredo Pacheco               Index rancher_id removed from cat_rancher_invoice.
  * 02/01/2013  Alfredo Pacheco               cat_rancher_invoice.rancher_id now references cat_rancher.rancher_id
+ * 02/02/2013  Diego Torres                  sys_sisoprega_role.record_id provides a unique id for data model.
  * ====================================================================================
  * 
  * Author: Diego Torres

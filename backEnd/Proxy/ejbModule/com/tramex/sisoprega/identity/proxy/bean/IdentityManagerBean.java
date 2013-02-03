@@ -93,10 +93,11 @@ public class IdentityManagerBean extends BaseBean implements RemoteIdentity {
   @Override
   public void addGroup(String userName, String groupName) throws IdentityManagerException {
     User user = getUserFromName(userName);
-    Role newRole = new Role();
-    newRole.setRole_name(groupName);
-    newRole.setUser(user);
-    user.getGroups().add(newRole);
+    Role newGroup = new Role();
+    newGroup.setRole_name(groupName);
+    newGroup.setUser_name(userName);
+    if(!user.getGroups().contains(groupName))
+      user.getGroups().add(newGroup);
     
     dataModel.updateDataModel(user);
     
@@ -112,10 +113,9 @@ public class IdentityManagerBean extends BaseBean implements RemoteIdentity {
   @Override
   public void removeGroup(String userName, String groupName) throws IdentityManagerException {
     User user = getUserFromName(userName);
-    Role newRole = new Role();
-    newRole.setRole_name(groupName);
-    newRole.setUser(user);
-    user.getGroups().remove(newRole);
+    
+    if(user.getGroups().contains(groupName))
+        user.getGroups().remove(groupName);
     
     dataModel.updateDataModel(user);
   }
