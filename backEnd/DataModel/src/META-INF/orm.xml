@@ -825,7 +825,9 @@
 			</basic>
 			<one-to-many name="receptions">
 				<join-column name="rancher_id" referenced-column-name="rancher_id"  />
-				<cascade><cascade-all/></cascade>
+				<cascade>
+					<cascade-all/>
+				</cascade>
 			</one-to-many>
 		</attributes>
 	</entity>

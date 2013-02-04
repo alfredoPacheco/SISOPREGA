@@ -140,7 +140,7 @@ public class ReceptionBean extends BaseBean implements Cruddable {
           queryName = "RECEPTIONS_BY_RANCHER_ID";
           parameters.put("rancherID", reception.getRancherId());
           qryLogger = "By rancherID [" + reception.getRancherId() + "]";    	  
-      }else {
+      } else {
         queryName = "ALL_RECEPTIONS";
         qryLogger = "By ALL_RECEPTIONS";
       }

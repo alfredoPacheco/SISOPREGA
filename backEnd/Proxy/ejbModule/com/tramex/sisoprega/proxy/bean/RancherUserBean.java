@@ -29,6 +29,7 @@ import com.tramex.sisoprega.common.ReadGatewayResponse;
 import com.tramex.sisoprega.common.UpdateGatewayResponse;
 import com.tramex.sisoprega.common.crud.Cruddable;
 import com.tramex.sisoprega.dto.RancherUser;
+import com.tramex.sisoprega.identity.dto.User;
 
 /**
  * This proxy knows the logic to evaluate Rancher's User information and
@@ -43,6 +44,7 @@ import com.tramex.sisoprega.dto.RancherUser;
  * MM/DD/YYYY
  * ----------  ---------------------------  -------------------------------------------
  * 01/29/2013  Diego Torres                 Initial Version.
+ * 02/03/2013  Diego Torres                 User user name instead of recordId to delete rancher users.
  * ====================================================================================
  * </PRE>
  * 
@@ -212,15 +214,28 @@ public class RancherUserBean extends BaseBean implements Cruddable {
     BaseResponse response = new BaseResponse();
 
     try {
-      RancherUser user = entityFromRequest(request, RancherUser.class);
-      if (user.getRecordId() == 0) {
+      RancherUser rancherUser = entityFromRequest(request, RancherUser.class);
+      if (rancherUser.getUser_name() == null || rancherUser.getUser_name().equals("")) {
         this.log.warning("VAL04 - Entity ID Omission.");
         response.setError(new Error("VAL04", "Se ha omitido el id del registro de usuario de ganadero al intentar eliminarlo.",
             "proxy.RancherUser.Delete"));
       } else {
-        user = dataModel.readSingleDataModel("RANCHER_USER_BY_RECORD_ID", "recordId", user.getRecordId(), RancherUser.class);
-        this.log.info("Deleting RancherUser [" + user.toString() + "] by principal[" + getLoggedUser() + "]");
-        dataModel.deleteDataModel(user, getLoggedUser());
+        Map<String, Object> parameters = new HashMap<String, Object>();
+        parameters.put("userName", rancherUser.getUser_name());
+        
+        // Check that user being removed is a rancher user
+        List<RancherUser> rancherUsers = dataModel.readDataModelList("RANCHER_USER_BY_USER_NAME", parameters, RancherUser.class);
+        if(!rancherUsers.isEmpty()){ // rancher user
+          List<User> users = dataModel.readDataModelList("USER_BY_NAME", parameters, User.class);
+          
+          if(!users.isEmpty()){ // User located, delete
+            User user = users.get(0);
+            this.log.info("Deleting RancherUser [" + rancherUser.toString() + "] by principal[" + getLoggedUser() + "]");
+            dataModel.deleteDataModel(user, getLoggedUser());
+          }
+        }else{ // not a rancher user
+          log.severe("User deletion trial by RancherUserBean by " + getLoggedUser());
+        }
         response.setError(new Error("0", "SUCCESS", "proxy.RancherUser.Delete"));
       }
     } catch (Exception e) {

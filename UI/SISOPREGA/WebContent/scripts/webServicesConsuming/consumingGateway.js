@@ -23,370 +23,444 @@
  * ----------  ---------------------------  -------------------------------------------
  *             Alfredo Pacheco              Initial Version
  * 11/28/2012  Diego Torres                 Adding login & logout, setting sessionToken.
+ * 02/03/2013  Diego Torres                 Adding operations for password reset.
  * ====================================================================================
  */
 
-var cConsumingGateway = {
+var cConsumingGateway =
+  {
 
-	SendMessage : function(rancher_id, message){
-		var result = 'OK';
-		var soapMessage = soapHeader + '<ws:SendSimpleMessage>';
-		soapMessage += '<rancherId>' + rancher_id + '</rancherId><message>' + message + '</message>';
-		soapMessage += '</ws:SendSimpleMessage>';
-		soapMessage += soapFooter;
-		
-//		jQuery.ajax({
-//			url : gatewayWsURL,
-//			type : "POST",
-//			dataType : "xml",
-//			data : soapMessage,
-//			processData : false,
-//			contentType : "text/xml;charset=UTF-8",
-//			async : false,
-//			success : function OnSuccess(data) {					
-//				result = jQuery(data).find("response").text();
-//			},
-//			error : function OnError(request, status, error) {
-//				result = 'Error al llamar el servicio web.';
-//				alert(error);
-//			}
-//		});
-		
-		return result;
-	},
-	SendReport : function(rancher_id, reportName){
-		var result = 'OK';
-		var soapMessage = soapHeader + '<ws:SendReport>';
-		soapMessage += '<rancherId>' + rancher_id + '</rancherId><reportName>' + reportName + '</reportName>';
-		soapMessage += '</ws:SendReport>';
-		soapMessage += soapFooter;
-		
-//		jQuery.ajax({
-//			url : gatewayWsURL,
-//			type : "POST",
-//			dataType : "xml",
-//			data : soapMessage,
-//			processData : false,
-//			contentType : "text/xml;charset=UTF-8",
-//			async : false,
-//			success : function OnSuccess(data) {					
-//				result = jQuery(data).find("response").text();
-//			},
-//			error : function OnError(request, status, error) {
-//				result = 'Error al llamar el servicio web.';
-//				alert(result + ': ' + error);
-//			}
-//		});
-		
-		return result;
-	},
-	Login : function(userId, password) {
-		// Se crea objeto que devolvera la funcion:
-		output = {
-			exceptionDescription : "Success",
-			exceptionId : 0			
-		};
+    SendMessage : function(rancher_id, message) {
+      var result = 'OK';
+      var soapMessage = soapHeader + '<ws:SendSimpleMessage>';
+      soapMessage += '<rancherId>' + rancher_id + '</rancherId><message>' + message + '</message>';
+      soapMessage += '</ws:SendSimpleMessage>';
+      soapMessage += soapFooter;
 
-		// SOAP Message:
-		var soapMessage = soapHeader + '<ws:Login>';
-		soapMessage += '<userName>' + userId + '</userName><password>' + password + '</password>';
-		soapMessage += '</ws:Login>';
-		soapMessage += soapFooter;
+      //		jQuery.ajax({
+      //			url : gatewayWsURL,
+      //			type : "POST",
+      //			dataType : "xml",
+      //			data : soapMessage,
+      //			processData : false,
+      //			contentType : "text/xml;charset=UTF-8",
+      //			async : false,
+      //			success : function OnSuccess(data) {					
+      //				result = jQuery(data).find("response").text();
+      //			},
+      //			error : function OnError(request, status, error) {
+      //				result = 'Error al llamar el servicio web.';
+      //				alert(error);
+      //			}
+      //		});
 
-		// Ajax request:
-		jQuery.ajax({
-			url : gatewayWsURL,
-			type : "POST",
-			dataType : "xml",
-			data : soapMessage,
-			processData : false,
-			contentType : "text/xml;charset=UTF-8",
-			async : false,
-			success : function OnSuccess(data) {					
-				output.exceptionDescription = jQuery(data).find(
-				"exceptionDescription").text();
-				output.exceptionId = jQuery(data).find("exceptionId").text();				
-			},
-			error : function OnError(request, status, error) {
-				output.exceptionId = 1;
-				output.exceptionDescription = error;
-				alert(output.exceptionDescription);
-				consumingGateway.LogOut();
-			}
-		});
-		return output;
-	},
-	Create : function(entityName, entity) {		
-		// Se crea objeto que devolvera la funcion:
-		output = {
-			exceptionDescription : "Success",
-			exceptionId : 0,
-			origin : "",
-			generatedId : ""
-		};
+      return result;
+    },
+    SendReport : function(rancher_id, reportName) {
+      var result = 'OK';
+      var soapMessage = soapHeader + '<ws:SendReport>';
+      soapMessage += '<rancherId>' + rancher_id + '</rancherId><reportName>' + reportName + '</reportName>';
+      soapMessage += '</ws:SendReport>';
+      soapMessage += soapFooter;
 
-		// SOAP Message:
-		var soapMessage = soapHeader + '<ws:Create>';
-		soapMessage += '<entityName>' + entityName + '</entityName>';
+      //		jQuery.ajax({
+      //			url : gatewayWsURL,
+      //			type : "POST",
+      //			dataType : "xml",
+      //			data : soapMessage,
+      //			processData : false,
+      //			contentType : "text/xml;charset=UTF-8",
+      //			async : false,
+      //			success : function OnSuccess(data) {					
+      //				result = jQuery(data).find("response").text();
+      //			},
+      //			error : function OnError(request, status, error) {
+      //				result = 'Error al llamar el servicio web.';
+      //				alert(result + ': ' + error);
+      //			}
+      //		});
 
-		jQuery.each(entity, function(key, value) {
-			soapMessage += '<field>';
-			soapMessage += '<name>' + key + '</name>';
-			soapMessage += '<value>' + value + '</value>';
-			soapMessage += '</field>';
-		});
+      return result;
+    },
+    Login : function(userId, password) {
+      // Se crea objeto que devolvera la funcion:
+      output =
+        {
+          exceptionDescription : "Success",
+          exceptionId : 0
+        };
 
-		soapMessage += '</ws:Create>' + soapFooter;
+      // SOAP Message:
+      var soapMessage = soapHeader + '<ws:Login>';
+      soapMessage += '<userName>' + userId + '</userName><password>' + password + '</password>';
+      soapMessage += '</ws:Login>';
+      soapMessage += soapFooter;
 
-		// Ajax request:
-		jQuery.ajax({
-			url : gatewayWsURL,
-			type : "POST",
-			dataType : "xml",
-			data : soapMessage,
-			processData : false,
-			contentType : "text/xml;charset=UTF-8",
-			async : false,
-			success : function OnSuccess(data) {
-				output.exceptionDescription = jQuery(data).find(
-						"exceptionDescription").text();
-				output.exceptionId = jQuery(data).find("exceptionId").text();
-				if (output.exceptionId == "GW01"){
-					alert(output.exceptionDescription);
-					consumingGateway.LogOut();
-				}
-				output.origin = jQuery(data).find("origin").text();
-				if (output.exceptionId == 0) {
-					output.generatedId = jQuery(data).find("generatedId").text();
-				}
-			},
-			error : function OnError(request, status, error) {
-				output.exceptionId = 1;
-				output.exceptionDescription = error + ' :' + status;
-				alert(output.exceptionDescription);
-				consumingGateway.LogOut();
-			}
-		});
-		return output;
-	},
+      // Ajax request:
+      jQuery.ajax(
+        {
+          url : gatewayWsURL,
+          type : "POST",
+          dataType : "xml",
+          data : soapMessage,
+          processData : false,
+          contentType : "text/xml;charset=UTF-8",
+          async : false,
+          success : function OnSuccess(data) {
+            output.exceptionDescription = jQuery(data).find("exceptionDescription").text();
+            output.exceptionId = jQuery(data).find("exceptionId").text();
+          },
+          error : function OnError(request, status, error) {
+            output.exceptionId = 1;
+            output.exceptionDescription = error;
+            alert(output.exceptionDescription);
+            consumingGateway.LogOut();
+          }
+        });
+      return output;
+    },
+    Create : function(entityName, entity) {
+      // Se crea objeto que devolvera la funcion:
+      output =
+        {
+          exceptionDescription : "Success",
+          exceptionId : 0,
+          origin : "",
+          generatedId : ""
+        };
 
-	Read : function(entityName, entity) {
-		// Se crea objeto que devolvera la funcion:
-		output = {
-			exceptionDescription : "Success",
-			exceptionId : 0,
-			origin : "",
-			entityName : "",
-			records : []
-		};
+      // SOAP Message:
+      var soapMessage = soapHeader + '<ws:Create>';
+      soapMessage += '<entityName>' + entityName + '</entityName>';
 
-		// SOAP Message:
-		var soapMessage = soapHeader + '<ws:Read>';
-		soapMessage += '<entityName>' + entityName + '</entityName>';
+      jQuery.each(entity, function(key, value) {
+        soapMessage += '<field>';
+        soapMessage += '<name>' + key + '</name>';
+        soapMessage += '<value>' + value + '</value>';
+        soapMessage += '</field>';
+      });
 
-		jQuery.each(entity, function(key, value) {
-			soapMessage += '<field>';
-			soapMessage += '<name>' + key + '</name>';
-			soapMessage += '<value>' + value + '</value>';
-			soapMessage += '</field>';
-		});
+      soapMessage += '</ws:Create>' + soapFooter;
 
-		soapMessage += '</ws:Read>' + soapFooter;
+      // Ajax request:
+      jQuery.ajax(
+        {
+          url : gatewayWsURL,
+          type : "POST",
+          dataType : "xml",
+          data : soapMessage,
+          processData : false,
+          contentType : "text/xml;charset=UTF-8",
+          async : false,
+          success : function OnSuccess(data) {
+            output.exceptionDescription = jQuery(data).find("exceptionDescription").text();
+            output.exceptionId = jQuery(data).find("exceptionId").text();
+            if (output.exceptionId == "GW01") {
+              alert(output.exceptionDescription);
+              consumingGateway.LogOut();
+            }
+            output.origin = jQuery(data).find("origin").text();
+            if (output.exceptionId == 0) {
+              output.generatedId = jQuery(data).find("generatedId").text();
+            }
+          },
+          error : function OnError(request, status, error) {
+            output.exceptionId = 1;
+            output.exceptionDescription = error + ' :' + status;
+            alert(output.exceptionDescription);
+            consumingGateway.LogOut();
+          }
+        });
+      return output;
+    },
 
-		// Ajax request:
-		jQuery.ajax({
-			url : gatewayWsURL,
-			type : "POST",
-			dataType : "xml",
-			data : soapMessage,
-			processData : false,
-			contentType : "text/xml;charset=UTF-8",
-			async : false,
-			success : function OnSuccess(data) {
+    Read : function(entityName, entity) {
+      // Se crea objeto que devolvera la funcion:
+      output =
+        {
+          exceptionDescription : "Success",
+          exceptionId : 0,
+          origin : "",
+          entityName : "",
+          records : []
+        };
 
-				output.exceptionDescription = jQuery(data).find(
-						"exceptionDescription").text();
-				output.exceptionId = jQuery(data).find("exceptionId").text();
-				if (output.exceptionId == "GW01"){
-					alert(output.exceptionDescription);
-					consumingGateway.LogOut();
-				}
-				output.origin = jQuery(data).find("origin").text();
+      // SOAP Message:
+      var soapMessage = soapHeader + '<ws:Read>';
+      soapMessage += '<entityName>' + entityName + '</entityName>';
 
-				if (output.exceptionId == 0) {
-					output.entityName = jQuery(data).find("entityName").text();
+      jQuery.each(entity, function(key, value) {
+        soapMessage += '<field>';
+        soapMessage += '<name>' + key + '</name>';
+        soapMessage += '<value>' + value + '</value>';
+        soapMessage += '</field>';
+      });
 
-					jQuery(data).find("record").each(function() {
-						var record = new Object();
-						jQuery(this).find("fields").each(function() {
-							var vName = jQuery(this).find('name').text();
-							var vValue = jQuery(this).find('value').text();
-							record[vName] = vValue;
-						});
-						output.records.push(record);
-					});
-				}
-			},
-			error : function OnError(request, status, error) {
-				output.exceptionId = 1;
-				output.exceptionDescription = error;
-				alert(output.exceptionDescription);
-				consumingGateway.LogOut();
-			}
-		});
-		return output;
-	},
+      soapMessage += '</ws:Read>' + soapFooter;
 
-	Update : function(entityName, entity) {
-		// Se crea objeto que devolvera la funcion:
-		output = {
-			exceptionDescription : "Success",
-			exceptionId : 0,
-			origin : "",
-			entityName : "",
-			record : {}
-		};
+      // Ajax request:
+      jQuery.ajax(
+        {
+          url : gatewayWsURL,
+          type : "POST",
+          dataType : "xml",
+          data : soapMessage,
+          processData : false,
+          contentType : "text/xml;charset=UTF-8",
+          async : false,
+          success : function OnSuccess(data) {
 
-		// SOAP Message:
-		var soapMessage = soapHeader + '<ws:Update>';
-		soapMessage += '<entityName>' + entityName + '</entityName>';
+            output.exceptionDescription = jQuery(data).find("exceptionDescription").text();
+            output.exceptionId = jQuery(data).find("exceptionId").text();
+            if (output.exceptionId == "GW01") {
+              alert(output.exceptionDescription);
+              consumingGateway.LogOut();
+            }
+            output.origin = jQuery(data).find("origin").text();
 
-		jQuery.each(entity, function(key, value) {
-			soapMessage += '<field>';
-			soapMessage += '<name>' + key + '</name>';
-			soapMessage += '<value>' + value + '</value>';
-			soapMessage += '</field>';
-		});
+            if (output.exceptionId == 0) {
+              output.entityName = jQuery(data).find("entityName").text();
 
-		soapMessage += '</ws:Update>' + soapFooter;
+              jQuery(data).find("record").each(function() {
+                var record = new Object();
+                jQuery(this).find("fields").each(function() {
+                  var vName = jQuery(this).find('name').text();
+                  var vValue = jQuery(this).find('value').text();
+                  record[vName] = vValue;
+                });
+                output.records.push(record);
+              });
+            }
+          },
+          error : function OnError(request, status, error) {
+            output.exceptionId = 1;
+            output.exceptionDescription = error;
+            alert(output.exceptionDescription);
+            consumingGateway.LogOut();
+          }
+        });
+      return output;
+    },
 
-		// Ajax request:
-		jQuery.ajax({
-			url : gatewayWsURL,
-			type : "POST",
-			dataType : "xml",
-			data : soapMessage,
-			processData : false,
-			contentType : "text/xml;charset=UTF-8",
-			async : false,
-			success : function OnSuccess(data) {
-				output.exceptionDescription = jQuery(data).find(
-						"exceptionDescription").text();
-				output.exceptionId = jQuery(data).find("exceptionId").text();
-				if (output.exceptionId == "GW01"){
-					alert(output.exceptionDescription);
-					consumingGateway.LogOut();
-				}
-				output.origin = jQuery(data).find("origin").text();
+    Update : function(entityName, entity) {
+      // Se crea objeto que devolvera la funcion:
+      output =
+        {
+          exceptionDescription : "Success",
+          exceptionId : 0,
+          origin : "",
+          entityName : "",
+          record : {}
+        };
 
-				if (output.exceptionId == 0) {
-					output.entityName = jQuery(data).find("entityName").text();
+      // SOAP Message:
+      var soapMessage = soapHeader + '<ws:Update>';
+      soapMessage += '<entityName>' + entityName + '</entityName>';
 
-					var vRecord = new Object();
-					jQuery(data).find("fields").each(function() {
-						var vName = jQuery(this).find('name').text();
-						var vValue = jQuery(this).find('value').text();
-						vRecord[vName] = vValue;
-					});
-					output.record = vRecord;
-				}
+      jQuery.each(entity, function(key, value) {
+        soapMessage += '<field>';
+        soapMessage += '<name>' + key + '</name>';
+        soapMessage += '<value>' + value + '</value>';
+        soapMessage += '</field>';
+      });
 
-			},
-			error : function OnError(request, status, error) {
-				output.exceptionId = 1;
-				output.exceptionDescription = error;
-				alert(output.exceptionDescription);
-				consumingGateway.LogOut();
-			}
-		});
-		return output;
-	},
+      soapMessage += '</ws:Update>' + soapFooter;
 
-	Delete : function(entityName, entity) {
-		// Se crea objeto que devolvera la funcion:
-		output = {
-			exceptionDescription : "Success",
-			exceptionId : 0,
-			origin : "",
-		};
+      // Ajax request:
+      jQuery.ajax(
+        {
+          url : gatewayWsURL,
+          type : "POST",
+          dataType : "xml",
+          data : soapMessage,
+          processData : false,
+          contentType : "text/xml;charset=UTF-8",
+          async : false,
+          success : function OnSuccess(data) {
+            output.exceptionDescription = jQuery(data).find("exceptionDescription").text();
+            output.exceptionId = jQuery(data).find("exceptionId").text();
+            if (output.exceptionId == "GW01") {
+              alert(output.exceptionDescription);
+              consumingGateway.LogOut();
+            }
+            output.origin = jQuery(data).find("origin").text();
 
-		// SOAP Message:
-		var soapMessage = soapHeader + '<ws:Delete>';
-		soapMessage += '<entityName>' + entityName + '</entityName>';
+            if (output.exceptionId == 0) {
+              output.entityName = jQuery(data).find("entityName").text();
 
-		jQuery.each(entity, function(key, value) {
-			soapMessage += '<field>';
-			soapMessage += '<name>' + key + '</name>';
-			soapMessage += '<value>' + value + '</value>';
-			soapMessage += '</field>';
-		});
+              var vRecord = new Object();
+              jQuery(data).find("fields").each(function() {
+                var vName = jQuery(this).find('name').text();
+                var vValue = jQuery(this).find('value').text();
+                vRecord[vName] = vValue;
+              });
+              output.record = vRecord;
+            }
 
-		soapMessage += '</ws:Delete>' + soapFooter;
+          },
+          error : function OnError(request, status, error) {
+            output.exceptionId = 1;
+            output.exceptionDescription = error;
+            alert(output.exceptionDescription);
+            consumingGateway.LogOut();
+          }
+        });
+      return output;
+    },
 
-		// Ajax request:
-		jQuery.ajax({
-			url : gatewayWsURL,
-			type : "POST",
-			dataType : "xml",
-			data : soapMessage,
-			processData : false,
-			contentType : "text/xml;charset=UTF-8",
-			async : false,
-			success : function OnSuccess(data) {
-				output.exceptionDescription = jQuery(data).find(
-						"exceptionDescription").text();
-				output.exceptionId = jQuery(data).find("exceptionId").text();
-				if (output.exceptionId == "GW01"){
-					alert(output.exceptionDescription);
-					consumingGateway.LogOut();
-				}
-				output.origin = jQuery(data).find("origin").text();
-			},
-			error : function OnError(request, status, error) {
-				output.exceptionId = 1;
-				output.exceptionDescription = error;
-				alert(output.exceptionDescription);
-				consumingGateway.LogOut();
-			}
-		});
-		return output;
-	},
-	
-	LogOut : function() {
-		// Se crea objeto que devolvera la funcion:
-		output = {
-			result : "",
-			exceptionDescription : "Success",
-			exceptionId : 0,
-		};
-		
-		// SOAP Message:
-		var soapMessage = soapHeader + '<ws:Logout/>' + soapFooter;
+    Delete : function(entityName, entity) {
+      // Se crea objeto que devolvera la funcion:
+      output =
+        {
+          exceptionDescription : "Success",
+          exceptionId : 0,
+          origin : "",
+        };
 
-		// Ajax request:
-		jQuery.ajax({
-			url : gatewayWsURL,
-			type : "POST",
-			dataType : "xml",
-			data : soapMessage,
-			processData : false,
-			contentType : "text/xml;charset=UTF-8",
-			async : false,
-			success : function OnSuccess(data) {
-				output.result = jQuery(data).find("return").text();
-			},
-			error : function OnError(request, status, error) {
-				output.exceptionId = 1;
-				output.exceptionDescription = error;
-				alert(output.exceptionDescription);
-				
-			}
-		});
-		enyo.$.sisoprega.destroy();
-		window.location = './'; 
-		return output;
-	}
+      // SOAP Message:
+      var soapMessage = soapHeader + '<ws:Delete>';
+      soapMessage += '<entityName>' + entityName + '</entityName>';
 
-};
+      jQuery.each(entity, function(key, value) {
+        soapMessage += '<field>';
+        soapMessage += '<name>' + key + '</name>';
+        soapMessage += '<value>' + value + '</value>';
+        soapMessage += '</field>';
+      });
+
+      soapMessage += '</ws:Delete>' + soapFooter;
+
+      // Ajax request:
+      jQuery.ajax(
+        {
+          url : gatewayWsURL,
+          type : "POST",
+          dataType : "xml",
+          data : soapMessage,
+          processData : false,
+          contentType : "text/xml;charset=UTF-8",
+          async : false,
+          success : function OnSuccess(data) {
+            output.exceptionDescription = jQuery(data).find("exceptionDescription").text();
+            output.exceptionId = jQuery(data).find("exceptionId").text();
+            if (output.exceptionId == "GW01") {
+              alert(output.exceptionDescription);
+              consumingGateway.LogOut();
+            }
+            output.origin = jQuery(data).find("origin").text();
+          },
+          error : function OnError(request, status, error) {
+            output.exceptionId = 1;
+            output.exceptionDescription = error;
+            alert(output.exceptionDescription);
+            consumingGateway.LogOut();
+          }
+        });
+      return output;
+    },
+
+    LogOut : function() {
+      // Se crea objeto que devolvera la funcion:
+      output =
+        {
+          result : "",
+          exceptionDescription : "Success",
+          exceptionId : 0,
+        };
+
+      // SOAP Message:
+      var soapMessage = soapHeader + '<ws:Logout/>' + soapFooter;
+
+      // Ajax request:
+      jQuery.ajax(
+        {
+          url : gatewayWsURL,
+          type : "POST",
+          dataType : "xml",
+          data : soapMessage,
+          processData : false,
+          contentType : "text/xml;charset=UTF-8",
+          async : false,
+          success : function OnSuccess(data) {
+            output.result = jQuery(data).find("return").text();
+          },
+          error : function OnError(request, status, error) {
+            output.exceptionId = 1;
+            output.exceptionDescription = error;
+            alert(output.exceptionDescription);
+
+          }
+        });
+      enyo.$.sisoprega.destroy();
+      window.location = './';
+      return output;
+    },
+
+    ResetPassword : function(userName, password) {
+      output = "OK";
+
+      var soapMessage = soapHeader + '<ws:ResetPassword>';
+      soapMessage += '<user_name>' + userName + '</user_name>';
+      soapMessage += '<password>' + userName + '</password>';
+      soapMessage += '</ws:ResetPassword>';
+      soapMessage += soapFooter;
+
+      jQuery.ajax({
+        url : identityWsURL,
+        type : "POST",
+        dataType : "xml",
+        data: soapMessage,
+        processData: false,
+        contentType : "text/xml;charset=UTF-8",
+        async : false,
+        success : function OnSuccess(data) {
+          output = jQuery(data).find("return").text();
+        },
+        error : function OnError(request, status, error) {
+          alert('No fue posible volver a asignar contraseña para el usuario ' + userName);
+        }
+      });
+      return output;
+    },
+    AddUser : function(objUser){
+      output = "OK";
+
+      var soapMessage = soapHeader + '<ws:CreateUser>';
+      soapMessage += '<user>';
+      soapMessage += '<userName>' + objUser.user_name + '</userName>';
+      soapMessage += '<password>' + objUser.password + '</password>';
+      
+      for(index in objUser.groups){
+        var group = objUser.groups[index];
+        soapMessage += '<groups>';
+        soapMessage += '<record_id>0</record_id>';
+        soapMessage += '<role_name>' + group.role_name + '</role_name>';
+        soapMessage += '<user_name>' + objUser.user_name + '</user_name>';
+        soapMessage += '</groups>';
+      }
+      
+      soapMessage += '</user>';
+      soapMessage += '</ws:CreateUser>';
+      soapMessage += soapFooter;
+
+      jQuery.ajax({
+        url : identityWsURL,
+        type : "POST",
+        dataType : "xml",
+        data: soapMessage,
+        processData: false,
+        contentType : "text/xml;charset=UTF-8",
+        async : false,
+        success : function OnSuccess(data) {
+          output = jQuery(data).find("return").text();
+        },
+        error : function OnError(request, status, error) {
+          alert('No fue posible crear el usuario ' + objUser.user_name);
+        }
+      });
+      return output;
+    }
+
+  };
 
 var consumingGateway = cConsumingGateway;
