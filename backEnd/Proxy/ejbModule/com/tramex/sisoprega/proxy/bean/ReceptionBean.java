@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.security.DeclareRoles;
 import javax.ejb.Stateless;
 
 import com.tramex.sisoprega.common.BaseResponse;
@@ -29,6 +30,7 @@ import com.tramex.sisoprega.common.GatewayRequest;
 import com.tramex.sisoprega.common.ReadGatewayResponse;
 import com.tramex.sisoprega.common.UpdateGatewayResponse;
 import com.tramex.sisoprega.common.crud.Cruddable;
+import com.tramex.sisoprega.dto.RancherUser;
 import com.tramex.sisoprega.dto.Reception;
 
 /**
@@ -53,6 +55,7 @@ import com.tramex.sisoprega.dto.Reception;
  * 
  */
 @Stateless
+@DeclareRoles({"sisoprega_admin", "mx_usr", "rancher"})
 public class ReceptionBean extends BaseBean implements Cruddable {
   
   /*
@@ -126,7 +129,10 @@ public class ReceptionBean extends BaseBean implements Cruddable {
       Map<String, Object> parameters = new HashMap<String, Object>();
       String queryName = "";
       
-      if (reception.getReceptionId() != 0) {
+      if(ejbContext.isCallerInRole("rancher")){
+        log.exiting(this.getClass().getCanonicalName(), "Read");
+        return readLoggedRancherReceptions(request.getEntityName());
+      } else if (reception.getReceptionId() != 0) {
         queryName = "CRT_RECEPTION_BY_ID";
         parameters.put("receptionId", reception.getReceptionId());
         qryLogger = "By receptionId [" + reception.getReceptionId() + "]";
@@ -244,6 +250,37 @@ public class ReceptionBean extends BaseBean implements Cruddable {
     }
 
     log.exiting(this.getClass().getCanonicalName(), "Delete");
+    return response;
+  }
+  
+  private ReadGatewayResponse readLoggedRancherReceptions(String entityName) throws IllegalArgumentException, IllegalAccessException{
+    log.entering(this.getClass().getCanonicalName(), "readLoggedRancherReceptions");
+
+    ReadGatewayResponse response = new ReadGatewayResponse();
+    response.setEntityName(entityName);
+    
+    Map<String, Object> parameters = new HashMap<String, Object>();
+    parameters.put("userName", getLoggedUser());
+    
+    List<RancherUser> ranchers = dataModel.readDataModelList("RANCHER_USER_BY_USER_NAME", parameters, RancherUser.class);
+    
+    if(!ranchers.isEmpty()){
+      RancherUser loggedRancher = ranchers.get(0);
+      
+      List<Reception> queryResults = loggedRancher.getReceptions();
+      if (queryResults.isEmpty()) {
+        response.setError(new Error("VAL02", "No se encontraron datos para el filtro seleccionado", "proxy.Reception.Read"));
+      } else {
+        response.getRecord().addAll(contentFromList(queryResults, Reception.class));
+
+        response.setError(new Error("0", "SUCCESS", "proxy.Reception.Read"));
+        log.info("Read operation RECEPTIONS BY LOGGED RANCHER executed by principal[" + getLoggedUser() + "] on ReceptionBean");
+      }
+    } else {
+      response.setError(new Error("VAL02", "No se encontraron datos para el filtro seleccionado", "proxy.Reception.Read"));
+    }
+    
+    log.exiting(this.getClass().getCanonicalName(), "readLoggedRancherReceptions");
     return response;
   }
 

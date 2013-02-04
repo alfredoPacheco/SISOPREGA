@@ -15,6 +15,8 @@
  */
 package com.tramex.sisoprega.gateway.ws;
 
+import java.util.logging.Logger;
+
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
@@ -45,7 +47,9 @@ import com.tramex.sisoprega.identity.dto.User;
  * 
  */
 @WebService(serviceName = "IdentityService")
-public class IdentityGateway extends CommonGateway {
+public class IdentityGateway {
+  
+  protected Logger log = Logger.getLogger(IdentityGateway.class.getCanonicalName());
   
   /**
    * Creates a new user in database.
@@ -89,12 +93,28 @@ public class IdentityGateway extends CommonGateway {
     }
   }
   
-  public String addGroup(String userName, String groupName) throws IdentityManagerException{
+  /**
+   * Add the specified group to the given user
+   * @param userName
+   * @param groupName
+   * @return
+   * @throws IdentityManagerException
+   */
+  @WebMethod(operationName = "AddGroup")
+  public String addGroup(@WebParam(name = "user_name") String userName, @WebParam(name = "group_name") String groupName) throws IdentityManagerException{
     getIdentityManager().addGroup(userName, groupName);
     return "OK";
   }
-  
-  public String removeGroup(String userName, String groupName) throws IdentityManagerException{
+
+  /**
+   * Removes a specified group from a given user
+   * @param userName
+   * @param groupName
+   * @return
+   * @throws IdentityManagerException
+   */
+  @WebMethod(operationName = "RemoveGroup")
+  public String removeGroup(@WebParam(name = "user_name") String userName, @WebParam(name = "group_name") String groupName) throws IdentityManagerException{
     getIdentityManager().removeGroup(userName, groupName);
     return "OK";
   }

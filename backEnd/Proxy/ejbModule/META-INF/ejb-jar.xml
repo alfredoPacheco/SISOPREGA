@@ -125,6 +125,9 @@
 		<security-role>
 			<role-name>sisoprega_admin</role-name>
 		</security-role>
+		<security-role>
+			<role-name>rancher</role-name>
+		</security-role>
 		<method-permission>
 			<role-name>mx_usr</role-name>
 			<method>
@@ -277,6 +280,25 @@
 			<method>
 				<ejb-name>RancherUserProxy</ejb-name>
 				<method-name>*</method-name>
+			</method>
+		</method-permission>
+		<method-permission>
+			<role-name>rancher</role-name>
+			<method>
+				<ejb-name>ReceptionBarnyardProxy</ejb-name>
+				<method-name>Read</method-name>
+			</method>
+			<method>
+				<ejb-name>ReceptionHeadcountProxy</ejb-name>
+				<method-name>Read</method-name>
+			</method>
+			<method>
+				<ejb-name>ReceptionProxy</ejb-name>
+				<method-name>Read</method-name>
+			</method>
+			<method>
+				<ejb-name>RancherUserProxy</ejb-name>
+				<method-name>Read</method-name>
 			</method>
 		</method-permission>
 	</assembly-descriptor>
