@@ -45,5 +45,7 @@ enyo.depends(
 	"source/cache.inspection.forecast.js",
 	"source/controls.autocomplete.js",
 	"source/controls.mask.js",
-	"source/catalogs.ranchers.billing.list.js"
+	"source/catalogs.ranchers.billing.list.js",
+	"source/catalogs.ranchers.users.list.js",
+	"source/catalogs.ranchers.users.create.js"
 );

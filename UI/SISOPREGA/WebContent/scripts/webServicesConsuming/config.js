@@ -24,6 +24,7 @@
  * ----------  ---------------------------  -------------------------------------------
  * 11/28/2012  Diego Torres                 Initial Version.
  * 01/22/2013  Diego Torres                 Cross site errors fixed by not specifying server host.
+ * 02/03/2013  Diego Torres                 Identity gateway path.
  * ====================================================================================
  *
  */
@@ -31,6 +32,10 @@
 var serverHost = '';
 var gatewayApp_path = '/Gateway/GatewayService';
 var gatewayWsURL = serverHost + gatewayApp_path;
+
+var identityApp_path = '/Gateway/IdentityService';
+var identityWsURL = serverHost + identityApp_path; 
+
 var soapHeader = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="http://ws.gateway.sisoprega.tramex.com/">';
 	soapHeader += '<soapenv:Header/><soapenv:Body>';
 var soapFooter = '</soapenv:Body></soapenv:Envelope>';
