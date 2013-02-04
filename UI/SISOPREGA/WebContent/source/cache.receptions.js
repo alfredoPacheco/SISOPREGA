@@ -449,7 +449,6 @@ enyo.kind({
 			var today_sf = month + '/' + today.getDate() + '/' + today.getFullYear(); 
 			var report_name = 'RecibidoPorGanadero?rancherId=' + objRec.rancher_id + '&amp;fromDate=' + today_sf + '&amp;toDate=' + today_sf;
 			consumingGateway.SendReport(objRec.rancher_id, report_name);
-			
 			return true;
 		}
 		else{ //Error			

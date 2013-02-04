@@ -29,6 +29,7 @@
  *
  */
 
+
 var serverHost = '';
 var gatewayApp_path = '/Gateway/GatewayService';
 var gatewayWsURL = serverHost + gatewayApp_path;

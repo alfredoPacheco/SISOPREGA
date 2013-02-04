@@ -1,6 +1,6 @@
 /*
  * The database script is executed in mysql command line:
- * \. /path/to/sisoprega_I1.sql
+ * psql -d sisoprega -f /path/to/deploy/pg_sisoprega_I1.sql
  *
  * This script is intended to create only the necesary structure to accomplish iteration 1.
  * 
