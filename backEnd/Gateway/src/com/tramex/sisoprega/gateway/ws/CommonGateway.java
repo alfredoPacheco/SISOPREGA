@@ -10,12 +10,12 @@ import javax.xml.ws.handler.MessageContext;
 
 import com.sun.appserv.security.ProgrammaticLogin;
 
-public class CommonGateway {
+public abstract class CommonGateway {
 
   @Resource
   protected WebServiceContext wsContext;
 
-  protected Logger log = Logger.getLogger(OperationsGateway.class.getCanonicalName());
+  protected Logger log = Logger.getLogger(CommonGateway.class.getCanonicalName());
 
   protected final static String REALM_NAME = "security";
   
@@ -40,7 +40,9 @@ public class CommonGateway {
   }
 
   protected HttpSession getSession() {
-    MessageContext mc = wsContext.getMessageContext();
+	log.info("asignando message context");
+	log.info(wsContext.toString());
+    MessageContext mc = this.wsContext.getMessageContext();
     return ((javax.servlet.http.HttpServletRequest) mc.get(MessageContext.SERVLET_REQUEST)).getSession();
   }
 

@@ -16,14 +16,18 @@
 package com.tramex.sisoprega.gateway.ws;
 
 import java.util.List;
+import java.util.logging.Logger;
 
+import javax.annotation.Resource;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.servlet.http.HttpSession;
+import javax.xml.ws.WebServiceContext;
 import javax.xml.ws.WebServiceException;
+import javax.xml.ws.handler.MessageContext;
 
 import com.sun.appserv.security.ProgrammaticLogin;
 import com.tramex.sisoprega.common.BaseResponse;
@@ -59,8 +63,14 @@ import com.tramex.sisoprega.common.messenger.Messageable;
  * 
  */
 @WebService(serviceName = "GatewayService")
-public class OperationsGateway extends CommonGateway {
+public class OperationsGateway {
+	@Resource
+	  protected WebServiceContext wsContext;
+	
+	 protected Logger log = Logger.getLogger(OperationsGateway.class.getCanonicalName());
 
+	  protected final static String REALM_NAME = "security";
+	
   /**
    * 
    * Provides an interface to create entities.
@@ -501,5 +511,37 @@ public class OperationsGateway extends CommonGateway {
     }
     return crud;
   }
+  
+  protected String getSessionUserName() {
+	    HttpSession session = getSession();
+	    if (session == null)
+	      throw new WebServiceException("No session in WebServiceContext");
+
+	    return (String) session.getAttribute("userName");
+	  }
+
+	  protected String getSessionPassword() {
+	    HttpSession session = getSession();
+	    if (session == null)
+	      throw new WebServiceException("No session in WebServiceContext");
+
+	    return (String) session.getAttribute("password");
+	  }
+
+	  protected HttpSession getSession() {
+		log.info("asignando message context");
+		log.info(wsContext.toString());
+	    MessageContext mc = this.wsContext.getMessageContext();
+	    return ((javax.servlet.http.HttpServletRequest) mc.get(MessageContext.SERVLET_REQUEST)).getSession();
+	  }
+
+	  protected boolean logIn(ProgrammaticLogin pl) throws Exception {
+	    boolean propagateException = false;
+	    return pl.login(getSessionUserName(), getSessionPassword().toCharArray(), REALM_NAME, propagateException);
+	  }
+
+	  protected boolean logOut(ProgrammaticLogin pl) {
+	    return pl.logout();
+	  }
 
 }

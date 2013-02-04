@@ -49,7 +49,7 @@ enyo.kind({
 		]},					 		
 	],
 	ready:function(){
-		_objPopupHeader = enyo.$.sisoprega_mainMenu_receptionsMap_map_lblInfo;
+		_objPopupHeader = enyo.$.sisoprega_mainMenu_receptionsMap.$.lblInfo;
 	},
 	setupRow:function(inSender, inIndex){		
 		var objInspection;
