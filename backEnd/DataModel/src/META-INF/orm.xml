@@ -794,7 +794,7 @@
 				<column name="barnyard_id"/>
 			</basic>
 			<basic name="fdId">
-				<column name="forecast_id"/>
+				<column name="detail_id"/>
 			</basic>
 		</attributes>
 	</entity>
