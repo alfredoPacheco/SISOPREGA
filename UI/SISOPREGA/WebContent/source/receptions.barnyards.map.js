@@ -28,7 +28,7 @@ enyo.kind({
 			components:[
 				{name: "cells", kind: "VFlexBox",align:"center",pack:"center", onclick: "cellsClick"},
 			]},
-			{kind: "Popup",name: "popMan", showHideMode: "transition", openClassName: "zoomFadeIn",
+			{kind: "Popup",name: "popMan", dismissWithClick:false,showHideMode: "transition", openClassName: "zoomFadeIn",
 			 className: "transitioner2", layoutKind: "VFlexLayout",
 			 style: "overflow: hidden", width: "95%", height: "95%",scrim: true},
 			 
