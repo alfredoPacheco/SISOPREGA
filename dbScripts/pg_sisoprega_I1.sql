@@ -95,10 +95,10 @@ CREATE TABLE cat_enterprise_rancher(
   legal_name VARCHAR(100) NOT NULL,
   address_one VARCHAR(100),
   address_two VARCHAR(100),
-  city VARCHAR(80) NOT NULL,
-  address_state VARCHAR(80) NOT NULL,
-  zip_code VARCHAR(9) NOT NULL,
-  legal_id VARCHAR(13) NOT NULL,
+  city VARCHAR(80),
+  address_state VARCHAR(80),
+  zip_code VARCHAR(9),
+  legal_id VARCHAR(13),
   telephone VARCHAR(20),
   email VARCHAR(150)
 );
