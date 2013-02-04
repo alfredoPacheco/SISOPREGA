@@ -15,11 +15,11 @@
  */
 package com.tramex.sisoprega.proxy.bean;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.ejb.Stateless;
-import javax.persistence.NoResultException;
-import javax.persistence.TypedQuery;
 
 import com.tramex.sisoprega.common.BaseResponse;
 import com.tramex.sisoprega.common.CreateGatewayResponse;
@@ -46,6 +46,7 @@ import com.tramex.sisoprega.dto.RancherInvoice;
  * 11/09/2012  Diego Torres                 Initial Version.
  * 12/08/2012  Diego Torres                 Fixing standard error codes and validation.
  * 12/16/2012  Diego Torres                 Adding log activity
+ * 01/22/2013  Diego Torres                 Implementing DataModel.
  * ====================================================================================
  * </PRE>
  * 
@@ -60,7 +61,7 @@ public class RancherInvoiceBean extends BaseBean implements Cruddable {
    */
   @Override
   public CreateGatewayResponse Create(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Create");
+    this.log.entering(this.getClass().getCanonicalName(), "Create");
 
     CreateGatewayResponse response = new CreateGatewayResponse();
     RancherInvoice invoiceInfo = null;
@@ -68,25 +69,23 @@ public class RancherInvoiceBean extends BaseBean implements Cruddable {
     try {
       invoiceInfo = entityFromRequest(request, RancherInvoice.class);
 
-      log.fine("Received rancherInvoice in request:{" + invoiceInfo + "}");
+      this.log.fine("Received rancherInvoice in request:{" + invoiceInfo + "}");
 
       if (validateEntity(invoiceInfo)) {
-        log.finer("rancherInvoice successfully validated");
-        em.persist(invoiceInfo);
-        log.finer("rancherInvoice persisted on database");
-        em.flush();
+        this.log.finer("rancherInvoice successfully validated");
+        dataModel.createDataModel(invoiceInfo);
 
         String sId = String.valueOf(invoiceInfo.getRancherInvoiceId());
         response.setGeneratedId(sId);
         response.setError(new Error("0", "SUCCESS", "proxy.RancherInvoice.Create"));
-        log.info("Rancher Invoice [" + invoiceInfo.toString() + "] created by principal[" + getLoggedUser() + "]");
+        this.log.info("Rancher Invoice [" + invoiceInfo.toString() + "] created by principal[" + getLoggedUser() + "]");
       } else {
-        log.warning("Validation error:" + error_description);
+        this.log.warning("Validation error:" + error_description);
         response.setError(new Error("VAL01", "Error de validación de datos:" + error_description, "proxy.RancherContact.Create"));
       }
     } catch (Exception e) {
-      log.severe("Exception found while creating rancher invoicing info");
-      log.throwing(this.getClass().getName(), "Create", e);
+      this.log.severe("Exception found while creating rancher invoicing info");
+      this.log.throwing(this.getClass().getName(), "Create", e);
 
       if (e instanceof javax.persistence.PersistenceException)
         response.setError(new Error("DB01", "Los datos que usted ha intentado ingresar, no son permitidos por la base de datos, "
@@ -97,7 +96,7 @@ public class RancherInvoiceBean extends BaseBean implements Cruddable {
       }
     }
 
-    log.exiting(this.getClass().getCanonicalName(), "Create");
+    this.log.exiting(this.getClass().getCanonicalName(), "Create");
     return response;
   }
 
@@ -106,7 +105,7 @@ public class RancherInvoiceBean extends BaseBean implements Cruddable {
    */
   @Override
   public ReadGatewayResponse Read(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Read");
+    this.log.entering(this.getClass().getCanonicalName(), "Read");
 
     ReadGatewayResponse response = new ReadGatewayResponse();
     response.setEntityName(request.getEntityName());
@@ -115,17 +114,18 @@ public class RancherInvoiceBean extends BaseBean implements Cruddable {
     try {
       invoice = entityFromRequest(request, RancherInvoice.class);
 
-      log.fine("Got rancher from request: " + invoice);
+      this.log.fine("Got rancher from request: " + invoice);
 
-      TypedQuery<RancherInvoice> readQuery = null;
       String qryLogger = "";
+      String queryName = "";
+      Map<String, Object> parameters = new HashMap<String, Object>();
       if (invoice.getRancherInvoiceId() != 0) {
-        readQuery = em.createNamedQuery("RANCHER_INVOICE_BY_ID", RancherInvoice.class);
-        readQuery.setParameter("rancherInvoiceId", invoice.getRancherInvoiceId());
+        queryName = "RANCHER_INVOICE_BY_ID";
+        parameters.put("rancherInvoiceId", invoice.getRancherInvoiceId());
         qryLogger = "By rancherInvoiceId [" + invoice.getRancherInvoiceId() + "]";
       } else if (invoice.getRancherId() != 0) {
-        readQuery = em.createNamedQuery("RANCHER_INVOICE_BY_RANCHER_ID", RancherInvoice.class);
-        readQuery.setParameter("rancherId", invoice.getRancherId());
+        queryName = "RANCHER_INVOICE_BY_RANCHER_ID";
+        parameters.put("rancherId", invoice.getRancherId());
         qryLogger = "By rancherId [" + invoice.getRancherId() + "]";
       } else {
         response.setError(new Error("VAL03", "El filtro especificado no es válido para datos de facturación.",
@@ -133,7 +133,7 @@ public class RancherInvoiceBean extends BaseBean implements Cruddable {
         return response;
       }
 
-      List<RancherInvoice> queryResults = readQuery.getResultList();
+      List<RancherInvoice> queryResults = dataModel.readDataModelList(queryName, parameters, RancherInvoice.class);
 
       if (queryResults.isEmpty()) {
         response.setError(new Error("VAL02", "No se encontraron datos para el filtro seleccionado", "proxy.RancherInvoice.Read"));
@@ -141,16 +141,16 @@ public class RancherInvoiceBean extends BaseBean implements Cruddable {
         response.getRecord().addAll(contentFromList(queryResults, RancherInvoice.class));
 
         response.setError(new Error("0", "SUCCESS", "proxy.RancherInvoice.Read"));
-        log.info("Read operation " + qryLogger + " executed by principal[" + getLoggedUser() + "] on RancherInvoiceBean");
+        this.log.info("Read operation " + qryLogger + " executed by principal[" + getLoggedUser() + "] on RancherInvoiceBean");
       }
     } catch (Exception e) {
-      log.severe("Exception found while reading rancher invoice filter");
-      log.throwing(this.getClass().getCanonicalName(), "Read", e);
+      this.log.severe("Exception found while reading rancher invoice filter");
+      this.log.throwing(this.getClass().getCanonicalName(), "Read", e);
 
       response.setError(new Error("DB02", "Error en la base de datos: " + e.getMessage(), "proxy.RancherInvoice.Read"));
     }
 
-    log.exiting(this.getClass().getCanonicalName(), "Read");
+    this.log.exiting(this.getClass().getCanonicalName(), "Read");
     return response;
   }
 
@@ -159,7 +159,7 @@ public class RancherInvoiceBean extends BaseBean implements Cruddable {
    */
   @Override
   public UpdateGatewayResponse Update(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Update");
+    this.log.entering(this.getClass().getCanonicalName(), "Update");
     UpdateGatewayResponse response = new UpdateGatewayResponse();
 
     RancherInvoice invoice = null;
@@ -168,28 +168,27 @@ public class RancherInvoiceBean extends BaseBean implements Cruddable {
       invoice = entityFromRequest(request, RancherInvoice.class);
 
       if (invoice.getRancherInvoiceId() == 0) {
-        log.warning("VAL04 - Entity ID Omission.");
+        this.log.warning("VAL04 - Entity ID Omission.");
         response.setError(new Error("VAL04", "Se ha omitido el id de los datos de facturación al intentar actualizarlos.",
             "proxy.RancherInvoiceBean.Update"));
       } else {
         if (validateEntity(invoice)) {
-          em.merge(invoice);
-          em.flush();
+          dataModel.updateDataModel(invoice);
 
           response.setUpdatedRecord(getContentFromEntity(invoice, RancherInvoice.class));
           response.setEntityName(request.getEntityName());
           response.setError(new Error("0", "SUCCESS", "proxy.RancherInvoice.Update"));
-          log.info("Rancher Invoice [" + invoice.toString() + "] updated by principal[" + getLoggedUser() + "]");
+          this.log.info("Rancher Invoice [" + invoice.toString() + "] updated by principal[" + getLoggedUser() + "]");
         } else {
-          log.warning("Validation error: " + error_description);
+          this.log.warning("Validation error: " + error_description);
           response.setError(new Error("VAL01", "Error de validación de datos: " + error_description,
               "proxy.RancherInvoice.Update"));
         }
       }
 
     } catch (Exception e) {
-      log.severe("Exception found while updating rancher invoice");
-      log.throwing(this.getClass().getName(), "Update", e);
+      this.log.severe("Exception found while updating rancher invoice");
+      this.log.throwing(this.getClass().getName(), "Update", e);
 
       if (e instanceof javax.persistence.PersistenceException)
         response.setError(new Error("DB01", "Los datos que usted ha intentado ingresar, no son permitidos por la base de datos, "
@@ -200,7 +199,7 @@ public class RancherInvoiceBean extends BaseBean implements Cruddable {
       }
     }
 
-    log.exiting(this.getClass().getCanonicalName(), "Update");
+    this.log.exiting(this.getClass().getCanonicalName(), "Update");
     return response;
   }
 
@@ -209,40 +208,31 @@ public class RancherInvoiceBean extends BaseBean implements Cruddable {
    */
   @Override
   public BaseResponse Delete(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Delete");
+    this.log.entering(this.getClass().getCanonicalName(), "Delete");
     BaseResponse response = new BaseResponse();
 
     try {
       RancherInvoice invoice = entityFromRequest(request, RancherInvoice.class);
       if (invoice.getRancherInvoiceId() == 0) {
-        log.warning("VAL04 - Entity ID Omission.");
+        this.log.warning("VAL04 - Entity ID Omission.");
         response.setError(new Error("VAL04", "Se ha omitido el id de los datos de facturación al intentar eliminarlos.",
             "proxy.RancherInvoiceBean.Delete"));
       } else {
-        TypedQuery<RancherInvoice> readQuery = em.createNamedQuery("RANCHER_INVOICE_BY_ID",
-            RancherInvoice.class);
-        readQuery.setParameter("rancherInvoiceId", invoice.getRancherInvoiceId());
-        invoice = readQuery.getSingleResult();
-
-        log.info("Deleting Rancher Invoice [" + invoice.toString() + "] by principal[" + getLoggedUser() + "]");
-        
-        em.merge(invoice);
-        em.remove(invoice);
-        em.flush();
-
+        invoice = dataModel.readSingleDataModel("RANCHER_INVOICE_BY_ID", "rancherInvoiceId", invoice.getRancherInvoiceId(), RancherInvoice.class);
+        this.log.info("Deleting RancherInvoice [" + invoice.toString() + "] by principal[" + getLoggedUser() + "]");
+        dataModel.deleteDataModel(invoice, getLoggedUser());
         response.setError(new Error("0", "SUCCESS", "proxy.RancherInvoice.Delete"));
-        log.info("Rancher Invoice successfully deleted by principal [" + getLoggedUser() + "]");
       }
     } catch (Exception e) {
-      log.severe("Exception found while deleting rancher invoicing info");
-      log.throwing(this.getClass().getName(), "Delete", e);
+      this.log.severe("Exception found while deleting rancher invoicing info");
+      this.log.throwing(this.getClass().getName(), "Delete", e);
 
       response.setError(new Error("DEL01",
           "Error al intentar borrar datos. Es muy probable que la entidad que usted quiere eliminar "
               + "cuente con otras entidades relacionadas.", "proxy.RancherInvoiceBean.Delete"));
     }
 
-    log.exiting(this.getClass().getCanonicalName(), "Delete");
+    this.log.exiting(this.getClass().getCanonicalName(), "Delete");
     return response;
   }
 
@@ -339,10 +329,6 @@ public class RancherInvoiceBean extends BaseBean implements Cruddable {
       valid = !duplicateEnterprise(invoice);
     }
 
-    if (valid) {
-      valid = rancherExists(invoice);
-    }
-
     return valid;
   }
 
@@ -359,59 +345,19 @@ public class RancherInvoiceBean extends BaseBean implements Cruddable {
   }
 
   private boolean duplicateRFC(RancherInvoice invoice) {
-    boolean duplicate = false;
-
-    TypedQuery<EnterpriseRancher> readQuery = null;
-
-    readQuery = em.createNamedQuery("ENTERPRISE_RANCHER_BY_RFC", EnterpriseRancher.class);
-    readQuery.setParameter("rfc", invoice.getLegalId());
-
-    try {
-      EnterpriseRancher enterprise = readQuery.getSingleResult();
-      duplicate = enterprise != null;
-      error_description = "RFC (legal_id) is already in use by an enterprise rancher";
-    } catch (NoResultException e) {
-      duplicate = false;
-    }
-
-    return duplicate;
+    Map<String, Object> parameters = new HashMap<String, Object>();
+    parameters.put("rfc", invoice.getLegalId());
+    
+    List<EnterpriseRancher> enterprises = dataModel.readDataModelList("ENTERPRISE_RANCHER_BY_RFC", parameters, EnterpriseRancher.class);
+    return !enterprises.isEmpty();
   }
 
   private boolean duplicateLegalName(RancherInvoice invoice) {
-    boolean duplicate = false;
-
-    TypedQuery<EnterpriseRancher> readQuery = null;
-
-    readQuery = em.createNamedQuery("ENTERPRISE_RANCHER_BY_LEGAL_NAME", EnterpriseRancher.class);
-    readQuery.setParameter("legalName", invoice.getLegalName());
-
-    try {
-      EnterpriseRancher enterprise = readQuery.getSingleResult();
-      duplicate = enterprise != null;
-      error_description = "Legal name is already in use by an enterprise rancher";
-    } catch (NoResultException e) {
-      duplicate = false;
-    }
-
-    return duplicate;
-  }
-
-  private boolean rancherExists(RancherInvoice invoice) {
-    boolean exists = true;
-
-    TypedQuery<com.tramex.sisoprega.dto.Rancher> readQuery = null;
-
-    readQuery = em.createNamedQuery("RANCHER_BY_ID", com.tramex.sisoprega.dto.Rancher.class);
-    readQuery.setParameter("rancherId", invoice.getRancherId());
-
-    try {
-      com.tramex.sisoprega.dto.Rancher enterprise = readQuery.getSingleResult();
-      exists = enterprise != null;
-    } catch (NoResultException e) {
-      exists = false;
-      error_description = "RancherId " + invoice.getRancherId() + " does not exists on database";
-    }
-
-    return exists;
+    
+    Map<String, Object> parameters = new HashMap<String, Object>();
+    parameters.put("legalName", invoice.getLegalName());
+    
+    List<EnterpriseRancher> enterprises = dataModel.readDataModelList("ENTERPRISE_RANCHER_BY_LEGAL_NAME", parameters, EnterpriseRancher.class);
+    return !enterprises.isEmpty();
   }
 }

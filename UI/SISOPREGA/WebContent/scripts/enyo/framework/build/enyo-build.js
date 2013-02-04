@@ -9754,7 +9754,7 @@ a[e] || h.setShowing(!1);
 }
 },
 create: function() {
-this.inherited(arguments), this.value = this.value || new Date, this.setupMonth(), this.yearRangeChanged(), this.valueChanged();
+this.inherited(arguments);
 },
 setYMD:function(){
 	this.bLoaded=true;
@@ -9768,7 +9768,7 @@ setNull:function(){
 	this.$.day.setItems([{caption:"----",value:1}]);
 	this.$.month.setValue(1);
 	this.$.year.setValue(1);	
-	this.$.day.setValue(1);		
+	this.$.day.setValue(1);	
 	this.render();
 },
 clickme:function(){

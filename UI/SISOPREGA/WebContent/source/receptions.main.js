@@ -8,7 +8,7 @@ enyo.kind({
 		"onWeights":""
 	},
 	components: [	
-		{kind: enyo.Pane, flex: 1, name: "mainPane",
+		{kind: enyo.Pane, flex: 1, name: "mainPane",transitionKind: "enyo.transitions.LeftRightFlyin",
 		 components:[
 					{kind:"receptions.list",name:"receptionList", objList:null, 
 					 onSelectReception:"selectProduct",onCreation:"showCreate"},

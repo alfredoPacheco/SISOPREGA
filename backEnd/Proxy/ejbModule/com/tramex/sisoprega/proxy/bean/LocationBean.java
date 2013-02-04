@@ -15,10 +15,11 @@
  */
 package com.tramex.sisoprega.proxy.bean;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.ejb.Stateless;
-import javax.persistence.TypedQuery;
 
 import com.tramex.sisoprega.common.BaseResponse;
 import com.tramex.sisoprega.common.CreateGatewayResponse;
@@ -45,6 +46,7 @@ import com.tramex.sisoprega.dto.Location;
  * 11/23/2012  Jaime Figueroa                 Initial Version.
  * 12/08/2012  Diego Torres                   Add standard error codes and validation.
  * 12/16/2012  Diego Torres                   Adding log activity
+ * 01/22/2013  Diego Torres                  Implementing DataModel.
  * ====================================================================================
  * </PRE>
  * 
@@ -63,34 +65,32 @@ public class LocationBean extends BaseBean implements Cruddable {
    */
   @Override
   public CreateGatewayResponse Create(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Create");
+    this.log.entering(this.getClass().getCanonicalName(), "Create");
 
     CreateGatewayResponse response = new CreateGatewayResponse();
     Location location = null;
     try {
       location = entityFromRequest(request, Location.class);
 
-      log.fine("Received catalog location in request: " + location);
+      this.log.fine("Received catalog location in request: " + location);
 
       if (validateEntity(location)) {
-        log.finer("cat location succesfully validated");
-        em.persist(location);
-        log.finer("cat location persisted on database");
-        em.flush();
+        this.log.finer("cat location succesfully validated");
+        dataModel.createDataModel(location);
 
         String sId = String.valueOf(location.getLocationId());
-        log.finer("Setting cat location id in response: " + sId);
+        this.log.finer("Setting cat location id in response: " + sId);
         response.setGeneratedId(sId);
         response.setError(new Error("0", "SUCCESS", "proxy.LocationBean.Create"));
-        log.info("Location [" + location.toString() + "] created by principal[" + getLoggedUser() + "]");
+        this.log.info("Location [" + location.toString() + "] created by principal[" + getLoggedUser() + "]");
       } else {
-        log.warning("Error de validación: " + error_description);
+        this.log.warning("Error de validación: " + error_description);
         response.setError(new Error("VAL01", "Error de validación: " + error_description, "proxy.LocationBean.Create"));
       }
 
     } catch (Exception e) {
-      log.severe("Exception found while creating cat location");
-      log.throwing(this.getClass().getName(), "Create", e);
+      this.log.severe("Exception found while creating cat location");
+      this.log.throwing(this.getClass().getName(), "Create", e);
 
       if (e instanceof javax.persistence.PersistenceException)
         response.setError(new Error("DB01", "Los datos que usted ha intentado ingresar, no son permitidos por la base de datos, "
@@ -101,7 +101,7 @@ public class LocationBean extends BaseBean implements Cruddable {
       }
     }
 
-    log.exiting(this.getClass().getCanonicalName(), "Create");
+    this.log.exiting(this.getClass().getCanonicalName(), "Create");
     return response;
   }
 
@@ -114,7 +114,7 @@ public class LocationBean extends BaseBean implements Cruddable {
    */
   @Override
   public ReadGatewayResponse Read(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Read");
+    this.log.entering(this.getClass().getCanonicalName(), "Read");
 
     ReadGatewayResponse response = new ReadGatewayResponse();
     response.setEntityName(request.getEntityName());
@@ -123,19 +123,21 @@ public class LocationBean extends BaseBean implements Cruddable {
     try {
       catalog = entityFromRequest(request, Location.class);
 
-      log.fine("Got contact from request: " + catalog);
-      TypedQuery<Location> readQuery = null;
+      this.log.fine("Got location from request: " + catalog);
+      
       String qryLogger = "";
+      String queryName = "";
+      Map<String, Object> parameters = new HashMap<String, Object>();
       if (catalog.getLocationId() != 0) {
-        readQuery = em.createNamedQuery("CAT_LOCATION_BY_ID", Location.class);
-        readQuery.setParameter("catclassId", catalog.getLocationId());
+        queryName = "CAT_LOCATION_BY_ID";
+        parameters.put("catclassId", catalog.getLocationId());
         qryLogger = "By catclassId [" + catalog.getLocationId() + "]";
       } else {
-        readQuery = em.createNamedQuery("ALL_CAT_LOCATION", Location.class);
+        queryName = "ALL_CAT_LOCATION";
         qryLogger = "By ALL_CAT_LOCATION";
       }
 
-      List<Location> queryResults = readQuery.getResultList();
+      List<Location> queryResults = dataModel.readDataModelList(queryName, parameters, Location.class);
 
       if (queryResults.isEmpty()) {
         response.setError(new Error("VAL02", "No se encontraron datos para el filtro seleccionado", "proxy.LocationBEan.Read"));
@@ -143,17 +145,17 @@ public class LocationBean extends BaseBean implements Cruddable {
         List<GatewayContent> records = contentFromList(queryResults, Location.class);
         response.getRecord().addAll(records);
         response.setError(new Error("0", "SUCCESS", "proxy.LocationBean.Read"));
-        log.info("Read operation " + qryLogger + " executed by principal[" + getLoggedUser() + "] on LocationBean");
+        this.log.info("Read operation " + qryLogger + " executed by principal[" + getLoggedUser() + "] on LocationBean");
       }
 
     } catch (Exception e) {
-      log.severe("Exception found while reading Cat Location");
-      log.throwing(this.getClass().getCanonicalName(), "Read", e);
+      this.log.severe("Exception found while reading Cat Location");
+      this.log.throwing(this.getClass().getCanonicalName(), "Read", e);
 
       response.setError(new Error("DB02", "Error en la base de datos: " + e.getMessage(), "proxy.LocationBean.Read"));
     }
 
-    log.exiting(this.getClass().getCanonicalName(), "Read");
+    this.log.exiting(this.getClass().getCanonicalName(), "Read");
     return response;
   }
 
@@ -166,35 +168,34 @@ public class LocationBean extends BaseBean implements Cruddable {
    */
   @Override
   public UpdateGatewayResponse Update(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Update");
+    this.log.entering(this.getClass().getCanonicalName(), "Update");
     UpdateGatewayResponse response = new UpdateGatewayResponse();
     Location location = null;
     try {
       location = entityFromRequest(request, Location.class);
 
       if (location.getLocationId() == 0) {
-        log.warning("VAL04 - Entity ID Omission.");
+        this.log.warning("VAL04 - Entity ID Omission.");
         response.setError(new Error("VAL04", "Se ha omitido el id de la localización al intentar actualizar sus datos.",
             "proxy.LocationBean.Update"));
       } else {
         if (validateEntity(location)) {
-          em.merge(location);
-          em.flush();
+          dataModel.updateDataModel(location);
 
           GatewayContent content = getContentFromEntity(location, Location.class);
           response.setUpdatedRecord(content);
 
           response.setError(new Error("0", "SUCCESS", "proxy.CatLocation.Update"));
-          log.info("Location [" + location.toString() + "] updated by principal[" + getLoggedUser() + "]");
+          this.log.info("Location [" + location.toString() + "] updated by principal[" + getLoggedUser() + "]");
         } else {
-          log.warning("Validation error: " + error_description);
+          this.log.warning("Validation error: " + error_description);
           response.setError(new Error("VAL01", "Error de validación de datos:" + error_description, "proxy.LocationBean.Update"));
         }
       }
 
     } catch (Exception e) {
-      log.severe("Exception found while updating Location");
-      log.throwing(this.getClass().getName(), "Update", e);
+      this.log.severe("Exception found while updating Location");
+      this.log.throwing(this.getClass().getName(), "Update", e);
 
       if (e instanceof javax.persistence.PersistenceException)
         response.setError(new Error("DB01", "Los datos que usted ha intentado ingresar, no son permitidos por la base de datos, "
@@ -205,7 +206,7 @@ public class LocationBean extends BaseBean implements Cruddable {
       }
     }
 
-    log.exiting(this.getClass().getCanonicalName(), "Update");
+    this.log.exiting(this.getClass().getCanonicalName(), "Update");
     return response;
   }
 
@@ -218,37 +219,31 @@ public class LocationBean extends BaseBean implements Cruddable {
    */
   @Override
   public BaseResponse Delete(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Delete");
+    this.log.entering(this.getClass().getCanonicalName(), "Delete");
     BaseResponse response = new BaseResponse();
 
     try {
       Location location = entityFromRequest(request, Location.class);
       if (location.getLocationId() == 0) {
-        log.warning("VAL04 - Entity ID Omission.");
+        this.log.warning("VAL04 - Entity ID Omission.");
         response.setError(new Error("VAL04", "Se ha omitido el id de la localización al intentar eliminar el registro.",
             "proxy.LocationBean.Delete"));
       } else {
-        TypedQuery<Location> readQuery = em.createNamedQuery("CAT_LOCATION_BY_ID", Location.class);
-        readQuery.setParameter("locationId", location.getLocationId());
-        location = readQuery.getSingleResult();
-        log.info("Deleting Location [" + location.toString() + "] by principal[" + getLoggedUser() + "]");
-        em.merge(location);
-        em.remove(location);
-        em.flush();
-
+        location = dataModel.readSingleDataModel("CAT_LOCATION_BY_ID", "locationId", location.getLocationId(), Location.class);
+        this.log.info("Deleting Location [" + location.toString() + "] by principal[" + getLoggedUser() + "]");
+        dataModel.deleteDataModel(location, getLoggedUser());
         response.setError(new Error("0", "SUCCESS", "proxy.LocationBean.Delete"));
-        log.info("Location successfully deleted by principal [" + getLoggedUser() + "]");
       }
     } catch (Exception e) {
-      log.severe("Exception found while deleting catalog");
-      log.throwing(this.getClass().getName(), "Delete", e);
+      this.log.severe("Exception found while deleting catalog");
+      this.log.throwing(this.getClass().getName(), "Delete", e);
 
       response.setError(new Error("DEL01",
           "Error al intentar borrar datos. Es muy probable que la entidad que usted quiere eliminar "
               + "cuente con otras entidades relacionadas.", "proxy.LocationBean.Delete"));
     }
 
-    log.exiting(this.getClass().getCanonicalName(), "Delete");
+    this.log.exiting(this.getClass().getCanonicalName(), "Delete");
     return response;
   }
 

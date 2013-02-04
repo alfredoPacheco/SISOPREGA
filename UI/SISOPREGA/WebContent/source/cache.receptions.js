@@ -19,18 +19,16 @@ enyo.kind({
 		var rancherAux = cacheRanchers.getByID(objNew.rancher_id);
 		
 		if(rancherAux.rancher_type==1){			
-			objNew.rancher_name=rancherAux.aka+" / "+rancherAux.last_name+" "+
-			rancherAux.mother_name+" "+rancherAux.first_name;			
+			objNew.rancher_name=rancherAux.first_name + " " + rancherAux.last_name;
 		}else{
 			objNew.rancher_name=rancherAux.company_name;
 		}
-		
+
 		objNew.cattype_name=cacheCattle.getByID(objNew.cattype_id).cattype_name;
 		objNew.hc_aprox="";
 		objNew.city_name= cacheMan.getCityByID(objNew.city_id).city_name;
 		objNew.weights=[{hcw_id:undefined, hc:undefined, weight:undefined} ]; 
 		objNew.barnyards=[];
-		objNew.accepted_count="";
 		objNew.inspections=[];
 		objNew.feed=[];
 		
@@ -108,14 +106,6 @@ enyo.kind({
 		return objNew;
 	},
 	get:function(){
-
-//					inspections : [ {
-//						rejected_id : 1,
-//						rejected_count : 1,
-//						reject_id : 1,
-//						reject_desc : "ENFERMEDAD"
-//					} ],
-
 		if (this.arrObjWasFilledUpOnce == false){
 			this.arrObjWasFilledUpOnce = true;			
 //receptions::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -247,9 +237,6 @@ enyo.kind({
 		return this.arrReception;	
 	},
 	getReceptionBarnyard:function(recID){
-//		private long recBarnyardId;
-//	    private long receptionId;
-//	    private long barnyardId;		    		    
 				
 			var arrAux = [];
 			var objToSend = {};
@@ -272,12 +259,6 @@ enyo.kind({
 		
 	},
 	getReceptionHeadcount:function(recID){
-//		private long headcountId;
-//	    private long receptionId;
-//	    private long hc;
-//	    private double weight;
-//	    private long weightUom;		    		    
-		
 			var arrAux = [];
 			var objToSend = {};
 			objToSend.receptionId = recID;
@@ -298,11 +279,6 @@ enyo.kind({
 		
 	},
 	getFeedOrder:function(recID){
-//		private long orderId;
-//	    private long  receptionId;
-//	    private Date feedDate;
-//	    private String feedOriginator;
-//	    private String handling;		    		    
 		
 		var arrAux = [];
 		var objToSend = {};
@@ -447,7 +423,7 @@ enyo.kind({
 		
 		return arrAux;		
 	},
-	create:function(objRec,cbObj,cbMethod){
+	Create:function(objRec,cbObj,cbMethod){
 		var objToSend = this.receptionAdapterToOut(objRec);
 		delete objToSend.receptionId;
 		var cgCreate = consumingGateway.Create("Reception", objToSend);
@@ -466,13 +442,20 @@ enyo.kind({
 			if(cbMethod){
 				cbObj[cbMethod]();
 			}
+			
+			// Send communication to customer
+			var today = new Date();
+			var month = today.getMonth() + 1; 
+			var today_sf = month + '/' + today.getDate() + '/' + today.getFullYear(); 
+			var report_name = 'RecibidoPorGanadero?rancherId=' + objRec.rancher_id + '&amp;fromDate=' + today_sf + '&amp;toDate=' + today_sf;
+			consumingGateway.SendReport(objRec.rancher_id, report_name);
+			
 			return true;
 		}
 		else{ //Error			
 			cacheMan.setMessage("", "[Exception ID: " + cgCreate.exceptionId + "] Descripcion: " + cgCreate.exceptionDescription);
 			return false;
 		}
-		
 	},
 	upd:function(objOld,objNew,cbObj,cbMethod){
 		objNew.reception_id = objOld.reception_id;
@@ -643,7 +626,7 @@ enyo.kind({
 		
 		var objToSend = {};
 		objToSend.receptionId = objRec.reception_id;
-		objToSend.feedDate = "" + DateOut(new Date());
+		//objToSend.feedDate = "" + DateOut(new Date());
 //		objToSend.feedOriginator = "";	
 		objToSend.handling = objFeed.handling;
 		
@@ -671,7 +654,7 @@ enyo.kind({
 		var objToSend = {};
 		objToSend.orderId = order_id;
 		for (prop in objFeed.barnyards){
-			objToSend.barnyardId = cacheBY.getByBarnyard(objFeed.barnyards[prop]);				
+			objToSend.barnyardId = cacheBY.getByBarnyard(objFeed.barnyards[prop]).barnyard_id;				
 		}
 		var cgCreate = consumingGateway.Create("FeedOrderBarnyard", objToSend);
 		if (cgCreate.exceptionId == 0){ //Created successfully
@@ -738,7 +721,7 @@ enyo.kind({
 		objNew.feeding_id = objOld.feeding_id;
 		var objToSend = {};
 		objToSend.orderId = objNew.feeding_id;
-		objToSend.feedDate = "" + DateOut(new Date());
+		//objToSend.feedDate = "" + DateOut(new Date());
 //		objToSend.feedOriginator = "";	
 		objToSend.handling = objNew.handling;
 		objToSend.receptionId = cbObj._objRec.reception_id;
@@ -816,7 +799,7 @@ enyo.kind({
 		var objToSend = {};
 		objToSend.inspectionId = inspection_id;
 		for (prop in objRec.barnyards){
-			objToSend.barnyardId = cacheBY.getByBarnyard(objRec.barnyards[prop]);
+			objToSend.barnyardId = cacheBY.getByBarnyard(objRec.barnyards[prop]).barnyard_id;
 			var cgCreate = consumingGateway.Create("InspectionBarnyard", objToSend);
 			if (cgCreate.exceptionId != 0){ //Created successfully
 				cacheMan.setMessage("", "[Exception ID: " + cgCreate.exceptionId + "] Descripcion: " + cgCreate.exceptionDescription);
@@ -854,9 +837,7 @@ enyo.kind({
 		}
 		
 	},	
-	addReject:function(iAccepted,objRec,objReject,cbObj,cbMethod){
-		if(iAccepted==""){iAccepted=0;}
-		objRec.accepted_count=iAccepted;
+	addReject:function(objRec,objReject,cbObj,cbMethod){				
 		if(objReject){
 			if (this.createInspection(objRec,objReject)== true){
 				objRec.inspections.push(objReject);
@@ -866,7 +847,7 @@ enyo.kind({
 			}			
 		}		
 	},
-	updateReject:function(iAccepted,objRec,iInspIdx,objReject,cbObj,cbMethod){
+	updateReject:function(objRec,iInspIdx,objReject,cbObj,cbMethod){
 		var objToSend = {};
 		objToSend.inspectionDetailsId =	objRec.inspections[iInspIdx].id;
 		objToSend.inspectionId = 		objRec.inspections[iInspIdx].rejected_id;		
@@ -878,8 +859,6 @@ enyo.kind({
 		
 		var cgUpdate = consumingGateway.Update("InspectionDetails", objToSend);
 		if (cgUpdate.exceptionId == 0){ //Updated successfully
-			if(iAccepted==""){iAccepted=0;}
-			objRec.accepted_count=iAccepted;
 			objRec.inspections[iInspIdx].rejected_count=objReject.rejected_count;
 			objRec.inspections[iInspIdx].reject_id=objReject.reject_id;
 			objRec.inspections[iInspIdx].reject_desc=objReject.reject_desc;				
@@ -912,8 +891,39 @@ enyo.kind({
 		else{ //Error
 			cacheMan.setMessage("", "[Exception ID: " + cgDelete.exceptionId + "] Descripcion: " + cgDelete.exceptionDescription);			
 		}
-		
-		
-	},				
+	},
+	getActiveBYForListByRancherID:function(rancher_id){
+		var result = [];
+		var receptions = this.get();
+		for (i in receptions){			
+			if (receptions[i].rancher_id == rancher_id){
+				var barnyards = receptions[i].barnyards;
+				for (property in barnyards){					
+					var barnyard = {caption:"",value:""};
+					barnyard_id = cacheBY.getByBarnyard(barnyards[property]).barnyard_id;
+					if(barnyards[property].charAt(0)==1){						
+						barnyard.caption = 	barnyards[property].substr(1) + " [Chihuahua]";
+						barnyard.value = 	barnyard_id;
+						barnyard.barnyard_code = barnyards[property].substr(1);
+						barnyard.location = "Chihuahua"; 
+						result.push(barnyard);												
+					}else{						
+						barnyard.caption = barnyards[property].substr(1) + " [Zona Sur]";
+						barnyard.value = 	barnyard_id;
+						barnyard.barnyard_code = barnyards[property].substr(1);
+						barnyard.location = "Zona Sur"; 
+						result.push(barnyard);						
+					}
+				}
+			}
+		}
+		return result;	
+	},
+	refreshData:function(){
+		this.receptionWasReadFromGateway=false;
+		this.inspectionWasReadFromGateway=false;
+		this.arrObjWasFilledUpOnce=false;	
+		this.get();
+	}	
 });
 var cacheReceptions = new cache.receptions();

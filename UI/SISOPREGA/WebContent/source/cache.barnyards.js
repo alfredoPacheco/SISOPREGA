@@ -151,7 +151,7 @@ enyo.kind({
 		return this.arrCatBarnyardCapacity;
 		
 	},
-	create:function(objCat,cbObj,cbMethod){
+	Create:function(objCat,cbObj,cbMethod){
 		//AJAX
 		this.arrObj.push(objCat);
 		if(cbMethod){
@@ -214,7 +214,7 @@ enyo.kind({
 		for(var i=0; i<arrAux.length;i++){
 			if (arrAux[i].barnyard_code==barnyard.substr(1)){
 				if (arrAux[i].location_id==barnyard.charAt(0)){
-					return arrAux[i].barnyard_id;
+					return arrAux[i];
 				}
 			}
 		}
@@ -297,7 +297,7 @@ enyo.kind({
 	setOccupied:function(sID,iReceptionID){ //example: setOccupied("1E2","79")
 		
 		objAux = {};
-		objAux.sID = this.getByBarnyard(sID);
+		objAux.sID = this.getByBarnyard(sID).barnyard_id;
 		objAux.iReceptionID = iReceptionID;
 		var objToSend = this.rec_barnAdapterToOut(objAux);
 		delete objToSend.recBarnyardId;
@@ -316,7 +316,7 @@ enyo.kind({
 		
 		var objToSend = {};
 		objToSend.receptionId = objRec.reception_id;
-		objToSend.barnyardId = cacheBY.getByBarnyard(sID);
+		objToSend.barnyardId = cacheBY.getByBarnyard(sID).barnyard_id;
 		var cgDelete = consumingGateway.Delete("ReceptionBarnyard", objToSend);
 		if (cgDelete.exceptionId == 0){ //Deleted successfully
 			delete objRec.barnyards[sID];
@@ -340,7 +340,36 @@ enyo.kind({
 			}
 		}
 		return arrBY;
+	},
+	getAllForList:function(){
+		var result = [];
+		var barnyards = this.get();
+		for (property in barnyards){
+			var barnyard = {caption:"",value:""};
+			if(barnyards[property].location_id==1){						
+				barnyard.caption = 	barnyards[property].barnyard_code + " [Chihuahua]";
+				barnyard.value = 	barnyards[property].barnyard_id;
+				barnyard.barnyard_code = barnyards[property].barnyard_code;
+				barnyard.location = "Chihuahua"; 
+				result.push(barnyard);												
+			}else{						
+				barnyard.caption = barnyards[property].barnyard_code + " [Zona Sur]";
+				barnyard.value = 	barnyards[property].barnyard_id;
+				barnyard.barnyard_code = barnyards[property].barnyard_code;
+				barnyard.location = "Zona Sur";
+				result.push(barnyard);						
+			}
+		}
+		return result;
+							
+	},
+	refreshData:function(){
+		this.arrObjWasFilledUpOnce=false;
+		this.barnyardWasReadFromGateway=false,	
+		this.barnyardCapacityWasReadFromGateway=false,		
+		this.get();
 	}
+	
 });
 
 var cacheBY= new cache.barnyards();

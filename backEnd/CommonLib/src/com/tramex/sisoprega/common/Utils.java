@@ -87,7 +87,7 @@ public class Utils {
     Object result = null;
 
     String sValue = valueFromRequest(request, fieldName);
-    if (sValue != null) {
+    if (sValue != null && !sValue.trim().equals("")) {
       if (type.getName().equals("int")) {
         result = Integer.parseInt(sValue);
         log.finest("found integer: " + sValue);

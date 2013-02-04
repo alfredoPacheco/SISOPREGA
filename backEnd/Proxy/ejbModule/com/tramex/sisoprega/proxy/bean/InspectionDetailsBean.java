@@ -15,10 +15,11 @@
  */
 package com.tramex.sisoprega.proxy.bean;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.ejb.Stateless;
-import javax.persistence.TypedQuery;
 
 import com.tramex.sisoprega.common.BaseResponse;
 import com.tramex.sisoprega.common.CreateGatewayResponse;
@@ -43,6 +44,7 @@ import com.tramex.sisoprega.dto.InspectionDetails;
  * MM/DD/YYYY
  * ----------  ---------------------------  -------------------------------------------
  * 12/23/2012  Alfredo Pacheco              Initial Version.
+ * 01/22/2013  Diego Torres                  Implementing DataModel.
  * ====================================================================================
  * </PRE>
  * 
@@ -61,34 +63,32 @@ public class InspectionDetailsBean extends BaseBean implements Cruddable {
    */
   @Override
   public CreateGatewayResponse Create(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Create");
+    this.log.entering(this.getClass().getCanonicalName(), "Create");
 
     CreateGatewayResponse response = new CreateGatewayResponse();
     InspectionDetails inspectionDetails = null;
     try {
       inspectionDetails = entityFromRequest(request, InspectionDetails.class);
 
-      log.fine("Received InspectionDetails in request: " + inspectionDetails);
+      this.log.fine("Received InspectionDetails in request: " + inspectionDetails);
 
       if (validateEntity(inspectionDetails)) {
-        log.finer("InspectionDetails succesfully validated");
-        em.persist(inspectionDetails);
-        log.finer("InspectionDetails persisted on database");
-        em.flush();
+        this.log.finer("InspectionDetails succesfully validated");
+        dataModel.createDataModel(inspectionDetails);
 
         String sId = String.valueOf(inspectionDetails.getInspectionDetailsId());
-        log.finer("Setting InspectionDetails id in response: " + sId);
+        this.log.finer("Setting InspectionDetails id in response: " + sId);
         response.setGeneratedId(sId);
         response.setError(new Error("0", "SUCCESS", "proxy.InspectionDetailsBean.Create"));
-        log.info("Reception inspectionDetails [" + inspectionDetails.toString() + "] created by principal[" + getLoggedUser() + "]");
+        this.log.info("Reception inspectionDetails [" + inspectionDetails.toString() + "] created by principal[" + getLoggedUser() + "]");
       } else {
-        log.warning("Error de validación: " + error_description);
+        this.log.warning("Error de validación: " + error_description);
         response.setError(new Error("VAL01", "Error de validación: " + error_description, "proxy.InspectionDetailsBean.Create"));
       }
 
     } catch (Exception e) {
-      log.severe("Exception found while creating InspectionDetailsBean");
-      log.throwing(this.getClass().getName(), "Create", e);
+      this.log.severe("Exception found while creating InspectionDetailsBean");
+      this.log.throwing(this.getClass().getName(), "Create", e);
 
       if (e instanceof javax.persistence.PersistenceException)
         response.setError(new Error("DB01",
@@ -99,7 +99,7 @@ public class InspectionDetailsBean extends BaseBean implements Cruddable {
       }
     }
 
-    log.exiting(this.getClass().getCanonicalName(), "Create");
+    this.log.exiting(this.getClass().getCanonicalName(), "Create");
     return response;
   }
 
@@ -112,7 +112,7 @@ public class InspectionDetailsBean extends BaseBean implements Cruddable {
    */
   @Override
   public ReadGatewayResponse Read(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Read");
+    this.log.entering(this.getClass().getCanonicalName(), "Read");
 
     ReadGatewayResponse response = new ReadGatewayResponse();
     response.setEntityName(request.getEntityName());
@@ -121,17 +121,18 @@ public class InspectionDetailsBean extends BaseBean implements Cruddable {
     try {
       inspectionDetails = entityFromRequest(request, InspectionDetails.class);
 
-      log.fine("Got inspectionDetails query from request: " + inspectionDetails);
+      this.log.fine("Got inspectionDetails query from request: " + inspectionDetails);
 
-      TypedQuery<InspectionDetails> readQuery = null;
       String qryLogger = "";
+      String queryName = "";
+      Map<String, Object> parameters = new HashMap<String, Object>();
       if (inspectionDetails.getInspectionDetailsId() != 0) {
-        readQuery = em.createNamedQuery("CRT_INSPECTION_DETAILS_BY_ID", InspectionDetails.class);
-        readQuery.setParameter("inspDetId", inspectionDetails.getInspectionDetailsId());
+        queryName = "CRT_INSPECTION_DETAILS_BY_ID";
+        parameters.put("inspDetId", inspectionDetails.getInspectionDetailsId());
         qryLogger = "By inspectionDetailsId [" + inspectionDetails.getInspectionDetailsId() + "]";
       } else if(inspectionDetails.getInspectionId() != 0 ){
-        readQuery = em.createNamedQuery("INSPECTION_DETAILS_BY_INSPECTION_ID", InspectionDetails.class);
-        readQuery.setParameter("inspId", inspectionDetails.getInspectionId());
+        queryName = "INSPECTION_DETAILS_BY_INSPECTION_ID";
+        parameters.put("inspId", inspectionDetails.getInspectionId());
         qryLogger = "By inspectionId [" + inspectionDetails.getInspectionId() + "]";
       } else {
         response.setError(new Error("VAL03", "El filtro especificado no es válido para datos de recepciones de ganado.",
@@ -139,7 +140,7 @@ public class InspectionDetailsBean extends BaseBean implements Cruddable {
         return response;
       }
 
-      List<InspectionDetails> queryResults = readQuery.getResultList();
+      List<InspectionDetails> queryResults = dataModel.readDataModelList(queryName, parameters, InspectionDetails.class);
 
       if (queryResults.isEmpty()) {
         response.setError(new Error("VAL02", "No se encontraron datos para el filtro seleccionado", "proxy.InspectionDetails.Read"));
@@ -147,16 +148,16 @@ public class InspectionDetailsBean extends BaseBean implements Cruddable {
         response.getRecord().addAll(contentFromList(queryResults, InspectionDetails.class));
 
         response.setError(new Error("0", "SUCCESS", "proxy.InspectionDetails.Read"));
-        log.info("Read operation " + qryLogger + " executed by principal[" + getLoggedUser() + "] on InspectionDetailsBean");
+        this.log.info("Read operation " + qryLogger + " executed by principal[" + getLoggedUser() + "] on InspectionDetailsBean");
       }
     } catch (Exception e) {
-      log.severe("Exception found while reading inspection details filter");
-      log.throwing(this.getClass().getCanonicalName(), "Read", e);
+      this.log.severe("Exception found while reading inspection details filter");
+      this.log.throwing(this.getClass().getCanonicalName(), "Read", e);
 
       response.setError(new Error("DB02", "Error en la base de datos: " + e.getMessage(), "proxy.InspectionDetails.Read"));
     }
 
-    log.exiting(this.getClass().getCanonicalName(), "Read");
+    this.log.exiting(this.getClass().getCanonicalName(), "Read");
     return response;
   }
 
@@ -169,35 +170,34 @@ public class InspectionDetailsBean extends BaseBean implements Cruddable {
    */
   @Override
   public UpdateGatewayResponse Update(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Update");
+    this.log.entering(this.getClass().getCanonicalName(), "Update");
     UpdateGatewayResponse response = new UpdateGatewayResponse();
     InspectionDetails inspectionDetails = null;
     try {
       inspectionDetails = entityFromRequest(request, InspectionDetails.class);
 
       if (inspectionDetails.getInspectionDetailsId() == 0) {
-        log.warning("VAL04 - Entity ID Omission.");
+        this.log.warning("VAL04 - Entity ID Omission.");
         response.setError(new Error("VAL04", "Se ha omitido el id del corral al intentar actualizar sus datos.",
             "proxy.InspectionDetails.Update"));
       } else {
         if (validateEntity(inspectionDetails)) {
-          em.merge(inspectionDetails);
-          em.flush();
+          dataModel.updateDataModel(inspectionDetails);
 
           GatewayContent content = getContentFromEntity(inspectionDetails, InspectionDetails.class);
           response.setUpdatedRecord(content);
 
           response.setError(new Error("0", "SUCCESS", "proxy.InspectionDetails.Update"));
-          log.info("Reception inspectionDetails [" + inspectionDetails.toString() + "] updated by principal[" + getLoggedUser() + "]");
+          this.log.info("Reception inspectionDetails [" + inspectionDetails.toString() + "] updated by principal[" + getLoggedUser() + "]");
         } else {
-          log.warning("Validation error:" + error_description);
+          this.log.warning("Validation error:" + error_description);
           response.setError(new Error("VAL01", "Error de validación de datos:" + error_description, "proxy.InspectionDetailsBean.Update"));
         }
       }
 
     } catch (Exception e) {
-      log.severe("Exception found while updating InspectionDetails");
-      log.throwing(this.getClass().getName(), "Update", e);
+      this.log.severe("Exception found while updating InspectionDetails");
+      this.log.throwing(this.getClass().getName(), "Update", e);
 
       if (e instanceof javax.persistence.PersistenceException)
         response.setError(new Error("DB01", "Los datos que usted ha intentado ingresar, no son permitidos por la base de datos, ",
@@ -207,7 +207,7 @@ public class InspectionDetailsBean extends BaseBean implements Cruddable {
       }
     }
 
-    log.exiting(this.getClass().getCanonicalName(), "Update");
+    this.log.exiting(this.getClass().getCanonicalName(), "Update");
     return response;
   }
 
@@ -220,36 +220,30 @@ public class InspectionDetailsBean extends BaseBean implements Cruddable {
    */
   @Override
   public BaseResponse Delete(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Delete");
+    this.log.entering(this.getClass().getCanonicalName(), "Delete");
     BaseResponse response = new BaseResponse();
 
     try {
       InspectionDetails inspectionDetails = entityFromRequest(request, InspectionDetails.class);
       if (inspectionDetails.getInspectionDetailsId() == 0) {
-        log.warning("VAL04 - Entity ID Omission.");
+        this.log.warning("VAL04 - Entity ID Omission.");
         response.setError(new Error("VAL04", "Se ha omitido el id de detalles de inspeccion al intentar eliminar el registro.", "proxy.InspectionDetails.Delete"));
       } else {
-        TypedQuery<InspectionDetails> readQuery = em.createNamedQuery("CRT_INSPECTION_DETAILS_BY_ID", InspectionDetails.class);
-        readQuery.setParameter("inspDetId", inspectionDetails.getInspectionDetailsId());
-        inspectionDetails = readQuery.getSingleResult();
-        log.info("Deleting Reception inspectionDetails [" + inspectionDetails.toString() + "] by principal[" + getLoggedUser() + "]");
-        em.merge(inspectionDetails);
-        em.remove(inspectionDetails);
-        em.flush();
-
+        inspectionDetails = dataModel.readSingleDataModel("CRT_INSPECTION_DETAILS_BY_ID", "inspDetId", inspectionDetails.getInspectionDetailsId(), InspectionDetails.class);
+        this.log.info("Deleting InspectionDetails [" + inspectionDetails.toString() + "] by principal[" + getLoggedUser() + "]");
+        dataModel.deleteDataModel(inspectionDetails, getLoggedUser());
         response.setError(new Error("0", "SUCCESS", "proxy.InspectionDetails.Delete"));
-        log.info("InspectionDetails successfully deleted by principal [" + getLoggedUser() + "]");
       }
     } catch (Exception e) {
-      log.severe("Exception found while deleting InspectionDetails");
-      log.throwing(this.getClass().getName(), "Delete", e);
+      this.log.severe("Exception found while deleting InspectionDetails");
+      this.log.throwing(this.getClass().getName(), "Delete", e);
 
       response.setError(new Error("DEL01",
           "Error al intentar borrar datos, es probable que esta entidad tenga otras entidades relacionadas, ",
           "proxy.InspectionDetails.Delete"));
     }
 
-    log.exiting(this.getClass().getCanonicalName(), "Delete");
+    this.log.exiting(this.getClass().getCanonicalName(), "Delete");
     return response;
   }
 

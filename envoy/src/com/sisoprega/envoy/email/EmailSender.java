@@ -17,6 +17,8 @@ package com.sisoprega.envoy.email;
 
 import java.io.File;
 
+import javax.mail.Session;
+
 /**
  * Defines the contract that each email sender must implement.<BR/>
  * 
@@ -42,6 +44,16 @@ public interface EmailSender {
    * @return
    */
   boolean sendEmail(final Email email);
+  
+  
+  /**
+   * Build and send the email to the configured recipient using a given session.
+   * 
+   * @param email
+   * @param session
+   * @return
+   */
+  boolean sendEmail(final Email email, Session session);
 
   /**
    * Configures the email communication.

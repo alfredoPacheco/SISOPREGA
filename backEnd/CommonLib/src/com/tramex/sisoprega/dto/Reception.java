@@ -122,4 +122,12 @@ public class Reception {
     return "cattleType:" + cattleType + ";dateAllotted:" + dateAllotted + ";locationId:" + locationId + ";rancherId:" + rancherId
         + ";receptionId:" + receptionId + ";";
   }
+  
+  @Override
+  public boolean equals(Object obj) {
+    if(obj instanceof Reception){
+      return this.getReceptionId() == ((Reception) obj).getReceptionId();
+    }
+    return false;
+  }
 }

@@ -26,8 +26,8 @@ enyo.kind({
 					 width:"50%;",
 			 	 	 style:"color:#FFF;margin-top:10%",
 			 	 	 components: [	
-						{kind:"Input", name:"user", hint:"Usuario",selectAllOnFocus: true},
-						{kind:"PasswordInput", name:"password", hint:"Contraseña",selectAllOnFocus: true}
+						{kind:"Input", name:"user", hint:"Usuario",selectAllOnFocus: true, onkeydown:"key_down"},
+						{kind:"PasswordInput", name:"password", hint:"Contraseña",selectAllOnFocus: true,onkeydown:"key_down"}
 					]},
 					{kind: "Spacer"}					 
 			]}]},		
@@ -35,7 +35,7 @@ enyo.kind({
 			components: [
 				{kind: "Button", className: "enyo-button-affirmative",style:"background-color:#5f0712",
 				 flex:1, caption: "Entrar", onclick: "checkLogIn", isDefault:"true"},				
-				 ]},							  
+				 ]}							  
 	],
 	checkLogIn:function(){
 		cacheMan.showScrim();
@@ -53,5 +53,11 @@ enyo.kind({
 			this.doFail();
 		}			
 		
+	},
+	key_down:function(inSender, inEvent){
+		if(inEvent.keyCode == 13){
+			this.checkLogIn();
+		}
 	}
+	
 });

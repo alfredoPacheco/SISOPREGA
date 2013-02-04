@@ -15,10 +15,11 @@
  */
 package com.tramex.sisoprega.proxy.bean;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.ejb.Stateless;
-import javax.persistence.TypedQuery;
 
 import com.tramex.sisoprega.common.BaseResponse;
 import com.tramex.sisoprega.common.CreateGatewayResponse;
@@ -47,6 +48,7 @@ import com.tramex.sisoprega.dto.ReceptionBarnyard;
  *  12/16/2012  Diego Torres                  Adding log activity
  *  01/03/2013  Diego Torres                  Adding delete request using receptionId & 
  *                                            barnyardId
+ * 01/22/2013  Diego Torres                  Implementing DataModel.
  *  ====================================================================================
  * </PRE>
  * 
@@ -65,34 +67,32 @@ public class ReceptionBarnyardBean extends BaseBean implements Cruddable {
    */
   @Override
   public CreateGatewayResponse Create(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Create");
+    this.log.entering(this.getClass().getCanonicalName(), "Create");
 
     CreateGatewayResponse response = new CreateGatewayResponse();
     ReceptionBarnyard recepBarnyard = null;
     try {
       recepBarnyard = entityFromRequest(request, ReceptionBarnyard.class);
 
-      log.fine("Received ReceptionBarnyard in request: " + recepBarnyard);
+      this.log.fine("Received ReceptionBarnyard in request: " + recepBarnyard);
 
       if (validateEntity(recepBarnyard)) {
-        log.finer("ReceptionBarnyard succesfully validated");
-        em.persist(recepBarnyard);
-        log.finer("ReceptionBarnyard persisted on database");
-        em.flush();
+        this.log.finer("ReceptionBarnyard succesfully validated");
+        dataModel.createDataModel(recepBarnyard);
 
         String sId = String.valueOf(recepBarnyard.getRecBarnyardId());
-        log.finer("Setting ReceptionBarnyard id in response: " + sId);
+        this.log.finer("Setting ReceptionBarnyard id in response: " + sId);
         response.setGeneratedId(sId);
         response.setError(new Error("0", "SUCCESS", "proxy.ReceptionBarnyardBean.Create"));
-        log.info("Reception Barnyard [" + recepBarnyard.toString() + "] created by principal[" + getLoggedUser() + "]");
+        this.log.info("Reception Barnyard [" + recepBarnyard.toString() + "] created by principal[" + getLoggedUser() + "]");
       } else {
-        log.warning("Error de validación: " + error_description);
+        this.log.warning("Error de validación: " + error_description);
         response.setError(new Error("VAL01", "Error de validación: " + error_description, "proxy.ReceptionBarnyardBean.Create"));
       }
 
     } catch (Exception e) {
-      log.severe("Exception found while creating ReceptionBarnyardBean");
-      log.throwing(this.getClass().getName(), "Create", e);
+      this.log.severe("Exception found while creating ReceptionBarnyardBean");
+      this.log.throwing(this.getClass().getName(), "Create", e);
 
       if (e instanceof javax.persistence.PersistenceException)
         response.setError(new Error("DB01",
@@ -103,7 +103,7 @@ public class ReceptionBarnyardBean extends BaseBean implements Cruddable {
       }
     }
 
-    log.exiting(this.getClass().getCanonicalName(), "Create");
+    this.log.exiting(this.getClass().getCanonicalName(), "Create");
     return response;
   }
 
@@ -116,7 +116,7 @@ public class ReceptionBarnyardBean extends BaseBean implements Cruddable {
    */
   @Override
   public ReadGatewayResponse Read(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Read");
+    this.log.entering(this.getClass().getCanonicalName(), "Read");
 
     ReadGatewayResponse response = new ReadGatewayResponse();
     response.setEntityName(request.getEntityName());
@@ -125,21 +125,22 @@ public class ReceptionBarnyardBean extends BaseBean implements Cruddable {
     try {
       rBarnyard = entityFromRequest(request, ReceptionBarnyard.class);
 
-      log.fine("Got reception barnyard from request: " + rBarnyard);
+      this.log.fine("Got reception barnyard from request: " + rBarnyard);
 
-      TypedQuery<ReceptionBarnyard> readQuery = null;
       String qryLogger = "";
+      String queryName = "";
+      Map<String, Object> parameters = new HashMap<String, Object>();
       if (rBarnyard.getRecBarnyardId() != 0) {
-        readQuery = em.createNamedQuery("CRT_RECEPTIONBARNYARD_BY_ID", ReceptionBarnyard.class);
-        readQuery.setParameter("recBarnyardId", rBarnyard.getRecBarnyardId());
+        queryName = "CRT_RECEPTIONBARNYARD_BY_ID";
+        parameters.put("recBarnyardId", rBarnyard.getRecBarnyardId());
         qryLogger = "By recBarnyardId [" + rBarnyard.getRecBarnyardId() + "]";
       } else if (rBarnyard.getReceptionId() != 0) {
-        readQuery = em.createNamedQuery("RECEPTION_BARNYARD_BY_RECEPTION_ID", ReceptionBarnyard.class);
-        readQuery.setParameter("receptionId", rBarnyard.getReceptionId());
+        queryName = "RECEPTION_BARNYARD_BY_RECEPTION_ID";
+        parameters.put("receptionId", rBarnyard.getReceptionId());
         qryLogger = "By receptionId [" + rBarnyard.getReceptionId() + "]";
       } else if(rBarnyard.getBarnyardId() != 0){
-        readQuery = em.createNamedQuery("RECEPTION_BARNYARD_BY_BARNYARD_ID", ReceptionBarnyard.class);
-        readQuery.setParameter("barnyardId", rBarnyard.getBarnyardId());
+        queryName = "RECEPTION_BARNYARD_BY_BARNYARD_ID";
+        parameters.put("barnyardId", rBarnyard.getBarnyardId());
         qryLogger = "By barnyardId [" + rBarnyard.getBarnyardId() + "]";
       } else {
         response.setError(new Error("VAL03", "El filtro especificado no es válido para las recepciones de ganado.",
@@ -147,7 +148,7 @@ public class ReceptionBarnyardBean extends BaseBean implements Cruddable {
         return response;
       }
 
-      List<ReceptionBarnyard> queryResults = readQuery.getResultList();
+      List<ReceptionBarnyard> queryResults = dataModel.readDataModelList(queryName, parameters, ReceptionBarnyard.class);
 
       if (queryResults.isEmpty()) {
         response.setError(new Error("VAL02", "No se encontraron datos para el filtro seleccionado", "proxy.ReceptionBarnyard.Read"));
@@ -155,16 +156,16 @@ public class ReceptionBarnyardBean extends BaseBean implements Cruddable {
         response.getRecord().addAll(contentFromList(queryResults, ReceptionBarnyard.class));
 
         response.setError(new Error("0", "SUCCESS", "proxy.ReceptionBarnyard.Read"));
-        log.info("Read operation " + qryLogger + " executed by principal[" + getLoggedUser() + "] on ReceptionBarnyardBean");
+        this.log.info("Read operation " + qryLogger + " executed by principal[" + getLoggedUser() + "] on ReceptionBarnyardBean");
       }
     } catch (Exception e) {
-      log.severe("Exception found while reading rancher invoice filter");
-      log.throwing(this.getClass().getCanonicalName(), "Read", e);
+      this.log.severe("Exception found while reading rancher invoice filter");
+      this.log.throwing(this.getClass().getCanonicalName(), "Read", e);
 
       response.setError(new Error("DB02", "Error en la base de datos: " + e.getMessage(), "proxy.ReceptionBarnyard.Read"));
     }
 
-    log.exiting(this.getClass().getCanonicalName(), "Read");
+    this.log.exiting(this.getClass().getCanonicalName(), "Read");
     return response;
   }
 
@@ -177,36 +178,35 @@ public class ReceptionBarnyardBean extends BaseBean implements Cruddable {
    */
   @Override
   public UpdateGatewayResponse Update(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Update");
+    this.log.entering(this.getClass().getCanonicalName(), "Update");
     UpdateGatewayResponse response = new UpdateGatewayResponse();
     ReceptionBarnyard recepBarnyard = null;
     try {
       recepBarnyard = entityFromRequest(request, ReceptionBarnyard.class);
 
       if (recepBarnyard.getRecBarnyardId() == 0) {
-        log.warning("VAL04 - Entity ID Omission.");
+        this.log.warning("VAL04 - Entity ID Omission.");
         response.setError(new Error("VAL04", "Se ha omitido el id del corral al intentar actualizar sus datos.",
             "proxy.ReceptionBarnyard.Update"));
       } else {
         if (validateEntity(recepBarnyard)) {
-          em.merge(recepBarnyard);
-          em.flush();
+          dataModel.updateDataModel(recepBarnyard);
 
           GatewayContent content = getContentFromEntity(recepBarnyard, ReceptionBarnyard.class);
           response.setUpdatedRecord(content);
 
           response.setError(new Error("0", "SUCCESS", "proxy.ReceptionBarnyard.Update"));
-          log.info("Reception Barnyard [" + recepBarnyard.toString() + "] updated by principal[" + getLoggedUser() + "]");
+          this.log.info("Reception Barnyard [" + recepBarnyard.toString() + "] updated by principal[" + getLoggedUser() + "]");
         } else {
-          log.warning("Validation error:" + error_description);
+          this.log.warning("Validation error:" + error_description);
           response.setError(new Error("VAL01", "Error de validación de datos:" + error_description,
               "proxy.ReceptionBarnyardBean.Update"));
         }
       }
 
     } catch (Exception e) {
-      log.severe("Exception found while updating ReceptionBarnyard");
-      log.throwing(this.getClass().getName(), "Update", e);
+      this.log.severe("Exception found while updating ReceptionBarnyard");
+      this.log.throwing(this.getClass().getName(), "Update", e);
 
       if (e instanceof javax.persistence.PersistenceException)
         response.setError(new Error("DB01",
@@ -218,7 +218,7 @@ public class ReceptionBarnyardBean extends BaseBean implements Cruddable {
       }
     }
 
-    log.exiting(this.getClass().getCanonicalName(), "Update");
+    this.log.exiting(this.getClass().getCanonicalName(), "Update");
     return response;
   }
 
@@ -231,49 +231,45 @@ public class ReceptionBarnyardBean extends BaseBean implements Cruddable {
    */
   @Override
   public BaseResponse Delete(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Delete");
+    this.log.entering(this.getClass().getCanonicalName(), "Delete");
     BaseResponse response = new BaseResponse();
 
     try {
       ReceptionBarnyard recepBarnyard = entityFromRequest(request, ReceptionBarnyard.class);
       if(recepBarnyard.getRecBarnyardId()!=0){
-        TypedQuery<ReceptionBarnyard> readQuery = em.createNamedQuery("CRT_RECEPTIONBARNYARD_BY_ID", ReceptionBarnyard.class);
-        readQuery.setParameter("recBarnyardId", recepBarnyard.getRecBarnyardId());
-        recepBarnyard = readQuery.getSingleResult();
-        log.info("Deleting Reception Barnyard [" + recepBarnyard.toString() + "] by principal[" + getLoggedUser() + "]");
-        em.merge(recepBarnyard);
-        em.remove(recepBarnyard);
-        em.flush();         
+        recepBarnyard = dataModel.readSingleDataModel("CRT_RECEPTIONBARNYARD_BY_ID", "recBarnyardId", recepBarnyard.getRecBarnyardId(), ReceptionBarnyard.class);
+        this.log.info("Deleting Reception Barnyard [" + recepBarnyard.toString() + "] by principal[" + getLoggedUser() + "]");
+        dataModel.deleteDataModel(recepBarnyard, getLoggedUser());
         response.setError(new Error("0", "SUCCESS", "proxy.ReceptionBarnyard.Delete"));
-        log.info("Reception Barnyard successfully deleted by principal [" + getLoggedUser() + "]");
       }else if(recepBarnyard.getBarnyardId()!=0 && recepBarnyard.getReceptionId()!=0){
-        TypedQuery<ReceptionBarnyard> readQuery = em.createNamedQuery("RECEPTION_BARNYARD_BY_BARNYARD_ID_AND_RECEPTION_ID", ReceptionBarnyard.class);
-        readQuery.setParameter("barnyard_id", recepBarnyard.getBarnyardId());
-        readQuery.setParameter("reception_id", recepBarnyard.getReceptionId());
-        recepBarnyard = readQuery.getSingleResult();
-        log.info("Deleting Reception Barnyard [" + recepBarnyard.toString() + "] by barnyardId and receptionId[" + getLoggedUser() + "]");
-        em.merge(recepBarnyard);
-        em.remove(recepBarnyard);
-        em.flush();
+        Map<String, Object> parameters = new HashMap<String, Object>();
+        parameters.put("barnyard_id", recepBarnyard.getBarnyardId());
+        parameters.put("reception_id", recepBarnyard.getReceptionId());
+        List<ReceptionBarnyard> barnyards = dataModel.readDataModelList("RECEPTION_BARNYARD_BY_BARNYARD_ID_AND_RECEPTION_ID", parameters, ReceptionBarnyard.class);
+        
+        if(!barnyards.isEmpty()){
+          recepBarnyard = barnyards.get(0);
+          this.log.info("Deleting Reception Barnyard [" + recepBarnyard.toString() + "] by barnyardId and receptionId[" + getLoggedUser() + "]");
+          dataModel.deleteDataModel(recepBarnyard, getLoggedUser());
+        }
 
         response.setError(new Error("0", "SUCCESS", "proxy.ReceptionBarnyard.Delete"));
-        log.info("Reception Barnyard successfully deleted by principal [" + getLoggedUser() + "]");
       } else {
-        log.warning("VAL04 - Entity ID Omission.");
+        this.log.warning("VAL04 - Entity ID Omission.");
         response.setError(new Error("VAL04", "Se ha omitido el id del corral al intentar eliminar el registro.",
             "proxy.ReceptionBarnyard.Delete"));
       }
       
     } catch (Exception e) {
-      log.severe("Exception found while deleting ReceptionBarnyard");
-      log.throwing(this.getClass().getName(), "Delete", e);
+      this.log.severe("Exception found while deleting ReceptionBarnyard");
+      this.log.throwing(this.getClass().getName(), "Delete", e);
 
       response.setError(new Error("DEL01",
           "Error al intentar borrar datos, es probable que esta entidad tenga otras entidades relacionadas, ",
           "proxy.ReceptionBarnyard.Delete"));
     }
 
-    log.exiting(this.getClass().getCanonicalName(), "Delete");
+    this.log.exiting(this.getClass().getCanonicalName(), "Delete");
     return response;
   }
 

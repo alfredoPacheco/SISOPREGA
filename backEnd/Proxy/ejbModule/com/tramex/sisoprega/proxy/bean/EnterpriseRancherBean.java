@@ -15,11 +15,11 @@
  */
 package com.tramex.sisoprega.proxy.bean;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.ejb.Stateless;
-import javax.persistence.NoResultException;
-import javax.persistence.TypedQuery;
 
 import com.tramex.sisoprega.common.BaseResponse;
 import com.tramex.sisoprega.common.CreateGatewayResponse;
@@ -27,8 +27,10 @@ import com.tramex.sisoprega.common.Error;
 import com.tramex.sisoprega.common.GatewayRequest;
 import com.tramex.sisoprega.common.ReadGatewayResponse;
 import com.tramex.sisoprega.common.UpdateGatewayResponse;
+import com.tramex.sisoprega.common.Utils;
 import com.tramex.sisoprega.common.crud.Cruddable;
 import com.tramex.sisoprega.dto.EnterpriseRancher;
+import com.tramex.sisoprega.dto.RancherInvoice;
 
 /**
  * This proxy knows the logic to evaluate Enterprise Ranchers and the way to the
@@ -45,6 +47,7 @@ import com.tramex.sisoprega.dto.EnterpriseRancher;
  * 11/05/2012  Diego Torres                 Initial Version.
  * 12/08/2012  Diego Torres                 Add standard error codes and validation.
  * 12/16/2012  Diego Torres                 Adding log activity
+ * 01/22/2013  Diego Torres                 Implementing DataModel interfacing
  * ====================================================================================
  * </PRE>
  * 
@@ -59,36 +62,35 @@ public class EnterpriseRancherBean extends BaseBean implements Cruddable {
    */
   @Override
   public CreateGatewayResponse Create(GatewayRequest request) {
-    log.entering(EnterpriseRancherBean.class.getCanonicalName(), "Create");
+    this.log.entering(EnterpriseRancherBean.class.getCanonicalName(), "Create");
 
     CreateGatewayResponse response = new CreateGatewayResponse();
     EnterpriseRancher enterpriseRancher = null;
     try {
       enterpriseRancher = entityFromRequest(request, EnterpriseRancher.class);
 
-      log.fine("Received enterprise rancher in request: {" + enterpriseRancher.toString() + "}");
+      this.log.fine("Received enterprise rancher in request: {" + enterpriseRancher.toString() + "}");
 
       if (validateEntity(enterpriseRancher)) {
-        log.finer("Enterprise RancherBean succesfully validated");
-        em.persist(enterpriseRancher);
-        em.flush();
-        log.finer("Enterprise RancherBean persisted on database");
+        this.log.finer("Enterprise RancherBean succesfully validated");
+        dataModel.createDataModel(enterpriseRancher);
+        this.log.finer("Enterprise RancherBean persisted on database");
 
         String sId = String.valueOf(enterpriseRancher.getEnterpriseId());
-        log.finer("Setting enterprise rancher id in response [" + sId + "]");
+        this.log.finer("Setting enterprise rancher id in response [" + sId + "]");
 
         response.setGeneratedId(sId);
         response.setError(new Error("0", "SUCCESS", "proxy.EnterpriseRancher.Create"));
-        log.info("Enterprise Rancher [" + enterpriseRancher.toString() + "] created by principal[" + getLoggedUser() + "]");
+        this.log.info("Enterprise Rancher [" + enterpriseRancher.toString() + "] created by principal[" + getLoggedUser() + "]");
       } else {
         // Set validation error
-        log.warning("Error de validación: " + error_description);
+        this.log.warning("Error de validación: " + error_description);
         response.setError(new Error("VAL01", "Error de validación: " + error_description, "proxy.EnterpriseRancherBean.Create"));
       }
     } catch (Exception e) {
       // Set exception details
-      log.severe("Exception found while create enterprise rancher");
-      log.throwing(this.getClass().getName(), "Create", e);
+      this.log.severe("Exception found while create enterprise rancher");
+      this.log.throwing(this.getClass().getName(), "Create", e);
 
       if (e instanceof javax.persistence.PersistenceException)
         response.setError(new Error("DB01", "Los datos que usted ha intentado ingresar, no son permitidos por la base de datos, "
@@ -99,7 +101,7 @@ public class EnterpriseRancherBean extends BaseBean implements Cruddable {
       }
     }
 
-    log.exiting(EnterpriseRancherBean.class.getCanonicalName(), "Create");
+    this.log.exiting(EnterpriseRancherBean.class.getCanonicalName(), "Create");
     return response;
   }
 
@@ -108,7 +110,7 @@ public class EnterpriseRancherBean extends BaseBean implements Cruddable {
    */
   @Override
   public ReadGatewayResponse Read(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Read");
+    this.log.entering(this.getClass().getCanonicalName(), "Read");
 
     ReadGatewayResponse response = new ReadGatewayResponse();
     response.setEntityName(request.getEntityName());
@@ -116,23 +118,22 @@ public class EnterpriseRancherBean extends BaseBean implements Cruddable {
     EnterpriseRancher enterpriseRancher = null;
     try {
       enterpriseRancher = entityFromRequest(request, EnterpriseRancher.class);
-      log.fine("Got rancher from request: " + enterpriseRancher);
+      this.log.fine("Got rancher from request: " + enterpriseRancher);
 
-      TypedQuery<EnterpriseRancher> readQuery = null;
       String qryLogger = "";
+      String queryName = "";
+      Map<String, Object> parameters = new HashMap<String, Object>();
       if (enterpriseRancher.getEnterpriseId() != 0) {
-        readQuery = em.createNamedQuery("ENTERPRISE_RANCHER_BY_ID", EnterpriseRancher.class);
-        log.fine("Query by Id: " + enterpriseRancher.getEnterpriseId());
-        readQuery.setParameter("enterpriseId", enterpriseRancher.getEnterpriseId());
+        queryName = "ENTERPRISE_RANCHER_BY_ID";
+        parameters.put("enterpriseId", enterpriseRancher.getEnterpriseId());
         qryLogger = "By enterpriseId [" + enterpriseRancher.getEnterpriseId() + "]";
       } else {
-        // No other filter expected for enterprise ranchers, return all
-        readQuery = em.createNamedQuery("ALL_ENTERPRISE_RANCHERS", EnterpriseRancher.class);
-        qryLogger = "ALL_ENTERPRISE_RANCHERS";
+        queryName = "ALL_ENTERPRISE_RANCHERS";
+        qryLogger = "By ALL_ENTERPRISE_RANCHERS";
       }
 
       // Query the results through the jpa using a typedQuery
-      List<EnterpriseRancher> queryResults = readQuery.getResultList();
+      List<EnterpriseRancher> queryResults = dataModel.readDataModelList(queryName, parameters, EnterpriseRancher.class);
 
       if (queryResults.isEmpty()) {
         response.setError(new Error("VAL02", "No se encontraron datos para el filtro seleccionado",
@@ -143,18 +144,18 @@ public class EnterpriseRancherBean extends BaseBean implements Cruddable {
 
         // Add success message to response
         response.setError(new Error("0", "SUCCESS", "proxy.EnterpriseRancher.Read"));
-        log.info("Read operation " + qryLogger + " executed by principal[" + getLoggedUser() + "] on EnterpriseRancherBean");
+        this.log.info("Read operation " + qryLogger + " executed by principal[" + getLoggedUser() + "] on EnterpriseRancherBean");
       }
     } catch (Exception e) {
       // something went wrong, alert the server and respond the client
-      log.severe("Exception found while reading enterprise contact");
-      log.throwing(this.getClass().getCanonicalName(), "Read", e);
+      this.log.severe("Exception found while reading enterprise contact");
+      this.log.throwing(this.getClass().getCanonicalName(), "Read", e);
 
       response.setError(new Error("DB02", "Read exception: " + e.getMessage(), "proxy.EnterpriseRancherBean.Read"));
     }
 
     // end and respond.
-    log.exiting(this.getClass().getCanonicalName(), "Read");
+    this.log.exiting(this.getClass().getCanonicalName(), "Read");
     return response;
   }
 
@@ -163,33 +164,32 @@ public class EnterpriseRancherBean extends BaseBean implements Cruddable {
    */
   @Override
   public UpdateGatewayResponse Update(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Update");
+    this.log.entering(this.getClass().getCanonicalName(), "Update");
     UpdateGatewayResponse response = new UpdateGatewayResponse();
     com.tramex.sisoprega.dto.EnterpriseRancher enterpriseRancher = null;
     try {
       enterpriseRancher = entityFromRequest(request, com.tramex.sisoprega.dto.EnterpriseRancher.class);
       if (enterpriseRancher.getEnterpriseId() == 0) {
-        log.warning("VAL04 - Entity ID Omission.");
+        this.log.warning("VAL04 - Entity ID Omission.");
         response.setError(new Error("VAL04", "Se ha omitido el id del ganadero al intentar actualizar sus datos.",
             "proxy.EnterpriseRancher.Update"));
       } else {
         if (validateEntity(enterpriseRancher)) {
-          em.merge(enterpriseRancher);
-          em.flush();
+          dataModel.updateDataModel(enterpriseRancher);
 
           response.setUpdatedRecord(getContentFromEntity(enterpriseRancher, com.tramex.sisoprega.dto.EnterpriseRancher.class));
           response.setEntityName(request.getEntityName());
           response.setError(new Error("0", "SUCCESS", "proxy.EnterpriseRancher.Update"));
-          log.info("EnterpriseRancher[" + enterpriseRancher.toString() + "] updated by principal[" + getLoggedUser() + "]");
+          this.log.info("EnterpriseRancher[" + enterpriseRancher.toString() + "] updated by principal[" + getLoggedUser() + "]");
         } else {
-          log.warning("Validation error: " + error_description);
+          this.log.warning("Validation error: " + error_description);
           response.setError(new Error("VAL01", "Error de validación de datos:" + error_description,
               "proxy.EnterpriseRancherBean.Update"));
         }
       }
     } catch (Exception e) {
-      log.severe("Exception found while updating enterpriseRancher");
-      log.throwing(this.getClass().getName(), "Update", e);
+      this.log.severe("Exception found while updating enterpriseRancher");
+      this.log.throwing(this.getClass().getName(), "Update", e);
 
       if (e instanceof javax.persistence.PersistenceException)
         response.setError(new Error("DB01", "Los datos que usted ha intentado ingresar, no son permitidos por la base de datos, "
@@ -201,7 +201,7 @@ public class EnterpriseRancherBean extends BaseBean implements Cruddable {
       }
     }
 
-    log.exiting(this.getClass().getCanonicalName(), "Update");
+    this.log.exiting(this.getClass().getCanonicalName(), "Update");
     return response;
   }
 
@@ -210,38 +210,35 @@ public class EnterpriseRancherBean extends BaseBean implements Cruddable {
    */
   @Override
   public BaseResponse Delete(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Delete");
+    this.log.entering(this.getClass().getCanonicalName(), "Delete");
 
     BaseResponse response = new BaseResponse();
     try {
 
       EnterpriseRancher enterpriseRancher = entityFromRequest(request, EnterpriseRancher.class);
       if (enterpriseRancher.getEnterpriseId() == 0) {
-        log.warning("VAL04 - Entity ID Omission.");
+        this.log.warning("VAL04 - Entity ID Omission.");
         response.setError(new Error("VAL04", "Se ha omitido el id del contacto al intentar eliminar el registro.",
             "proxy.EnterpriseContact.Delete"));
       } else {
-        TypedQuery<EnterpriseRancher> readQuery = em.createNamedQuery("ENTERPRISE_RANCHER_BY_ID", EnterpriseRancher.class);
-        readQuery.setParameter("enterpriseId", enterpriseRancher.getEnterpriseId());
-        enterpriseRancher = readQuery.getSingleResult();
-        log.info("Deleting EnterpriseRancher [" + enterpriseRancher.toString() + "] by principal[" + getLoggedUser() + "]");
-        em.merge(enterpriseRancher);
-        em.remove(enterpriseRancher);
-        em.flush();
+        enterpriseRancher = dataModel.readSingleDataModel("ENTERPRISE_RANCHER_BY_ID", "enterpriseId",
+            enterpriseRancher.getEnterpriseId(), EnterpriseRancher.class);
+        this.log.info("Deleting EnterpriseRancher [" + enterpriseRancher.toString() + "] by principal[" + getLoggedUser() + "]");
+        dataModel.deleteDataModel(enterpriseRancher, getLoggedUser());
 
         response.setError(new Error("0", "SUCCESS", "proxy.EnterpriseRancher.Delete"));
-        log.info("EnterpriseRancher successfully deleted by principal [" + getLoggedUser() + "]");
+        this.log.info("EnterpriseRancher successfully deleted by principal [" + getLoggedUser() + "]");
       }
     } catch (Exception e) {
-      log.severe("Exception found while deleting contact");
-      log.throwing(this.getClass().getName(), "Delete", e);
+      this.log.severe("Exception found while deleting contact");
+      this.log.throwing(this.getClass().getName(), "Delete", e);
 
       response.setError(new Error("DEL01",
           "Error al intentar borrar datos. Es muy probable que la entidad que usted quiere eliminar "
               + "cuente con otras entidades relacionadas.", "proxy.EnterpriseRancher.Delete"));
     }
 
-    log.exiting(this.getClass().getCanonicalName(), "Delete");
+    this.log.exiting(this.getClass().getCanonicalName(), "Delete");
     return response;
   }
 
@@ -294,50 +291,56 @@ public class EnterpriseRancherBean extends BaseBean implements Cruddable {
 
     if (valid) {
       valid = rancher.getLegalId().trim().length() > 0;
-      if(!valid)
+      if (!valid)
         error_description = "El RFC de la empresa es un campo requerido.";
     }
-    
-    if(valid){
+
+    if (valid) {
       valid = rancher.getLegalName().length() <= 100;
-      if(!valid)
+      if (!valid)
         error_description = "La razón social es un campo requerido en la base de datos.";
     }
-    
-    if(valid){
-      valid = rancher.getLegalName().trim().length() >0;
-      if(!valid)
+
+    if (valid) {
+      valid = rancher.getLegalName().trim().length() > 0;
+      if (!valid)
         error_description = "La razón social de la empresa es un campo requerido en la base de datos.";
     }
-    
-    if(valid){
+
+    if (valid) {
       valid = rancher.getState().length() <= 80;
-      if(!valid)
+      if (!valid)
         error_description = "El estado de la dirección de la empresa es más grande de lo requerido.";
     }
-    
-    if(valid){
+
+    if (valid) {
       valid = rancher.getState().trim().length() > 0;
-      if(!valid)
+      if (!valid)
         error_description = "El estado de la dirección de la empresa es un campo requerido.";
     }
-    
-    if(valid){
-      valid = rancher.getTelephone().length()<=20;
-      if(!valid)
+
+    if (valid) {
+      valid = rancher.getTelephone().length() <= 20;
+      if (!valid)
         error_description = "El teléfono de la empresa es más grande de lo permitido en la base de datos.";
     }
-    
-    if(valid){
-      valid = rancher.getZipCode().length()<=9;
-      if(!valid)
+
+    if (valid) {
+      valid = rancher.getZipCode().length() <= 9;
+      if (!valid)
         error_description = "El código postal de la empresa es más grande de lo permitido en la base de datos.";
     }
-    
-    if(valid){
+
+    if (valid) {
       valid = rancher.getZipCode().trim().length() > 0;
-      if(!valid)
+      if (!valid)
         error_description = "El código postal de la empresa es un campo requerido.";
+    }
+
+    if (valid && rancher.getEmail() != null && rancher.getEmail().trim().length() > 0) {
+      valid = Utils.isValidEmail(rancher.getEmail());
+      if (!valid)
+        error_description = "La dirección de correo electrónico no cumple con un formato reconocible (correo@dominio.etc).";
     }
 
     if (valid) {
@@ -359,41 +362,25 @@ public class EnterpriseRancherBean extends BaseBean implements Cruddable {
     return duplicate;
   }
 
-  private boolean duplicateRFC(com.tramex.sisoprega.dto.EnterpriseRancher rancher) {
-    boolean duplicate = false;
+  private boolean duplicateRFC(EnterpriseRancher rancher) {
 
-    TypedQuery<com.tramex.sisoprega.dto.RancherInvoice> readQuery = null;
+    Map<String, Object> parameters = new HashMap<String, Object>();
+    parameters.put("rfc", rancher.getLegalId());
+    List<RancherInvoice> invoices = dataModel.readDataModelList("RANCHER_INVOICE_BY_RFC", parameters, RancherInvoice.class);
 
-    readQuery = em.createNamedQuery("RANCHER_INVOICE_BY_RFC", com.tramex.sisoprega.dto.RancherInvoice.class);
-    readQuery.setParameter("rfc", rancher.getLegalId());
+    error_description = "El RFC ya esta en uso por otro ganadero";
 
-    try {
-      com.tramex.sisoprega.dto.RancherInvoice enterprise = readQuery.getSingleResult();
-      duplicate = enterprise != null;
-      error_description = "RFC (legal_id) is already in use by a rancher";
-    } catch (NoResultException e) {
-      duplicate = false;
-    }
-
-    return duplicate;
+    return !invoices.isEmpty();
   }
 
-  private boolean duplicateLegalName(com.tramex.sisoprega.dto.EnterpriseRancher rancher) {
-    boolean duplicate = false;
+  private boolean duplicateLegalName(EnterpriseRancher rancher) {
+    Map<String, Object> parameters = new HashMap<String, Object>();
+    parameters.put("legalName", rancher.getLegalName());
+    List<RancherInvoice> invoices = dataModel
+        .readDataModelList("RANCHER_INVOICE_BY_LEGAL_NAME", parameters, RancherInvoice.class);
 
-    TypedQuery<com.tramex.sisoprega.dto.RancherInvoice> readQuery = null;
+    error_description = "La razón social ya esta en uso por otro ganadero.";
 
-    readQuery = em.createNamedQuery("RANCHER_INVOICE_BY_LEGAL_NAME", com.tramex.sisoprega.dto.RancherInvoice.class);
-    readQuery.setParameter("legalName", rancher.getLegalName());
-
-    try {
-      com.tramex.sisoprega.dto.RancherInvoice enterprise = readQuery.getSingleResult();
-      duplicate = enterprise != null;
-      error_description = "Legal name is already in use by a rancher";
-    } catch (NoResultException e) {
-      duplicate = false;
-    }
-
-    return duplicate;
+    return !invoices.isEmpty();
   }
 }

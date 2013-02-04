@@ -15,7 +15,7 @@ var	_arrReceptionList=[
 		{reception_id:1,rancher_id:1,
 		 rancher_name:"BALDOR / DEL RIO MENDEZ ALAN", arrival_date:"2012-09-15",
 		 cattype_id:1,cattype_name:"CABALLOS",hc_aprox:100,
-		 city_id:1,city_name:"LOCAL",
+		 city_id:1,city_name:"CHIHUAHUA",
 		 weights:[{hcw_id:0,hc:50,weight:1234}],barnyards:{"1E5":"1E5"},
 		 accepted_count:"",
 		 inspections:[{rejected_id:1,rejected_count:1,reject_id:1,reject_desc:"ENFERMEDAD"}],
@@ -33,7 +33,7 @@ var	_arrReceptionList=[
 		 },
 	];	
 
-var _arrCities=[{city_id:1,city_name:"LOCAL"},{city_id:2,city_name:"FORANEA"}];
+var _arrCities=[{city_id:1,city_name:"Chihuahua"},{city_id:2,city_name:"Zona Sur"}];
 
 var _arrRancherList =[
 					{rancher_id:1,aka:"BALDOR", first_name:"ALAN", last_name:"DEL RIO", mother_name:"MENDEZ",
@@ -75,7 +75,8 @@ var _arrBarnyardsListCatalog=[
                		 barnyard_capacity:[{catclass_id:1,catclass_name:"EQUINO",head_count:75}]},
                		{barnyard_id:2,barnyard_code:"A2", location_id: "2",
                		 barnyard_capacity:[{catclass_id:4,cattype_name:"BOVINO",head_count:50}]}
-               	];		
+               	];	
+
 var _objMainHeader;
 var _objPopupHeader;
 
@@ -158,3 +159,27 @@ enyo.kind({
 });
 
 var cacheMan = new cache();
+cacheMan.findLocation = function(criteria){				
+	var result = [];
+	if (criteria != ""){
+		var locations = _arrCities;
+		var pattern = new RegExp(criteria.trim(), "ig");
+		for (property in locations){
+			pattern.lastIndex = 0;
+			if (pattern.test(locations[property].city_name)){
+				var location = {caption:locations[property].city_name,value:locations[property].city_id};
+				result.push(location);
+			}
+		}	
+	}
+	return result;
+	};
+cacheMan.allLocationsForList = function() {
+	var result = [];
+	var locations = _arrCities;	
+	for (property in locations){
+		var location = {caption:locations[property].city_name,value:locations[property].city_id};
+		result.push(location);
+	}
+	return result;
+};

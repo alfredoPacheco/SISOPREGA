@@ -15,6 +15,11 @@
  * 12/01/2012  Diego Torres                  System log will be provided by app server.
  * 12/13/2012  Alfredo Pacheco               Field handling moved from ctrl_feed_order_details to ctrl_feed_order.
  * 01/04/2013  Alfredo Pacheco		     On Delete Cascade for ctrl_feed_order_barnyard and ctrl_feed_order_details.
+ * 01/13/2013  Diego Torres                  Add email to enterprise rancher.
+ * 01/29/2013  Diego Torres                  Add rancher user.
+ * 01/29/2013  Alfredo Pacheco               Index rancher_id removed from cat_rancher_invoice.
+ * 02/01/2013  Alfredo Pacheco               cat_rancher_invoice.rancher_id now references cat_rancher.rancher_id
+ * 02/02/2013  Diego Torres                  sys_sisoprega_role.record_id provides a unique id for data model.
  * ====================================================================================
  * 
  * Author: Diego Torres
@@ -33,7 +38,7 @@
  */
 DROP TABLE IF EXISTS sys_sisoprega_user CASCADE;
 CREATE TABLE sys_sisoprega_user(
-	user_name varchar(10) NOT NULL PRIMARY KEY,
+	user_name varchar(30) NOT NULL PRIMARY KEY,
 	user_password varchar(32) NOT NULL
 );
  
@@ -41,9 +46,14 @@ GRANT ALL ON sys_sisoprega_user TO sisoprega;
  
 DROP TABLE IF EXISTS sys_sisoprega_role CASCADE;
 CREATE TABLE sys_sisoprega_role(
-	user_name varchar(10) NOT NULL REFERENCES sys_sisoprega_user(user_name),
+    record_id SERIAL PRIMARY KEY,
+	user_name varchar(30) NOT NULL REFERENCES sys_sisoprega_user(user_name),
 	role_name varchar(20) NOT NULL
 );
+
+GRANT ALL ON sys_sisoprega_user to sisoprega;
+GRANT ALL ON sys_sisoprega_role to sisoprega;
+GRANT ALL ON sys_sisoprega_role_record_id_seq to sisoprega;
  
 CREATE UNIQUE INDEX U_user_role ON sys_sisoprega_role(user_name, role_name);
 
@@ -83,13 +93,14 @@ DROP TABLE IF EXISTS cat_enterprise_rancher CASCADE;
 CREATE TABLE cat_enterprise_rancher(
   enterprise_id integer PRIMARY KEY,
   legal_name VARCHAR(100) NOT NULL,
-  address_one VARCHAR(100) NOT NULL,
+  address_one VARCHAR(100),
   address_two VARCHAR(100),
-  city VARCHAR(80) NOT NULL,
-  address_state VARCHAR(80) NOT NULL,
-  zip_code VARCHAR(9) NOT NULL,
-  legal_id VARCHAR(13) NOT NULL,
-  telephone VARCHAR(20)
+  city VARCHAR(80),
+  address_state VARCHAR(80),
+  zip_code VARCHAR(9),
+  legal_id VARCHAR(13),
+  telephone VARCHAR(20),
+  email VARCHAR(150)
 );
 
 CREATE UNIQUE INDEX U_enterprise_rancher_legal_id ON cat_enterprise_rancher(legal_id);
@@ -175,12 +186,23 @@ AFTER DELETE ON cat_person_rancher
 FOR EACH ROW
 EXECUTE PROCEDURE proc_person_rancher_delete();
 
+DROP TABLE IF EXISTS cat_rancher_user CASCADE;
+CREATE TABLE cat_rancher_user(
+  record_id SERIAL PRIMARY KEY,
+  rancher_id integer NOT NULL REFERENCES cat_rancher(rancher_id) ON DELETE CASCADE,
+  user_name VARCHAR(30) NOT NULL REFERENCES sys_sisoprega_user(user_name) ON DELETE CASCADE
+);
+
+CREATE UNIQUE INDEX U_rancher_user ON cat_rancher_user(rancher_id, user_name);
+
+GRANT ALL ON cat_rancher_user TO sisoprega;
+GRANT ALL ON cat_rancher_user_record_id_seq TO sisoprega;
 
 DROP TABLE IF EXISTS cat_rancher_invoice CASCADE;
 
 CREATE TABLE cat_rancher_invoice (
   rancher_invoice_id  SERIAL PRIMARY KEY,
-  rancher_id integer NOT NULL REFERENCES cat_person_rancher(rancher_id),
+  rancher_id integer NOT NULL REFERENCES cat_rancher(rancher_id) ON DELETE CASCADE,
   legal_name VARCHAR(100) NOT NULL,
   address_one VARCHAR(100) NOT NULL,
   address_two VARCHAR(100),
@@ -190,7 +212,6 @@ CREATE TABLE cat_rancher_invoice (
   legal_id VARCHAR(13) NOT NULL
 );
 
-CREATE UNIQUE INDEX U_rancher_invoice_rancher_id ON cat_rancher_invoice(rancher_id);
 CREATE UNIQUE INDEX U_rancher_invoice_legal_name ON cat_rancher_invoice(legal_name);
 CREATE UNIQUE INDEX U_rancher_invoice_legal_ID ON cat_rancher_invoice(legal_id);
 
@@ -258,7 +279,6 @@ GRANT ALL ON cat_cattle_type_cattype_id_seq TO sisoprega;
 INSERT INTO cat_cattle_type(catclass_id, cattype_name) VALUES(1, 'Novillos');
 INSERT INTO cat_cattle_type(catclass_id, cattype_name) VALUES(1, 'Vaquillas');
 INSERT INTO cat_cattle_type(catclass_id, cattype_name) VALUES(2, 'Caballos');
-INSERT INTO cat_cattle_type(catclass_id, cattype_name) VALUES(2, 'Yeguas');
 
 /*
   Table structure for table cat_location 
@@ -297,7 +317,6 @@ CREATE UNIQUE INDEX U_barnyard_code ON cat_barnyard(barnyard_code, location_id);
 
 GRANT ALL ON cat_barnyard TO sisoprega;
 GRANT ALL ON cat_barnyard_barnyard_id_seq TO sisoprega;
-
 
 /* 
   Table structure for table cat_barnyard_capacity.
@@ -407,7 +426,7 @@ DROP TABLE IF EXISTS ctrl_feed_order CASCADE;
 CREATE TABLE ctrl_feed_order(
 	order_id SERIAL PRIMARY KEY,
 	reception_id integer NOT NULL REFERENCES ctrl_reception(reception_id),
-	feed_date date NOT NULL,
+	feed_date timestamp without time zone NOT NULL DEFAULT now(),
 	feed_originator varchar(150),
 	handling varchar(100)
 );
@@ -426,7 +445,7 @@ CREATE TABLE ctrl_feed_order_barnyard(
 CREATE UNIQUE INDEX U_feed_order_barnyard ON ctrl_feed_order_barnyard(order_id, barnyard_id);
 
 GRANT ALL ON ctrl_feed_order_barnyard TO sisoprega;
-GRANT ALL ON cctrl_feed_order_barnyard_feed_ord_barn_id_seq TO sisoprega;
+GRANT ALL ON ctrl_feed_order_barnyard_feed_ord_barn_id_seq TO sisoprega;
 
 DROP TABLE IF EXISTS cat_food CASCADE;
 CREATE TABLE cat_food(
@@ -522,7 +541,7 @@ CREATE TABLE ctrl_inspection_forecast_detail(
 	auth varchar(10),
 	origin varchar(20),
 	cattle_type integer NOT NULL REFERENCES cat_cattle_type(cattype_id),
-	quantity integer not null,
+	quantity integer not null
 );
 
 GRANT ALL ON ctrl_inspection_forecast_detail TO sisoprega;
@@ -534,3 +553,20 @@ CREATE TABLE ctrl_inspection_forecast_barnyard(
 	detail_id integer NOT NULL REFERENCES ctrl_inspection_forecast_detail(id) ON DELETE CASCADE,
 	barnyard_id integer NOT NULL REFERENCES cat_barnyard(barnyard_id)
 );
+
+GRANT ALL ON ctrl_inspection_forecast_barnyard TO sisoprega;
+GRANT ALL ON ctrl_inspection_forecast_barnyard_id_seq TO sisoprega;
+
+CREATE OR REPLACE VIEW vw_rancher AS
+SELECT 
+  rancher_id, 
+  first_name || ' ' || last_name AS rancher_name 
+FROM 
+  cat_person_rancher 
+UNION (SELECT 
+  enterprise_id AS rancher_id, 
+  legal_name AS rancher_name 
+FROM cat_enterprise_rancher)
+ORDER BY rancher_name;
+
+GRANT ALL ON vw_rancher TO sisoprega;

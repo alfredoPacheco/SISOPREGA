@@ -1,5 +1,5 @@
 enyo.kind({
-	name: "receptions.barnyards.map",
+	name: "receptions.barnyards.map",	
 	arrReception:[{caption:"Recepcion",value:1},{caption:"Deseleccionar",value:2}],
 	arrPostReception:[{caption:"Alimento",value:3},
 				      {caption:"Inspeccion",value:4},
@@ -7,7 +7,8 @@ enyo.kind({
 					  {caption:"Liberar",value:6},
 					  {caption:"Deseleccionar",value:8},
 					  ],
-    kind: enyo.SlidingView,
+    kind: enyo.VFlexBox,
+    flex:1,
 	arrByMOver:{},
 	objSelected:null,
 	arrSelected:{},
@@ -15,97 +16,120 @@ enyo.kind({
 	sColorOccupied:"#ff7200",
 	sColorFree:"white",	
 	sColorSelect:"lightgreen",
-	sColorSelectOccupied:"#9b7eb1",
+	sColorSelectOccupied:"#9b7eb1",	
+	className:"mapBG",
+	create : function() {
+		this.inherited(arguments);
+		this.$.rancherFilter.setItems(cacheRanchers.getAllForList());		
+	},
 	components: [
-		{kind:"VFlexBox", flex:1, className:"mapBG",
-		 components:[
 			{name: "options", kind: enyo.PopupSelect, onSelect: "actionSelected",items:[]},
-			{kind:enyo.BasicScroller,flex: 1,
+			{kind:enyo.BasicScroller,flex: 1, 
 			components:[
-				{name: "cells", kind: "VFlexBox",align:"middle", onclick: "cellsClick"},
+				{name: "cells", kind: "VFlexBox",align:"center",pack:"center", onclick: "cellsClick"},
 			]},
 			{kind: "Popup",name: "popMan", showHideMode: "transition", openClassName: "zoomFadeIn",
 			 className: "transitioner2", layoutKind: "VFlexLayout",
-			 style: "overflow: hidden", width: "95%", height: "95%",scrim: true,}]}
+			 style: "overflow: hidden", width: "95%", height: "95%",scrim: true},
+			 
+			 {kind: "Toolbar",style:"height:20px;",components: [    		
+						{kind: "controls.autocomplete",width:"60%", name:"rancherFilter",
+							  hint:"Filtro por Ganadero", onSelectItem:"rancherFilterChanged"},
+							{kind: "Button",name:"btnClearFilter", className: "enyo-button-negative",
+                    		   caption: "X", onclick: "clearFilter"}	
+			]}
 	],
 	ready: function() {
 		this.last=this.$.cells;
 		//this.addRow(true);
-		this.addRowHeader();
+		this.addRow();
+		this.addRowHeader();		
+		this.createCells("2E",7,4,"50px","50px");
+		this.splitRow();
 		this.addCustomCell("corraman","Corrales de <br/> Manejo","100px","50px");
 		this.createCells("1E",5,6,"50px","50px");
 		this.splitRow();
 		this.createCells("1E",17,8,"50px","50px");
-		this.splitRow();		
-		this.createCells("2E",7,4,"50px","50px");				
-		this.addRow();
+						
+		this.addRow();		
+		this.createCells("2E",8,4,"50px","50px");
+		this.splitRow();
 		this.createCells("1E",2,8,"50px","50px");		
 		this.splitRow();
 		this.createCells("1E",18,8,"50px","50px");		
-		this.splitRow();		
-		this.createCells("2E",8,4,"50px","50px");						
+								
 		this.addRow(true);		
+		this.createCells("2D",11,4,"50px","50px");
+		this.splitRow();
 		this.createCells("1D",1,8,"50px","50px");				
 		this.splitRow();
 		this.createCells("1D",17,8,"50px","50px");
+								
+		this.addRow();	
+		this.createCells("2D",12,6,"33.33px","25px");
 		this.splitRow();
-		this.createCells("2D",11,4,"50px","50px");						
-		this.addRow();		
 		this.createCells("1D",2,12,"33.33px","25px");
 		this.splitRow();
 		this.createCells("1D",26,4,"100px","25px");		
+		
+		this.addRow(true);	
+		this.createCells("2C",11,6,"33.33px","25px");
 		this.splitRow();
-		this.createCells("2D",12,6,"33.33px","25px");
-		this.addRow(true);			
 		this.createCells("1C",1,12,"33.33px","25px");
 		this.splitRow();
 		this.createCells("1C",25,4,"100px","25px");	
+							
+		this.addRow();
+		this.createCells("2C",12,6,"33.33px","25px");
 		this.splitRow();
-		this.createCells("2C",11,6,"33.33px","25px");					
-		this.addRow();		
 		this.createCells("1C",2,12,"33.33px","25px");
 		this.splitRow();
 		this.createCells("1C",26,4,"100px","25px");		
-		this.splitRow();
-		this.createCells("2C",12,6,"33.33px","25px");							
+									
 		this.addRow(true);			
+		this.createCells("2B",11,6,"33.33px","25px");
+		this.splitRow();
 		this.createCells("1B",1,12,"33.33px","25px");
 		this.splitRow();
 		this.createCells("1B",25,4,"100px","25px");						
-		this.splitRow();
-		this.createCells("2B",11,6,"33.33px","25px");							
+									
 		
 		this.addRow(true);
+		this.createCells("2B",8,4,"50px","50px");
+		this.splitRow();
 		this.createCells("1B",2,8,"50px","50px");
 		this.splitRow();
 		this.createCells("1B",18,6,"50px","50px");		
 		this.addCustomCell("lagoxi","Laguna de <br/> Oxidacion","98px","50px");		
-		this.splitRow();
-		this.createCells("2B",8,4,"50px","50px");									
+											
 		this.addRow(true);
+		this.createCells("2A",7,4,"50px","50px");
+		this.splitRow();
 		this.createCells("1A",1,8,"50px","50px");		
 		this.splitRow();
 		this.createCells("1A",17,8,"50px","50px");		
+											
+		this.addRow();		
+		this.createCells("2A",8,4,"50px","50px");
 		this.splitRow();
-		this.createCells("2A",7,4,"50px","50px");									
-		this.addRow();			
 		this.addCustomCell("cabaA","Caballerizas A","99px","50px");
 		this.addCustomCell("cabaB","Caballerizas B","100px","50px");		
 		this.createCells("1A",10,4,"50px","50px");
 		this.splitRow();
 		this.createCells("1A",18,8,"50px","50px");		
-		this.splitRow();
-		this.createCells("2A",8,4,"50px","50px");
 		
-		this.addRow();			
-		this.addCustomCell("spacerone","","813px","50px","customBYCellDesc");		
-		this.splitRow();
+		
+		this.addRow();	
 		this.createCells("2R",7,4,"50px","50px");
+		this.splitRow();
+		this.addCustomCell("spacerone","","813px","50px","customBYCellDesc");		
+		
 													
 		this.addRow();
-		this.addCustomCell("spacertwo","","813px","50px");
+		this.createCells("2R",8,4,"50px","50px");
 		this.splitRow();
-		this.createCells("2R",8,4,"50px","50px");		
+		this.addCustomCell("spacertwo","","813px","50px");
+				
 	},
 	last:null,
 	addCustomCell:function(sName,sCaption,sWidth,sHeight,sClass){
@@ -115,28 +139,40 @@ enyo.kind({
 		objBarn.createComponent({kind:enyo.Control,
 		                         className:sClass,
 								 allowHtml:true,
-		                          style: "width:"+sWidth+
-						                 ";height:"+sHeight+";" +
+		                          style:"width:"+sWidth+
+						                ";height:"+sHeight+";" +
 				                 		"text-align: center;" +
-				                 		"vertical-align: middle;",
+				                 		"vertical-align: middle;" +
+				                 		"background-color:#DABD8B;" +
+				                 		"display: table-cell;",
 			                      name:sName,
 								  content:sCaption,
 								 },{owner: this});		
 	},
 	addRowHeader:function(){
 			this.last=objBarn=this.$.cells.createComponent({kind: "HFlexBox"});																								
-			this.addCustomCell("alaone","<strong>CHIHUAHUA</strong>",
-							  "815px","30px","customBYcellZone");
-			this.splitRow();
 			this.addCustomCell("alatwo","<strong>ZONA SUR</strong>",
-			                   "200px","30px","customBYcellZone");			
+					           "200px","30px","customBYcellZone");
+			this.splitRow();
+			this.addCustomCell("alaone","<strong>CHIHUAHUA</strong>",
+					           "765px","30px","customBYcellZone");
+			this.addRefreshButton();		
 			this.addRow();
 	},
+	addRefreshButton:function(sName,sCaption,sWidth,sHeight,sClass){
+		if(!sClass){
+			sClass="customBYcell";
+		}
+		objBarn.createComponent({kind: "IconButton",  onclick:"refreshMap",
+		                         icon:"images/command-menu/menu-icon-music-repeat.png",
+								 style:"height:23px; width:45px; padding:0;margin:0px",
+								 },{owner: this});		
+	},	
 	addRow:function(bDiv){
 		if (bDiv){	
-			this.$.cells.createComponent({kind: "Divider",caption:"", style:"margin-left: -16px;min-width: 1050px;"});
+			this.$.cells.createComponent({kind: "Divider",caption:"", style:"margin-left:-15px;width: 1040px;"});
 		}else{
-			this.$.cells.createComponent({kind: "HFlexBox", style:"height:5px;"});									
+			this.$.cells.createComponent({kind: "HFlexBox",style:"height:5px;"});									
 		}
 		this.last=objBarn=this.$.cells.createComponent({kind: "HFlexBox"});						
 	},
@@ -144,8 +180,7 @@ enyo.kind({
   		objBarn=this.last;		
 		objBarn.createComponent({kind:enyo.Control,
 		                         style: "width:15px; height:"+sHeight+
-										";align:left"+
-										""});
+										";align:center"});
 	},	
 	createCells:function(sLetter,iStart,iNumber,sWidth,sHeight){
 		//this.createCells("1E",5,6,"50px","50px");
@@ -169,6 +204,7 @@ enyo.kind({
 											   ";", 										
 			                               name:sLetter+iStart,
 										   occupied:iOccupied,
+										   bBY:true,
 										   content:sLetter.substr(1)+iStart,
 										   onclick: "cellClick",
 										   onmousehold:"cellHold",
@@ -319,6 +355,7 @@ enyo.kind({
 		this.$.spacerone.setContent("");
 	},
 	setDesc:function(sBY){
+		_objMainHeader.setStyle("color:#FFF;border:none;font-size:12px; text-align:center;min-width:150px;");
 		try {
 		var objRec=cacheReceptions.getByID(cacheBY.inUse()[sBY].reception_id);
 		var sBy="";
@@ -333,7 +370,7 @@ enyo.kind({
 //			iAc=objRec.accepted_count;
 //		}
 		_objMainHeader.setContent(objRec.rancher_name+" - "+objRec.city_name+"<BR>"+objRec.cattype_name+
-								  "  ("+ objRec.weights[0].hc+"/"+objRec.weights[0].weight+")"+
+								  "  ("+ objRec.hc_aprox+"/"+objRec.weights[0].weight+")"+
 							  	  "	 "+objRec.arrival_date		
 		);	
 		/*this.$.spacerone.setContent("<strong>"+objRec.rancher_name +"</strong> "+
@@ -483,5 +520,93 @@ enyo.kind({
 			this.$[sKey].occupied=1;
 			this.$[sKey].applyStyle("background-color",this.sColorOccupied);							
 		}
+	},
+	
+	refreshMap:function(){
+		cacheMan.showScrim();
+		cacheRanchers.refreshData();			
+		cacheCattle.refreshData();
+		cacheBY.refreshData();
+		cacheReceptions.refreshData();	
+		cacheMan.hideScrim();
+		for (var i = 0, a; (a=this.$.cells.children[i]); i++) {			
+			for (var j = 0, b; (b =a.children[j]); j++) {				
+				if(b.bBY==true){
+					this.$[b.name].removeClass("selectCell");
+					if(cacheBY.isOccupied(b.name)){
+						//alert(b.name)
+						this.$[b.name].occupied=1;						
+						this.$[b.name].applyStyle("background-color",this.sColorOccupied);						
+					}else{
+						this.$[b.name].occupied=0;								
+						this.$[b.name].applyStyle("background-color",this.sColorFree);																	
+					}
+				}
+			}
+		}
+		this.arrByMOver={};
+		this.objSelected=null;
+		this.arrSelected={};
+		this.arrSelectedOccupied={};		
+	},
+	rancherFilterChanged:function(inSender){
+		if(this.$.rancherFilter.getIndex()>-1){
+			var receptions = cacheReceptions.getActiveBYForListByRancherID(this.$.rancherFilter.getIndex());
+			if(receptions.length > 0){
+				for (var i = 0, a; (a=this.$.cells.children[i]); i++) {
+					for (var j = 0, b; (b =a.children[j]); j++) {
+						if(b.bBY==true){
+							this.$[b.name].removeClass("selectCell");
+							this.$[b.name].occupied=0;
+							this.$[b.name].applyStyle("background-color",this.sColorFree);
+							for(x in receptions){
+								var byFinded = cacheBY.getByBarnyard(b.name);
+								if(byFinded){
+									if(byFinded.barnyard_id == receptions[x].value){
+										this.$[b.name].occupied=1;
+										this.$[b.name].applyStyle("background-color",this.sColorOccupied);
+										break;
+									}
+								}
+							}
+						}
+					}
+				}
+			}else{
+				for (var i = 0, a; (a=this.$.cells.children[i]); i++) {
+					for (var j = 0, b; (b =a.children[j]); j++) {
+						if(b.bBY==true){
+							this.$[b.name].removeClass("selectCell");
+							this.$[b.name].occupied=0;
+							this.$[b.name].applyStyle("background-color",this.sColorFree);							
+						}
+					}
+				}
+			}	
+		}else{
+			for (var i = 0, a; (a=this.$.cells.children[i]); i++) {			
+				for (var j = 0, b; (b =a.children[j]); j++) {				
+					if(b.bBY==true){
+						this.$[b.name].removeClass("selectCell");
+						if(cacheBY.isOccupied(b.name)){
+							//alert(b.name)
+							this.$[b.name].occupied=1;						
+							this.$[b.name].applyStyle("background-color",this.sColorOccupied);						
+						}else{
+							this.$[b.name].occupied=0;								
+							this.$[b.name].applyStyle("background-color",this.sColorFree);																	
+						}
+					}
+				}
+			}					
+		}
+		this.arrByMOver={};
+		this.objSelected=null;
+		this.arrSelected={};
+		this.arrSelectedOccupied={};
+	},
+	
+	clearFilter:function(){		
+		this.$.rancherFilter.setIndex(-1);		
 	}
 });		

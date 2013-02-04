@@ -29,7 +29,6 @@ enyo.kind({
 		},
 		{kind: "Toolbar",	
 		components: [					 
-		{kind: "ToolInput", name:"accepted_count", width:"23%",  hint:"Aceptados",changeOnInput: true,},					
 		{kind: "ToolInput", name:"rejected_count", width:"23%",  hint:"Rechazados",changeOnInput: true,},			
 		{kind: "ListSelector", name: 'reject_id', width:"50%",
 		 style:"width:100%;color:white", contentPack:"end",
@@ -50,7 +49,7 @@ enyo.kind({
 		]},					 		
 	],
 	ready:function(){
-		_objPopupHeader = enyo.$.sisoprega_mainMenu_receptionsMap_map_lblInfo;
+		_objPopupHeader = enyo.$.sisoprega_mainMenu_receptionsMap.$.lblInfo;
 	},
 	setupRow:function(inSender, inIndex){		
 		var objInspection;
@@ -71,8 +70,7 @@ enyo.kind({
 		this.$.productList.render();
 	},
 	addReject: function() {		
-		cacheReceptions.addReject(this.$.accepted_count.getValue(),
-		                          this._objRec,this.getReject(),this,"resetValues");
+		cacheReceptions.addReject(this._objRec,this.getReject(),this,"resetValues");
 	},
 	getReject:function(){
 		var objData=null;
@@ -85,9 +83,7 @@ enyo.kind({
 		return objData; 
 	},
 	updateReject:function(){
-		cacheReceptions.updateReject(this.$.accepted_count.getValue(),
-		                     this._objRec,this.iSelect,this.getReject(),
-							 this,"afterUpdate");
+		cacheReceptions.updateReject(this._objRec,this.iSelect,this.getReject(),this,"afterUpdate");
 	},
 	afterUpdate:function(){
 		this.toggleAdd();
@@ -98,7 +94,6 @@ enyo.kind({
 		this.updateHeader();		
 	},
 	set:function(objVar){
-		this.$.accepted_count.setValue(objVar.accepted_count);
 		this._objRec=objVar;
 	},
 	setReject:function(inSender, inEvent){
@@ -121,7 +116,6 @@ enyo.kind({
 		this.resetValues();	
 	},	
 	resetValues:function(){
-		this.$.rejected_count.setValue(this._objRec.accepted_count);
 		this.$.reject_id.setItems(cacheRejects.getLS());	
 		this.$.reject_id.setValue(0);
 		this.$.rejected_count.setValue("");		

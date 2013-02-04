@@ -69,7 +69,7 @@ enyo.kind({
 		    		jQuery.each(this, function(key, value){
 		    			objAux[key] = value;
 		    		});
-		    		objTmp = selfCacheCattle.cattleTypeAdapterToIn(objAux);		    		
+		    		var objTmp = selfCacheCattle.cattleTypeAdapterToIn(objAux);		    		
 		    		arrAux.push(objTmp);
 		    	});
 			}
@@ -103,7 +103,7 @@ enyo.kind({
 		    		jQuery.each(this, function(key, value){
 		    			objAux[key] = value;
 		    		});
-		    		objTmp = selfCacheCattle.cattleClassAdapterToIn(objAux);		    		
+		    		var objTmp = selfCacheCattle.cattleClassAdapterToIn(objAux);		    		
 		    		arrAux.push(objTmp);
 		    	});
 			}
@@ -121,7 +121,7 @@ enyo.kind({
 		
 		return this.arrCattleClass;
 	},
-	create:function(objCat,cbObj,cbMethod){
+	Create:function(objCat,cbObj,cbMethod){
 		
 		var objToSend = this.cattleTypeAdapterToOut(objCat);
 		delete objToSend.cattypeId;
@@ -232,6 +232,36 @@ enyo.kind({
 			cacheMan.setMessage("", "[Exception ID: " + cgDelete.exceptionId + "] Descripcion: " + cgDelete.exceptionDescription);
 			return false;
 		}				
+	},
+	findCattle : function(criteria){				
+		var result = [];
+		if (criteria != ""){
+			var cattles = this.getCattleType();
+			var pattern = new RegExp(criteria.trim(), "ig");
+			for (property in cattles){
+				pattern.lastIndex = 0;
+				if (pattern.test(cattles[property].cattype_name)){
+					var cattletype = {caption:cattles[property].cattype_name,value:cattles[property].cattype_id};
+					result.push(cattletype);
+				}
+			}	
+		}
+		return result;
+		},
+	getAllCattleType : function() {
+		var result = [];
+		var cattles = this.getCattleType();	
+		for (property in cattles){
+			var cattletype = {caption:cattles[property].cattype_name,value:cattles[property].cattype_id};
+			result.push(cattletype);
+		}
+		return result;
+	},
+	refreshData:function(){		
+		this.cattleTypeWasReadFromGateway=false;
+		this.cattleClassWasReadFromGateway=false;
+		this.getCattleClass();
+		this.getCattleType();		
 	}
 });
 var cacheCattle= new cache.cattle();
