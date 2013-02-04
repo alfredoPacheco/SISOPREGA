@@ -90,6 +90,8 @@ enyo.kind({
 	},
 	ready:function(){
 		this.resetValues();
+		this.$.cattype_id.setValue(1);
+		this.$.city_id.setValue(1);
 	},
 	addReception:function(){
 		cacheReceptions.Create(this.getReception(),this,"doAddReception");

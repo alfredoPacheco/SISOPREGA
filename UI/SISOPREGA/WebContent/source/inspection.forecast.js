@@ -294,6 +294,8 @@ enyo
 			ready : function() {
 				this.$.fechaPicker.setValue(new Date());
 				this.cambioDeFecha();
+				this.$.cattle_type_id.setIndex(1);
+				this.$.localidad.setIndex(1);
 			},
 			resetValues : function() {
 				this.$.rancherInput.setIndex(-1);
