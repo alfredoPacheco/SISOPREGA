@@ -279,7 +279,6 @@ GRANT ALL ON cat_cattle_type_cattype_id_seq TO sisoprega;
 INSERT INTO cat_cattle_type(catclass_id, cattype_name) VALUES(1, 'Novillos');
 INSERT INTO cat_cattle_type(catclass_id, cattype_name) VALUES(1, 'Vaquillas');
 INSERT INTO cat_cattle_type(catclass_id, cattype_name) VALUES(2, 'Caballos');
-INSERT INTO cat_cattle_type(catclass_id, cattype_name) VALUES(2, 'Yeguas');
 
 /*
   Table structure for table cat_location 
