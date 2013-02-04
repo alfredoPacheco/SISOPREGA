@@ -196,7 +196,7 @@ CREATE TABLE cat_rancher_user(
 CREATE UNIQUE INDEX U_rancher_user ON cat_rancher_user(rancher_id, user_name);
 
 GRANT ALL ON cat_rancher_user TO sisoprega;
-GRANT ALL ON cat_rancher_user_record_id TO sisoprega;
+GRANT ALL ON cat_rancher_user_record_id_seq TO sisoprega;
 
 DROP TABLE IF EXISTS cat_rancher_invoice CASCADE;
 
