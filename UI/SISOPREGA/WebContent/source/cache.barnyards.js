@@ -305,10 +305,12 @@ enyo.kind({
 		if (cgCreate.exceptionId == 0){ //Created successfully			
 			objAux.recBarnyardId = cgCreate.generatedId;
 			this.arrObjInUse[sID]={reception_id:parseInt(iReceptionID),accepted_count:"",inspections:[],feed:[]};
+			return true;
 		}
 		else{ //Error			
-			cacheMan.setMessage("", "[Exception ID: " + cgCreate.exceptionId + "] Descripcion: " + cgCreate.exceptionDescription);
-			//TODO: do something with arrObjInUse
+			alert( cgCreate.exceptionDescription);
+			//cacheMan.setMessage("", "[Exception ID: " + cgCreate.exceptionId + "] Descripcion: " + cgCreate.exceptionDescription);
+			return false;
 		}
 		
 	},

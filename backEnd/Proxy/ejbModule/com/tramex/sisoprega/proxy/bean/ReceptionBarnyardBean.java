@@ -29,6 +29,7 @@ import com.tramex.sisoprega.common.GatewayRequest;
 import com.tramex.sisoprega.common.ReadGatewayResponse;
 import com.tramex.sisoprega.common.UpdateGatewayResponse;
 import com.tramex.sisoprega.common.crud.Cruddable;
+import com.tramex.sisoprega.dto.Reception;
 import com.tramex.sisoprega.dto.ReceptionBarnyard;
 
 /**
@@ -48,7 +49,9 @@ import com.tramex.sisoprega.dto.ReceptionBarnyard;
  *  12/16/2012  Diego Torres                  Adding log activity
  *  01/03/2013  Diego Torres                  Adding delete request using receptionId & 
  *                                            barnyardId
- * 01/22/2013  Diego Torres                  Implementing DataModel.
+ * 01/22/2013  Diego Torres                   Implementing DataModel.
+ * 02/04/2013  Jaime Figueroa                 Verificar en Proxy que no haya receptiones activas en 
+ *                                            corrales secionados.
  *  ====================================================================================
  * </PRE>
  * 
@@ -87,6 +90,8 @@ public class ReceptionBarnyardBean extends BaseBean implements Cruddable {
         this.log.info("Reception Barnyard [" + recepBarnyard.toString() + "] created by principal[" + getLoggedUser() + "]");
       } else {
         this.log.warning("Error de validación: " + error_description);
+        if(!receptionHasBarnyards(recepBarnyard.getReceptionId()))
+          deleteReception(recepBarnyard.getReceptionId());
         response.setError(new Error("VAL01", "Error de validación: " + error_description, "proxy.ReceptionBarnyardBean.Create"));
       }
 
@@ -138,7 +143,7 @@ public class ReceptionBarnyardBean extends BaseBean implements Cruddable {
         queryName = "RECEPTION_BARNYARD_BY_RECEPTION_ID";
         parameters.put("receptionId", rBarnyard.getReceptionId());
         qryLogger = "By receptionId [" + rBarnyard.getReceptionId() + "]";
-      } else if(rBarnyard.getBarnyardId() != 0){
+      } else if (rBarnyard.getBarnyardId() != 0) {
         queryName = "RECEPTION_BARNYARD_BY_BARNYARD_ID";
         parameters.put("barnyardId", rBarnyard.getBarnyardId());
         qryLogger = "By barnyardId [" + rBarnyard.getBarnyardId() + "]";
@@ -151,7 +156,8 @@ public class ReceptionBarnyardBean extends BaseBean implements Cruddable {
       List<ReceptionBarnyard> queryResults = dataModel.readDataModelList(queryName, parameters, ReceptionBarnyard.class);
 
       if (queryResults.isEmpty()) {
-        response.setError(new Error("VAL02", "No se encontraron datos para el filtro seleccionado", "proxy.ReceptionBarnyard.Read"));
+        response.setError(new Error("VAL02", "No se encontraron datos para el filtro seleccionado",
+            "proxy.ReceptionBarnyard.Read"));
       } else {
         response.getRecord().addAll(contentFromList(queryResults, ReceptionBarnyard.class));
 
@@ -236,20 +242,23 @@ public class ReceptionBarnyardBean extends BaseBean implements Cruddable {
 
     try {
       ReceptionBarnyard recepBarnyard = entityFromRequest(request, ReceptionBarnyard.class);
-      if(recepBarnyard.getRecBarnyardId()!=0){
-        recepBarnyard = dataModel.readSingleDataModel("CRT_RECEPTIONBARNYARD_BY_ID", "recBarnyardId", recepBarnyard.getRecBarnyardId(), ReceptionBarnyard.class);
+      if (recepBarnyard.getRecBarnyardId() != 0) {
+        recepBarnyard = dataModel.readSingleDataModel("CRT_RECEPTIONBARNYARD_BY_ID", "recBarnyardId",
+            recepBarnyard.getRecBarnyardId(), ReceptionBarnyard.class);
         this.log.info("Deleting Reception Barnyard [" + recepBarnyard.toString() + "] by principal[" + getLoggedUser() + "]");
         dataModel.deleteDataModel(recepBarnyard, getLoggedUser());
         response.setError(new Error("0", "SUCCESS", "proxy.ReceptionBarnyard.Delete"));
-      }else if(recepBarnyard.getBarnyardId()!=0 && recepBarnyard.getReceptionId()!=0){
+      } else if (recepBarnyard.getBarnyardId() != 0 && recepBarnyard.getReceptionId() != 0) {
         Map<String, Object> parameters = new HashMap<String, Object>();
         parameters.put("barnyard_id", recepBarnyard.getBarnyardId());
         parameters.put("reception_id", recepBarnyard.getReceptionId());
-        List<ReceptionBarnyard> barnyards = dataModel.readDataModelList("RECEPTION_BARNYARD_BY_BARNYARD_ID_AND_RECEPTION_ID", parameters, ReceptionBarnyard.class);
-        
-        if(!barnyards.isEmpty()){
+        List<ReceptionBarnyard> barnyards = dataModel.readDataModelList("RECEPTION_BARNYARD_BY_BARNYARD_ID_AND_RECEPTION_ID",
+            parameters, ReceptionBarnyard.class);
+
+        if (!barnyards.isEmpty()) {
           recepBarnyard = barnyards.get(0);
-          this.log.info("Deleting Reception Barnyard [" + recepBarnyard.toString() + "] by barnyardId and receptionId[" + getLoggedUser() + "]");
+          this.log.info("Deleting Reception Barnyard [" + recepBarnyard.toString() + "] by barnyardId and receptionId["
+              + getLoggedUser() + "]");
           dataModel.deleteDataModel(recepBarnyard, getLoggedUser());
         }
 
@@ -259,7 +268,7 @@ public class ReceptionBarnyardBean extends BaseBean implements Cruddable {
         response.setError(new Error("VAL04", "Se ha omitido el id del corral al intentar eliminar el registro.",
             "proxy.ReceptionBarnyard.Delete"));
       }
-      
+
     } catch (Exception e) {
       this.log.severe("Exception found while deleting ReceptionBarnyard");
       this.log.throwing(this.getClass().getName(), "Delete", e);
@@ -271,6 +280,39 @@ public class ReceptionBarnyardBean extends BaseBean implements Cruddable {
 
     this.log.exiting(this.getClass().getCanonicalName(), "Delete");
     return response;
+  }
+
+  @Override
+  protected boolean validateEntity(Object entity) {
+    boolean valid = super.validateEntity(entity);
+
+    if (valid) {
+      ReceptionBarnyard reception = (ReceptionBarnyard) entity;
+      long barnyardId = reception.getBarnyardId();
+      Map<String, Object> parameters = new HashMap<String, Object>();
+      parameters.put("barnyardId", barnyardId);
+
+      List<ReceptionBarnyard> receptions = dataModel.readDataModelList("RECEPTION_BARNYARD_BY_BARNYARD_ID", parameters,
+          ReceptionBarnyard.class);
+      valid = receptions.isEmpty();
+      if (!valid)
+        error_description = "No es posible recibir en este corral dado que ya esta ocupado";
+    }
+
+    return valid;
+  }
+
+  private void deleteReception(long receptionId) {
+    Reception reception = dataModel.readSingleDataModel("CRT_RECEPTION_BY_ID", "receptionId", receptionId, Reception.class);
+    dataModel.deleteDataModel(reception, getLoggedUser());
+  }
+
+  private boolean receptionHasBarnyards(long receptionId) {
+    Map<String, Object> parameters = new HashMap<String, Object>();
+    parameters.put("receptionId", receptionId);
+    List<ReceptionBarnyard> receptions = dataModel.readDataModelList("RECEPTION_BARNYARD_BY_RECEPTION_ID", parameters,
+        ReceptionBarnyard.class);
+    return !receptions.isEmpty();
   }
 
 }
