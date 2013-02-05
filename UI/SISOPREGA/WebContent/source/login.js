@@ -37,6 +37,10 @@ enyo.kind({
 				 flex:1, caption: "Entrar", onclick: "checkLogIn", isDefault:"true"},				
 				 ]}							  
 	],
+	ready:function(){
+		this.$.user.$.input.applyStyle("color", "white");
+		this.$.password.$.input.applyStyle("color", "white");
+	},
 	checkLogIn:function(){
 		cacheMan.showScrim();
 		var consumirLogin = consumingGateway.Login(this.$.user.getValue(), this.$.password.getValue());
