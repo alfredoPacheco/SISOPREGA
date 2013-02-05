@@ -28,7 +28,7 @@ enyo.kind({
 			components:[
 				{name: "cells", kind: "VFlexBox",align:"center",pack:"center", onclick: "cellsClick"},
 			]},
-			{kind: "Popup",name: "popMan", showHideMode: "transition", openClassName: "zoomFadeIn",
+			{kind: "Popup",name: "popMan", dismissWithClick:false,showHideMode: "transition", openClassName: "zoomFadeIn",
 			 className: "transitioner2", layoutKind: "VFlexLayout",
 			 style: "overflow: hidden", width: "95%", height: "95%",scrim: true},
 			 
@@ -412,11 +412,16 @@ enyo.kind({
 				if(this.$.tbHeaderRec){
 					this.$.tbHeaderRec.destroy();
 				}				
-			    this.$.popMan.createComponent({kind: "Toolbar",name:"tbHeaderRec",style:"height:10px", 
+				this.$.popMan.createComponent({kind: "Toolbar",name:"tbHeaderRec",style:"height:10px", 
 											 components: [
-												{kind: "Spacer"},
+												{kind: "VFlexBox", name:'lblBYselected', allowHtml:true,
+													 style:"color:#FFF;border:none;font-size:12px", content: "algo",flex:1},
+													 {kind: "Spacer",flex:1},
+												{kind: "VFlexBox", name:'lblInfo', allowHtml:true,
+													 style:"color:#FFF;border:none;font-size:12px;text-align:center;", content: "",flex:1},
+													 {kind: "Spacer",flex:1},
 												{name:'btnLogOut', onclick:"closePopUp",
-												 icon:"images/command-menu/icon-context.png"}]},{owner:this});						
+												 icon:"images/command-menu/icon-context.png",flex:1}]},{owner:this});						
 				this.$.popMan.createComponent({kind: "receptions.feed",
 										       onAddFeed:"closePopUp",onCancel:"closePopUp", 
 										       name:'dynocon',flex: 1},{owner:this});			
