@@ -4,7 +4,8 @@ enyo.kind({
 	iSelect:null,	
 	_arrBY:null,
 	_arrBYSelect:null,
-	_objRec:null,	
+	_objRec:null,
+	bySelected:"",
 	components:[
 		{kind: "Popup",name: "manejo", lazy:false,
 		 cbMethod:"",showHideMode: "transition", className:"formBG",
@@ -90,6 +91,11 @@ enyo.kind({
 		]}
 		]},					 		
 	],
+	ready:function(){
+		_objPopupHeader = enyo.$.sisoprega_mainMenu_receptionsMap.$.lblInfo;
+		_objPopupHeader.setContent(_objMainHeader.getContent());
+		this.bySelected = enyo.$.sisoprega_mainMenu_receptionsMap.$.lblBYselected;
+	},
 	setupRow:function(inSender, inIndex){	
 		var objFeed;
 		if (this._objRec.feed){
@@ -206,7 +212,8 @@ enyo.kind({
 		this.updatetList();		
 	},
 	updatetList:function(){
-		this.$.productList.render();					
+		this.$.productList.render();
+		this.updateHeader();
 	},
 	set:function(objRec,arrBY){
 		this._objRec=objRec;
@@ -298,5 +305,29 @@ enyo.kind({
 			this.$.handling.setValue("");
 		}					
 		this.updatetList();
+	},
+	updateHeader:function(){
+		
+//		var totalRejected = 0;
+//		var totalHeads = 0;		
+//		var totalAccepted = 0;
+//		
+//		if (this._objRec){
+//			totalHeads = parseInt(this._objRec.hc_aprox);
+//			for (i in this._objRec.inspections){
+//				if (this._objRec.inspections[i]){					
+//					totalRejected = totalRejected + parseInt(this._objRec.inspections[i].rejected_count);					
+//				}	
+//			}
+//		}
+//		
+//		totalAccepted = totalHeads - totalRejected;
+		var corralesSeleccionados = "";
+		for (i in this._arrBY){
+			corralesSeleccionados = "" + corralesSeleccionados + " " + this._arrBY[i].slice(1) + " ";
+		}
+		corralesSeleccionados.slice(-2);
+		this.bySelected.setContent("Alimentando corrales: " + corralesSeleccionados);
+		
 	}
 });
