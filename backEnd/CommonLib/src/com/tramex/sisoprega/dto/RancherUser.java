@@ -28,6 +28,7 @@ import java.util.List;
  * MM/DD/YYYY
  * ----------  ---------------------------  -------------------------------------------
  * Jan 29, 2013     Diego Torres                 Initial Version.
+ * 02/04/2013   Diego Torres                Adding one-to-one relationship with rancher.
  * ====================================================================================
  * </PRE>
  * 

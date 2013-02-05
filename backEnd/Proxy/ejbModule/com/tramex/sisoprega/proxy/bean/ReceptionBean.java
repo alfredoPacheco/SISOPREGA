@@ -48,7 +48,8 @@ import com.tramex.sisoprega.dto.Reception;
  * 12/07/2012  Jaime Figueroa                Initial Version.
  * 12/13/2012  Diego Torres                  Enable read operation      
  * 12/16/2012  Diego Torres                  Adding log activity
- * 01/22/2013  Diego Torres                  Apply data model interfacing.                               
+ * 01/22/2013  Diego Torres                  Apply data model interfacing.  
+ * 02/04/2013  Diego Torres                  Logged user details read request.                             
  * ====================================================================================
  * </PRE>
  * @author Jaime Figueroa
@@ -253,20 +254,21 @@ public class ReceptionBean extends BaseBean implements Cruddable {
     return response;
   }
   
-  private ReadGatewayResponse readLoggedRancherReceptions(String entityName) throws IllegalArgumentException, IllegalAccessException{
+  private ReadGatewayResponse readLoggedRancherReceptions(String entityName) throws IllegalArgumentException,
+      IllegalAccessException {
     log.entering(this.getClass().getCanonicalName(), "readLoggedRancherReceptions");
 
     ReadGatewayResponse response = new ReadGatewayResponse();
     response.setEntityName(entityName);
-    
+
     Map<String, Object> parameters = new HashMap<String, Object>();
     parameters.put("userName", getLoggedUser());
-    
+
     List<RancherUser> ranchers = dataModel.readDataModelList("RANCHER_USER_BY_USER_NAME", parameters, RancherUser.class);
-    
-    if(!ranchers.isEmpty()){
+
+    if (!ranchers.isEmpty()) {
       RancherUser loggedRancher = ranchers.get(0);
-      
+
       List<Reception> queryResults = loggedRancher.getReceptions();
       if (queryResults.isEmpty()) {
         response.setError(new Error("VAL02", "No se encontraron datos para el filtro seleccionado", "proxy.Reception.Read"));
@@ -279,7 +281,7 @@ public class ReceptionBean extends BaseBean implements Cruddable {
     } else {
       response.setError(new Error("VAL02", "No se encontraron datos para el filtro seleccionado", "proxy.Reception.Read"));
     }
-    
+
     log.exiting(this.getClass().getCanonicalName(), "readLoggedRancherReceptions");
     return response;
   }
