@@ -26,7 +26,7 @@ enyo.kind({
 		//Update Internal Object
 		for (var sKey in objNew){
 			if(objOld[sKey]!=null){
-				objOld[sKey]=objNew[sKey]
+				objOld[sKey]=objNew[sKey];
 			}
 		}
 		if(cbMethod){
@@ -83,7 +83,7 @@ enyo.kind({
 	updateWeight:function(objRec,objOld,objNew,cbObj,cbMethod){
 		for (var sKey in objNew){
 			if(objOld[sKey]!=null){
-				objOld[sKey]=objNew[sKey]
+				objOld[sKey]=objNew[sKey];
 			}
 		}
 		if(cbMethod){
@@ -111,7 +111,7 @@ enyo.kind({
 		//AJAX
 		//Update Internal Object	
 		for(var sKey in arrRec){
-			this.deleteByID(sKey)
+			this.deleteByID(sKey);
 		}
 		if(cbMethod){
 			cbObj[cbMethod]();
@@ -127,7 +127,7 @@ enyo.kind({
 		for(var sKey in objBY){
 			cacheObj.setOccupied(sKey,objReception.reception_id);
 		}
-		cacheObj
+		cacheObj;
 		if(cbMethod){
 			cbObj[cbMethod]();
 		}		
@@ -143,7 +143,7 @@ enyo.kind({
 		//Update Local		
 		for(var sKey in objNew){
 			if(objNew[sKey]!=null){
-				objOld[sKey]=objNew[sKey]
+				objOld[sKey]=objNew[sKey];
 			}
 		}		
 		if(cbMethod){

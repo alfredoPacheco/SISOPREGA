@@ -39,7 +39,7 @@ enyo.kind({
 		this.$.main.setIndex(0);		
 	},	
 	loadUpdateProfile:function(){
-		alert('TODO:Profile')
+		alert('TODO:Profile');
 	},
 	loadReports:function(){
         this.inherited(arguments);
@@ -84,17 +84,17 @@ enyo.kind({
 		switch(this.reportID){
 			//Alimentacion
 			case 1:
-				sTitle="feed"
+				sTitle="feed";
 				sURL="/ReportingGateway/ReporteAlimento?fromDate="+sFrom+"&toDate="+sTo+"&rancherId=692";				
 				break;
 			//Inspeccion
 			case 2:
-				sTitle="inspection"				
+				sTitle="inspection";			
 				sURL="/ReportingGateway/CattleInspection?fromDate="+sFrom+"&toDate="+sTo+"&rancherId=692";				
 				break;
 			//Recepcion
 			case 3:
-				sTitle="reception"
+				sTitle="reception";
 				sURL="/ReportingGateway/RecibidoPorGanadero?fromDate="+sFrom+"&toDate="+sTo+"&rancherId=692";				
 				break;				
 		}
