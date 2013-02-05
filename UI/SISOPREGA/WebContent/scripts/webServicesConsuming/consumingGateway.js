@@ -391,8 +391,10 @@ var cConsumingGateway =
 
           }
         });
-      enyo.$.sisoprega.destroy();
-      window.location = './';
+      try{
+    	  enyo.$.sisoprega.destroy();
+      }catch(e){}
+      //window.location = './';
       return output;
     },
 

@@ -93,11 +93,9 @@ enyo.kind({
 			this.cattleClassWasReadFromGateway = true;
 			var objAux = {};
 			var arrAux = [];
-			var selfCacheCattle = this;		
-			
+			var selfCacheCattle = this;			
 	//Retrieve CattleType
 			var cgReadAll = consumingGateway.Read("CattleClass", {});
-			
 			if (cgReadAll.exceptionId == 0){ //Read successfully
 				jQuery.each(cgReadAll.records, function() {
 		    		jQuery.each(this, function(key, value){
@@ -260,7 +258,7 @@ enyo.kind({
 	refreshData:function(){		
 		this.cattleTypeWasReadFromGateway=false;
 		this.cattleClassWasReadFromGateway=false;
-		this.getCattleClass();
+		this.getCattleClass();		
 		this.getCattleType();		
 	}
 });
