@@ -13,11 +13,12 @@ enyo.kind(
     events :
       {
         "onAddRancherUser" : "",
-        "onUpdateUser" : "",
+        "onResetPassword" : "",
         "onCancel" : ""
       },
     objRan : null,
     objUser : {},
+    NO_CHANGED : '!$NoChanged$!',
     components :
       [
         {
@@ -103,7 +104,9 @@ enyo.kind(
       this.$.confirm_password.setValue("");
     },
     resetPassword : function() {
-      cacheRanchers.resetRancherPassword(this.$.user_name.getValue(), this.$.password.getValue(), this.$.confirm_password.getValue());
+      if(this.$.password.getValue() != this.NO_CHANGED){
+        cacheRanchers.resetRancherPassword(this.$.user_name.getValue(), this.$.password.getValue(), this.$.confirm_password.getValue(), this, "doResetPassword");
+      }
     },
     setRancher : function(objRancher) {
       this.objRan = objRancher;
@@ -112,6 +115,8 @@ enyo.kind(
       this.$.draAdd.setOpen(true);
       this.$.draUpdate.setOpen(false);
       this.resetValues();
+      // TODO: Enable or show user_name field
+      this.$.user_name.disabled = false;
     },
     getRancherUserDetails : function(){
       var userDetails = {
@@ -134,4 +139,19 @@ enyo.kind(
         cacheMan.setMessage("", "La contraseña y su confirmación no coinciden.");
       }
     },
+    setUser : function(objRancher, pObjUser){
+      this.objRan = objRancher;
+      this.objUser = pObjUser;
+      this.$.user_name.setValue(pObjUser.user_name);
+      this.$.password.setValue(this.NO_CHANGED);
+      this.$.confirm_password.setValue(this.NO_CHANGED);
+      
+      this.toggleUpdate();
+    },
+    toggleUpdate : function(){
+      this.$.draAdd.setOpen(false);
+      this.$.draUpdate.setOpen(true);
+      // TODO: Disable or hide user_name field
+      this.$.user_name.disabled = true;
+    }
   });

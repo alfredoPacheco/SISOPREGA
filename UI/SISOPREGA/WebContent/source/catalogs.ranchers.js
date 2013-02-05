@@ -362,8 +362,7 @@ enyo.kind(
           paneName : "usersList"
         });
 
-      // TODO: Restore object in use for edit.
-      this.$.aRancherUsers.setBilling(this.$.ranchersList.getSelected(), this.$.usersList.getUser());
+      this.$.aRancherUsers.setUser(this.$.ranchersList.getSelected(), this.$.usersList.getUser());
       _objMainHeader.setContent('Asignar contraseña');
       this.$.mainPane.selectViewByName("aRancherUsers");
     },

@@ -16,9 +16,11 @@
 package com.tramex.sisoprega.proxy.bean;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.security.DeclareRoles;
 import javax.ejb.Stateless;
 
 import com.tramex.sisoprega.common.BaseResponse;
@@ -31,6 +33,7 @@ import com.tramex.sisoprega.common.Utils;
 import com.tramex.sisoprega.common.crud.Cruddable;
 import com.tramex.sisoprega.dto.EnterpriseRancher;
 import com.tramex.sisoprega.dto.RancherInvoice;
+import com.tramex.sisoprega.dto.RancherUser;
 
 /**
  * This proxy knows the logic to evaluate Enterprise Ranchers and the way to the
@@ -48,6 +51,7 @@ import com.tramex.sisoprega.dto.RancherInvoice;
  * 12/08/2012  Diego Torres                 Add standard error codes and validation.
  * 12/16/2012  Diego Torres                 Adding log activity
  * 01/22/2013  Diego Torres                 Implementing DataModel interfacing
+ * 02/04/2013  Diego Torres                 Logged user details read request.
  * ====================================================================================
  * </PRE>
  * 
@@ -55,6 +59,7 @@ import com.tramex.sisoprega.dto.RancherInvoice;
  * 
  */
 @Stateless
+@DeclareRoles({ "sisoprega_admin", "mx_usr", "rancher" })
 public class EnterpriseRancherBean extends BaseBean implements Cruddable {
 
   /**
@@ -123,7 +128,11 @@ public class EnterpriseRancherBean extends BaseBean implements Cruddable {
       String qryLogger = "";
       String queryName = "";
       Map<String, Object> parameters = new HashMap<String, Object>();
-      if (enterpriseRancher.getEnterpriseId() != 0) {
+      
+      if (ejbContext.isCallerInRole("rancher")) {
+        log.exiting(this.getClass().getCanonicalName(), "Read");
+        return readLoggedRancherDetails(request.getEntityName());
+      }else if (enterpriseRancher.getEnterpriseId() != 0) {
         queryName = "ENTERPRISE_RANCHER_BY_ID";
         parameters.put("enterpriseId", enterpriseRancher.getEnterpriseId());
         qryLogger = "By enterpriseId [" + enterpriseRancher.getEnterpriseId() + "]";
@@ -383,4 +392,42 @@ public class EnterpriseRancherBean extends BaseBean implements Cruddable {
 
     return !invoices.isEmpty();
   }
+  
+  private ReadGatewayResponse readLoggedRancherDetails(String entityName) throws IllegalArgumentException, IllegalAccessException{
+    log.entering(this.getClass().getCanonicalName(), "readLoggedRancherReceptions");
+
+    ReadGatewayResponse response = new ReadGatewayResponse();
+    response.setEntityName(entityName);
+    
+    Map<String, Object> parameters = new HashMap<String, Object>();
+    parameters.put("userName", getLoggedUser());
+    
+    List<RancherUser> ranchers = dataModel.readDataModelList("RANCHER_USER_BY_USER_NAME", parameters, RancherUser.class);
+    
+    if(!ranchers.isEmpty()){
+      RancherUser loggedRancher = ranchers.get(0);
+      
+      EnterpriseRancher rancher = dataModel.readSingleDataModel("ENTERPRISE_RANCHER_BY_ID", "enterpriseId", loggedRancher.getRancherId(), EnterpriseRancher.class);
+      
+      if(rancher != null){
+        List<EnterpriseRancher> rancherList = new LinkedList<EnterpriseRancher>();
+        rancherList.add(rancher);
+        
+        response.getRecord().addAll(contentFromList(rancherList, EnterpriseRancher.class));
+
+        response.setError(new Error("0", "SUCCESS", "proxy.RancherBean.Read"));
+        log.info("Read operation RANCHER BY LOGGED RANCHER executed by principal[" + getLoggedUser() + "] on RancherBean");
+        
+      }else{
+        response.setError(new Error("VAL02", "No se encontraron datos para el filtro seleccionado", "proxy.RancherBean.Read"));
+      }
+    } else {
+      response.setError(new Error("VAL02", "No se encontraron datos para el filtro seleccionado", "proxy.Reception.Read"));
+    }
+    
+    log.exiting(this.getClass().getCanonicalName(), "readLoggedRancherReceptions");
+    return response;
+  }
+
+  
 }

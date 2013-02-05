@@ -823,11 +823,8 @@
 			<basic name="user_name">
 				<column name="user_name"/>
 			</basic>
-			<one-to-many name="receptions">
-				<join-column name="rancher_id" referenced-column-name="rancher_id"  />
-				<cascade>
-					<cascade-all/>
-				</cascade>
+			<one-to-many name="receptions" fetch="LAZY">
+				<join-column name="rancher_id" referenced-column-name="rancher_id" />
 			</one-to-many>
 		</attributes>
 	</entity>
