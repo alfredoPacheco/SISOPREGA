@@ -305,8 +305,24 @@
 				<method-name>Read</method-name>
 			</method>
 			<method>
+				<ejb-name>RancherProxy</ejb-name>
+				<method-name>Update</method-name>
+			</method>
+			<method>
 				<ejb-name>EnterpriseRancherProxy</ejb-name>
 				<method-name>Read</method-name>
+			</method>
+			<method>
+				<ejb-name>EnterpriseRancherProxy</ejb-name>
+				<method-name>Update</method-name>
+			</method>
+			<method>
+				<ejb-name>EnterpriseContactProxy</ejb-name>
+				<method-name>*</method-name>
+			</method>
+			<method>
+				<ejb-name>RancherInvoiceProxy</ejb-name>
+				<method-name>*</method-name>
 			</method>
 		</method-permission>
 	</assembly-descriptor>
