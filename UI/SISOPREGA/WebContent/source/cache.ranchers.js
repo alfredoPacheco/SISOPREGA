@@ -41,10 +41,14 @@ enyo.kind(
             arrAux.push(objTmp);
           });
         } else { // Error
-          if (cgReadAllRanchers.exceptionId != "VAL02") { // No
-            // data found
-            cacheMan.setMessage("", "[Exception ID: " + cgReadAllRanchers.exceptionId + "] Descripción: " + cgReadAllRanchers.exceptionDescription);
+        	if(cgReadAllRanchers.exceptionId == "DB02"){
+        		//NOTHING TO READ OK
+        	}else{
+        		if (cgReadAllRanchers.exceptionId != "VAL02") { // No
+        		// data found
+        		cacheMan.setMessage("", "[Exception ID: " + cgReadAllRanchers.exceptionId + "] Descripción: " + cgReadAllRanchers.exceptionDescription);
           }
+        }
         }
         // Retrieve Enterprise Ranchers:
         var cgReadAllEnterpriseRanchers = consumingGateway.Read("EnterpriseRancher", {});
@@ -61,12 +65,16 @@ enyo.kind(
             objAux = {};
           });
         } else { // Error
-          if (cgReadAllEnterpriseRanchers.exceptionId != "VAL02") {// No
-            // data
-            // found
-            cacheMan.setMessage("", "[Exception ID: " + cgReadAllEnterpriseRanchers.exceptionId + "] Descripcion: "
-                + cgReadAllEnterpriseRanchers.exceptionDescription);
-          }
+        	if(cgReadAllEnterpriseRanchers.exceptionId == "DB02"){
+        		//NOTHING TO READ OK        		
+        	}else{
+        		if (cgReadAllEnterpriseRanchers.exceptionId != "VAL02") {// No        	
+	            // data
+	            // found
+	            cacheMan.setMessage("", "[Exception ID: " + cgReadAllEnterpriseRanchers.exceptionId + "] Descripcion: "
+	                + cgReadAllEnterpriseRanchers.exceptionDescription);
+	          }
+        	}
         }
         this.arrObj = arrAux;
         _arrRancherList = arrAux;

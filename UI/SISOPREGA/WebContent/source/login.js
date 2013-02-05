@@ -41,6 +41,8 @@ enyo.kind({
 		cacheMan.showScrim();
 		var consumirLogin = consumingGateway.Login(this.$.user.getValue(), this.$.password.getValue());
 		if(consumirLogin.exceptionId == 0){
+			this.$.user.setValue("");
+			this.$.password.setValue("");
 			cacheRanchers.get();			
 			cacheCattle.getCattleClass();
 			cacheCattle.getCattleType();
