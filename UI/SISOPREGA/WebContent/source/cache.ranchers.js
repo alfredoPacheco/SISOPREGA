@@ -815,9 +815,12 @@ enyo.kind(
         return false;
       }
     },
-    resetRancherPassword : function(userName, newPassword, confirmNewPassword) {
+    resetRancherPassword : function(userName, newPassword, confirmNewPassword, cbObj, cbMethod) {
       if (newPassword == confirmNewPassword) {
-        consumingGateway.ResetPassword(userName, newPassword);
+        var result = consumingGateway.ResetPassword(userName, newPassword);
+        if (result == 'OK' && cbMethod) {
+          cbObj[cbMethod]();
+        }
       } else {
         cacheMan.setMessage("", "La contraseña y su confirmación no coinciden.");
       }

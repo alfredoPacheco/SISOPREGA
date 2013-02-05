@@ -29,6 +29,7 @@ import java.util.List;
  * MM/DD/YYYY
  * ----------  ---------------------------  -------------------------------------------
  * Feb 1, 2013     Diego Torres                 Initial Version.
+ * 02/04/2013   Diego Torres                Implement toString for clean log.
  * ====================================================================================
  * </PRE>
  * 
@@ -108,5 +109,10 @@ public class User {
     }else{
       return false;
     }
+  }
+  
+  @Override
+  public String toString() {
+    return userName;
   }
 }

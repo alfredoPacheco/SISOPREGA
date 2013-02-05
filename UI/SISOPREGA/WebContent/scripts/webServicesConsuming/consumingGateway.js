@@ -401,7 +401,7 @@ var cConsumingGateway =
 
       var soapMessage = soapHeader + '<ws:ResetPassword>';
       soapMessage += '<user_name>' + userName + '</user_name>';
-      soapMessage += '<password>' + userName + '</password>';
+      soapMessage += '<password>' + password + '</password>';
       soapMessage += '</ws:ResetPassword>';
       soapMessage += soapFooter;
 

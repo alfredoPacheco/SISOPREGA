@@ -300,6 +300,14 @@
 				<ejb-name>RancherUserProxy</ejb-name>
 				<method-name>Read</method-name>
 			</method>
+			<method>
+				<ejb-name>RancherProxy</ejb-name>
+				<method-name>Read</method-name>
+			</method>
+			<method>
+				<ejb-name>EnterpriseRancherProxy</ejb-name>
+				<method-name>Read</method-name>
+			</method>
 		</method-permission>
 	</assembly-descriptor>
 </ejb-jar>
