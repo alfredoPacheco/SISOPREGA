@@ -52,8 +52,7 @@ enyo
 								components : [ {
 									kind : "RowGroup",
 									defaultKind : "HFlexBox",
-									caption : "",
-									style : "color:#FFF;",
+									caption : "",									
 									components : [ {
 										kind : "Item",
 										components : [ {
@@ -145,6 +144,8 @@ enyo
 										flex : 1,
 										caption : "Actualizar",
 										onclick : "updateForecast"
+										
+											
 									}, {
 										kind : "Button",
 										name : "btnCancel",
@@ -474,7 +475,7 @@ enyo
 				for (i in barnyardsAux) {
 					barnyardsAux[i] = barnyardsAux[i].replace(" ", "");
 					barnyardsAux[i] = this.$.localidad.getIndex()
-							+ barnyardsAux[i];
+							+ barnyardsAux[i].toUpperCase();
 					var auxBarn = cacheBY.getByBarnyard(barnyardsAux[i]);
 					if (auxBarn == undefined) {
 						cacheMan.setMessage("", "[Exception ID: LOCAL"
