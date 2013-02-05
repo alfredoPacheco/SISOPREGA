@@ -89,13 +89,12 @@ public class RancherBean extends BaseBean implements Cruddable {
         response.setError(new Error("VAL01", "Error de validación de datos:" + error_description, "proxy.Rancher.Create"));
       }
     } catch (Exception e) {
-      this.log.severe("Exception found while creating rancher");
-      this.log.throwing(this.getClass().getName(), "Create", e);
-
-      if (e instanceof javax.persistence.PersistenceException)
+      if (e instanceof javax.persistence.PersistenceException) {
+        this.log.severe("Exception found while creating rancher");
+        this.log.throwing(this.getClass().getName(), "Create", e);
         response.setError(new Error("DB01", "Los datos que usted ha intentado ingresar, no son permitidos por la base de datos, "
             + "muy probablemente el ganadero que usted quiere agregar ya existe en la base de datos.", "proxy.Rancher.Create"));
-      else {
+      } else {
         response.setError(new Error("DB02", "Error en la base de datos:[" + e.getMessage() + "]", "proxy.Rancher.Create"));
       }
     }
@@ -285,39 +284,39 @@ public class RancherBean extends BaseBean implements Cruddable {
 
     return result;
   }
-  
-  private ReadGatewayResponse readLoggedRancherDetails(String entityName) throws IllegalArgumentException, IllegalAccessException{
+
+  private ReadGatewayResponse readLoggedRancherDetails(String entityName) throws IllegalArgumentException, IllegalAccessException {
     log.entering(this.getClass().getCanonicalName(), "readLoggedRancherReceptions");
 
     ReadGatewayResponse response = new ReadGatewayResponse();
     response.setEntityName(entityName);
-    
+
     Map<String, Object> parameters = new HashMap<String, Object>();
     parameters.put("userName", getLoggedUser());
-    
+
     List<RancherUser> ranchers = dataModel.readDataModelList("RANCHER_USER_BY_USER_NAME", parameters, RancherUser.class);
-    
-    if(!ranchers.isEmpty()){
+
+    if (!ranchers.isEmpty()) {
       RancherUser loggedRancher = ranchers.get(0);
-      
+
       Rancher rancher = dataModel.readSingleDataModel("RANCHER_BY_ID", "rancherId", loggedRancher.getRancherId(), Rancher.class);
-      
-      if(rancher != null){
+
+      if (rancher != null) {
         List<Rancher> rancherList = new LinkedList<Rancher>();
         rancherList.add(rancher);
-        
+
         response.getRecord().addAll(contentFromList(rancherList, Rancher.class));
 
         response.setError(new Error("0", "SUCCESS", "proxy.RancherBean.Read"));
         log.info("Read operation RANCHER BY LOGGED RANCHER executed by principal[" + getLoggedUser() + "] on RancherBean");
-        
-      }else{
+
+      } else {
         response.setError(new Error("VAL02", "No se encontraron datos para el filtro seleccionado", "proxy.RancherBean.Read"));
       }
     } else {
       response.setError(new Error("VAL02", "No se encontraron datos para el filtro seleccionado", "proxy.Reception.Read"));
     }
-    
+
     log.exiting(this.getClass().getCanonicalName(), "readLoggedRancherReceptions");
     return response;
   }

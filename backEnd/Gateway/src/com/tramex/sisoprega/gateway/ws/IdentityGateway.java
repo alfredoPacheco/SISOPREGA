@@ -15,6 +15,7 @@
  */
 package com.tramex.sisoprega.gateway.ws;
 
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.jws.WebMethod;
@@ -117,6 +118,16 @@ public class IdentityGateway {
   public String removeGroup(@WebParam(name = "user_name") String userName, @WebParam(name = "group_name") String groupName) throws IdentityManagerException{
     getIdentityManager().removeGroup(userName, groupName);
     return "OK";
+  }
+  
+  /**
+   * Retrieves the list of all users
+   * @return
+   * @throws IdentityManagerException
+   */
+  @WebMethod(operationName = "ReadAllUsers")
+  public List<User> readAllUsers() throws IdentityManagerException{
+    return getIdentityManager().allUsers();
   }
   
   private RemoteIdentity getIdentityManager() {

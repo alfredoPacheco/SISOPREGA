@@ -94,14 +94,14 @@ public class EnterpriseRancherBean extends BaseBean implements Cruddable {
       }
     } catch (Exception e) {
       // Set exception details
-      this.log.severe("Exception found while create enterprise rancher");
-      this.log.throwing(this.getClass().getName(), "Create", e);
-
-      if (e instanceof javax.persistence.PersistenceException)
+      if (e instanceof javax.persistence.PersistenceException){
+        this.log.severe("Exception found while create enterprise rancher");
+        this.log.throwing(this.getClass().getName(), "Create", e);
+        
         response.setError(new Error("DB01", "Los datos que usted ha intentado ingresar, no son permitidos por la base de datos, "
             + "muy probablemente el ganadero que usted quiere agregar ya existe en la base de datos.",
             "proxy.EnterpriseRAncherBean.Create"));
-      else {
+      } else {
         response.setError(new Error("DB02", "Create exception: " + e.getMessage(), "proxy.EnterpriseRancherBean.Create"));
       }
     }

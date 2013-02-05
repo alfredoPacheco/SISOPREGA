@@ -5,6 +5,7 @@
  * - [DATE] By Alan del Rio: Initial Version. 
  * - [DATE] By Alfredo Pacheco: Integrate with web services. 
  * - 02/03/2013 By Diego Torres: Add rancher user handlers.
+ * - 02/05/2013 By Diego Torres: Eliminate double call to updateList on rancher users list.
  * 
  */
 enyo.kind(
@@ -331,7 +332,6 @@ enyo.kind(
       }
 
       this.$.usersList.setList(objRan);
-      this.$.usersList.updateList();
       this.$.mainPane.selectViewByName("usersList");
     },
     showAddUser : function() {

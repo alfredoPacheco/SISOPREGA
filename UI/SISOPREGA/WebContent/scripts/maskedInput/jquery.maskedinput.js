@@ -16,7 +16,7 @@ var pasteEventName = getPasteEvent() + ".mask",
 	ua = navigator.userAgent,
 	iPhone = /iphone/i.test(ua),
 	android=/android/i.test(ua),
-	caretTimeoutId;
+	caretTimeoutId=0;
 
 $.mask = {
 	//Predefined character definitions
@@ -299,8 +299,7 @@ $.fn.extend({
 				})
 				.bind("focus.mask", function() {
 					clearTimeout(caretTimeoutId);
-					var pos,
-						moveCaret;
+					var pos;
 
 					focusText = input.val();
 					pos = checkVal();

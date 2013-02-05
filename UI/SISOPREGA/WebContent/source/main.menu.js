@@ -17,7 +17,8 @@ enyo.kind({
 			onReceptions:"showReceptionsMap",
 			onCatalogs:"showCatalogs", 
 			onReports:"showReports",
-			onInspectionForecast:"showInspectionForecast"},
+			onInspectionForecast:"showInspectionForecast",
+			onUsers:"showUsersList"},
 	 		
 			{kind:"operations.menu", name:"operations", onReceptions:"showReceptions", 
 			 onInspections:"showInspections",lazy:true},
@@ -26,8 +27,8 @@ enyo.kind({
 	 		{kind:"receptions.barnyards.map", name:"receptionsMap",lazy:true, flex:1},	 		
 	 		{kind:"reports.main", name:"reports",lazy:true},
 	 		{kind:"inspections.list", name:"inspections"},
-	 		{kind:"inspections.main.fs", name:"inspectionForecast", lazy:true}
-	 		
+	 		{kind:"inspections.main.fs", name:"inspectionForecast", lazy:true},
+	 		{kind:"users.list", name:"usersList", lazy:true}
 		 ]}
 	],
 	showReceptionsMap:function(){
@@ -57,6 +58,14 @@ enyo.kind({
 		_objMainHeader.setContent('Lista de Inspección');
 		this.addGoBackAction();
 		this.$.mainPane.selectViewByName("inspectionForecast");
+	},
+	showUsersList : function(){
+	  enyo.$.sisoprega_btnGoBack.setShowing(1);
+      enyo.$.sisoprega_spacerSecond.setShowing(!1);
+      _objMainHeader.setContent('Lista de Usuarios');
+      this.addGoBackAction();
+      this.$.mainPane.selectViewByName("usersList");
+      this.$.usersList.updateList();
 	},
 	addGoBackAction:function(){		
 		_gobackStack.push({caption:"Menu Principal",paneMan:this.$.mainPane,paneName:"menuOptions"});		
