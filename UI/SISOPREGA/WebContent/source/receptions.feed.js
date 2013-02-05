@@ -103,11 +103,11 @@ enyo.kind({
 				var objFeedfeed;
 				var sBy="";											 
 				for(var sKey in objFeed.barnyards){
-					sBy+=sKey.substr(1)+", ";
+					sBy+=sKey.slice(1) +", ";
 				}
 				sBy=sBy.slice(0,-2);
 				this.$.lblhandling.setContent(objFeed.handling);
-				this.$.by.setContent(sBy);				
+				this.$.by.setContent("" + objFeed.dateAndTime + "   Corrales: [" + sBy + "]" );				
 				if(objFeedfeed=objFeed.feed[this.$.lblground.feed_id]){
 					if(objFeedfeed.feed_units){
 						this.$.lblground.setContent(objFeedfeed.feed_desc+
@@ -307,27 +307,12 @@ enyo.kind({
 		this.updatetList();
 	},
 	updateHeader:function(){
-		
-//		var totalRejected = 0;
-//		var totalHeads = 0;		
-//		var totalAccepted = 0;
-//		
-//		if (this._objRec){
-//			totalHeads = parseInt(this._objRec.hc_aprox);
-//			for (i in this._objRec.inspections){
-//				if (this._objRec.inspections[i]){					
-//					totalRejected = totalRejected + parseInt(this._objRec.inspections[i].rejected_count);					
-//				}	
-//			}
-//		}
-//		
-//		totalAccepted = totalHeads - totalRejected;
 		var corralesSeleccionados = "";
-		for (i in this._arrBY){
-			corralesSeleccionados = "" + corralesSeleccionados + " " + this._arrBY[i].slice(1) + " ";
+		var arrAux = this._arrBY;
+		for (i in arrAux){
+			corralesSeleccionados = "" + corralesSeleccionados + " " + arrAux[i].slice(1) + " ";
 		}
 		corralesSeleccionados.slice(-2);
 		this.bySelected.setContent("Alimentando corrales: " + corralesSeleccionados);
-		
 	}
 });

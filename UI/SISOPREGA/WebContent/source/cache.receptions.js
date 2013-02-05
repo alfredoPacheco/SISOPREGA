@@ -166,22 +166,30 @@ enyo.kind({
 					}		
 				}
 			
-//feedOrder:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::				
+//feedOrder:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::	
+				var fmt = new enyo.g11n.DateFmt({
+					  date: "short",
+					  time: "short",
+					  locale: new enyo.g11n.Locale("en_es")
+					});
 				var arrFeedAux = this.getFeedOrder(objAux.reception_id);
 				for (f in arrFeedAux){
 					var feedAux = {};
+					var fechaAux = new Date(parseInt(arrFeedAux[f].feedDate));
 					try{
 						feedAux.feeding_id = 	arrFeedAux[f].orderId;
 						feedAux.handling = 		arrFeedAux[f].handling;
 						feedAux.weight = 		arrFeedAux[f].weight;
+						feedAux.dateAndTime =	fmt.format(fechaAux);
 					}catch(e){}	
 //feedOrderBarnyard::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::					
 					if(feedAux.feeding_id){
 						var arrFeedBarnyardAux = this.getFeedOrderBarnyard(feedAux.feeding_id);
 						var feedBarnyardAux = {barnyards:{}};
 						for (fb in arrFeedBarnyardAux){
-							var barnyardName = cacheBY.getByID(arrFeedBarnyardAux[fb].barnyardId).barnyard_code;
-							feedBarnyardAux.barnyards[barnyardName] = barnyardName;
+							var barnyardAux = cacheBY.getByID(arrFeedBarnyardAux[fb].barnyardId);
+							
+							feedBarnyardAux.barnyards["" + barnyardAux.location_id + barnyardAux.barnyard_code] = "" + barnyardAux.location_id + barnyardAux.barnyard_code;
 						}
 						feedAux.barnyards = feedBarnyardAux.barnyards;
 //feedOrderDetails:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::	
@@ -633,6 +641,13 @@ enyo.kind({
 		var cgCreate = consumingGateway.Create("FeedOrder", objToSend);
 		if (cgCreate.exceptionId == 0){ //Created successfully		
 			objFeed.feeding_id = cgCreate.generatedId;
+			var fmt = new enyo.g11n.DateFmt({
+				  date: "short",
+				  time: "short",
+				  locale: new enyo.g11n.Locale("en_es")});
+				var fechaAux = new Date();
+				objFeed.dateAndTime =	fmt.format(fechaAux);
+			
 			if (cacheReceptions.createFeedOrderBarnyard(cgCreate.generatedId,objFeed)== true){				
 				if (cacheReceptions.createFeedOrderDetails(cgCreate.generatedId,objFeed)== true){
 					return true;
@@ -655,15 +670,14 @@ enyo.kind({
 		objToSend.orderId = order_id;
 		for (prop in objFeed.barnyards){
 			objToSend.barnyardId = cacheBY.getByBarnyard(objFeed.barnyards[prop]).barnyard_id;				
+			objFeed.barnyards[prop] = objFeed.barnyards[prop].slice(1);
+			var cgCreate = consumingGateway.Create("FeedOrderBarnyard", objToSend);
+			if (cgCreate.exceptionId != 0){ //error
+				cacheMan.setMessage("", "[Exception ID: " + cgCreate.exceptionId + "] Descripcion: " + cgCreate.exceptionDescription);
+				return false;
+			}
 		}
-		var cgCreate = consumingGateway.Create("FeedOrderBarnyard", objToSend);
-		if (cgCreate.exceptionId == 0){ //Created successfully
-			return true;			
-		}
-		else{ //Error			
-			cacheMan.setMessage("", "[Exception ID: " + cgCreate.exceptionId + "] Descripcion: " + cgCreate.exceptionDescription);
-			return false;
-		}
+		return true;
 	},
 	createFeedOrderDetails:function(order_id, objFeed){
 
