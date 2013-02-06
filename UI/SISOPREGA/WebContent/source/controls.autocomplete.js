@@ -45,7 +45,7 @@ enyo.kind({
 		style : "width:300px;",
 		modal : false,
 		onSelect : "select_item",
-		onBeforeOpen : "setupItem",
+		onSetupItem: "setupItem",
 		items : []
 	}, 
 //	{layoutKind : enyo.HFlexLayout,	components : [ 
@@ -67,31 +67,92 @@ enyo.kind({
 //		]	}
 
 	],
-
-	controlSelectionItem : function(direction) {
-		if (direction == "down") {
-			if (d) {
-			}
-		}
-	},
 	lostFocus : function(inSender, inEvent) {
 		if (this.$.drop_down.isOpen) {
 			this.setIndex(this.$.drop_down.items[0].value);
 		}
 		this.$.drop_down.close();
+		this.itemSelectedPopup = 0;
+	},
+	setupItem : function(inSender, InIndex){
+		if(this.itemSelectedPopup > -1){
+			if(this.$.drop_down.items[this.itemSelectedPopup].caption == InIndex.$.item.getContent()){
+				InIndex.applyStyle("background-color", "white");
+				this.$.textField.setValue(InIndex.caption);
+			}
+		}
+		return false;
 	},
 	select_item : function(inSender, inSelected) {
 		this.setIndex(inSender.items[inSelected].value);
+		this.itemSelectedPopup = 0;
 	},
 	click_button : function(inSender, inEvent) {
 		this.$.drop_down.setItems(this.allItems);
 		this.$.drop_down.openAtEvent(inEvent);
+		this.$.textField.forceFocus();
 		return false;
 	},
 	key_down : function(inSender, inEvent){
 		
-		if(inEvent.keyCode == 13){			
-			this.doEnter();
+		switch(inEvent.keyCode){
+		case 13:
+			if (this.$.drop_down.isOpen) {
+				this.select_item(this.$.drop_down, this.itemSelectedPopup);
+				this.$.drop_down.close();
+			}else{
+				this.doEnter();
+			}
+			break;
+		case 38://up
+			this.selectUp();
+			break;
+		case 40://down
+			this.selectDown();
+			break;
+		case 37://left
+			break;
+		case 39://right
+			break;
+		default:
+			console.info(inEvent.keyCode);
+		}
+		return true;
+	},
+	selectDown:function(){
+		if (this.$.drop_down.isOpen) {
+			if(this.getItems().length >0){
+				if(this.itemSelectedPopup < this.getItems().length - 1){
+					this.itemSelectedPopup ++;
+					this.$.drop_down.selected = this.itemSelectedPopup;
+					this.$.drop_down.scrollToSelected();					
+				}else{
+					this.itemSelectedPopup = 0;
+					this.$.drop_down.selected = this.itemSelectedPopup;
+					this.$.drop_down.scrollToSelected();
+				}
+				this.$.drop_down.render();
+			}else{
+				this.itemSelectedPopup = -1;
+			}	
+		}
+	},
+	selectUp:function(){
+		if (this.$.drop_down.isOpen) {
+			if(this.getItems().length >0){
+				if(this.itemSelectedPopup > 0){
+					this.itemSelectedPopup --;
+					this.$.drop_down.selected = this.itemSelectedPopup;
+					this.$.drop_down.scrollToSelected();
+				}else{
+					this.itemSelectedPopup = this.getItems().length - 1;
+					this.$.drop_down.selected = this.itemSelectedPopup;
+					this.$.drop_down.scrollToSelected();
+				}
+				this.$.drop_down.render();
+			}else{
+				this.itemSelectedPopup = -1;
+			}	
 		}
 	},
 	key_up : function(inSender, inEvent) {
@@ -105,6 +166,8 @@ enyo.kind({
 			break;
 		case (x == 16): //Shift
 		case (x == 9): // tab
+		case (x == 38): // up
+		case (x == 40): // down
 		case (x == 13): // enter
 			return true;
 		}
@@ -117,6 +180,7 @@ enyo.kind({
 		} else {
 			// this.$.drop_down.setItems(cacheRanchers.getAllForList());
 			this.$.drop_down.close();
+			this.itemSelectedPopup = 0;
 		}
 
 	},
