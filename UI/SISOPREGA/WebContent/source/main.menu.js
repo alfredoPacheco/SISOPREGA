@@ -3,6 +3,7 @@ enyo.kind({
 	kind: enyo.VFlexBox,
 	className:"buttonsBG",
 	pack:"center",
+	tempFixCom:null,
 	events:{
 		onUpdateLabel:"",
 	},	
@@ -27,8 +28,7 @@ enyo.kind({
 	 		{kind:"receptions.barnyards.map", name:"receptionsMap",lazy:true, flex:1},	 		
 	 		{kind:"reports.main", name:"reports",lazy:true},
 	 		{kind:"inspections.list", name:"inspections"},
-	 		{kind:"inspections.main.fs", name:"inspectionForecast", lazy:true},
-	 		{kind:"users.list", name:"usersList", lazy:true}
+	 		{kind:"inspections.main.fs", name:"inspectionForecast", lazy:true}
 		 ]}
 	],
 	showReceptionsMap:function(){
@@ -65,6 +65,9 @@ enyo.kind({
       _objMainHeader.setContent('Lista de Usuarios');
       this.addGoBackAction();
       this.$.mainPane.selectViewByName("usersList");
+      if(this.tempFixCom==null){
+    	  this.tempFixCom=this.$.mainPane.createComponent({kind:"users.list", name:"usersList"},{owner: this});    	  
+      }
       this.$.usersList.updateList();
 	},
 	addGoBackAction:function(){		
