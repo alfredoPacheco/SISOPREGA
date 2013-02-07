@@ -1,7 +1,7 @@
-/** 
- * Provides a handler for users list administration. 
+/**  
  * 
- * Revision History:  
+ * Provides a handler for users list administration.  
+ * Revision History:   
  * - 02/05/2013 By Diego Torres: Initial Version.
  *  
  * */
@@ -11,11 +11,10 @@ enyo.kind(
     kind : enyo.VFlexBox,
     events :
       {
-        "onLoad" : "",
-        "onCreation" : "",
+        "onAddUser" : "",
         "onSelectUser" : ""
       },
-    iSelected : null,
+    iSelected : -1,
     users : [],
     components :
       [
@@ -28,13 +27,10 @@ enyo.kind(
               {
                 kind : enyo.VirtualRepeater,
                 name : "usersList",
-                onSetupRow : "setupUserRow",
+                onSetupRow : "setupRow",
                 onclick : "selectUser",
                 components :
                   [
-                    {
-                      kind : "Divider"
-                    },
                     {
                       kind : enyo.SwipeableItem,
                       onConfirm : "deleteUser",
@@ -58,6 +54,12 @@ enyo.kind(
           kind : "Toolbar",
           components :
             [
+              {
+                kind : "enyo.IconButton",
+                flex : 1,
+                icon : "images/menu-icon-new.png",
+                onclick : "doAddUser"
+              },
               {
                 kind : "ListSelector",
                 name : 'filter_id',
@@ -92,5 +94,30 @@ enyo.kind(
         });
       }
       this.$.usersList.render();
+      this.iSelected = -1;
+    },
+    setupRow : function(inSender, inIndex) {
+      if (!this.users || this.users.length == 0)
+        return false;
+      if (!this.users[inIndex])
+        return false;
+      var user = this.users[inIndex];
+      this.$.name.setContent(user.userName);
+      var groupsString = '';
+      for (index in user.groups) {
+        groupsString += user.groups[index] + ', ';
+      }
+      groupsString = groupsString.substring(0, groupsString.length - 2);
+      this.$.info.setContent('groups: [' + groupsString + ']');
+      return true;
+    },
+    selectUser : function(inSender, inEvent) {
+      this.iSelected = inEvent.rowIndex;
+      this.doSelectUser();
+    },
+    getSelectedUser : function(){
+      if(this.iSelected>=0)
+        return this.users[this.iSelected];
+      return null;
     }
   });

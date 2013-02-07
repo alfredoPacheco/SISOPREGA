@@ -52,10 +52,6 @@ public class BaseDataModel implements RemoteModelable {
   @PersistenceContext
   protected EntityManager em;
   
-  public BaseDataModel(){
-    this.log = Logger.getLogger(this.getClass().getCanonicalName());
-  }
-  
   public void createDataModel(Object dataModel){
     em.persist(dataModel);
     em.flush();

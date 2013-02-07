@@ -61,7 +61,9 @@ public class Role {
   public boolean equals(Object obj) {
     if(obj instanceof Role){
       return this.getRole_name().equals(((Role) obj).getRole_name());
-    }else{
+    }else if (obj instanceof String){
+      return this.getRole_name().equals(obj);
+    } else {
       return false;
     }
   }

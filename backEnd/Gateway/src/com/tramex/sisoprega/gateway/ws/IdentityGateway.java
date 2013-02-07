@@ -127,6 +127,7 @@ public class IdentityGateway {
    */
   @WebMethod(operationName = "ReadAllUsers")
   public List<User> readAllUsers() throws IdentityManagerException{
+    log.info("Retrieving list of users.");
     return getIdentityManager().allUsers();
   }
   
