@@ -17,11 +17,16 @@ package com.tramex.sisoprega.gateway.ws;
 
 import java.util.logging.Logger;
 
+import javax.annotation.Resource;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
 import javax.naming.Context;
 import javax.naming.InitialContext;
+import javax.servlet.http.HttpSession;
+import javax.xml.ws.WebServiceContext;
+import javax.xml.ws.WebServiceException;
+import javax.xml.ws.handler.MessageContext;
 
 import com.tramex.sisoprega.identity.IdentityManagerException;
 import com.tramex.sisoprega.identity.RemoteIdentity;
@@ -40,6 +45,7 @@ import com.tramex.sisoprega.identity.dto.User;
  * MM/DD/YYYY
  * ----------  ---------------------------  -------------------------------------------
  * 02/01/2012  Diego Torres                 Initial Version.
+ * 02/05/2013  Jaime Figueroa               Validate the user is logged in.
  * ====================================================================================
  * </PRE>
  * 
@@ -48,77 +54,110 @@ import com.tramex.sisoprega.identity.dto.User;
  */
 @WebService(serviceName = "IdentityService")
 public class IdentityGateway {
-  
+  @Resource
+  protected WebServiceContext wsContext;
+
   protected Logger log = Logger.getLogger(IdentityGateway.class.getCanonicalName());
-  
+
   /**
    * Creates a new user in database.
+   * 
    * @param user
    * @return
-   * @throws IdentityManagerException 
+   * @throws IdentityManagerException
    */
   @WebMethod(operationName = "CreateUser")
-  public String CreateUser(@WebParam(name = "user") User user) throws IdentityManagerException{
+  public String CreateUser(@WebParam(name = "user") User user) throws IdentityManagerException {
+
+    if (getSessionUserName() == null)
+      throw new WebServiceException("User is not logged in");
+
     getIdentityManager().createUser(user);
     return "OK";
   }
-  
+
   /**
    * Resets the password of an existing user
+   * 
    * @param userName
    * @param newPassword
    * @return
-   * @throws IdentityManagerException 
+   * @throws IdentityManagerException
    */
   @WebMethod(operationName = "ResetPassword")
-  public String ResetPassword(@WebParam(name = "user_name") String userName, @WebParam(name = "password") String newPassword) throws IdentityManagerException{
+  public String ResetPassword(@WebParam(name = "user_name") String userName, @WebParam(name = "password") String newPassword)
+      throws IdentityManagerException {
+    
+    if (getSessionUserName() == null)
+      throw new WebServiceException("User is not logged in");
+    
     getIdentityManager().resetPassword(userName, newPassword);
     return "OK";
   }
-  
+
   /**
-   * try to change the password of a given user evaluating its given previous password
+   * try to change the password of a given user evaluating its given previous
+   * password
+   * 
    * @param userName
    * @param previousPassword
    * @param newPassword
    * @return
-   * @throws IdentityManagerException 
+   * @throws IdentityManagerException
    */
   @WebMethod(operationName = "ChangePassword")
-  public String ChangePassword(@WebParam(name = "user_name") String userName, @WebParam(name = "previous_password") String previousPassword, @WebParam(name = "new_password") String newPassword) throws IdentityManagerException{
-    if(getIdentityManager().validateCurrentPassword(userName, previousPassword)){
+  public String ChangePassword(@WebParam(name = "user_name") String userName,
+      @WebParam(name = "previous_password") String previousPassword, @WebParam(name = "new_password") String newPassword)
+      throws IdentityManagerException {
+    
+    if (getSessionUserName() == null)
+      throw new WebServiceException("User is not logged in");
+    
+    if (getIdentityManager().validateCurrentPassword(userName, previousPassword)) {
       return ResetPassword(userName, newPassword);
-    }else{
+    } else {
       return "La contraseña actual no coincide.";
     }
   }
-  
+
   /**
    * Add the specified group to the given user
+   * 
    * @param userName
    * @param groupName
    * @return
    * @throws IdentityManagerException
    */
   @WebMethod(operationName = "AddGroup")
-  public String addGroup(@WebParam(name = "user_name") String userName, @WebParam(name = "group_name") String groupName) throws IdentityManagerException{
+  public String addGroup(@WebParam(name = "user_name") String userName, @WebParam(name = "group_name") String groupName)
+      throws IdentityManagerException {
+    
+    if (getSessionUserName() == null)
+      throw new WebServiceException("User is not logged in");
+    
     getIdentityManager().addGroup(userName, groupName);
     return "OK";
   }
 
   /**
    * Removes a specified group from a given user
+   * 
    * @param userName
    * @param groupName
    * @return
    * @throws IdentityManagerException
    */
   @WebMethod(operationName = "RemoveGroup")
-  public String removeGroup(@WebParam(name = "user_name") String userName, @WebParam(name = "group_name") String groupName) throws IdentityManagerException{
+  public String removeGroup(@WebParam(name = "user_name") String userName, @WebParam(name = "group_name") String groupName)
+      throws IdentityManagerException {
+    
+    if (getSessionUserName() == null)
+      throw new WebServiceException("User is not logged in");
+    
     getIdentityManager().removeGroup(userName, groupName);
     return "OK";
   }
-  
+
   private RemoteIdentity getIdentityManager() {
     Context jndiContext = null;
     RemoteIdentity im = null;
@@ -131,5 +170,18 @@ public class IdentityGateway {
     }
     return im;
   }
-  
+
+  private String getSessionUserName() {
+    HttpSession session = getSession();
+    if (session == null)
+      throw new WebServiceException("No session in WebServiceContext");
+
+    return (String) session.getAttribute("userName");
+  }
+
+  private HttpSession getSession() {
+    MessageContext mc = wsContext.getMessageContext();
+    return ((javax.servlet.http.HttpServletRequest) mc.get(MessageContext.SERVLET_REQUEST)).getSession();
+  }
+
 }
