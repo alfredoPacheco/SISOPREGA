@@ -13,7 +13,10 @@ enyo.kind({
 		 align:"center",	    
 		 components: [			
 			{kind: "Spacer"},
-			{kind: "Button", className: "enyo-button-option", caption: "Ganado", onclick:"doReceptions"},
+			{kind: "Button", className: "enyo-button-option", caption: "Ganado Recibido", onclick:"doReceptions"},
+			{kind: "Button", className: "enyo-button-option", caption: "Ganado Inspecionado", onclick:"doReceptions"},
+			{kind: "Button", className: "enyo-button-option", caption: "Ganado Recibido por Ganadero", onclick:"doReceptions"},
+			{kind: "Button", className: "enyo-button-option", caption: "Reporte de Alimento", onclick:"doReceptions"},
 			{kind: "Spacer"}]}
 	]
 });
