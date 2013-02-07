@@ -3,12 +3,13 @@ enyo.kind({
 	kind: enyo.VFlexBox,
 	className:"buttonsBG",
 	pack:"center",
+	tempFixCom:null,
 	events:{
 		onUpdateLabel:"",
 	},	
 //	     style:"background-image: url(images/practice_background.png); background-size: cover;",				 	
 	components:[
-		{kind: enyo.Pane, className:"buttonsBG", flex: 1, name: "mainPane", transitionKind: "enyo.transitions.LeftRightFlyin", 
+		{kind: enyo.Pane, onSelectView:"selectView",className:"buttonsBG", flex: 1, name: "mainPane", transitionKind: "enyo.transitions.LeftRightFlyin", 
 	     style:"background-size: cover;",				 		
 		 components:[	
 			{kind:"main.menu.options", name:"menuOptions", className:"buttonsBG",style:"width:1030px;margin-left: auto;margin-right: auto;",
@@ -17,7 +18,8 @@ enyo.kind({
 			onReceptions:"showReceptionsMap",
 			onCatalogs:"showCatalogs", 
 			onReports:"showReports",
-			onInspectionForecast:"showInspectionForecast"},
+			onInspectionForecast:"showInspectionForecast",
+			onUsers:"showUsersList"},
 	 		
 			{kind:"operations.menu", name:"operations", onReceptions:"showReceptions", 
 			 onInspections:"showInspections",lazy:true},
@@ -26,8 +28,8 @@ enyo.kind({
 	 		{kind:"receptions.barnyards.map", name:"receptionsMap",lazy:true, flex:1},	 		
 	 		{kind:"reports.main", name:"reports",lazy:true},
 	 		{kind:"inspections.list", name:"inspections"},
-	 		{kind:"inspections.main.fs", name:"inspectionForecast", lazy:true}
-	 		
+	 		{kind:"inspections.main.fs", name:"inspectionForecast", lazy:true},
+	 		{kind:"users.list", name:"usersList",lazy:true, }	 		
 		 ]}
 	],
 	showReceptionsMap:function(){
@@ -58,8 +60,21 @@ enyo.kind({
 		this.addGoBackAction();
 		this.$.mainPane.selectViewByName("inspectionForecast");
 	},
+	showUsersList : function(){
+	  enyo.$.sisoprega_btnGoBack.setShowing(1);
+      enyo.$.sisoprega_spacerSecond.setShowing(!1);
+      _objMainHeader.setContent('Lista de Usuarios');
+      this.addGoBackAction();
+      this.$.mainPane.selectViewByName("usersList");
+	},
 	addGoBackAction:function(){		
 		_gobackStack.push({caption:"Menu Principal",paneMan:this.$.mainPane,paneName:"menuOptions"});		
+	},
+	selectView:function(inSender, inView, inPreviousView) {
+		if(inView.name=="usersList"){
+			inView.updateList();
+		}
 	}
+	
 });
 

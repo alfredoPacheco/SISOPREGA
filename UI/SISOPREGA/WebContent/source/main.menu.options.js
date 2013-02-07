@@ -10,7 +10,8 @@ enyo.kind({
 		onOperations:"",		
 		onCatalogs:"",
 		onReports:"",
-		onInspectionForecast:""
+		onInspectionForecast:"",
+		onUsers: ""
 	},		
 		components: [{style:"height:10px;"},
 			{kind: enyo.HFlexBox,
@@ -37,7 +38,7 @@ enyo.kind({
 				 align:"center",	    
 				 components: [				
 					{kind: "CustomButton",  className:"menuButton", style:"width:85px;height:75px;background-image:url('images/inspeccion.png');", onclick:"doInspectionForecast"},
-					{kind: "CustomButton", className:"menuButton", style:"width:85px;height:75px;background-image:url('images/users.png');", onclick:"doInspectionForecast"},
+					{kind: "CustomButton", className:"menuButton", style:"width:85px;height:75px;background-image:url('images/users.png');", onclick:"doUsers"},
 					{kind: "Spacer",style:"width:85px;"}
 					]
 				},

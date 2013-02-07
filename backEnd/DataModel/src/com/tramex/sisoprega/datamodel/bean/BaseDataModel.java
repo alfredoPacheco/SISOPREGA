@@ -79,7 +79,14 @@ public class BaseDataModel implements RemoteModelable {
     TypedQuery<T> readQuery = em.createNamedQuery(queryName, type);
     
     readQuery.setParameter(idName, modelId);
-    return readQuery.getSingleResult();
+    T result = null;
+    try{
+      result = readQuery.getSingleResult();
+    }catch(Exception e){
+      log.fine("Could not find single data model: " + e.getMessage());
+    }
+    
+    return result;
   }
   
   public void updateDataModel(Object dataModel){

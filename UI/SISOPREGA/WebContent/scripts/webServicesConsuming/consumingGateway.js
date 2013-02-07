@@ -391,9 +391,10 @@ var cConsumingGateway =
 
           }
         });
-      try{
-    	  enyo.$.sisoprega.destroy();
-      }catch(e){}
+      try {
+        enyo.$.sisoprega.destroy();
+      } catch (e) {
+      }
       //window.location = './';
       return output;
     },
@@ -407,32 +408,33 @@ var cConsumingGateway =
       soapMessage += '</ws:ResetPassword>';
       soapMessage += soapFooter;
 
-      jQuery.ajax({
-        url : identityWsURL,
-        type : "POST",
-        dataType : "xml",
-        data: soapMessage,
-        processData: false,
-        contentType : "text/xml;charset=UTF-8",
-        async : false,
-        success : function OnSuccess(data) {
-          output = jQuery(data).find("return").text();
-        },
-        error : function OnError(request, status, error) {
-          alert('No fue posible volver a asignar contraseña para el usuario ' + userName);
-        }
-      });
+      jQuery.ajax(
+        {
+          url : identityWsURL,
+          type : "POST",
+          dataType : "xml",
+          data : soapMessage,
+          processData : false,
+          contentType : "text/xml;charset=UTF-8",
+          async : false,
+          success : function OnSuccess(data) {
+            output = jQuery(data).find("return").text();
+          },
+          error : function OnError(request, status, error) {
+            alert('No fue posible volver a asignar contraseña para el usuario ' + userName);
+          }
+        });
       return output;
     },
-    AddUser : function(objUser){
+    AddUser : function(objUser) {
       output = "OK";
 
       var soapMessage = soapHeader + '<ws:CreateUser>';
       soapMessage += '<user>';
       soapMessage += '<userName>' + objUser.user_name + '</userName>';
       soapMessage += '<password>' + objUser.password + '</password>';
-      
-      for(index in objUser.groups){
+
+      for (index in objUser.groups) {
         var group = objUser.groups[index];
         soapMessage += '<groups>';
         soapMessage += '<record_id>0</record_id>';
@@ -440,27 +442,68 @@ var cConsumingGateway =
         soapMessage += '<user_name>' + objUser.user_name + '</user_name>';
         soapMessage += '</groups>';
       }
-      
+
       soapMessage += '</user>';
       soapMessage += '</ws:CreateUser>';
       soapMessage += soapFooter;
 
-      jQuery.ajax({
-        url : identityWsURL,
-        type : "POST",
-        dataType : "xml",
-        data: soapMessage,
-        processData: false,
-        contentType : "text/xml;charset=UTF-8",
-        async : false,
-        success : function OnSuccess(data) {
-          output = jQuery(data).find("return").text();
-        },
-        error : function OnError(request, status, error) {
-          alert('No fue posible crear el usuario ' + objUser.user_name);
-        }
-      });
+      jQuery.ajax(
+        {
+          url : identityWsURL,
+          type : "POST",
+          dataType : "xml",
+          data : soapMessage,
+          processData : false,
+          contentType : "text/xml;charset=UTF-8",
+          async : false,
+          success : function OnSuccess(data) {
+            output = jQuery(data).find("return").text();
+          },
+          error : function OnError(request, status, error) {
+            alert('No fue posible crear el usuario ' + objUser.user_name);
+          }
+        });
       return output;
+    },
+    ReadAllUsers : function() {
+      // Se crea objeto que devolvera la funcion:
+      users = [];
+
+      // SOAP Message:
+      var soapMessage = soapHeader + '<ws:ReadAllUsers/>' + soapFooter;
+
+      // Ajax request:
+      jQuery.ajax(
+        {
+          url : identityWsURL,
+          type : "GET",
+          dataType : "xml",
+          data : soapMessage,
+          processData : false,
+          contentType : "text/xml;charset=UTF-8",
+          async : false,
+          success : function OnSuccess(data) {
+            jQuery(data).find("return").each(function() {
+              var user =
+                {
+                  userName : jQuery(this).find("userName").text(),
+                  password : jQuery(this).find("password").text(),
+                  groups : []
+                };
+
+              jQuery(this).find("groups").each(function() {
+                var group = jQuery(this).find('role_name').text();
+                user.groups.push(group);
+              });
+
+              users.push(user);
+            });
+          },
+          error : function OnError(request, status, error) {
+            alert(request.getResponse.text());
+          }
+        });
+      return users;
     }
 
   };

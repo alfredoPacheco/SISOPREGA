@@ -47,5 +47,7 @@ enyo.depends(
 	"source/controls.mask.js",
 	"source/catalogs.ranchers.billing.list.js",
 	"source/catalogs.ranchers.users.list.js",
-	"source/catalogs.ranchers.users.create.js"
+	"source/catalogs.ranchers.users.create.js",
+	"source/users.list.js",
+	"source/cache.users.js"
 );

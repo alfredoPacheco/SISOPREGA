@@ -834,6 +834,10 @@
 			<description>Retrieves a single record by the given user name</description>
 			<query>SELECT u FROM User u WHERE u.userName = :userName</query>
 		</named-query>
+		<named-query name="ALL_NO_RANCHER_USERS">
+			<description>Retrieves all users not assiged to rancher group for administration purposes.</description>
+			<query>SELECT DISTINCT u FROM User u LEFT JOIN u.groups r WHERE NOT r.role_name = "rancher" OR r.role_name IS NULL</query>
+		</named-query>
 		<attributes>
 			<id name="userName">
 				<column name="user_name"/>	

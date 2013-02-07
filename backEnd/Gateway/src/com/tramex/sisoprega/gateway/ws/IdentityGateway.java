@@ -15,6 +15,7 @@
  */
 package com.tramex.sisoprega.gateway.ws;
 
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.annotation.Resource;
@@ -158,6 +159,17 @@ public class IdentityGateway {
     return "OK";
   }
 
+  
+  /**
+   * Retrieves the list of all users
+   * @return
+   * @throws IdentityManagerException
+   */
+  @WebMethod(operationName = "ReadAllUsers")
+  public List<User> readAllUsers() throws IdentityManagerException{
+    return getIdentityManager().allUsers();
+  }
+  
   private RemoteIdentity getIdentityManager() {
     Context jndiContext = null;
     RemoteIdentity im = null;

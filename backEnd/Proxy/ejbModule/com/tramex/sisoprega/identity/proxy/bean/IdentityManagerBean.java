@@ -17,6 +17,7 @@ package com.tramex.sisoprega.identity.proxy.bean;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -119,6 +120,28 @@ public class IdentityManagerBean extends BaseBean implements RemoteIdentity {
     
     dataModel.updateDataModel(user);
   }
+  
+  /*
+   * (non-Javadoc)
+   * 
+   * @see
+   * com.tramex.sisoprega.identity.RemoteIdentity#allUsers()
+   */
+  @Override
+  public List<User> allUsers() throws IdentityManagerException {
+    List<User> users = dataModel.readDataModelList("ALL_NO_RANCHER_USERS", null, User.class);
+    List<User> result = new ArrayList<User>();
+    for(User user : users){
+      User uCopy = new User();
+      uCopy.setUserName(user.getUserName());
+      uCopy.setPassword("!$NoChanged$!");
+      uCopy.setGroups(new ArrayList<Role>());
+      uCopy.getGroups().addAll(user.getGroups());
+      result.add(uCopy);
+    }
+    
+    return result;
+  }
 
   /*
    * (non-Javadoc)
@@ -166,6 +189,4 @@ public class IdentityManagerBean extends BaseBean implements RemoteIdentity {
     }
     return sb.toString();
   }
-  
-  
 }

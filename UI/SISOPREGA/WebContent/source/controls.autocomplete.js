@@ -10,10 +10,14 @@ enyo.kind({
 		items : [],
 	},
 	events:{
-		"onSelectItem":""
+		"onSelectItem":"",
+		"onEnter":""
 	},
 	getValue : function(){
 		return this.$.textField.getValue();
+	},
+	setFocus:	function(){
+		this.$.textField.forceFocus();
 	},
 	hintChanged : function(inOldValue) {
 		this.$.textField.setHint(this.getHint());
@@ -50,6 +54,7 @@ enyo.kind({
 			name : "textField",
 			hint : "",
 			onkeyup : "key_up",
+			onkeydown: "key_down",
 			onblur : "lostFocus",
 			flex : 1
 		}, {
@@ -83,6 +88,12 @@ enyo.kind({
 		this.$.drop_down.openAtEvent(inEvent);
 		return false;
 	},
+	key_down : function(inSender, inEvent){
+		
+		if(inEvent.keyCode == 13){			
+			this.doEnter();
+		}
+	},
 	key_up : function(inSender, inEvent) {
 		var arrAux = [];
 		var value = "";
@@ -94,6 +105,7 @@ enyo.kind({
 			break;
 		case (x == 16): //Shift
 		case (x == 9): // tab
+		case (x == 13): // enter
 			return true;
 		}
 		value = inSender.value;

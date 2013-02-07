@@ -13,7 +13,9 @@ enyo.kind({
 	arrBY:null,
 	create : function() {
 		this.inherited(arguments);
-		this.$.rancher_id.setItems(cacheRanchers.getAllForList());		
+		this.$.rancher_id.setItems(cacheRanchers.getAllForList());
+		this.$.cattype_id.setItems(cacheCattle.getAllCattleType());
+		this.$.city_id.setItems(cacheMan.allLocationsForList());
 	},
 	components: [	
 		{kind: enyo.Scroller,
@@ -42,7 +44,8 @@ enyo.kind({
 									name : "rancher_id",
 									hint:"",
 									flex:1,
-									contentPack:"end"
+									contentPack:"end",
+									onEnter:"emularTabulacionConEnter"
 								},	
 								{kind: enyo.IconButton, icon: "images/menu-icon-new.png", 
 								 onclick: "contextMenuClicked" },	
@@ -51,22 +54,43 @@ enyo.kind({
 							
 					  {kind: "Item",
 						components: [
-							{content: "Ganado", className: "enyo-label", flex: 1},
-							{name: 'cattype_id', flex: 1, kind: "ListSelector", contentPack:"end", items: []}]},
+//							{content: "Ganado", className: "enyo-label", flex: 1},
+							{layoutKind: enyo.HFlexLayout,components:[
+	  								{
+	  									kind : "controls.autocomplete",
+	  									name : "cattype_id",
+	  									hint:"",
+	  									flex:1,
+	  									contentPack:"end",
+	  									onEnter:"emularTabulacionConEnter"
+	  								}]}
+	  							]},
 					  {kind: "Item",
 						components: [
 							{content: "Ciudad de Origen", className: "enyo-label", flex: 1},
-							{name: 'city_id',flex: 1, kind: "ListSelector",float:true,
-							 contentPack:"end", items:[]}]},					  
+//							{name: 'city_id',flex: 1, kind: "ListSelector",float:true,
+//							 contentPack:"end", items:[]}]},
+							 {layoutKind: enyo.HFlexLayout,components:[
+   	  								{
+   	  									kind : "controls.autocomplete",
+   	  									name : "city_id",
+   	  									hint:"",
+   	  									flex:1,
+   	  									contentPack:"end",
+   	  									onEnter:"emularTabulacionConEnter"
+   	  								}]},
+   	  							]},
 					{kind: "VFlexBox", style: "",					  				  
 					 components:[
-					     {content:"Fecha de Llegada",},
-						 {kind: "DatePicker", name:"arrival_date", label:"",
+					     {content:"Fecha de Llegada",},						 
+					     {kind: "DatePicker", name:"arrival_date", label:"",
 						  inputClassName: "blankInput",focusClassName:"darkFocus",changeOnInput: true}]},
-						 {kind: "Input", name:"hc_aprox",   hint:"Cabezas",inputClassName: "blankInput",
-					 	  changeOnInput: true,inputType:"number",},
-						 {kind: "Input", name:"weight", hint:"Peso",inputClassName: "blankInput",
-					 	  changeOnInput: true,inputType:"number",}]}
+						 
+						  {kind: "Input", name:"hc_aprox",   hint:"Cabezas",inputClassName: "blankInput",
+					 	  changeOnInput: true,inputType:"number",onkeydown:"key_down"},
+						 
+					 	  {kind: "Input", name:"weight", hint:"Peso",inputClassName: "blankInput",
+					 	  changeOnInput: true,inputType:"number",onkeydown:"key_down"}]}
 		]},
 		{kind: "Drawer", name:"draAdd", 
 			 components: [ 					
@@ -90,8 +114,32 @@ enyo.kind({
 	},
 	ready:function(){
 		this.resetValues();
-		this.$.cattype_id.setValue(1);
-		this.$.city_id.setValue(1);
+		this.$.rancher_id.setFocus();
+	},
+	emularTabulacionConEnter:function(inSender){
+		switch(inSender.name){
+		case "rancher_id":
+			this.$.cattype_id.setFocus();
+			break;
+		case "cattype_id":
+			this.$.city_id.setFocus();
+			break;
+		case "city_id":
+			this.$.hc_aprox.forceFocus();
+			break;
+		case "hc_aprox":
+			this.$.weight.forceFocus();
+			break;
+		case "weight":
+			this.$.rancher_id.setFocus();
+			break;
+			
+		}
+	},
+	key_down:function(inSender, inEvent){
+		if(inEvent.keyCode == 13){
+			this.emularTabulacionConEnter(inSender);
+		}
 	},
 	addReception:function(){
 		cacheReceptions.Create(this.getReception(),this,"doAddReception");
@@ -106,14 +154,14 @@ enyo.kind({
 					
 		receptionDef.rancher_name=	this.$.rancher_id.getValue();
 		receptionDef.rancher_id=	this.$.rancher_id.getIndex();						
-		receptionDef.city_id=		this.$.city_id.getValue();
-		receptionDef.city_name=		cacheMan.getCityByID(this.$.city_id.getValue()).city_name;
+		receptionDef.city_id=		this.$.city_id.getIndex();
+		receptionDef.city_name=		this.$.city_id.getValue();
 		
 		if(this.$.arrival_date.getValue()!=null){	
 			receptionDef.arrival_date=fmt.format(this.$.arrival_date.getValue());
 		}
-		receptionDef.cattype_id=this.$.cattype_id.getValue();
-		receptionDef.cattype_name=cacheCattle.getByID(this.$.cattype_id.getValue()).cattype_name;	
+		receptionDef.cattype_id=this.$.cattype_id.getIndex();
+		receptionDef.cattype_name=this.$.cattype_id.getValue();	
 		receptionDef.weights.push({hcw_id:null,hc:this.$.hc_aprox.getValue(),weight:this.$.weight.getValue()});
 		receptionDef.hc_aprox=this.$.hc_aprox.getValue();
 		receptionDef.barnyards=this.arrBY;		
@@ -124,12 +172,10 @@ enyo.kind({
 	},
 	resetValues:function(){
 		this.$.rancher_id.setIndex(-1);
-		this.$.cattype_id.setValue(0);
-		this.$.city_id.setValue(0);		
+		this.$.cattype_id.setIndex(1);
+		this.$.city_id.setIndex(1);		
 		this.$.arrival_date.setValue(new Date());
 		this.$.hc_aprox.setValue("");
-		this.$.cattype_id.setItems(cacheCattle.getCattleTypeLS());
-		this.$.city_id.setItems(cacheMan.getCitiesLS());
 	},
 	setReception:function(receptionDef,arrBY){
 		this.resetValues();
@@ -142,8 +188,8 @@ enyo.kind({
 												  receptionDef.arrival_date.substring(5,7)-1,
 												  receptionDef.arrival_date.substring(8,10)
 										 ));
-			this.$.city_id.setValue(receptionDef.city_id);
-			this.$.cattype_id.setValue(receptionDef.cattype_id);
+			this.$.city_id.setIndex(receptionDef.city_id);
+			this.$.cattype_id.setIndex(receptionDef.cattype_id);
 			if(receptionDef.weights.length==1){
 				this.$.hc_aprox.setValue(receptionDef.weights[0].hc);			
 				this.$.weight.setValue(receptionDef.weights[0].weight);

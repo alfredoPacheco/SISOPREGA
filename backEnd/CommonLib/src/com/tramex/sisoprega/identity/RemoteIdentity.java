@@ -15,6 +15,8 @@
  */
 package com.tramex.sisoprega.identity;
 
+import java.util.List;
+
 import com.tramex.sisoprega.identity.dto.User;
 
 /**
@@ -36,13 +38,51 @@ import com.tramex.sisoprega.identity.dto.User;
  * 
  */
 public interface RemoteIdentity {
+  /**
+   * Create a user
+   * @param user
+   * @throws IdentityManagerException
+   */
   void createUser(User user) throws IdentityManagerException;
 
+  /**
+   * Reset user password. Encripts password.
+   * @param userName
+   * @param newPassword
+   * @throws IdentityManagerException
+   */
   void resetPassword(String userName, String newPassword) throws IdentityManagerException;
 
+  /**
+   * Add group to user.
+   * @param userName
+   * @param groupName
+   * @throws IdentityManagerException
+   */
   void addGroup(String userName, String groupName) throws IdentityManagerException;
 
+  /**
+   * Remove group from user
+   * @param userName
+   * @param groupName
+   * @throws IdentityManagerException
+   */
   void removeGroup(String userName, String groupName) throws IdentityManagerException;
 
+  /**
+   * Validate current password
+   * @param userName
+   * @param password
+   * @return
+   * @throws IdentityManagerException
+   */
   boolean validateCurrentPassword(String userName, String password) throws IdentityManagerException;
+
+  /**
+   * Retrieve all users from database.
+   * @return
+   * @throws IdentityManagerException
+   */
+  List<User> allUsers() throws IdentityManagerException;
+
 }
