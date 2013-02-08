@@ -4,10 +4,10 @@ enyo.kind({
 	className:"buttonsBG",
 	pack:"center",
 	tempFixCom:null,
+	isEditing : false,
 	events:{
 		onUpdateLabel:"",
 	},	
-//	     style:"background-image: url(images/practice_background.png); background-size: cover;",				 	
 	components:[
 		{kind: enyo.Pane, onSelectView:"selectView",className:"buttonsBG", flex: 1, name: "mainPane", transitionKind: "enyo.transitions.LeftRightFlyin", 
 	     style:"background-size: cover;",				 		
@@ -29,7 +29,8 @@ enyo.kind({
 	 		{kind:"reports.main", name:"reports",lazy:true},
 	 		{kind:"inspections.list", name:"inspections"},
 	 		{kind:"inspections.main.fs", name:"inspectionForecast", lazy:true},
-	 		{kind:"users.list", name:"usersList",lazy:true, }	 		
+	 		{kind:"users.list", name:"usersList", onAddUser:"showAddUser", onSelectUser:"showEditUser", lazy:true },
+	 		{kind:"users.create", name:"addUser" }
 		 ]}
 	],
 	showReceptionsMap:function(){
@@ -67,12 +68,43 @@ enyo.kind({
       this.addGoBackAction();
       this.$.mainPane.selectViewByName("usersList");
 	},
+	showAddUser : function(){
+	  enyo.$.sisoprega_btnGoBack.setShowing(1);
+      enyo.$.sisoprega_spacerSecond.setShowing(!1);
+      _objMainHeader.setContent('Agregar Usuario');
+      _gobackStack.push(
+          {
+            caption : _objMainHeader.getContent(),
+            paneMan : this.$.mainPane,
+            paneName : "usersList"
+          });
+      this.$.mainPane.selectViewByName("addUser");
+	},
+	showEditUser : function(){
+	  enyo.$.sisoprega_btnGoBack.setShowing(1);
+      enyo.$.sisoprega_spacerSecond.setShowing(!1);
+      _objMainHeader.setContent('Editar Usuario');
+      _gobackStack.push(
+          {
+            caption : _objMainHeader.getContent(),
+            paneMan : this.$.mainPane,
+            paneName : "usersList"
+          });
+      this.$.mainPane.selectViewByName("addUser");
+	},
 	addGoBackAction:function(){		
 		_gobackStack.push({caption:"Menu Principal",paneMan:this.$.mainPane,paneName:"menuOptions"});		
 	},
 	selectView:function(inSender, inView, inPreviousView) {
 		if(inView.name=="usersList"){
-			inView.updateList();
+		  inView.updateList();
+		}
+		if(inPreviousView.name == "usersList" && inView.name != "menuOptions"){
+		  var selectedUser = inPreviousView.getSelectedUser();
+		  if(selectedUser)
+		    inView.setUser(selectedUser);
+		  else
+		    inView.toggleAdd();
 		}
 	}
 	

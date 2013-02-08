@@ -3,7 +3,8 @@ enyo.kind({
 	kind: enyo.SlidingView,
 	layoutKind: enyo.VFlexLayout,
 	events: {
-		"onReceptions":""
+		onReceptions : "",
+		onInspections : ""
 	},	
 	className:"buttonsBG",
 	components: [
@@ -13,7 +14,10 @@ enyo.kind({
 		 align:"center",	    
 		 components: [			
 			{kind: "Spacer"},
-			{kind: "Button", className: "enyo-button-option", caption: "Ganado", onclick:"doReceptions"},
+			{kind: "Button", className: "enyo-button-option", caption: "Ganado Recibido", onclick:"doReceptions"},
+			{kind: "Button", className: "enyo-button-option", caption: "Ganado Inspecionado", onclick:"doInspections"},
+			{kind: "Button", className: "enyo-button-option", caption: "Ganado Recibido por Ganadero", onclick:"doReceptions"},
+			{kind: "Button", className: "enyo-button-option", caption: "Reporte de Alimento", onclick:"doReceptions"},
 			{kind: "Spacer"}]}
 	]
 });
