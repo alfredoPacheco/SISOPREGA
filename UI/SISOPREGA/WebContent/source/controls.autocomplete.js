@@ -1,7 +1,8 @@
 enyo.kind({
 	name : "controls.autocomplete",
 	kind : enyo.Control,
-	itemSelectedPopup : -1,
+	itemSelectedPopupAux : -1,
+	navigatingOnList:false,
 	layoutKind : enyo.HFlexLayout,
 	allItems : [],
 	published : {
@@ -45,53 +46,129 @@ enyo.kind({
 		style : "width:300px;",
 		modal : false,
 		onSelect : "select_item",
-		onBeforeOpen : "setupItem",
+		onSetupItem: "setupItem",
 		items : []
 	}, 
-//	{layoutKind : enyo.HFlexLayout,	components : [ 
-		               {
-			kind : "Input",
-			name : "textField",
-			hint : "",
-			onkeyup : "key_up",
-			onkeydown: "key_down",
-			onblur : "lostFocus",
-			flex : 1
-		}, {
-			style : "background-color:#DABD8B;",
-			kind : "IconButton",
-			icon : "images/icon-arrows-down.png",
-			onclick : "click_button"
-		} 
+	{
+		kind : "Input",
+		name : "textField",
+		hint : "",
+		onkeyup : "key_up",
+		onkeydown: "key_down",
+		onblur : "lostFocus",
+		flex : 1
+	}, {
+		style : "background-color:#DABD8B;",
+		kind : "IconButton",
+		icon : "images/icon-arrows-down.png",
+		onclick : "click_button"
+	} 
 		
-//		]	}
 
 	],
-
-	controlSelectionItem : function(direction) {
-		if (direction == "down") {
-			if (d) {
+	lostFocus : function(inSender, inEvent) {
+		if (this.$.drop_down.isOpen && this.$.drop_down.selected > -1 && this.$.drop_down.selected != null) {
+			this.itemSelectedPopupAux=-1;
+			this.setIndex(this.$.drop_down.items[this.$.drop_down.selected].value);
+			this.$.drop_down.close();
+			this.$.drop_down.selected = -1;
+		}		
+	},
+	setupItem : function(inSender, InIndex){
+		this.itemSelectedPopupAux++;
+		if (this.index > -1 && !this.navigatingOnList){
+			if(this.getCaptionByIndex(this.index) == InIndex.$.item.getContent()){
+				InIndex.applyStyle("background-color", "white");
+				this.$.textField.setValue(InIndex.caption);
+				this.$.drop_down.selected = this.itemSelectedPopupAux;				
 			}
 		}
-	},
-	lostFocus : function(inSender, inEvent) {
-		if (this.$.drop_down.isOpen) {
-			this.setIndex(this.$.drop_down.items[0].value);
+		else if(this.$.drop_down.selected > -1 && this.$.drop_down.selected != null){
+			if(this.$.drop_down.items[this.$.drop_down.selected].caption == InIndex.$.item.getContent()){
+				InIndex.applyStyle("background-color", "white");
+				this.$.textField.setValue(InIndex.caption);
+			}
 		}
-		this.$.drop_down.close();
+		return false;
 	},
 	select_item : function(inSender, inSelected) {
+		this.itemSelectedPopupAux=-1;
 		this.setIndex(inSender.items[inSelected].value);
+		this.$.drop_down.selected = -1;
 	},
 	click_button : function(inSender, inEvent) {
+		this.itemSelectedPopupAux=-1;
 		this.$.drop_down.setItems(this.allItems);
 		this.$.drop_down.openAtEvent(inEvent);
+		this.$.textField.forceFocus();
 		return false;
 	},
 	key_down : function(inSender, inEvent){
 		
-		if(inEvent.keyCode == 13){			
-			this.doEnter();
+		switch(inEvent.keyCode){
+		case 13:
+			if (this.$.drop_down.isOpen && this.$.drop_down.selected > -1 && this.$.drop_down.selected != null) {
+				this.itemSelectedPopupAux=-1;
+				this.setIndex(this.$.drop_down.items[this.$.drop_down.selected].value);
+				this.$.drop_down.close();
+				this.$.drop_down.selected = -1;
+			}else{
+				this.doEnter();
+			}
+			break;
+		case 38://up
+			this.selectUp();
+			break;
+		case 40://down
+			this.selectDown();
+			break;
+		case 37://left
+			break;
+		case 39://right
+			break;
+		default:
+			console.info(inEvent.keyCode);
+		}
+		return true;
+	},
+	selectDown:function(){
+		if (this.$.drop_down.isOpen) {
+			this.navigatingOnList = true;
+			if(this.getItems().length >0){
+				if(this.$.drop_down.selected < this.getItems().length - 1){
+					this.$.drop_down.selected ++;
+//					this.$.drop_down.selected = this.itemSelectedPopup;
+					this.$.drop_down.scrollToSelected();					
+				}else{
+					this.$.drop_down.selected = 0;
+//					this.$.drop_down.selected = this.itemSelectedPopup;
+					this.$.drop_down.scrollToSelected();
+				}
+				this.$.drop_down.render();
+			}else{
+				this.$.drop_down.selected = -1;
+			}	
+			this.navigatingOnList = false;
+		}
+	},
+	selectUp:function(){
+		if (this.$.drop_down.isOpen) {
+			this.navigatingOnList = true;
+			if(this.getItems().length >0){
+				if(this.$.drop_down.selected > 0){
+					this.$.drop_down.selected --;
+//					this.$.drop_down.selected = this.itemSelectedPopup;
+					this.$.drop_down.scrollToSelected();
+				}else{
+					this.$.drop_down.selected = this.getItems().length - 1;
+//					this.$.drop_down.selected = this.itemSelectedPopup;
+					this.$.drop_down.scrollToSelected();
+				}
+				this.$.drop_down.render();
+			}else{
+				this.$.drop_down.selected = -1;
+			}	
+			this.navigatingOnList = false;
 		}
 	},
 	key_up : function(inSender, inEvent) {
@@ -105,18 +182,25 @@ enyo.kind({
 			break;
 		case (x == 16): //Shift
 		case (x == 9): // tab
+		case (x == 38): // up
+		case (x == 40): // down
+		case (x == 37): // left
+		case (x == 39): // right
 		case (x == 13): // enter
 			return true;
 		}
 		value = inSender.value;
 		arrAux = this.findItem(value);
+		this.$.drop_down.selected = -1;
 		if (arrAux.length > 0) {
+			
 			this.$.drop_down.setItems(arrAux);
 			// this.$.drop_down.$.list.$.client.controls[0].setStyle("background-color:yellow;");
 			this.$.drop_down.openAroundControl(this.$.textField, "", "left");
 		} else {
 			// this.$.drop_down.setItems(cacheRanchers.getAllForList());
 			this.$.drop_down.close();
+			
 		}
 
 	},
@@ -145,6 +229,13 @@ enyo.kind({
 		for(i in this.allItems){
 			if(this.allItems[i].value==index){
 				return this.allItems[i].caption;
+			}
+		}
+	},
+	getIndexByCaption:function(caption){
+		for(i in this.items){
+			if(this.items[i].caption==caption){
+				return this.items[i].value;
 			}
 		}
 	}
