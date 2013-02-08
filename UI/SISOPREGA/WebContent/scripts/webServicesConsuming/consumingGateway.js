@@ -476,7 +476,7 @@ var cConsumingGateway =
       jQuery.ajax(
         {
           url : identityWsURL,
-          type : "GET",
+          type : "POST",
           dataType : "xml",
           data : soapMessage,
           processData : false,
@@ -504,8 +504,61 @@ var cConsumingGateway =
           }
         });
       return users;
-    }
+    },
+    AddGroup : function(userName, groupName){
+      output = "OK";
 
+      var soapMessage = soapHeader + '<ws:AddGroup>';
+      soapMessage += '<user_name>' + userName + '</user_name>';
+      soapMessage += '<group_name>' + groupName + '</group_name>';
+      soapMessage += '</ws:AddGroup>';
+      soapMessage += soapFooter;
+
+      jQuery.ajax(
+        {
+          url : identityWsURL,
+          type : "POST",
+          dataType : "xml",
+          data : soapMessage,
+          processData : false,
+          contentType : "text/xml;charset=UTF-8",
+          async : false,
+          success : function OnSuccess(data) {
+            output = jQuery(data).find("return").text();
+          },
+          error : function OnError(request, status, error) {
+            alert('No fue posible agregar grupo ' + groupName + ' al usuario ' + userName);
+          }
+        });
+      return output;
+    },
+    RemoveGroup : function(userName, groupName){
+      output = "OK";
+
+      var soapMessage = soapHeader + '<ws:RemoveGroup>';
+      soapMessage += '<user_name>' + userName + '</user_name>';
+      soapMessage += '<group_name>' + groupName + '</group_name>';
+      soapMessage += '</ws:RemoveGroup>';
+      soapMessage += soapFooter;
+
+      jQuery.ajax(
+        {
+          url : identityWsURL,
+          type : "POST",
+          dataType : "xml",
+          data : soapMessage,
+          processData : false,
+          contentType : "text/xml;charset=UTF-8",
+          async : false,
+          success : function OnSuccess(data) {
+            output = jQuery(data).find("return").text();
+          },
+          error : function OnError(request, status, error) {
+            alert('No fue posible remover el grupo ' + groupName + ' del usuario ' + userName);
+          }
+        });
+      return output;
+    }
   };
 
 var consumingGateway = cConsumingGateway;

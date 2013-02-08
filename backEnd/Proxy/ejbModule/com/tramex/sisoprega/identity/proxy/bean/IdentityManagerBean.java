@@ -42,7 +42,8 @@ import com.tramex.sisoprega.proxy.bean.BaseBean;
  * Date        By                           Description
  * MM/DD/YYYY
  * ----------  ---------------------------  -------------------------------------------
- * 02/01/2012  Diego Torres                 Initial Version.
+ * 02/01/2013  Diego Torres                 Initial Version.
+ * 02/06/2013  Diegp Torres                 Add group only when group is not assigned to user.
  * ====================================================================================
  * </PRE>
  * 
@@ -94,14 +95,16 @@ public class IdentityManagerBean extends BaseBean implements RemoteIdentity {
   @Override
   public void addGroup(String userName, String groupName) throws IdentityManagerException {
     User user = getUserFromName(userName);
-    Role newGroup = new Role();
-    newGroup.setRole_name(groupName);
-    newGroup.setUser_name(userName);
-    if(!user.getGroups().contains(groupName))
+    if(!user.getGroups().contains(groupName)){
+      log.fine("group not found in user to be added:" + groupName);
+      Role newGroup = new Role();
+      newGroup.setRole_name(groupName);
+      newGroup.setUser_name(userName);
+      
       user.getGroups().add(newGroup);
-    
-    dataModel.updateDataModel(user);
-    
+      log.fine("Updating records on database");
+      dataModel.updateDataModel(user);
+    }
   }
 
   /*
@@ -113,12 +116,27 @@ public class IdentityManagerBean extends BaseBean implements RemoteIdentity {
    */
   @Override
   public void removeGroup(String userName, String groupName) throws IdentityManagerException {
+    log.entering(this.getClass().getCanonicalName(), "removeGroup");
     User user = getUserFromName(userName);
     
-    if(user.getGroups().contains(groupName))
-        user.getGroups().remove(groupName);
+    log.fine("checking if group [" + groupName + "] is contained in user");
+    Role groupToRemove = null;
+    
+    for(Role group : user.getGroups()){
+      if(group.getRole_name().equalsIgnoreCase(groupName)){
+        groupToRemove = group;
+        log.fine("Deleting group record on database");
+        dataModel.deleteDataModel(group, "");
+        break;
+      }
+    }
+    
+    log.fine("group found in user to be removed:" + groupName);
+    user.getGroups().remove(groupToRemove);
     
     dataModel.updateDataModel(user);
+    log.fine("Updating user record with new set of groups");
+    return;
   }
   
   /*

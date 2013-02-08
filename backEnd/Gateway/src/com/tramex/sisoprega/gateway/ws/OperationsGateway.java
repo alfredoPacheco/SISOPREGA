@@ -112,12 +112,6 @@ public class OperationsGateway {
 				// Retrieve a cruddable instance from an EJB in the glassfish
 				// context
 				Cruddable crud = getCruddable(request.getEntityName());
-				// Generate the result from the cruddable operation
-				for (Field fld : content) {
-					if (fld.getValue() == "~:~getUserID") {
-						fld.setValue(getSessionUserName());
-					}
-				}
 				result = crud.Create(request);
 			} else {
 				result = new CreateGatewayResponse();

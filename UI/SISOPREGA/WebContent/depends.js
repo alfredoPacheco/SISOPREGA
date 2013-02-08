@@ -49,5 +49,6 @@ enyo.depends(
 	"source/catalogs.ranchers.users.list.js",
 	"source/catalogs.ranchers.users.create.js",
 	"source/users.list.js",
+	"source/users.create.js",
 	"source/cache.users.js"
 );
