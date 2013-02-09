@@ -25,15 +25,15 @@ enyo.kind({
 		var formElement = document.getElementById("frmUpload");
 		var oMyForm = new FormData(formElement);
 		var sParams=null;
-		sParams="rancher_id="+this.$.rancher_id.getIndex()+"&"+"folio_id="+this.$.folio_id.getValue()		
+		sParams="rancher_id="+this.$.rancher_id.getIndex()+"&fechaPedimento=2/8/2013&"+"folio_id="+this.$.folio_id.getValue(),	
 		jQuery.ajax({
 		   type: 'POST',
 		   contentType:false,		   
 		   processData: false,
 		   url: 'PdfUploader?'+sParams,
 		   data: oMyForm,
-		   success: function(data){alert('PDF Cargado con exito')},
-		   error : function(xhr, textStatus,errorThrown){alert('Error Cargando PDF')}
+		   success: function(data){alert('PDF Cargado con exito');},
+		   error : function(xhr, textStatus,errorThrown){alert('Error Cargando PDF');}
      });
 	},
 	emularTabulacionConEnter:function(inSender){
