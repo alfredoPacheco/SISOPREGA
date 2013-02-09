@@ -5,7 +5,8 @@ enyo.kind({
 	events: {	
 		onUpdate:"",
 		onCancel:"",
-	},	
+	},
+	iId:null,
 	components: [
   		{style:"width:1%"},
   		{style:"width:98%",components:[
@@ -59,7 +60,7 @@ enyo.kind({
 			{tag:"br"},						
 			{tag:"br"},										
 			{kind: "FittableColumns", style:"align:center",components:[
-				  {kind:"onyx.Button", onclick:"launchReport",content:"OK",classes: "onyx-affirmative",
+				  {kind:"onyx.Button",content:"OK",classes: "onyx-affirmative",
 				   style:"width:49%",onclick:"doUpdate"},
 				  {style:"width:2%"},
 				  {kind:"onyx.Button", onclick:"doCancel",content:"Cancelar",classes: "onyx-negative",
@@ -69,25 +70,27 @@ enyo.kind({
        {style:"width:1%"},		 	
 	],
 	setProfile:function(objData){
-		this.$.company_name.setValue(objData.company_name);
-		this.$.address_one.setValue(objData.address_one);
-		this.$.address_two.setValue(objData.address_two);
-		this.$.city_id.setValue(objData.city_id);
-		this.$.state_id.setValue(objData.state_id);
-		this.$.zip_code.setValue(objData.zip_code);
-		this.$.rfc.setValue(objData.rfc);
-		this.$.phone_number.setValue(objData.phone_number);
+		this.iId=objData.enterpriseId;
+		this.$.company_name.setValue(objData.legalName);
+		this.$.address_one.setValue(objData.addressOne);
+		this.$.address_two.setValue(objData.addressTwo);
+		this.$.city_id.setValue(objData.city);
+		this.$.state_id.setValue(objData.state);
+		this.$.zip_code.setValue(objData.zipCode);
+		this.$.rfc.setValue(objData.legalId);
+		this.$.phone_number.setValue(objData.telephone);
 		this.$.email.setValue(objData.email);				 
 	},		
-	getProfile:function(){
-		 var objData ={company_name: this.$.company_name.getValue(),
-					  address_one: this.$.address_one.getValue(),
-					  address_two: this.$.address_two.getValue(),
-					  city_id: this.$.city_id.getValue(),
-					  state_id: this.$.state_id.getValue(),
-					  zip_code: this.$.zip_code.getValue(),
-					  rfc: this.$.rfc.getValue(),
-					  phone_number: this.$.phone_number.getValue(),
+	getProfile:function(){		
+		 var objData ={enterpriseId:this.iId,
+				 	  legalName: this.$.company_name.getValue(),
+					  addressOne: this.$.address_one.getValue(),
+					  addressTwo: this.$.address_two.getValue(),
+					  city: this.$.city_id.getValue(),
+					  state: this.$.state_id.getValue(),
+					  zipCode: this.$.zip_code.getValue(),
+					  legalId: this.$.rfc.getValue(),
+					  telephone: this.$.phone_number.getValue(),
 					  email: this.$.email.getValue()};		
 		 return objData;		 
 	},	
