@@ -20,7 +20,7 @@ enyo.kind({
 			onReports:"showReports",
 			onInspectionForecast:"showInspectionForecast",
 			onUsers:"showUsersList",
-			onFileUpload:"showFileUpload"},
+			onFileUpload:"showExpRequest"},
 	 		
 			{kind:"operations.menu", name:"operations", onReceptions:"showReceptions", 
 			 onInspections:"showInspections",lazy:true},
@@ -70,10 +70,10 @@ enyo.kind({
       this.addGoBackAction();
       this.$.mainPane.selectViewByName("usersList");
 	},
-	showFileUpload: function(){
+	showExpRequest: function(){
 		  enyo.$.sisoprega_btnGoBack.setShowing(1);
 	      enyo.$.sisoprega_spacerSecond.setShowing(!1);
-	      _objMainHeader.setContent('Subir Archivo');
+	      _objMainHeader.setContent('Cargar Pedimento');
 	      this.addGoBackAction();
 	      this.$.mainPane.selectViewByName("fileUploader");
 	},	

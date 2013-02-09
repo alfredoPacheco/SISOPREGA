@@ -51,7 +51,7 @@ enyo.kind({
 					 components: [				
 						{ content:"Lista de Inspeccion" , flex:1, style:"text-align:center;vertical-align:top;"},
 						{ content:"Usuarios" , flex:1, style:"text-align:center;vertical-align:top;"},
-						{ content:"Archivo" , flex:1, style:"text-align:center;vertical-align:top;"},]
+						{ content:"Cargar pedimento" , flex:1, style:"text-align:center;vertical-align:top;"},]
 					},
 				{kind: enyo.HFlexBox,
 					 className:"buttonsBG",		

@@ -37,6 +37,10 @@ enyo.kind({
 			this.doFail();
 		}					
 	},
+	resetValues:function(){
+		this.$.user.hasNode().value=""; 
+		this.$.password.hasNode().value="";
+	},
 	key_down:function(inSender, inEvent){
 		if(inEvent.keyCode == 13){			
 			this.checkLogIn();
