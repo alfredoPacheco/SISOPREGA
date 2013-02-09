@@ -4,7 +4,8 @@ enyo.kind({
 	layoutKind: enyo.VFlexLayout,
 	events: {
 		onReceptions : "",
-		onInspections : ""
+		onInspections : "",
+		onFeed: ""
 	},	
 	className:"buttonsBG",
 	components: [
@@ -16,8 +17,7 @@ enyo.kind({
 			{kind: "Spacer"},
 			{kind: "Button", className: "enyo-button-option", caption: "Ganado Recibido", onclick:"doReceptions"},
 			{kind: "Button", className: "enyo-button-option", caption: "Ganado Inspecionado", onclick:"doInspections"},
-			{kind: "Button", className: "enyo-button-option", caption: "Ganado Recibido por Ganadero", onclick:"doReceptions"},
-			{kind: "Button", className: "enyo-button-option", caption: "Reporte de Alimento", onclick:"doReceptions"},
+			{kind: "Button", className: "enyo-button-option", caption: "Reporte de Alimento", onclick:"doFeed"},
 			{kind: "Spacer"}]}
 	]
 });

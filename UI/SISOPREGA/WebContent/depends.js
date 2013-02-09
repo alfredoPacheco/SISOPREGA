@@ -24,8 +24,8 @@ enyo.depends(
 	"source/inspections.list.js",	
 	"source/reports.main.js",
 	"source/reports.select.js",					
-	"source/reports.receptions.js",						
-	"source/reports.receptions.list.js",	
+	"source/reports.filter.js",	
+	"source/reports.filter.by_date.js",
 	"source/catalogs.main.js",
 	"source/catalogs.menu.js",
 	"source/catalogs.ranchers.js",		
@@ -50,5 +50,6 @@ enyo.depends(
 	"source/catalogs.ranchers.users.create.js",
 	"source/users.list.js",
 	"source/users.create.js",
-	"source/cache.users.js"
+	"source/cache.users.js",
+	"source/file.uploader.js"
 );

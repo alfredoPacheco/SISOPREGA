@@ -167,7 +167,13 @@ public class IdentityGateway {
    */
   @WebMethod(operationName = "ReadAllUsers")
   public List<User> readAllUsers() throws IdentityManagerException{
+
+    
+    if (getSessionUserName() == null)
+      throw new WebServiceException("User is not logged in");
+    
     log.info("Retrieving list of users.");
+
     return getIdentityManager().allUsers();
   }
   
