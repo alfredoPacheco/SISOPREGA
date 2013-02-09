@@ -6,6 +6,7 @@ enyo.kind({
 		onUpdate:"",
 		onCancel:"",
 	},	
+	iId:null,
 	components: [
   		{style:"width:1%"},
   		{style:"width:98%",components:[
@@ -34,7 +35,8 @@ enyo.kind({
 			{tag:"br"},		
 			{kind: "onyx.Groupbox", classes:"onyx-sample-result-box", components: [
 				{kind: "onyx.GroupboxHeader", content: "Fecha de Nacimiento"},
-				{kind:"onyx.DatePicker", name:'birth_date', minYear:1900, maxYear:2010, style:"border-width: 0 0px 0px 0px;"},		
+				{kind:"onyx.DatePicker", bBlank:true,name:'birth_date', minYear:1900, maxYear:2010, style:"border-width: 0 0px 0px 0px;",
+				 onclick:"reloadControl"},		
 			]},		
 			{tag:"br"},		
 			{kind: "onyx.Groupbox", classes:"onyx-sample-result-box", components: [
@@ -56,8 +58,8 @@ enyo.kind({
 			{tag:"br"},						
 			{tag:"br"},										
 			{kind: "FittableColumns", style:"align:center",components:[
-				  {kind:"onyx.Button", onclick:"launchReport",content:"OK",classes: "onyx-affirmative",
-				   style:"width:49%", onclick:"updateProfile"},
+				  {kind:"onyx.Button", onclick:"doUpdate",content:"OK",classes: "onyx-affirmative",
+				   style:"width:49%",},
 				  {style:"width:2%"},
 				  {kind:"onyx.Button", onclick:"doCancel",content:"Cancelar",classes: "onyx-negative",
 				   style:"width:49%"},
@@ -72,24 +74,42 @@ enyo.kind({
 		this.$.popPassword.hide();
 	},
 	setProfile:function(objData){
+		
+		this.iId=objData.rancherId;
 		this.$.aka.getValue(objData.aka);
-		//this.$.birth_date.setValue(objData.birth_date);
-		this.$.email_add.setValue(objData.email_add);
-		this.$.first_name.setValue(objData.first_name);
-		this.$.last_name.setValue(objData.last_name);
-		this.$.mother_name.setValue(objData.mother_name);
-		this.$.phone_number.setValue(objData.phone_number)
+		// Diego: Validate if retrieved value from database is not empty.		
+		if (objData.birthDate!= '') {
+			this.$.birth_date.setValue(new Date(objData.birthDate
+					.substring(0, 4),
+					objData.birthDate.substring(5, 7) - 1,
+					objData.birthDate.substring(8, 10)));
+		}else{
+			
+		}
+		this.$.email_add.setValue(objData.emailAddress);
+		this.$.first_name.setValue(objData.firstName);
+		this.$.last_name.setValue(objData.lastName);
+		this.$.mother_name.setValue(objData.motherName);
+		this.$.phone_number.setValue(objData.phone)
 	},	
 	getProfile:function(){
-     var objData ={
+		var fmt = new enyo.g11n.DateFmt({
+			format : "yyyy/MM/dd",
+			locale : new enyo.g11n.Locale("es_es")
+		});		
+		
+
+     var objData ={rancherId:this.iId,
           		  aka : this.$.aka.getValue(),
-				  birth_date : this.$.birth_date.getValue(),
-				  email_add : this.$.email_add.getValue(),
-				  first_name : this.$.first_name.getValue(),
-				  last_name : this.$.last_name.getValue(),
-				  mother_name : this.$.mother_name.getValue(),
-				  phone_number : this.$.phone_number.getValue(),
-        };
+				  birthDate : null,
+				  emailAddress : this.$.email_add.getValue(),
+				  firstName : this.$.first_name.getValue(),
+				  lastName : this.$.last_name.getValue(),
+				  motherName : this.$.mother_name.getValue(),
+				  phone : this.$.phone_number.getValue()};
+		if (this.$.birth_date.getValue() != null) {
+			objData.birthDate = fmt.format(this.$.birth_date.getValue());
+		}     
      	return objData;
 	},
 	changePW:function(){
@@ -102,5 +122,8 @@ enyo.kind({
 		jQuery(function(j) {
 			j(document.getElementById(_id)).mask('(999) 999-9999');
 		});	
-	}				
+	},
+	reloadControl:function(){
+		this.$.birth_date.completeSetup();
+	}
 });

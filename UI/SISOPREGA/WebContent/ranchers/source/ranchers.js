@@ -28,9 +28,9 @@ enyo.kind({
 			{kind: "ranchers.reports",onMBYReport:"loadBYMReport", onFeedReport:"loadFeedReport",
 			 onInspectionReport:"loadInspectionReport", onHistoricalReport:"loadHistoricalReport",
 			 onUpdateProfile:"loadUpdateProfile",onGoBack:"loadLogIn"},
-			{kind: "receptions.barnyards.map",name:"rancherMap",onGoBack:"stepBack",onUpdate:"updateProfile"},
+			{kind: "receptions.barnyards.map",name:"rancherMap",onGoBack:"stepBack"},
 			{kind: "ranchers.profile.person",name:"profilePerson",onCancel:"stepBack",onUpdate:"updateProfile"},
-			{kind: "ranchers.profile.enterprise",name:"profileEnterprise",onCancel:"stepBack"},			
+			{kind: "ranchers.profile.enterprise",name:"profileEnterprise",onCancel:"stepBack",onUpdate:"updateProfile"},			
 		]},
 	],
 	rendered:function(){
@@ -44,7 +44,7 @@ enyo.kind({
 		this.$.main.setIndex(0);		
 	},	
 	loadUpdateProfile:function(){
-		cacheProfile.read();		
+		cacheProfile.read();
 		if(cacheProfile.objRancher.enterpriseId){
 			this.objProfile=this.$.profileEnterprise;
 			this.objProfile.setProfile(cacheProfile.objRancher);
