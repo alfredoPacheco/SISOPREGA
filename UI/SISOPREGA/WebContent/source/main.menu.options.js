@@ -40,7 +40,7 @@ enyo.kind({
 				 components: [				
 					{kind: "CustomButton",  className:"menuButton", style:"width:85px;height:75px;background-image:url('images/inspeccion.png');", onclick:"doInspectionForecast"},
 					{kind: "CustomButton", className:"menuButton", style:"width:85px;height:75px;background-image:url('images/users.png');", onclick:"doUsers"},
-					{kind: "CustomButton", className:"menuButton", style:"width:85px;height:75px;background-image:url('images/users.png');", onclick:"doFileUpload"}
+					{kind: "CustomButton", className:"menuButton", style:"width:85px;height:75px;background-image:url('images/upload.png');", onclick:"doFileUpload"}
 					]
 				},
 				{kind: enyo.HFlexBox,
