@@ -395,7 +395,7 @@ var cConsumingGateway =
         enyo.$.sisoprega.destroy();
       } catch (e) {
       }
-      //window.location = './';
+      window.location = './';
       return output;
     },
 
