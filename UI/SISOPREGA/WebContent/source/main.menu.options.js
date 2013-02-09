@@ -11,7 +11,8 @@ enyo.kind({
 		onCatalogs:"",
 		onReports:"",
 		onInspectionForecast:"",
-		onUsers: ""
+		onUsers: "",
+		onFileUpload:""
 	},		
 		components: [{style:"height:10px;"},
 			{kind: enyo.HFlexBox,
@@ -39,7 +40,7 @@ enyo.kind({
 				 components: [				
 					{kind: "CustomButton",  className:"menuButton", style:"width:85px;height:75px;background-image:url('images/inspeccion.png');", onclick:"doInspectionForecast"},
 					{kind: "CustomButton", className:"menuButton", style:"width:85px;height:75px;background-image:url('images/users.png');", onclick:"doUsers"},
-					{kind: "Spacer",style:"width:85px;"}
+					{kind: "CustomButton", className:"menuButton", style:"width:85px;height:75px;background-image:url('images/users.png');", onclick:"doFileUpload"}
 					]
 				},
 				{kind: enyo.HFlexBox,
@@ -50,7 +51,7 @@ enyo.kind({
 					 components: [				
 						{ content:"Lista de Inspeccion" , flex:1, style:"text-align:center;vertical-align:top;"},
 						{ content:"Usuarios" , flex:1, style:"text-align:center;vertical-align:top;"},
-						{ content:"" , flex:1, style:"text-align:center;vertical-align:top;"},]
+						{ content:"Archivo" , flex:1, style:"text-align:center;vertical-align:top;"},]
 					},
 				{kind: enyo.HFlexBox,
 					 className:"buttonsBG",		

@@ -50,5 +50,6 @@ enyo.depends(
 	"source/catalogs.ranchers.users.create.js",
 	"source/users.list.js",
 	"source/users.create.js",
-	"source/cache.users.js"
+	"source/cache.users.js",
+	"source/file.uploader.js"
 );

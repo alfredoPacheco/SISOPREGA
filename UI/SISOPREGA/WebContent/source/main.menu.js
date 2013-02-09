@@ -19,7 +19,8 @@ enyo.kind({
 			onCatalogs:"showCatalogs", 
 			onReports:"showReports",
 			onInspectionForecast:"showInspectionForecast",
-			onUsers:"showUsersList"},
+			onUsers:"showUsersList",
+			onFileUpload:"showFileUpload"},
 	 		
 			{kind:"operations.menu", name:"operations", onReceptions:"showReceptions", 
 			 onInspections:"showInspections",lazy:true},
@@ -30,7 +31,8 @@ enyo.kind({
 	 		{kind:"inspections.list", name:"inspections"},
 	 		{kind:"inspections.main.fs", name:"inspectionForecast", lazy:true},
 	 		{kind:"users.list", name:"usersList", onAddUser:"showAddUser", onSelectUser:"showEditUser", lazy:true },
-	 		{kind:"users.create", name:"addUser" }
+	 		{kind:"users.create", name:"addUser"},
+	 		{kind:"file.uploader", name:"fileUploader",lazy:true}	 		
 		 ]}
 	],
 	showReceptionsMap:function(){
@@ -68,6 +70,13 @@ enyo.kind({
       this.addGoBackAction();
       this.$.mainPane.selectViewByName("usersList");
 	},
+	showFileUpload: function(){
+		  enyo.$.sisoprega_btnGoBack.setShowing(1);
+	      enyo.$.sisoprega_spacerSecond.setShowing(!1);
+	      _objMainHeader.setContent('Subir Archivo');
+	      this.addGoBackAction();
+	      this.$.mainPane.selectViewByName("fileUploader");
+	},	
 	showAddUser : function(){
 	  enyo.$.sisoprega_btnGoBack.setShowing(1);
       enyo.$.sisoprega_spacerSecond.setShowing(!1);
