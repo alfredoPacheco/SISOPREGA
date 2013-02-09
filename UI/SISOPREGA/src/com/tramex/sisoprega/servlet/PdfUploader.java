@@ -15,12 +15,19 @@
  */
 package com.tramex.sisoprega.servlet;
 
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Properties;
 import java.util.Scanner;
 
+import javax.annotation.Resource;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -51,8 +58,10 @@ import javax.servlet.http.Part;
 @WebServlet(name = "PdfUploader", urlPatterns = "/PdfUploader")
 @MultipartConfig
 public class PdfUploader extends HttpServlet {
-
   private static final long serialVersionUID = 3471374815554430971L;
+  
+  @Resource(name="pdfUploader")
+  private Properties PDF_UPLOADER_PROPERTIES;
 
   protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     response.setContentType("text/html;charset=UTF-8");
@@ -63,25 +72,20 @@ public class PdfUploader extends HttpServlet {
       Part file = request.getPart("pdfFile");
       InputStream is = file.getInputStream();
 
-      // TODO: Define metadata.
-      // read filename
-      Part pFileName = request.getPart("fileName");
-      Scanner s = new Scanner(pFileName.getInputStream());
-      String fileName = s.nextLine();
-      s.close();
+      String rancherId = getValue("rancherId", request);
+      String requestFormDate = getValue("fechaPedimento", request);
+      String requestFormId = getValue("numeroPedimento", request);
 
-      // String outputfile = this.getServletContext().getRealPath(fileName);
-      String outputfile = "/temp/" + fileName + ".pdf";
-      FileOutputStream os = new FileOutputStream(outputfile);
-
-      // write bytes.
-      int ch = is.read();
-      while (ch != -1) {
-        os.write(ch);
-        ch = is.read();
-      }
-
-      os.close();
+      Date dRequestFormDate = new SimpleDateFormat("MM/dd/yyyy").parse(requestFormDate);
+      String dateDirName = new SimpleDateFormat("yyyyMMdd").format(dRequestFormDate);
+      
+      String directoryName = PDF_UPLOADER_PROPERTIES.getProperty("uploadPath") + "/" + rancherId;
+      
+      if(checkFileExists(directoryName, true))
+        createFile(directoryName, requestFormId, is);
+      
+      appendFile(directoryName + "/" + dateDirName, requestFormId);
+            
       out.println("OK");
     } catch (Exception e) {
       out.println("Exception while uploading the file: " + e.getMessage());
@@ -89,5 +93,49 @@ public class PdfUploader extends HttpServlet {
       out.close();
     }
   }
+  
+  private String getValue(String fieldName, HttpServletRequest request) throws IOException, ServletException{
+    Part origin = request.getPart(fieldName);
+    Scanner scanner = new Scanner(origin.getInputStream());
+    String result = scanner.nextLine();
+    scanner.close();
+    return result;
+  }
 
+  private boolean checkFileExists(String dirName, boolean create){
+    boolean result = false;
+    File f = new File(dirName);
+    if(!f.exists()){
+      if(create)
+        result = f.mkdirs();
+      else
+        result = false;
+    }
+    return result;
+  }
+  
+  private void createFile(String directoryName, String requestFormId, InputStream is) throws IOException{
+    String outputfile = directoryName + "/" + requestFormId + ".pdf";
+    FileOutputStream os = new FileOutputStream(outputfile);
+
+    // write bytes.
+    int ch = is.read();
+    while (ch != -1) {
+      os.write(ch);
+      ch = is.read();
+    }
+
+    os.close();
+  }
+  
+  private void appendFile(String fileName, String requestFormId) throws IOException{
+    PrintWriter out = null;
+    try{
+      out = new PrintWriter(new BufferedWriter(new FileWriter(fileName, true)));
+      out.println(requestFormId);
+    }finally{
+      out.close();
+    }
+  }
+  
 }
