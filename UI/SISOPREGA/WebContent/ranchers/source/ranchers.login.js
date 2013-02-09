@@ -6,6 +6,7 @@ enyo.kind({
 		onFail:"",
 	},
 	fit: true,
+	userID:null,
 	classes: "enyo-fit",
 	style: "width:100%; height:100%; bottom:0px; top:0px; left:0px;right:0px",	
 	components: [
@@ -31,6 +32,7 @@ enyo.kind({
 	checkLogIn:function(){
 		var consumirLogin = consumingGateway.Login(this.$.user.hasNode().value, this.$.password.hasNode().value);
 		if(consumirLogin.exceptionId == 0){
+			this.userID=this.$.user.hasNode().value;
 			this.doSucess();
 		}else{
 			this.$.popLogIn.show();
@@ -45,6 +47,6 @@ enyo.kind({
 		if(inEvent.keyCode == 13){			
 			this.checkLogIn();
 		}
-	}	
+	}
 });
 

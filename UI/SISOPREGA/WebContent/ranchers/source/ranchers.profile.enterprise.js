@@ -5,6 +5,7 @@ enyo.kind({
 	events: {	
 		onUpdate:"",
 		onCancel:"",
+		onChangePW:""
 	},
 	iId:null,
 	components: [
@@ -12,7 +13,7 @@ enyo.kind({
   		{style:"width:98%",components:[
 			{kind: "onyx.Popup",classes: "onyx", name: "popPassword", centered: true, modal:true,	 floating: true, scrim: true, 
 				components: [
-					{kind: "ranchers.profile.password",classes: "onyx",onCancel:"closePopPW",onChange:"changePW"}
+					{kind: "ranchers.profile.password",name:'passChange',classes: "onyx",onCancel:"closePopPW",onChange:"doChangePW"}
 			]},
 			{kind: "onyx.Groupbox", classes:"onyx-sample-result-box", components: [
 				{kind: "onyx.GroupboxHeader", content: "Razon Social"},
@@ -99,10 +100,14 @@ enyo.kind({
 	},	
 	closePopPW:function(){
 		this.$.popPassword.hide();
+		return true;
 	},
-	changePW:function(){
-		alert('TODO: Change password');
+	getPWDChangeData:function(){
+		return this.$.passChange.getPWChangeData();
+	},
+	closePWPopup:function(){
 		this.$.popPassword.hide();
+		return true;
 	},
 	applyMask : function(inSender) {
 		var _id = inSender.id;

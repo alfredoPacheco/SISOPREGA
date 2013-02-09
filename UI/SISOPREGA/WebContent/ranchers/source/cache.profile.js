@@ -42,7 +42,7 @@ enyo.kind({
 			return false;
 		}
 	},	
-	changePassword:function(){					
+	changePassword:function(objData){					
 		var cgReadAll = consumingGateway.Update("RancherUser", objData);		
 		if (cgReadAll.exceptionId == 0){
 			return true;
@@ -76,6 +76,15 @@ enyo.kind({
 				  telephone: source.telephone,
 				  email: source.email};
 		return target;
+	},
+	changePassword:function(userName,currentPW,newPW){		
+		 response=consumingGateway.changePassword(userName,currentPW,newPW);
+		 if(response.exceptionId == 0){
+			 return true;
+		 }else{
+			 return false;
+		 }
+			 
 	}
   });
 var cacheProfile = new cache.profile();

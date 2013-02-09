@@ -5,6 +5,7 @@ enyo.kind({
 	events: {	
 		onUpdate:"",
 		onCancel:"",
+		onChangePW:""
 	},	
 	iId:null,
 	components: [
@@ -12,7 +13,7 @@ enyo.kind({
   		{style:"width:98%",components:[
 			{kind: "onyx.Popup",classes: "onyx", name: "popPassword", centered: true, modal:true,	 floating: true, scrim: true, 
 				components: [
-					{kind: "ranchers.profile.password",classes: "onyx",onCancel:"closePopPW",onChange:"changePW"}
+					{kind: "ranchers.profile.password",name:'passChange',classes: "onyx",onCancel:"closePopPW",onChange:"doChangePW"}
 			]},
 			{kind: "onyx.Groupbox", classes:"onyx-sample-result-box", components: [
 				{kind: "onyx.GroupboxHeader", content: "alias"},
@@ -52,7 +53,7 @@ enyo.kind({
 			{tag:"br"},
 			{kind: "onyx.Groupbox", classes:"onyx-sample-result-box", components: [
 				{kind: "onyx.GroupboxHeader", content: "-"},
-				{kind:"onyx.Button", onclick:"launchReport",content:"Cambiar Password",
+				{kind:"onyx.Button",content:"Cambiar Password",
 				 classes: "onyx-blue", style:"width:100%",onclick:"openPopPW"},
 			]},								
 			{tag:"br"},						
@@ -72,6 +73,7 @@ enyo.kind({
 	},	
 	closePopPW:function(){
 		this.$.popPassword.hide();
+		return true;
 	},
 	setProfile:function(objData){
 		
@@ -112,18 +114,20 @@ enyo.kind({
 		}     
      	return objData;
 	},
-	changePW:function(){
-		alert('TODO: Change password');
-		var objData={};
-		this.$.popPassword.hide();
-	},
 	applyMask : function(inSender) {
 		var _id = inSender.id;
 		jQuery(function(j) {
 			j(document.getElementById(_id)).mask('(999) 999-9999');
 		});	
 	},
+	closePWPopup:function(){
+		this.$.popPassword.hide();
+		return true;
+	},	
 	reloadControl:function(){
 		this.$.birth_date.completeSetup();
-	}
+	},
+	getPWDChangeData:function(){
+		return this.$.passChange.getPWChangeData();
+	}	
 });
