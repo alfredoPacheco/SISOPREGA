@@ -20,6 +20,7 @@
  * 01/29/2013  Alfredo Pacheco               Index rancher_id removed from cat_rancher_invoice.
  * 02/01/2013  Alfredo Pacheco               cat_rancher_invoice.rancher_id now references cat_rancher.rancher_id
  * 02/02/2013  Diego Torres                  sys_sisoprega_role.record_id provides a unique id for data model.
+ * 02/07/2013  Diego Torres                  add table for document management (pedimentos)
  * ====================================================================================
  * 
  * Author: Diego Torres
@@ -570,3 +571,17 @@ FROM cat_enterprise_rancher)
 ORDER BY rancher_name;
 
 GRANT ALL ON vw_rancher TO sisoprega;
+
+DROP TABLE IF EXISTS ctrl_pedimentos;
+CREATE TABLE ctrl_pedimentos(
+	record_id SERIAL PRIMARY KEY,
+	rancher_id integer NOT NULL REFERENCES cat_rancher(rancher_id) ON DELETE CASCADE,
+	pedimento_date DATE,
+	pedimento_id VARCHAR(30),
+	pedimento BLOB
+);
+
+CREATE UNIQUE INDEX U_ctrl_pedimentos ON ctrl_pedimentos(pedimento_id);
+
+GRANT ALL ON ctrl_pedimentos TO SISOPREGA;
+GRANT ALL ON ctrl_pedimentos_record_id_seq TO SISOPREGA;

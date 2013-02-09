@@ -116,7 +116,7 @@ enyo.kind(
                             className : "enyo-button-negative",
                             flex : 1,
                             caption : "Cancelar",
-                            onclick : "doCancel"
+                            onclick : "cancel"
                           }, ]
                     } ]
               } ]
@@ -129,10 +129,8 @@ enyo.kind(
       this.$.user_name.setValue("");
       this.$.password.setValue("");
       this.$.confirm_password.setValue("");
-      //this.$.isAdmin.setState("checked", false);
-      //this.$.isMexUser.setState("checked", false);
       this.$.isAdmin.setChecked(false);
-      this.$.isMexUser.setChecked(true);
+      this.$.isMexUser.setChecked(false);
     },
     setUser : function(parUser){
       this.resetValues();
@@ -202,5 +200,8 @@ enyo.kind(
           return true;
       }
       return false;
-    } 
+    } ,
+    cancel: function(){
+      cacheMan.goBack();
+    }
   });
