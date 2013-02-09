@@ -85,11 +85,19 @@ enyo
 												flex : 1
 											} ]
 										} ]
-									}, {
-										kind : "controls.autocomplete",
-										name : "cattle_type_id",
-										hint : "Ganado"
-									}, {
+									}, 
+									{
+										kind : "Item",
+										components : [ {
+											layoutKind : enyo.HFlexLayout,
+											components : [ {
+												kind : "controls.autocomplete",
+												name : "cattle_type_id",
+												hint : "Ganado"
+											} ]
+										} ]
+									}, 
+									{
 										kind : "Item",
 										components : [ {
 											layoutKind : enyo.HFlexLayout,
@@ -101,11 +109,19 @@ enyo
 												flex : 1
 											} ]
 										} ]
-									}, {
-										kind : "controls.autocomplete",
-										name : "localidad",
-										hint : "Localidad"
-									}, {
+									}, 
+									{
+										kind : "Item",
+										components : [ {
+											layoutKind : enyo.HFlexLayout,
+											components : [ {
+												kind : "controls.autocomplete",
+												name : "localidad",
+												hint : "Localidad"
+											} ]
+										} ]
+									},
+									{
 										kind : "Item",
 										components : [ {
 											layoutKind : enyo.HFlexLayout,

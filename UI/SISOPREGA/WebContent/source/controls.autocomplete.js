@@ -65,8 +65,8 @@ enyo.kind({
 	} 
 	],
 	lostFocus : function(inSender, inEvent) {
-		if (this.$.drop_down.isOpen && this.$.drop_down.selected > -1 && this.$.drop_down.selected != null) {
-			this.itemSelectedPopupAux=-1;
+		if (!this.navigatingOnList && this.$.drop_down.isOpen && this.$.drop_down.selected > -1 && this.$.drop_down.selected != null) {
+//			this.itemSelectedPopupAux=-1;
 			this.setIndex(this.$.drop_down.items[this.$.drop_down.selected].value);
 			this.$.drop_down.close();
 //			this.$.drop_down.selected = -1;
@@ -86,9 +86,6 @@ enyo.kind({
 			this.$.drop_down.selected = 0;	
 		}
 		else if(this.$.drop_down.selected > -1 && this.$.drop_down.selected != null){
-			console.debug(this.$.drop_down.selected);
-			console.debug(this.$.drop_down.items);
-			console.debug(InIndex.$.item.getContent());
 			if(this.$.drop_down.items[this.$.drop_down.selected].caption == InIndex.$.item.getContent()){
 				InIndex.applyStyle("background-color", "white");
 				this.$.textField.setValue(InIndex.caption);
@@ -105,6 +102,7 @@ enyo.kind({
 		this.$.drop_down.setItems(this.allItems);
 		this.$.drop_down.openAtEvent(inEvent);
 		this.$.textField.forceFocus();
+		this.$.drop_down.scrollToSelected();
 		return false;
 	},
 	key_down : function(inSender, inEvent){		
@@ -131,6 +129,8 @@ enyo.kind({
 			break;
 		case 39://right
 			break;
+		case 9: //tab
+			return true;
 		default:
 //			console.info(inEvent.keyCode);
 		}
@@ -141,8 +141,8 @@ enyo.kind({
 	selectDown:function(){
 		if (this.$.drop_down.isOpen) {
 			this.navigatingOnList = true;
-			if(this.getItems().length >0){
-				if(this.$.drop_down.selected < this.getItems().length - 1){
+			if(this.$.drop_down.items.length >0){
+				if(this.$.drop_down.selected < this.$.drop_down.items.length - 1){
 					this.$.drop_down.selected ++;
 //					this.$.drop_down.selected = this.itemSelectedPopup;
 					this.$.drop_down.scrollToSelected();					
@@ -161,13 +161,13 @@ enyo.kind({
 	selectUp:function(){
 		if (this.$.drop_down.isOpen) {
 			this.navigatingOnList = true;
-			if(this.getItems().length >0){
+			if(this.$.drop_down.items.length >0){
 				if(this.$.drop_down.selected > 0){
 					this.$.drop_down.selected --;
 //					this.$.drop_down.selected = this.itemSelectedPopup;
 					this.$.drop_down.scrollToSelected();
 				}else{
-					this.$.drop_down.selected = this.getItems().length - 1;
+					this.$.drop_down.selected = this.$.drop_down.items.length - 1;
 //					this.$.drop_down.selected = this.itemSelectedPopup;
 					this.$.drop_down.scrollToSelected();
 				}
