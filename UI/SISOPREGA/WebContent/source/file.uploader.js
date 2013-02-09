@@ -7,8 +7,15 @@ enyo.kind({
 		caption : "",
 		components : [	            
 	        {allowHtml:true, content:'<form action="PdfUploader" enctype="multipart/form-data" name="frmUpload" id="frmUpload"> <input id="pdfFile" name="pdfFile" type="file" /></form>'},
-			{kind : "controls.autocomplete",name : "rancher_id",hint:"",flex:1,contentPack:"end",onEnter:"emularTabulacionConEnter"},										
-	        {kind : "Input", name:'folio_id',hint : "Folio"},	        
+			{kind : "controls.autocomplete",name : "rancher_id",hint:"Ganadero",flex:1,contentPack:"end",onEnter:"emularTabulacionConEnter"},										
+	        {kind : "Input", name:'folio_id',hint : "Folio"},
+	        {
+				kind : "VFlexBox",
+				style : "",
+				components:[ 
+				    {kind : "DatePicker",name : "exp_date",minYear : 1940,maxYear : new Date().getFullYear(),label : "",className : "picker-hbox"}]
+			}	        
+	        	        
 		]},
 		{kind: "Button",name: "btnUpload", className: "enyo-button-affirmative",caption: "Crear",onclick:"uploadFile"},
 	  	{kind:"Spacer"}		
@@ -20,12 +27,18 @@ enyo.kind({
 	create:function(){
 		this.inherited(arguments);
 		this.$.rancher_id.setItems(cacheRanchers.getAllForList());
+		this.$.exp_date.setValue(new Date());
 	},
 	uploadFile:function(){
+		var fmt = new enyo.g11n.DateFmt({
+			format : "yyyy/MM/dd",
+			locale : new enyo.g11n.Locale("es_es")
+		});		
 		var formElement = document.getElementById("frmUpload");
 		var oMyForm = new FormData(formElement);
 		var sParams=null;
-		sParams="rancher_id="+this.$.rancher_id.getIndex()+"&fechaPedimento=2/8/2013&"+"folio_id="+this.$.folio_id.getValue(),	
+		sParams="rancher_id="+this.$.rancher_id.getIndex()+"&folio_id="+this.$.folio_id.getValue();	
+		sParams+="&exp_date="+fmt.format(this.$.exp_date.getValue());
 		jQuery.ajax({
 		   type: 'POST',
 		   contentType:false,		   
