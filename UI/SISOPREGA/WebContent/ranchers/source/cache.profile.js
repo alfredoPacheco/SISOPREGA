@@ -16,17 +16,20 @@ enyo.kind({
 				this.objRancher=this.enterpriseAdapterRead(objResponse.records[0]);
 			}
 		}else{
-			if(objResponse.exceptionId == 'VAL02'){
+			if(objResponse.exceptionId == '0'){
 				this.objRancher=this.personAdapterRead(objResponse.records[0]);
 			}
 		}
 		
 		if(objResponse.exceptionId != '0'){
 			alert('Error al cargar profile');
+		}else{
+			this.objRancher.phone_number=phoneToMask(this.objRancher.phone_number);
 		}
     },
     
 	update: function(objUpdate){
+		objUpdate.phone_number=phoneOut(objUpdate.phone_number);
 		if(this.objRancher.enterpriseId){
 			var objResp = consumingGateway.Update("EnterpriseRancher",objUpdate);
 		}else{
@@ -36,11 +39,10 @@ enyo.kind({
 			this.objRancher=objUpdate;
 			return true;
 		}else{
-			alert('Error al actualizar profile');
 			return false;
 		}
 	},	
-	changePassword:function(){					
+	changePassword:function(objData){					
 		var cgReadAll = consumingGateway.Update("RancherUser", objData);		
 		if (cgReadAll.exceptionId == 0){
 			return true;
@@ -49,28 +51,40 @@ enyo.kind({
 		}		
 	},
 	personAdapterRead:function(source){
-        var target={aka : source.aka,
-		            birth_date : "" + source.birth_date,
-		            email_add : source.emailAddress,
-		            first_name : source.firstName,
-		            last_name : source.lastName,
-		            mother_name : source.motherName,
-		            phone_number : source.phone};	
+		if(source.birthDate<0){
+			source.birthDate="";
+		}
+        var target={rancherId:source.rancherId,
+        			aka : source.aka,
+		            birthDate: "" + UTCtoNormalDate(source.birthDate),
+		            emailAddress: source.emailAddress,
+		            firstName: source.firstName,
+		            lastName: source.lastName,
+		            motherName: source.motherName,
+		            phone: source.phone};
 		return target;
 	},	
 	enterpriseAdapterRead:function(source){
-		 var target ={
-				  enterpriseId:source.enterpriseId,
-				  company_name: source.legalName,
-				  address_one: source.addressOne,
-				  address_two: source.addressTwo,
-				  city_id: source.city,
-				  state_id: source.state,
-				  zip_code: source.zipCode	,
-				  rfc: source.legalId,
-				  phone_number: source.telephone,
+		 var target ={enterpriseId:source.enterpriseId,
+				  legalName: source.legalName,
+				  addressOne: source.addressOne,
+				  addressTwo: source.addressTwo,
+				  city: source.city,
+				  state: source.state,
+				  zipCode: source.zipCode	,
+				  legalId: source.legalId,
+				  telephone: source.telephone,
 				  email: source.email};
 		return target;
-	},	
+	},
+	changePassword:function(userName,currentPW,newPW){		
+		 response=consumingGateway.changePassword(userName,currentPW,newPW);
+		 if(response.exceptionId == 0){
+			 return true;
+		 }else{
+			 return false;
+		 }
+			 
+	}
   });
 var cacheProfile = new cache.profile();

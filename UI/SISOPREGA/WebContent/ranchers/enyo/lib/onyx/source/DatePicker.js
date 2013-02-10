@@ -33,6 +33,7 @@ enyo.kind({
 		minYear: 1900,
 		//* Optional maximum year value
 		maxYear: 2099,
+		bBlank:false,
 		/**
 			The current Date object. When a Date object is passed to _setValue_,
 			the control is updated to reflect the new value. _getValue_ returns
@@ -51,12 +52,50 @@ enyo.kind({
 		*/
 		onSelect: ""
 	},
-	create: function() {
+	create: function(bReset) {
 		this.inherited(arguments);
-		if (enyo.g11n) {
-			this.locale = enyo.g11n.currentLocale().getLocale();
+		if(this.bBlank){			
+			this.initNonDefaults()
+		}else{
+			if (enyo.g11n) {
+				this.locale = enyo.g11n.currentLocale().getLocale();
+			}
+			this.initDefaults();
 		}
-		this.initDefaults();
+	},
+	initNonDefaults: function() {
+		// Fall back to en_us as default
+		this.setupPickers(this._tf ? this._tf.getDateFieldOrder() : 'mdy');				
+	},
+	completeSetup:function(){
+		// Fall back to en_us as default
+		var months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+
+		//Attempt to use the g11n lib (ie assume it is loaded)
+		if (enyo.g11n) {
+			this._tf = new enyo.g11n.Fmts({locale:this.locale});
+			months = this._tf.getMonthFields();
+		}
+
+		//this.setupPickers(this._tf ? this._tf.getDateFieldOrder() : 'mdy');
+		
+		this.dayHiddenChanged();
+		this.monthHiddenChanged();
+		this.yearHiddenChanged();
+			
+		//Fill month, year & day pickers with values					
+		var d = this.value = this.value || new Date();
+		for (var i=0,m; (m=months[i]); i++) {
+			this.$.monthPicker.createComponent({content: m, value:i, active: i==d.getMonth()});
+		}
+
+		var y = d.getFullYear();
+		this.$.yearPicker.setSelected(y-this.minYear);
+		this.$.year.setContent(y);
+		
+		for (i=1; i<=this.monthLength(d.getYear(), d.getMonth()); i++) {
+			this.$.dayPicker.createComponent({content:i, value:i, active: i==d.getDate()});			
+		}				
 	},
 	initDefaults: function() {
 		// Fall back to en_us as default

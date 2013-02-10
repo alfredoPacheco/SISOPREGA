@@ -395,7 +395,7 @@ var cConsumingGateway =
         enyo.$.sisoprega.destroy();
       } catch (e) {
       }
-      //window.location = './';
+      window.location = './';
       return output;
     },
 
@@ -558,7 +558,35 @@ var cConsumingGateway =
           }
         });
       return output;
-    }
+    },
+    changePassword : function(userName,currentPassword, newPassword) {
+        output = "OK";
+
+        var soapMessage = soapHeader + '<ws:ChangePassword>';
+        soapMessage += '<user_name>' + userName + '</user_name>';
+        soapMessage += '<previous_password>' + currentPassword + '</previous_password>';
+        soapMessage += '<new_password>' + newPassword + '</new_password>';        
+        soapMessage += '</ws:ChangePassword>';
+        soapMessage += soapFooter;
+
+        jQuery.ajax(
+          {
+            url : identityWsURL,
+            type : "POST",
+            dataType : "xml",
+            data : soapMessage,
+            processData : false,
+            contentType : "text/xml;charset=UTF-8",
+            async : false,
+            success : function OnSuccess(data) {
+              output = jQuery(data).find("return").text();
+            },
+            error:function OnError(request, status, error) {
+              alert('Erro al intentar actualizar password');
+            }
+          });
+        return output;
+      },    
   };
 
 var consumingGateway = cConsumingGateway;
