@@ -23,6 +23,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.HttpConstraint;
+import javax.servlet.annotation.ServletSecurity;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -57,6 +59,7 @@ import com.tramex.sisoprega.reporting.BaseReportServlet;
  */
 
 @WebServlet("/GanadoRecibido")
+@ServletSecurity(@HttpConstraint(rolesAllowed = {"sisoprega_admin", "mex_user", "rancher"}))
 public class GanadoRecibido extends BaseReportServlet {
 
   private static final long serialVersionUID = -3931253027518760935L;
@@ -82,8 +85,6 @@ public class GanadoRecibido extends BaseReportServlet {
     params.put("CUS_TO_DATE", toDate);
 
     String reportURL = "WEB-INF/Reports/Tramex/GanadoRecibido.jasper";
-
     processRequest(reportURL, params, response);
-
   }
 }
