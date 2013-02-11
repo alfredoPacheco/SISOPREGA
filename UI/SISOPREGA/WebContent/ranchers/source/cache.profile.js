@@ -79,7 +79,7 @@ enyo.kind({
 	},
 	changePassword:function(userName,currentPW,newPW){		
 		 response=consumingGateway.changePassword(userName,currentPW,newPW);
-		 if(response.exceptionId == 0){
+		 if(response == "OK"){
 			 return true;
 		 }else{
 			 return false;
