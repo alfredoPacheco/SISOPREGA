@@ -25,7 +25,7 @@ enyo.kind({
 				barnyard_id:		objBarnyard.barnyardId,				
 				barnyard_code:		objBarnyard.barnyardCode,
 //				available: 			objBarnyard.available,				
-				location_id:		objBarnyard.locationId	
+				zone_id:			objBarnyard.locationId	
 			};
 		
 		return objNew;
@@ -40,7 +40,7 @@ enyo.kind({
 				barnyardId:			objBarnyard.barnyard_id,				
 				barnyardCode:		objBarnyard.barnyard_code,
 				available: 			objBarnyard.available,				
-				locationId:			objBarnyard.location_id
+				locationId:			objBarnyard.zone_id
 			};		
 		return objNew;
 	},
@@ -213,7 +213,7 @@ enyo.kind({
 		var arrAux = this.get();
 		for(var i=0; i<arrAux.length;i++){
 			if (arrAux[i].barnyard_code==barnyard.substr(1)){
-				if (arrAux[i].location_id==barnyard.charAt(0)){
+				if (arrAux[i].zone_id==barnyard.charAt(0)){
 					return arrAux[i];
 				}
 			}
@@ -348,17 +348,17 @@ enyo.kind({
 		var barnyards = this.get();
 		for (property in barnyards){
 			var barnyard = {caption:"",value:""};
-			if(barnyards[property].location_id==1){						
+			if(barnyards[property].zone_id==1){						
 				barnyard.caption = 	barnyards[property].barnyard_code + " [Chihuahua]";
 				barnyard.value = 	barnyards[property].barnyard_id;
 				barnyard.barnyard_code = barnyards[property].barnyard_code;
-				barnyard.location = "Chihuahua"; 
+				barnyard.zone = "Chihuahua"; 
 				result.push(barnyard);												
 			}else{						
 				barnyard.caption = barnyards[property].barnyard_code + " [Zona Sur]";
 				barnyard.value = 	barnyards[property].barnyard_id;
 				barnyard.barnyard_code = barnyards[property].barnyard_code;
-				barnyard.location = "Zona Sur";
+				barnyard.zone = "Zona Sur";
 				result.push(barnyard);						
 			}
 		}
