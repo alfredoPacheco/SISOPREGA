@@ -4,6 +4,15 @@ enyo.kind({
 	iSelect:null,
 	_objRec:null,		
 	components:[
+	   {kind: "Popup",name: "comment", lazy:false,showHideMode: "transition", className:"formBG",
+	    openClassName: "zoomFadeIn", className: "transitioner2", layoutKind: "VFlexLayout",width: "90%",
+	    style: "overflow: hidden",scrim: true,
+	    components:[
+	 	    {components:[
+	 	        {content:"Comentarios"},
+	 	        {kind: "Input", name:"handling",hint:"Agregar comentario"},
+	 	        {kind: "Button",className: "enyo-button-affirmative",caption: "OK",onclick:"closeComments"}]}
+		]},	            
 		{kind: enyo.Scroller, name:"scrollProductList",flex: 1,
 		 className:"listBG",			
  		 components: [
@@ -29,7 +38,8 @@ enyo.kind({
 		},
 		{kind: "Toolbar",	
 		components: [					 
-		{kind: "ToolInput", name:"rejected_count", width:"23%",  hint:"Rechazados",changeOnInput: true,},			
+		{kind: "ToolInput", name:"rejected_count", width:"23%",  hint:"Rechazados",changeOnInput: true,},	
+		{kind : "Button",name : "btnComm",className : "enyo-button-affirmative",caption : "Comentario",onclick : "openComments"},		
 		{kind: "ListSelector", name: 'reject_id', width:"50%",
 		 style:"width:100%;color:white", contentPack:"end",
 			items: [] ,flex: 1,contentPack:"end"},							
@@ -138,5 +148,15 @@ enyo.kind({
 		
 		totalAccepted = totalHeads - totalRejected;
 		_objPopupHeader.setContent("Total HC: [" + totalHeads + "]   Total Aceptados: [" + totalAccepted + "]   Total Rechazados: [" + totalRejected + "]");
+	},
+	closeComments:function(){			
+		this.$.comment.close();	
+		this.addComment();			
+	},
+	openComments:function(){
+		this.$.comment.openAtCenter();		
+	},	
+	addComment:function(){
+		alert('TODO: Save comment - link to WS');
 	}
 });
