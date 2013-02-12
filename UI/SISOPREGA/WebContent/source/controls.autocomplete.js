@@ -22,12 +22,17 @@ enyo.kind({
 	},
 	hintChanged : function(inOldValue) {
 		this.$.textField.setHint(this.getHint());
-	},
+	},	
 	indexChanged : function(inOldValue) {
-		if(this.getIndex()>-1){
-			this.$.textField.setValue(this.getCaptionByIndex(this.getIndex()));
+		if(this.items.length > 0){
+			if(this.getIndex()>-1){
+				this.$.textField.setValue(this.getCaptionByIndex(this.getIndex()));
+			}else{
+				this.$.textField.setValue("");	
+			}
 		}else{
 			this.$.textField.setValue("");
+			this.index = -1;
 		}
 		this.doSelectItem();
 	},
@@ -38,7 +43,7 @@ enyo.kind({
 	create : function() {
 		this.inherited(arguments);
 		this.hintChanged();
-		this.indexChanged();
+//		this.indexChanged();
 	},
 	components : [ {
 		name : "drop_down",
@@ -65,17 +70,15 @@ enyo.kind({
 	} 
 	],
 	lostFocus : function(inSender, inEvent) {
-		if (!this.navigatingOnList && this.$.drop_down.isOpen && this.$.drop_down.selected > -1 && this.$.drop_down.selected != null) {
-//			this.itemSelectedPopupAux=-1;
-			this.setIndex(this.$.drop_down.items[this.$.drop_down.selected].value);
+//		if (!this.navigatingOnList && this.$.drop_down.isOpen && this.$.drop_down.selected > -1 && this.$.drop_down.selected != null) {
+//			this.setIndex(this.$.drop_down.items[this.$.drop_down.selected].value);
 			this.$.drop_down.close();
-//			this.$.drop_down.selected = -1;
-		}		
+//		}		
 	},
 	setupItem : function(inSender, InIndex){
 		this.itemSelectedPopupAux++;
 		if (this.index > -1 && !this.navigatingOnList){
-			if(this.items[i].caption == InIndex.$.item.getContent()){
+			if(this.getCaptionByIndex(this.index) == InIndex.$.item.getContent()){
 				InIndex.applyStyle("background-color", "white");
 //				this.$.textField.setValue(InIndex.caption);
 				this.$.drop_down.selected = this.itemSelectedPopupAux;				
@@ -100,9 +103,11 @@ enyo.kind({
 	click_button : function(inSender, inEvent) {
 		this.itemSelectedPopupAux=-1;
 		this.$.drop_down.setItems(this.allItems);
-		this.$.drop_down.openAtEvent(inEvent);
-		this.$.textField.forceFocus();
-		this.$.drop_down.scrollToSelected();
+		if(this.$.drop_down.items.length > 0){
+			this.$.drop_down.openAtEvent(inEvent);
+			this.$.drop_down.scrollToSelected();
+		}
+		this.$.textField.forceFocus();		
 		return false;
 	},
 	key_down : function(inSender, inEvent){		
@@ -201,10 +206,12 @@ enyo.kind({
 		this.itemSelectedPopupAux=-1;
 		if (arrAux.length > 0) {		
 			this.index = -1;
-			this.$.drop_down.setItems(arrAux);			
-			this.$.drop_down.openAroundControl(this.$.textField, "", "left");
-			this.$.drop_down.selected = 0;
-			this.$.drop_down.scrollToSelected();
+			this.$.drop_down.setItems(arrAux);
+			if(this.$.drop_down.items.length > 0){
+				this.$.drop_down.openAroundControl(this.$.textField, "", "left");
+				this.$.drop_down.selected = 0;
+				this.$.drop_down.scrollToSelected();
+			}
 		} else {
 			this.$.drop_down.close();			
 		}

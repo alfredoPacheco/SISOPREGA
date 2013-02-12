@@ -15,7 +15,7 @@ enyo.kind({
 		this.inherited(arguments);
 		this.$.rancher_id.setItems(cacheRanchers.getAllForList());
 		this.$.cattype_id.setItems(cacheCattle.getAllCattleType());
-		this.$.location_id.setItems(cacheMan.getAllZonesForList());
+		this.$.location_id.setItems(cacheMan.getAllLocationsForList());
 	},
 	components: [	
 		{kind: enyo.Scroller,
@@ -67,7 +67,7 @@ enyo.kind({
 	  							]},
 					  {kind: "Item",
 						components: [
-							{content: "Ciudad de Origen", className: "enyo-label", flex: 1},
+							{content: "Origen", className: "enyo-label", flex: 1},
 							 {layoutKind: enyo.HFlexLayout,components:[
    	  								{
    	  									kind : "controls.autocomplete",
@@ -75,7 +75,8 @@ enyo.kind({
    	  									hint:"",
    	  									flex:1,
    	  									contentPack:"end",
-   	  									onEnter:"emularTabulacionConEnter"
+   	  									onEnter:"emularTabulacionConEnter",
+   	  									onSelectItem:"on_select_location"
    	  								}]},
    	  							]},
 					{kind: "VFlexBox", style: "",					  				  
@@ -109,6 +110,9 @@ enyo.kind({
 		//enyo.log(enyo.json.stringify(this._arrDefinitions[inValue]));
 		//this.$.lstDef.setItems(this._arrDefinitions[inValue]);
 		//this.$.lstDef.setValue(null);			
+	},
+	on_select_location:function(){
+		
 	},
 	ready:function(){
 		this.resetValues();

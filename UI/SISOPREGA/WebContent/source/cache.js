@@ -29,7 +29,7 @@ var	_arrReceptionList=[
 		 weights:[{hcw_id:0,hc:50,weight:1234}],barnyards:{},
 		 accepted_count:"",
 		 inspections:[],
-		 feed:[]		 
+		 feed:[]
 		 },
 	];	
 
@@ -101,6 +101,8 @@ enyo.kind({
 	gblLabel:null,
 	gblToaster:null,
 	gblScrim:null,
+	arrLocations:[],
+	locationsReadedFromGateway:false,
 	setGlobalLabel:function(objVar){
 		this.gblLabel=objVar;
 	},
@@ -143,8 +145,8 @@ enyo.kind({
 		_arrZonesLS=[];
 		for(var i=0;i<_arrZones.length;i++){		
 				_arrZonesLS.push({caption:	_arrZones[i].zone_name,
-										value:_arrZones[i].zone_id});				
-		}					
+										value:_arrZones[i].zone_id});
+		}
 	},
 	getZones:function(){
 		return _arrZones;
@@ -155,31 +157,86 @@ enyo.kind({
 				return this.getZones()[i];
 			}
 		}
-	},		
+	},
+	findZone:function(criteria){				
+		var result = [];
+		if (criteria != ""){
+			var zones = _arrZones;
+			var pattern = new RegExp(criteria.trim(), "ig");
+			for (property in zones){
+				pattern.lastIndex = 0;
+				if (pattern.test(zones[property].zone_name)){
+					var zone = {caption:zones[property].zone_name,value:zones[property].zone_id};
+					result.push(zone);
+				}
+			}	
+		}
+		return result;
+	},
+	getAllZonesForList:function() {
+		var result = [];
+		var zones = _arrZones;
+		for (property in zones){
+			var zone = {caption:zones[property].zone_name,value:zones[property].zone_id};
+			result.push(zone);
+		}
+		return result;
+	},
+	getLocations:function(){
+		if (this.locationsReadedFromGateway == false){
+			this.locationsReadedFromGateway = true;
+			var arrAux = [];
+			
+			var cgReadAll = consumingGateway.Read("Location", {});
+
+			if (cgReadAll.exceptionId == 0) { // Read successfully
+				for (item in cgReadAll.records) {
+					var objTmp = {};
+					objTmp.location_id = cgReadAll.records[item].locationId;
+					objTmp.location_name = cgReadAll.records[item].locationName;
+					arrAux.push(objTmp);
+				}
+			} 
+			else{ //Error
+				if (cgReadAll.exceptionId != "VAL02"){ //No data found
+					cacheMan.setMessage("", "[Exception ID: " + cgReadAll.exceptionId + "] Descripcion: " + cgReadAll.exceptionDescription);	
+				}			
+			}
+			this.arrLocations = arrAux;
+		}
+		return this.arrLocations;
+	},
+	createLocation : function(objLocation){
+		var objToSend = {};
+		objToSend.locationName = objLocation.location_name; 
+
+		var cgCreate = consumingGateway.Create("Location", objToSend);
+		if (cgCreate.exceptionId == 0){ //Created successfully
+			objToSend.location_id = cgCreate.generatedId;			
+			this.arrLocations.push(objToSend);
+			return true;
+		}
+		else{ //Error
+			cacheMan.setMessage("", "[Exception ID: " + cgCreate.exceptionId + "] Descripcion: " + cgCreate.exceptionDescription);
+			return false;
+		}
+	},
+	getLocationByID:function(iLocationID){
+		for(var i=0; i<this.getLocations().length;i++){
+			if (this.getLocations()[i].location_id==iLocationID){
+				return this.getLocations()[i];
+			}
+		}
+	},
+	getAllLocationsForList:function() {
+		var result = [];
+		var locations = this.getLocations();
+		for (property in locations){
+			var location = {caption:locations[property].location_name,value:locations[property].location_id};
+			result.push(location);
+		}
+		return result;
+	},
 });
 
 var cacheMan = new cache();
-cacheMan.findZone = function(criteria){				
-	var result = [];
-	if (criteria != ""){
-		var zones = _arrZones;
-		var pattern = new RegExp(criteria.trim(), "ig");
-		for (property in zones){
-			pattern.lastIndex = 0;
-			if (pattern.test(zones[property].zone_name)){
-				var zone = {caption:zones[property].zone_name,value:zones[property].zone_id};
-				result.push(zone);
-			}
-		}	
-	}
-	return result;
-	};
-cacheMan.getAllZonesForList = function() {
-	var result = [];
-	var zones = _arrZones;	
-	for (property in zones){
-		var zone = {caption:zones[property].zone_name,value:zones[property].zone_id};
-		result.push(zone);
-	}
-	return result;
-};
