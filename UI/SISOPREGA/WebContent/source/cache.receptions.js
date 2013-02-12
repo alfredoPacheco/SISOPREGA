@@ -29,7 +29,7 @@ enyo
 
 				objNew.cattype_name = cacheCattle.getByID(objNew.cattype_id).cattype_name;
 				objNew.hc_aprox = "";
-				objNew.location_name = cacheMan.getZoneByID(objNew.city_id).city_name;
+				objNew.location_name = cacheMan.getLocationByID(objNew.location_id).location_name;
 				objNew.weights = [ {
 					hcw_id : undefined,
 					hc : undefined,

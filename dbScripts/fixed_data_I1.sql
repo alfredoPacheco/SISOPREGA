@@ -227,9 +227,43 @@ INSERT INTO cat_barnyard(barnyard_code, location_id) VALUES('R9', 2);
 INSERT INTO cat_barnyard(barnyard_code, location_id) VALUES('R11', 2);
 INSERT INTO cat_barnyard(barnyard_code, location_id) VALUES('R13', 2);
 
-
+/* Food */
 INSERT INTO cat_food(food_name) VALUES('Molida');
 INSERT INTO cat_food(food_name) VALUES('Alfalfa');
 INSERT INTO cat_food(food_name) VALUES('Avena');
 INSERT INTO cat_food(food_name) VALUES('Concentrado');
 INSERT INTO cat_food(food_name) VALUES('Maiz');
+
+/* Locations  the first one is the default value in UI */
+INSERT INTO cat_location(location_name) VALUES('Chihuahua');
+INSERT INTO cat_location(location_name) VALUES('Aguascalientes');
+INSERT INTO cat_location(location_name) VALUES('Baja California');
+INSERT INTO cat_location(location_name) VALUES('Baja California Sur');
+INSERT INTO cat_location(location_name) VALUES('Campeche');
+INSERT INTO cat_location(location_name) VALUES('Chiapas');
+INSERT INTO cat_location(location_name) VALUES('Coahuila');
+INSERT INTO cat_location(location_name) VALUES('Colima');
+INSERT INTO cat_location(location_name) VALUES('Distrito Federal');
+INSERT INTO cat_location(location_name) VALUES('Durango');
+INSERT INTO cat_location(location_name) VALUES('Estado de México');
+INSERT INTO cat_location(location_name) VALUES('Guanajuato');
+INSERT INTO cat_location(location_name) VALUES('Guerrero');
+INSERT INTO cat_location(location_name) VALUES('Hidalgo');
+INSERT INTO cat_location(location_name) VALUES('Jalisco');
+INSERT INTO cat_location(location_name) VALUES('Michoacán');
+INSERT INTO cat_location(location_name) VALUES('Morelos');
+INSERT INTO cat_location(location_name) VALUES('Nayarit');
+INSERT INTO cat_location(location_name) VALUES('Nuevo León');
+INSERT INTO cat_location(location_name) VALUES('Oaxaca');
+INSERT INTO cat_location(location_name) VALUES('Puebla');
+INSERT INTO cat_location(location_name) VALUES('Querétaro');
+INSERT INTO cat_location(location_name) VALUES('Quintana Roo');
+INSERT INTO cat_location(location_name) VALUES('San Luis Potosí');
+INSERT INTO cat_location(location_name) VALUES('Sinaloa');
+INSERT INTO cat_location(location_name) VALUES('Sonora');
+INSERT INTO cat_location(location_name) VALUES('Tabasco');
+INSERT INTO cat_location(location_name) VALUES('Tamaulipas');
+INSERT INTO cat_location(location_name) VALUES('Tlaxcala');
+INSERT INTO cat_location(location_name) VALUES('Veracruz');
+INSERT INTO cat_location(location_name) VALUES('Yucatán');
+INSERT INTO cat_location(location_name) VALUES('Zacatecas');

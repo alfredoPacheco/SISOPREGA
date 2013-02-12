@@ -370,7 +370,7 @@ enyo.kind({
 //			iAc=objRec.accepted_count;
 //		}
 		_objMainHeader.setContent(objRec.rancher_name+" - "+objRec.location_name+"<BR>"+objRec.cattype_name+
-								  "  ("+ objRec.hc_aprox+"/"+objRec.weights[0].weight+")"+
+								  "  ("+ objRec.hc_aprox+"/"+objRec.weights[0].weight+"kg)"+
 							  	  "	 "+objRec.arrival_date		
 		);	
 		/*this.$.spacerone.setContent("<strong>"+objRec.rancher_name +"</strong> "+
