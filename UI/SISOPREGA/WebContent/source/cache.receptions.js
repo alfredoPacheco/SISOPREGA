@@ -157,7 +157,8 @@ enyo
 								weight_uom : undefined
 							};
 							try {
-								// arrFeedAux[i].inspectionDate;
+								inspectionAux.inspection_date=UTCtoNormalDate(arrInspectionAux[i].inspectionDate);
+								inspectionAux.comments=arrInspectionAux[i].comments;
 								inspectionAux.rejected_id = arrInspectionAux[i].inspectionId;
 								// arrFeedAux[i].receptionId;
 							} catch (e) {
@@ -870,6 +871,7 @@ enyo
 				var cgCreate = consumingGateway.Create("Inspection", objToSend);
 				if (cgCreate.exceptionId == 0) { // Created successfully
 					objRej.rejected_id = cgCreate.generatedId;
+					objRej.inspectionDate = "" + UTCtoNormalDate(DateOut(new Date()));
 					if (this.createInspectionBarnyard(cgCreate.generatedId,
 							objRec) == true) {
 						if (this.createInspectionDetails(cgCreate.generatedId,
@@ -1062,6 +1064,22 @@ enyo
 				this.inspectionWasReadFromGateway = false;
 				this.arrObjWasFilledUpOnce = false;
 				this.get();
+			},
+			//ADE - Addd inspection comment
+			addInspectionComment:function(receptionId,inspectionId,inspectionDate,comments){
+				var objToSend = {};
+				objToSend.receptionId = receptionId;
+				objToSend.inspectionId = inspectionId;
+				objToSend.inspectionDate=DateOut(inspectionDate);
+				objToSend.comments = comments;				
+				var objData = consumingGateway.Update("Inspection", objToSend);	
+				if (objData.exceptionId == 0) {
+					return true;
+				} else { 
+					return false;
+				}				
 			}
+						
 		});
+
 var cacheReceptions = new cache.receptions();

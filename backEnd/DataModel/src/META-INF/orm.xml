@@ -349,7 +349,7 @@
 				<column name="barnyard_code" />
 			</basic>
 			<basic name="locationId">
-				<column name="location_id" />
+				<column name="zone_id" />
 			</basic>
 		</attributes>
 	</entity>
@@ -627,6 +627,9 @@
 			</basic>
 			<basic name="receptionId">
 				<column name="reception_id" />
+			</basic>
+			<basic name="comments">
+				<column name="comments" />
 			</basic>
 		</attributes>
 	</entity>

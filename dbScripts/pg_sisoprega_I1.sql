@@ -21,6 +21,7 @@
  * 02/01/2013  Alfredo Pacheco               cat_rancher_invoice.rancher_id now references cat_rancher.rancher_id
  * 02/02/2013  Diego Torres                  sys_sisoprega_role.record_id provides a unique id for data model.
  * 02/07/2013  Diego Torres                  add table for document management (pedimentos)
+ * 02/11/2013  Diego Torres                  Changing cat_location for cat_zone
  * ====================================================================================
  * 
  * Author: Diego Torres
@@ -283,6 +284,7 @@ INSERT INTO cat_cattle_type(catclass_id, cattype_name) VALUES(2, 'Caballos');
 
 /*
   Table structure for table cat_location 
+  Handles country states
   */
 DROP TABLE IF EXISTS cat_location CASCADE;
 
@@ -294,12 +296,27 @@ CREATE TABLE cat_location (
 GRANT ALL ON cat_location TO sisoprega;
 GRANT ALL ON cat_location_location_id_seq TO sisoprega;
 
+
+/*
+  Handles barnyard zones.
+*/
+
+DROP TABLE IF EXISTS cat_zone CASCADE;
+
+CREATE TABLE cat_zone(
+  zone_id SERIAL PRIMARY KEY,
+  zone_name VARCHAR(50) NOT NULL
+);
+
+GRANT ALL ON cat_zone TO sisoprega;
+GRANT ALL ON cat_zone_zone_id_seq TO sisoprega;
+
 /*
  DEFAULT DATA FOR LOCATIONS
  */
 
-INSERT INTO cat_location(location_name) VALUES('Chihuahua');
-INSERT INTO cat_location(location_name) VALUES('Zona Sur');
+INSERT INTO cat_zone(zone_name) VALUES('Chihuahua');
+INSERT INTO cat_zone(zone_name) VALUES('Zona Sur');
 
 /*
  Table structure for table cat_barnyards
@@ -311,10 +328,10 @@ CREATE TABLE cat_barnyard (
   barnyard_id SERIAL PRIMARY KEY,
   barnyard_code VARCHAR(3) NOT NULL,
   available BOOLEAN NOT NULL DEFAULT TRUE,
-  location_id integer NOT NULL REFERENCES cat_location(location_id)
+  zone_id integer NOT NULL REFERENCES cat_zone(zone_id)
 );
 
-CREATE UNIQUE INDEX U_barnyard_code ON cat_barnyard(barnyard_code, location_id);
+CREATE UNIQUE INDEX U_barnyard_code ON cat_barnyard(barnyard_code, zone_id);
 
 GRANT ALL ON cat_barnyard TO sisoprega;
 GRANT ALL ON cat_barnyard_barnyard_id_seq TO sisoprega;
@@ -479,7 +496,8 @@ DROP TABLE IF EXISTS ctrl_inspection CASCADE;
 CREATE TABLE ctrl_inspection (
   inspection_id SERIAL PRIMARY KEY,
   reception_id integer NOT NULL REFERENCES ctrl_reception(reception_id),
-  inspection_date date NOT NULL
+  inspection_date date NOT NULL,
+  comments text
 );
 
 GRANT ALL ON ctrl_inspection TO sisoprega;
