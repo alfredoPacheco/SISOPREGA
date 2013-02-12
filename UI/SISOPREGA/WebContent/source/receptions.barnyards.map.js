@@ -37,7 +37,7 @@ enyo.kind({
 						{kind: "controls.autocomplete",width:"60%", name:"rancherFilter",
 							  hint:"Filtro por Ganadero", onSelectItem:"rancherFilterChanged"},
 							{kind: "Button",name:"btnClearFilter", className: "enyo-button-negative",
-                    		   caption: "X", onclick: "clearFilter"}	
+                    		   caption: "Remover Filtro", onclick: "clearFilter"}	
 			]}
 	],
 	ready: function() {
