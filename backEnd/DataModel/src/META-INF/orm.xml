@@ -628,6 +628,9 @@
 			<basic name="receptionId">
 				<column name="reception_id" />
 			</basic>
+			<basic name="comments">
+				<column name="comments" />
+			</basic>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.InspectionBarnyard">
