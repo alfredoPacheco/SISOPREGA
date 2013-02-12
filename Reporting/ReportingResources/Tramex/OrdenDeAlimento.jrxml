@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="OrdenDeAlimento" language="groovy" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="aa942456-9dda-43b6-8884-e4b5e0324fce">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="CUS_ORDER_ID" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[SELECT
+     ctrl_feed_order."order_id" AS ctrl_feed_order_order_id,
+     ctrl_feed_order."feed_date" AS ctrl_feed_order_feed_date,
+     ctrl_feed_order."handling" AS ctrl_feed_order_handling,
+     ctrl_feed_order_details."quantity" AS ctrl_feed_order_details_quantity,
+     array_to_string(array_agg(cat_barnyard."barnyard_code"),',') AS cat_barnyard_barnyard_code,
+     cat_zone."zone_name" AS cat_barnyard_zone_name,
+     cat_food."food_name" AS cat_food_food_name,
+     ctrl_reception."date_allotted" AS ctrl_reception_date_allotted,
+     vw_rancher."rancher_name" AS vw_rancher_rancher_name
+FROM
+     "public"."ctrl_feed_order" ctrl_feed_order INNER JOIN "public"."ctrl_feed_order_details" ctrl_feed_order_details ON ctrl_feed_order."order_id" = ctrl_feed_order_details."order_id"
+     INNER JOIN "public"."ctrl_feed_order_barnyard" ctrl_feed_order_barnyard ON ctrl_feed_order."order_id" = ctrl_feed_order_barnyard."order_id"
+     INNER JOIN "public"."ctrl_reception" ctrl_reception ON ctrl_feed_order."reception_id" = ctrl_reception."reception_id"
+     INNER JOIN "public"."vw_rancher" vw_rancher ON ctrl_reception."rancher_id" = vw_rancher."rancher_id"
+     INNER JOIN "public"."cat_barnyard" cat_barnyard ON ctrl_feed_order_barnyard."barnyard_id" = cat_barnyard."barnyard_id"
+     INNER JOIN "public"."cat_zone" cat_zone ON cat_barnyard."zone_id" = cat_zone."zone_id"
+     INNER JOIN "public"."cat_food" cat_food ON ctrl_feed_order_details."food_id" = cat_food."food_id"
+WHERE
+     ctrl_feed_order."order_id" = $P{CUS_ORDER_ID}
+GROUP BY ctrl_feed_order_order_id, ctrl_feed_order_feed_date, ctrl_feed_order_handling, ctrl_feed_order_details_quantity, cat_barnyard_zone_name, cat_food_food_name, ctrl_reception_date_allotted, vw_rancher_rancher_name]]>
+	</queryString>
+	<field name="ctrl_feed_order_order_id" class="java.lang.Integer"/>
+	<field name="ctrl_feed_order_feed_date" class="java.sql.Timestamp"/>
+	<field name="ctrl_feed_order_handling" class="java.lang.String"/>
+	<field name="ctrl_feed_order_details_quantity" class="java.math.BigDecimal"/>
+	<field name="cat_barnyard_barnyard_code" class="java.lang.String"/>
+	<field name="cat_barnyard_zone_name" class="java.lang.String"/>
+	<field name="cat_food_food_name" class="java.lang.String"/>
+	<field name="ctrl_reception_date_allotted" class="java.sql.Date"/>
+	<field name="vw_rancher_rancher_name" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="88d0cba3-7592-4f3b-8f29-3876910ecba3" x="3" y="0" width="145" height="26"/>
+				<textElement>
+					<font size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Orden de alimento]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="a854afb1-f950-4c9d-b144-d0bd29494e52" x="148" y="26" width="193" height="20"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vw_rancher_rancher_name}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="41fc06e8-a13b-4ee6-8dd6-6d760836e4c8" x="23" y="26" width="125" height="20"/>
+				<textElement textAlignment="Right">
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[Para el ganado de:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="09f1716c-7a47-4bd1-a088-874d0a42f574" x="148" y="46" width="156" height="20"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format($F{ctrl_reception_date_allotted})]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="41fc06e8-a13b-4ee6-8dd6-6d760836e4c8" x="23" y="46" width="125" height="20"/>
+				<textElement textAlignment="Right">
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[Recibido el:]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="25" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="ab0a8fb1-3a46-4a3b-81d8-05858c10fe4f" x="304" y="2" width="115" height="20"/>
+				<textElement/>
+				<text><![CDATA[Fecha]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="df0c46c8-386f-4b58-b266-09811dd99c5f" x="79" y="2" width="69" height="20"/>
+				<textElement/>
+				<text><![CDATA[Cantidad]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="45ebd08a-c2b3-4a6e-baf1-99010c0a7ab4" x="148" y="2" width="82" height="20"/>
+				<textElement/>
+				<text><![CDATA[Corrales]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cc80fcf4-aa44-4817-8d4a-5b121b3eae0c" x="230" y="2" width="74" height="20"/>
+				<textElement/>
+				<text><![CDATA[Zona]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="aeaf8c44-ddb7-40d2-ab7f-66e931dd6f0a" x="0" y="2" width="79" height="20"/>
+				<textElement/>
+				<text><![CDATA[Alimento]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement uuid="7dff93c1-e17b-4675-b311-4b965ca169b5" x="304" y="0" width="115" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{ctrl_feed_order_feed_date}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="454dc286-f834-4f4a-8059-d64608e6c938" x="79" y="0" width="69" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{ctrl_feed_order_details_quantity}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="1b048cea-f11f-47e0-985d-2bc3f3cdcc08" x="148" y="0" width="82" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{cat_barnyard_barnyard_code}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="f9ef9cde-4ba4-488f-8a98-8ef32bfa7afc" x="230" y="0" width="74" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{cat_barnyard_zone_name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="0c07dcae-d61a-4200-ac91-d52d4bab373b" x="0" y="0" width="79" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{cat_food_food_name}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="47" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="e9e2249e-a2e9-4e48-b73f-43f8a89810fc" x="0" y="0" width="128" height="20"/>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[Comentario:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="0dac95e1-e020-41d2-86d6-732c45a30a75" x="128" y="0" width="324" height="45"/>
+				<textElement>
+					<font isUnderline="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ctrl_feed_order_handling}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

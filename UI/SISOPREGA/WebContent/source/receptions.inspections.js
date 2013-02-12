@@ -174,8 +174,8 @@ enyo.kind({
 	},	
 	addComment:function(){			
 		if(!cacheReceptions.addInspectionComment(this._objRec.reception_id,
-					this._objRec.inspections[this._objRec.inspections.length-1].reject_id,
-					this._objRec.inspections[this._objRec.inspections.length-1].inspection_date,this.$.comments.getValue())){					
+					this._objRec.inspections[this._objRec.inspections.length-1].rejected_id,
+					this._objRec.inspections[this._objRec.inspections.length-1].inspectionDate,this.$.comments.getValue())){					
 			cacheMan.setMessage("", "Error al enviar commentario de inspeccion");
 		}else{
 			this._objRec.inspections[this._objRec.inspections.length-1].comments=this.$.comments.getValue();

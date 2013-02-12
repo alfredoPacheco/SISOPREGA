@@ -157,7 +157,7 @@ enyo
 								weight_uom : undefined
 							};
 							try {
-								inspectionAux.inspection_date=UTCtoNormalDate(arrInspectionAux[i].inspectionDate);
+								inspectionAux.inspectionDate=UTCtoNormalDate(arrInspectionAux[i].inspectionDate);
 								inspectionAux.comments=arrInspectionAux[i].comments;
 								inspectionAux.rejected_id = arrInspectionAux[i].inspectionId;
 								// arrFeedAux[i].receptionId;
@@ -871,7 +871,10 @@ enyo
 				var cgCreate = consumingGateway.Create("Inspection", objToSend);
 				if (cgCreate.exceptionId == 0) { // Created successfully
 					objRej.rejected_id = cgCreate.generatedId;
-					objRej.inspectionDate = "" + UTCtoNormalDate(DateOut(new Date()));
+					
+					if(!objRej.inspectionDate)
+					  objRej.inspectionDate = "" + DateOut(new Date());
+					
 					if (this.createInspectionBarnyard(cgCreate.generatedId,
 							objRec) == true) {
 						if (this.createInspectionDetails(cgCreate.generatedId,

@@ -6,6 +6,7 @@ enyo.kind({
 					  {caption:"Editar",value:5},
 					  {caption:"Liberar",value:6},
 					  {caption:"Deseleccionar",value:8},
+					  {caption:"Imprimir",value:9}
 					  ],
     kind: enyo.VFlexBox,
     flex:1,
@@ -484,6 +485,9 @@ enyo.kind({
 				this.objSelected.occupied=1;
 				this.objSelected.applyStyle("background-color",this.sColorOccupied);									
 				break;
+			case 9: // Imprimir
+			  alert ('Open reception report');
+			  break;
 		}
 	},
 	closePopUp:function(){	
