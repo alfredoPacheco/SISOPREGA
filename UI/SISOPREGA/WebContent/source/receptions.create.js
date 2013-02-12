@@ -68,8 +68,6 @@ enyo.kind({
 					  {kind: "Item",
 						components: [
 							{content: "Ciudad de Origen", className: "enyo-label", flex: 1},
-//							{name: 'city_id',flex: 1, kind: "ListSelector",float:true,
-//							 contentPack:"end", items:[]}]},
 							 {layoutKind: enyo.HFlexLayout,components:[
    	  								{
    	  									kind : "controls.autocomplete",

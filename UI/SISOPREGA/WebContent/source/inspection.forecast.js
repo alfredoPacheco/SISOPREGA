@@ -8,6 +8,7 @@ enyo
 				this.$.rancherInput.setItems(cacheRanchers.getAllForList());
 				this.$.cattle_type_id.setItems(cacheCattle.getAllCattleType());
 				this.$.localidad.setItems(cacheMan.allLocationsForList());
+				this.$.origen.setItems();
 			},
 			iSelected : null,
 			_id : undefined,
@@ -60,7 +61,8 @@ enyo
 											components : [ {
 												kind : "controls.autocomplete",
 												name : "rancherInput",
-												hint : "Ganadero"
+												hint : "Ganadero",
+												onSelectItem:"on_select_rancher"
 											} ]
 										} ]
 									},  {
@@ -74,18 +76,18 @@ enyo
 												flex : 1
 											} ]
 										} ]
-									}, {
+									},
+									{
 										kind : "Item",
 										components : [ {
 											layoutKind : enyo.HFlexLayout,
 											components : [ {
-												kind : "Input",
+												kind : "controls.autocomplete",
 												name : "origen",
-												hint : "Origen",
-												flex : 1
+												hint : "Ciudad de Origen"
 											} ]
 										} ]
-									}, 
+									},
 									{
 										kind : "Item",
 										components : [ {
@@ -96,7 +98,7 @@ enyo
 												hint : "Ganado"
 											} ]
 										} ]
-									}, 
+									},
 									{
 										kind : "Item",
 										components : [ {
@@ -310,9 +312,7 @@ enyo
 			},
 			ready : function() {
 				this.$.fechaPicker.setValue(new Date());
-				this.cambioDeFecha();
-				this.$.cattle_type_id.setIndex(1);
-				this.$.localidad.setIndex(1);
+				this.cambioDeFecha();				
 			},
 			resetValues : function() {
 				this.$.rancherInput.setIndex(-1);
@@ -329,11 +329,17 @@ enyo
 					locale : new enyo.g11n.Locale("es_es")
 				});
 				this.fecha = fmt.format(this.$.fechaPicker.getValue());
+				this.$.cattle_type_id.setIndex(1);
+				this.$.localidad.setIndex(1);
 				this.updateList();
 			},
 			cambiarAHoy : function() {
 				this.$.fechaPicker.setValue(new Date());
 				this.cambioDeFecha();
+			},
+			on_select_rancher: function(InSender, InEvent){
+				var receptions = cacheReceptions.getReceptionsByRancherID(InSender.index);
+				
 			},
 			selectForecast : function(inSender, inEvent) {
 				if (objFore = this.objList[inEvent.rowIndex]) {

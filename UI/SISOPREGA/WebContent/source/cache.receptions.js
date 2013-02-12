@@ -1037,6 +1037,26 @@ enyo
 				}
 				return result;
 			},
+			getAllOriginForList : function() {
+				var result = [];
+//				var receptions = this.get();	
+//				for (i in receptions){
+//					
+//					var cattletype = {caption:cattles[property].cattype_name,value:cattles[property].cattype_id};
+//					result.push(cattletype);
+//				}
+				return result;
+			},
+			getReceptionsByRancherID : function(rancher_id) {
+				var result = [];
+				var receptions = this.get();
+				for (i in receptions) {
+					if (receptions[i].rancher_id == rancher_id) {						
+						result.push(receptions[i]);							
+					}
+				}
+				return result;
+			},
 			refreshData : function() {
 				this.receptionWasReadFromGateway = false;
 				this.inspectionWasReadFromGateway = false;
