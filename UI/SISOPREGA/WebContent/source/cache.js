@@ -15,7 +15,7 @@ var	_arrReceptionList=[
 		{reception_id:1,rancher_id:1,
 		 rancher_name:"BALDOR / DEL RIO MENDEZ ALAN", arrival_date:"2012-09-15",
 		 cattype_id:1,cattype_name:"CABALLOS",hc_aprox:100,
-		 city_id:1,city_name:"CHIHUAHUA",
+		 location_id:1,location_name:"CHIHUAHUA",
 		 weights:[{hcw_id:0,hc:50,weight:1234}],barnyards:{"1E5":"1E5"},
 		 accepted_count:"",
 		 inspections:[{rejected_id:1,rejected_count:1,reject_id:1,reject_desc:"ENFERMEDAD"}],
@@ -25,15 +25,15 @@ var	_arrReceptionList=[
 		{reception_id:2,rancher_id:2,
 		 rancher_name:"FUERTE / TORRRES FUERTE DIEGO", arrival_date:"2012-09-16",
 		 cattype_id:2,cattype_name:"LLEGUAS",hc_aprox:60,
-		 city_id:2,city_name:"FORANEA",
+		 location_id:2,location_name:"FORANEA",
 		 weights:[{hcw_id:0,hc:50,weight:1234}],barnyards:{},
 		 accepted_count:"",
 		 inspections:[],
-		 feed:[]		 
+		 feed:[]
 		 },
 	];	
 
-var _arrCities=[{city_id:1,city_name:"Chihuahua"},{city_id:2,city_name:"Zona Sur"}];
+var _arrZones=[{zone_id:1,zone_name:"Chihuahua"},{zone_id:2,zone_name:"Zona Sur"}];
 
 var _arrRancherList =[
 					{rancher_id:1,aka:"BALDOR", first_name:"ALAN", last_name:"DEL RIO", mother_name:"MENDEZ",
@@ -71,9 +71,9 @@ var _arrBarnyardsList=[
 	];		
 
 var _arrBarnyardsListCatalog=[
-               		{barnyard_id:1,barnyard_code:"A1", location_id: "1",
+               		{barnyard_id:1,barnyard_code:"A1", zone_id: "1",
                		 barnyard_capacity:[{catclass_id:1,catclass_name:"EQUINO",head_count:75}]},
-               		{barnyard_id:2,barnyard_code:"A2", location_id: "2",
+               		{barnyard_id:2,barnyard_code:"A2", zone_id: "2",
                		 barnyard_capacity:[{catclass_id:4,cattype_name:"BOVINO",head_count:50}]}
                	];	
 
@@ -101,6 +101,8 @@ enyo.kind({
 	gblLabel:null,
 	gblToaster:null,
 	gblScrim:null,
+	arrLocations:[],
+	locationsReadedFromGateway:false,
 	setGlobalLabel:function(objVar){
 		this.gblLabel=objVar;
 	},
@@ -135,51 +137,106 @@ enyo.kind({
 			}
 		}
 	},
-	getCitiesLS:function(){
-		this.updateCitiesLS();
-		return _arrCitiesLS;
+	getZonesLS:function(){
+		this.updateZonesLS();
+		return _arrZonesLS;
 	},
-	updateCitiesLS:function(){
-		_arrCitiesLS=[];
-		for(var i=0;i<_arrCities.length;i++){		
-				_arrCitiesLS.push({caption:	_arrCities[i].city_name,
-										value:_arrCities[i].city_id});				
-		}					
+	updateZonesLS:function(){
+		_arrZonesLS=[];
+		for(var i=0;i<_arrZones.length;i++){		
+				_arrZonesLS.push({caption:	_arrZones[i].zone_name,
+										value:_arrZones[i].zone_id});
+		}
 	},
-	getCities:function(){
-		return _arrCities;
-	},	
-	getCityByID:function(iCityID){
-		for(var i=0; i<this.getCities().length;i++){
-			if (this.getCities()[i].city_id==iCityID){
-				return this.getCities()[i];
+	getZones:function(){
+		return _arrZones;
+	},
+	getZoneByID:function(iZoneID){
+		for(var i=0; i<this.getZones().length;i++){
+			if (this.getZones()[i].zone_id==iZoneID){
+				return this.getZones()[i];
 			}
 		}
-	},		
+	},
+	findZone:function(criteria){				
+		var result = [];
+		if (criteria != ""){
+			var zones = _arrZones;
+			var pattern = new RegExp(criteria.trim(), "ig");
+			for (property in zones){
+				pattern.lastIndex = 0;
+				if (pattern.test(zones[property].zone_name)){
+					var zone = {caption:zones[property].zone_name,value:zones[property].zone_id};
+					result.push(zone);
+				}
+			}	
+		}
+		return result;
+	},
+	getAllZonesForList:function() {
+		var result = [];
+		var zones = _arrZones;
+		for (property in zones){
+			var zone = {caption:zones[property].zone_name,value:zones[property].zone_id};
+			result.push(zone);
+		}
+		return result;
+	},
+	getLocations:function(){
+		if (this.locationsReadedFromGateway == false){
+			this.locationsReadedFromGateway = true;
+			var arrAux = [];
+			
+			var cgReadAll = consumingGateway.Read("Location", {});
+
+			if (cgReadAll.exceptionId == 0) { // Read successfully
+				for (item in cgReadAll.records) {
+					var objTmp = {};
+					objTmp.location_id = cgReadAll.records[item].locationId;
+					objTmp.location_name = cgReadAll.records[item].locationName;
+					arrAux.push(objTmp);
+				}
+			} 
+			else{ //Error
+				if (cgReadAll.exceptionId != "VAL02"){ //No data found
+					cacheMan.setMessage("", "[Exception ID: " + cgReadAll.exceptionId + "] Descripcion: " + cgReadAll.exceptionDescription);	
+				}			
+			}
+			this.arrLocations = arrAux;
+		}
+		return this.arrLocations;
+	},
+	createLocation : function(objLocation){
+		var objToSend = {};
+		objToSend.locationName = objLocation.location_name; 
+
+		var cgCreate = consumingGateway.Create("Location", objToSend);
+		if (cgCreate.exceptionId == 0){ //Created successfully
+			objToSend.location_id = cgCreate.generatedId;			
+			this.arrLocations.push(objToSend);
+			return true;
+		}
+		else{ //Error
+			cacheMan.setMessage("", "[Exception ID: " + cgCreate.exceptionId + "] Descripcion: " + cgCreate.exceptionDescription);
+			return false;
+		}
+	},
+	getLocationByID:function(iLocationID){
+		for(var i=0; i<this.getLocations().length;i++){
+			if (this.getLocations()[i].location_id==iLocationID){
+				return this.getLocations()[i];
+			}
+		}
+	},
+	getAllLocationsForList:function() {
+		var result = [];
+		var locations = this.getLocations();
+		for (property in locations){
+			var location = {caption:locations[property].location_name,value:locations[property].location_id};
+			result.push(location);
+		}
+		return result;
+	},
 });
 
 var cacheMan = new cache();
-cacheMan.findLocation = function(criteria){				
-	var result = [];
-	if (criteria != ""){
-		var locations = _arrCities;
-		var pattern = new RegExp(criteria.trim(), "ig");
-		for (property in locations){
-			pattern.lastIndex = 0;
-			if (pattern.test(locations[property].city_name)){
-				var location = {caption:locations[property].city_name,value:locations[property].city_id};
-				result.push(location);
-			}
-		}	
-	}
-	return result;
-	};
-cacheMan.allLocationsForList = function() {
-	var result = [];
-	var locations = _arrCities;	
-	for (property in locations){
-		var location = {caption:locations[property].city_name,value:locations[property].city_id};
-		result.push(location);
-	}
-	return result;
-};

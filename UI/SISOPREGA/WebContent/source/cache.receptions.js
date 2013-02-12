@@ -16,7 +16,7 @@ enyo
 					arrival_date : ""
 							+ UTCtoNormalDate(objReception.dateAllotted),
 					cattype_id : objReception.cattleType,
-					city_id : objReception.locationId
+					location_id : objReception.locationId
 				};
 				var rancherAux = cacheRanchers.getByID(objNew.rancher_id);
 
@@ -29,7 +29,7 @@ enyo
 
 				objNew.cattype_name = cacheCattle.getByID(objNew.cattype_id).cattype_name;
 				objNew.hc_aprox = "";
-				objNew.city_name = cacheMan.getCityByID(objNew.city_id).city_name;
+				objNew.location_name = cacheMan.getLocationByID(objNew.location_id).location_name;
 				objNew.weights = [ {
 					hcw_id : undefined,
 					hc : undefined,
@@ -88,7 +88,7 @@ enyo
 					rancherId : objReception.rancher_id,
 					dateAllotted : "" + DateOut(objReception.arrival_date),
 					cattleType : objReception.cattype_id,
-					locationId : objReception.city_id
+					locationId : objReception.location_id
 				};
 
 				return objNew;
@@ -123,9 +123,9 @@ enyo
 							try {
 								var barnyard = cacheBY
 										.getByID(barnyardAux[b].barnyardId);
-								objAux.barnyards["" + barnyard.location_id
+								objAux.barnyards["" + barnyard.zone_id
 										+ barnyard.barnyard_code] = ""
-										+ barnyard.location_id
+										+ barnyard.zone_id
 										+ barnyard.barnyard_code;
 							} catch (e) {
 							}
@@ -157,7 +157,8 @@ enyo
 								weight_uom : undefined
 							};
 							try {
-								// arrFeedAux[i].inspectionDate;
+								inspectionAux.inspection_date=UTCtoNormalDate(arrInspectionAux[i].inspectionDate);
+								inspectionAux.comments=arrInspectionAux[i].comments;
 								inspectionAux.rejected_id = arrInspectionAux[i].inspectionId;
 								// arrFeedAux[i].receptionId;
 							} catch (e) {
@@ -206,7 +207,7 @@ enyo
 								};
 								for (fb in arrFeedBarnyardAux) {
 									var barnyardAux = cacheBY.getByID(arrFeedBarnyardAux[fb].barnyardId);
-									feedBarnyardAux.barnyards["" + barnyardAux.location_id + barnyardAux.barnyard_code] = "" + barnyardAux.location_id + barnyardAux.barnyard_code;
+									feedBarnyardAux.barnyards["" + barnyardAux.zone_id + barnyardAux.barnyard_code] = "" + barnyardAux.zone_id + barnyardAux.barnyard_code;
 									 						
 								}
 								feedAux.barnyards = feedBarnyardAux.barnyards;
@@ -870,6 +871,7 @@ enyo
 				var cgCreate = consumingGateway.Create("Inspection", objToSend);
 				if (cgCreate.exceptionId == 0) { // Created successfully
 					objRej.rejected_id = cgCreate.generatedId;
+					objRej.inspectionDate = "" + UTCtoNormalDate(DateOut(new Date()));
 					if (this.createInspectionBarnyard(cgCreate.generatedId,
 							objRec) == true) {
 						if (this.createInspectionDetails(cgCreate.generatedId,
@@ -1020,7 +1022,7 @@ enyo
 								barnyard.value = barnyard_id;
 								barnyard.barnyard_code = barnyards[property]
 										.substr(1);
-								barnyard.location = "Chihuahua";
+								barnyard.zone = "Chihuahua";
 								result.push(barnyard);
 							} else {
 								barnyard.caption = barnyards[property]
@@ -1029,10 +1031,30 @@ enyo
 								barnyard.value = barnyard_id;
 								barnyard.barnyard_code = barnyards[property]
 										.substr(1);
-								barnyard.location = "Zona Sur";
+								barnyard.zone = "Zona Sur";
 								result.push(barnyard);
 							}
 						}
+					}
+				}
+				return result;
+			},
+			getAllOriginForList : function() {
+				var result = [];
+//				var receptions = this.get();	
+//				for (i in receptions){
+//					
+//					var cattletype = {caption:cattles[property].cattype_name,value:cattles[property].cattype_id};
+//					result.push(cattletype);
+//				}
+				return result;
+			},
+			getReceptionsByRancherID : function(rancher_id) {
+				var result = [];
+				var receptions = this.get();
+				for (i in receptions) {
+					if (receptions[i].rancher_id == rancher_id) {						
+						result.push(receptions[i]);							
 					}
 				}
 				return result;
@@ -1042,6 +1064,22 @@ enyo
 				this.inspectionWasReadFromGateway = false;
 				this.arrObjWasFilledUpOnce = false;
 				this.get();
+			},
+			//ADE - Addd inspection comment
+			addInspectionComment:function(receptionId,inspectionId,inspectionDate,comments){
+				var objToSend = {};
+				objToSend.receptionId = receptionId;
+				objToSend.inspectionId = inspectionId;
+				objToSend.inspectionDate=DateOut(inspectionDate);
+				objToSend.comments = comments;				
+				var objData = consumingGateway.Update("Inspection", objToSend);	
+				if (objData.exceptionId == 0) {
+					return true;
+				} else { 
+					return false;
+				}				
 			}
+						
 		});
+
 var cacheReceptions = new cache.receptions();

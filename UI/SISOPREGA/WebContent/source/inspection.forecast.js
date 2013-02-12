@@ -5,9 +5,13 @@ enyo
 			layoutKind : enyo.VFlexLayout,
 			create : function() {
 				this.inherited(arguments);				
-				this.$.rancherInput.setItems(cacheRanchers.getAllForList());
+				
 				this.$.cattle_type_id.setItems(cacheCattle.getAllCattleType());
-				this.$.localidad.setItems(cacheMan.allLocationsForList());
+				this.$.localidad.setItems(cacheMan.getAllZonesForList());
+				this.$.origen.setItems(cacheMan.getAllLocationsForList());
+				
+//				this.$.corrales.setItems(cacheReceptions.getActiveBYForListByRancherID());
+				this.$.rancherInput.setItems(cacheRanchers.getAllForList());
 			},
 			iSelected : null,
 			_id : undefined,
@@ -17,6 +21,8 @@ enyo
 			itemSelectedPopup : -1,
 			fecha : undefined,
 			totalItems : 0,
+			arrReceptions:[],
+			defaultZone : 1,
 			components : [ {
 				kind : "SlidingPane",
 				flex : 1,
@@ -60,10 +66,24 @@ enyo
 											components : [ {
 												kind : "controls.autocomplete",
 												name : "rancherInput",
-												hint : "Ganadero"
+												hint : "Ganadero",
+												onSelectItem:"on_select_rancher"
 											} ]
 										} ]
-									},  {
+									},
+									{
+										kind : "Item",
+										components : [ {
+											layoutKind : enyo.HFlexLayout,
+											components : [ {
+												kind : "controls.autocomplete",
+												name : "localidad",
+												hint : "Localidad",
+												onSelectItem:"on_select_zone"
+											} ]
+										} ]
+									},
+									{
 										kind : "Item",
 										components : [ {
 											layoutKind : enyo.HFlexLayout,
@@ -74,18 +94,18 @@ enyo
 												flex : 1
 											} ]
 										} ]
-									}, {
+									},
+									{
 										kind : "Item",
 										components : [ {
 											layoutKind : enyo.HFlexLayout,
 											components : [ {
-												kind : "Input",
+												kind : "controls.autocomplete",
 												name : "origen",
-												hint : "Origen",
-												flex : 1
+												hint : "Origen"
 											} ]
 										} ]
-									}, 
+									},
 									{
 										kind : "Item",
 										components : [ {
@@ -96,7 +116,7 @@ enyo
 												hint : "Ganado"
 											} ]
 										} ]
-									}, 
+									},
 									{
 										kind : "Item",
 										components : [ {
@@ -110,17 +130,17 @@ enyo
 											} ]
 										} ]
 									}, 
-									{
-										kind : "Item",
-										components : [ {
-											layoutKind : enyo.HFlexLayout,
-											components : [ {
-												kind : "controls.autocomplete",
-												name : "localidad",
-												hint : "Localidad"
-											} ]
-										} ]
-									},
+//									{
+//										kind : "Item",
+//										components : [ {
+//											layoutKind : enyo.HFlexLayout,
+//											components : [ {
+//												kind : "controls.autocomplete",
+//												name : "corrales",
+//												hint : "Corrales"
+//											} ]
+//										} ]
+//									},
 									{
 										kind : "Item",
 										components : [ {
@@ -261,7 +281,7 @@ enyo
 															content : ""
 														},
 														{
-															name : "listLocation",
+															name : "listZone",
 															style : "width:150px;text-align:center;",
 															content : ""
 														},
@@ -310,17 +330,15 @@ enyo
 			},
 			ready : function() {
 				this.$.fechaPicker.setValue(new Date());
-				this.cambioDeFecha();
-				this.$.cattle_type_id.setIndex(1);
-				this.$.localidad.setIndex(1);
+				this.cambioDeFecha();				
 			},
 			resetValues : function() {
 				this.$.rancherInput.setIndex(-1);
 				this.$.autorizacion.setValue("");
-				this.$.origen.setValue("");
+				this.$.origen.setIndex(-1);
 				this.$.cattle_type_id.setIndex(-1);
 				this.$.cantidad.setValue("");
-				this.$.localidad.setIndex(-1);
+				this.$.localidad.setIndex(this.defaultZone);
 				this.$.corrales.setValue("");
 			},
 			cambioDeFecha : function() {
@@ -329,23 +347,166 @@ enyo
 					locale : new enyo.g11n.Locale("es_es")
 				});
 				this.fecha = fmt.format(this.$.fechaPicker.getValue());
+				this.$.cattle_type_id.setIndex(1);
+				this.$.localidad.setIndex(1);
 				this.updateList();
 			},
 			cambiarAHoy : function() {
 				this.$.fechaPicker.setValue(new Date());
 				this.cambioDeFecha();
 			},
+			on_select_zone:function(InSender, InEvent){
+				this.defaultZone = this.$.localidad.getIndex();
+			},
+			on_select_rancher: function(InSender, InEvent){
+				//TODO 
+				this.addRancherSelected(InSender.index);
+				this.getActiveOrigins();
+				this.getActiveCattles();
+				
+			
+			},
+			addRancherSelected:function(rancher_id){
+				if (rancher_id > -1){
+					for (i in this.arrReceptions){
+						if (this.arrReceptions[i].rancher_id == rancher_id){
+							return;
+						}
+					}
+					
+					var objRancherSelected={
+							rancher_id : 	rancher_id,
+							receptions:		cacheReceptions.getReceptionsByRancherID(rancher_id),
+							origins: [],
+							cattle_types: [],
+							zones:[],
+							barnyards:[]
+					};
+					
+					this.arrReceptions.push(objRancherSelected);
+				}
+			},
+			getActiveRanchers:function(){
+				
+			},
+			getActiveLocations:function(){
+				var response = [];
+				response = cacheMan.getAllZonesForList();
+				this.$.localidad.setItems(response);
+			},
+			getActiveOrigins:function(){
+				var response = [];
+				if(this.$.rancherInput.getIndex()>-1){
+					for (i in this.arrReceptions){
+						if (this.arrReceptions[i].rancher_id == this.$.rancherInput.getIndex()){
+							for(j in this.arrReceptions[i].receptions){
+								var auxOrigin = {
+									value :		this.arrReceptions[i].receptions[j].location_id,
+									caption : 	this.arrReceptions[i].receptions[j].location_name
+								};
+								response.push(auxOrigin);	
+							}
+						}
+					}
+				}else{
+					response = cacheMan.getAllLocationsForList();
+				}
+				
+				this.$.origen.setItems(response);
+				if(response.length == 1 && this.$.origen.getValue().trim() == ""){
+					this.$.origen.setIndex(response[0].value);
+				}
+			},
+			getActiveCattles:function(){
+				var response = [];
+				if(this.$.rancherInput.getIndex()>-1){
+					for (i in this.arrReceptions){
+						if (this.arrReceptions[i].rancher_id == this.$.rancherInput.getIndex()){
+							for(j in this.arrReceptions[i].receptions){
+								var auxCattle = {
+									value :		this.arrReceptions[i].receptions[j].cattype_id,
+									caption : 	this.arrReceptions[i].receptions[j].cattype_name									
+								};
+								response.push(auxCattle);	
+							}
+						}
+					}
+				}else{
+					response = cacheCattle.getAllCattleType();
+				}
+				
+				this.$.cattle_type_id.setItems(response);
+				if(response.length == 1 && this.$.cattle_type_id.getValue().trim() == ""){
+					this.$.cattle_type_id.setIndex(response[0].value);
+				}
+			},
+			getActiveBarnyards:function(){
+				var response = [];
+				if(this.$.rancherInput.getIndex()>-1){
+					for (i in this.arrReceptions){
+						if (this.arrReceptions[i].rancher_id == this.$.rancherInput.getIndex()){
+							for(j in this.arrReceptions[i].receptions){
+								var barnyards = this.arrReceptions[i].receptions[j].barnyards;
+								for (property in barnyards)
+								{
+									var auxBarnyard = {
+											caption : "",
+											value : ""
+										};
+										var barnyard_id = cacheBY
+												.getByBarnyard(barnyards[property]).barnyard_id;
+										if (barnyards[property].charAt(0) == 1) {
+											auxBarnyard.caption = barnyards[property]
+													.substr(1)
+													+ " [Chihuahua]";
+											auxBarnyard.value = barnyard_id;
+											auxBarnyard.barnyard_code = barnyards[property]
+													.substr(1);
+											auxBarnyard.zone = "Chihuahua";
+											response.push(barnyard);
+										} else {
+											auxBarnyard.caption = barnyards[property]
+													.substr(1)
+													+ " [Zona Sur]";
+											auxBarnyard.value = barnyard_id;
+											auxBarnyard.barnyard_code = barnyards[property]
+													.substr(1);
+											auxBarnyard.zone = "Zona Sur";
+											response.push(barnyard);
+										}
+								}
+							}
+						}
+					}
+				}else{
+					response = cacheReceptions.getActiveBYForListByRancherID();
+				}
+				
+				return response;
+			},
+			filterData:function(items,criteria){
+				return [];
+			},
+			autoCompleteFields:function(){
+				
+				
+				
+				for (i in receptions){
+					this.arrReceptions.push(receptions[i]);
+					
+				}
+			},
 			selectForecast : function(inSender, inEvent) {
 				if (objFore = this.objList[inEvent.rowIndex]) {
 					this.$.rancherInput.setIndex(objFore.rancher_id);
 					this.$.autorizacion.setValue(objFore.auth);
-					this.$.origen.setValue(objFore.origin);
+					this.$.origen.setIndex(objFore.origin);
 					this.$.cattle_type_id.setIndex(objFore.cattle_type);
 					
 					this.$.cantidad.setValue(objFore.quantity);
 
 					if (objFore.barnyards.length > 0) {
-						this.$.localidad.setIndex(objFore.barnyards[0].location_id);						
+						this.$.localidad.setIndex(objFore.barnyards[0].zone_id);						
 						var strBarnyards = "";
 						for (i in objFore.barnyards) {
 							strBarnyards = strBarnyards
@@ -388,10 +549,10 @@ enyo
 					this.$.listQuantity.setContent(objFore.quantity);
 
 					if (objFore.barnyards.length > 0) {
-						if (objFore.barnyards[0].location_id == 1) {
-							this.$.listLocation.setContent("Chihuahua");
+						if (objFore.barnyards[0].zone_id == 1) {
+							this.$.listZone.setContent("Chihuahua");
 						} else {
-							this.$.listLocation.setContent("Zona Sur");
+							this.$.listZone.setContent("Zona Sur");
 						}
 						var strBarnyards = "";
 						for (i in objFore.barnyards) {
@@ -402,7 +563,7 @@ enyo
 						strBarnyards = strBarnyards.slice(0, -2);
 						this.$.listBarnyards.setContent(strBarnyards);
 					} else {
-						this.$.listLocation.setContent("");
+						this.$.listZone.setContent("");
 						this.$.listBarnyards.setContent("");
 					}
 					if (inIndex == this.iSelected) {
@@ -413,7 +574,7 @@ enyo
 						this.$.listOrigin.applyStyle("color", "white");
 						this.$.listCattleType.applyStyle("color", "white");
 						this.$.listQuantity.applyStyle("color", "white");
-						this.$.listLocation.applyStyle("color", "white");
+						this.$.listZone.applyStyle("color", "white");
 						this.$.listBarnyards.applyStyle("color", "white");
 					} else {
 						this.$.rowItem.applyStyle("background-color", null);
@@ -423,7 +584,7 @@ enyo
 						this.$.listOrigin.applyStyle("color", null);
 						this.$.listCattleType.applyStyle("color", null);
 						this.$.listQuantity.applyStyle("color", null);
-						this.$.listLocation.applyStyle("color", null);
+						this.$.listZone.applyStyle("color", null);
 						this.$.listBarnyards.applyStyle("color", null);
 					}
 					this.totalItems++;
@@ -484,7 +645,7 @@ enyo
 				objInspFore.cattle_type = this.$.cattle_type_id.getIndex();
 				objInspFore.auth = this.$.autorizacion.getValue();
 				objInspFore.fore_date = this.fecha;
-				objInspFore.origin = this.$.origen.getValue();
+				objInspFore.origin = this.$.origen.getIndex();
 				objInspFore.quantity = this.$.cantidad.getValue();
 
 				var barnyardsAux = this.$.corrales.getValue().split(",");
