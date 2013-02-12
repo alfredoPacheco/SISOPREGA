@@ -75,14 +75,23 @@ public class InspectionBean extends BaseBean implements Cruddable {
       this.log.fine("Received Inspection in request: " + inspection);
 
       if (validateEntity(inspection)) {
-        this.log.finer("Inspection succesfully validated");
-        dataModel.createDataModel(inspection);
+        long existingInspection =inspectionFromReception(inspection.getReceptionId());
+        if(existingInspection>0){
+          String sId = String.valueOf(existingInspection);
+          this.log.finer("Setting Inspection id in response: " + sId);
+          response.setGeneratedId(sId);
+          response.setError(new Error("0", "SUCCESS", "proxy.InspectionBean.Create"));
+          this.log.info("Inspection [" + inspection.toString() + "] retrieved as created");
+        }else{
+          this.log.finer("Inspection succesfully validated");
+          dataModel.createDataModel(inspection);
 
-        String sId = String.valueOf(inspection.getInspectionId());
-        this.log.finer("Setting Inspection id in response: " + sId);
-        response.setGeneratedId(sId);
-        response.setError(new Error("0", "SUCCESS", "proxy.InspectionBean.Create"));
-        this.log.info("Inspection [" + inspection.toString() + "] created by principal[" + getLoggedUser() + "]");
+          String sId = String.valueOf(inspection.getInspectionId());
+          this.log.finer("Setting Inspection id in response: " + sId);
+          response.setGeneratedId(sId);
+          response.setError(new Error("0", "SUCCESS", "proxy.InspectionBean.Create"));
+          this.log.info("Inspection [" + inspection.toString() + "] created by principal[" + getLoggedUser() + "]");
+        }
       } else {
         this.log.warning("Error de validación: " + error_description);
         response.setError(new Error("VAL01", "Error de validación: " + error_description, "proxy.InspectionBean.Create"));
@@ -253,4 +262,17 @@ public class InspectionBean extends BaseBean implements Cruddable {
     return response;
   }
 
+  private long inspectionFromReception(long receptionId){
+    long result = 0l;
+    
+    Map<String, Object> parameters = new HashMap<String, Object>();
+    parameters.put("receptionId", receptionId);
+    
+    List<Inspection> inspections = dataModel.readDataModelList("INSPECTION_BY_RECEPTION_ID", parameters, Inspection.class);
+    if(!inspections.isEmpty())
+      result = inspections.get(0).getInspectionId();
+    
+    return result;
+  }
+  
 }

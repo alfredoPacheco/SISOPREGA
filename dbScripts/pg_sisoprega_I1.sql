@@ -499,6 +499,7 @@ CREATE TABLE ctrl_inspection (
   inspection_date date NOT NULL
 );
 
+CREATE UNIQUE INDEX U_ctrl_inspection(reception_id);
 GRANT ALL ON ctrl_inspection TO sisoprega;
 GRANT ALL ON ctrl_inspection_inspection_id_seq TO sisoprega;
 
@@ -512,6 +513,7 @@ CREATE TABLE ctrl_inspection_barnyard (
   inspection_id integer NOT NULL REFERENCES ctrl_inspection(inspection_id),
   barnyard_id integer NOT NULL REFERENCES cat_barnyard(barnyard_id)
 );
+
 
 CREATE UNIQUE INDEX U_inspection_barnyard ON ctrl_inspection_barnyard(inspection_id, barnyard_id);
 
@@ -588,17 +590,3 @@ FROM cat_enterprise_rancher)
 ORDER BY rancher_name;
 
 GRANT ALL ON vw_rancher TO sisoprega;
-
-DROP TABLE IF EXISTS ctrl_pedimentos;
-CREATE TABLE ctrl_pedimentos(
-	record_id SERIAL PRIMARY KEY,
-	rancher_id integer NOT NULL REFERENCES cat_rancher(rancher_id) ON DELETE CASCADE,
-	pedimento_date DATE,
-	pedimento_id VARCHAR(30),
-	pedimento BLOB
-);
-
-CREATE UNIQUE INDEX U_ctrl_pedimentos ON ctrl_pedimentos(pedimento_id);
-
-GRANT ALL ON ctrl_pedimentos TO SISOPREGA;
-GRANT ALL ON ctrl_pedimentos_record_id_seq TO SISOPREGA;

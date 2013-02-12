@@ -75,14 +75,23 @@ public class InspectionBarnyardBean extends BaseBean implements Cruddable {
       this.log.fine("Received InspectionBarnyard in request: " + inspBarnyard);
 
       if (validateEntity(inspBarnyard)) {
-        this.log.finer("InspectionBarnyard succesfully validated");
-        dataModel.createDataModel(inspBarnyard);
+        long existingInspection = barnyardFromInspection(inspBarnyard.getInspectionId());
+        if(existingInspection>0){
+          String sId = String.valueOf(existingInspection);
+          this.log.finer("Setting Inspection id in response: " + sId);
+          response.setGeneratedId(sId);
+          response.setError(new Error("0", "SUCCESS", "proxy.InspectionBean.Create"));
+          this.log.info("Inspection [" + inspBarnyard.toString() + "] retrieved as created");
+        }else{
+          this.log.finer("InspectionBarnyard succesfully validated");
+          dataModel.createDataModel(inspBarnyard);
 
-        String sId = String.valueOf(inspBarnyard.getIbId());
-        this.log.finer("Setting InspectionBarnyard id in response: " + sId);
-        response.setGeneratedId(sId);
-        response.setError(new Error("0", "SUCCESS", "proxy.InspectionBarnyardBean.Create"));
-        this.log.info("Inspection Barnyard [" + inspBarnyard.toString() + "] created by principal[" + getLoggedUser() + "]");
+          String sId = String.valueOf(inspBarnyard.getIbId());
+          this.log.finer("Setting InspectionBarnyard id in response: " + sId);
+          response.setGeneratedId(sId);
+          response.setError(new Error("0", "SUCCESS", "proxy.InspectionBarnyardBean.Create"));
+          this.log.info("Inspection Barnyard [" + inspBarnyard.toString() + "] created by principal[" + getLoggedUser() + "]");
+        }
       } else {
         this.log.warning("Error de validación: " + error_description);
         response.setError(new Error("VAL01", "Error de validación: " + error_description, "proxy.InspectionBarnyardBean.Create"));
@@ -254,6 +263,20 @@ public class InspectionBarnyardBean extends BaseBean implements Cruddable {
 
     this.log.exiting(this.getClass().getCanonicalName(), "Delete");
     return response;
+  }
+  
+  private long barnyardFromInspection(long inspectionId){
+    long result = 0l;
+    
+    Map<String, Object> parameters = new HashMap<String, Object>();
+    parameters.put("inspectionId", inspectionId);
+    
+    List<InspectionBarnyard> inspections = dataModel.readDataModelList("IB_BY_INSPECTION_ID", parameters, InspectionBarnyard.class);
+    log.finer("Barnyards for inspection: " + inspections.size());
+    if(!inspections.isEmpty())
+      result = inspections.get(0).getIbId();
+    
+    return result;
   }
 
 }
