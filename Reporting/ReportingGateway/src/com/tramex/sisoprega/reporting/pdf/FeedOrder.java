@@ -56,7 +56,7 @@ import com.tramex.sisoprega.reporting.BaseReportServlet;
  */
 
 @WebServlet("/FeedOrder")
-@ServletSecurity(@HttpConstraint(rolesAllowed = {"rancher"}))
+@ServletSecurity(@HttpConstraint(rolesAllowed = {"sisoprega_admin", "mex_user"}))
 public class FeedOrder extends BaseReportServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -73,7 +73,7 @@ public class FeedOrder extends BaseReportServlet {
       log.fine("orderId: [" + request.getParameter("orderId") + "]");
 
       params.put("CUS_ORDER_ID", Integer.parseInt(request.getParameter("orderId")));
-      String reportURL = "WEB-INF/Reports/Tramex/feedOrder.jasper";
+      String reportURL = "WEB-INF/Reports/Tramex/OrdenDeAlimento.jasper";
 
       processRequest(reportURL, params, response);
 

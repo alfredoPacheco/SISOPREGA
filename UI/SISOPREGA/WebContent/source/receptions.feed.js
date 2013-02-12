@@ -473,6 +473,7 @@ enyo.kind(
       this.bySelected.setContent("Alimentando corrales: " + corralesSeleccionados);
     },
     openFeedingReport : function() {
-      alert('TODO: Open feeding report');
+      window.open('/ReportingGateway/FeedOrder?orderId='+ this._objRec.feed[this._objRec.feed.length - 1].feeding_id,'_blank');
+      window.focus();
     }
   });

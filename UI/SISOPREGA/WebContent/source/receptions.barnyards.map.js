@@ -486,7 +486,9 @@ enyo.kind({
 				this.objSelected.applyStyle("background-color",this.sColorOccupied);									
 				break;
 			case 9: // Imprimir
-			  alert ('Open reception report');
+			  var receptionId = cacheBY.inUse()[this.objSelected.name].reception_id;
+			  window.open('/ReportingGateway/CattleReceptionId?receptionId=' + receptionId, '_blank');
+		      window.focus();
 			  break;
 		}
 	},

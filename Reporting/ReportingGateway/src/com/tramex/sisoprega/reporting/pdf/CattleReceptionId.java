@@ -17,8 +17,6 @@ package com.tramex.sisoprega.reporting.pdf;
 
 import java.io.IOException;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -57,7 +55,7 @@ import com.tramex.sisoprega.reporting.BaseReportServlet;
  * @author Jaime Figueroa
  */
 @WebServlet("/CattleReceptionId")
-@ServletSecurity(@HttpConstraint(rolesAllowed = {"sisoprega_admin", "mex_user", "rancher"}))
+@ServletSecurity(@HttpConstraint(rolesAllowed = {"sisoprega_admin", "mex_user"}))
 public class CattleReceptionId extends BaseReportServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -72,15 +70,8 @@ public class CattleReceptionId extends BaseReportServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException,
         ParseException, JRException {
       Map<String, Object> params = new HashMap<String, Object>();
-      log.fine("fromDate: [" + request.getParameter("fromDate") + "]");
-      log.fine("toDate: [" + request.getParameter("toDate") + "]");
       log.fine("receptionId: [" + request.getParameter("receptionId") + "]");
 
-      Date fromDate = new SimpleDateFormat("MM/dd/yyyy").parse(request.getParameter("fromDate"));
-      Date toDate = new SimpleDateFormat("MM/dd/yyyy").parse(request.getParameter("toDate"));
-
-      params.put("CUS_FROM_DATE", fromDate);
-      params.put("CUS_TO_DATE", toDate);
       params.put("CUS_RECEPTION_ID", Integer.parseInt(request.getParameter("receptionId")));
 
       String reportURL = "WEB-INF/Reports/Tramex/CattleReceptionId.jasper";
