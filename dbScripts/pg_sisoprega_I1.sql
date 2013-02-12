@@ -188,7 +188,6 @@ AFTER DELETE ON cat_person_rancher
 FOR EACH ROW
 EXECUTE PROCEDURE proc_person_rancher_delete();
 
-
 DROP TABLE IF EXISTS cat_rancher_user CASCADE;
 CREATE TABLE cat_rancher_user(
   record_id SERIAL PRIMARY KEY,
