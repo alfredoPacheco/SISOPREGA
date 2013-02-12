@@ -15,10 +15,21 @@
  */
 package com.tramex.sisoprega.text.proxy.bean;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
+
+import javax.annotation.Resource;
 
 import com.tramex.sisoprega.common.BaseResponse;
 import com.tramex.sisoprega.common.CreateGatewayResponse;
@@ -52,6 +63,9 @@ import com.tramex.sisoprega.proxy.bean.BaseBean;
  */
 public class PdfUploaderBean extends BaseBean implements Cruddable {
 
+  @Resource(name = "pdfUploader")
+  private Properties PDF_UPLOADER_PROPERTIES;
+
   @Override
   public CreateGatewayResponse Create(GatewayRequest request) {
     this.log.entering(this.getClass().getCanonicalName(), "Create");
@@ -77,37 +91,76 @@ public class PdfUploaderBean extends BaseBean implements Cruddable {
       this.log.fine("Got pedimento from request: " + pedimento);
 
       List<Pedimento> pedimentos = new LinkedList<Pedimento>();
-      
+
       if (ejbContext.isCallerInRole("rancher")) {
         long rancherId = getLoggedRancherId();
         if (pedimento.getFolio() != null && !pedimento.getFolio().trim().equals("")) {
           // Retrieve details for single pedimento
-          
+          Pedimento ped = getPedimentoDetails(rancherId, pedimento.getFolio());
+          if (ped != null) {
+            pedimentos.add(ped);
+          }
         } else if (pedimento.getFechaPedimento() != null) {
-          if (pedimento.getRancherId() != 0) {
-            // TODO: Retrieve details for list of pedimentos
+          // Retrieve details for list of pedimentos
+          String fechaPedimento = new SimpleDateFormat("yyyyMMdd").format(pedimento.getFechaPedimento());
+          for (String folio : getFoliosInDate(rancherId, fechaPedimento)) {
+            Pedimento p = new Pedimento();
+            p.setFolio(folio);
+            p.setRancherId(rancherId);
+            p.setFechaPedimento(pedimento.getFechaPedimento());
+            pedimentos.add(p);
           }
         }
       } else if (pedimento.getFolio() != null && !pedimento.getFolio().trim().equals("")) {
         if (pedimento.getRancherId() != 0) {
-          // TODO: Seek on especific rancher
+          // Retrieve details for single pedimento
+          Pedimento ped = getPedimentoDetails(pedimento.getRancherId(), pedimento.getFolio());
+          if (ped != null) {
+            pedimentos.add(ped);
+          }
         } else {
-          // TODO: Seek on all ranchers
+          for (Long rancherId : getUploadedRanchers()) {
+            Pedimento ped = getPedimentoDetails(rancherId, pedimento.getFolio());
+            if (ped != null) {
+              pedimentos.add(ped);
+              break;
+            }
+          }
         }
       } else if (pedimento.getFechaPedimento() != null) {
         if (pedimento.getRancherId() != 0) {
-          // TODO: Seek on especific rancher
+          // Seek on especific rancher
+          String fechaPedimento = new SimpleDateFormat("yyyyMMdd").format(pedimento.getFechaPedimento());
+          for (String folio : getFoliosInDate(pedimento.getRancherId(), fechaPedimento)) {
+            Pedimento p = new Pedimento();
+            p.setFolio(folio);
+            p.setRancherId(pedimento.getRancherId());
+            p.setFechaPedimento(pedimento.getFechaPedimento());
+            pedimentos.add(p);
+          }
         } else {
-          // TODO: Seek on all ranchers
+          response.setError(new Error("VAL03", "El filtro especificado no es válido en la lista de pedimentos",
+              "proxy.PdfUploader.Read"));
+          return response;
         }
       } else if (pedimento.getRancherId() != 0) {
-        // TODO: Retrieve date list of pedimentos for rancher
+        // Retrieve date list of pedimentos for rancher
+        for (String fechaPedimento : getDatesInRancher(pedimento.getRancherId())) {
+          for (String folio : getFoliosInDate(pedimento.getRancherId(), fechaPedimento)) {
+            Pedimento p = new Pedimento();
+            p.setFolio(folio);
+            p.setRancherId(pedimento.getRancherId());
+            p.setFechaPedimento(pedimento.getFechaPedimento());
+            pedimentos.add(p);
+          }
+        }
+        
       } else {
         response.setError(new Error("VAL03", "El filtro especificado no es válido en la lista de pedimentos",
             "proxy.PdfUploader.Read"));
         return response;
       }
-      
+
       if (pedimentos.isEmpty()) {
         response.setError(new Error("VAL02", "No se encontraron datos para el filtro seleccionado", "proxy.RancherBean.Read"));
       } else {
@@ -174,16 +227,72 @@ public class PdfUploaderBean extends BaseBean implements Cruddable {
         result = rancher.getRancherId();
       }
     }
-    
+
     return result;
   }
 
-  private Pedimento getPedimentoDetails(long rancherId, String folio){
+  private Pedimento getPedimentoDetails(long rancherId, String folio) throws IOException, ParseException {
     Pedimento result = null;
-    
-    
-    
+
+    for (String fechaPedimento : getDatesInRancher(rancherId)) {
+      if (getFoliosInDate(rancherId, fechaPedimento).contains(folio)) {
+        result = new Pedimento();
+        Date dFechaPedimento = new SimpleDateFormat("yyyyMMdd").parse(fechaPedimento);
+        result.setFechaPedimento(dFechaPedimento);
+        result.setFolio(folio);
+        result.setRancherId(rancherId);
+        break;
+      }
+    }
+
     return result;
+  }
+
+  private List<String> getDatesInRancher(long rancherId) {
+    List<String> dates = new LinkedList<String>();
+
+    String rancherFileName = PDF_UPLOADER_PROPERTIES.getProperty("uploadPath") + "/" + rancherId;
+
+    File file = new File(rancherFileName);
+    File[] listOfFiles = file.listFiles();
+    for (File f : listOfFiles) {
+      dates.add(f.getName());
+    }
+
+    return dates;
+  }
+
+  private List<String> getFoliosInDate(long rancherId, String fechaPedimento) throws IOException {
+    List<String> folios = new LinkedList<String>();
+
+    String dateFileName = PDF_UPLOADER_PROPERTIES.getProperty("uploadPath") + "/" + rancherId + "/" + fechaPedimento;
+
+    File file = new File(dateFileName);
+    if (file.exists()) {
+      BufferedReader br = new BufferedReader(new FileReader(dateFileName));
+      try {
+        String folio = br.readLine();
+        folios.add(folio);
+      } finally {
+        br.close();
+      }
+    }
+
+    return folios;
+  }
+
+  private List<Long> getUploadedRanchers() {
+    List<Long> ranchersList = new ArrayList<Long>();
+
+    String rancherFileName = PDF_UPLOADER_PROPERTIES.getProperty("uploadPath");
+
+    File file = new File(rancherFileName);
+    File[] listOfFiles = file.listFiles();
+    for (File f : listOfFiles) {
+      ranchersList.add(Long.parseLong(f.getName()));
+    }
+
+    return ranchersList;
   }
 
 }
