@@ -369,12 +369,12 @@ enyo.kind({
 //		if(objRec.accepted_count!=""){
 //			iAc=objRec.accepted_count;
 //		}
-		_objMainHeader.setContent(objRec.rancher_name+" - "+objRec.city_name+"<BR>"+objRec.cattype_name+
+		_objMainHeader.setContent(objRec.rancher_name+" - "+objRec.location_name+"<BR>"+objRec.cattype_name+
 								  "  ("+ objRec.hc_aprox+"/"+objRec.weights[0].weight+")"+
 							  	  "	 "+objRec.arrival_date		
 		);	
 		/*this.$.spacerone.setContent("<strong>"+objRec.rancher_name +"</strong> "+
-									"- "+objRec.city_name+" - "+objRec.cattype_name+
+									"- "+objRec.location_name+" - "+objRec.cattype_name+
 									"  ("+ objRec.hc_aprox+"/"+objRec.weights[0].weight+")"+
 									"	 "+objRec.arrival_date+
 									"</br> Corrales ("+iBy+") - "+sBy);		

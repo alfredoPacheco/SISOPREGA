@@ -29,13 +29,13 @@ enyo.kind({
 			 onInspectionReport:"loadInspectionReport", onHistoricalReport:"loadHistoricalReport",
 			 onUpdateProfile:"loadUpdateProfile",onGoBack:"loadLogIn"},
 			{kind: "receptions.barnyards.map",name:"rancherMap",onGoBack:"stepBack"},
-			{kind: "ranchers.profile.person",name:"profilePerson",onCancel:"stepBack",onUpdate:"updateProfile"},
-			{kind: "ranchers.profile.enterprise",name:"profileEnterprise",onCancel:"stepBack",onUpdate:"updateProfile"},			
+			{kind: "ranchers.profile.person",name:"profilePerson",onCancel:"stepBack",onUpdate:"updateProfile",onChangePW:'changePW'},
+			{kind: "ranchers.profile.enterprise",name:"profileEnterprise",onCancel:"stepBack",onUpdate:"updateProfile",onChangePW:'changePW'},			
 		]},
 	],
 	rendered:function(){
 		this.inherited(arguments);
-		this.$.main.setIndex(0);		
+		this.$.main.setIndex(0);
 	},
 	loadLogIn:function(){
         this.inherited(arguments);
@@ -124,5 +124,14 @@ enyo.kind({
 		}else{
 			alert('Error actualizando profile');
 		}			
+	},
+	changePW:function(){
+		var objData=this.objProfile.getPWDChangeData();
+		if(cacheProfile.changePassword(this.$.login.userID,objData.currentPW,objData.newPW)){
+			this.objProfile.closePopPW();
+			alert('Password Actualizado');
+		}else{
+			alert('Error al intentar cambiar password');
+		}		
 	}
 });

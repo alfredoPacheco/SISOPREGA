@@ -15,7 +15,7 @@ var	_arrReceptionList=[
 		{reception_id:1,rancher_id:1,
 		 rancher_name:"BALDOR / DEL RIO MENDEZ ALAN", arrival_date:"2012-09-15",
 		 cattype_id:1,cattype_name:"CABALLOS",hc_aprox:100,
-		 city_id:1,city_name:"CHIHUAHUA",
+		 location_id:1,location_name:"CHIHUAHUA",
 		 weights:[{hcw_id:0,hc:50,weight:1234}],barnyards:{"1E5":"1E5"},
 		 accepted_count:"",
 		 inspections:[{rejected_id:1,rejected_count:1,reject_id:1,reject_desc:"ENFERMEDAD"}],
@@ -25,7 +25,7 @@ var	_arrReceptionList=[
 		{reception_id:2,rancher_id:2,
 		 rancher_name:"FUERTE / TORRRES FUERTE DIEGO", arrival_date:"2012-09-16",
 		 cattype_id:2,cattype_name:"LLEGUAS",hc_aprox:60,
-		 city_id:2,city_name:"FORANEA",
+		 location_id:2,location_name:"FORANEA",
 		 weights:[{hcw_id:0,hc:50,weight:1234}],barnyards:{},
 		 accepted_count:"",
 		 inspections:[],
@@ -33,7 +33,7 @@ var	_arrReceptionList=[
 		 },
 	];	
 
-var _arrCities=[{city_id:1,city_name:"Chihuahua"},{city_id:2,city_name:"Zona Sur"}];
+var _arrZones=[{zone_id:1,zone_name:"Chihuahua"},{zone_id:2,zone_name:"Zona Sur"}];
 
 var _arrRancherList =[
 					{rancher_id:1,aka:"BALDOR", first_name:"ALAN", last_name:"DEL RIO", mother_name:"MENDEZ",
@@ -71,9 +71,9 @@ var _arrBarnyardsList=[
 	];		
 
 var _arrBarnyardsListCatalog=[
-               		{barnyard_id:1,barnyard_code:"A1", location_id: "1",
+               		{barnyard_id:1,barnyard_code:"A1", zone_id: "1",
                		 barnyard_capacity:[{catclass_id:1,catclass_name:"EQUINO",head_count:75}]},
-               		{barnyard_id:2,barnyard_code:"A2", location_id: "2",
+               		{barnyard_id:2,barnyard_code:"A2", zone_id: "2",
                		 barnyard_capacity:[{catclass_id:4,cattype_name:"BOVINO",head_count:50}]}
                	];	
 
@@ -135,51 +135,51 @@ enyo.kind({
 			}
 		}
 	},
-	getCitiesLS:function(){
-		this.updateCitiesLS();
-		return _arrCitiesLS;
+	getZonesLS:function(){
+		this.updateZonesLS();
+		return _arrZonesLS;
 	},
-	updateCitiesLS:function(){
-		_arrCitiesLS=[];
-		for(var i=0;i<_arrCities.length;i++){		
-				_arrCitiesLS.push({caption:	_arrCities[i].city_name,
-										value:_arrCities[i].city_id});				
+	updateZonesLS:function(){
+		_arrZonesLS=[];
+		for(var i=0;i<_arrZones.length;i++){		
+				_arrZonesLS.push({caption:	_arrZones[i].zone_name,
+										value:_arrZones[i].zone_id});				
 		}					
 	},
-	getCities:function(){
-		return _arrCities;
-	},	
-	getCityByID:function(iCityID){
-		for(var i=0; i<this.getCities().length;i++){
-			if (this.getCities()[i].city_id==iCityID){
-				return this.getCities()[i];
+	getZones:function(){
+		return _arrZones;
+	},
+	getZoneByID:function(iZoneID){
+		for(var i=0; i<this.getZones().length;i++){
+			if (this.getZones()[i].zone_id==iZoneID){
+				return this.getZones()[i];
 			}
 		}
 	},		
 });
 
 var cacheMan = new cache();
-cacheMan.findLocation = function(criteria){				
+cacheMan.findZone = function(criteria){				
 	var result = [];
 	if (criteria != ""){
-		var locations = _arrCities;
+		var zones = _arrZones;
 		var pattern = new RegExp(criteria.trim(), "ig");
-		for (property in locations){
+		for (property in zones){
 			pattern.lastIndex = 0;
-			if (pattern.test(locations[property].city_name)){
-				var location = {caption:locations[property].city_name,value:locations[property].city_id};
-				result.push(location);
+			if (pattern.test(zones[property].zone_name)){
+				var zone = {caption:zones[property].zone_name,value:zones[property].zone_id};
+				result.push(zone);
 			}
 		}	
 	}
 	return result;
 	};
-cacheMan.allLocationsForList = function() {
+cacheMan.getAllZonesForList = function() {
 	var result = [];
-	var locations = _arrCities;	
-	for (property in locations){
-		var location = {caption:locations[property].city_name,value:locations[property].city_id};
-		result.push(location);
+	var zones = _arrZones;	
+	for (property in zones){
+		var zone = {caption:zones[property].zone_name,value:zones[property].zone_id};
+		result.push(zone);
 	}
 	return result;
 };

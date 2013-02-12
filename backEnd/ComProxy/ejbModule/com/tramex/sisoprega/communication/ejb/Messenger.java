@@ -64,19 +64,19 @@ public class Messenger implements Messageable {
 
   private Logger log = Logger.getLogger(Messenger.class.getCanonicalName());
 
-  @EJB(name = "java:global/DataModel/BaseDataModel")
+  @EJB(lookup = "java:global/DataModel/BaseDataModel")
   private RemoteModelable dataModel;
   
-  @EJB(name="java:global/ComProxy/SmtpEmailSender")
+  @EJB(lookup="java:global/ComProxy/SmtpEmailSender")
   private EmailSender smtp;
   
-  @EJB(name="java:global/ComProxy/ClickatellProvider")
+  @EJB(lookup="java:global/ComProxy/MasMensajesProvider")
   private SmsProvider smsMan;
   
-  @Resource(name="mail/sisoprega")
+  @Resource(lookup="mail/sisoprega")
   private Session mailSession;
   
-  @Resource(name="comProxy/Properties")
+  @Resource(lookup="comProxy/Properties")
   private Properties comProxyProps;
   
   private final static String REPORTING_URL = "http://localhost:9090/ReportingGateway/";

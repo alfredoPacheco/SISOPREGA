@@ -15,7 +15,7 @@ enyo.kind({
 		this.inherited(arguments);
 		this.$.rancher_id.setItems(cacheRanchers.getAllForList());
 		this.$.cattype_id.setItems(cacheCattle.getAllCattleType());
-		this.$.city_id.setItems(cacheMan.allLocationsForList());
+		this.$.location_id.setItems(cacheMan.getAllZonesForList());
 	},
 	components: [	
 		{kind: enyo.Scroller,
@@ -71,7 +71,7 @@ enyo.kind({
 							 {layoutKind: enyo.HFlexLayout,components:[
    	  								{
    	  									kind : "controls.autocomplete",
-   	  									name : "city_id",
+   	  									name : "location_id",
    	  									hint:"",
    	  									flex:1,
    	  									contentPack:"end",
@@ -120,9 +120,9 @@ enyo.kind({
 			this.$.cattype_id.setFocus();
 			break;
 		case "cattype_id":
-			this.$.city_id.setFocus();
+			this.$.location_id.setFocus();
 			break;
-		case "city_id":
+		case "location_id":
 			this.$.hc_aprox.forceFocus();
 			break;
 		case "hc_aprox":
@@ -145,15 +145,15 @@ enyo.kind({
 	getReception:function(){
 		var receptionDef;		
 		receptionDef ={rancher_id:null,arrival_date:"",company_name:"",
-					   cattype_id:"",cattype_name:"",hc_aprox:"",city_id:"",city_name:"",
+					   cattype_id:"",cattype_name:"",hc_aprox:"",location_id:"",location_name:"",
 					   weights:[], barnyards:[],accepted_count:"",inspections:[],feed:[]};
 					   
 		var fmt = new enyo.g11n.DateFmt({format: "yyyy/MM/dd", locale: new enyo.g11n.Locale("es_es")});		
 					
 		receptionDef.rancher_name=	this.$.rancher_id.getValue();
 		receptionDef.rancher_id=	this.$.rancher_id.getIndex();						
-		receptionDef.city_id=		this.$.city_id.getIndex();
-		receptionDef.city_name=		this.$.city_id.getValue();
+		receptionDef.location_id=		this.$.location_id.getIndex();
+		receptionDef.location_name=		this.$.location_id.getValue();
 		
 		if(this.$.arrival_date.getValue()!=null){	
 			receptionDef.arrival_date=fmt.format(this.$.arrival_date.getValue());
@@ -171,7 +171,7 @@ enyo.kind({
 	resetValues:function(){
 		this.$.rancher_id.setIndex(-1);
 		this.$.cattype_id.setIndex(1);
-		this.$.city_id.setIndex(1);		
+		this.$.location_id.setIndex(1);		
 		this.$.arrival_date.setValue(new Date());
 		this.$.hc_aprox.setValue("");
 	},
@@ -186,7 +186,7 @@ enyo.kind({
 												  receptionDef.arrival_date.substring(5,7)-1,
 												  receptionDef.arrival_date.substring(8,10)
 										 ));
-			this.$.city_id.setIndex(receptionDef.city_id);
+			this.$.location_id.setIndex(receptionDef.location_id);
 			this.$.cattype_id.setIndex(receptionDef.cattype_id);
 			if(receptionDef.weights.length==1){
 				this.$.hc_aprox.setValue(receptionDef.weights[0].hc);			
