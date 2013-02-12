@@ -496,7 +496,8 @@ DROP TABLE IF EXISTS ctrl_inspection CASCADE;
 CREATE TABLE ctrl_inspection (
   inspection_id SERIAL PRIMARY KEY,
   reception_id integer NOT NULL REFERENCES ctrl_reception(reception_id),
-  inspection_date date NOT NULL
+  inspection_date date NOT NULL,
+  comments text
 );
 
 GRANT ALL ON ctrl_inspection TO sisoprega;
