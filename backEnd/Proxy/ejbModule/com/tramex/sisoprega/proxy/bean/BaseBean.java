@@ -56,7 +56,7 @@ public class BaseBean {
   @Resource
   protected SessionContext ejbContext;
   
-  @EJB(name="java:global/DataModel/BaseDataModel")
+  @EJB(lookup="java:global/DataModel/BaseDataModel")
   protected RemoteModelable dataModel;
   
   public BaseBean(){
