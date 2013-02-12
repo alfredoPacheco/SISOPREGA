@@ -8,7 +8,7 @@ enyo.kind({
 		//AJAX
 		return this.arrObj;
 	},
-	create:function(objCreate,cbObj,cbMethod){
+	Create:function(objCreate,cbObj,cbMethod){
 		//AJAX
 		//SCRIM.on
 		//scrimoff

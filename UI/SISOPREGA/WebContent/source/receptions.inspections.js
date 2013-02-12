@@ -4,8 +4,26 @@ enyo.kind({
 	iSelect:null,
 	_objRec:null,		
 	components:[
+	   {kind: "Popup",name: "comment", lazy:false,showHideMode: "transition", className:"formBG",
+	    openClassName: "zoomFadeIn", className: "transitioner2", layoutKind: "VFlexLayout",width: "90%",
+	    style: "overflow: hidden",scrim: true,
+	    getComment:function(){
+	    	return this.$.comments.getValue();
+	    },
+	    setComment:function(sComment){
+	    	this.$.comments.setValue(sComment);
+	    },	    
+	    components:[
+	 	    {components:[
+	 	        {content:"Comentarios"},
+	 	        {kind: "Input", name:"comments",hint:"Agregar comentario"},
+	 	        {layoutKind: "HFlexLayout",components:[
+	 	    	 	{kind: "Button",className: "enyo-button-affirmative",caption: "OK",flex:1,onclick:"addComment"},	 	        
+	 	   	 	    {kind: "Button",className: "enyo-button-negative",caption: "Cancel",flex:1,onclick:"closeComments"}	 	                     
+	 	        ]}]}
+		]},	            
 		{kind: enyo.Scroller, name:"scrollProductList",flex: 1,
-		 className:"listBG",			
+		 className:"listBG",			 
  		 components: [
 					{kind: enyo.VirtualRepeater, name: "productList", onSetupRow: "setupRow", 
 					 onclick: "setReject",								
@@ -29,8 +47,8 @@ enyo.kind({
 		},
 		{kind: "Toolbar",	
 		components: [					 
-		{kind: "ToolInput", name:"accepted_count", width:"23%",  hint:"Aceptados",changeOnInput: true,},					
-		{kind: "ToolInput", name:"rejected_count", width:"23%",  hint:"Rechazados",changeOnInput: true,},			
+		{kind: "ToolInput", name:"rejected_count", width:"23%",  hint:"Rechazados",changeOnInput: true,},	
+		{kind : "Button",name : "btnComm",className : "enyo-button-affirmative",caption : "Comentario",onclick : "openComments"},		
 		{kind: "ListSelector", name: 'reject_id', width:"50%",
 		 style:"width:100%;color:white", contentPack:"end",
 			items: [] ,flex: 1,contentPack:"end"},							
@@ -50,7 +68,7 @@ enyo.kind({
 		]},					 		
 	],
 	ready:function(){
-		_objPopupHeader = enyo.$.sisoprega_mainMenu_receptionsMap_map_lblInfo;
+		_objPopupHeader = enyo.$.sisoprega_mainMenu_receptionsMap.$.lblInfo;
 	},
 	setupRow:function(inSender, inIndex){		
 		var objInspection;
@@ -71,8 +89,7 @@ enyo.kind({
 		this.$.productList.render();
 	},
 	addReject: function() {		
-		cacheReceptions.addReject(this.$.accepted_count.getValue(),
-		                          this._objRec,this.getReject(),this,"resetValues");
+		cacheReceptions.addReject(this._objRec,this.getReject(),this,"resetValues");
 	},
 	getReject:function(){
 		var objData=null;
@@ -85,9 +102,7 @@ enyo.kind({
 		return objData; 
 	},
 	updateReject:function(){
-		cacheReceptions.updateReject(this.$.accepted_count.getValue(),
-		                     this._objRec,this.iSelect,this.getReject(),
-							 this,"afterUpdate");
+		cacheReceptions.updateReject(this._objRec,this.iSelect,this.getReject(),this,"afterUpdate");
 	},
 	afterUpdate:function(){
 		this.toggleAdd();
@@ -98,7 +113,6 @@ enyo.kind({
 		this.updateHeader();		
 	},
 	set:function(objVar){
-		this.$.accepted_count.setValue(objVar.accepted_count);
 		this._objRec=objVar;
 	},
 	setReject:function(inSender, inEvent){
@@ -121,7 +135,6 @@ enyo.kind({
 		this.resetValues();	
 	},	
 	resetValues:function(){
-		this.$.rejected_count.setValue(this._objRec.accepted_count);
 		this.$.reject_id.setItems(cacheRejects.getLS());	
 		this.$.reject_id.setValue(0);
 		this.$.rejected_count.setValue("");		
@@ -144,5 +157,29 @@ enyo.kind({
 		
 		totalAccepted = totalHeads - totalRejected;
 		_objPopupHeader.setContent("Total HC: [" + totalHeads + "]   Total Aceptados: [" + totalAccepted + "]   Total Rechazados: [" + totalRejected + "]");
+	},
+	closeComments:function(){			
+		this.$.comment.close();				
+	},
+	openComments:function(){	
+		if(this._objRec.inspections.length>0){
+			if(this._objRec.inspections[this._objRec.inspections.length-1].comments){
+				this.$.comments.setValue(this._objRec.inspections[this._objRec.inspections.length-1].comments);
+			}
+			this.$.comment.openAtCenter();	
+		}else{
+			cacheMan.setMessage("", "Para agregar comentarios es necesario agregar almenos un rechazo");
+		}
+				
+	},	
+	addComment:function(){			
+		if(!cacheReceptions.addInspectionComment(this._objRec.reception_id,
+					this._objRec.inspections[this._objRec.inspections.length-1].rejected_id,
+					this._objRec.inspections[this._objRec.inspections.length-1].inspectionDate,this.$.comments.getValue())){					
+			cacheMan.setMessage("", "Error al enviar commentario de inspeccion");
+		}else{
+			this._objRec.inspections[this._objRec.inspections.length-1].comments=this.$.comments.getValue();
+			this.closeComments();
+		}			
 	}
 });

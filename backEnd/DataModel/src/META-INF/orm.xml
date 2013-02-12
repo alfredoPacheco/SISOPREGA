@@ -1,0 +1,867 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings version="2.0"
+	xmlns="http://java.sun.com/xml/ns/persistence/orm" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm http://java.sun.com/xml/ns/persistence/orm_2_0.xsd">
+	<persistence-unit-metadata>
+		<persistence-unit-defaults>
+			<access>PROPERTY</access>
+		</persistence-unit-defaults>
+	</persistence-unit-metadata>
+	<entity class="com.tramex.sisoprega.dto.Rancher">
+		<table name="cat_person_rancher" />
+		<named-query name="RANCHER_BY_ID">
+			<description>Get a single rancher by rancherId</description>
+			<query>SELECT r FROM Rancher r WHERE r.rancherId = :rancherId</query>
+		</named-query>
+		<named-query name="ALL_RANCHERS">
+			<description>Get all ranchers in database</description>
+			<query>SELECT r FROM Rancher r ORDER BY r.lastName, r.motherName, r.firstName, r.rancherId</query>
+		</named-query>
+		<attributes>
+			<id name="rancherId">
+				<column name="rancher_id" />
+				<generated-value strategy="IDENTITY" />
+			</id>
+			<basic name="birthDate">
+				<column name="birth_date" />
+				<temporal>DATE</temporal>
+			</basic>
+			<basic name="emailAddress">
+				<column name="email_add" length="150" />
+			</basic>
+			<basic name="firstName">
+				<column name="first_name" length="50" nullable="false" />
+			</basic>
+			<basic name="lastName">
+				<column name="last_name" length="50" nullable="false" />
+			</basic>
+			<basic name="motherName">
+				<column name="mother_name" length="50" />
+			</basic>
+			<basic name="phone">
+				<column name="telephone" length="20" />
+			</basic>
+		</attributes>
+	</entity>
+	<entity class="com.tramex.sisoprega.dto.EnterpriseRancher">
+		<table name="cat_enterprise_rancher" />
+		<named-query name="ENTERPRISE_RANCHER_BY_ID">
+			<description>Get a single enterprise rancher by enterpriseId</description>
+			<query>SELECT enterprise FROM EnterpriseRancher enterprise WHERE enterprise.enterpriseId = :enterpriseId</query>
+		</named-query>
+		<named-query name="ALL_ENTERPRISE_RANCHERS">
+			<description>Get all enterprise ranchers in database</description>
+			<query>SELECT enterprise FROM EnterpriseRancher enterprise ORDER BY enterprise.legalName, enterprise.legalId, enterprise.state</query>
+		</named-query>
+		<named-query name="ENTERPRISE_RANCHER_BY_RFC">
+			<description>Get a single enterprise rancher record by legal_id</description>
+			<query>SELECT enterprise FROM EnterpriseRancher enterprise WHERE enterprise.legalId = :rfc</query>
+		</named-query>
+		<named-query name="ENTERPRISE_RANCHER_BY_LEGAL_NAME">
+			<description>Get a single enterprise rancher record by legal_name</description>
+			<query>SELECT enterprise FROM EnterpriseRancher enterprise WHERE enterprise.legalName = :legalName</query>
+		</named-query>
+		<attributes>
+			<id name="enterpriseId">
+				<column name="enterprise_id" />
+				<generated-value strategy="IDENTITY" />
+			</id>
+			<basic name="addressOne">
+				<column name="address_one" nullable="false" length="100" />
+			</basic>
+			<basic name="addressTwo">
+				<column name="address_two" length="100" />
+			</basic>
+			<basic name="city">
+				<column name="city" length="80" nullable="false" />
+			</basic>
+			<basic name="legalId">
+				<column name="legal_id" length="13" nullable="false" unique="true" />
+			</basic>
+			<basic name="legalName">
+				<column name="legal_name" length="100" nullable="false"
+					unique="true" />
+			</basic>
+			<basic name="state">
+				<column name="address_state" length="80" nullable="false" />
+			</basic>
+			<basic name="telephone">
+				<column name="telephone" length="20" />
+			</basic>
+			<basic name="zipCode">
+				<column name="zip_code" length="9" nullable="false" />
+			</basic>
+		</attributes>
+	</entity>
+	<entity class="com.tramex.sisoprega.dto.RancherInvoice">
+		<table name="cat_rancher_invoice" />
+		<named-query name="RANCHER_INVOICE_BY_ID">
+			<description>Get a single rancher invoice record using it's id</description>
+			<query>SELECT invoice FROM RancherInvoice invoice WHERE invoice.rancherInvoiceId = :rancherInvoiceId</query>
+		</named-query>
+		<named-query name="RANCHER_INVOICE_BY_RANCHER_ID">
+			<description>Get a single rancher invoice record using the rancherId</description>
+			<query>SELECT invoice FROM RancherInvoice invoice WHERE invoice.rancherId = :rancherId</query>
+		</named-query>
+		<named-query name="RANCHER_INVOICE_BY_RFC">
+			<description>Get a single rancher invoicing record by legal_id</description>
+			<query>SELECT invoice FROM RancherInvoice invoice WHERE invoice.legalId = :rfc</query>
+		</named-query>
+		<named-query name="RANCHER_INVOICE_BY_LEGAL_NAME">
+			<description>Get a single rancher invoicing record by legal_name</description>
+			<query>SELECT invoice FROM RancherInvoice invoice WHERE invoice.legalName = :legalName</query>
+		</named-query>
+		<attributes>
+			<id name="rancherInvoiceId">
+				<column name="rancher_invoice_id" />
+				<generated-value strategy="IDENTITY" />
+			</id>
+			<basic name="rancherId">
+				<column name="rancher_id" nullable="false" unique="true"
+					updatable="false" />
+			</basic>
+			<basic name="addressOne">
+				<column name="address_one" length="100" nullable="false" />
+			</basic>
+			<basic name="addressState">
+				<column name="address_state" length="80" nullable="false" />
+			</basic>
+			<basic name="addressTwo">
+				<column name="address_two" length="100" />
+			</basic>
+			<basic name="city">
+				<column name="city" length="80" nullable="false" />
+			</basic>
+			<basic name="legalId">
+				<column name="legal_id" length="13" nullable="false" unique="true" />
+			</basic>
+			<basic name="legalName">
+				<column name="legal_name" length="100" nullable="false"
+					unique="true" />
+			</basic>
+			<basic name="zipCode">
+				<column name="zip_code" nullable="false" />
+			</basic>
+		</attributes>
+	</entity>
+	<entity class="com.tramex.sisoprega.dto.RancherContact">
+		<table name="cat_rancher_contact" />
+		<named-query name="RANCHER_CONTACT_BY_ID">
+			<description>Get a rancher contact by its contact Id</description>
+			<query>
+			SELECT contact 
+			FROM RancherContact contact 
+			WHERE contact.contactId = :contactId</query>
+		</named-query>
+		<named-query name="RANCHER_CONTACT_BY_RANCHER_ID">
+			<description>Get all rancher contacts by rancher id</description>
+			<query>
+			SELECT contact 
+			FROM RancherContact contact 
+			WHERE contact.rancherId = :rancherId 
+			ORDER BY contact.firstName, contact.lastName, contact.motherName</query>
+		</named-query>
+		<attributes>
+			<id name="contactId">
+				<column name="contact_id" />
+				<generated-value strategy="IDENTITY" />
+			</id>
+			<basic name="rancherId">
+				<column name="rancher_id" nullable="false" />
+			</basic>
+			<basic name="firstName">
+				<column name="first_name" nullable="false" length="50" />
+			</basic>
+			<basic name="lastName">
+				<column name="last_name" nullable="false" length="50" />
+			</basic>
+			<basic name="motherName">
+				<column name="mother_name" length="50" />
+			</basic>
+			<basic name="birthDate">
+				<column name="birth_date" />
+				<temporal>DATE</temporal>
+			</basic>
+			<basic name="emailAddress">
+				<column name="email_add" length="150" />
+			</basic>
+			<basic name="addressOne">
+				<column name="address_one" length="100" />
+			</basic>
+			<basic name="addressTwo">
+				<column name="address_two" length="100" />
+			</basic>
+			<basic name="addressState">
+				<column name="address_state" length="80" />
+			</basic>
+			<basic name="zipCode">
+				<column name="zip_code" />
+			</basic>
+		</attributes>
+	</entity>
+	<entity class="com.tramex.sisoprega.dto.EnterpriseContact">
+		<table name="cat_rancher_contact" />
+		<named-query name="ENTERPRISE_CONTACT_BY_ID">
+			<description>Get an enterprise contact by its contact id</description>
+			<query>
+			SELECT contact
+			FROM EnterpriseContact contact
+			WHERE contact.contactId = :contactId
+			</query>
+		</named-query>
+		<named-query name="ENTERPRISE_CONTACT_BY_ENTERPRISE_ID">
+			<description> Get all enterprise contact by enterprise id</description>
+			<query>
+				SELECT contact
+				FROM EnterpriseContact contact
+				WHERE contact.enterpriseId = :enterpriseId
+				ORDER BY contact.firstName, contact.lastName, contact.motherName
+			</query>
+		</named-query>
+		<attributes>
+			<id name="contactId">
+				<column name="contact_id" />
+				<generated-value strategy="IDENTITY" />
+			</id>
+			<basic name="enterpriseId">
+				<column name="rancher_id" nullable="false" />
+			</basic>
+			<basic name="firstName">
+				<column name="first_name" nullable="false" length="50" />
+			</basic>
+			<basic name="lastName">
+				<column name="last_name" nullable="false" length="50" />
+			</basic>
+			<basic name="motherName">
+				<column name="mother_name" length="50" />
+			</basic>
+			<basic name="birthDate">
+				<column name="birth_date" />
+				<temporal>DATE</temporal>
+			</basic>
+			<basic name="emailAddress">
+				<column name="email_add" length="150" />
+			</basic>
+			<basic name="addressOne">
+				<column name="address_one" length="100" />
+			</basic>
+			<basic name="addressTwo">
+				<column name="address_two" length="100" />
+			</basic>
+			<basic name="addressState">
+				<column name="address_state" length="80" />
+			</basic>
+			<basic name="zipCode">
+				<column name="zip_code" />
+			</basic>
+		</attributes>
+	</entity>
+	<entity class="com.tramex.sisoprega.dto.CattleClass">
+		<table name="cat_cattle_class" />
+		<named-query name="CATTLE_CLASS_BY_ID">
+			<description>Retrieves a single cattle class record by it's ID</description>
+			<query>SELECT cattle FROM CattleClass cattle WHERE cattle.catclassId = :catclassId</query>
+		</named-query>
+		<named-query name="ALL_CATTLE_CLASSES">
+			<description>Retrieves all cattle class records from database</description>
+			<query>SELECT cattle FROM CattleClass cattle ORDER BY cattle.catclassName</query>
+		</named-query>
+		<attributes>
+			<id name="catclassId">
+				<column name="catclass_id" />
+				<generated-value strategy="IDENTITY" />
+			</id>
+			<basic name="catclassName">
+				<column name="catclass_name" length="50" unique="true" />
+			</basic>
+		</attributes>
+	</entity>
+	<entity class="com.tramex.sisoprega.dto.CattleType">
+		<table name="cat_cattle_type" />
+		<named-query name="ALL_CATTLE_TYPE">
+			<description>Retrieves all cattle type records from database </description>
+			<query>SELECT Cattle FROM CattleType Cattle ORDER BY Cattle.cattypeName</query>
+		</named-query>
+		<named-query name="CATTLE_TYPE_BY_ID">
+			<description>Retrieve a single cattle type record using the type id</description>
+			<query>SELECT Cattle FROM CattleType Cattle WHERE Cattle.cattypeId= :cattypeId</query>
+		</named-query>
+		<named-query name="CATTLE_TYPE_BY_CLASS_ID">
+			<description>Retrieve the cattle types associated with a cattle class</description>
+			<query>SELECT Cattle FROM CattleType Cattle WHERE Cattle.catclassId = :catClassId</query>
+		</named-query>
+		<attributes>
+			<id name="cattypeId">
+				<column name="cattype_id" />
+				<generated-value strategy="IDENTITY" />
+			</id>
+			<basic name="catclassId">
+				<column name="catclass_id" />
+			</basic>
+			<basic name="cattypeName">
+				<column name="cattype_name" />
+			</basic>
+		</attributes>
+	</entity>
+	<entity class="com.tramex.sisoprega.dto.Location">
+		<table name="cat_location" />
+		<named-query name="CAT_LOCATION_BY_ID">
+			<description>Retrieves a single catLocation record by ID</description>
+			<query>SELECT loc FROM Location loc WHERE loc.locationId = :locationId</query>
+		</named-query>
+		<named-query name="ALL_CAT_LOCATION">
+			<description>Retrieves all catalog location records from database</description>
+			<query>SELECT loc FROM Location loc ORDER BY loc.locationName</query>
+		</named-query>
+		<attributes>
+			<id name="locationId">
+				<column name="location_id" />
+				<generated-value strategy="IDENTITY" />
+			</id>
+			<basic name="locationName">
+				<column name="location_name" />
+			</basic>
+		</attributes>
+	</entity>
+	<entity class="com.tramex.sisoprega.dto.Barnyard">
+		<table name="cat_barnyard" />
+		<named-query name="BARNYARD_BY_ID">
+			<description>Retrieves a single catBarnyard record by ID</description>
+			<query>SELECT bar FROM Barnyard bar WHERE bar.barnyardId = :barnyardId</query>
+		</named-query>
+		<named-query name="BARNYARD_BY_LOCATION">
+			<description>Retrieves a list of barnyards given its location id</description>
+			<query>SELECT barn FROM Barnyard barn WHERE barn.locationId = :locationId ORDER BY barn.barnyardCode</query>
+		</named-query>
+		<named-query name="ALL_BARNYARDS">
+			<description>Retrieves all barnyard records from database.</description>
+			<query>SELECT barn FROM Barnyard barn ORDER BY barn.barnyardCode</query>
+		</named-query>
+		<attributes>
+			<id name="barnyardId">
+				<column name="barnyard_id" />
+				<generated-value strategy="IDENTITY" />
+			</id>
+			<basic name="available">
+				<column name="available" />
+			</basic>
+			<basic name="barnyardCode">
+				<column name="barnyard_code" />
+			</basic>
+			<basic name="locationId">
+				<column name="zone_id" />
+			</basic>
+		</attributes>
+	</entity>
+	<entity class="com.tramex.sisoprega.dto.BarnyardCapacity">
+		<table name="cat_barnyard_capacity" />
+		<named-query name="BARNYARD_CAPACITY_BY_ID">
+			<description>Retrieves a single catBarnyardCapacity record by ID</description>
+			<query>SELECT barCa FROM BarnyardCapacity barCa WHERE barCa.capacityId = :capacityId</query>
+		</named-query>
+		<named-query name="BARNYARD_CAPACITY_BY_BARNYARD_AND_CATTLE">
+			<description>Retrieves a single barnyard capacity record using the barnyard and the cattle</description>
+			<query>SELECT capacity FROM BarnyardCapacity capacity WHERE capacity.barnyardId = :barnyardId AND capacity.catclassId = :cattleClassId</query>
+		</named-query>
+		<named-query name="ALL_BARNYARD_CAPACITIES">
+			<description>Get all records of barnyard capacities in database</description>
+			<query>SELECT barCa FROM BarnyardCapacity barCa ORDER BY barCa.barnyardId</query>
+		</named-query>
+		<attributes>
+			<id name="capacityId">
+				<column name="capacity_id" />
+				<generated-value strategy="IDENTITY" />
+			</id>
+			<basic name="barnyardId">
+				<column name="barnyard_id" />
+			</basic>
+			<basic name="catclassId">
+				<column name="catclass_id" />
+			</basic>
+			<basic name="headCount">
+				<column name="head_count" />
+			</basic>
+		</attributes>
+	</entity>
+	<entity class="com.tramex.sisoprega.dto.MeasurementUnit">
+		<table name="cat_measurement_unit" />
+		<named-query name="CAT_MEASUREMENTUNIT_BY_ID">
+			<description>Retrieves a single catMeasurementUnit record by ID</description>
+			<query>SELECT MeaUni FROM MeasurementUnit MeaUni WHERE MeaUni.unitId = :unitId</query>
+		</named-query>
+		<named-query name="ALL_MEASUREMENT_UNITS">
+			<description>Retrieves all measurement units from database.</description>
+			<query>SELECT mu FROM MeasurementUnit mu ORDER BY mu.unitAbreviation</query>
+		</named-query>
+		<attributes>
+			<id name="unitId">
+				<column name="unit_id" />
+				<generated-value strategy="IDENTITY" />
+			</id>
+			<basic name="unitName">
+				<column name="unit_name" />
+			</basic>
+			<basic name="unitAbreviation">
+				<column name="Unit_abreviation" />
+			</basic>
+		</attributes>
+	</entity>
+	<entity class="com.tramex.sisoprega.dto.MeasurementUnitEquivalence">
+		<table name="cat_measurement_unit_equivalence" />
+		<named-query name="CAT_MEASUREMENTUNITEQUIVALENCE_BY_ID">
+			<description>Retrieves a single catMeasurementUnitEquivalence record by ID</description>
+			<query>SELECT MeaUnEq FROM MeasurementUnitEquivalence MeaUnEq WHERE MeaUnEq.equivalenceId = :equivalenceId</query>
+		</named-query>
+		<named-query name="EQUIVALENCE_BY_UNIT_ID">
+			<description>Retrieves the equivalence of a given unit id</description>
+			<query>SELECT equivalence FROM MeasurementUnitEquivalence equivalence WHERE equivalence.unitSrc = :unitId</query>
+		</named-query>
+		<attributes>
+			<id name="equivalenceId">
+				<column name="equivalence_id" />
+				<generated-value strategy="IDENTITY" />
+			</id>
+			<basic name="equivalence">
+				<column name="equivalence" />
+			</basic>
+			<basic name="unitDest">
+				<column name="unit_dest" />
+			</basic>
+			<basic name="unitSrc">
+				<column name="unit_src" />
+			</basic>
+		</attributes>
+	</entity>
+	<entity class="com.tramex.sisoprega.dto.Reception">
+		<table name="ctrl_reception" />
+		<named-query name="CRT_RECEPTION_BY_ID">
+			<description>Retrieves a single crtReception record by ID</description>
+			<query>SELECT Recep FROM Reception Recep WHERE Recep.receptionId = :receptionId</query>
+		</named-query>
+		<named-query name="ALL_RECEPTIONS">
+			<description>Retrieves all reception records from database.</description>
+			<query>SELECT rec FROM Reception rec ORDER BY rec.rancherId</query>
+		</named-query>
+		<named-query name="RECEPTIONS_BY_RANCHER_ID">
+			<description>Retrieves all reception records from database by rancher ID</description>
+			<query>SELECT rec FROM Reception rec WHERE rec.rancherId=:rancherID</query>
+		</named-query>
+		<attributes>
+			<id name="receptionId">
+				<column name="reception_id" />
+				<generated-value strategy="IDENTITY" />
+			</id>
+			<basic name="dateAllotted">
+				<column name="date_allotted" />
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="rancherId">
+				<column name="rancher_id" />
+			</basic>
+			<basic name="locationId">
+				<column name="location_id" />
+			</basic>
+			<basic name="cattleType">
+				<column name="cattle_type" />
+			</basic>
+		</attributes>
+	</entity>
+	<entity class="com.tramex.sisoprega.dto.ReceptionBarnyard">
+		<table name="ctrl_reception_barnyard" />
+		<named-query name="CRT_RECEPTIONBARNYARD_BY_ID">
+			<description>Retrieves a single crtReceptionBarnyard record by ID</description>
+			<query>SELECT RecepYard FROM ReceptionBarnyard RecepYard WHERE RecepYard.recBarnyardId = :recBarnyardId</query>
+		</named-query>
+		<named-query name="RECEPTION_BARNYARD_BY_RECEPTION_ID">
+			<description>Retrieves a list of barnyards for a given reception id</description>
+			<query>SELECT rec FROM ReceptionBarnyard rec WHERE rec.receptionId = :receptionId ORDER BY rec.barnyardId</query>
+		</named-query>
+		<named-query name="RECEPTION_BARNYARD_BY_BARNYARD_ID">
+			<description>Retrieves a list of receptions for a given barnyard_id</description>
+			<query>SELECT rec FROM ReceptionBarnyard rec WHERE rec.barnyardId = :barnyardId ORDER BY rec.receptionId</query>
+		</named-query>
+		<named-query name="RECEPTION_BARNYARD_BY_BARNYARD_ID_AND_RECEPTION_ID">
+			<description>Retrieves a list of receptions for a given barnyard_id and reception_id</description>
+			<query>SELECT rec FROM ReceptionBarnyard rec WHERE rec.barnyardId = :barnyard_id and rec.receptionId = :reception_id</query>
+		</named-query>
+		<attributes>
+			<id name="recBarnyardId">
+				<column name="rec_barnyard_id" />
+				<generated-value strategy="IDENTITY" />
+			</id>
+			<basic name="barnyardId">
+				<column name="barnyard_id" />
+			</basic>
+			<basic name="receptionId">
+				<column name="reception_id" />
+			</basic>
+		</attributes>
+	</entity>
+	<entity class="com.tramex.sisoprega.dto.ReceptionHeadcount">
+		<table name="ctrl_reception_headcount" />
+		<named-query name="CRT_RECEPTIONHEADCOUNT_BY_ID">
+			<description>Retrieves a single crtReceptionHeadcount record by ID</description>
+			<query>SELECT RecepHcount FROM ReceptionHeadcount RecepHcount WHERE RecepHcount.headcountId = :headcountId</query>
+		</named-query>
+		<named-query name="RECEPTION_HEADCOUNT_BY_RECEPTION_ID">
+			<description>Retrieves a list of reception headcounts by ReceptionID</description>
+			<query>SELECT RecepHcount FROM ReceptionHeadcount RecepHcount WHERE RecepHcount.receptionId = :receptionId</query>
+		</named-query>
+		<attributes>
+			<id name="headcountId">
+				<column name="headcount_id" />
+				<generated-value strategy="IDENTITY" />
+			</id>
+			<basic name="receptionId">
+				<column name="reception_id" />
+			</basic>
+			<basic name="hc">
+				<column name="hc" />
+			</basic>
+			<basic name="weight">
+				<column name="weight" />
+			</basic>
+			<basic name="weightUom">
+				<column name="weight_uom" />
+			</basic>
+		</attributes>
+	</entity>
+	<entity class="com.tramex.sisoprega.dto.FeedOrder">
+		<table name="ctrl_feed_order" />
+		<named-query name="CRT_FEEDORDER_BY_ID">
+			<description>Retrieves a single Feed Order record by its ID</description>
+			<query>SELECT FeedOrd FROM FeedOrder FeedOrd WHERE FeedOrd.orderId = :orderId</query>
+		</named-query>
+		<named-query name="FEEDORDER_BY_RECEPTION_ID">
+			<description>Retrieves a list of feed orders using the reception id.</description>
+			<query>SELECT feed FROM FeedOrder feed WHERE feed.receptionId = :receptionId</query>
+		</named-query>
+		<attributes>
+			<id name="orderId">
+				<column name="order_id" />
+				<generated-value strategy="IDENTITY" />
+			</id>
+			<basic name="feedDate">
+				<column name="feed_date" />
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="receptionId">
+				<column name="reception_id" />
+			</basic>
+			<basic name="feedOriginator">
+				<column name="feed_originator" />
+			</basic>
+			<basic name="handling">
+				<column name="handling" />
+			</basic>
+		</attributes>
+	</entity>
+	<entity class="com.tramex.sisoprega.dto.Food">
+		<table name="cat_food" />
+		<named-query name="CAT_FOOD_BY_ID">
+			<description>Retrieves a single crtFood record by ID</description>
+			<query>SELECT fod FROM Food fod WHERE fod.foodId = :foodId</query>
+		</named-query>
+		<named-query name="ALL_FOOD">
+			<description>Retrieves all records for food in database.</description>
+			<query>SELECT f FROM Food f ORDER BY f.foodName</query>
+		</named-query>
+		<attributes>
+			<id name="foodId">
+				<column name="food_id" />
+				<generated-value strategy="IDENTITY" />
+			</id>
+			<basic name="foodName">
+				<column name="food_name" />
+			</basic>
+		</attributes>
+	</entity>
+	<entity class="com.tramex.sisoprega.dto.FeedOrderDetails">
+		<table name="ctrl_feed_order_details" />
+		<named-query name="CRT_FEEDORDERDETAILS_BY_ID">
+			<description>Retrieves a single crtFood record by ID</description>
+			<query>SELECT FeOrDls FROM FeedOrderDetails FeOrDls WHERE FeOrDls.fodId = :fodId</query>
+		</named-query>
+		<named-query name="FOD_BY_ORDER_ID">
+			<description>Retrieves a list of feed order details based in the feed orderId</description>
+			<query>SELECT fod FROM FeedOrderDetails fod WHERE fod.orderId = :orderId ORDER BY fod.foodId</query>
+		</named-query>
+		<named-query name="FEED_ORDER_DETAILS_BY_ORDER_ID_AND_FOOD_ID">
+			<description>Retrieves a list of feed order details based in the feed orderId and foodId</description>
+			<query>SELECT fod FROM FeedOrderDetails fod WHERE fod.orderId = :order_id and fod.foodId = :food_id</query>
+		</named-query>
+		<attributes>
+			<id name="fodId">
+				<column name="id" />
+				<generated-value strategy="IDENTITY" />
+			</id>
+			<basic name="foodId">
+				<column name="food_id" />
+			</basic>
+			<basic name="orderId">
+				<column name="order_id" />
+			</basic>
+			<basic name="quantity">
+				<column name="quantity" />
+			</basic>
+		</attributes>
+	</entity>
+	<entity class="com.tramex.sisoprega.dto.Inspection">
+		<table name="ctrl_inspection" />
+		<named-query name="CRT_INSPECTION_BY_ID">
+			<description>Retrieves a single crtFood record by ID</description>
+			<query>SELECT Insp FROM Inspection Insp WHERE Insp.inspectionId = :inspectionId</query>
+		</named-query>
+		<named-query name="INSPECTION_BY_RECEPTION_ID">
+			<description>Retrieves all inspection records from a given reception</description>
+			<query>SELECT insp FROM Inspection insp WHERE insp.receptionId = :receptionId ORDER BY insp.inspectionDate desc</query>
+		</named-query>
+		<attributes>
+			<id name="inspectionId">
+				<column name="inspection_id" />
+				<generated-value strategy="IDENTITY" />
+			</id>
+			<basic name="inspectionDate">
+				<column name="inspection_date" />
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="receptionId">
+				<column name="reception_id" />
+			</basic>
+			<basic name="comments">
+				<column name="comments" />
+			</basic>
+		</attributes>
+	</entity>
+	<entity class="com.tramex.sisoprega.dto.InspectionBarnyard">
+		<table name="ctrl_inspection_barnyard" />
+		<named-query name="CRT_INSPECTIONBARNYARD_BY_ID">
+			<description>Retrieves a single crtFood record by ID</description>
+			<query>SELECT InspBar FROM InspectionBarnyard InspBar WHERE InspBar.ibId = :ibId</query>
+		</named-query>
+		<named-query name="IB_BY_INSPECTION_ID">
+			<description>Retrieves all barnyards for a given inspection id</description>
+			<query>SELECT ins FROM InspectionBarnyard ins WHERE ins.inspectionId = :inspectionId ORDER BY ins.barnyardId</query>
+		</named-query>
+		<attributes>
+			<id name="ibId">
+				<column name="id" />
+				<generated-value strategy="IDENTITY" />
+			</id>
+			<basic name="inspectionId">
+				<column name="inspection_id" />
+			</basic>
+			<basic name="barnyardId">
+				<column name="barnyard_Id" />
+			</basic>
+		</attributes>
+	</entity>
+	<entity class="com.tramex.sisoprega.dto.InspectionDetails">
+		<table name="ctrl_inspection_result" />
+		<named-query name="CRT_INSPECTION_DETAILS_BY_ID">
+			<description>Retrieves a single inspection details record by ID</description>
+			<query>SELECT InspDet FROM InspectionDetails InspDet WHERE InspDet.inspectionDetailsId = :inspDetId</query>
+		</named-query>
+		<named-query name="INSPECTION_DETAILS_BY_INSPECTION_ID">
+			<description>Retrieves all inspection details for a given inspection id</description>
+			<query>SELECT ins FROM InspectionDetails ins WHERE ins.inspectionId = :inspId ORDER BY ins.inspectionCodeId</query>
+		</named-query>
+		<attributes>
+			<id name="inspectionDetailsId">
+				<column name="id" />
+				<generated-value strategy="IDENTITY" />
+			</id>
+			<basic name="inspectionId">
+				<column name="inspection_id" />
+			</basic>
+			<basic name="inspectionCodeId">
+				<column name="inspection_code_id" />
+			</basic>
+			<basic name="hc">
+				<column name="hc" />
+			</basic>
+			<basic name="weight">
+				<column name="weight" />
+			</basic>
+			<basic name="weightUom">
+				<column name="weight_uom" />
+			</basic>
+			<basic name="note">
+				<column name="note" />
+			</basic>
+		</attributes>
+	</entity>
+	<entity class="com.tramex.sisoprega.dto.InspectionCode">
+		<table name="cat_inspection_code" />
+		<named-query name="CAT_INSPECTIONCODE_BY_ID">
+			<description>Retrieves a single crtFood record by ID</description>
+			<query>SELECT InspCod FROM InspectionCode InspCod WHERE InspCod.inspectionCodeId = :inspectionCodeId</query>
+		</named-query>
+		<named-query name="ALL_INSPECTION_CODES">
+			<description>Retrieves all inspection codes from database</description>
+			<query>SELECT ic FROM InspectionCode ic ORDER BY ic.inspectionCodeDescription</query>
+		</named-query>
+		<attributes>
+			<id name="inspectionCodeId">
+				<column name="inspection_code_id" />
+				<generated-value strategy="IDENTITY" />
+			</id>
+			<basic name="inspectionCodeDescription">
+				<column name="inspection_code_description" />
+			</basic>
+		</attributes>
+	</entity>
+	<entity class="com.tramex.sisoprega.dto.FeedOrderBarnyard">
+		<table name="ctrl_feed_order_barnyard" />
+		<named-query name="CAT_FEEDORDERBARNYARD_BY_ID">
+			<description>Retrieves a single crtFood record by ID</description>
+			<query>SELECT FedOrBar FROM FeedOrderBarnyard FedOrBar WHERE FedOrBar.feedOrdBarnId = :feedOrdBarnId</query>
+		</named-query>
+		<named-query name="FEED_ORDER_FOR_BARNYARD_BY_ORDER_ID">
+			<description>Retrieves a list with the feed orders for a given order</description>
+			<query>SELECT fob FROM FeedOrderBarnyard fob  
+			WHERE fob.orderId = :orderId</query>
+		</named-query>
+		<attributes>
+			<id name="feedOrdBarnId">
+				<column name="feed_ord_barn_id" />
+				<generated-value strategy="IDENTITY" />
+			</id>
+			<basic name="barnyardId">
+				<column name="barnyard_id" />
+			</basic>
+			<basic name="orderId">
+				<column name="order_id" />
+			</basic>
+		</attributes>
+	</entity>
+	<entity class="com.tramex.sisoprega.dto.InspectionForecast">
+		<table name="ctrl_inspection_forecast" />
+		<named-query name="TODAY_INSPECTION_FORECAST">
+			<description>Retrieves a single record that represents todays forecast list</description>
+			<query>SELECT forecast FROM InspectionForecast forecast ORDER BY forecast.forecastDate</query>
+		</named-query>
+		<attributes>
+			<id name="forecastId">
+				<column name="id" />
+				<generated-value strategy="IDENTITY" />
+			</id>
+			<basic name="forecastDate">
+				<column name="forecast_date" />
+				<temporal>DATE</temporal>
+			</basic>
+		</attributes>
+	</entity>
+	<entity class="com.tramex.sisoprega.dto.InspectionForecastDetail">
+		<table name="ctrl_inspection_forecast_detail" />
+		<named-query name="FORECAST_DETAIL_BY_FORECAST_ID">
+			<description>Retrieves all records from a given forecast id</description>
+			<query>SELECT forecastDetail FROM InspectionForecastDetail forecastDetail WHERE forecastDetail.forecastId = :forecastId</query>
+		</named-query>
+		<named-query name="FORECAST_DETAIL_BY_ID">
+			<description>Retrieves a single record of forecast details by its given id.</description>
+			<query>SELECT forecastDetail FROM InspectionForecastDetail forecastDetail WHERE forecastDetail.fdId = :fdId</query>
+		</named-query>
+		<attributes>
+			<id name="fdId">
+				<column name="id" />
+				<generated-value strategy="IDENTITY" />
+			</id>
+			<basic name="forecastId">
+				<column name="forecast_id" />
+			</basic>
+			<basic name="rancherId">
+				<column name="rancher_id" />
+			</basic>
+			<basic name="cattleType">
+				<column name="cattle_type" />
+			</basic>
+		</attributes>
+	</entity>
+	<entity class="com.tramex.sisoprega.dto.InspectionForecastBarnyard">
+		<table name="ctrl_inspection_forecast_barnyard"/>
+		<named-query name="FORECAST_BARNAYARD_BY_ID">
+			<description>Retrieve a single record of forecast barnyard by its given id</description>
+			<query>SELECT forecastBarnyard FROM InspectionForecastBarnyard forecastBarnyard WHERE forecastBarnyard.ifbId = :ifbId</query>
+		</named-query>
+		<named-query name="FORECAST_BARNYARD_BY_FORECAST_DETAIL_ID">
+			<description>Retrieve all barnyard records of a given forecast id</description>
+			<query>SELECT forecastBarnyard FROM InspectionForecastBarnyard forecastBarnyard WHERE forecastBarnyard.fdId = :fdId</query>
+		</named-query>
+		<attributes>
+			<id name="ifbId">
+				<column name="id"/>
+				<generated-value strategy="IDENTITY"/>
+			</id>
+			<basic name="barnyardId">
+				<column name="barnyard_id"/>
+			</basic>
+			<basic name="fdId">
+				<column name="detail_id"/>
+			</basic>
+		</attributes>
+	</entity>
+	<entity class="com.tramex.sisoprega.dto.RancherUser">
+		<table name="cat_rancher_user"/>
+		<named-query name="RANCHER_USER_BY_RECORD_ID">
+			<description>Retrieve a single record of rancher user by its record id</description>
+			<query>SELECT rUser FROM RancherUser rUser WHERE rUser.recordId = :recordId</query>
+		</named-query>
+		<named-query name="RANCHER_USER_BY_RANCHER_ID">
+			<description>Retrieves all users belonging to a given rancher id</description>
+			<query>SELECT rUser FROM RancherUser rUser WHERE rUser.rancherId = :rancherId</query>
+		</named-query>
+		<named-query name="RANCHER_USER_BY_USER_NAME">
+			<description>Retrieves a single record of rancher user by its user id</description>
+			<query>SELECT rUser FROM RancherUser rUser WHERE rUser.user_name = :userName</query>
+		</named-query>
+		<attributes>
+			<id name="recordId">
+				<column name="record_id"/>
+				<generated-value strategy="IDENTITY"/>
+			</id>
+			<basic name="rancherId">
+				<column name="rancher_id"/>
+			</basic>
+			<basic name="user_name">
+				<column name="user_name"/>
+			</basic>
+			<one-to-many name="receptions" fetch="LAZY">
+				<join-column name="rancher_id" referenced-column-name="rancher_id" />
+			</one-to-many>
+		</attributes>
+	</entity>
+	<entity class="com.tramex.sisoprega.identity.dto.User">
+		<table name="sys_sisoprega_user"/>
+		<named-query name="USER_BY_NAME">
+			<description>Retrieves a single record by the given user name</description>
+			<query>SELECT u FROM User u WHERE u.userName = :userName</query>
+		</named-query>
+		<named-query name="ALL_NO_RANCHER_USERS">
+			<description>Retrieves all users not assiged to rancher group for administration purposes.</description>
+			<query>SELECT DISTINCT u FROM User u LEFT JOIN u.groups r WHERE NOT r.role_name = "rancher" OR r.role_name IS NULL</query>
+		</named-query>
+		<attributes>
+			<id name="userName">
+				<column name="user_name"/>	
+			</id>
+			<basic name="password">
+				<column name="user_password"/>
+			</basic>
+			<one-to-many name="groups">
+				<join-column name="user_name" referenced-column-name="user_name"/>
+				<cascade> 
+					<cascade-all />
+				</cascade>
+			</one-to-many>
+		</attributes>
+	</entity>
+	<entity class="com.tramex.sisoprega.identity.dto.Role">
+		<table name="sys_sisoprega_role"/>
+		<attributes>
+			<id name="record_id">
+				<generated-value strategy="IDENTITY"/>
+			</id>
+		</attributes>
+	</entity>
+</entity-mappings>

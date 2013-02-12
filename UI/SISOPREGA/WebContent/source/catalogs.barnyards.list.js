@@ -83,7 +83,7 @@ enyo.kind({
 		return objBY;
 	},
 	 addBarnyard: function() {				
-		cacheBY.create(this.getBY(),this,"updateList");
+		cacheBY.Create(this.getBY(),this,"updateList");
 	},
 	afterUpdate:function(){
 		this.toggleAdd();

@@ -15,10 +15,11 @@
  */
 package com.tramex.sisoprega.proxy.bean;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.ejb.Stateless;
-import javax.persistence.TypedQuery;
 
 import com.tramex.sisoprega.common.BaseResponse;
 import com.tramex.sisoprega.common.CreateGatewayResponse;
@@ -44,6 +45,7 @@ import com.tramex.sisoprega.dto.ReceptionHeadcount;
  * ----------  ---------------------------  -------------------------------------------
  * 12/07/2012   Jaime Figueroa               Initial Version.
  * 12/16/2012   Diego Torres                 Adding log activity
+ * 01/22/2013  Diego Torres                  Implementing DataModel.
  * ====================================================================================
  * </PRE>
  * 
@@ -62,34 +64,32 @@ public class ReceptionHeadcountBean extends BaseBean implements Cruddable {
    */
   @Override
   public CreateGatewayResponse Create(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Create");
+    this.log.entering(this.getClass().getCanonicalName(), "Create");
 
     CreateGatewayResponse response = new CreateGatewayResponse();
     ReceptionHeadcount headCount = null;
     try {
       headCount = entityFromRequest(request, ReceptionHeadcount.class);
 
-      log.fine("Received ReceptionHeadcount in request: " + headCount);
+      this.log.fine("Received ReceptionHeadcount in request: " + headCount);
 
       if (validateEntity(headCount)) {
-        log.finer("ReceptionHeadcount succesfully validated");
-        em.persist(headCount);
-        log.finer("ReceptionHeadcount persisted on database");
-        em.flush();
+        this.log.finer("ReceptionHeadcount succesfully validated");
+        dataModel.createDataModel(headCount);
 
         String sId = String.valueOf(headCount.getHeadcountId());
-        log.finer("Setting ReceptionHeadcount id in response: " + sId);
+        this.log.finer("Setting ReceptionHeadcount id in response: " + sId);
         response.setGeneratedId(sId);
         response.setError(new Error("0", "SUCCESS", "proxy.ReceptionHeadcountBean.Create"));
-        log.info("Reception Headcount [" + headCount.toString() + "] created by principal[" + getLoggedUser() + "]");
+        this.log.info("Reception Headcount [" + headCount.toString() + "] created by principal[" + getLoggedUser() + "]");
       } else {
-        log.warning("Error de validación: " + error_description);
+        this.log.warning("Error de validación: " + error_description);
         response.setError(new Error("VAL01", "Error de validación: " + error_description, "proxy.ReceptionHeadcountBean.Create"));
       }
 
     } catch (Exception e) {
-      log.severe("Exception found while creating ReceptionHeadcountBean");
-      log.throwing(this.getClass().getName(), "Create", e);
+      this.log.severe("Exception found while creating ReceptionHeadcountBean");
+      this.log.throwing(this.getClass().getName(), "Create", e);
 
       if (e instanceof javax.persistence.PersistenceException)
         response.setError(new Error("DB01",
@@ -100,7 +100,7 @@ public class ReceptionHeadcountBean extends BaseBean implements Cruddable {
       }
     }
 
-    log.exiting(this.getClass().getCanonicalName(), "Create");
+    this.log.exiting(this.getClass().getCanonicalName(), "Create");
     return response;
   }
 
@@ -113,7 +113,7 @@ public class ReceptionHeadcountBean extends BaseBean implements Cruddable {
    */
   @Override
   public ReadGatewayResponse Read(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Read");
+    this.log.entering(this.getClass().getCanonicalName(), "Read");
 
     ReadGatewayResponse response = new ReadGatewayResponse();
     response.setEntityName(request.getEntityName());
@@ -122,17 +122,18 @@ public class ReceptionHeadcountBean extends BaseBean implements Cruddable {
     try {
       recHc = entityFromRequest(request, ReceptionHeadcount.class);
 
-      log.fine("Got headcount query from request: " + recHc);
+      this.log.fine("Got headcount query from request: " + recHc);
 
-      TypedQuery<ReceptionHeadcount> readQuery = null;
       String qryLogger = "";
+      String queryName = "";
+      Map<String, Object> parameters = new HashMap<String, Object>();
       if (recHc.getHeadcountId() != 0) {
-        readQuery = em.createNamedQuery("CRT_RECEPTIONHEADCOUNT_BY_ID", ReceptionHeadcount.class);
-        readQuery.setParameter("headcountId", recHc.getHeadcountId());
+        queryName = "CRT_RECEPTIONHEADCOUNT_BY_ID";
+        parameters.put("headcountId", recHc.getHeadcountId());
         qryLogger = "By headcountId [" + recHc.getHeadcountId() + "]";
       } else if(recHc.getReceptionId() != 0 ){
-        readQuery = em.createNamedQuery("RECEPTION_HEADCOUNT_BY_RECEPTION_ID", ReceptionHeadcount.class);
-        readQuery.setParameter("receptionId", recHc.getReceptionId());
+        queryName = "RECEPTION_HEADCOUNT_BY_RECEPTION_ID";
+        parameters.put("receptionId", recHc.getReceptionId());
         qryLogger = "By receptionId [" + recHc.getReceptionId() + "]";
       } else {
         response.setError(new Error("VAL03", "El filtro especificado no es válido para datos de recepciones de ganado.",
@@ -140,7 +141,7 @@ public class ReceptionHeadcountBean extends BaseBean implements Cruddable {
         return response;
       }
 
-      List<ReceptionHeadcount> queryResults = readQuery.getResultList();
+      List<ReceptionHeadcount> queryResults = dataModel.readDataModelList(queryName, parameters, ReceptionHeadcount.class);
 
       if (queryResults.isEmpty()) {
         response.setError(new Error("VAL02", "No se encontraron datos para el filtro seleccionado", "proxy.ReceptionHeadcount.Read"));
@@ -148,16 +149,16 @@ public class ReceptionHeadcountBean extends BaseBean implements Cruddable {
         response.getRecord().addAll(contentFromList(queryResults, ReceptionHeadcount.class));
 
         response.setError(new Error("0", "SUCCESS", "proxy.ReceptionHeadcount.Read"));
-        log.info("Read operation " + qryLogger + " executed by principal[" + getLoggedUser() + "] on ReceptionHeadcountBean");
+        this.log.info("Read operation " + qryLogger + " executed by principal[" + getLoggedUser() + "] on ReceptionHeadcountBean");
       }
     } catch (Exception e) {
-      log.severe("Exception found while reading rancher invoice filter");
-      log.throwing(this.getClass().getCanonicalName(), "Read", e);
+      this.log.severe("Exception found while reading rancher invoice filter");
+      this.log.throwing(this.getClass().getCanonicalName(), "Read", e);
 
       response.setError(new Error("DB02", "Error en la base de datos: " + e.getMessage(), "proxy.ReceptionHeadcount.Read"));
     }
 
-    log.exiting(this.getClass().getCanonicalName(), "Read");
+    this.log.exiting(this.getClass().getCanonicalName(), "Read");
     return response;
   }
 
@@ -170,35 +171,34 @@ public class ReceptionHeadcountBean extends BaseBean implements Cruddable {
    */
   @Override
   public UpdateGatewayResponse Update(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Update");
+    this.log.entering(this.getClass().getCanonicalName(), "Update");
     UpdateGatewayResponse response = new UpdateGatewayResponse();
     ReceptionHeadcount headCount = null;
     try {
       headCount = entityFromRequest(request, ReceptionHeadcount.class);
 
       if (headCount.getHeadcountId() == 0) {
-        log.warning("VAL04 - Entity ID Omission.");
+        this.log.warning("VAL04 - Entity ID Omission.");
         response.setError(new Error("VAL04", "Se ha omitido el id del corral al intentar actualizar sus datos.",
             "proxy.ReceptionHeadcount.Update"));
       } else {
         if (validateEntity(headCount)) {
-          em.merge(headCount);
-          em.flush();
+          dataModel.updateDataModel(headCount);
 
           GatewayContent content = getContentFromEntity(headCount, ReceptionHeadcount.class);
           response.setUpdatedRecord(content);
 
           response.setError(new Error("0", "SUCCESS", "proxy.ReceptionHeadcount.Update"));
-          log.info("Reception Headcount [" + headCount.toString() + "] updated by principal[" + getLoggedUser() + "]");
+          this.log.info("Reception Headcount [" + headCount.toString() + "] updated by principal[" + getLoggedUser() + "]");
         } else {
-          log.warning("Validation error:" + error_description);
+          this.log.warning("Validation error:" + error_description);
           response.setError(new Error("VAL01", "Error de validación de datos:" + error_description, "proxy.ReceptionHeadcountBean.Update"));
         }
       }
 
     } catch (Exception e) {
-      log.severe("Exception found while updating ReceptionHeadcount");
-      log.throwing(this.getClass().getName(), "Update", e);
+      this.log.severe("Exception found while updating ReceptionHeadcount");
+      this.log.throwing(this.getClass().getName(), "Update", e);
 
       if (e instanceof javax.persistence.PersistenceException)
         response.setError(new Error("DB01", "Los datos que usted ha intentado ingresar, no son permitidos por la base de datos, ",
@@ -208,7 +208,7 @@ public class ReceptionHeadcountBean extends BaseBean implements Cruddable {
       }
     }
 
-    log.exiting(this.getClass().getCanonicalName(), "Update");
+    this.log.exiting(this.getClass().getCanonicalName(), "Update");
     return response;
   }
 
@@ -221,36 +221,33 @@ public class ReceptionHeadcountBean extends BaseBean implements Cruddable {
    */
   @Override
   public BaseResponse Delete(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Delete");
+    this.log.entering(this.getClass().getCanonicalName(), "Delete");
     BaseResponse response = new BaseResponse();
 
     try {
       ReceptionHeadcount headCount = entityFromRequest(request, ReceptionHeadcount.class);
       if (headCount.getHeadcountId() == 0) {
-        log.warning("VAL04 - Entity ID Omission.");
+        this.log.warning("VAL04 - Entity ID Omission.");
         response.setError(new Error("VAL04", "Se ha omitido el id del corral al intentar eliminar el registro.", "proxy.ReceptionHeadcount.Delete"));
       } else {
-        TypedQuery<ReceptionHeadcount> readQuery = em.createNamedQuery("CRT_RECEPTIONHEADCOUNT_BY_ID", ReceptionHeadcount.class);
-        readQuery.setParameter("headcountId", headCount.getHeadcountId());
-        headCount = readQuery.getSingleResult();
-        log.info("Deleting Reception Headcount [" + headCount.toString() + "] by principal[" + getLoggedUser() + "]");
-        em.merge(headCount);
-        em.remove(headCount);
-        em.flush();
+        
+        headCount = dataModel.readSingleDataModel("CRT_RECEPTIONHEADCOUNT_BY_ID", "headcountId", headCount.getHeadcountId(), ReceptionHeadcount.class);
+        this.log.info("Deleting Reception Headcount [" + headCount.toString() + "] by principal[" + getLoggedUser() + "]");
+        dataModel.deleteDataModel(headCount, getLoggedUser());
 
         response.setError(new Error("0", "SUCCESS", "proxy.ReceptionHeadcount.Delete"));
-        log.info("Reception Headcount successfully deleted by principal [" + getLoggedUser() + "]");
+        this.log.info("Reception Headcount successfully deleted by principal [" + getLoggedUser() + "]");
       }
     } catch (Exception e) {
-      log.severe("Exception found while deleting ReceptionHeadcount");
-      log.throwing(this.getClass().getName(), "Delete", e);
+      this.log.severe("Exception found while deleting ReceptionHeadcount");
+      this.log.throwing(this.getClass().getName(), "Delete", e);
 
       response.setError(new Error("DEL01",
           "Error al intentar borrar datos, es probable que esta entidad tenga otras entidades relacionadas, ",
           "proxy.ReceptionHeadcount.Delete"));
     }
 
-    log.exiting(this.getClass().getCanonicalName(), "Delete");
+    this.log.exiting(this.getClass().getCanonicalName(), "Delete");
     return response;
   }
 

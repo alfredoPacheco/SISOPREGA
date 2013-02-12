@@ -93,11 +93,9 @@ enyo.kind({
 			this.cattleClassWasReadFromGateway = true;
 			var objAux = {};
 			var arrAux = [];
-			var selfCacheCattle = this;		
-			
+			var selfCacheCattle = this;			
 	//Retrieve CattleType
 			var cgReadAll = consumingGateway.Read("CattleClass", {});
-			
 			if (cgReadAll.exceptionId == 0){ //Read successfully
 				jQuery.each(cgReadAll.records, function() {
 		    		jQuery.each(this, function(key, value){
@@ -121,7 +119,7 @@ enyo.kind({
 		
 		return this.arrCattleClass;
 	},
-	create:function(objCat,cbObj,cbMethod){
+	Create:function(objCat,cbObj,cbMethod){
 		
 		var objToSend = this.cattleTypeAdapterToOut(objCat);
 		delete objToSend.cattypeId;
@@ -256,6 +254,12 @@ enyo.kind({
 			result.push(cattletype);
 		}
 		return result;
+	},
+	refreshData:function(){		
+		this.cattleTypeWasReadFromGateway=false;
+		this.cattleClassWasReadFromGateway=false;
+		this.getCattleClass();		
+		this.getCattleType();		
 	}
 });
 var cacheCattle= new cache.cattle();

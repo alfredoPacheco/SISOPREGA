@@ -15,10 +15,11 @@
  */
 package com.tramex.sisoprega.proxy.bean;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.ejb.Stateless;
-import javax.persistence.TypedQuery;
 
 import com.tramex.sisoprega.common.BaseResponse;
 import com.tramex.sisoprega.common.CreateGatewayResponse;
@@ -45,6 +46,7 @@ import com.tramex.sisoprega.dto.CattleClass;
  * 11/15/2012  Diego Torres                 Initial Version.
  * 12/05/2012  Diego Torres                 Standard error descriptions.
  * 12/16/2012  Diego Torres                 Adding user log activity.
+ * 01/22/2013  Diego Torres                 Implementing data model interfacing.
  * ====================================================================================
  * </PRE>
  * 
@@ -62,33 +64,32 @@ public class CattleClassBean extends BaseBean implements Cruddable {
    */
   @Override
   public CreateGatewayResponse Create(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Create");
+    this.log.entering(this.getClass().getCanonicalName(), "Create");
 
     CreateGatewayResponse response = new CreateGatewayResponse();
     CattleClass cattle = null;
     try {
       cattle = entityFromRequest(request, CattleClass.class);
 
-      log.fine("Received cattle class in request: " + cattle);
+      this.log.fine("Received cattle class in request: " + cattle);
 
       if (validateEntity(cattle)) {
-        log.finer("Cattle class succesfully validated");
-        em.persist(cattle);
-        log.finer("Cattle class persisted on database");
-        em.flush();
+        this.log.finer("Cattle class succesfully validated");
+        
+        dataModel.createDataModel(cattle);
 
         String sId = String.valueOf(cattle.getCatclassId());
-        log.finer("Setting cattle class id in response: " + sId);
+        this.log.finer("Setting cattle class id in response: " + sId);
         response.setGeneratedId(sId);
         response.setError(new Error("0", "SUCCESS", "proxy.CattleClassBean.Create"));
-        log.info("Cattle class [" + cattle.toString() + "] created by principal[" + getLoggedUser() + "]");
+        this.log.info("Cattle class [" + cattle.toString() + "] created by principal[" + getLoggedUser() + "]");
       } else {
-        log.warning("Error de validación: " + error_description);
+        this.log.warning("Error de validación: " + error_description);
         response.setError(new Error("VAL01", "Error de validación: " + error_description, "proxy.CattleClassBean.Create"));
       }
     } catch (Exception e) {
-      log.severe("Exception found while creating cattle class");
-      log.throwing(this.getClass().getName(), "Create", e);
+      this.log.severe("Exception found while creating cattle class");
+      this.log.throwing(this.getClass().getName(), "Create", e);
 
       if (e instanceof javax.persistence.PersistenceException)
         response
@@ -100,7 +101,7 @@ public class CattleClassBean extends BaseBean implements Cruddable {
       }
     }
 
-    log.exiting(this.getClass().getCanonicalName(), "Create");
+    this.log.exiting(this.getClass().getCanonicalName(), "Create");
     return response;
   }
 
@@ -112,7 +113,7 @@ public class CattleClassBean extends BaseBean implements Cruddable {
    */
   @Override
   public ReadGatewayResponse Read(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Read");
+    this.log.entering(this.getClass().getCanonicalName(), "Read");
 
     ReadGatewayResponse response = new ReadGatewayResponse();
     response.setEntityName(request.getEntityName());
@@ -121,19 +122,20 @@ public class CattleClassBean extends BaseBean implements Cruddable {
     try {
       cattle = entityFromRequest(request, CattleClass.class);
 
-      log.fine("Got cattle class from request: " + cattle);
-      TypedQuery<CattleClass> readQuery = null;
+      this.log.fine("Got cattle class from request: " + cattle);
       String qryLogger = "";
+      String queryName = "";
+      Map<String, Object> parameters = new HashMap<String, Object>();
       if (cattle.getCatclassId() != 0) {
-        readQuery = em.createNamedQuery("CATTLE_CLASS_BY_ID", CattleClass.class);
-        readQuery.setParameter("catclassId", cattle.getCatclassId());
+        queryName="CATTLE_CLASS_BY_ID";
+        parameters.put("catclassId", cattle.getCatclassId());
         qryLogger = "By catclassId[" + cattle.getCatclassId() + "]";
       } else {
-        readQuery = em.createNamedQuery("ALL_CATTLE_CLASSES", CattleClass.class);
+        queryName="ALL_CATTLE_CLASSES";
         qryLogger = "By ALL_CATTLE_CLASSES";
       }
 
-      List<CattleClass> queryResults = readQuery.getResultList();
+      List<CattleClass> queryResults = dataModel.readDataModelList(queryName, parameters, CattleClass.class);
 
       if (queryResults.isEmpty()) {
         response.setError(new Error("VAL02", "No se encontraron datos para el filtro seleccionado", "proxy.CattleClassBean.Read"));
@@ -142,17 +144,17 @@ public class CattleClassBean extends BaseBean implements Cruddable {
         response.getRecord().addAll(records);
         
         response.setError(new Error("0", "SUCCESS", "proxy.CattleClass.Read"));
-        log.info("Read operation " + qryLogger + " executed by principal[" + getLoggedUser() + "] on CattleClassBean");
+        this.log.info("Read operation " + qryLogger + " executed by principal[" + getLoggedUser() + "] on CattleClassBean");
       }
 
     } catch (Exception e) {
-      log.severe("Exception found while reading Cattle Class");
-      log.throwing(this.getClass().getCanonicalName(), "Read", e);
+      this.log.severe("Exception found while reading Cattle Class");
+      this.log.throwing(this.getClass().getCanonicalName(), "Read", e);
 
       response.setError(new Error("DB02", "Read exception: " + e.getMessage(), "proxy.CattleClass.Read"));
     }
 
-    log.exiting(this.getClass().getCanonicalName(), "Read");
+    this.log.exiting(this.getClass().getCanonicalName(), "Read");
     return response;
   }
 
@@ -164,34 +166,33 @@ public class CattleClassBean extends BaseBean implements Cruddable {
    */
   @Override
   public UpdateGatewayResponse Update(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Update");
+    this.log.entering(this.getClass().getCanonicalName(), "Update");
     UpdateGatewayResponse response = new UpdateGatewayResponse();
     CattleClass cattle = null;
     try {
       cattle = entityFromRequest(request, CattleClass.class);
 
       if (cattle.getCatclassId() == 0) {
-        log.warning("VAL04 - Entity ID Omission.");
+        this.log.warning("VAL04 - Entity ID Omission.");
         response.setError(new Error("VAL04", "Se ha omitido el id de la clase de ganado al intentar actualizar sus datos.", "proxy.CattleClassBean.Update"));
       } else {
         if (validateEntity(cattle)) {
-          em.merge(cattle);
-          em.flush();
+          dataModel.updateDataModel(cattle);
 
           GatewayContent content = getContentFromEntity(cattle, CattleClass.class);
           response.setUpdatedRecord(content);
 
           response.setError(new Error("0", "SUCCESS", "proxy.CattleClass.Update"));
-          log.info("CattleClass[" + cattle.toString() + "] updated by principal[" + getLoggedUser() + "]");
+          this.log.info("CattleClass[" + cattle.toString() + "] updated by principal[" + getLoggedUser() + "]");
         } else {
-          log.warning("Validation error: " + error_description);
+          this.log.warning("Validation error: " + error_description);
           response.setError(new Error("VAL01", "Error de validación de datos:" + error_description, "proxy.CattleClass.Update"));
         }
       }
 
     } catch (Exception e) {
-      log.severe("Exception found while updating CattleClass");
-      log.throwing(this.getClass().getName(), "Update", e);
+      this.log.severe("Exception found while updating CattleClass");
+      this.log.throwing(this.getClass().getName(), "Update", e);
 
       if (e instanceof javax.persistence.PersistenceException)
         response
@@ -203,7 +204,7 @@ public class CattleClassBean extends BaseBean implements Cruddable {
       }
     }
 
-    log.exiting(this.getClass().getCanonicalName(), "Update");
+    this.log.exiting(this.getClass().getCanonicalName(), "Update");
     return response;
   }
 
@@ -215,29 +216,26 @@ public class CattleClassBean extends BaseBean implements Cruddable {
    */
   @Override
   public BaseResponse Delete(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Delete");
+    this.log.entering(this.getClass().getCanonicalName(), "Delete");
     BaseResponse response = new BaseResponse();
 
     try {
       CattleClass cattle = entityFromRequest(request, CattleClass.class);
       if (cattle.getCatclassId() == 0) {
-        log.warning("VAL04 - Entity ID Omission.");
+        this.log.warning("VAL04 - Entity ID Omission.");
         response.setError(new Error("VAL04", "Se ha omitido el id de la clase de ganado al intentar eliminar el registro.", "proxy.CattleClassBean.Delete"));
       } else {
-        TypedQuery<CattleClass> readQuery = em.createNamedQuery("CATTLE_CLASS_BY_ID", CattleClass.class);
-        readQuery.setParameter("catclassId", cattle.getCatclassId());
-        cattle = readQuery.getSingleResult();
-        log.info("Deleting CattleClass[" + cattle.toString() + "] by principal[" + getLoggedUser() + "]");
-        em.merge(cattle);
-        em.remove(cattle);
-        em.flush();
+        cattle = dataModel.readSingleDataModel("CATTLE_CLASS_BY_ID", "catclassId", cattle.getCatclassId(), CattleClass.class);
+        this.log.info("Deleting CattleClass[" + cattle.toString() + "] by principal[" + getLoggedUser() + "]");
+        
+        dataModel.deleteDataModel(cattle, getLoggedUser());
 
         response.setError(new Error("0", "SUCCESS", "proxy.CattleClass.Delete"));
-        log.info("CattleClass successfully deleted by principal [" + getLoggedUser() + "]");
+        this.log.info("CattleClass successfully deleted by principal [" + getLoggedUser() + "]");
       }
     } catch (Exception e) {
-      log.severe("Exception found while deleting cattle class");
-      log.throwing(this.getClass().getName(), "Delete", e);
+      this.log.severe("Exception found while deleting cattle class");
+      this.log.throwing(this.getClass().getName(), "Delete", e);
 
       response.setError(new Error("DEL01",
           "Error al intentar borrar datos, es probable que esta entidad tenga otras entidades relacionadas, "
@@ -245,7 +243,7 @@ public class CattleClassBean extends BaseBean implements Cruddable {
           "proxy.CattleClassBean.Delete"));
     }
 
-    log.exiting(this.getClass().getCanonicalName(), "Delete");
+    this.log.exiting(this.getClass().getCanonicalName(), "Delete");
     return response;
   }
 }

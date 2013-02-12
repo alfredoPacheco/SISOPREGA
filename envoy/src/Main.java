@@ -51,13 +51,13 @@ public class Main {
 		smsMan.sendSMS(sms);
 		
 		System.out.println(smsMan.getResponseMsg());		 
-		 
+		 //diego.torres.fuerte@gmail.com
 		EmailSender smtp = EmailFactory.getSender("smtp");
 		smtp.setConfiguration(xmlFile);
-		Email email = new Email("",
-								"",
-								"",
-								"");
+		Email email = new Email("alan.delrio@hotmail.com",
+								"info@sisoprega.com",
+								"Javadabadooo Title",
+								"Javadabadooo Message");
 		smtp.sendEmail(email);
 	}
 }

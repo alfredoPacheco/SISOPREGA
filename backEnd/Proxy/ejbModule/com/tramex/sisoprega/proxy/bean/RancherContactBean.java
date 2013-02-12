@@ -15,11 +15,11 @@
  */
 package com.tramex.sisoprega.proxy.bean;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.ejb.Stateless;
-import javax.persistence.NoResultException;
-import javax.persistence.TypedQuery;
 
 import com.tramex.sisoprega.common.BaseResponse;
 import com.tramex.sisoprega.common.CreateGatewayResponse;
@@ -47,6 +47,7 @@ import com.tramex.sisoprega.dto.RancherContact;
  * 11/11/2012  Diego Torres                 Initial Version.
  * 12/08/2012  Diego Torres                 Fixing standard error codes and validation.
  * 12/16/2012  Diego Torres                 Adding log activity
+ * 01/22/2013  Diego Torres                  Implementing DataModel.
  * ====================================================================================
  * </PRE>
  * 
@@ -64,7 +65,7 @@ public class RancherContactBean extends BaseBean implements Cruddable {
    */
   @Override
   public CreateGatewayResponse Create(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Create");
+    this.log.entering(this.getClass().getCanonicalName(), "Create");
 
     CreateGatewayResponse response = new CreateGatewayResponse();
     RancherContact contact = null;
@@ -72,23 +73,22 @@ public class RancherContactBean extends BaseBean implements Cruddable {
     try {
       contact = entityFromRequest(request, RancherContact.class);
 
-      log.fine("Received contact in request: {" + contact + "}");
+      this.log.fine("Received contact in request: {" + contact + "}");
 
       if (validateEntity(contact)) {
-        em.persist(contact);
-        em.flush();
+        dataModel.createDataModel(contact);
 
         String sId = String.valueOf(contact.getContactId());
         response.setGeneratedId(sId);
         response.setError(new Error("0", "SUCCESS", "proxy.RancherContact.Create"));
-        log.info("Rancher Contact [" + contact.toString() + "] created by principal[" + getLoggedUser() + "]");
+        this.log.info("Rancher Contact [" + contact.toString() + "] created by principal[" + getLoggedUser() + "]");
       } else {
-        log.warning("Validation error:" + error_description);
+        this.log.warning("Validation error:" + error_description);
         response.setError(new Error("VAL01", "Error de validación de datos:" + error_description, "proxy.RancherContact.Create"));
       }
     } catch (Exception e) {
-      log.severe("Exception found while creating rancher contact");
-      log.throwing(this.getClass().getName(), "Create", e);
+      this.log.severe("Exception found while creating rancher contact");
+      this.log.throwing(this.getClass().getName(), "Create", e);
 
       if (e instanceof javax.persistence.PersistenceException)
         response.setError(new Error("DB01", "Los datos que usted ha intentado ingresar, no son permitidos por la base de datos, "
@@ -99,7 +99,7 @@ public class RancherContactBean extends BaseBean implements Cruddable {
       }
     }
 
-    log.exiting(this.getClass().getCanonicalName(), "Create");
+    this.log.exiting(this.getClass().getCanonicalName(), "Create");
     return response;
   }
 
@@ -111,7 +111,7 @@ public class RancherContactBean extends BaseBean implements Cruddable {
    */
   @Override
   public ReadGatewayResponse Read(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Read");
+    this.log.entering(this.getClass().getCanonicalName(), "Read");
 
     ReadGatewayResponse response = new ReadGatewayResponse();
     response.setEntityName(request.getEntityName());
@@ -120,17 +120,18 @@ public class RancherContactBean extends BaseBean implements Cruddable {
     try {
       contact = entityFromRequest(request, RancherContact.class);
 
-      log.fine("Got contact from request: " + contact);
+      this.log.fine("Got contact from request: " + contact);
 
-      TypedQuery<RancherContact> readQuery = null;
-      String qryLogger  = "";
+      String qryLogger = "";
+      String queryName = "";
+      Map<String, Object> parameters = new HashMap<String, Object>();
       if (contact.getRancherId() != 0) {
-        readQuery = em.createNamedQuery("RANCHER_CONTACT_BY_RANCHER_ID", RancherContact.class);
-        readQuery.setParameter("rancherId", contact.getRancherId());
+        queryName = "RANCHER_CONTACT_BY_RANCHER_ID";
+        parameters.put("rancherId", contact.getRancherId());
         qryLogger = "By rancherId [" + contact.getRancherId() + "]";
       } else if (contact.getContactId() != 0) {
-        readQuery = em.createNamedQuery("RANCHER_CONTACT_BY_ID", RancherContact.class);
-        readQuery.setParameter("contactId", contact.getContactId());
+        queryName = "RANCHER_CONTACT_BY_ID";
+        parameters.put("contactId", contact.getContactId());
         qryLogger = "By contactId [" + contact.getContactId() + "]";
       } else {
         response.setError(new Error("VAL03", "El filtro especificado no es válido en el catálogo de contactos.",
@@ -138,7 +139,7 @@ public class RancherContactBean extends BaseBean implements Cruddable {
         return response;
       }
 
-      List<RancherContact> queryResults = readQuery.getResultList();
+      List<RancherContact> queryResults = dataModel.readDataModelList(queryName, parameters, RancherContact.class);
 
       if (queryResults.isEmpty()) {
         response.setError(new Error("VAL02", "No se encontraron datos para el filtro seleccionado", "proxy.RancherContact.Read"));
@@ -147,18 +148,18 @@ public class RancherContactBean extends BaseBean implements Cruddable {
         response.getRecord().addAll(records);
 
         response.setError(new Error("0", "SUCCESS", "proxy.RancherContact.Read"));
-        log.info("Read operation " + qryLogger + " executed by principal[" + getLoggedUser() + "] on RancherContactBean");
+        this.log.info("Read operation " + qryLogger + " executed by principal[" + getLoggedUser() + "] on RancherContactBean");
       }
 
     } catch (Exception e) {
       // something went wrong, alert the server and respond the client
-      log.severe("Exception found while reading rancher contact");
-      log.throwing(this.getClass().getCanonicalName(), "Read", e);
+      this.log.severe("Exception found while reading rancher contact");
+      this.log.throwing(this.getClass().getCanonicalName(), "Read", e);
 
       response.setError(new Error("DB02", "Error en la base de datos: " + e.getMessage(), "proxy.RancherContact.Read"));
     }
 
-    log.exiting(this.getClass().getCanonicalName(), "Read");
+    this.log.exiting(this.getClass().getCanonicalName(), "Read");
     return response;
   }
 
@@ -170,36 +171,35 @@ public class RancherContactBean extends BaseBean implements Cruddable {
    */
   @Override
   public UpdateGatewayResponse Update(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Update");
+    this.log.entering(this.getClass().getCanonicalName(), "Update");
     UpdateGatewayResponse response = new UpdateGatewayResponse();
     RancherContact contact = null;
     try {
       contact = entityFromRequest(request, RancherContact.class);
 
       if (contact.getContactId() == 0) {
-        log.warning("VAL04 - Entity ID Omission.");
+        this.log.warning("VAL04 - Entity ID Omission.");
         response.setError(new Error("VAL04", "Se ha omitido el id del contacto al intentar actualizar sus datos.",
             "proxy.RancherContactBean.Update"));
       } else {
         // Received Id.
         if (validateEntity(contact)) {
-          em.merge(contact);
-          em.flush();
+          dataModel.updateDataModel(contact);
 
           GatewayContent content = getContentFromEntity(contact, RancherContact.class);
           response.setUpdatedRecord(content);
 
           response.setError(new Error("0", "SUCCESS", "proxy.RancherContact.Update"));
-          log.info("Rancher Contact [" + contact.toString() + "] updated by principal[" + getLoggedUser() + "]");
+          this.log.info("Rancher Contact [" + contact.toString() + "] updated by principal[" + getLoggedUser() + "]");
         } else {
-          log.warning("Validation error: " + error_description);
+          this.log.warning("Validation error: " + error_description);
           response.setError(new Error("VAL01", "Error de validación de datos: " + error_description,
               "proxy.RancherContact.Update"));
         }
       }
     } catch (Exception e) {
-      log.severe("Exception found while updating RanacherContact");
-      log.throwing(this.getClass().getName(), "Update", e);
+      this.log.severe("Exception found while updating RanacherContact");
+      this.log.throwing(this.getClass().getName(), "Update", e);
 
       if (e instanceof javax.persistence.PersistenceException)
         response.setError(new Error("DB01", "Los datos que usted ha intentado ingresar, no son permitidos por la base de datos, "
@@ -210,7 +210,7 @@ public class RancherContactBean extends BaseBean implements Cruddable {
       }
     }
 
-    log.exiting(this.getClass().getCanonicalName(), "Update");
+    this.log.exiting(this.getClass().getCanonicalName(), "Update");
     return response;
   }
 
@@ -222,37 +222,31 @@ public class RancherContactBean extends BaseBean implements Cruddable {
    */
   @Override
   public BaseResponse Delete(GatewayRequest request) {
-    log.entering(this.getClass().getCanonicalName(), "Delete");
+    this.log.entering(this.getClass().getCanonicalName(), "Delete");
     BaseResponse response = new BaseResponse();
 
     try {
       RancherContact contact = entityFromRequest(request, RancherContact.class);
       if (contact.getContactId() == 0) {
-        log.warning("VAL04 - Entity ID Omission.");
+        this.log.warning("VAL04 - Entity ID Omission.");
         response.setError(new Error("VAL04", "Se ha omitido el id del contacto al intentar eliminar el registro.",
             "proxy.RancherContactBean.Delete"));
       } else {
-        TypedQuery<RancherContact> readQuery = em.createNamedQuery("RANCHER_CONTACT_BY_ID", RancherContact.class);
-        readQuery.setParameter("contactId", contact.getContactId());
-        contact = readQuery.getSingleResult();
-        log.info("Deleting Rancher Contact [" + contact.toString() + "] by principal[" + getLoggedUser() + "]");
-        em.merge(contact);
-        em.remove(contact);
-        em.flush();
-
+        contact = dataModel.readSingleDataModel("RANCHER_CONTACT_BY_ID", "contactId", contact.getContactId(), RancherContact.class);
+        this.log.info("Deleting RancherContact [" + contact.toString() + "] by principal[" + getLoggedUser() + "]");
+        dataModel.deleteDataModel(contact, getLoggedUser());
         response.setError(new Error("0", "SUCCES", "proxy.RancherContact.Delete"));
-        log.info("Rancher Contact successfully deleted by principal [" + getLoggedUser() + "]");
       }
     } catch (Exception e) {
-      log.severe("Exception found while deleting contact");
-      log.throwing(this.getClass().getName(), "Delete", e);
+      this.log.severe("Exception found while deleting contact");
+      this.log.throwing(this.getClass().getName(), "Delete", e);
 
       response.setError(new Error("DEL01",
           "Error al intentar borrar datos. Es muy probable que la entidad que usted quiere eliminar "
               + "cuente con otras entidades relacionadas.", "proxy.RancherContactBean.Delete"));
     }
 
-    log.exiting(this.getClass().getCanonicalName(), "Delete");
+    this.log.exiting(this.getClass().getCanonicalName(), "Delete");
     return response;
   }
 
@@ -348,30 +342,6 @@ public class RancherContactBean extends BaseBean implements Cruddable {
         error_description = "El código postal de la dirección del contacto excede el tamaño permitido en la base de datos.";
     }
 
-    if (valid) {
-      valid = rancherExists(contact);
-    }
-
     return valid;
   }
-
-  private boolean rancherExists(RancherContact contact) {
-    boolean exists = true;
-
-    TypedQuery<com.tramex.sisoprega.dto.Rancher> readQuery = null;
-
-    readQuery = em.createNamedQuery("RANCHER_BY_ID", com.tramex.sisoprega.dto.Rancher.class);
-    readQuery.setParameter("rancherId", contact.getRancherId());
-
-    try {
-      com.tramex.sisoprega.dto.Rancher enterprise = readQuery.getSingleResult();
-      exists = enterprise != null;
-    } catch (NoResultException e) {
-      exists = false;
-      error_description = "RancherId " + contact.getRancherId() + " does not exists on database";
-    }
-
-    return exists;
-  }
-
 }

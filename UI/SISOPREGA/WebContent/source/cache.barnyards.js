@@ -25,7 +25,7 @@ enyo.kind({
 				barnyard_id:		objBarnyard.barnyardId,				
 				barnyard_code:		objBarnyard.barnyardCode,
 //				available: 			objBarnyard.available,				
-				location_id:		objBarnyard.locationId	
+				zone_id:			objBarnyard.locationId	
 			};
 		
 		return objNew;
@@ -40,7 +40,7 @@ enyo.kind({
 				barnyardId:			objBarnyard.barnyard_id,				
 				barnyardCode:		objBarnyard.barnyard_code,
 				available: 			objBarnyard.available,				
-				locationId:			objBarnyard.location_id
+				locationId:			objBarnyard.zone_id
 			};		
 		return objNew;
 	},
@@ -151,7 +151,7 @@ enyo.kind({
 		return this.arrCatBarnyardCapacity;
 		
 	},
-	create:function(objCat,cbObj,cbMethod){
+	Create:function(objCat,cbObj,cbMethod){
 		//AJAX
 		this.arrObj.push(objCat);
 		if(cbMethod){
@@ -213,8 +213,8 @@ enyo.kind({
 		var arrAux = this.get();
 		for(var i=0; i<arrAux.length;i++){
 			if (arrAux[i].barnyard_code==barnyard.substr(1)){
-				if (arrAux[i].location_id==barnyard.charAt(0)){
-					return arrAux[i].barnyard_id;
+				if (arrAux[i].zone_id==barnyard.charAt(0)){
+					return arrAux[i];
 				}
 			}
 		}
@@ -297,7 +297,7 @@ enyo.kind({
 	setOccupied:function(sID,iReceptionID){ //example: setOccupied("1E2","79")
 		
 		objAux = {};
-		objAux.sID = this.getByBarnyard(sID);
+		objAux.sID = this.getByBarnyard(sID).barnyard_id;
 		objAux.iReceptionID = iReceptionID;
 		var objToSend = this.rec_barnAdapterToOut(objAux);
 		delete objToSend.recBarnyardId;
@@ -305,10 +305,12 @@ enyo.kind({
 		if (cgCreate.exceptionId == 0){ //Created successfully			
 			objAux.recBarnyardId = cgCreate.generatedId;
 			this.arrObjInUse[sID]={reception_id:parseInt(iReceptionID),accepted_count:"",inspections:[],feed:[]};
+			return true;
 		}
 		else{ //Error			
-			cacheMan.setMessage("", "[Exception ID: " + cgCreate.exceptionId + "] Descripcion: " + cgCreate.exceptionDescription);
-			//TODO: do something with arrObjInUse
+			alert( cgCreate.exceptionDescription);
+			//cacheMan.setMessage("", "[Exception ID: " + cgCreate.exceptionId + "] Descripcion: " + cgCreate.exceptionDescription);
+			return false;
 		}
 		
 	},
@@ -316,7 +318,7 @@ enyo.kind({
 		
 		var objToSend = {};
 		objToSend.receptionId = objRec.reception_id;
-		objToSend.barnyardId = cacheBY.getByBarnyard(sID);
+		objToSend.barnyardId = cacheBY.getByBarnyard(sID).barnyard_id;
 		var cgDelete = consumingGateway.Delete("ReceptionBarnyard", objToSend);
 		if (cgDelete.exceptionId == 0){ //Deleted successfully
 			delete objRec.barnyards[sID];
@@ -346,23 +348,30 @@ enyo.kind({
 		var barnyards = this.get();
 		for (property in barnyards){
 			var barnyard = {caption:"",value:""};
-			if(barnyards[property].location_id==1){						
+			if(barnyards[property].zone_id==1){						
 				barnyard.caption = 	barnyards[property].barnyard_code + " [Chihuahua]";
 				barnyard.value = 	barnyards[property].barnyard_id;
 				barnyard.barnyard_code = barnyards[property].barnyard_code;
-				barnyard.location = "Chihuahua"; 
+				barnyard.zone = "Chihuahua"; 
 				result.push(barnyard);												
 			}else{						
 				barnyard.caption = barnyards[property].barnyard_code + " [Zona Sur]";
 				barnyard.value = 	barnyards[property].barnyard_id;
 				barnyard.barnyard_code = barnyards[property].barnyard_code;
-				barnyard.location = "Zona Sur";
+				barnyard.zone = "Zona Sur";
 				result.push(barnyard);						
 			}
 		}
 		return result;
 							
+	},
+	refreshData:function(){
+		this.arrObjWasFilledUpOnce=false;
+		this.barnyardWasReadFromGateway=false,	
+		this.barnyardCapacityWasReadFromGateway=false,		
+		this.get();
 	}
+	
 });
 
 var cacheBY= new cache.barnyards();

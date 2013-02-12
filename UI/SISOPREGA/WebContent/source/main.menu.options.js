@@ -4,13 +4,15 @@ enyo.kind({
 	layoutKind: enyo.VFlexLayout,	
 	align:"center",
 	//pack:"center",	
-	style:"height:340px;width:320px;",
+	style:"width:320px;",
 	events: {
 		onReceptions:"",
 		onOperations:"",		
 		onCatalogs:"",
 		onReports:"",
-		onInspectionForecast:""
+		onInspectionForecast:"",
+		onUsers: "",
+		onFileUpload:""
 	},		
 		components: [{style:"height:10px;"},
 			{kind: enyo.HFlexBox,
@@ -33,12 +35,13 @@ enyo.kind({
 				},
 			{kind: enyo.HFlexBox,
 				 className:"buttonsBG",		
-			     flex: 1,
+			     
 				 align:"center",	    
 				 components: [				
-					{kind: "CustomButton", className:"menuButton", style:"width:75px;height:75px;background-image:url('images/inspeccion.png');", onclick:"doInspectionForecast"},
-					{kind: "Spacer"},
-					{kind: "Spacer"}]
+					{kind: "CustomButton",  className:"menuButton", style:"width:85px;height:75px;background-image:url('images/inspeccion.png');", onclick:"doInspectionForecast"},
+					{kind: "CustomButton", className:"menuButton", style:"width:85px;height:75px;background-image:url('images/users.png');", onclick:"doUsers"},
+					{kind: "CustomButton", className:"menuButton", style:"width:85px;height:75px;background-image:url('images/upload.png');", onclick:"doFileUpload"}
+					]
 				},
 				{kind: enyo.HFlexBox,
 					 className:"buttonsBG",		
@@ -47,8 +50,8 @@ enyo.kind({
 					 
 					 components: [				
 						{ content:"Lista de Inspeccion" , flex:1, style:"text-align:center;vertical-align:top;"},
-						{ content:"" , flex:1,style:"text-align:center;vertical-align:top;"},
-						{ content:"" , flex:1,style:"text-align:center;vertical-align:top;"},]
+						{ content:"Usuarios" , flex:1, style:"text-align:center;vertical-align:top;"},
+						{ content:"Cargar pedimento" , flex:1, style:"text-align:center;vertical-align:top;"},]
 					},
 				{kind: enyo.HFlexBox,
 					 className:"buttonsBG",		
