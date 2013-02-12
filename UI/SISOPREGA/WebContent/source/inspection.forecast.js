@@ -8,6 +8,7 @@ enyo
 				this.$.rancherInput.setItems(cacheRanchers.getAllForList());
 				this.$.cattle_type_id.setItems(cacheCattle.getAllCattleType());
 				this.$.localidad.setItems(cacheMan.allLocationsForList());
+				this.$.origen.setItems();
 			},
 			iSelected : null,
 			_id : undefined,
@@ -60,7 +61,8 @@ enyo
 											components : [ {
 												kind : "controls.autocomplete",
 												name : "rancherInput",
-												hint : "Ganadero"
+												hint : "Ganadero",
+												onSelectItem:"on_select_rancher"
 											} ]
 										} ]
 									},  {
@@ -74,18 +76,18 @@ enyo
 												flex : 1
 											} ]
 										} ]
-									}, {
+									},
+									{
 										kind : "Item",
 										components : [ {
 											layoutKind : enyo.HFlexLayout,
 											components : [ {
-												kind : "Input",
+												kind : "controls.autocomplete",
 												name : "origen",
-												hint : "Origen",
-												flex : 1
+												hint : "Ciudad de Origen"
 											} ]
 										} ]
-									}, 
+									},
 									{
 										kind : "Item",
 										components : [ {
@@ -96,7 +98,7 @@ enyo
 												hint : "Ganado"
 											} ]
 										} ]
-									}, 
+									},
 									{
 										kind : "Item",
 										components : [ {
@@ -261,7 +263,7 @@ enyo
 															content : ""
 														},
 														{
-															name : "listLocation",
+															name : "listZone",
 															style : "width:150px;text-align:center;",
 															content : ""
 														},
@@ -310,9 +312,7 @@ enyo
 			},
 			ready : function() {
 				this.$.fechaPicker.setValue(new Date());
-				this.cambioDeFecha();
-				this.$.cattle_type_id.setIndex(1);
-				this.$.localidad.setIndex(1);
+				this.cambioDeFecha();				
 			},
 			resetValues : function() {
 				this.$.rancherInput.setIndex(-1);
@@ -329,11 +329,17 @@ enyo
 					locale : new enyo.g11n.Locale("es_es")
 				});
 				this.fecha = fmt.format(this.$.fechaPicker.getValue());
+				this.$.cattle_type_id.setIndex(1);
+				this.$.localidad.setIndex(1);
 				this.updateList();
 			},
 			cambiarAHoy : function() {
 				this.$.fechaPicker.setValue(new Date());
 				this.cambioDeFecha();
+			},
+			on_select_rancher: function(InSender, InEvent){
+				var receptions = cacheReceptions.getReceptionsByRancherID(InSender.index);
+				
 			},
 			selectForecast : function(inSender, inEvent) {
 				if (objFore = this.objList[inEvent.rowIndex]) {
@@ -345,7 +351,7 @@ enyo
 					this.$.cantidad.setValue(objFore.quantity);
 
 					if (objFore.barnyards.length > 0) {
-						this.$.localidad.setIndex(objFore.barnyards[0].location_id);						
+						this.$.localidad.setIndex(objFore.barnyards[0].zone_id);						
 						var strBarnyards = "";
 						for (i in objFore.barnyards) {
 							strBarnyards = strBarnyards
@@ -388,10 +394,10 @@ enyo
 					this.$.listQuantity.setContent(objFore.quantity);
 
 					if (objFore.barnyards.length > 0) {
-						if (objFore.barnyards[0].location_id == 1) {
-							this.$.listLocation.setContent("Chihuahua");
+						if (objFore.barnyards[0].zone_id == 1) {
+							this.$.listZone.setContent("Chihuahua");
 						} else {
-							this.$.listLocation.setContent("Zona Sur");
+							this.$.listZone.setContent("Zona Sur");
 						}
 						var strBarnyards = "";
 						for (i in objFore.barnyards) {
@@ -402,7 +408,7 @@ enyo
 						strBarnyards = strBarnyards.slice(0, -2);
 						this.$.listBarnyards.setContent(strBarnyards);
 					} else {
-						this.$.listLocation.setContent("");
+						this.$.listZone.setContent("");
 						this.$.listBarnyards.setContent("");
 					}
 					if (inIndex == this.iSelected) {
@@ -413,7 +419,7 @@ enyo
 						this.$.listOrigin.applyStyle("color", "white");
 						this.$.listCattleType.applyStyle("color", "white");
 						this.$.listQuantity.applyStyle("color", "white");
-						this.$.listLocation.applyStyle("color", "white");
+						this.$.listZone.applyStyle("color", "white");
 						this.$.listBarnyards.applyStyle("color", "white");
 					} else {
 						this.$.rowItem.applyStyle("background-color", null);
@@ -423,7 +429,7 @@ enyo
 						this.$.listOrigin.applyStyle("color", null);
 						this.$.listCattleType.applyStyle("color", null);
 						this.$.listQuantity.applyStyle("color", null);
-						this.$.listLocation.applyStyle("color", null);
+						this.$.listZone.applyStyle("color", null);
 						this.$.listBarnyards.applyStyle("color", null);
 					}
 					this.totalItems++;

@@ -26,8 +26,8 @@ enyo.kind({
 					 width:"50%;",
 			 	 	 style:"color:#FFF;margin-top:10%",
 			 	 	 components: [	
-						{kind:"Input", name:"user", hint:"Usuario",selectAllOnFocus: true, onkeydown:"key_down", value:"admin"},
-						{kind:"PasswordInput", name:"password", hint:"Contraseña",selectAllOnFocus: true,onkeydown:"key_down", value:"admin"}
+						{kind:"Input", name:"user", hint:"Usuario",selectAllOnFocus: true, onkeydown:"key_down", value:"admin", onfocus:"on_focus", onblur : "lost_focus"},
+						{kind:"PasswordInput", name:"password", hint:"Contraseña",selectAllOnFocus: true,onkeydown:"key_down", value:"admin",  onfocus:"on_focus", onblur : "lost_focus"}
 					]},
 					{kind: "Spacer"}					 
 			]}]},		
@@ -37,6 +37,12 @@ enyo.kind({
 				 flex:1, caption: "Entrar", onclick: "checkLogIn", isDefault:"true"},				
 				 ]}							  
 	],
+	lost_focus:function(InSender, InEvent){
+		InSender.$.input.applyStyle("color","white");
+	},
+	on_focus:function(InSender, InEvent){
+		InSender.$.input.applyStyle("color","black");
+	},
 	ready:function(){
 		this.$.user.$.input.applyStyle("color", "white");
 		this.$.password.$.input.applyStyle("color", "white");
