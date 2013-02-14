@@ -396,15 +396,18 @@ enyo
 			},
 			getActiveOrigins:function(){
 				var response = [];
+				var newArray = [];
 				if(this.$.rancherInput.getIndex()>-1){
 					for (i in this.arrReceptions){
 						if (this.arrReceptions[i].rancher_id == this.$.rancherInput.getIndex()){
 							for(j in this.arrReceptions[i].receptions){
 								var auxOrigin = {
 									value :		this.arrReceptions[i].receptions[j].location_id,
-									caption : 	this.arrReceptions[i].receptions[j].location_name
+									caption : 	this.arrReceptions[i].receptions[j].location_name									
 								};
-								response.push(auxOrigin);	
+								if(!(this.arrReceptions[i].receptions[j].location_id in response)){
+									response[this.arrReceptions[i].receptions[j].location_id]=auxOrigin;	
+								}	
 							}
 						}
 					}
@@ -412,22 +415,29 @@ enyo
 					response = cacheMan.getAllLocationsForList();
 				}
 				
-				this.$.origen.setItems(response);
-				if(response.length == 1 && this.$.origen.getValue().trim() == ""){
-					this.$.origen.setIndex(response[0].value);
+				for(i in response){
+					newArray.push(response[i]);
+				}
+				
+				this.$.origen.setItems(newArray);
+				if(newArray.length == 1 && this.$.origen.getValue().trim() == ""){
+					this.$.origen.setIndex(newArray[0].value);
 				}
 			},
 			getActiveCattles:function(){
 				var response = [];
+				var newArray = [];
 				if(this.$.rancherInput.getIndex()>-1){
 					for (i in this.arrReceptions){
 						if (this.arrReceptions[i].rancher_id == this.$.rancherInput.getIndex()){
 							for(j in this.arrReceptions[i].receptions){
 								var auxCattle = {
 									value :		this.arrReceptions[i].receptions[j].cattype_id,
-									caption : 	this.arrReceptions[i].receptions[j].cattype_name									
+									caption : 	this.arrReceptions[i].receptions[j].cattype_name
 								};
-								response.push(auxCattle);	
+								if(!(this.arrReceptions[i].receptions[j].cattype_id in response)){
+									response[this.arrReceptions[i].receptions[j].cattype_id]=auxCattle;
+								}								
 							}
 						}
 					}
@@ -435,9 +445,13 @@ enyo
 					response = cacheCattle.getAllCattleType();
 				}
 				
-				this.$.cattle_type_id.setItems(response);
-				if(response.length == 1 && this.$.cattle_type_id.getValue().trim() == ""){
-					this.$.cattle_type_id.setIndex(response[0].value);
+				for(i in response){
+					newArray.push(response[i]);
+				}
+				
+				this.$.cattle_type_id.setItems(newArray);
+				if(newArray.length == 1 && this.$.cattle_type_id.getValue().trim() == ""){
+					this.$.cattle_type_id.setIndex(newArray[0].value);
 				}
 			},
 			getActiveBarnyards:function(){
