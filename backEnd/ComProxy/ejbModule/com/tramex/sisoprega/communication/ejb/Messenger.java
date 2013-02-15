@@ -20,6 +20,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.Authenticator;
+import java.net.PasswordAuthentication;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Properties;
@@ -64,22 +66,25 @@ public class Messenger implements Messageable {
 
   private Logger log = Logger.getLogger(Messenger.class.getCanonicalName());
 
+  private String userName;
+  private String password;
+
   @EJB(lookup = "java:global/DataModel/BaseDataModel")
   private RemoteModelable dataModel;
-  
-  @EJB(lookup="java:global/ComProxy/SmtpEmailSender")
+
+  @EJB(lookup = "java:global/ComProxy/SmtpEmailSender")
   private EmailSender smtp;
-  
-  @EJB(lookup="java:global/ComProxy/MasMensajesProvider")
+
+  @EJB(lookup = "java:global/ComProxy/MasMensajesProvider")
   private SmsProvider smsMan;
-  
-  @Resource(lookup="mail/sisoprega")
+
+  @Resource(lookup = "mail/sisoprega")
   private Session mailSession;
-  
-  @Resource(lookup="comProxy/Properties")
+
+  @Resource(lookup = "comProxy/Properties")
   private Properties comProxyProps;
-  
-  private final static String REPORTING_URL = "http://localhost:9090/ReportingGateway/";
+
+  private final static String REPORTING_URL_PROPERTY = "reporting.application";
 
   /**
    * Default constructor.
@@ -145,12 +150,12 @@ public class Messenger implements Messageable {
     Sms sms = new Sms(to, from, message);
     try {
       smsMan.setConfiguration(comProxyProps);
-      
+
       String userId, password;
       userId = comProxyProps.getProperty("clickatell.user");
       password = comProxyProps.getProperty("clickatell.password");
       smsMan.doLogin(userId, password);
-      
+
       smsMan.sendSMS(sms);
       log.info("SENT SMS: " + message);
       return true;
@@ -175,16 +180,17 @@ public class Messenger implements Messageable {
   private boolean sendEmail(String to, String reportName) {
 
     try {
-      URL url = new URL(REPORTING_URL + reportName);
+      URL url = new URL(comProxyProps.getProperty(REPORTING_URL_PROPERTY) + reportName);
 
       String from = "tramex@sisoprega.com";
       String content = "Encuentre anexo el reporte con los detalles de este mensaje.";
+      reportName = reportName.substring(0, reportName.indexOf('?'));
       Email email = new Email(to, from, reportName, content);
 
       Attachment attachment = new Attachment();
       attachment.setAttachmentType("application/pdf");
       String[] pathParts = url.getPath().split("/");
-      int iFileNamePart = pathParts.length-1;
+      int iFileNamePart = pathParts.length - 1;
       attachment.setFileName(pathParts[iFileNamePart] + ".pdf");
 
       attachment.setContent(readPDF(url));
@@ -203,33 +209,31 @@ public class Messenger implements Messageable {
   @Override
   public boolean sendReport(long rancherId, String reportName) {
     log.entering(this.getClass().getCanonicalName(), "sendReport(rancherId, reportName)");
-    
-    
+
     Rancher person = null;
-    try{
+    try {
       log.fine("Reading person rancher [" + rancherId + "] from dataModel");
       person = dataModel.readSingleDataModel("RANCHER_BY_ID", "rancherId", rancherId, Rancher.class);
       log.finer("person obtained from dataModel:" + person);
-      
+
       if (person != null) {
         log.fine("Sending reportName: " + reportName);
         return sendReport(person, reportName);
       }
-    }catch(Exception e){
+    } catch (Exception e) {
       log.fine("Person not found with provided id [" + rancherId + "]");
     }
 
     EnterpriseRancher enterprise = null;
-    try{
+    try {
       log.fine("Reading enterprise rancher [" + rancherId + "] from dataModel");
-      enterprise = dataModel.readSingleDataModel("ENTERPRISE_RANCHER_BY_ID", "enterpriseId", rancherId,
-          EnterpriseRancher.class);
+      enterprise = dataModel.readSingleDataModel("ENTERPRISE_RANCHER_BY_ID", "enterpriseId", rancherId, EnterpriseRancher.class);
       log.finer("enterprise obtained from dataModel: " + enterprise);
       if (enterprise != null) {
         log.fine("Sending reportName: " + reportName);
         return sendReport(enterprise, reportName);
       }
-    }catch(Exception e){
+    } catch (Exception e) {
       log.fine("Enterprise not found with provided id [" + rancherId + "]");
     }
 
@@ -244,7 +248,8 @@ public class Messenger implements Messageable {
       return sendSimpleMessage(person, message);
     }
 
-    EnterpriseRancher enterprise = dataModel.readSingleDataModel("ENTERPRISE_RANCHER_BY_ID", "enterpriseId", rancherId, EnterpriseRancher.class);
+    EnterpriseRancher enterprise = dataModel.readSingleDataModel("ENTERPRISE_RANCHER_BY_ID", "enterpriseId", rancherId,
+        EnterpriseRancher.class);
     if (enterprise != null) {
       return sendSimpleMessage(enterprise, message);
     }
@@ -256,6 +261,11 @@ public class Messenger implements Messageable {
 
     ByteArrayOutputStream tmpOut = new ByteArrayOutputStream();
 
+    Authenticator.setDefault(new SisopregaAuthenticator(this.userName, this.password) {
+      protected PasswordAuthentication getPasswordAuthentication() {
+        return new PasswordAuthentication(this.getUserName(), this.getPassword().toCharArray());
+      }
+    });
     URLConnection connection = url.openConnection();
     InputStream in = connection.getInputStream();
     int contentLength = connection.getContentLength();
@@ -277,14 +287,21 @@ public class Messenger implements Messageable {
 
     return tmpOut.toByteArray();
   }
-  
-  private boolean sendReport(String reportName, String phone, String email){
+
+  private boolean sendReport(String reportName, String phone, String email) {
     log.entering(this.getClass().getCanonicalName(), "sendReport(reportName, phone, email)");
     String message = "";
     try {
-      URL url = new URL(REPORTING_URL + "SMS/" + reportName);
+      Authenticator.setDefault(new SisopregaAuthenticator(this.userName, this.password) {
+        protected PasswordAuthentication getPasswordAuthentication() {
+          return new PasswordAuthentication(this.getUserName(), this.getPassword().toCharArray());
+        }
+      });
+      URL url = new URL(comProxyProps.getProperty(REPORTING_URL_PROPERTY) + "SMS/" + reportName);
       log.fine("Formed url: " + url.getPath());
-      BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
+
+      URLConnection connection = url.openConnection();
+      BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
       String str;
       while ((str = in.readLine()) != null) {
         message += str;
@@ -299,5 +316,33 @@ public class Messenger implements Messageable {
 
     return false;
   }
-  
+
+  @Override
+  public void login(String userName, String password) {
+    this.userName = userName;
+    this.password = password;
+  }
+
+  private class SisopregaAuthenticator extends Authenticator {
+    private final String userName;
+    private final String password;
+
+    public SisopregaAuthenticator(String userName, String password) {
+      this.userName = userName;
+      this.password = password;
+    }
+
+    public String getUserName() {
+      return this.userName;
+    }
+
+    public String getPassword() {
+      return this.password;
+    }
+
+    protected PasswordAuthentication getPasswordAuthentication() {
+      return new PasswordAuthentication(this.userName, this.password.toCharArray());
+    }
+  }
+
 }

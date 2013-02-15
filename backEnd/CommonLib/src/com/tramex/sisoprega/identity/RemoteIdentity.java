@@ -68,6 +68,8 @@ public interface RemoteIdentity {
    * @throws IdentityManagerException
    */
   void removeGroup(String userName, String groupName) throws IdentityManagerException;
+  
+  void removeUser(String userName) throws IdentityManagerException;
 
   /**
    * Validate current password

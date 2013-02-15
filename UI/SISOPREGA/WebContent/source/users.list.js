@@ -59,29 +59,6 @@ enyo.kind(
                 flex : 1,
                 icon : "images/menu-icon-new.png",
                 onclick : "doAddUser"
-              },
-              {
-                kind : "ListSelector",
-                name : 'filter_id',
-                label : "Filtro",
-                hideItem : true,
-                onChange : "filterUsers",
-                items :
-                  [
-                    {
-                      caption : "Admin",
-                      value : 1
-                    },
-                    {
-                      caption : "Mex user",
-                      value : 2
-                    },
-                    {
-                      caption : "Todo",
-                      value : 3
-                    } ],
-                flex : 1,
-                contentPack : "end"
               } ]
         } ],
     updateList : function() {
@@ -119,5 +96,12 @@ enyo.kind(
       if(this.iSelected>=0)
         return this.users[this.iSelected];
       return null;
+    },
+    deleteUser : function(inSender, inIndex){
+      if (cacheUsers.deleteUser(this.users[inIndex], this, "updateList")) {
+        return true;
+      } else {
+        return false;
+      }
     }
   });
