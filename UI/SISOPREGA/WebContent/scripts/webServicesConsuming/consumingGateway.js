@@ -586,7 +586,33 @@ var cConsumingGateway =
             }
           });
         return output;
-      },    
+      }, 
+      RemoveUser : function(userName){
+        output = "OK";
+
+        var soapMessage = soapHeader + '<ws:RemoveUser>';
+        soapMessage += '<user_name>' + userName + '</user_name>';
+        soapMessage += '</ws:RemoveUser>';
+        soapMessage += soapFooter;
+
+        jQuery.ajax(
+          {
+            url : identityWsURL,
+            type : "POST",
+            dataType : "xml",
+            data : soapMessage,
+            processData : false,
+            contentType : "text/xml;charset=UTF-8",
+            async : false,
+            success : function OnSuccess(data) {
+              output = jQuery(data).find("return").text();
+            },
+            error : function OnError(request, status, error) {
+              alert('No fue posible remover el usuario ' + userName);
+            }
+          });
+        return output;
+      },   
   };
 
 var consumingGateway = cConsumingGateway;

@@ -139,6 +139,17 @@ public class IdentityManagerBean extends BaseBean implements RemoteIdentity {
     return;
   }
   
+  @Override
+  public void removeUser(String userName) throws IdentityManagerException {
+    log.entering(this.getClass().getCanonicalName(), "removeGroup");
+
+    User user = getUserFromName(userName);
+    dataModel.deleteDataModel(user, "");
+    
+    log.fine("User record removed");
+    return;
+  }
+  
   /*
    * (non-Javadoc)
    * 

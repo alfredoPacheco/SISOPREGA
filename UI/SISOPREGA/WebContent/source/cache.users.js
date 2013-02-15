@@ -21,6 +21,15 @@ enyo.kind(
     },
     resetPassword : function(userName, password){
       return consumingGateway.ResetPassword(userName, password);
+    },
+    createUser : function (objUser){
+      return consumingGateway.AddUser(objUser)=='OK';
+    },
+    deleteUser : function (objUser, cbObj, cbMethod){
+      var deleted = consumingGateway.RemoveUser(objUser.user_name)=='OK';
+      if(deleted && cbMethod)
+        cbObj[cbMethod]();
+      return deleted;
     }
   });
 var cacheUsers = new cache.users();

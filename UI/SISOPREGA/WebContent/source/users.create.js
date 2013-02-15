@@ -89,7 +89,7 @@ enyo.kind(
                       name : "btnAdd",
                       className : "enyo-button-affirmative",
                       caption : "Crear",
-                      onclick : "addRancherUser"
+                      onclick : "addUser"
                     }, ]
               },
               {
@@ -132,76 +132,105 @@ enyo.kind(
       this.$.isAdmin.setChecked(false);
       this.$.isMexUser.setChecked(false);
     },
-    setUser : function(parUser){
+    setUser : function(parUser) {
       this.resetValues();
-      if(parUser){
+      if (parUser) {
         this.objUser = parUser;
-        
+
         this.$.user_name.setValue(parUser.userName);
         this.$.password.setValue(parUser.password);
         this.$.confirm_password.setValue(parUser.password);
-        
+
         // Iterate groups to set check box values
-        for(index in parUser.groups){
-          if(parUser.groups[index] == 'admin'){
+        for (index in parUser.groups) {
+          if (parUser.groups[index] == 'admin') {
             this.$.isAdmin.setChecked(true);
-          }
-          else if (parUser.groups[index] == 'mex_user'){
+          } else if (parUser.groups[index] == 'mex_user') {
             this.$.isMexUser.setChecked(true);
           }
-            
+
         } // for
       } // if parUser
       this.toggleUpdate();
     },
-    toggleUpdate : function(){
+    toggleUpdate : function() {
       this.$.draAdd.setOpen(false);
       this.$.draUpdate.setOpen(true);
     },
-    toggleAdd : function(){
+    toggleAdd : function() {
       this.$.draAdd.setOpen(true);
       this.$.draUpdate.setOpen(false);
       this.resetValues();
     },
-    updateUser: function(){
-      if(this.$.password.getValue() != this.NO_CHANGED){
-        if(this.$.password.getValue() != this.$.confirm_password.getValue()){
+    updateUser : function() {
+      if (this.$.password.getValue() != this.NO_CHANGED) {
+        if (this.$.password.getValue() != this.$.confirm_password.getValue()) {
           alert("La contraseña y su confirmación no coinciden.");
           return false;
         }
-        if(this.$.password.getValue() == ""){
+        if (this.$.password.getValue() == "") {
           alert("Debe proveer una contraseña");
         }
-        
+
         cacheUsers.resetPassword(this.objUser.userName, this.$.password.getValue());
       }
-      
-      if(this.$.isMexUser.getChecked()){
-        if(!this.userHasGroup("mex_user"))
+
+      if (this.$.isMexUser.getChecked()) {
+        if (!this.userHasGroup("mex_user"))
           cacheUsers.addGroup(this.objUser.userName, "mex_user");
       } else {
-        if(this.userHasGroup("mex_user"))
+        if (this.userHasGroup("mex_user"))
           cacheUsers.removeGroup(this.objUser.userName, "mex_user");
       }
-      
-      if(this.$.isAdmin.getChecked()){
-        if(!this.userHasGroup("admin"))
+
+      if (this.$.isAdmin.getChecked()) {
+        if (!this.userHasGroup("admin"))
           cacheUsers.addGroup(this.objUser.userName, "admin");
       } else {
-        if(this.userHasGroup("admin"))
+        if (this.userHasGroup("admin"))
           cacheUsers.removeGroup(this.objUser.userName, "admin");
       }
-      
+
       cacheMan.goBack();
     },
-    userHasGroup : function(groupName){
-      for(index in this.objUser.groups){
-        if(this.objUser.groups[index] == groupName)
+    addUser : function() {
+      if (this.$.password.getValue() != this.$.confirm_password.getValue()) {
+        alert("La contraseña y su confirmación no coinciden.");
+        return false;
+      }
+      if (this.$.password.getValue() == "") {
+        alert("Debe proveer una contraseña");
+        return false;
+      }
+      var newUser =
+        {
+          user_name : this.$.user_name.getValue(),
+          password : this.$.password.getValue(),
+          groups : []
+        };
+
+      if (this.$.isAdmin.getChecked()) {
+        var role = {role_name:'admin'};
+        newUser.groups.push(role);
+      }
+      
+      if (this.$.isMexUser.getChecked()) {
+        var role = {role_name:'mex_user'};
+        newUser.groups.push(role);
+      }
+      
+      if(cacheUsers.createUser(newUser)){
+        cacheMan.goBack();
+      }
+    },
+    userHasGroup : function(groupName) {
+      for (index in this.objUser.groups) {
+        if (this.objUser.groups[index] == groupName)
           return true;
       }
       return false;
-    } ,
-    cancel: function(){
+    },
+    cancel : function() {
       cacheMan.goBack();
     }
   });
