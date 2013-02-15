@@ -10,7 +10,6 @@
     </web-resource-collection>
     <auth-constraint>
       <role-name>mx_usr</role-name>
-      <role-name>sisoprega_admin</role-name>
       <role-name>rancher</role-name>
     </auth-constraint>
     <user-data-constraint>

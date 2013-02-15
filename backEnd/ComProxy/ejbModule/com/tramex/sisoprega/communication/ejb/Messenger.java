@@ -184,6 +184,7 @@ public class Messenger implements Messageable {
 
       String from = "tramex@sisoprega.com";
       String content = "Encuentre anexo el reporte con los detalles de este mensaje.";
+      reportName = reportName.substring(0, reportName.indexOf('?'));
       Email email = new Email(to, from, reportName, content);
 
       Attachment attachment = new Attachment();

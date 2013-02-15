@@ -56,7 +56,7 @@ import com.tramex.sisoprega.reporting.BaseReportServlet;
  */
 
 @WebServlet("/FeedOrder")
-@ServletSecurity(@HttpConstraint(rolesAllowed = {"sisoprega_admin", "mx_usr"}))
+@ServletSecurity(@HttpConstraint(rolesAllowed = {"mx_usr"}))
 public class FeedOrder extends BaseReportServlet {
 	private static final long serialVersionUID = 1L;
        

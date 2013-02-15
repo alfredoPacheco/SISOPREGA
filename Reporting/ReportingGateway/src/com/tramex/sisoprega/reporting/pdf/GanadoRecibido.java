@@ -59,7 +59,7 @@ import com.tramex.sisoprega.reporting.BaseReportServlet;
  */
 
 @WebServlet("/GanadoRecibido")
-@ServletSecurity(@HttpConstraint(rolesAllowed = {"sisoprega_admin", "mx_usr", "rancher"}))
+@ServletSecurity(@HttpConstraint(rolesAllowed = {"mx_usr", "rancher"}))
 public class GanadoRecibido extends BaseReportServlet {
 
   private static final long serialVersionUID = -3931253027518760935L;
