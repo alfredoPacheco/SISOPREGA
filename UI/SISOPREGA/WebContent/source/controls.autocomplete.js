@@ -72,7 +72,7 @@ enyo.kind({
 	lostFocus : function(inSender, inEvent) {
 //		if (!this.navigatingOnList && this.$.drop_down.isOpen && this.$.drop_down.selected > -1 && this.$.drop_down.selected != null) {
 //			this.setIndex(this.$.drop_down.items[this.$.drop_down.selected].value);
-			this.$.drop_down.close();
+//			this.$.drop_down.close();
 //		}		
 	},
 	setupItem : function(inSender, InIndex){
@@ -252,3 +252,15 @@ enyo.kind({
 		}
 	}
 });
+createComponent({kind: "catalogs.ranchers.person.create",
+	 onAddRancher:"adoken", name:'dynoco',flex: 1},{owner:this});
+
+enyo.kind({kind: "CheckBox", onChange: "checkboxClicked", name:"check_box",
+		checkboxClicked: function(inSender) {
+		    if (inSender.getChecked()) {
+		         this.log("I've been checked!");
+		    }
+		}
+	}
+);
+
