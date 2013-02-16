@@ -41,6 +41,7 @@ public class Reception {
   private Date dateAllotted;
   private long cattleType;
   private long locationId;
+  private long zoneId;
 
   /**
    * @return the receptionId
@@ -116,10 +117,26 @@ public class Reception {
   public void setLocationId(long locationId) {
     this.locationId = locationId;
   }
+  
+  /**
+   * @return the zoneId
+   */
+  public long getZoneId() {
+    return zoneId;
+  }
+
+  /**
+   * @param zoneId
+   *          the zoneId to set
+   */
+  public void setZoneId(long zoneId) {
+    this.zoneId = zoneId;
+  }
+  
 
   @Override
   public String toString() {
-    return "cattleType:" + cattleType + ";dateAllotted:" + dateAllotted + ";locationId:" + locationId + ";rancherId:" + rancherId
+    return "cattleType:" + cattleType + ";dateAllotted:" + dateAllotted + ";locationId:" + locationId + ";zoneId:" + zoneId + ";rancherId:" + rancherId
         + ";receptionId:" + receptionId + ";";
   }
   
