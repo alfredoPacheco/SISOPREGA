@@ -48,7 +48,8 @@ enyo.kind({
 		{kind: "Toolbar",	
 		components: [					 
 		{kind: "ToolInput", name:"rejected_count", width:"23%",  hint:"Rechazados",changeOnInput: true,},	
-		{kind : "Button",name : "btnComm",className : "enyo-button-affirmative",caption : "Comentario",onclick : "openComments"},		
+		{kind : "Button",name : "btnComm",className : "enyo-button-affirmative",caption : "Comentario",onclick : "openComments"},
+		{kind : "Button",name : "btnSms",className : "enyo-button-affirmative",caption : "SMS",onclick : "sendSMS"},		
 		{kind: "ListSelector", name: 'reject_id', width:"50%",
 		 style:"width:100%;color:white", contentPack:"end",
 			items: [] ,flex: 1,contentPack:"end"},							
@@ -181,5 +182,8 @@ enyo.kind({
 			this._objRec.inspections[this._objRec.inspections.length-1].comments=this.$.comments.getValue();
 			this.closeComments();
 		}			
+	},
+	sendSMS:function(){
+		cacheReceptions.sendInspectionReport(this._objRec.rancher_id);
 	}
 });

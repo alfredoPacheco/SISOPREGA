@@ -1081,6 +1081,18 @@ enyo
 				} else { 
 					return false;
 				}				
+			},
+			sendInspectionReport:function(rancher_id){
+				// Send communication to customer
+				var today = new Date();
+				var month = today.getMonth() + 1;
+				var today_sf = month + '/' + today.getDate() + '/'
+						+ today.getFullYear();
+				var report_name = 'CattleInspection?rancherId='
+						+ rancher_id + '&amp;fromDate=' + today_sf
+						+ '&amp;toDate=' + today_sf;
+				consumingGateway.SendReport(rancher_id, report_name);
+				cacheMan.setMessage("", "SMS Enviado");
 			}
 						
 		});
