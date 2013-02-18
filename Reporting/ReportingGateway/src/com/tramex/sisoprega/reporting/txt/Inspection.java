@@ -79,11 +79,7 @@ public class Inspection extends BaseReportServlet {
     PreparedStatement ps = null;
     ResultSet rs = null;
     
-    StringBuilder sReport=new StringBuilder();
-    StringBuilder sHeads=new StringBuilder();
-    int  iRejects=0;
     StringBuilder sDetails=new StringBuilder();
-    System.out.println(sqlString);
     try {
       ps = conn.prepareStatement(sqlString);
 
@@ -97,13 +93,12 @@ public class Inspection extends BaseReportServlet {
       rs = ps.executeQuery();
 
       while(rs.next()) {    	     	
-    	sDetails.append(rs.getString("ctrl_inspection_inspection_date")).append(" - ").
-    			 append(rs.getString("ctrl_inspection_result_note")).append(" - ").
-    			 append(rs.getString("rechazos")).append("\n");
+    	sDetails.append(rs.getString("ctrl_inspection_result_note")).append(" - ").
+    			 append(rs.getString("rechazos")).append("; ");
       }
       
       PrintWriter out = response.getWriter();
-	  out.println("Reporte de Rechazos");
+	  out.println("Reporte de Rechazos: ");
 	  out.println(sDetails);
 	  out.close();
     } catch (SQLException e) {
@@ -126,12 +121,4 @@ public class Inspection extends BaseReportServlet {
 
     log.exiting(this.getClass().getCanonicalName(), "processRequest");
   }
-
-  private double rounded2Decs(double amount) {
-    amount *= 100;
-    amount = Math.ceil(amount);
-    amount *= 0.01d;
-    return amount;
-  }
-
 }
