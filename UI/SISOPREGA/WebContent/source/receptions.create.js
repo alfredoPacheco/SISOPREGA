@@ -33,7 +33,7 @@ enyo.kind({
 			 style: "overflow: hidden", width: "85%", height: "85%",scrim: true, components: [
 				
 			]},
-			{kind: "RowGroup", defaultKind: "HFlexBox", caption: "", style:"color:#FFF",
+			{kind: "RowGroup", defaultKind: "HFlexBox", caption: "", style:"color:black",
 			 components: [
 					  {kind: "Item",
 						components: [
