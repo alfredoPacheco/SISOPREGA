@@ -206,7 +206,7 @@ enyo.kind({
 			                               name:sLetter+iStart,
 										   occupied:iOccupied,
 										   bBY:true,
-										   content:sLetter.substr(1)+iStart,
+										   content:sLetter.substr(1)+Math.abs(iStart),
 										   onclick: "cellClick",
 										   onmousehold:"cellHold",
 										  },{owner: this});
