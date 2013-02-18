@@ -8,9 +8,8 @@ enyo
 				
 				this.$.cattle_type_id.setItems(cacheCattle.getAllCattleType());
 				this.$.localidad.setItems(cacheMan.getAllZonesForList());
-				this.$.origen.setItems(cacheMan.getAllLocationsForList());
-				
-//				this.$.corrales.setItems(cacheReceptions.getActiveBYForListByRancherID());
+				this.$.origen.setItems(cacheMan.getAllLocationsForList());				
+				this.$.corrales.setItems(cacheReceptions.getActiveBYForListByRancherID(14));
 				this.$.rancherInput.setItems(cacheRanchers.getAllForList());
 			},
 			iSelected : null,
@@ -130,29 +129,30 @@ enyo
 											} ]
 										} ]
 									}, 
-//									{
-//										kind : "Item",
-//										components : [ {
-//											layoutKind : enyo.HFlexLayout,
-//											components : [ {
-//												kind : "controls.autocomplete",
-//												name : "corrales",
-//												hint : "Corrales"
-//											} ]
-//										} ]
-//									},
 									{
 										kind : "Item",
 										components : [ {
 											layoutKind : enyo.HFlexLayout,
 											components : [ {
-												kind : "Input",
+												kind : "controls.multiselect",
 												name : "corrales",
-												hint : "Corrales",
-												flex : 1
+												hint : "Corrales"
 											} ]
 										} ]
-									} ]
+									},
+//									{
+//										kind : "Item",
+//										components : [ {
+//											layoutKind : enyo.HFlexLayout,
+//											components : [ {
+//												kind : "Input",
+//												name : "corrales",
+//												hint : "Corrales",
+//												flex : 1
+//											} ]
+//										} ]
+//									}
+									]
 								} ]
 							}, {
 								kind : "Drawer",
@@ -339,7 +339,7 @@ enyo
 				this.$.cattle_type_id.setIndex(-1);
 				this.$.cantidad.setValue("");
 				this.$.localidad.setIndex(this.defaultZone);
-				this.$.corrales.setValue("");
+				this.$.corrales.setIndex(-1);
 			},
 			cambioDeFecha : function() {
 				var fmt = new enyo.g11n.DateFmt({

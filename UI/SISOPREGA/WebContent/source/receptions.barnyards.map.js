@@ -45,7 +45,7 @@ enyo.kind({
 		//this.addRow(true);
 		this.addRow();
 		this.addRowHeader();		
-		this.createCells("2E",7,4,"50px","50px");
+		this.createCells("2E",-7,4,"50px","50px");
 		this.splitRow();
 		this.addCustomCell("corraman","Corrales de <br/> Manejo","100px","50px");
 		this.createCells("1E",5,6,"50px","50px");
@@ -53,42 +53,42 @@ enyo.kind({
 		this.createCells("1E",17,8,"50px","50px");
 						
 		this.addRow();		
-		this.createCells("2E",8,4,"50px","50px");
+		this.createCells("2E",-8,4,"50px","50px");
 		this.splitRow();
 		this.createCells("1E",2,8,"50px","50px");		
 		this.splitRow();
 		this.createCells("1E",18,8,"50px","50px");		
 								
 		this.addRow(true);		
-		this.createCells("2D",11,4,"50px","50px");
+		this.createCells("2D",-11,4,"50px","50px");
 		this.splitRow();
 		this.createCells("1D",1,8,"50px","50px");				
 		this.splitRow();
 		this.createCells("1D",17,8,"50px","50px");
 								
 		this.addRow();	
-		this.createCells("2D",12,6,"33.33px","25px");
+		this.createCells("2D",-12,6,"33.33px","25px");
 		this.splitRow();
 		this.createCells("1D",2,12,"33.33px","25px");
 		this.splitRow();
 		this.createCells("1D",26,4,"100px","25px");		
 		
 		this.addRow(true);	
-		this.createCells("2C",11,6,"33.33px","25px");
+		this.createCells("2C",-11,6,"33.33px","25px");
 		this.splitRow();
 		this.createCells("1C",1,12,"33.33px","25px");
 		this.splitRow();
 		this.createCells("1C",25,4,"100px","25px");	
 							
 		this.addRow();
-		this.createCells("2C",12,6,"33.33px","25px");
+		this.createCells("2C",-12,6,"33.33px","25px");
 		this.splitRow();
 		this.createCells("1C",2,12,"33.33px","25px");
 		this.splitRow();
 		this.createCells("1C",26,4,"100px","25px");		
 									
 		this.addRow(true);			
-		this.createCells("2B",11,6,"33.33px","25px");
+		this.createCells("2B",-11,6,"33.33px","25px");
 		this.splitRow();
 		this.createCells("1B",1,12,"33.33px","25px");
 		this.splitRow();
@@ -96,7 +96,7 @@ enyo.kind({
 									
 		
 		this.addRow(true);
-		this.createCells("2B",8,4,"50px","50px");
+		this.createCells("2B",-8,4,"50px","50px");
 		this.splitRow();
 		this.createCells("1B",2,8,"50px","50px");
 		this.splitRow();
@@ -104,14 +104,14 @@ enyo.kind({
 		this.addCustomCell("lagoxi","Laguna de <br/> Oxidacion","98px","50px");		
 											
 		this.addRow(true);
-		this.createCells("2A",7,4,"50px","50px");
+		this.createCells("2A",-7,4,"50px","50px");
 		this.splitRow();
 		this.createCells("1A",1,8,"50px","50px");		
 		this.splitRow();
 		this.createCells("1A",17,8,"50px","50px");		
 											
 		this.addRow();		
-		this.createCells("2A",8,4,"50px","50px");
+		this.createCells("2A",-8,4,"50px","50px");
 		this.splitRow();
 		this.addCustomCell("cabaA","Caballerizas A","99px","50px");
 		this.addCustomCell("cabaB","Caballerizas B","100px","50px");		
@@ -121,13 +121,13 @@ enyo.kind({
 		
 		
 		this.addRow();	
-		this.createCells("2R",7,4,"50px","50px");
+		this.createCells("2R",-7,4,"50px","50px");
 		this.splitRow();
 		this.addCustomCell("spacerone","","813px","50px","customBYCellDesc");		
 		
 													
 		this.addRow();
-		this.createCells("2R",8,4,"50px","50px");
+		this.createCells("2R",-8,4,"50px","50px");
 		this.splitRow();
 		this.addCustomCell("spacertwo","","813px","50px");
 				
@@ -206,7 +206,7 @@ enyo.kind({
 			                               name:sLetter+iStart,
 										   occupied:iOccupied,
 										   bBY:true,
-										   content:sLetter.substr(1)+iStart,
+										   content:sLetter.substr(1)+Math.abs(iStart),
 										   onclick: "cellClick",
 										   onmousehold:"cellHold",
 										  },{owner: this});

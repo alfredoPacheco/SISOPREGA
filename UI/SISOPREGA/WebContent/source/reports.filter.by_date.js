@@ -12,7 +12,7 @@ enyo.kind({
 			kind : "RowGroup",
 			defaultKind : "HFlexBox",
 			caption : "",
-			style : "color:#FFF",
+			style : "color:black",
 			components : [ {
 				kind : "VFlexBox",
 				style : "",

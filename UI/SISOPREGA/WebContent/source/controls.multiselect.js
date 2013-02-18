@@ -1,5 +1,5 @@
 enyo.kind({
-	name : "controls.autocomplete",
+	name : "controls.multiselect",
 	kind : enyo.Control,
 	itemSelectedPopupAux : -1,
 	navigatingOnList:false,
@@ -8,7 +8,7 @@ enyo.kind({
 	published : {
 		hint : "",
 		index : -1,
-		items : []
+		items : [],
 	},
 	events:{
 		"onSelectItem":"",
@@ -45,16 +45,93 @@ enyo.kind({
 		this.hintChanged();
 //		this.indexChanged();
 	},
-	components : [
-	{
-		name : "drop_down",
-		kind : enyo.PopupList,
-		style : "width:300px;",
-		modal : false,
-		onSelect : "select_item",
-		onSetupItem: "setupItem",
-		items : []
-	}, 
+	components : [ 
+	{kind: "Popup", name:"drop_down",
+		layoutKind : enyo.VFlexLayout,
+		items:[],
+		width: "300px",height:"300px",
+		setItems:function(items){
+			this.items = items;			
+		},
+		components : [ {
+			kind : enyo.Scroller,
+			flex : 1,
+			autoHorizontal: false, horizontal: false,
+//			className : "listBG",
+			components : [ {
+				kind : enyo.VirtualRepeater,
+				name : "list",
+				onSetupRow : "setupItem",
+				onclick : "select_item",
+				components : [{kind: "Item", layoutKind: "HFlexLayout", components: [ 
+				              {kind : "Divider"},
+				              {kind: "CheckBox",onChange: "checkboxClicked", name:"check_box"},
+				              {kind:"Spacer"},
+				              {name : "caption",style: "font-size:12px;text-align:left;",content : "", flex:9}
+				              ]}]
+				}]
+		}, {
+			kind : "Toolbar",
+			components : [ {
+				kind : "enyo.IconButton",
+				flex : 1,
+				label : "Aceptar",
+				onclick : "doPerson"
+			}, {
+				kind : "enyo.IconButton",
+				flex : 1,
+				label : "Cancelar",
+				onclick : "doEnterprise"
+			}]
+		}],
+		checkboxClicked: function(inSender) {
+		    if (inSender.getChecked()) {
+		         this.log("I've been checked!");
+		    }
+		},
+		select_item : function(inSender, inEvent) {
+			if (this.items[inEvent.rowIndex]) {
+				this.iSelected = inEvent.rowIndex;
+				this.doSelect_item();
+			}
+		},
+		getSelected : function() {
+			return this.items[this.iSelected];
+		},
+		
+		setupProductRow : function(inSender, inIndex) {
+			
+		},
+		
+		deleteRancher : function(inSender, inIndex) {
+			if (cacheRanchers.del(this.items[inIndex], this, "filterRanchers")) {
+				return true;
+			} else {
+				return false;
+			}
+		},
+		ready : function() {
+			
+//			this.updateList();
+		},
+		updateList : function() {
+			this.$.list.render();
+		}},
+		
+		
+//		
+//		
+//		published:{items:[],selected:-1},
+//		setItems:function(items){
+//			this.$.p_multiselect.setItems(items);
+//		},
+//		create : function() {
+//			this.inherited(arguments);			
+////			this.indexChanged();
+//		},
+//		  layoutKind: "VFlexLayout",onSelect : "select_item", onSetupItem: "setupItem",
+//		 width: "300px", components:[ {kind: "controls.multiselect.popuplist", 
+//			 							name:"p_multiselect", flex: 1}]}, 
 	{
 		kind : "Input",
 		name : "textField",
@@ -68,27 +145,72 @@ enyo.kind({
 		kind : "IconButton",
 		icon : "images/icon-arrows-down.png",
 		onclick : "click_button"
-	}], 
-	setupItem : function(inSender, InIndex){
-		this.itemSelectedPopupAux++;
-		if (this.index > -1 && !this.navigatingOnList){
-			if(this.getCaptionByIndex(this.index) == InIndex.$.item.getContent()){
-				InIndex.applyStyle("background-color", "white");
+	} 
+	],
+	setupItem : function(inSender, inIndex){
+		var objRan;
+		if (objRan = this.items[inIndex]) {
+			this.setupDivider(inIndex);
+			this.$.caption.setContent(objRan.caption);
+			
+//			this.$.info.setContent(objRan.phone_number);
+			return true;
+		}
+		
+		
+		
+//		this.itemSelectedPopupAux++;
+//		if (this.index > -1 && !this.navigatingOnList){
+//			if(this.getCaptionByIndex(this.index) == InIndex.$.item.getContent()){
+//				InIndex.applyStyle("background-color", "white");
+////				this.$.textField.setValue(InIndex.caption);
+//				this.$.drop_down.selected = this.itemSelectedPopupAux;				
+//			}
+//		}
+//		else if (!this.navigatingOnList && this.itemSelectedPopupAux == 0 ){
+//			InIndex.applyStyle("background-color", "white");
+//			this.$.drop_down.selected = 0;	
+//		}
+//		else if(this.$.drop_down.selected > -1 && this.$.drop_down.selected != null){
+//			if(this.$.drop_down.items[this.$.drop_down.selected].caption == InIndex.$.item.getContent()){
+//				InIndex.applyStyle("background-color", "white");
 //				this.$.textField.setValue(InIndex.caption);
-				this.$.drop_down.selected = this.itemSelectedPopupAux;				
+//			}
+//		}
+//		return false;
+	},
+	getGroupName : function(inIndex) {
+		try {
+			// get previous record
+			var r0 = this.items[inIndex - 1];
+			// get (and memoized) first letter of last name
+			if (r0) {
+				r0.letter = r0.sortStr.substr(0, 1).toUpperCase();
 			}
-		}
-		else if (!this.navigatingOnList && this.itemSelectedPopupAux == 0 ){
-			InIndex.applyStyle("background-color", "white");
-			this.$.drop_down.selected = 0;	
-		}
-		else if(this.$.drop_down.selected > -1 && this.$.drop_down.selected != null){
-			if(this.$.drop_down.items[this.$.drop_down.selected].caption == InIndex.$.item.getContent()){
-				InIndex.applyStyle("background-color", "white");
-				this.$.textField.setValue(InIndex.caption);
-			}
-		}
-		return false;
+			var a = r0 && r0.letter;
+			// get record
+			var r1 = this.items[inIndex];
+			r1.letter = r1.sortStr.substr(0, 1).toUpperCase();
+			var b = r1.letter;
+			// new group if first letter of last name has changed
+			return a != b ? b : null;
+		} catch (e) {
+			return null;
+		};
+
+	},
+	setupDivider : function(inIndex) {
+		// use group divider at group transition, otherwise use item border for
+		// divider
+		var group = this.getGroupName(inIndex);
+		this.$.divider.setCaption(group);
+		this.$.divider.canGenerate = Boolean(group);
+	},
+	lostFocus : function(inSender, inEvent) {
+//		if (!this.navigatingOnList && this.$.drop_down.isOpen && this.$.drop_down.selected > -1 && this.$.drop_down.selected != null) {
+//			this.setIndex(this.$.drop_down.items[this.$.drop_down.selected].value);
+//			this.$.drop_down.close();
+//		}		
 	},
 	select_item : function(inSender, inSelected) {
 		this.setIndex(inSender.items[inSelected].value);
@@ -98,8 +220,9 @@ enyo.kind({
 		this.itemSelectedPopupAux=-1;
 		this.$.drop_down.setItems(this.allItems);
 		if(this.$.drop_down.items.length > 0){
+//			this.$.drop_down.scrollToSelected();
 			this.$.drop_down.openAtEvent(inEvent);
-			this.$.drop_down.scrollToSelected();
+			this.$.list.render();
 		}
 		this.$.textField.forceFocus();		
 		return false;
