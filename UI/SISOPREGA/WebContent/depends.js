@@ -36,6 +36,7 @@ enyo.depends(
 	"source/catalogs.ranchers.billing.create.js",		
 	"source/catalogs.ranchers.enterprise.create.js",	
 	"source/catalogs.ranchers.contact.list.js",	
+	"source/catalogs.ranchers.pedimentos.list.js",
 	"source/catalogs.barnyards.js",
 	"source/catalogs.barnyards.list.js"	,
 	"source/catalogs.barnyards.capacity.js",

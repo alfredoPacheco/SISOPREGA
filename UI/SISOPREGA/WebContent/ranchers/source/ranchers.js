@@ -27,10 +27,11 @@ enyo.kind({
 			{kind: "ranchers.login",name:"login",onSucess:"loadReports"},
 			{kind: "ranchers.reports",onMBYReport:"loadBYMReport", onFeedReport:"loadFeedReport",
 			 onInspectionReport:"loadInspectionReport", onHistoricalReport:"loadHistoricalReport",
-			 onUpdateProfile:"loadUpdateProfile",onGoBack:"loadLogIn"},
+			 onUpdateProfile:"loadUpdateProfile",onPedimentos:"loadPedimentos", onGoBack:"loadLogIn"},
 			{kind: "receptions.barnyards.map",name:"rancherMap",onGoBack:"stepBack"},
 			{kind: "ranchers.profile.person",name:"profilePerson",onCancel:"stepBack",onUpdate:"updateProfile",onChangePW:'changePW'},
-			{kind: "ranchers.profile.enterprise",name:"profileEnterprise",onCancel:"stepBack",onUpdate:"updateProfile",onChangePW:'changePW'},			
+			{kind: "ranchers.profile.enterprise",name:"profileEnterprise",onCancel:"stepBack",onUpdate:"updateProfile",onChangePW:'changePW'},
+			{kind: "ranchers.pedimentos", name:"pedimentosList", onCancel:"stepBack", onUpdate:"updatePedimentos"}
 		]},
 	],
 	rendered:function(){
@@ -133,5 +134,10 @@ enyo.kind({
 		}else{
 			alert('Error al intentar cambiar password');
 		}		
+	},
+	loadPedimentos:function(){
+	  this.inherited(arguments);
+      this.$.pedimentosList.updateList();
+	  this.$.main.setIndex(5);
 	}
 });

@@ -20,6 +20,12 @@
 	background-size:100% 100%;
 	background-repeat: no-repeat;
 }
+.rancherDocosBG{
+	cursor:pointer;	
+	background-image: url(../images/pedimentos.png);
+	background-size:100% 100%;
+	background-repeat: no-repeat;
+}
 .mainBG{
 	background-image: url(../images/background.png);
 	background-size:100% 100%;	

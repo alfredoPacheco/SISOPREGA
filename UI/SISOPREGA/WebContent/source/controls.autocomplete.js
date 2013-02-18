@@ -252,7 +252,7 @@ enyo.kind({
 		}
 	}
 });
-createComponent({kind: "catalogs.ranchers.person.create",
+createComponent : ({kind: "catalogs.ranchers.person.create",
 	 onAddRancher:"adoken", name:'dynoco',flex: 1},{owner:this});
 
 enyo.kind({kind: "CheckBox", onChange: "checkboxClicked", name:"check_box",
