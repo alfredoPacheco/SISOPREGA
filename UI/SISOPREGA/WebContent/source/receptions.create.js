@@ -33,7 +33,7 @@ enyo.kind({
 			 style: "overflow: hidden", width: "85%", height: "85%",scrim: true, components: [
 				
 			]},
-			{kind: "RowGroup", defaultKind: "HFlexBox", caption: "", style:"color:#FFF",
+			{kind: "RowGroup", defaultKind: "HFlexBox", caption: "", style:"color:black",
 			 components: [
 					  {kind: "Item",
 						components: [
@@ -133,7 +133,11 @@ enyo.kind({
 			this.$.weight.forceFocus();
 			break;
 		case "weight":
-			this.$.rancher_id.setFocus();
+			if (this.$.draAdd.open==true){
+				this.addReception();
+			}else if (this.$.draUpdate.open==true){
+				this.updateReception();
+			}
 			break;
 			
 		}

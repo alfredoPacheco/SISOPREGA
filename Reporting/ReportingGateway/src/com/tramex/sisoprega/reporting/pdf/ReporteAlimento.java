@@ -84,6 +84,5 @@ public class ReporteAlimento extends BaseReportServlet {
     String reportURL = "WEB-INF/Reports/Ranchers/EntregaAlimento.jasper";
 
     processRequest(reportURL, params, response);
-
   }
 }

@@ -21,16 +21,23 @@ import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
 import javax.annotation.Resource;
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
+
+import com.tramex.sisoprega.datamodel.RemoteModelable;
+import com.tramex.sisoprega.dto.Rancher;
+import com.tramex.sisoprega.dto.RancherUser;
 
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExporter;
@@ -66,6 +73,9 @@ public class BaseReportServlet extends HttpServlet {
 
   @Resource(name = "jdbc/sisoprega")
   protected DataSource ds;
+  
+  @EJB(lookup="java:global/DataModel/BaseDataModel")
+  protected RemoteModelable dataModel;
 
   protected Connection conn = null;
 
@@ -137,6 +147,30 @@ public class BaseReportServlet extends HttpServlet {
    */
   protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     doGet(request, response);
+  }
+  
+  protected String rancherFromLoggedUser(HttpServletRequest request){
+    log.entering(this.getClass().getCanonicalName(), "getLoggedRancherId");
+
+    long result = 0;
+
+    Map<String, Object> parameters = new HashMap<String, Object>();
+    parameters.put("userName", request.getUserPrincipal().getName());
+
+    List<RancherUser> ranchers = dataModel.readDataModelList("RANCHER_USER_BY_USER_NAME", parameters, RancherUser.class);
+
+    if (!ranchers.isEmpty()) {
+      RancherUser loggedRancher = ranchers.get(0);
+
+      Rancher rancher = dataModel.readSingleDataModel("RANCHER_BY_ID", "rancherId", loggedRancher.getRancherId(), Rancher.class);
+
+      if (rancher != null) {
+        result = rancher.getRancherId();
+      }
+    }
+
+    log.fine("Retrieved rancherId[" + result + "] from userName[" + request.getUserPrincipal().getName() + "]");
+    return String.valueOf(result);
   }
 
 }

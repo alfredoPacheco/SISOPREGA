@@ -18,5 +18,6 @@
 			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="src" path="/CommonLib"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

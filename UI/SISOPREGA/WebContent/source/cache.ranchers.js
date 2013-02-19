@@ -785,12 +785,12 @@ enyo.kind(
       var objAux = {};
       var arrAux = [];
       var objToSend = new Object();
-      var cgReadBillings = null;
+      var cgReadUsers = null;
 
       objToSend.rancherId = objRan.rancher_id;
-      cgReadBillings = consumingGateway.Read("RancherUser", objToSend);
-      if (cgReadBillings.exceptionId == 0) { // Read successfully
-        jQuery.each(cgReadBillings.records, function() {
+      cgReadUsers = consumingGateway.Read("RancherUser", objToSend);
+      if (cgReadUsers.exceptionId == 0) { // Read successfully
+        jQuery.each(cgReadUsers.records, function() {
           jQuery.each(this, function(key, value) {
             objAux[key] = value;
           });
@@ -831,6 +831,51 @@ enyo.kind(
         }
       } else {
         cacheMan.setMessage("", "La contraseña y su confirmación no coinciden.");
+      }
+    },
+    getPedimentos : function(objRan) {
+      var objAux = {};
+      var arrAux = [];
+      var objToSend = new Object();
+      var cgReadPedimentos = null;
+
+      objToSend.rancherId = objRan.rancher_id;
+      cgReadPedimentos = consumingGateway.Read("Pedimento", objToSend);
+      if (cgReadPedimentos.exceptionId == 0) { // Read successfully
+        jQuery.each(cgReadPedimentos.records, function() {
+          jQuery.each(this, function(key, value) {
+            objAux[key] = value;
+          });
+          objAux.fechaPedimento = "" + UTCtoNormalDate(objAux.fechaPedimento);
+          arrAux.push(objAux);
+          objAux = {};
+        });
+      }
+      return objRan.pedimentos = arrAux;
+    },
+    deletePedimento : function(objRancher, objCon, cbObj, cbMethod){
+      var objToSend = {};
+      objToSend.folio = objCon.folio;
+      objToSend.rancherId = objCon.rancherId;
+      objToSend.fechaPedimento = DateOut(objCon.fechaPedimento);
+      var cgDeletePedimento = null;
+      cgDeletePedimento = consumingGateway.Delete("Pedimento", objToSend);
+
+      if (cgDeletePedimento.exceptionId == 0) { // Deleted successfully
+        var tamanio = objRancher.pedimentos.length;
+        for ( var i = 0; i < tamanio; i++) {
+          if (objRancher.pedimentos[i].folio == objCon.folio) {
+            objRancher.pedimentos.splice(i, 1);
+            if (cbMethod) {
+              cbObj[cbMethod]();
+            }
+            return true;
+          }
+        }
+        return false;
+      } else { // Error
+        cacheMan.setMessage("", "[Exception ID: " + cgDeletePedimento.exceptionId + "] Descripcion: " + cgDeletePedimento.exceptionDescription);
+        return false;
       }
     }
   });

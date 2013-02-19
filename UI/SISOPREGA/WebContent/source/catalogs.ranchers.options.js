@@ -17,7 +17,8 @@ enyo.kind(
         "onEdit" : "",
         "onContacts" : "",
         "onBilling" : "",
-        "onRegister" : ""
+        "onRegister" : "",
+        "onPedimentos" : ""
       },
     components :
       [
@@ -54,6 +55,12 @@ enyo.kind(
                 className : "enyo-button-cat",
                 caption : "Usuarios",
                 onclick : "doRegister"
+              },
+              {
+                kind : "Button",
+                className : "enyo-button-cat",
+                caption : "Pedimentos",
+                onclick : "doPedimentos"
               },
               {
                 kind : "Spacer"
