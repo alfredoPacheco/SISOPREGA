@@ -75,7 +75,8 @@ enyo
 												kind : "controls.autocomplete",
 												name : "rancher",
 												hint : "Ganadero",
-												onSelectItem:"on_select_item"
+												onSelectItem:"on_select_item",
+												onEnter:"emularTabulacionConEnter"
 											} ]
 										} ]
 									},
@@ -87,7 +88,8 @@ enyo
 												kind : "controls.autocomplete",
 												name : "zone",
 												hint : "Localidad",
-												onSelectItem:"on_select_item"
+												onSelectItem:"on_select_item",
+												onEnter:"emularTabulacionConEnter"
 											} ]
 										} ]
 									},
@@ -99,7 +101,8 @@ enyo
 												kind : "Input",
 												name : "autorizacion",
 												hint : "Autorizacion",
-												flex : 1
+												flex : 1,
+												onkeydown:"key_down"
 											} ]
 										} ]
 									},
@@ -111,7 +114,8 @@ enyo
 												kind : "controls.autocomplete",
 												name : "origin",
 												hint : "Origen",
-												onSelectItem:"on_select_item"
+												onSelectItem:"on_select_item",
+												onEnter:"emularTabulacionConEnter"
 											} ]
 										} ]
 									},
@@ -123,7 +127,8 @@ enyo
 												kind : "controls.autocomplete",
 												name : "cattle_type",
 												hint : "Ganado",
-												onSelectItem:"on_select_item"
+												onSelectItem:"on_select_item",
+												onEnter:"emularTabulacionConEnter"
 											} ]
 										} ]
 									},
@@ -136,7 +141,8 @@ enyo
 												name : "cantidad",
 												hint : "Cantidad",
 												inputType : "number",
-												flex : 1
+												flex : 1,
+												onkeydown:"key_down"
 											} ]
 										} ]
 									}, 
@@ -148,7 +154,8 @@ enyo
 												kind : "controls.multiselect",
 												name : "barnyards",
 												hint : "Corrales",
-												onSelectItem:"on_select_item"
+												onSelectItem:"on_select_item",
+												onEnter:"emularTabulacionConEnter"
 											} ]
 										} ]
 									},
@@ -340,11 +347,40 @@ enyo
 					}
 				}
 			},
+			emularTabulacionConEnter:function(inSender){
+				switch(inSender.name){
+				case "rancher":
+					this.$.zone.setFocus();
+					break;
+				case "zone":
+					this.$.autorizacion.forceFocus();
+					break;
+				case "autorizacion":
+					this.$.origin.setFocus();
+					break;
+				case "origin":
+					this.$.cattle_type.setFocus();
+					break;		
+				case "cattle_type":
+					this.$.cantidad.forceFocus();
+					break;
+				case "cantidad":
+					this.$.barnyards.setFocus();
+					break;
+				case "barnyards":
+//					this.$.rancher_id.setFocus();
+					break;
+				}
+			},
+			key_down:function(inSender, inEvent){
+				if(inEvent.keyCode == 13){
+					this.emularTabulacionConEnter(inSender);
+				}
+			},
 			ready : function() {
 				this.arrActiveReceptions = cacheReceptions.get();				
 				this.$.fechaPicker.setValue(new Date());
-				this.cambioDeFecha();				
-				
+				this.cambioDeFecha();			
 			},
 			resetValues : function() {
 				this.$.rancher.clear();

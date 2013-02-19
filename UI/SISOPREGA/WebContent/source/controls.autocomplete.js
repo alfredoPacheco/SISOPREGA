@@ -253,5 +253,6 @@ enyo.kind({
 	clear:function(){
 		this.$.textField.setValue("");
 		this.index = -1;
+		this.$.drop_down.selected = -1;
 	}
 });
