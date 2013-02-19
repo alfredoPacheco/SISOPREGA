@@ -649,7 +649,7 @@ enyo
 						for(j in this.arrFilter[i].barnyards){
 							auxCaption += this.arrFilter[i].barnyards[j].substring(1) + ", ";
 						}
-						auxCaption.slice(0, -2);
+						auxCaption = auxCaption.slice(0, -2);
 						var obj = {
 								value:		this.arrFilter[i].reception_id,
 								caption:	auxCaption,
