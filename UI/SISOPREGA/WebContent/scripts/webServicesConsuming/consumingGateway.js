@@ -82,7 +82,7 @@ var cConsumingGateway =
 
       return result;
     },
-    Login : function(userId, password) {
+    Login : function(userId, password, callBackObject, callBackMethod, result) {
       // Se crea objeto que devolvera la funcion:
       output =
         {
@@ -105,19 +105,17 @@ var cConsumingGateway =
           data : soapMessage,
           processData : false,
           contentType : "text/xml;charset=UTF-8",
-          async : false,
           success : function OnSuccess(data) {
             output.exceptionDescription = jQuery(data).find("exceptionDescription").text();
             output.exceptionId = jQuery(data).find("exceptionId").text();
+            callBackObject[callBackMethod](output);
           },
           error : function OnError(request, status, error) {
             output.exceptionId = 1;
             output.exceptionDescription = error;
-            alert(output.exceptionDescription);
-            consumingGateway.LogOut();
+            callBackObject[callBackMethod](output);
           }
         });
-      return output;
     },
     Create : function(entityName, entity) {
       // Se crea objeto que devolvera la funcion:
