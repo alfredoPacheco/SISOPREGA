@@ -60,7 +60,9 @@ enyo.kind({
 		this.createCells("1E",18,8,"50px","50px");		
 								
 		this.addRow(true);		
-		this.createCells("2D",-11,4,"50px","50px");
+		this.createCells("2D",-11,1,"50px","50px");
+		this.createCells("2D",-7,2,"50px","50px");
+		this.createCells("2D",-1,1,"50px","50px");
 		this.splitRow();
 		this.createCells("1D",1,8,"50px","50px");				
 		this.splitRow();
