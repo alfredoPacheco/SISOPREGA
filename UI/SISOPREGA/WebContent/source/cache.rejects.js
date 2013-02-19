@@ -1,11 +1,20 @@
 enyo.kind({
 	name: "cache.rejects",
-	arrObj:_arrCattleReject,
+	arrObj:null,
 	reloadme:function(){
 		//AJAX
 	},	
 	get:function(){
 		//AJAX
+		if (!this.arrObj){
+			this.arrObj=[];
+			var request = consumingGateway.Read("InspectionCode", {});
+			if (request.exceptionId == 0){ //Read successfully
+				for(rec in request.records){
+					this.arrObj.push({reject_id:request.records[rec].inspectionCodeId,reject_desc:request.records[rec].inspectionCodeDescription});					
+				}
+			}
+		}
 		return this.arrObj;
 	},
 	Create:function(objCreate,cbObj,cbMethod){

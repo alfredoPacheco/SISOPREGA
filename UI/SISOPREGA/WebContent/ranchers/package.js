@@ -6,6 +6,7 @@ enyo.depends(
   "source/global.utils.js",   
   "source/ranchers.js",
   "source/ranchers.login.js",
+  "source/ranchers.pedimentos.js",
   "source/ranchers.reports.js",
   "source/ranchers.profile.person.js",
   "source/ranchers.profile.enterprise.js",   

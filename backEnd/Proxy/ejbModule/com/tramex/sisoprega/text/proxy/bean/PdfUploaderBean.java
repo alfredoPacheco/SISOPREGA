@@ -17,8 +17,11 @@ package com.tramex.sisoprega.text.proxy.bean;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -30,6 +33,8 @@ import java.util.Map;
 import java.util.Properties;
 
 import javax.annotation.Resource;
+import javax.annotation.security.DeclareRoles;
+import javax.ejb.Stateless;
 
 import com.tramex.sisoprega.common.BaseResponse;
 import com.tramex.sisoprega.common.CreateGatewayResponse;
@@ -61,6 +66,8 @@ import com.tramex.sisoprega.proxy.bean.BaseBean;
  * @author Diego Torres
  * 
  */
+@Stateless
+@DeclareRoles({ "sisoprega_admin", "mx_usr", "rancher" })
 public class PdfUploaderBean extends BaseBean implements Cruddable {
 
   @Resource(name = "pdfUploader")
@@ -110,6 +117,8 @@ public class PdfUploaderBean extends BaseBean implements Cruddable {
             p.setFechaPedimento(pedimento.getFechaPedimento());
             pedimentos.add(p);
           }
+        } else {
+          fillWithPedimentosByRancherId(pedimentos, rancherId);
         }
       } else if (pedimento.getFolio() != null && !pedimento.getFolio().trim().equals("")) {
         if (pedimento.getRancherId() != 0) {
@@ -145,16 +154,7 @@ public class PdfUploaderBean extends BaseBean implements Cruddable {
         }
       } else if (pedimento.getRancherId() != 0) {
         // Retrieve date list of pedimentos for rancher
-        for (String fechaPedimento : getDatesInRancher(pedimento.getRancherId())) {
-          for (String folio : getFoliosInDate(pedimento.getRancherId(), fechaPedimento)) {
-            Pedimento p = new Pedimento();
-            p.setFolio(folio);
-            p.setRancherId(pedimento.getRancherId());
-            p.setFechaPedimento(pedimento.getFechaPedimento());
-            pedimentos.add(p);
-          }
-        }
-        
+        fillWithPedimentosByRancherId(pedimentos, pedimento.getRancherId());
       } else {
         response.setError(new Error("VAL03", "El filtro especificado no es válido en la lista de pedimentos",
             "proxy.PdfUploader.Read"));
@@ -201,8 +201,36 @@ public class PdfUploaderBean extends BaseBean implements Cruddable {
     this.log.entering(this.getClass().getCanonicalName(), "Create");
 
     BaseResponse response = new BaseResponse();
-    response
-        .setError(new Error("VAL04", "No se permite el borrado de registros por este medio.", "proxy.PdfUploaderBean.Create"));
+    String exceptionFrom = "proxy.PdfUploaderBean.Create";
+
+    Pedimento pedimento = null;
+    try {
+      pedimento = entityFromRequest(request, Pedimento.class);
+      this.log.fine("Got pedimento from request: " + pedimento);
+
+      if (pedimento.getFechaPedimento() != null && pedimento.getFolio() != null && pedimento.getRancherId() != 0) {
+        String uploadPath = PDF_UPLOADER_PROPERTIES.getProperty("uploadPath");
+        String fechaPedimento = new SimpleDateFormat("yyyyMMdd").format(pedimento.getFechaPedimento());
+        String datesFile = uploadPath + "/" + pedimento.getRancherId() + "/" + fechaPedimento;
+        String zipFile = uploadPath + "/" + pedimento.getRancherId() + "/" + pedimento.getFolio() + ".zip";
+
+        removeLineFromFile(datesFile, pedimento.getFolio());
+        deleteFile(zipFile);
+
+      } else {
+        String exceptionId = "VAL04";
+        String exceptionDescription = "Se han omitido detalles necesarios para el borrado de un pedimento, por favor indique: fecha, folio y ganadero";
+        response.setError(new Error(exceptionId, exceptionDescription, exceptionFrom));
+      }
+    } catch (Exception e) {
+      this.log.severe("Exception found while deleting PEDIMENTO");
+      this.log.throwing(this.getClass().getName(), "Delete", e);
+
+      String exceptionId = "DEL01";
+      String exceptionDescription = "Error al intentar borrar un pedimento, intente mas tarde.";
+
+      response.setError(new Error(exceptionId, exceptionDescription, exceptionFrom));
+    }
 
     this.log.exiting(this.getClass().getCanonicalName(), "Create");
     return response;
@@ -228,6 +256,7 @@ public class PdfUploaderBean extends BaseBean implements Cruddable {
       }
     }
 
+    log.fine("Retrieved rancherId[" + result + "] from userName[" + getLoggedUser() + "]");
     return result;
   }
 
@@ -255,8 +284,13 @@ public class PdfUploaderBean extends BaseBean implements Cruddable {
 
     File file = new File(rancherFileName);
     File[] listOfFiles = file.listFiles();
+
+    if (listOfFiles == null)
+      return dates;
+
     for (File f : listOfFiles) {
-      dates.add(f.getName());
+      if (!f.getName().contains("."))
+        dates.add(f.getName());
     }
 
     return dates;
@@ -271,8 +305,10 @@ public class PdfUploaderBean extends BaseBean implements Cruddable {
     if (file.exists()) {
       BufferedReader br = new BufferedReader(new FileReader(dateFileName));
       try {
-        String folio = br.readLine();
-        folios.add(folio);
+        String folio = null;
+        while ((folio = br.readLine()) != null) {
+          folios.add(folio);
+        }
       } finally {
         br.close();
       }
@@ -284,15 +320,116 @@ public class PdfUploaderBean extends BaseBean implements Cruddable {
   private List<Long> getUploadedRanchers() {
     List<Long> ranchersList = new ArrayList<Long>();
 
-    String rancherFileName = PDF_UPLOADER_PROPERTIES.getProperty("uploadPath");
+    String uploadPath = PDF_UPLOADER_PROPERTIES.getProperty("uploadPath");
 
-    File file = new File(rancherFileName);
+    File file = new File(uploadPath);
     File[] listOfFiles = file.listFiles();
     for (File f : listOfFiles) {
       ranchersList.add(Long.parseLong(f.getName()));
     }
 
     return ranchersList;
+  }
+
+  private void deleteFile(String fileName) {
+    log.fine("Deleting file:[" + fileName + "]");
+    recursiveDelete(new File(fileName));
+  }
+
+  private void recursiveDelete(File file) {
+    if (file == null || !file.exists()) {
+      log.finer("Found that the file is null or does not exists.");
+      return;
+    }
+
+    if (file.isFile()) {
+      log.finer("Found that the file is deleteable.");
+      file.delete();
+      return;
+    }
+    File children[] = file.listFiles();
+    for (int i = 0; i < children.length; i++) {
+      log.finer("Found that the file is a folder with [" + children.length + "] files.");
+      File child = children[i];
+      if (child.isFile())
+        child.delete();
+      else
+        recursiveDelete(child);
+    }
+
+    file.delete();
+  }
+
+  private void removeLineFromFile(String file, String lineToRemove) {
+
+    try {
+
+      File inFile = new File(file);
+
+      if (!inFile.isFile()) {
+        log.severe("Parameter is not an existing file");
+        return;
+      }
+
+      // Construct the new file that will later be renamed to the original
+      // filename.
+      File tempFile = new File(inFile.getAbsolutePath() + ".tmp");
+
+      BufferedReader br = new BufferedReader(new FileReader(file));
+      PrintWriter pw = new PrintWriter(new FileWriter(tempFile));
+
+      String line = null;
+      int linesInFile = 0;
+
+      // Read from the original file and write to the new
+      // unless content matches data to be removed.
+      while ((line = br.readLine()) != null) {
+        if (!line.trim().equals(lineToRemove)) {
+          pw.println(line);
+          pw.flush();
+          linesInFile++;
+        }
+      }
+      pw.close();
+      br.close();
+
+      // Delete the original file
+      if (!inFile.delete()) {
+        this.log.severe(("Could not delete file"));
+        return;
+      }
+
+      // Rename the new file to the filename the original file had.
+      if (linesInFile > 0) {
+        if (!tempFile.renameTo(inFile))
+          this.log.severe("Could not rename file");
+      } else {
+        tempFile.delete();
+      }
+
+    } catch (FileNotFoundException ex) {
+      this.log.throwing(this.getClass().getCanonicalName(), "Delete", ex);
+    } catch (IOException ex) {
+      this.log.throwing(this.getClass().getCanonicalName(), "Delete", ex);
+    }
+  }
+
+  private void fillWithPedimentosByRancherId(List<Pedimento> pedimentos, long rancherId) throws ParseException, IOException {
+    // Retrieve date list of pedimentos for rancher
+    log.fine("Retrieving pedimentos for RancherId [" + rancherId + "]");
+    for (String fechaPedimento : getDatesInRancher(rancherId)) {
+      log.fine("Getting pedimentos in date file: " + fechaPedimento);
+      Date dFechaPedimento = new SimpleDateFormat("yyyyMMdd").parse(fechaPedimento);
+      for (String folio : getFoliosInDate(rancherId, fechaPedimento)) {
+        log.finer("Got folio : [" + folio + "]");
+        Pedimento p = new Pedimento();
+        p.setFolio(folio);
+        p.setRancherId(rancherId);
+        p.setFechaPedimento(dFechaPedimento);
+        pedimentos.add(p);
+        log.finest("Pedimentos in list for now:[" + pedimentos.size() + "]");
+      }
+    }
   }
 
 }

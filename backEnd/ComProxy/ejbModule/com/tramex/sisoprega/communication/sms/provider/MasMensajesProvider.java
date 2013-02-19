@@ -156,7 +156,7 @@ public class MasMensajesProvider implements SmsProvider {
   @Override
   public void setConfiguration(Properties props) throws InitSmsProviderException {
     try {
-      this.doLogin(props.getProperty("masmensajes.user"), props.getProperty("masmensajes.password"));
+      this.doLogin(props.getProperty("sms.user"), props.getProperty("sms.password"));
     } catch (Exception e) {
       throw new InitSmsProviderException("Error retrieving sms properties.");
     }

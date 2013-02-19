@@ -80,7 +80,7 @@ public class Pedimento {
   
   @Override
   public String toString() {
-    String sFechaPedimento = new SimpleDateFormat("MM/dd/yyyy").format(fechaPedimento);
+    String sFechaPedimento = this.fechaPedimento==null?"":new SimpleDateFormat("MM/dd/yyyy").format(this.fechaPedimento);
     return "folio:" + this.getFolio() + ";rancherId:" + this.getRancherId() + ";fecha:" + sFechaPedimento + ";";
   }
 
