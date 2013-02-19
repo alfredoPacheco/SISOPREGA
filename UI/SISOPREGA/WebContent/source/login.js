@@ -2,12 +2,6 @@ enyo.kind(
   {
     name : "login",
     kind : enyo.VFlexBox,
-    loggedIn : false,
-    gotRanchers : false,
-    gotCattleClass : false,
-    gotCattleType : false,
-    gotBarnyards : false,
-    gotReceptions : false,
     events :
       {
         "onSucess" : "",
@@ -133,8 +127,11 @@ enyo.kind(
     },
     key_down : function(inSender, inEvent) {
       if (inEvent.keyCode == 13) {
-        this.checkLogIn();
+        if (inSender.name == "user") {
+          this.$.password.forceFocus();
+        } else {
+          this.checkLogIn();
+        }
       }
     }
-
   });

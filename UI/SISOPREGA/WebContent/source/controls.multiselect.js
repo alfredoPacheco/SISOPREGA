@@ -5,6 +5,7 @@ enyo.kind({
 	navigatingOnList:false,
 	layoutKind : enyo.HFlexLayout,
 	allItems : [],
+	selected:-1,
 	published : {
 		hint : "",
 		index : -1,
@@ -89,46 +90,21 @@ enyo.kind({
 		         this.log("I've been checked!");
 		    }
 		},
-		select_item : function(inSender, inEvent) {
-			if (this.items[inEvent.rowIndex]) {
-				this.iSelected = inEvent.rowIndex;
-				this.doSelect_item();
-			}
+		select_item : function(inSender, inSelected) {
+			this.setIndex(inSender.items[inSelected].value);
+			this.$.textField.forceFocus();
 		},
-		getSelected : function() {
-			return this.items[this.iSelected];
-		},
-		
-		setupProductRow : function(inSender, inIndex) {
-			
-		},
-		
-		deleteRancher : function(inSender, inIndex) {
-			if (cacheRanchers.del(this.items[inIndex], this, "filterRanchers")) {
-				return true;
-			} else {
-				return false;
-			}
-		},
-		ready : function() {
-			
-//			this.updateList();
-		},
-		updateList : function() {
-			this.$.list.render();
-		}},
-		
-		
-//		
-//		
-//		published:{items:[],selected:-1},
-//		setItems:function(items){
-//			this.$.p_multiselect.setItems(items);
+//		getSelected : function() {
+//			return this.items[this.iSelected];
 //		},
+		
+		},
+		
 //		create : function() {
 //			this.inherited(arguments);			
 ////			this.indexChanged();
 //		},
+		
 //		  layoutKind: "VFlexLayout",onSelect : "select_item", onSetupItem: "setupItem",
 //		 width: "300px", components:[ {kind: "controls.multiselect.popuplist", 
 //			 							name:"p_multiselect", flex: 1}]}, 
@@ -213,7 +189,7 @@ enyo.kind({
 //		}		
 	},
 	select_item : function(inSender, inSelected) {
-		this.setIndex(inSender.items[inSelected].value);
+		this.setIndex(this.items[inSelected.rowIndex].value);
 		this.$.textField.forceFocus();
 	},
 	click_button : function(inSender, inEvent) {
@@ -222,7 +198,7 @@ enyo.kind({
 		if(this.$.drop_down.items.length > 0){
 //			this.$.drop_down.scrollToSelected();
 			this.$.drop_down.openAtEvent(inEvent);
-			this.$.list.render();
+//			this.$.list.render();
 		}
 		this.$.textField.forceFocus();		
 		return false;
@@ -367,5 +343,9 @@ enyo.kind({
 				return this.items[i].value;
 			}
 		}
+	},
+	clear:function(){
+		this.$.textField.setValue("");
+		this.index = -1;
 	}
 });

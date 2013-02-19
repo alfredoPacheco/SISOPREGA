@@ -146,14 +146,14 @@ public class Messenger implements Messageable {
   }
 
   private boolean sendSMS(String to, String message) {
-    String from = comProxyProps.getProperty("clickatell.from");
+    String from = comProxyProps.getProperty("sms.from");
     Sms sms = new Sms(to, from, message);
     try {
       smsMan.setConfiguration(comProxyProps);
 
       String userId, password;
-      userId = comProxyProps.getProperty("clickatell.user");
-      password = comProxyProps.getProperty("clickatell.password");
+      userId = comProxyProps.getProperty("sms.user");
+      password = comProxyProps.getProperty("sms.password");
       smsMan.doLogin(userId, password);
 
       smsMan.sendSMS(sms);

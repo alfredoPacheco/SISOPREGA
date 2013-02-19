@@ -461,6 +461,9 @@
 			<basic name="locationId">
 				<column name="location_id" />
 			</basic>
+			<basic name="zoneId">
+				<column name="zone_id" />
+			</basic>
 			<basic name="cattleType">
 				<column name="cattle_type" />
 			</basic>
@@ -772,6 +775,9 @@
 			</basic>
 			<basic name="rancherId">
 				<column name="rancher_id" />
+			</basic>
+			<basic name="zoneId">
+				<column name="zone_id" />
 			</basic>
 			<basic name="cattleType">
 				<column name="cattle_type" />

@@ -31,8 +31,7 @@ enyo.kind({
 				this.$.textField.setValue("");	
 			}
 		}else{
-			this.$.textField.setValue("");
-			this.index = -1;
+			this.clear();
 		}
 		this.doSelectItem();
 	},
@@ -69,6 +68,12 @@ enyo.kind({
 		icon : "images/icon-arrows-down.png",
 		onclick : "click_button"
 	}], 
+	lostFocus : function(inSender, inEvent) {
+//		if (!this.navigatingOnList && this.$.drop_down.isOpen && this.$.drop_down.selected > -1 && this.$.drop_down.selected != null) {
+//			this.setIndex(this.$.drop_down.items[this.$.drop_down.selected].value);
+			this.$.drop_down.close();
+//		}		
+	},
 	setupItem : function(inSender, InIndex){
 		this.itemSelectedPopupAux++;
 		if (this.index > -1 && !this.navigatingOnList){
@@ -244,5 +249,10 @@ enyo.kind({
 				return this.items[i].value;
 			}
 		}
+	},
+	clear:function(){
+		this.$.textField.setValue("");
+		this.index = -1;
+		this.$.drop_down.selected = -1;
 	}
 });
