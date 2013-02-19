@@ -133,7 +133,11 @@ enyo.kind({
 			this.$.weight.forceFocus();
 			break;
 		case "weight":
-			this.$.rancher_id.setFocus();
+			if (this.$.draAdd.open==true){
+				this.addReception();
+			}else if (this.$.draUpdate.open==true){
+				this.updateReception();
+			}
 			break;
 			
 		}

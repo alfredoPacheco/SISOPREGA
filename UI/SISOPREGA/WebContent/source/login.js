@@ -68,7 +68,11 @@ enyo.kind({
 	},
 	key_down:function(inSender, inEvent){
 		if(inEvent.keyCode == 13){
-			this.checkLogIn();
+			if (inSender.name == "user"){
+				this.$.password.forceFocus();
+			} else{				
+				this.checkLogIn();
+			}
 		}
 	}
 	
