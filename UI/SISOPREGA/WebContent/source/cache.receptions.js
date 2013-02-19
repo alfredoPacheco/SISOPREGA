@@ -11,12 +11,13 @@ enyo
 			},
 			receptionAdapterToIn : function(objReception) {
 				var objNew = {
-					reception_id : objReception.receptionId,
-					rancher_id : objReception.rancherId,
-					arrival_date : ""
-							+ UTCtoNormalDate(objReception.dateAllotted),
-					cattype_id : objReception.cattleType,
-					location_id : objReception.locationId
+					reception_id : 	objReception.receptionId,
+					rancher_id : 	objReception.rancherId,
+					arrival_date : 	""
+									+ UTCtoNormalDate(objReception.dateAllotted),
+					cattype_id : 	objReception.cattleType,
+					location_id : 	objReception.locationId,
+					zone_id :		objReception.zoneId	
 				};
 				var rancherAux = cacheRanchers.getByID(objNew.rancher_id);
 
@@ -88,7 +89,8 @@ enyo
 					rancherId : objReception.rancher_id,
 					dateAllotted : "" + DateOut(objReception.arrival_date),
 					cattleType : objReception.cattype_id,
-					locationId : objReception.location_id
+					locationId : objReception.location_id,
+					zoneId : objReception.zone_id
 				};
 
 				return objNew;

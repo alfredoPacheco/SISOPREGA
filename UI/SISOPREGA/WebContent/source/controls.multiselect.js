@@ -367,5 +367,9 @@ enyo.kind({
 				return this.items[i].value;
 			}
 		}
+	},
+	clear:function(){
+		this.$.textField.setValue("");
+		this.index = -1;
 	}
 });
