@@ -3,6 +3,7 @@
  * 
  * Revision History:  
  * - 02/07/2013 Alan del Rio
+ * - 02/18/2013 Diego Torres : Add handler for pedimentos list.
  *  
  * */
 enyo.kind({
@@ -11,7 +12,7 @@ enyo.kind({
     read: function(iRancherType){		
 		var objResponse = consumingGateway.Read("Rancher", {});				
 		if(objResponse.exceptionId == 'VAL02'){
-			var objResponse = consumingGateway.Read("EnterpriseRancher", {});
+			objResponse = consumingGateway.Read("EnterpriseRancher", {});
 			if(objResponse.exceptionId == '0'){
 				this.objRancher=this.enterpriseAdapterRead(objResponse.records[0]);
 			}
@@ -30,10 +31,11 @@ enyo.kind({
     
 	update: function(objUpdate){
 		objUpdate.phone_number=phoneOut(objUpdate.phone_number);
+		var objResp = null;
 		if(this.objRancher.enterpriseId){
-			var objResp = consumingGateway.Update("EnterpriseRancher",objUpdate);
+			objResp = consumingGateway.Update("EnterpriseRancher",objUpdate);
 		}else{
-			var objResp = consumingGateway.Update("Rancher",objUpdate);	
+			objResp = consumingGateway.Update("Rancher",objUpdate);	
 		}				
 		if (objResp.exceptionId == "0"){
 			this.objRancher=objUpdate;
@@ -85,6 +87,24 @@ enyo.kind({
 			 return false;
 		 }
 			 
+	},
+	getPedimentos : function(){
+	  var objAux = {};
+      var arrAux = [];
+      var cgReadPedimentos = null;
+      
+      cgReadPedimentos = consumingGateway.Read("Pedimento", {});
+      if (cgReadPedimentos.exceptionId == 0) { // Read successfully
+        jQuery.each(cgReadPedimentos.records, function() {
+          jQuery.each(this, function(key, value) {
+            objAux[key] = value;
+          });
+          objAux.fechaPedimento = "" + UTCtoNormalDate(objAux.fechaPedimento);
+          arrAux.push(objAux);
+          objAux = {};
+        });
+      }
+      return arrAux;
 	}
   });
 var cacheProfile = new cache.profile();

@@ -254,7 +254,7 @@ public class InspectionBean extends BaseBean implements Cruddable {
       this.log.throwing(this.getClass().getName(), "Delete", e);
 
       response.setError(new Error("DEL01",
-          "Error al intentar borrar datos, es probable que esta entidad tenga otras entidades relacionadas, ",
+          "Error al intentar borrar datos, es probable que esta entidad tenga otras entidades relacionadas.",
           "proxy.Inspection.Delete"));
     }
 

@@ -50,7 +50,8 @@ enyo.kind(
                 onEdit : "showEdit",
                 onContacts : "showContacts",
                 onBilling : "showBillings",
-                onRegister : "showRegister"
+                onRegister : "showRegister",
+                onPedimentos : "showPedimentos"
               },
               {
                 kind : "catalogs.ranchers.contact.list",
@@ -96,7 +97,12 @@ enyo.kind(
                 onAddRancherUser : "goBack",
                 onResetPassword : "goBack",
                 onCancel : "goBack"
-              } ]
+              },
+              {
+                kind : "catalogs.ranchers.pedimentos.list",
+                name : "pedimentosList",
+                onGoback : "goBack"
+              }, ]
         } ],
     showPerson : function() {
       _gobackStack.push(
@@ -336,14 +342,14 @@ enyo.kind(
     },
     showAddUser : function() {
       var objRan = this.$.ranchersList.getSelected();
-      
+
       _gobackStack.push(
         {
           caption : _objMainHeader.getContent(),
           paneMan : this.$.mainPane,
           paneName : "usersList"
         });
-      
+
       if (objRan.rancher_type == 2) {
         _objMainHeader.setContent("Nuevo Usuario - " + objRan.company_name);
       } else {
@@ -366,6 +372,18 @@ enyo.kind(
       _objMainHeader.setContent('Asignar contraseña');
       this.$.mainPane.selectViewByName("aRancherUsers");
     },
+    showPedimentos : function() {
+      _gobackStack.push(
+        {
+          caption : _objMainHeader.getContent(),
+          paneMan : this.$.mainPane,
+          paneName : "ranOptions"
+        });
+
+      this.$.pedimentosList.setList(this.$.ranchersList.getSelected());
+      _objMainHeader.setContent('Lista de pedimentos');
+      this.$.mainPane.selectViewByName("pedimentosList");
+    },
     addGoBackAction : function() {
       _gobackStack.push(
         {
@@ -379,6 +397,7 @@ enyo.kind(
       this.$.contactList.updateList();
       this.$.billingList.updateList();
       this.$.usersList.updateList();
+      this.$.pedimentosList.updateList();
       cacheMan.goBack();
     }
   });
