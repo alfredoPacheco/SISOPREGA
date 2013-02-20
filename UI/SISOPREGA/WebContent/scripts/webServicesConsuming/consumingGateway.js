@@ -296,9 +296,10 @@ var cConsumingGateway =
                   record[vName] = vValue;
                 });
                 output.records.push(record);
-                cbObj[cbMethod](output);
-                return false;
               });
+              
+              cbObj[cbMethod](output);
+              return false;
             }
           },
           error : function OnError(request, status, error) {
