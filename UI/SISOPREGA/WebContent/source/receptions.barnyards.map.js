@@ -368,20 +368,12 @@ enyo.kind({
 			sBy+=sKey+", ";
 		}
 		sBy=sBy.slice(0,-2);
-//		var iAc=0;				
-//		if(objRec.accepted_count!=""){
-//			iAc=objRec.accepted_count;
-//		}
+
 		_objMainHeader.setContent(objRec.rancher_name+" - "+objRec.location_name+"<BR>"+objRec.cattype_name+
 								  "  ("+ objRec.hc_aprox+"/"+objRec.weights[0].weight+"kg)"+
 							  	  "	 "+objRec.arrival_date		
 		);	
-		/*this.$.spacerone.setContent("<strong>"+objRec.rancher_name +"</strong> "+
-									"- "+objRec.location_name+" - "+objRec.cattype_name+
-									"  ("+ objRec.hc_aprox+"/"+objRec.weights[0].weight+")"+
-									"	 "+objRec.arrival_date+
-									"</br> Corrales ("+iBy+") - "+sBy);		
-		*/}
+		}
 		catch(e){
 			_objMainHeader.setContent("");
 		}
@@ -534,33 +526,35 @@ enyo.kind({
 			this.$[sKey].applyStyle("background-color",this.sColorOccupied);							
 		}
 	},
-	
 	refreshMap:function(){
 		cacheMan.showScrim();
-		cacheRanchers.refreshData();			
-		cacheCattle.refreshData();
-		cacheBY.refreshData();
-		cacheReceptions.refreshData();	
-		cacheMan.hideScrim();
-		for (var i = 0, a; (a=this.$.cells.children[i]); i++) {			
-			for (var j = 0, b; (b =a.children[j]); j++) {				
-				if(b.bBY==true){
-					this.$[b.name].removeClass("selectCell");
-					if(cacheBY.isOccupied(b.name)){
-						//alert(b.name)
-						this.$[b.name].occupied=1;						
-						this.$[b.name].applyStyle("background-color",this.sColorOccupied);						
-					}else{
-						this.$[b.name].occupied=0;								
-						this.$[b.name].applyStyle("background-color",this.sColorFree);																	
-					}
-				}
-			}
-		}
-		this.arrByMOver={};
-		this.objSelected=null;
-		this.arrSelected={};
-		this.arrSelectedOccupied={};		
+		consumingGateway.ReadAsync("Rancher", {}, this, "refreshMapCallBack");
+	},
+	refreshMapCallBack : function(result){
+	  cacheRanchers.refreshPersonCallBack(result);
+	  cacheCattle.refreshData();
+      cacheBY.refreshData();
+      cacheReceptions.refreshData();  
+      cacheMan.hideScrim();
+      for (var i = 0, a; (a=this.$.cells.children[i]); i++) {         
+          for (var j = 0, b; (b =a.children[j]); j++) {               
+              if(b.bBY==true){
+                  this.$[b.name].removeClass("selectCell");
+                  if(cacheBY.isOccupied(b.name)){
+                      //alert(b.name)
+                      this.$[b.name].occupied=1;                      
+                      this.$[b.name].applyStyle("background-color",this.sColorOccupied);                      
+                  }else{
+                      this.$[b.name].occupied=0;                              
+                      this.$[b.name].applyStyle("background-color",this.sColorFree);                                                                  
+                  }
+              }
+          }
+      }
+      this.arrByMOver={};
+      this.objSelected=null;
+      this.arrSelected={};
+      this.arrSelectedOccupied={};
 	},
 	rancherFilterChanged:function(inSender){
 		if(this.$.rancherFilter.getIndex()>-1){

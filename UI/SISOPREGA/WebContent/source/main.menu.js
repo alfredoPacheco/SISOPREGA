@@ -14,7 +14,6 @@ enyo.kind({
 		 components:[	
 			{kind:"main.menu.options", name:"menuOptions", className:"buttonsBG",style:"width:1030px;margin-left: auto;margin-right: auto;",
 			flex: 1,
-			onOperations:"showOperations",
 			onReceptions:"showReceptionsMap",
 			onCatalogs:"showCatalogs", 
 			onReports:"showReports",
@@ -22,9 +21,7 @@ enyo.kind({
 			onUsers:"showUsersList",
 			onFileUpload:"showExpRequest"},
 	 		
-			{kind:"operations.menu", name:"operations", onReceptions:"showReceptions", 
-			 onInspections:"showInspections",lazy:true},
-	 		{kind:"catalogs.main", name:"catalogs",lazy:true},
+			{kind:"catalogs.main", name:"catalogs",lazy:true},
 	 		{kind:"receptions.main", name:"receptions",lazy:true},				
 	 		{kind:"receptions.barnyards.map", name:"receptionsMap",lazy:true, flex:1},	 		
 	 		{kind:"reports.main", name:"reports",lazy:true},

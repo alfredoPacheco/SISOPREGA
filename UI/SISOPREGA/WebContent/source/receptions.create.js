@@ -34,8 +34,13 @@ enyo.kind({
 			 style: "overflow: hidden", width: "85%", height: "85%",scrim: true, components: [
 				
 			]},
-			{kind: "RowGroup", defaultKind: "HFlexBox", caption: "", style:"color:black",
+			{kind: "RowGroup", defaultKind: "HFlexBox",
 			 components: [
+						{layoutKind: enyo.HFlexLayout,components:[			              
+						      {content: "Corrales", className: "enyo-label", },
+						      {content: "  ", style:"width:2%"},
+						      {name:'sBYs', content: "", className: "enyo-label",style:"color:black"},
+						]},			              
 					  {kind: "Item",
 						components: [
 							{content: "Ganadero", className: "enyo-label", flex: 1},
@@ -204,6 +209,14 @@ enyo.kind({
 	setReception:function(receptionDef,arrBY){
 		this.resetValues();
 		this.arrBY=arrBY;
+		
+		var sBY="";
+		
+		for (var sKey in arrBY){
+			sBY+=arrBY[sKey].substring(1)+", ";
+		}	
+		sBY=sBY.slice(0,-2);
+		this.$.sBYs.setContent(sBY);
 		if(receptionDef){
 			this.objRec=receptionDef;
 			this.$.rancher_id.setIndex(receptionDef.rancher_id);

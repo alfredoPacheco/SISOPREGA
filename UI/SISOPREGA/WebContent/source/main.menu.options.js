@@ -6,8 +6,7 @@ enyo.kind({
 	//pack:"center",	
 	style:"width:320px;",
 	events: {
-		onReceptions:"",
-		onOperations:"",		
+		onReceptions:"",	
 		onCatalogs:"",
 		onReports:"",
 		onInspectionForecast:"",
