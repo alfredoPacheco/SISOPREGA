@@ -396,6 +396,10 @@
 				<ejb-name>PedimentoProxy</ejb-name>
 				<method-name>Read</method-name>
 			</method>
+			<method>
+				<ejb-name>LocationProxy</ejb-name>
+				<method-name>Read</method-name>
+			</method>
 		</method-permission>
 	</assembly-descriptor>
 </ejb-jar>

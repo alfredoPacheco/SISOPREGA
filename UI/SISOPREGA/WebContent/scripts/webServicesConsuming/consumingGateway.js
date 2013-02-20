@@ -109,11 +109,13 @@ var cConsumingGateway =
             output.exceptionDescription = jQuery(data).find("exceptionDescription").text();
             output.exceptionId = jQuery(data).find("exceptionId").text();
             callBackObject[callBackMethod](output);
+            return false;
           },
           error : function OnError(request, status, error) {
             output.exceptionId = 1;
             output.exceptionDescription = error;
             callBackObject[callBackMethod](output);
+            return false;
           }
         });
     },
@@ -238,6 +240,76 @@ var cConsumingGateway =
           }
         });
       return output;
+    },
+    
+    ReadAsync : function(entityName, entity, cbObj, cbMethod) {
+      // Se crea objeto que devolvera la funcion:
+      output =
+        {
+          exceptionDescription : "Success",
+          exceptionId : 0,
+          origin : "",
+          entityName : "",
+          records : []
+        };
+
+      // SOAP Message:
+      var soapMessage = soapHeader + '<ws:Read>';
+      soapMessage += '<entityName>' + entityName + '</entityName>';
+
+      jQuery.each(entity, function(key, value) {
+        soapMessage += '<field>';
+        soapMessage += '<name>' + key + '</name>';
+        soapMessage += '<value>' + value + '</value>';
+        soapMessage += '</field>';
+      });
+
+      soapMessage += '</ws:Read>' + soapFooter;
+
+      // Ajax request:
+      jQuery.ajax(
+        {
+          url : gatewayWsURL,
+          type : "POST",
+          dataType : "xml",
+          data : soapMessage,
+          processData : false,
+          contentType : "text/xml;charset=UTF-8",
+          success : function OnSuccess(data) {
+
+            output.exceptionDescription = jQuery(data).find("exceptionDescription").text();
+            output.exceptionId = jQuery(data).find("exceptionId").text();
+            if (output.exceptionId == "GW01") {
+              alert(output.exceptionDescription);
+              consumingGateway.LogOut();
+            }
+            output.origin = jQuery(data).find("origin").text();
+
+            if (output.exceptionId == 0) {
+              output.entityName = jQuery(data).find("entityName").text();
+
+              jQuery(data).find("record").each(function() {
+                var record = new Object();
+                jQuery(this).find("fields").each(function() {
+                  var vName = jQuery(this).find('name').text();
+                  var vValue = jQuery(this).find('value').text();
+                  record[vName] = vValue;
+                });
+                output.records.push(record);
+                cbObj[cbMethod](output);
+                return false;
+              });
+            }
+          },
+          error : function OnError(request, status, error) {
+            output.exceptionId = 1;
+            output.exceptionDescription = error;
+            alert(output.exceptionDescription);
+            consumingGateway.LogOut();
+            callbackObject[callbackMethod](output);
+            return output;
+          }
+        });
     },
 
     Update : function(entityName, entity) {

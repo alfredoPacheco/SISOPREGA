@@ -11,7 +11,6 @@ enyo.depends(
 	"source/cache.receptions.js",	
 	"source/cache.rejects.js",
 	"source/cache.feed.js",	
-	"source/operations.menu.js",	
 	"source/receptions.main.js",		
 	"source/receptions.create.js",
 	"source/receptions.list.js",		
