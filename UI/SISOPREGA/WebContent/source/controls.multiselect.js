@@ -18,6 +18,9 @@ enyo.kind({
 	getValue : function(){
 		return this.$.textField.getValue();
 	},
+	setValue: function(str){
+		this.$.textField.setValue(str);
+	},
 	setFocus:	function(){
 		this.$.textField.forceFocus();
 	},

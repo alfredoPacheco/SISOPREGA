@@ -221,10 +221,15 @@ enyo.kind(
                     } ]
               } ]
         }, ],
-    ready : function() {
-      _objPopupHeader = enyo.$.sisoprega_mainMenu_receptionsMap.$.lblInfo;
-      _objPopupHeader.setContent(_objMainHeader.getContent());
-      this.bySelected = enyo.$.sisoprega_mainMenu_receptionsMap.$.lblBYselected;
+    ready : function(InSender, InEvent) {
+    	if(enyo.$.sisoprega_receptionsMap){
+    		_objPopupHeader = enyo.$.sisoprega_receptionsMap.$.lblInfo;	
+    		this.bySelected = enyo.$.sisoprega_receptionsMap.$.lblBYselected;
+    	}else if(enyo.$.sisoprega_mainMenu_receptionsMap){
+    		_objPopupHeader = enyo.$.sisoprega_mainMenu_receptionsMap.$.lblInfo;
+    		this.bySelected = enyo.$.sisoprega_mainMenu_receptionsMap.$.lblBYselected;
+    	}    	
+    	_objPopupHeader.setContent(_objMainHeader.getContent());    	
     },
     setupRow : function(inSender, inIndex) {
       var objFeed;
