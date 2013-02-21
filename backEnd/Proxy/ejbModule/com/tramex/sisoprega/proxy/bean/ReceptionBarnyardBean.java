@@ -15,11 +15,16 @@
  */
 package com.tramex.sisoprega.proxy.bean;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.ejb.Stateless;
+import javax.naming.Context;
+import javax.naming.InitialContext;
 
 import com.tramex.sisoprega.common.BaseResponse;
 import com.tramex.sisoprega.common.CreateGatewayResponse;
@@ -29,6 +34,7 @@ import com.tramex.sisoprega.common.GatewayRequest;
 import com.tramex.sisoprega.common.ReadGatewayResponse;
 import com.tramex.sisoprega.common.UpdateGatewayResponse;
 import com.tramex.sisoprega.common.crud.Cruddable;
+import com.tramex.sisoprega.common.messenger.Messageable;
 import com.tramex.sisoprega.dto.Reception;
 import com.tramex.sisoprega.dto.ReceptionBarnyard;
 
@@ -52,6 +58,7 @@ import com.tramex.sisoprega.dto.ReceptionBarnyard;
  * 01/22/2013  Diego Torres                   Implementing DataModel.
  * 02/04/2013  Jaime Figueroa                 Verificar en Proxy que no haya receptiones activas en 
  *                                            corrales secionados.
+ * 02/19/2013  Alan del Rio                   Evaluate when deleting last barnyarnd and trigger sendReport                        
  *  ====================================================================================
  * </PRE>
  * 
@@ -260,6 +267,35 @@ public class ReceptionBarnyardBean extends BaseBean implements Cruddable {
           this.log.info("Deleting Reception Barnyard [" + recepBarnyard.toString() + "] by barnyardId and receptionId["
               + getLoggedUser() + "]");
           dataModel.deleteDataModel(recepBarnyard, getLoggedUser());
+          parameters.clear();
+          parameters.put("receptionId",recepBarnyard.getReceptionId());
+          barnyards = dataModel.readDataModelList("RECEPTION_BARNYARD_BY_RECEPTION_ID",parameters, ReceptionBarnyard.class);
+          if (barnyards.isEmpty()){
+        	    Context jndiContext = null;
+        	    Messageable messenger = null;
+        	    String commonPrefix = "java:global/ComProxy/";
+        	    try {
+        	      jndiContext = new InitialContext();
+        	      messenger = (Messageable) jndiContext.lookup(commonPrefix + "Messenger");
+        	      log.fine("Messenger instance created.");
+        	    } catch (java.lang.Exception e) {
+        	      log.severe("Unable to load jndi context component");
+        	      log.throwing(this.getClass().getName(), "getCruddable", e);
+        	      response.setError(new Error("VAL04", "El módulo de mensajería no está correctamente instalado", "proxy.ReceptionBarnyard.Delete"));        	      
+        	    }
+
+        	    if (messenger != null) {
+        	    	DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+        	    	Date date = new Date();
+        	    	String sReport= new String("CattleInspection?rancherId="+recepBarnyard.getReceptionId()+"&fromDate="+dateFormat.format(date)+"&toDate="+dateFormat.format(date));
+        	    	Reception rec = dataModel.readSingleDataModel("CRT_RECEPTION_BY_ID","receptionId",recepBarnyard.getReceptionId(), Reception.class);        	    	        	 
+        	    	log.fine(sReport);
+        	      if (!messenger.sendReport(rec.getRancherId(), sReport)) {
+        	    	  response.setError(new Error("VAL04", "El módulo de mensajería no está correctamente instalado", "proxy.ReceptionBarnyard.Delete"));        	              	    	  
+        	      }
+
+        	    }        	  
+          }        	
         }
 
         response.setError(new Error("0", "SUCCESS", "proxy.ReceptionBarnyard.Delete"));
