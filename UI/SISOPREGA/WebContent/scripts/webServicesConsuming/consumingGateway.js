@@ -108,7 +108,7 @@ var consumingGateway =
           success : function OnSuccess(data) {
             output.exceptionDescription = jQuery(data).find("exceptionDescription").text();
             output.exceptionId = jQuery(data).find("exceptionId").text();
-            callBackObject[callBackMethod](output);
+            setTimeout(callBackObject[callBackMethod](output), 1000);
             return false;
           },
           error : function OnError(request, status, error) {

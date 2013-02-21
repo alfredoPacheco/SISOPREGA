@@ -147,6 +147,8 @@ public class Messenger implements Messageable {
 
   private boolean sendSMS(String to, String message) {
     String from = comProxyProps.getProperty("sms.from");
+    if(to.equals(""))
+      return false;
     Sms sms = new Sms(to, from, message);
     try {
       smsMan.setConfiguration(comProxyProps);
@@ -167,6 +169,10 @@ public class Messenger implements Messageable {
   private boolean sendSimpleEmail(String to, String message) {
     String from = "tramex@sisoprega.com";
     String title = "Mensaje simple desde TRAMEX.";
+    
+    if(to.equals(""))
+      return false;
+    
     Email email = new Email(to, from, title, message);
 
     try {
@@ -180,6 +186,10 @@ public class Messenger implements Messageable {
   private boolean sendEmail(String to, String reportName) {
 
     try {
+      
+      if(to.equals(""))
+        return false;
+      
       URL url = new URL(comProxyProps.getProperty(REPORTING_URL_PROPERTY) + reportName);
 
       String from = "tramex@sisoprega.com";

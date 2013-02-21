@@ -53,7 +53,7 @@ GROUP BY ctrl_feed_order_order_id, ctrl_feed_order_feed_date, ctrl_feed_order_ha
 				<textElement>
 					<font size="14"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{vw_rancher_rancher_name}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ $F{vw_rancher_rancher_name}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement uuid="41fc06e8-a13b-4ee6-8dd6-6d760836e4c8" x="23" y="26" width="125" height="20"/>
@@ -67,7 +67,7 @@ GROUP BY ctrl_feed_order_order_id, ctrl_feed_order_feed_date, ctrl_feed_order_ha
 				<textElement>
 					<font size="14"/>
 				</textElement>
-				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format($F{ctrl_reception_date_allotted})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ new SimpleDateFormat("dd/MM/yyyy").format($F{ctrl_reception_date_allotted})]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement uuid="41fc06e8-a13b-4ee6-8dd6-6d760836e4c8" x="23" y="46" width="125" height="20"/>
@@ -149,7 +149,9 @@ GROUP BY ctrl_feed_order_order_id, ctrl_feed_order_feed_date, ctrl_feed_order_ha
 		<band height="47" splitType="Stretch">
 			<staticText>
 				<reportElement uuid="e9e2249e-a2e9-4e48-b73f-43f8a89810fc" x="0" y="0" width="128" height="20"/>
-				<textElement textAlignment="Right"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
 				<text><![CDATA[Comentario:]]></text>
 			</staticText>
 			<textField>
@@ -157,7 +159,7 @@ GROUP BY ctrl_feed_order_order_id, ctrl_feed_order_feed_date, ctrl_feed_order_ha
 				<textElement>
 					<font isUnderline="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{ctrl_feed_order_handling}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ $F{ctrl_feed_order_handling}]]></textFieldExpression>
 			</textField>
 		</band>
 	</summary>

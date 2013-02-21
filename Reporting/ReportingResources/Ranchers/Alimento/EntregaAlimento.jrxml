@@ -20,7 +20,8 @@
      cat_food."food_name" AS cat_food_food_name,
      vw_rancher."rancher_name" AS vw_rancher_rancher_name,
      ctrl_reception."date_allotted" AS ctrl_reception_date_allotted,
-     cat_barnyard."barnyard_id" AS cat_barnyard_barnyard_id
+     cat_barnyard."barnyard_id" AS cat_barnyard_barnyard_id,
+     ctrl_feed_order."handling" AS ctrl_feed_order_handling
 FROM
      "public"."ctrl_feed_order" ctrl_feed_order INNER JOIN "public"."ctrl_feed_order_barnyard" ctrl_feed_order_barnyard_A ON ctrl_feed_order."order_id" = ctrl_feed_order_barnyard_A."order_id"
      INNER JOIN "public"."ctrl_feed_order_details" ctrl_feed_order_details ON ctrl_feed_order."order_id" = ctrl_feed_order_details."order_id"
@@ -42,7 +43,8 @@ GROUP BY
      vw_rancher."rancher_name",
      ctrl_reception_date_allotted,
      ctrl_reception."rancher_id",
-     cat_barnyard."barnyard_id"
+     cat_barnyard."barnyard_id",
+     ctrl_feed_order_handling
 ORDER BY
      vw_rancher."rancher_name" ASC,
      ctrl_reception_date_allotted ASC]]>
@@ -53,6 +55,7 @@ ORDER BY
 	<field name="vw_rancher_rancher_name" class="java.lang.String"/>
 	<field name="ctrl_reception_date_allotted" class="java.sql.Date"/>
 	<field name="barnyards" class="java.lang.String"/>
+	<field name="ctrl_feed_order_handling" class="java.lang.String"/>
 	<variable name="barnyards_1" class="java.lang.Integer" resetType="Group" resetGroup="Fecha_Recibido" calculation="Count">
 		<variableExpression><![CDATA[$F{barnyards}]]></variableExpression>
 	</variable>
@@ -85,21 +88,21 @@ ORDER BY
 					<text><![CDATA[Recibido el:]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="8d76c4a5-4ccd-4053-b44b-15dbb4a74ba9" x="349" y="30" width="140" height="20"/>
+					<reportElement uuid="8d76c4a5-4ccd-4053-b44b-15dbb4a74ba9" x="209" y="30" width="140" height="20"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font fontName="Arial" size="16" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Alimento]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="456c5f2a-ffbd-4e02-a1ad-048fd9c50678" x="643" y="30" width="140" height="20"/>
+					<reportElement uuid="456c5f2a-ffbd-4e02-a1ad-048fd9c50678" x="503" y="30" width="140" height="20"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font fontName="Arial" size="16" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Fecha y Hora]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="23aa7e17-44e0-4910-8d65-eb7297cffa53" x="495" y="30" width="140" height="20"/>
+					<reportElement uuid="23aa7e17-44e0-4910-8d65-eb7297cffa53" x="355" y="30" width="140" height="20"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font fontName="Arial" size="16" isBold="true"/>
 					</textElement>
@@ -113,11 +116,18 @@ ORDER BY
 					<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format($F{ctrl_reception_date_allotted})]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement uuid="932efdf5-b46c-4461-9fb1-d0ad2251c394" x="232" y="30" width="100" height="20"/>
+					<reportElement uuid="932efdf5-b46c-4461-9fb1-d0ad2251c394" x="92" y="30" width="100" height="20"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="14" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Corral]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="9a85b3a8-87b7-40d6-a205-b7db01d5f87c" x="652" y="29" width="150" height="21"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="16" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Comentario]]></text>
 				</staticText>
 			</band>
 		</groupHeader>
@@ -170,32 +180,39 @@ ORDER BY
 	<detail>
 		<band height="23" splitType="Stretch">
 			<textField>
-				<reportElement uuid="88b95e93-1ede-429a-9c0b-b03ee389be3a" x="349" y="1" width="140" height="20"/>
+				<reportElement uuid="88b95e93-1ede-429a-9c0b-b03ee389be3a" x="209" y="1" width="140" height="20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial" size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{cat_food_food_name}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="83804fb6-3d68-43f2-8c2b-26f98b7adaf1" x="495" y="1" width="140" height="20"/>
+				<reportElement uuid="83804fb6-3d68-43f2-8c2b-26f98b7adaf1" x="355" y="1" width="140" height="20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial" size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{ctrl_feed_order_details_quantity}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="ae3881d2-cf14-4d08-8442-30290e51a92c" x="643" y="1" width="140" height="20"/>
+				<reportElement uuid="ae3881d2-cf14-4d08-8442-30290e51a92c" x="503" y="1" width="140" height="20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{ctrl_feed_order_feed_date}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="657637b9-7ae9-4508-9616-a8b9575303f6" x="232" y="0" width="100" height="20"/>
+				<reportElement uuid="657637b9-7ae9-4508-9616-a8b9575303f6" x="92" y="0" width="100" height="20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{barnyards}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="ae3d34d5-8862-43ac-a74e-787416cc0bfb" x="652" y="0" width="150" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ctrl_feed_order_handling}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

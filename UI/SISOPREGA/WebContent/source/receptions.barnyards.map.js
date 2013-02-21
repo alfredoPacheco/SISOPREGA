@@ -191,7 +191,7 @@ enyo.kind({
 		var sColor;
 		for (var i=0; i<iNumber; i++) {
 			var iOccupied;
-			if(cacheBY.isOccupied(sLetter+iStart)){
+			if(cacheBY.isOccupied(sLetter+Math.abs(iStart))){
 				iOccupied=1;
 				sColor=cacheReceptions.getByID(cacheBY.getRecIDbyBY(sLetter+Math.abs(iStart))).color;
 			}else{
@@ -205,7 +205,7 @@ enyo.kind({
 											   ";align:left"+															
 											   ";background-color:"+sColor+
 											   ";", 										
-			                               name:sLetter+iStart,
+			                               name:sLetter+Math.abs(iStart),
 										   occupied:iOccupied,
 										   bBY:true,
 										   content:sLetter.substr(1)+Math.abs(iStart),
