@@ -78,15 +78,22 @@ public class ReporteAlimento extends BaseReportServlet {
       rancherId = rancherFromLoggedUser(request);
     
     log.fine("rancherId: [" + rancherId + "]");
-
+    
     Date fromDate = new SimpleDateFormat("MM/dd/yyyy").parse(request.getParameter("fromDate"));
     Date toDate = new SimpleDateFormat("MM/dd/yyyy").parse(request.getParameter("toDate"));
     
     params.put("CUS_FROM_DATE", fromDate);
     params.put("CUS_TO_DATE", toDate);
-    params.put("CUS_RANCHER_ID", Integer.parseInt(rancherId));
+    
+    if(rancherId != null && !rancherId.equals(""))
+      params.put("CUS_RANCHER_ID", Integer.parseInt(rancherId));
 
-    String reportURL = "WEB-INF/Reports/Ranchers/EntregaAlimento.jasper";
+    String reportURL = "";
+    
+    if(rancherId != null && !rancherId.equals(""))
+      reportURL = "WEB-INF/Reports/Tramex/AllEntregaAlimento.jasper";
+    else
+      reportURL = "WEB-INF/Reports/Ranchers/EntregaAlimento.jasper";
 
     processRequest(reportURL, params, response);
   }
