@@ -39,7 +39,8 @@ GROUP BY
      ctrl_reception_date_allotted
 ORDER BY
      ctrl_reception."date_allotted" ASC,
-     vw_rancher."rancher_name" ASC]]>
+     vw_rancher."rancher_name" ASC,
+     CALC_AVG_KG ASC]]>
 	</queryString>
 	<field name="vw_rancher_rancher_name" class="java.lang.String"/>
 	<field name="ctrl_reception_headcount_hc" class="java.lang.Integer"/>
