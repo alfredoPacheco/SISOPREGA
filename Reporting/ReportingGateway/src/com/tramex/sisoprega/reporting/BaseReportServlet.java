@@ -104,6 +104,7 @@ public class BaseReportServlet extends HttpServlet {
 
   protected void processRequest(String relativeReportURL, Map<String, Object> parameters, HttpServletResponse response)
       throws IOException, JRException {
+    log.fine("loading report: " + relativeReportURL);
     response.setContentType("application/pdf");
     ServletOutputStream out = response.getOutputStream();
     InputStream is = new FileInputStream(getServletContext().getRealPath(relativeReportURL));
