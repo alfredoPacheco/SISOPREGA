@@ -4,6 +4,7 @@ enyo.kind(
     kind : enyo.VFlexBox,
     components :
       [
+		
         //SCRIM
         {
           kind : enyo.Scrim,
@@ -27,23 +28,34 @@ enyo.kind(
           style : "max-height:10px",
           className : "headerMain",
           components :
-            [
+            [{kind: "AppMenu", name:"menu", width:"300px", components: [
+                                            {caption: "Operaciones", onclick: "open_view"},
+                                            {caption: "Catálogos", components: [
+                                                {caption: "Ganaderos", onclick: "open_view"},
+                                                {caption: "Ganado", onclick: "open_view"}
+                                            ]},
+                                            {caption: "Reportes", onclick: "open_view"},
+                                            {caption: "Lista de Inspección", onclick: "open_view"},
+                                            {caption: "Usuarios", onclick: "open_view"},
+                                            {caption: "Carga de Pedimento", onclick: "open_view"}
+                                        ]},
               {
                 name : 'btnGoBack',
                 icon : "images/command-menu/menu-icon-back.png",
                 onclick : "goBack",
-                flex : 1
+//                flex : 2
               },
               {
-                kind : "Spacer",
-                flex : 1,
-                name : "spacerFirst"
-              },
-              {
-                kind : "Spacer",
-                flex : 1,
-                name : "spacerSecond"
-              },
+                  name : 'btnMenu',
+                  icon : "images/icon-arrows-down.png",                  
+                  onclick : "open_menu",
+//                  flex : 2
+                },
+//              {
+//                kind : "Spacer",
+////                flex : 1,
+//                name : "spacerSecond"
+//              },
               {
                 kind : "VFlexBox",
                 name : 'lblMainCap',
@@ -52,14 +64,14 @@ enyo.kind(
                 style : "color:#FFF;border:none;font-size:15px; text-align:center;min-width:150px;",
                 content : "Menu Principal"
               },
-              {
-                kind : "Spacer",
-                flex : 1,
-                name : "spacerThird"
-              },
+//              {
+//                kind : "Spacer",
+////                flex : 1,
+//                name : "spacerThird"
+//              },
               {
                 name : 'btnLogOut',
-                flex : 1,
+//                flex : 1,
                 onclick : "logOut",
                 icon : "images/command-menu/icon-context.png"
               } ]
@@ -68,6 +80,7 @@ enyo.kind(
           kind : enyo.Pane,
           flex : 1,
           name : "mainPane",
+          onSelectView:"selectView",
           transitionKind : "enyo.transitions.LeftRightFlyin",
           components :
             [
@@ -80,7 +93,16 @@ enyo.kind(
               {
                 kind : "main.menu",
                 name : "mainMenu"
-              } ]
+              },
+              {kind:"receptions.barnyards.map", name:"receptionsMap",lazy:true, flex:1},
+              {kind:"catalogs.cattle",name:"catCattle"},
+              {kind:"catalogs.ranchers",name:"catRanchers"},
+              {kind:"reports.main", name:"reports",lazy:true},
+              {kind:"inspections.main.fs", name:"inspectionForecast", lazy:true},
+              {kind:"users.list", name:"usersList", onAddUser:"showAddUser", onSelectUser:"showEditUser", lazy:true },
+              {kind:"users.create", name:"addUser"},
+              {kind:"file.uploader", name:"fileUploader",lazy:true}
+  			]
         },
         {
           kind : enyo.Dialog,
@@ -111,17 +133,17 @@ enyo.kind(
       cacheMan.goBack();
       if (_objMainHeader.getContent() == "Menu Principal") {
         this.$.btnGoBack.setShowing(!1);
-        enyo.$.sisoprega_spacerSecond.setShowing(1);
+//        enyo.$.sisoprega_spacerSecond.setShowing(1);
         _objMainHeader.setStyle("color:#FFF;border:none;font-size:15px; text-align:center;min-width:150px;");
       } else {
         this.$.btnGoBack.setShowing(1);
-        enyo.$.sisoprega_spacerSecond.setShowing(!1);
+//        enyo.$.sisoprega_spacerSecond.setShowing(!1);
       }
 
     },
     goAhead : function() {
       this.$.btnGoBack.setShowing(!1);
-      enyo.$.sisoprega_spacerSecond.setShowing(1);
+//      enyo.$.sisoprega_spacerSecond.setShowing(1);
       this.$.tbHeader.show();
       this.$.mainPane.selectViewByName("mainMenu");
     },
@@ -130,5 +152,76 @@ enyo.kind(
     },
     logOut : function() {
       consumingGateway.LogOut();
-    }
+    },
+    open_menu : function(){
+    	this.$.menu.openAroundControl(this.$.btnMenu,"", "left");
+    },
+    addGoBackAction:function(){
+		_gobackStack.push({caption:_objMainHeader.getContent(),paneMan:this.$.mainPane,paneName:this.$.mainPane.getViewName()});		
+	},
+    open_view : function(InSender, InEvent){
+    	
+    	switch(InSender.caption){
+    	case 'Operaciones':
+    		this.addGoBackAction();	
+    		_objMainHeader.setContent('Corrales');    		
+    		this.$.mainPane.selectViewByName("receptionsMap");
+    		break;
+    	case 'Reportes':
+    		this.addGoBackAction();
+    		_objMainHeader.setContent('Reportes');		
+    		this.$.mainPane.selectViewByName("reports");
+    		break;
+    	case 'Ganaderos':
+    		this.addGoBackAction();
+    		_objMainHeader.setContent('Ganaderos');
+    		this.$.mainPane.selectViewByName("catRanchers");
+    		break;
+    	case 'Ganado':
+    		this.addGoBackAction();
+    		_objMainHeader.setContent('Ganado');    				
+    		this.$.mainPane.selectViewByName("catCattle");
+    		break;
+    	case 'Lista de Inspección':
+    		this.addGoBackAction();
+    		_objMainHeader.setContent('Lista de Inspección');
+    		this.$.mainPane.selectViewByName("inspectionForecast");
+    		break;
+    	case 'Usuarios':    		
+    		this.addGoBackAction();
+    		_objMainHeader.setContent('Lista de Usuarios');
+  	      	this.$.mainPane.selectViewByName("usersList");
+    		break;
+    	case 'Carga de Pedimento':
+    		this.addGoBackAction();
+    		_objMainHeader.setContent('Cargar Pedimento');
+  	      	this.$.mainPane.selectViewByName("fileUploader");
+  	      	break;
+    	}
+    	enyo.$.sisoprega_btnGoBack.setShowing(1);
+    },
+    showAddUser : function(){
+  	  	enyo.$.sisoprega_btnGoBack.setShowing(1);
+        _objMainHeader.setContent('Agregar Usuario');
+        this.addGoBackAction();
+        this.$.mainPane.selectViewByName("addUser");
+  	},
+  	showEditUser : function(){
+  		enyo.$.sisoprega_btnGoBack.setShowing(1);
+        _objMainHeader.setContent('Editar Usuario');
+        this.addGoBackAction();
+        this.$.mainPane.selectViewByName("addUser");
+  	},
+  	selectView:function(inSender, inView, inPreviousView) {
+		if(inView.name=="usersList"){
+		  inView.updateList();
+		}
+		if(inPreviousView.name == "usersList" && inView.name != "menuOptions"){
+		  var selectedUser = inPreviousView.getSelectedUser();
+		  if(selectedUser)
+		    inView.setUser(selectedUser);
+		  else
+		    inView.toggleAdd();
+		}
+	}
   });

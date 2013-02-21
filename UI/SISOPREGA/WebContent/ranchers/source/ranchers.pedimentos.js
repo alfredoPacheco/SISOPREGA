@@ -21,16 +21,23 @@ enyo.kind(
             }
             ]
        },
-       {
-         name:"basicList", 
+       {kind : "FittableColumns", ontap:"selectPedimento", 
+       	components:[    	            
+	            {content:"Fecha",style:"width:10%"},
+	            {content:"Folio"},    	            
+       ]},
+       {name:"basicList", 
          kind:"List",
+         classes: "list-sample-pulldown-list",
          onSetupItem:"setupItem", 
-         components:
-           [
-            {name:"item", ontap:"selectPedimento", components:[{name:"name"}]}
-            ]
-       }
-       ],
+         components:[
+            {name: "item",kind : "FittableColumns", ontap:"selectPedimento",classes: "list-sample-pulldown-item enyo-border-box", 
+            	components:[    	            
+    	            {name:"pDate",style:"width:10%"},
+    	            {name:"pFolio",},    	            
+	            ]}
+       ]}
+    ],
     setList : function() {
       this.updateList();
     },
@@ -38,7 +45,8 @@ enyo.kind(
       var objPedimento;
       if (this.pedimentos[inIndex.index]) {
         objPedimento = this.pedimentos[inIndex.index];
-        this.$.name.setContent(objPedimento.folio + ' - ' + objPedimento.fechaPedimento);
+        this.$.pFolio.setContent(objPedimento.folio);
+        this.$.pDate.setContent(objPedimento.fechaPedimento);
         return true;
       }
       return false;

@@ -89,9 +89,16 @@ public class CattleInspection extends BaseReportServlet {
 
     params.put("CUS_FROM_DATE", fromDate);
     params.put("CUS_TO_DATE", toDate);
-    params.put("CUS_RANCHER_ID", Integer.parseInt(rancherId));
+    
+    if(rancherId != null && !rancherId.equals("-1"))
+      params.put("CUS_RANCHER_ID", Integer.parseInt(rancherId));
 
-    String reportURL = "WEB-INF/Reports/Ranchers/CattleInspection.jasper";
+    String reportURL = "";
+    if(rancherId != null && !rancherId.equals("-1"))
+      reportURL = "WEB-INF/Reports/Ranchers/CattleInspection.jasper";
+    else
+      reportURL = "WEB-INF/Reports/Tramex/AllCattleInspection.jasper";
+      
 
     processRequest(reportURL, params, response);
 
