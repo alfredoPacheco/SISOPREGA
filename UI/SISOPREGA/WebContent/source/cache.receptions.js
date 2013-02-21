@@ -39,6 +39,7 @@ enyo
 				objNew.barnyards = [];
 				objNew.inspections = [];
 				objNew.feed = [];
+				objNew.color = colorStack.pop();
 
 				return objNew;
 			},
@@ -496,7 +497,7 @@ enyo
 				var cgCreate = consumingGateway.Create("Reception", objToSend);
 				if (cgCreate.exceptionId == 0) { // Created successfully
 					objRec.reception_id = cgCreate.generatedId;
-
+					objRec.color = colorStack.pop();
 					for ( var sKey in objRec.barnyards) {
 						if (!cacheBY.setOccupied(sKey, objRec.reception_id)) {
 							cbObj["doCancel"]();
