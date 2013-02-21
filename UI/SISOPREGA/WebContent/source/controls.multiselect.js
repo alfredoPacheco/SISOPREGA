@@ -38,6 +38,8 @@ enyo.kind({
 		this.doSelectItem();
 	},
 	itemsChanged : function(inOldValue) {
+		this.clear();
+		this.$.drop_down.close();
 		this.$.drop_down.setItems(this.getItems());
 		this.allItems = this.getItems();
 	},

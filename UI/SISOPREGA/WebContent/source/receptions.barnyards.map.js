@@ -21,7 +21,7 @@ enyo.kind({
 	className:"mapBG",
 	create : function() {
 		this.inherited(arguments);
-		this.$.rancherFilter.setItems(cacheRanchers.getAllForList());		
+		this.$.rancherFilter.setItems(cacheReceptions.getRanchersByReceptions());		
 	},
 	components: [
 			{name: "options", kind: enyo.PopupSelect, onSelect: "actionSelected",items:[]},
@@ -493,6 +493,7 @@ enyo.kind({
 		}	
 		this.deselect();
 		this.$.popMan.close();
+		this.$.rancherFilter.setItems(cacheReceptions.getRanchersByReceptions());
 	},
 	updateBY:function(){		
 		this.$.popMan.close();	
@@ -534,7 +535,8 @@ enyo.kind({
 	  cacheRanchers.refreshPersonCallBack(result);
 	  cacheCattle.refreshData();
       cacheBY.refreshData();
-      cacheReceptions.refreshData();  
+      cacheReceptions.refreshData();
+      this.$.rancherFilter.setItems(cacheReceptions.getRanchersByReceptions());
       cacheMan.hideScrim();
       for (var i = 0, a; (a=this.$.cells.children[i]); i++) {         
           for (var j = 0, b; (b =a.children[j]); j++) {               
@@ -614,6 +616,6 @@ enyo.kind({
 	},
 	
 	clearFilter:function(){		
-		this.$.rancherFilter.setIndex(-1);		
+		this.$.rancherFilter.clear();		
 	}
 });		

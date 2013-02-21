@@ -1063,6 +1063,28 @@ enyo
 				}
 				return result;
 			},
+			getRanchersByReceptions:function(){
+				var arrResult = [];
+				var result = [];
+				var arrReceptions = this.get();
+				if(arrReceptions.length>0){
+					for (i in arrReceptions){
+						var obj = {
+								value:		arrReceptions[i].rancher_id,
+								caption:	arrReceptions[i].rancher_name
+						};
+						if(!(arrResult[obj.value] in arrResult)){
+							arrResult[obj.value]=obj;
+						}
+					}
+				}
+				
+				for(i in arrResult){
+					result.push(arrResult[i]);
+				}
+				
+				return result;
+			},
 			refreshData : function() {
 				this.receptionWasReadFromGateway = false;
 				this.inspectionWasReadFromGateway = false;
