@@ -48,6 +48,9 @@ enyo.kind({
 			onclick : "doGetReport"
 		}, ]
 	} ],
+	ready : function(){
+	  this.resetValues();
+	},
 	getParams : function() {
 		var fmt = new enyo.g11n.DateFmt({
 			format : "dd/MM/yyyy",
