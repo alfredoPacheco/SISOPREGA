@@ -16,6 +16,7 @@ enyo.kind({
 		this.$.rancher_id.setItems(cacheRanchers.getAllForList());
 		this.$.cattype_id.setItems(cacheCattle.getAllCattleType());
 		this.$.location_id.setItems(cacheMan.getAllLocationsForList());
+		this.$.zone_id.setItems(cacheMan.getAllZonesForList());
 	},
 	components: [	
 		{kind: enyo.Scroller,
@@ -33,8 +34,13 @@ enyo.kind({
 			 style: "overflow: hidden", width: "85%", height: "85%",scrim: true, components: [
 				
 			]},
-			{kind: "RowGroup", defaultKind: "HFlexBox", caption: "", style:"color:black",
+			{kind: "RowGroup", defaultKind: "HFlexBox",
 			 components: [
+						{layoutKind: enyo.HFlexLayout,components:[			              
+						      {content: "Corrales", className: "enyo-label", },
+						      {content: "  ", style:"width:2%"},
+						      {name:'sBYs', content: "", className: "enyo-label",style:"color:black"},
+						]},			              
 					  {kind: "Item",
 						components: [
 							{content: "Ganadero", className: "enyo-label", flex: 1},
@@ -75,10 +81,22 @@ enyo.kind({
    	  									hint:"",
    	  									flex:1,
    	  									contentPack:"end",
-   	  									onEnter:"emularTabulacionConEnter",
-   	  									onSelectItem:"on_select_location"
+   	  									onEnter:"emularTabulacionConEnter"
    	  								}]},
    	  							]},
+  						{kind: "Item",
+  							components: [
+  								{content: "Zona en corrales", className: "enyo-label", flex: 1},
+  								 {layoutKind: enyo.HFlexLayout,components:[
+  	   	  								{
+  	   	  									kind : "controls.autocomplete",
+  	   	  									name : "zone_id",
+  	   	  									hint:"",
+  	   	  									flex:1,
+  	   	  									contentPack:"end",
+  	   	  									onEnter:"emularTabulacionConEnter"
+  	   	  								}]},
+  	   	  							]},
 					{kind: "VFlexBox", style: "",					  				  
 					 components:[
 					     {content:"Fecha de Llegada",},						 
@@ -127,8 +145,11 @@ enyo.kind({
 			this.$.location_id.setFocus();
 			break;
 		case "location_id":
-			this.$.hc_aprox.forceFocus();
+			this.$.zone_id.setFocus();
 			break;
+		case "zone_id":
+			this.$.hc_aprox.forceFocus();
+			break;		
 		case "hc_aprox":
 			this.$.weight.forceFocus();
 			break;
@@ -154,12 +175,13 @@ enyo.kind({
 		var receptionDef;		
 		receptionDef ={rancher_id:null,arrival_date:"",company_name:"",
 					   cattype_id:"",cattype_name:"",hc_aprox:"",location_id:"",location_name:"",
-					   weights:[], barnyards:[],accepted_count:"",inspections:[],feed:[]};
+					   zone_id:"", weights:[], barnyards:[],accepted_count:"",inspections:[],feed:[]};
 					   
 		var fmt = new enyo.g11n.DateFmt({format: "yyyy/MM/dd", locale: new enyo.g11n.Locale("es_es")});		
 					
 		receptionDef.rancher_name=	this.$.rancher_id.getValue();
-		receptionDef.rancher_id=	this.$.rancher_id.getIndex();						
+		receptionDef.rancher_id=	this.$.rancher_id.getIndex();
+		receptionDef.zone_id=		this.$.zone_id.getIndex();
 		receptionDef.location_id=		this.$.location_id.getIndex();
 		receptionDef.location_name=		this.$.location_id.getValue();
 		
@@ -179,6 +201,7 @@ enyo.kind({
 	resetValues:function(){
 		this.$.rancher_id.setIndex(-1);
 		this.$.cattype_id.setIndex(1);
+		this.$.zone_id.setIndex(1);
 		this.$.location_id.setIndex(1);		
 		this.$.arrival_date.setValue(new Date());
 		this.$.hc_aprox.setValue("");
@@ -186,6 +209,14 @@ enyo.kind({
 	setReception:function(receptionDef,arrBY){
 		this.resetValues();
 		this.arrBY=arrBY;
+		
+		var sBY="";
+		
+		for (var sKey in arrBY){
+			sBY+=arrBY[sKey].substring(1)+", ";
+		}	
+		sBY=sBY.slice(0,-2);
+		this.$.sBYs.setContent(sBY);
 		if(receptionDef){
 			this.objRec=receptionDef;
 			this.$.rancher_id.setIndex(receptionDef.rancher_id);
@@ -194,6 +225,7 @@ enyo.kind({
 												  receptionDef.arrival_date.substring(5,7)-1,
 												  receptionDef.arrival_date.substring(8,10)
 										 ));
+			this.$.zone_id.setIndex(receptionDef.zone_id);
 			this.$.location_id.setIndex(receptionDef.location_id);
 			this.$.cattype_id.setIndex(receptionDef.cattype_id);
 			if(receptionDef.weights.length==1){

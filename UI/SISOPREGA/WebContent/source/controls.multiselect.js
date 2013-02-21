@@ -4,12 +4,13 @@ enyo.kind({
 	itemSelectedPopupAux : -1,
 	navigatingOnList:false,
 	layoutKind : enyo.HFlexLayout,
-	allItems : [],
+	allItems : [],	
 	published : {
 		hint : "",
 		index : -1,
 		items : [],
 	},
+	itemsSelected:[],
 	events:{
 		"onSelectItem":"",
 		"onEnter":""
@@ -53,6 +54,7 @@ enyo.kind({
 		setItems:function(items){
 			this.items = items;			
 		},
+		selected:-1,
 		components : [ {
 			kind : enyo.Scroller,
 			flex : 1,
@@ -64,10 +66,10 @@ enyo.kind({
 				onSetupRow : "setupItem",
 				onclick : "select_item",
 				components : [{kind: "Item", layoutKind: "HFlexLayout", components: [ 
-				              {kind : "Divider"},
-				              {kind: "CheckBox",onChange: "checkboxClicked", name:"check_box"},
-				              {kind:"Spacer"},
-				              {name : "caption",style: "font-size:12px;text-align:left;",content : "", flex:9}
+					              {kind : "Divider"},
+					              {kind: "CheckBox",onChange: "checkboxClicked", name:"check_box"},
+					              {kind:"Spacer"},
+					              {name : "caption",style: "font-size:12px;text-align:left;",content : "", flex:9}
 				              ]}]
 				}]
 		}, {
@@ -76,12 +78,12 @@ enyo.kind({
 				kind : "enyo.IconButton",
 				flex : 1,
 				label : "Aceptar",
-				onclick : "doPerson"
+				onclick : "on_acept"
 			}, {
 				kind : "enyo.IconButton",
 				flex : 1,
 				label : "Cancelar",
-				onclick : "doEnterprise"
+				onclick : "on_cancel"
 			}]
 		}],
 		checkboxClicked: function(inSender) {
@@ -89,46 +91,17 @@ enyo.kind({
 		         this.log("I've been checked!");
 		    }
 		},
-		select_item : function(inSender, inEvent) {
-			if (this.items[inEvent.rowIndex]) {
-				this.iSelected = inEvent.rowIndex;
-				this.doSelect_item();
-			}
-		},
-		getSelected : function() {
-			return this.items[this.iSelected];
+		select_item : function(inSender, inSelected) {
+			this.setIndex(inSender.items[inSelected].value);
+			this.$.textField.forceFocus();
+		},		
 		},
 		
-		setupProductRow : function(inSender, inIndex) {
-			
-		},
-		
-		deleteRancher : function(inSender, inIndex) {
-			if (cacheRanchers.del(this.items[inIndex], this, "filterRanchers")) {
-				return true;
-			} else {
-				return false;
-			}
-		},
-		ready : function() {
-			
-//			this.updateList();
-		},
-		updateList : function() {
-			this.$.list.render();
-		}},
-		
-		
-//		
-//		
-//		published:{items:[],selected:-1},
-//		setItems:function(items){
-//			this.$.p_multiselect.setItems(items);
-//		},
 //		create : function() {
 //			this.inherited(arguments);			
 ////			this.indexChanged();
 //		},
+		
 //		  layoutKind: "VFlexLayout",onSelect : "select_item", onSetupItem: "setupItem",
 //		 width: "300px", components:[ {kind: "controls.multiselect.popuplist", 
 //			 							name:"p_multiselect", flex: 1}]}, 
@@ -147,37 +120,33 @@ enyo.kind({
 		onclick : "click_button"
 	} 
 	],
+	on_acept:function(){
+		var strValue = "";
+		for (i in this.itemsSelected){
+			if(this.itemsSelected[i]){
+				strValue += this.allItems[i].caption + ", ";
+			}			
+		}
+		if(strValue != ""){
+			strValue = strValue.slice(0, -2);
+		}
+		this.$.textField.setValue(strValue);
+		this.$.drop_down.close();
+	},
+	on_cancel:function(){
+		this.$.drop_down.close();
+	},
 	setupItem : function(inSender, inIndex){
+		if(this.$.drop_down.selected == inIndex){
+			inSender.$.client.$.client.applyStyle("background-color","white");
+		}
+		inSender.controls[1].controls[1].setChecked(this.itemsSelected[inIndex]);
 		var objRan;
-		if (objRan = this.items[inIndex]) {
+		if (objRan = this.$.drop_down.items[inIndex]) {
 			this.setupDivider(inIndex);
 			this.$.caption.setContent(objRan.caption);
-			
-//			this.$.info.setContent(objRan.phone_number);
 			return true;
 		}
-		
-		
-		
-//		this.itemSelectedPopupAux++;
-//		if (this.index > -1 && !this.navigatingOnList){
-//			if(this.getCaptionByIndex(this.index) == InIndex.$.item.getContent()){
-//				InIndex.applyStyle("background-color", "white");
-////				this.$.textField.setValue(InIndex.caption);
-//				this.$.drop_down.selected = this.itemSelectedPopupAux;				
-//			}
-//		}
-//		else if (!this.navigatingOnList && this.itemSelectedPopupAux == 0 ){
-//			InIndex.applyStyle("background-color", "white");
-//			this.$.drop_down.selected = 0;	
-//		}
-//		else if(this.$.drop_down.selected > -1 && this.$.drop_down.selected != null){
-//			if(this.$.drop_down.items[this.$.drop_down.selected].caption == InIndex.$.item.getContent()){
-//				InIndex.applyStyle("background-color", "white");
-//				this.$.textField.setValue(InIndex.caption);
-//			}
-//		}
-//		return false;
 	},
 	getGroupName : function(inIndex) {
 		try {
@@ -197,7 +166,6 @@ enyo.kind({
 		} catch (e) {
 			return null;
 		};
-
 	},
 	setupDivider : function(inIndex) {
 		// use group divider at group transition, otherwise use item border for
@@ -212,17 +180,22 @@ enyo.kind({
 //			this.$.drop_down.close();
 //		}		
 	},
-	select_item : function(inSender, inSelected) {
-		this.setIndex(inSender.items[inSelected].value);
+	select_item : function(inSender, inEvent) {		
+		this.itemsSelected[inEvent.rowIndex]=this.$.item.controls[1].getChecked();
+		this.$.drop_down.selected = inEvent.rowIndex;
+		this.$.drop_down.render();
+//		this.setIndex(this.items[inSelected.rowIndex].value);
 		this.$.textField.forceFocus();
 	},
 	click_button : function(inSender, inEvent) {
 		this.itemSelectedPopupAux=-1;
 		this.$.drop_down.setItems(this.allItems);
 		if(this.$.drop_down.items.length > 0){
-//			this.$.drop_down.scrollToSelected();
+			this.$.drop_down.selected = 0;
+//			this.$.list.controlsToRow(this.$.drop_down.selected);
+//			this.$.scroller.scrollIntoView(this.$.item.getBounds().top, 0);
 			this.$.drop_down.openAtEvent(inEvent);
-			this.$.list.render();
+			this.$.drop_down.render();
 		}
 		this.$.textField.forceFocus();		
 		return false;
@@ -232,13 +205,17 @@ enyo.kind({
 		case 13:
 			if (this.$.drop_down.isOpen && this.$.drop_down.selected > -1 && this.$.drop_down.selected != null) {
 				this.itemSelectedPopupAux=-1;
-				this.setIndex(this.$.drop_down.items[this.$.drop_down.selected].value);
+				this.on_acept();
 //				this.$.drop_down.close();
 //				this.$.drop_down.selected = -1;
 			}else{
 				this.doEnter();
 			}
 			break;
+		case 17: //ctrl
+			this.itemsSelected[this.$.drop_down.selected]= !(this.itemsSelected[this.$.drop_down.selected]);
+			this.$.drop_down.render();
+			return true;
 		case 38://up
 			this.selectUp();
 			return true;
@@ -266,14 +243,12 @@ enyo.kind({
 			if(this.$.drop_down.items.length >0){
 				if(this.$.drop_down.selected < this.$.drop_down.items.length - 1){
 					this.$.drop_down.selected ++;
-//					this.$.drop_down.selected = this.itemSelectedPopup;
-					this.$.drop_down.scrollToSelected();					
 				}else{
 					this.$.drop_down.selected = 0;
-//					this.$.drop_down.selected = this.itemSelectedPopup;
-					this.$.drop_down.scrollToSelected();
 				}
 				this.$.drop_down.render();
+				this.$.list.controlsToRow(this.$.drop_down.selected);
+				this.$.scroller.scrollIntoView(this.$.item.getBounds().top, 0);
 			}else{
 				this.$.drop_down.selected = -1;
 			}	
@@ -286,14 +261,12 @@ enyo.kind({
 			if(this.$.drop_down.items.length >0){
 				if(this.$.drop_down.selected > 0){
 					this.$.drop_down.selected --;
-//					this.$.drop_down.selected = this.itemSelectedPopup;
-					this.$.drop_down.scrollToSelected();
 				}else{
 					this.$.drop_down.selected = this.$.drop_down.items.length - 1;
-//					this.$.drop_down.selected = this.itemSelectedPopup;
-					this.$.drop_down.scrollToSelected();
 				}
 				this.$.drop_down.render();
+				this.$.list.controlsToRow(this.$.drop_down.selected);
+				this.$.scroller.scrollIntoView(this.$.item.getBounds().top, 0);
 			}else{
 				this.$.drop_down.selected = -1;
 			}	
@@ -309,6 +282,7 @@ enyo.kind({
 		case (x == 32): // space
 		case (x >= 46 && x <= 90): // letters and numbers and delete
 			break;
+		case (x==17): // ctrl
 		case (x == 16): //Shift
 		case (x == 9): // tab
 		case (x == 38): // up
@@ -323,12 +297,12 @@ enyo.kind({
 		this.itemSelectedPopupAux=-1;
 		if (arrAux.length > 0) {		
 			this.index = -1;
+			this.$.drop_down.selected = 0;
 			this.$.drop_down.setItems(arrAux);
-			if(this.$.drop_down.items.length > 0){
-				this.$.drop_down.openAroundControl(this.$.textField, "", "left");
-				this.$.drop_down.selected = 0;
-				this.$.drop_down.scrollToSelected();
-			}
+			this.$.drop_down.render();
+			this.$.drop_down.openAroundControl(this.$.textField, "", "left");
+			this.$.list.controlsToRow(this.$.drop_down.selected);
+			this.$.scroller.scrollIntoView(this.$.item.getBounds().top, 0);			
 		} else {
 			this.$.drop_down.close();			
 		}
@@ -367,5 +341,10 @@ enyo.kind({
 				return this.items[i].value;
 			}
 		}
+	},
+	clear:function(){
+		this.$.textField.setValue("");
+		this.index = -1;
+		this.$.drop_down.selected = -1;
 	}
 });
