@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="AllCattleInspection" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="8ce1224d-f511-485b-9e76-7dc49ae8f006">
 	<property name="ireport.zoom" value="1.0"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.x" value="92"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" fontName="Times New Roman" fontSize="50" isBold="true" pdfFontName="Times-Bold"/>
 	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
@@ -17,8 +17,8 @@
 	<parameter name="CUS_TO_DATE" class="java.util.Date"/>
 	<queryString>
 		<![CDATA[SELECT
-     SUM(ctrl_inspection_result."hc") AS Rechazos,
-     ctrl_reception_headcount."hc"-SUM(ctrl_inspection_result."hc") AS Aceptadas,
+      SUM(ctrl_inspection_result."hc") AS Rechazos,
+     vw_rancher."rancher_id",
      vw_rancher."rancher_name" AS vw_rancher_rancher_name,
      ctrl_inspection_result."note" AS ctrl_inspection_result_note,
      ctrl_reception."reception_id" AS ctrl_reception_reception_id,
@@ -40,30 +40,25 @@ GROUP BY
      cat_cattle_type_cattype_name,
      ctrl_inspection_inspection_date,
      TotalCabezas,
-     ctrl_inspection_result_note
+     ctrl_inspection_result_note,
+     ctrl_inspection_result."hc", vw_rancher."rancher_id"
 ORDER BY
      ctrl_inspection."inspection_date" ASC,
-     vw_rancher."rancher_name" ASC]]>
+     vw_rancher."rancher_name" ASC;]]>
 	</queryString>
 	<field name="rechazos" class="java.lang.Long"/>
-	<field name="aceptadas" class="java.lang.Long"/>
+	<field name="rancher_id" class="java.lang.Integer"/>
 	<field name="vw_rancher_rancher_name" class="java.lang.String"/>
 	<field name="ctrl_inspection_result_note" class="java.lang.String"/>
 	<field name="ctrl_reception_reception_id" class="java.lang.Integer"/>
 	<field name="cat_cattle_type_cattype_name" class="java.lang.String"/>
 	<field name="ctrl_inspection_inspection_date" class="java.sql.Date"/>
 	<field name="totalcabezas" class="java.lang.Integer"/>
-	<variable name="aceptadas_1" class="java.lang.Long" resetType="Group" resetGroup="Grupo por Ranchero" calculation="Sum">
-		<variableExpression><![CDATA[$F{aceptadas}]]></variableExpression>
-	</variable>
 	<variable name="rechazos_1" class="java.lang.Long" resetType="Group" resetGroup="Grupo por Ranchero" calculation="Sum">
 		<variableExpression><![CDATA[$F{rechazos}]]></variableExpression>
 	</variable>
-	<variable name="aceptadas_2" class="java.lang.Long" resetType="Group" resetGroup="Grupo por Ranchero" calculation="Average">
-		<variableExpression><![CDATA[$F{aceptadas}]]></variableExpression>
-	</variable>
-	<variable name="aceptadas_3" class="java.lang.Integer" resetType="Group" resetGroup="Fecha de Inspección" calculation="Count">
-		<variableExpression><![CDATA[$F{aceptadas}]]></variableExpression>
+	<variable name="rechazos_2" class="java.lang.Long" resetType="Group" resetGroup="Grupo por Ranchero" calculation="Sum">
+		<variableExpression><![CDATA[$F{rechazos}]]></variableExpression>
 	</variable>
 	<group name="Fecha de Inspección">
 		<groupExpression><![CDATA[$F{ctrl_inspection_inspection_date}]]></groupExpression>
@@ -151,14 +146,14 @@ ORDER BY
 					<textFieldExpression><![CDATA[$F{cat_cattle_type_cattype_name}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement uuid="12f6e4bc-90b9-43aa-9cc7-9770e4710f3c" x="410" y="0" width="69" height="15"/>
-					<textElement textAlignment="Center" verticalAlignment="Bottom"/>
-					<textFieldExpression><![CDATA[$F{aceptadas}]]></textFieldExpression>
-				</textField>
-				<textField>
 					<reportElement uuid="47447f73-c3af-49c6-aba0-db76cda48aa6" x="1" y="2" width="109" height="13"/>
 					<textElement textAlignment="Center" verticalAlignment="Bottom"/>
 					<textFieldExpression><![CDATA[$F{ctrl_reception_reception_id}]]></textFieldExpression>
+				</textField>
+				<textField evaluationTime="Group" evaluationGroup="Grupo por Ranchero">
+					<reportElement uuid="dd26fc58-18de-4ed8-9905-1bd607e0c671" x="410" y="0" width="64" height="15"/>
+					<textElement textAlignment="Center" verticalAlignment="Bottom"/>
+					<textFieldExpression><![CDATA[$F{totalcabezas}-$V{rechazos_2}]]></textFieldExpression>
 				</textField>
 			</band>
 		</groupHeader>
