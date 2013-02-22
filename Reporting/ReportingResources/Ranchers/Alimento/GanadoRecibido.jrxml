@@ -14,30 +14,29 @@
      ctrl_reception_headcount."weight" / ctrl_reception_headcount."hc" AS CALC_AVG_KG,
      ctrl_reception_headcount."weight" * 2.2046 / ctrl_reception_headcount."hc" AS CALC_AVG_POUNDS,
      cat_cattle_type."cattype_name" AS cat_cattle_type_cattype_name,
-     cat_measurement_unit."unit_abreviation" AS cat_measurement_unit_unit_abreviation,
      ctrl_reception."date_allotted" AS ctrl_reception_date_allotted,
      array_to_string(array_agg(cat_barnyard."barnyard_code"),',')AS barnyards
 FROM
      "public"."cat_cattle_class" cat_cattle_class INNER JOIN "public"."cat_cattle_type" cat_cattle_type ON cat_cattle_class."catclass_id" = cat_cattle_type."catclass_id"
      INNER JOIN "public"."ctrl_reception" ctrl_reception ON cat_cattle_type."cattype_id" = ctrl_reception."cattle_type"
-     INNER JOIN "public"."ctrl_reception_barnyard" ctrl_reception_barnyard ON ctrl_reception."reception_id" = ctrl_reception_barnyard."reception_id"
+     LEFT JOIN "public"."ctrl_reception_barnyard" ctrl_reception_barnyard ON ctrl_reception."reception_id" = ctrl_reception_barnyard."reception_id"
      INNER JOIN "public"."ctrl_reception_headcount" ctrl_reception_headcount ON ctrl_reception."reception_id" = ctrl_reception_headcount."reception_id"
      INNER JOIN "public"."vw_rancher" vw_rancher ON ctrl_reception."rancher_id" = vw_rancher."rancher_id"
-     INNER JOIN "public"."cat_measurement_unit" cat_measurement_unit ON ctrl_reception_headcount."weight_uom" = cat_measurement_unit."unit_id"
-     INNER JOIN "public"."cat_barnyard" cat_barnyard ON ctrl_reception_barnyard."barnyard_id" = cat_barnyard."barnyard_id"
-WHERE
+     LEFT JOIN "public"."cat_barnyard" cat_barnyard ON ctrl_reception_barnyard."barnyard_id" = cat_barnyard."barnyard_id"
+ WHERE
 	ctrl_reception."date_allotted" >= $P{CUS_FROM_DATE}
 	AND ctrl_reception."date_allotted" <= $P{CUS_TO_DATE}
 GROUP BY
      cat_cattle_type_cattype_name,
      ctrl_reception_headcount_weight,
      ctrl_reception_headcount_hc,
-     cat_measurement_unit_unit_abreviation,
      vw_rancher_rancher_name,
      ctrl_reception_date_allotted
 ORDER BY
      ctrl_reception."date_allotted" ASC,
-     vw_rancher."rancher_name" ASC]]>
+     vw_rancher."rancher_name" ASC,
+     CALC_AVG_KG ASC
+]]>
 	</queryString>
 	<field name="vw_rancher_rancher_name" class="java.lang.String"/>
 	<field name="ctrl_reception_headcount_hc" class="java.lang.Integer"/>
@@ -46,7 +45,6 @@ ORDER BY
 	<field name="calc_avg_kg" class="java.math.BigDecimal"/>
 	<field name="calc_avg_pounds" class="java.math.BigDecimal"/>
 	<field name="cat_cattle_type_cattype_name" class="java.lang.String"/>
-	<field name="cat_measurement_unit_unit_abreviation" class="java.lang.String"/>
 	<field name="ctrl_reception_date_allotted" class="java.sql.Date"/>
 	<field name="barnyards" class="java.lang.String"/>
 	<variable name="ctrl_reception_headcount_hc_1" class="java.lang.Integer" calculation="Sum">
@@ -272,6 +270,13 @@ ORDER BY
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[new Double(String.valueOf($F{calc_avg_pounds}))]]></textFieldExpression>
 			</textField>
+			<staticText>
+				<reportElement uuid="6198964d-779f-4da5-9f10-a1a9c6be706e" x="655" y="2" width="97" height="20">
+					<printWhenExpression><![CDATA[$F{barnyards}.equals( "" )]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Liberado]]></text>
+			</staticText>
 		</band>
 	</detail>
 	<columnFooter>

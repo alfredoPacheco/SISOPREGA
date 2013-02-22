@@ -92,7 +92,7 @@ enyo.kind({
 		this.$.first_name.setValue(objData.firstName);
 		this.$.last_name.setValue(objData.lastName);
 		this.$.mother_name.setValue(objData.motherName);
-		this.$.phone_number.setValue(objData.phone)
+		this.$.phone_number.setValue(objData.phone);
 	},	
 	getProfile:function(){
 		var fmt = new enyo.g11n.DateFmt({

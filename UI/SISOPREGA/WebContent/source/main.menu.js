@@ -14,7 +14,6 @@ enyo.kind({
 		 components:[	
 			{kind:"main.menu.options", name:"menuOptions", className:"buttonsBG",style:"width:1030px;margin-left: auto;margin-right: auto;",
 			flex: 1,
-			onOperations:"showOperations",
 			onReceptions:"showReceptionsMap",
 			onCatalogs:"showCatalogs", 
 			onReports:"showReports",
@@ -22,9 +21,7 @@ enyo.kind({
 			onUsers:"showUsersList",
 			onFileUpload:"showExpRequest"},
 	 		
-			{kind:"operations.menu", name:"operations", onReceptions:"showReceptions", 
-			 onInspections:"showInspections",lazy:true},
-	 		{kind:"catalogs.main", name:"catalogs",lazy:true},
+			{kind:"catalogs.main", name:"catalogs",lazy:true},
 	 		{kind:"receptions.main", name:"receptions",lazy:true},				
 	 		{kind:"receptions.barnyards.map", name:"receptionsMap",lazy:true, flex:1},	 		
 	 		{kind:"reports.main", name:"reports",lazy:true},
@@ -37,49 +34,49 @@ enyo.kind({
 	],
 	showReceptionsMap:function(){
 		enyo.$.sisoprega_btnGoBack.setShowing(1);
-		enyo.$.sisoprega_spacerSecond.setShowing(!1);
+//		enyo.$.sisoprega_spacerSecond.setShowing(!1);
 		_objMainHeader.setContent('Corrales');
 		this.addGoBackAction();	
 		this.$.mainPane.selectViewByName("receptionsMap");		
 	},	
 	showCatalogs:function(){
 		enyo.$.sisoprega_btnGoBack.setShowing(1);
-		enyo.$.sisoprega_spacerSecond.setShowing(!1);
+//		enyo.$.sisoprega_spacerSecond.setShowing(!1);
 		_objMainHeader.setContent('Catalogos');
 		this.addGoBackAction();
 		this.$.mainPane.selectViewByName("catalogs");		
 	},
 	showReports:function(){
 		enyo.$.sisoprega_btnGoBack.setShowing(1);
-		enyo.$.sisoprega_spacerSecond.setShowing(!1);
+//		enyo.$.sisoprega_spacerSecond.setShowing(!1);
 		_objMainHeader.setContent('Reportes');		
 		this.addGoBackAction();
 		this.$.mainPane.selectViewByName("reports");
 	},
 	showInspectionForecast:function(){
 		enyo.$.sisoprega_btnGoBack.setShowing(1);
-		enyo.$.sisoprega_spacerSecond.setShowing(!1);
+//		enyo.$.sisoprega_spacerSecond.setShowing(!1);
 		_objMainHeader.setContent('Lista de Inspección');
 		this.addGoBackAction();
 		this.$.mainPane.selectViewByName("inspectionForecast");
 	},
 	showUsersList : function(){
 	  enyo.$.sisoprega_btnGoBack.setShowing(1);
-      enyo.$.sisoprega_spacerSecond.setShowing(!1);
+//      enyo.$.sisoprega_spacerSecond.setShowing(!1);
       _objMainHeader.setContent('Lista de Usuarios');
       this.addGoBackAction();
       this.$.mainPane.selectViewByName("usersList");
 	},
 	showExpRequest: function(){
 		  enyo.$.sisoprega_btnGoBack.setShowing(1);
-	      enyo.$.sisoprega_spacerSecond.setShowing(!1);
+//	      enyo.$.sisoprega_spacerSecond.setShowing(!1);
 	      _objMainHeader.setContent('Cargar Pedimento');
 	      this.addGoBackAction();
 	      this.$.mainPane.selectViewByName("fileUploader");
 	},	
 	showAddUser : function(){
 	  enyo.$.sisoprega_btnGoBack.setShowing(1);
-      enyo.$.sisoprega_spacerSecond.setShowing(!1);
+//      enyo.$.sisoprega_spacerSecond.setShowing(!1);
       _objMainHeader.setContent('Agregar Usuario');
       _gobackStack.push(
           {
@@ -91,7 +88,7 @@ enyo.kind({
 	},
 	showEditUser : function(){
 	  enyo.$.sisoprega_btnGoBack.setShowing(1);
-      enyo.$.sisoprega_spacerSecond.setShowing(!1);
+//      enyo.$.sisoprega_spacerSecond.setShowing(!1);
       _objMainHeader.setContent('Editar Usuario');
       _gobackStack.push(
           {

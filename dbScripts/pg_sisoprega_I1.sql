@@ -22,6 +22,8 @@
  * 02/02/2013  Diego Torres                  sys_sisoprega_role.record_id provides a unique id for data model.
  * 02/07/2013  Diego Torres                  add table for document management (pedimentos)
  * 02/11/2013  Diego Torres                  Changing cat_location for cat_zone
+ * 02/16/2013  Alfredo Pacheco		     zone_id field added to cat_reception
+ * 02/16/2013  Alfredo Pacheco		     zone_id field added to ctrl_inspection_forecast_detail
  * ====================================================================================
  * 
  * Author: Diego Torres
@@ -407,7 +409,8 @@ CREATE TABLE ctrl_reception (
   rancher_id integer NOT NULL REFERENCES cat_rancher(rancher_id),
   date_allotted date NOT NULL,
   cattle_type integer NOT NULL REFERENCES cat_cattle_type(cattype_id),
-  location_id integer NOT NULL REFERENCES cat_location(location_id)
+  location_id integer NOT NULL REFERENCES cat_location(location_id),
+  zone_id integer NOT NULL REFERENCES cat_zone(zone_id)
 );
 
 GRANT ALL ON ctrl_reception TO sisoprega;
@@ -559,6 +562,7 @@ CREATE TABLE ctrl_inspection_forecast_detail(
 	id SERIAL PRIMARY KEY,
 	forecast_id integer NOT NULL REFERENCES ctrl_inspection_forecast(id) ON DELETE CASCADE,
 	rancher_id integer NOT NULL REFERENCES cat_rancher(rancher_id),
+	zone_id integer NOT NULL REFERENCES cat_zone(zone_id),
 	auth varchar(10),
 	origin varchar(20),
 	cattle_type integer NOT NULL REFERENCES cat_cattle_type(cattype_id),

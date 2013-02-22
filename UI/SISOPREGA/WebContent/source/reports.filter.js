@@ -12,7 +12,7 @@ enyo.kind({
 			kind : "RowGroup",
 			defaultKind : "HFlexBox",
 			caption : "",
-			style : "color:#FFF",
+			style : "color:black",
 			components : [ {
 				kind : "Item",
 				components : [ {
@@ -63,10 +63,11 @@ enyo.kind({
 	} ],
 	ready:function(){
 		this.$.rancher_id.setItems(cacheRanchers.getAllForList());
+		this.resetValues();
 	},
 	getParams : function() {
 		var fmt = new enyo.g11n.DateFmt({
-			format : "dd/MM/yyyy",
+			format : "MM/dd/yyyy",
 			locale : new enyo.g11n.Locale("es_es")
 		});
 		var params = {
@@ -81,7 +82,7 @@ enyo.kind({
 		return params;
 	},
 	resetValues : function() {
-		this.$.rancher_id.setValue(0);
+		this.$.rancher_id.setIndex(-1);
 		this.$.start_date.setValue(new Date());
 		this.$.end_date.setValue(new Date());
 		this.$.rancher_id.setItems(cacheRanchers.ls());

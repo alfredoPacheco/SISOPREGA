@@ -117,6 +117,10 @@
 			<ejb-name>IdentityManager</ejb-name>
 			<ejb-class>com.tramex.sisoprega.identity.proxy.bean.IdentityManagerBean</ejb-class>
 		</session>
+		<session>
+			<ejb-name>PedimentoProxy</ejb-name>
+			<ejb-class>com.tramex.sisoprega.text.proxy.bean.PdfUploaderBean</ejb-class>
+		</session>
 	</enterprise-beans>
 	<assembly-descriptor>
 		<security-role>
@@ -241,6 +245,10 @@
 			<method>
 				<ejb-name>RancherUserProxy</ejb-name>
 				<method-name>Create</method-name>
+			</method>
+			<method>
+				<ejb-name>PedimentoProxy</ejb-name>
+				<method-name>*</method-name>
 			</method>
 		</method-permission>
 		<method-permission>
@@ -384,6 +392,14 @@
 				<ejb-name>FoodProxy</ejb-name>
 				<method-name>Read</method-name>
 			</method>						
+			<method>
+				<ejb-name>PedimentoProxy</ejb-name>
+				<method-name>Read</method-name>
+			</method>
+			<method>
+				<ejb-name>LocationProxy</ejb-name>
+				<method-name>Read</method-name>
+			</method>
 		</method-permission>
 	</assembly-descriptor>
 </ejb-jar>

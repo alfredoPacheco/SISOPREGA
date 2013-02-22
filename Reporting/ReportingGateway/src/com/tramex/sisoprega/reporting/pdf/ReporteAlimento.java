@@ -55,7 +55,7 @@ import com.tramex.sisoprega.reporting.BaseReportServlet;
  */
 
 @WebServlet("/ReporteAlimento")
-@ServletSecurity(@HttpConstraint(rolesAllowed = {"sisoprega_admin", "mex_user", "rancher"}))
+@ServletSecurity(@HttpConstraint(rolesAllowed = {"mx_usr", "rancher"}))
 public class ReporteAlimento extends BaseReportServlet {
   private static final long serialVersionUID = -5469090911544878219L;
 
@@ -72,18 +72,30 @@ public class ReporteAlimento extends BaseReportServlet {
     Map<String, Object> params = new HashMap<String, Object>();
     log.fine("fromDate: [" + request.getParameter("fromDate") + "]");
     log.fine("toDate: [" + request.getParameter("toDate") + "]");
-    log.fine("rancherId: [" + request.getParameter("rancherId") + "]");
-
+    String rancherId = request.getParameter("rancherId");
+    
+    if(request.isUserInRole("rancher"))
+      rancherId = rancherFromLoggedUser(request);
+    
+    log.fine("rancherId: [" + rancherId + "]");
+    
     Date fromDate = new SimpleDateFormat("MM/dd/yyyy").parse(request.getParameter("fromDate"));
     Date toDate = new SimpleDateFormat("MM/dd/yyyy").parse(request.getParameter("toDate"));
     
     params.put("CUS_FROM_DATE", fromDate);
     params.put("CUS_TO_DATE", toDate);
-    params.put("CUS_RANCHER_ID", Integer.parseInt(request.getParameter("rancherId")));
+    
+    if(rancherId != null && !rancherId.equals("-1"))
+      params.put("CUS_RANCHER_ID", Integer.parseInt(rancherId));
 
-    String reportURL = "WEB-INF/Reports/Ranchers/EntregaAlimento.jasper";
+    String reportURL = "";
+    
+    if(rancherId != null && !rancherId.equals("-1"))
+      reportURL = "WEB-INF/Reports/Ranchers/EntregaAlimento.jasper";
+    else
+      reportURL = "WEB-INF/Reports/Tramex/AllEntregaAlimento.jasper";
+      
 
     processRequest(reportURL, params, response);
-
   }
 }

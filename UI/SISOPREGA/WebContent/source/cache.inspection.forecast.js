@@ -18,6 +18,7 @@ enyo.kind({
 						id:					undefined,
 						fore_details_id:	undefined,
 						rancher_id:			undefined,
+						zone_id:			undefined,
 						auth:				undefined,	
 						origin:				undefined,
 						cattle_type:		undefined,
@@ -35,6 +36,7 @@ enyo.kind({
 				for (i in arrForeDetailAux){
 					objInsFore.fore_details_id=		arrForeDetailAux[i].fore_details_id;
 					objInsFore.rancher_id=			arrForeDetailAux[i].rancher_id;
+					objInsFore.zone_id=				arrForeDetailAux[i].zone_id;
 					objInsFore.auth=				arrForeDetailAux[i].auth;	
 					objInsFore.origin=				arrForeDetailAux[i].origin;
 					objInsFore.cattle_type=			arrForeDetailAux[i].cattle_type;
@@ -344,6 +346,7 @@ enyo.kind({
 			fore_details_id : 	oFDetails.fdId,
 			id : 				oFDetails.forecastId,
 			rancher_id : 		oFDetails.rancherId,
+			zone_id : 			oFDetails.zoneId,
 			auth :	 			oFDetails.auth,
 			origin : 			oFDetails.origin,
 			cattle_type : 		oFDetails.cattleType,
@@ -356,6 +359,7 @@ enyo.kind({
 			fdId : 			oFDetails.fore_details_id,
 			forecastId : 	oFDetails.id,
 			rancherId : 	oFDetails.rancher_id,
+			zoneId : 		oFDetails.zone_id,
 			auth : 			oFDetails.auth,
 			origin : 		oFDetails.origin,
 			cattleType : 	oFDetails.cattle_type,

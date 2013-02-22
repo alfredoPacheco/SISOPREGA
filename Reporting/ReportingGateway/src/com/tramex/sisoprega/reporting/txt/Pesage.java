@@ -11,6 +11,8 @@ import java.util.Date;
 import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.HttpConstraint;
+import javax.servlet.annotation.ServletSecurity;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -22,6 +24,7 @@ import com.tramex.sisoprega.reporting.BaseReportServlet;
  * Servlet implementation class Pesage
  */
 @WebServlet("/SMS/RecibidoPorGanadero")
+@ServletSecurity(@HttpConstraint(rolesAllowed = { "mx_usr" }))
 public class Pesage extends BaseReportServlet {
   private static final long serialVersionUID = 1L;
 
@@ -74,9 +77,14 @@ public class Pesage extends BaseReportServlet {
       } else {
 
         PrintWriter out = response.getWriter();
+
+        double dLibras = rounded2Decs(rs.getDouble("libras"));
+        double dPKilos = rounded2Decs(rs.getDouble("pkilos"));
+        double dPLibras = rounded2Decs(rs.getDouble("plibras"));
+
         out.println("Ganado Recibido: " + rs.getLong("cabezas") + " cabezas de " + rs.getString("ganado") + ", "
-            + rs.getDouble("kilos") + " kg. (" + rs.getDouble("libras") + " lbs.). Prom por Kg.: " + rs.getDouble("pkilos")
-            + "; Prom por Lb.: " + rs.getDouble("plibras") + ". Corrales: " + rs.getString("corrales") + ".");
+            + rs.getDouble("kilos") + " kg. (" + dLibras + " lbs.). Prom por Kg.: " + dPKilos + "; Prom por Lb.: " + dPLibras
+            + ". Corrales: " + rs.getString("corrales") + ".");
 
         out.close();
       }
@@ -101,4 +109,12 @@ public class Pesage extends BaseReportServlet {
 
     log.exiting(this.getClass().getCanonicalName(), "processRequest");
   }
+
+  private double rounded2Decs(double amount) {
+    amount *= 100;
+    amount = Math.ceil(amount);
+    amount *= 0.01d;
+    return amount;
+  }
+
 }

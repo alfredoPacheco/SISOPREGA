@@ -11,12 +11,13 @@ enyo
 			},
 			receptionAdapterToIn : function(objReception) {
 				var objNew = {
-					reception_id : objReception.receptionId,
-					rancher_id : objReception.rancherId,
-					arrival_date : ""
-							+ UTCtoNormalDate(objReception.dateAllotted),
-					cattype_id : objReception.cattleType,
-					location_id : objReception.locationId
+					reception_id : 	objReception.receptionId,
+					rancher_id : 	objReception.rancherId,
+					arrival_date : 	""
+									+ UTCtoNormalDate(objReception.dateAllotted),
+					cattype_id : 	objReception.cattleType,
+					location_id : 	objReception.locationId,
+					zone_id :		objReception.zoneId	
 				};
 				var rancherAux = cacheRanchers.getByID(objNew.rancher_id);
 
@@ -38,6 +39,7 @@ enyo
 				objNew.barnyards = [];
 				objNew.inspections = [];
 				objNew.feed = [];
+				objNew.color = colorStack.pop();
 
 				return objNew;
 			},
@@ -88,7 +90,8 @@ enyo
 					rancherId : objReception.rancher_id,
 					dateAllotted : "" + DateOut(objReception.arrival_date),
 					cattleType : objReception.cattype_id,
-					locationId : objReception.location_id
+					locationId : objReception.location_id,
+					zoneId : objReception.zone_id
 				};
 
 				return objNew;
@@ -176,8 +179,7 @@ enyo
 								inspectionAux.id = arrInspectionDetailsAux[id].inspectionDetailsId;
 								inspectionAux.weight = arrInspectionDetailsAux[id].weight;
 								inspectionAux.weight_uom = arrInspectionDetailsAux[id].weightUom;
-
-								objAux.inspections.push(inspectionAux);
+								objAux.inspections.push(enyo.clone(inspectionAux));
 							}
 						}
 
@@ -493,7 +495,7 @@ enyo
 				var cgCreate = consumingGateway.Create("Reception", objToSend);
 				if (cgCreate.exceptionId == 0) { // Created successfully
 					objRec.reception_id = cgCreate.generatedId;
-
+					objRec.color = colorStack.pop();
 					for ( var sKey in objRec.barnyards) {
 						if (!cacheBY.setOccupied(sKey, objRec.reception_id)) {
 							cbObj["doCancel"]();
@@ -1060,6 +1062,28 @@ enyo
 				}
 				return result;
 			},
+			getRanchersByReceptions:function(){
+				var arrResult = [];
+				var result = [];
+				var arrReceptions = this.get();
+				if(arrReceptions.length>0){
+					for (i in arrReceptions){
+						var obj = {
+								value:		arrReceptions[i].rancher_id,
+								caption:	arrReceptions[i].rancher_name
+						};
+						if(!(arrResult[obj.value] in arrResult)){
+							arrResult[obj.value]=obj;
+						}
+					}
+				}
+				
+				for(i in arrResult){
+					result.push(arrResult[i]);
+				}
+				
+				return result;
+			},
 			refreshData : function() {
 				this.receptionWasReadFromGateway = false;
 				this.inspectionWasReadFromGateway = false;
@@ -1079,6 +1103,18 @@ enyo
 				} else { 
 					return false;
 				}				
+			},
+			sendInspectionReport:function(rancher_id){
+				// Send communication to customer
+				var today = new Date();
+				var month = today.getMonth() + 1;
+				var today_sf = month + '/' + today.getDate() + '/'
+						+ today.getFullYear();
+				var report_name = 'CattleInspection?rancherId='
+						+ rancher_id + '&amp;fromDate=' + today_sf
+						+ '&amp;toDate=' + today_sf;
+				consumingGateway.SendReport(rancher_id, report_name);
+				cacheMan.setMessage("", "SMS Enviado");
 			}
 						
 		});

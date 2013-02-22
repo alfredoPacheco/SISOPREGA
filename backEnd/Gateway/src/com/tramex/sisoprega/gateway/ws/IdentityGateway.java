@@ -158,6 +158,21 @@ public class IdentityGateway {
     getIdentityManager().removeGroup(userName, groupName);
     return "OK";
   }
+  
+  /**
+   * Removes a user from database.
+   * @param userName
+   * @return
+   * @throws IdentityManagerException
+   */
+  @WebMethod(operationName = "RemoveUser")
+  public String removeUser(@WebParam(name = "user_name") String userName) throws IdentityManagerException{
+    if (getSessionUserName() == null)
+      throw new WebServiceException("User is not logged in");
+    
+    getIdentityManager().removeUser(userName);
+    return "OK";
+  }
 
   
   /**

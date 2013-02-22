@@ -14,14 +14,14 @@ enyo.kind({
 	objSelected:null,
 	arrSelected:{},
 	arrSelectedOccupied:{},
-	sColorOccupied:"#ff7200",
+//	sColorOccupied:"#ff7200",
 	sColorFree:"white",	
 	sColorSelect:"lightgreen",
 	sColorSelectOccupied:"#9b7eb1",	
 	className:"mapBG",
 	create : function() {
 		this.inherited(arguments);
-		this.$.rancherFilter.setItems(cacheRanchers.getAllForList());		
+		this.$.rancherFilter.setItems(cacheReceptions.getRanchersByReceptions());		
 	},
 	components: [
 			{name: "options", kind: enyo.PopupSelect, onSelect: "actionSelected",items:[]},
@@ -45,7 +45,7 @@ enyo.kind({
 		//this.addRow(true);
 		this.addRow();
 		this.addRowHeader();		
-		this.createCells("2E",7,4,"50px","50px");
+		this.createCells("2E",-7,4,"50px","50px");
 		this.splitRow();
 		this.addCustomCell("corraman","Corrales de <br/> Manejo","100px","50px");
 		this.createCells("1E",5,6,"50px","50px");
@@ -53,42 +53,44 @@ enyo.kind({
 		this.createCells("1E",17,8,"50px","50px");
 						
 		this.addRow();		
-		this.createCells("2E",8,4,"50px","50px");
+		this.createCells("2E",-8,4,"50px","50px");
 		this.splitRow();
 		this.createCells("1E",2,8,"50px","50px");		
 		this.splitRow();
 		this.createCells("1E",18,8,"50px","50px");		
 								
 		this.addRow(true);		
-		this.createCells("2D",11,4,"50px","50px");
+		this.createCells("2D",-11,1,"50px","50px");
+		this.createCells("2D",-7,2,"50px","50px");
+		this.createCells("2D",-1,1,"50px","50px");
 		this.splitRow();
 		this.createCells("1D",1,8,"50px","50px");				
 		this.splitRow();
 		this.createCells("1D",17,8,"50px","50px");
 								
 		this.addRow();	
-		this.createCells("2D",12,6,"33.33px","25px");
+		this.createCells("2D",-12,6,"33.33px","25px");
 		this.splitRow();
 		this.createCells("1D",2,12,"33.33px","25px");
 		this.splitRow();
 		this.createCells("1D",26,4,"100px","25px");		
 		
 		this.addRow(true);	
-		this.createCells("2C",11,6,"33.33px","25px");
+		this.createCells("2C",-11,6,"33.33px","25px");
 		this.splitRow();
 		this.createCells("1C",1,12,"33.33px","25px");
 		this.splitRow();
 		this.createCells("1C",25,4,"100px","25px");	
 							
 		this.addRow();
-		this.createCells("2C",12,6,"33.33px","25px");
+		this.createCells("2C",-12,6,"33.33px","25px");
 		this.splitRow();
 		this.createCells("1C",2,12,"33.33px","25px");
 		this.splitRow();
 		this.createCells("1C",26,4,"100px","25px");		
 									
 		this.addRow(true);			
-		this.createCells("2B",11,6,"33.33px","25px");
+		this.createCells("2B",-11,6,"33.33px","25px");
 		this.splitRow();
 		this.createCells("1B",1,12,"33.33px","25px");
 		this.splitRow();
@@ -96,7 +98,7 @@ enyo.kind({
 									
 		
 		this.addRow(true);
-		this.createCells("2B",8,4,"50px","50px");
+		this.createCells("2B",-8,4,"50px","50px");
 		this.splitRow();
 		this.createCells("1B",2,8,"50px","50px");
 		this.splitRow();
@@ -104,14 +106,14 @@ enyo.kind({
 		this.addCustomCell("lagoxi","Laguna de <br/> Oxidacion","98px","50px");		
 											
 		this.addRow(true);
-		this.createCells("2A",7,4,"50px","50px");
+		this.createCells("2A",-7,4,"50px","50px");
 		this.splitRow();
 		this.createCells("1A",1,8,"50px","50px");		
 		this.splitRow();
 		this.createCells("1A",17,8,"50px","50px");		
 											
 		this.addRow();		
-		this.createCells("2A",8,4,"50px","50px");
+		this.createCells("2A",-8,4,"50px","50px");
 		this.splitRow();
 		this.addCustomCell("cabaA","Caballerizas A","99px","50px");
 		this.addCustomCell("cabaB","Caballerizas B","100px","50px");		
@@ -121,13 +123,13 @@ enyo.kind({
 		
 		
 		this.addRow();	
-		this.createCells("2R",7,4,"50px","50px");
+		this.createCells("2R",-7,4,"50px","50px");
 		this.splitRow();
 		this.addCustomCell("spacerone","","813px","50px","customBYCellDesc");		
 		
 													
 		this.addRow();
-		this.createCells("2R",8,4,"50px","50px");
+		this.createCells("2R",-8,4,"50px","50px");
 		this.splitRow();
 		this.addCustomCell("spacertwo","","813px","50px");
 				
@@ -189,9 +191,9 @@ enyo.kind({
 		var sColor;
 		for (var i=0; i<iNumber; i++) {
 			var iOccupied;
-			if(cacheBY.isOccupied(sLetter+iStart)){
+			if(cacheBY.isOccupied(sLetter+Math.abs(iStart))){
 				iOccupied=1;
-				sColor=this.sColorOccupied;
+				sColor=cacheReceptions.getByID(cacheBY.getRecIDbyBY(sLetter+Math.abs(iStart))).color;
 			}else{
 				iOccupied=0;				
 				sColor=this.sColorFree;				
@@ -203,10 +205,10 @@ enyo.kind({
 											   ";align:left"+															
 											   ";background-color:"+sColor+
 											   ";", 										
-			                               name:sLetter+iStart,
+			                               name:sLetter+Math.abs(iStart),
 										   occupied:iOccupied,
 										   bBY:true,
-										   content:sLetter.substr(1)+iStart,
+										   content:sLetter.substr(1)+Math.abs(iStart),
 										   onclick: "cellClick",
 										   onmousehold:"cellHold",
 										  },{owner: this});
@@ -241,7 +243,7 @@ enyo.kind({
 					for(var sKey in this.arrSelectedOccupied){
 						if(cacheBY.isOccupied(sKey)){
 							this.$[sKey].occupied=1;
-							this.$[sKey].applyStyle("background-color",this.sColorOccupied);
+							this.$[sKey].applyStyle("background-color",cacheReceptions.getByID(cacheBY.getRecIDbyBY(sKey)).color);
 						}
 					}
 					this.arrSelectedOccupied={};
@@ -261,7 +263,7 @@ enyo.kind({
 						if(cacheBY.inUse()[sKey].reception_id!=cacheBY.inUse()[inSender.name].reception_id){
 							for(var sKey in this.arrSelectedOccupied){
 								this.$[sKey].occupied=1;
-								this.$[sKey].applyStyle("background-color",this.sColorOccupied);
+								this.$[sKey].applyStyle("background-color",cacheReceptions.getByID(cacheBY.getRecIDbyBY(sKey)).color);
 							}
 							this.arrSelectedOccupied={};
 						}
@@ -282,7 +284,7 @@ enyo.kind({
 			case 3:
 				delete this.arrSelectedOccupied[this.objSelected.name];	
 				this.objSelected.occupied=1;
-				this.objSelected.applyStyle("background-color",this.sColorOccupied);									
+				this.objSelected.applyStyle("background-color",cacheReceptions.getByID(cacheBY.getRecIDbyBY(this.objSelected.name)).color);									
 				break;								
 				
 		}
@@ -298,7 +300,7 @@ enyo.kind({
 					for(var sKey in this.arrSelectedOccupied){
 						if(cacheBY.isOccupied(sKey)){
 							this.$[sKey].occupied=1;
-							this.$[sKey].applyStyle("background-color",this.sColorOccupied);
+							this.$[sKey].applyStyle("background-color",cacheReceptions.getByID(cacheBY.getRecIDbyBY(sKey)).color);
 						}
 					}
 					this.arrSelectedOccupied={};
@@ -321,7 +323,7 @@ enyo.kind({
 						if(cacheBY.inUse()[sKey].reception_id!=cacheBY.inUse()[inSender.name].reception_id){
 							for(var sKey in this.arrSelectedOccupied){
 								this.$[sKey].occupied=1;
-								this.$[sKey].applyStyle("background-color",this.sColorOccupied);
+								this.$[sKey].applyStyle("background-color",cacheReceptions.getByID(cacheBY.getRecIDbyBY(sKey)).color);
 							}
 							this.arrSelectedOccupied={};
 						}
@@ -366,20 +368,12 @@ enyo.kind({
 			sBy+=sKey+", ";
 		}
 		sBy=sBy.slice(0,-2);
-//		var iAc=0;				
-//		if(objRec.accepted_count!=""){
-//			iAc=objRec.accepted_count;
-//		}
+
 		_objMainHeader.setContent(objRec.rancher_name+" - "+objRec.location_name+"<BR>"+objRec.cattype_name+
 								  "  ("+ objRec.hc_aprox+"/"+objRec.weights[0].weight+"kg)"+
 							  	  "	 "+objRec.arrival_date		
 		);	
-		/*this.$.spacerone.setContent("<strong>"+objRec.rancher_name +"</strong> "+
-									"- "+objRec.location_name+" - "+objRec.cattype_name+
-									"  ("+ objRec.hc_aprox+"/"+objRec.weights[0].weight+")"+
-									"	 "+objRec.arrival_date+
-									"</br> Corrales ("+iBy+") - "+sBy);		
-		*/}
+		}
 		catch(e){
 			_objMainHeader.setContent("");
 		}
@@ -483,7 +477,7 @@ enyo.kind({
 			case 8: //Deseleccionar
 				delete this.arrSelectedOccupied[this.objSelected.name];	
 				this.objSelected.occupied=1;
-				this.objSelected.applyStyle("background-color",this.sColorOccupied);									
+				this.objSelected.applyStyle("background-color",cacheReceptions.getByID(cacheBY.getRecIDbyBY(this.objSelected.name)).color);									
 				break;
 			case 9: // Imprimir
 			  var receptionId = cacheBY.inUse()[this.objSelected.name].reception_id;
@@ -499,6 +493,7 @@ enyo.kind({
 		}	
 		this.deselect();
 		this.$.popMan.close();
+		this.$.rancherFilter.setItems(cacheReceptions.getRanchersByReceptions());
 	},
 	updateBY:function(){		
 		this.$.popMan.close();	
@@ -510,7 +505,7 @@ enyo.kind({
 		}
 		for (var sKey in this.arrSelected){
 			this.$[sKey].occupied=1;
-			this.$[sKey].applyStyle("background-color",this.sColorOccupied);			
+			this.$[sKey].applyStyle("background-color",cacheReceptions.getByID(cacheBY.getRecIDbyBY(sKey)).color);			
 		}
 		this.arrSelected={};		
 	},
@@ -529,36 +524,39 @@ enyo.kind({
 		for (var sKey in this.arrSelectedOccupied){		
 			delete this.arrSelectedOccupied[sKey];	
 			this.$[sKey].occupied=1;
-			this.$[sKey].applyStyle("background-color",this.sColorOccupied);							
+			this.$[sKey].applyStyle("background-color",cacheReceptions.getByID(cacheBY.getRecIDbyBY(sKey)).color);							
 		}
 	},
-	
 	refreshMap:function(){
 		cacheMan.showScrim();
-		cacheRanchers.refreshData();			
-		cacheCattle.refreshData();
-		cacheBY.refreshData();
-		cacheReceptions.refreshData();	
-		cacheMan.hideScrim();
-		for (var i = 0, a; (a=this.$.cells.children[i]); i++) {			
-			for (var j = 0, b; (b =a.children[j]); j++) {				
-				if(b.bBY==true){
-					this.$[b.name].removeClass("selectCell");
-					if(cacheBY.isOccupied(b.name)){
-						//alert(b.name)
-						this.$[b.name].occupied=1;						
-						this.$[b.name].applyStyle("background-color",this.sColorOccupied);						
-					}else{
-						this.$[b.name].occupied=0;								
-						this.$[b.name].applyStyle("background-color",this.sColorFree);																	
-					}
-				}
-			}
-		}
-		this.arrByMOver={};
-		this.objSelected=null;
-		this.arrSelected={};
-		this.arrSelectedOccupied={};		
+		consumingGateway.ReadAsync("Rancher", {}, this, "refreshMapCallBack");
+	},
+	refreshMapCallBack : function(result){
+	  cacheRanchers.refreshPersonCallBack(result);
+	  cacheCattle.refreshData();
+      cacheBY.refreshData();
+      cacheReceptions.refreshData();
+      this.$.rancherFilter.setItems(cacheReceptions.getRanchersByReceptions());
+      cacheMan.hideScrim();
+      for (var i = 0, a; (a=this.$.cells.children[i]); i++) {         
+          for (var j = 0, b; (b =a.children[j]); j++) {               
+              if(b.bBY==true){
+                  this.$[b.name].removeClass("selectCell");
+                  if(cacheBY.isOccupied(b.name)){
+                      //alert(b.name)
+                      this.$[b.name].occupied=1;                      
+                      this.$[b.name].applyStyle("background-color",cacheReceptions.getByID(cacheBY.getRecIDbyBY(b.name)).color);                      
+                  }else{
+                      this.$[b.name].occupied=0;                              
+                      this.$[b.name].applyStyle("background-color",this.sColorFree);                                                                  
+                  }
+              }
+          }
+      }
+      this.arrByMOver={};
+      this.objSelected=null;
+      this.arrSelected={};
+      this.arrSelectedOccupied={};
 	},
 	rancherFilterChanged:function(inSender){
 		if(this.$.rancherFilter.getIndex()>-1){
@@ -574,8 +572,8 @@ enyo.kind({
 								var byFinded = cacheBY.getByBarnyard(b.name);
 								if(byFinded){
 									if(byFinded.barnyard_id == receptions[x].value){
-										this.$[b.name].occupied=1;
-										this.$[b.name].applyStyle("background-color",this.sColorOccupied);
+										this.$[b.name].occupied=1;										
+										this.$[b.name].applyStyle("background-color",cacheReceptions.getByID(cacheBY.getRecIDbyBY(b.name)).color);
 										break;
 									}
 								}
@@ -602,7 +600,7 @@ enyo.kind({
 						if(cacheBY.isOccupied(b.name)){
 							//alert(b.name)
 							this.$[b.name].occupied=1;						
-							this.$[b.name].applyStyle("background-color",this.sColorOccupied);						
+							this.$[b.name].applyStyle("background-color",cacheReceptions.getByID(cacheBY.getRecIDbyBY(b.name)).color);						
 						}else{
 							this.$[b.name].occupied=0;								
 							this.$[b.name].applyStyle("background-color",this.sColorFree);																	
@@ -618,6 +616,7 @@ enyo.kind({
 	},
 	
 	clearFilter:function(){		
-		this.$.rancherFilter.setIndex(-1);		
+		this.$.rancherFilter.clear();
+		this.rancherFilterChanged();
 	}
 });		

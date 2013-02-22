@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="AllCattleInspection" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="8ce1224d-f511-485b-9e76-7dc49ae8f006">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="92"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" fontName="Times New Roman" fontSize="50" isBold="true" pdfFontName="Times-Bold"/>
+	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<style name="Row" mode="Transparent">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style backcolor="#E6DAC3"/>
+		</conditionalStyle>
+	</style>
+	<parameter name="CUS_FROM_DATE" class="java.util.Date"/>
+	<parameter name="CUS_TO_DATE" class="java.util.Date"/>
+	<queryString>
+		<![CDATA[SELECT
+      SUM(ctrl_inspection_result."hc") AS Rechazos,
+     vw_rancher."rancher_id",
+     vw_rancher."rancher_name" AS vw_rancher_rancher_name,
+     ctrl_inspection_result."note" AS ctrl_inspection_result_note,
+     ctrl_reception."reception_id" AS ctrl_reception_reception_id,
+     cat_cattle_type."cattype_name" AS cat_cattle_type_cattype_name,
+     ctrl_inspection."inspection_date" AS ctrl_inspection_inspection_date,
+     ctrl_reception_headcount."hc" AS TotalCabezas
+FROM
+     "public"."cat_cattle_type" cat_cattle_type INNER JOIN "public"."ctrl_reception" ctrl_reception ON cat_cattle_type."cattype_id" = ctrl_reception."cattle_type"
+     INNER JOIN "public"."ctrl_inspection" ctrl_inspection ON ctrl_reception."reception_id" = ctrl_inspection."reception_id"
+     INNER JOIN "public"."ctrl_reception_headcount" ctrl_reception_headcount ON ctrl_reception."reception_id" = ctrl_reception_headcount."reception_id"
+     INNER JOIN "public"."vw_rancher" vw_rancher ON ctrl_reception."rancher_id" = vw_rancher."rancher_id"
+     INNER JOIN "public"."ctrl_inspection_result" ctrl_inspection_result ON ctrl_inspection."inspection_id" = ctrl_inspection_result."inspection_id"
+WHERE
+     ctrl_inspection."inspection_date" >= $P{CUS_FROM_DATE}
+ AND ctrl_inspection."inspection_date" <= $P{CUS_TO_DATE}
+GROUP BY
+     vw_rancher_rancher_name,
+     ctrl_reception_reception_id,
+     cat_cattle_type_cattype_name,
+     ctrl_inspection_inspection_date,
+     TotalCabezas,
+     ctrl_inspection_result_note,
+     ctrl_inspection_result."hc", vw_rancher."rancher_id"
+ORDER BY
+     ctrl_inspection."inspection_date" ASC,
+     vw_rancher."rancher_name" ASC;]]>
+	</queryString>
+	<field name="rechazos" class="java.lang.Long"/>
+	<field name="rancher_id" class="java.lang.Integer"/>
+	<field name="vw_rancher_rancher_name" class="java.lang.String"/>
+	<field name="ctrl_inspection_result_note" class="java.lang.String"/>
+	<field name="ctrl_reception_reception_id" class="java.lang.Integer"/>
+	<field name="cat_cattle_type_cattype_name" class="java.lang.String"/>
+	<field name="ctrl_inspection_inspection_date" class="java.sql.Date"/>
+	<field name="totalcabezas" class="java.lang.Integer"/>
+	<variable name="rechazos_1" class="java.lang.Long" resetType="Group" resetGroup="Grupo por Ranchero" calculation="Sum">
+		<variableExpression><![CDATA[$F{rechazos}]]></variableExpression>
+	</variable>
+	<variable name="rechazos_2" class="java.lang.Long" resetType="Group" resetGroup="Grupo por Ranchero" calculation="Sum">
+		<variableExpression><![CDATA[$F{rechazos}]]></variableExpression>
+	</variable>
+	<group name="Fecha de Inspección">
+		<groupExpression><![CDATA[$F{ctrl_inspection_inspection_date}]]></groupExpression>
+		<groupHeader>
+			<band height="33">
+				<textField>
+					<reportElement uuid="6997e2ae-05ae-4229-b6cd-e4e973dd82ab" x="1" y="0" width="109" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Top"/>
+					<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format($F{ctrl_inspection_inspection_date})]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="1c49298e-c70c-437a-9446-53083526ab83" x="1" y="20" width="109" height="13"/>
+					<textElement textAlignment="Center" verticalAlignment="Bottom">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[No. de Lote]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="ae3b00b5-29b7-4951-8143-bd1a41e3d4d5" x="241" y="20" width="100" height="13"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Total de Cabezas]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="05c2c6a5-63e5-4ddb-aed1-22fa9d01da9a" x="342" y="20" width="64" height="13"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Ganado]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="0329d3d7-9730-4ac2-9701-e7b4395f35df" x="113" y="20" width="124" height="13"/>
+					<textElement verticalAlignment="Bottom">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Ganadero]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="6ad674a4-53f2-4405-ba77-dbb5d791476c" x="410" y="20" width="69" height="13"/>
+					<textElement textAlignment="Center" verticalAlignment="Bottom">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Aceptadas]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="25"/>
+		</groupFooter>
+	</group>
+	<group name="Grupo por Ranchero">
+		<groupExpression><![CDATA[$F{vw_rancher_rancher_name}]]></groupExpression>
+		<groupHeader>
+			<band height="19">
+				<textField isStretchWithOverflow="true">
+					<reportElement uuid="94480909-8f3b-4760-b898-f4efa0c886c6" style="Detail" x="113" y="0" width="124" height="15"/>
+					<textElement verticalAlignment="Bottom">
+						<font fontName="SansSerif" size="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{vw_rancher_rancher_name}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="cb5036aa-31ce-4182-b3ae-aabe9074c395" style="Column header" x="638" y="2" width="86" height="15" forecolor="#736343"/>
+					<textElement textAlignment="Justified" verticalAlignment="Middle"/>
+					<text><![CDATA[Razón]]></text>
+				</staticText>
+				<textField>
+					<reportElement uuid="2c95bb51-9878-43ea-9f6f-53e87f10caa4" x="241" y="0" width="100" height="15"/>
+					<textElement textAlignment="Center" verticalAlignment="Bottom">
+						<font fontName="SansSerif" size="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{totalcabezas}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="96764517-bb07-4133-b1fc-819c6cdec4b5" x="729" y="2" width="64" height="15" forecolor="#736343"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Cantidad]]></text>
+				</staticText>
+				<textField>
+					<reportElement uuid="922aeb6c-006d-4f9e-a815-63c3f08df61d" x="342" y="0" width="64" height="15"/>
+					<textElement textAlignment="Center" verticalAlignment="Bottom"/>
+					<textFieldExpression><![CDATA[$F{cat_cattle_type_cattype_name}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement uuid="47447f73-c3af-49c6-aba0-db76cda48aa6" x="1" y="2" width="109" height="13"/>
+					<textElement textAlignment="Center" verticalAlignment="Bottom"/>
+					<textFieldExpression><![CDATA[$F{ctrl_reception_reception_id}]]></textFieldExpression>
+				</textField>
+				<textField evaluationTime="Group" evaluationGroup="Grupo por Ranchero">
+					<reportElement uuid="dd26fc58-18de-4ed8-9905-1bd607e0c671" x="410" y="0" width="64" height="15"/>
+					<textElement textAlignment="Center" verticalAlignment="Bottom"/>
+					<textFieldExpression><![CDATA[$F{totalcabezas}-$V{rechazos_2}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="20">
+				<textField>
+					<reportElement uuid="700a6c5d-57f1-4270-a159-ad3f8e3980ce" x="729" y="3" width="64" height="15"/>
+					<textElement textAlignment="Center" verticalAlignment="Bottom">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{rechazos_1}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="3ebf91a7-ae69-4cfe-806b-2886d1f70879" x="624" y="3" width="100" height="15"/>
+					<textElement textAlignment="Center" verticalAlignment="Bottom">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Total de Rechazos]]></text>
+				</staticText>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="77" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="e960b304-b97c-405c-bf66-b2d5bf3598e5" style="Title" x="1" y="0" width="801" height="51"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="36" pdfFontName="Times-Roman"/>
+				</textElement>
+				<text><![CDATA[Inspección de Ganado]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="27b476e9-469c-496d-a6ec-e43417e71c13" x="312" y="51" width="92" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format($P{CUS_FROM_DATE})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="ecf40fb6-f5d2-4325-8c7b-d3d6dcba7fc4" x="437" y="51" width="100" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format($P{CUS_TO_DATE})]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="0eb4452d-9037-42dc-97ec-a9979da87cba" x="279" y="51" width="33" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[DEL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="0eb4452d-9037-42dc-97ec-a9979da87cba" x="411" y="51" width="26" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Al]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="32" splitType="Stretch">
+			<line>
+				<reportElement uuid="e04e36a7-051d-4282-97f3-5fe03cc74416" positionType="FixRelativeToBottom" x="0" y="15" width="802" height="1"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement uuid="4f034bd1-1c22-4692-b994-ea5a006af85f" x="1" y="15" width="109" height="17"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha de Inspección]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="17" splitType="Stretch">
+			<frame>
+				<reportElement uuid="f271f658-f279-459c-b0d2-8eabe1e45296" style="Row" mode="Opaque" x="0" y="1" width="802" height="15"/>
+				<textField isStretchWithOverflow="true">
+					<reportElement uuid="18b81242-7d52-41a7-b065-285ea641e864" style="Detail" x="638" y="0" width="86" height="15"/>
+					<textElement textAlignment="Justified" verticalAlignment="Middle">
+						<font size="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{ctrl_inspection_result_note}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement uuid="c751631b-c23b-4616-a156-e9fd5445c30b" x="729" y="0" width="64" height="15"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$F{rechazos}]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="11" splitType="Stretch">
+			<line>
+				<reportElement uuid="e073045a-f18b-4db0-badd-2201c2a3a0f9" positionType="FixRelativeToBottom" x="0" y="3" width="802" height="1"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="25" splitType="Stretch">
+			<frame>
+				<reportElement uuid="19d5c695-fb8a-4615-b8a8-2cfa9114bd76" mode="Opaque" x="-21" y="1" width="843" height="24" forecolor="#D0B48E" backcolor="#F2EBDF"/>
+				<textField evaluationTime="Report">
+					<reportElement uuid="63e60796-af58-49cf-955f-d8166240fa57" style="Column header" x="783" y="1" width="40" height="20" forecolor="#736343"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement uuid="9fb1bce9-8878-4b36-be35-7d31d17cabfd" style="Column header" x="703" y="1" width="80" height="20" forecolor="#736343"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+				</textField>
+				<textField pattern="EEEEE dd MMMMM yyyy">
+					<reportElement uuid="d9a7c9f7-4fa3-47e2-87ff-01b184fdaf24" style="Column header" x="22" y="1" width="197" height="20" forecolor="#736343"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

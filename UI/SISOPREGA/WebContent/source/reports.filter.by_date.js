@@ -12,7 +12,7 @@ enyo.kind({
 			kind : "RowGroup",
 			defaultKind : "HFlexBox",
 			caption : "",
-			style : "color:#FFF",
+			style : "color:black",
 			components : [ {
 				kind : "VFlexBox",
 				style : "",
@@ -48,9 +48,12 @@ enyo.kind({
 			onclick : "doGetReport"
 		}, ]
 	} ],
+	ready : function(){
+	  this.resetValues();
+	},
 	getParams : function() {
 		var fmt = new enyo.g11n.DateFmt({
-			format : "dd/MM/yyyy",
+			format : "MM/dd/yyyy",
 			locale : new enyo.g11n.Locale("es_es")
 		});
 		var params = {

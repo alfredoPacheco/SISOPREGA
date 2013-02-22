@@ -37,6 +37,7 @@ public class InspectionForecastDetail {
   private long fdId;
   private long forecastId;
   private long rancherId;
+  private long zoneId;
   private String auth;
   private String origin;
   private long cattleType;
@@ -76,6 +77,21 @@ public class InspectionForecastDetail {
    */
   public void setRancherId(long rancherId) {
     this.rancherId = rancherId;
+  }
+  /**
+   * @return the auth
+   */
+  /**
+   * @return the zoneId
+   */
+  public long getZoneId() {
+    return zoneId;
+  }
+  /**
+   * @param rancherId the rancherId to set
+   */
+  public void setZoneId(long zoneId) {
+    this.zoneId = zoneId;
   }
   /**
    * @return the auth
