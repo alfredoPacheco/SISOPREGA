@@ -14,10 +14,13 @@ enyo.kind({
 	objSelected:null,
 	arrSelected:{},
 	arrSelectedOccupied:{},
-//	sColorOccupied:"#ff7200",
+	arrBYbyRancherSelected:{},
+//	sColorOccupied:"darkorange",
+	sColorOccupied:"#ff7200",
 	sColorFree:"white",	
 	sColorSelect:"lightgreen",
-	sColorSelectOccupied:"#9b7eb1",	
+	sColorSelectOccupied:"#9b7eb1",
+//	sColorSelectOccupied:"yellow",
 	className:"mapBG",
 	create : function() {
 		this.inherited(arguments);
@@ -193,7 +196,7 @@ enyo.kind({
 			var iOccupied;
 			if(cacheBY.isOccupied(sLetter+Math.abs(iStart))){
 				iOccupied=1;
-				sColor=cacheReceptions.getByID(cacheBY.getRecIDbyBY(sLetter+Math.abs(iStart))).color;
+				sColor=this.sColorOccupied;
 			}else{
 				iOccupied=0;				
 				sColor=this.sColorFree;				
@@ -239,11 +242,12 @@ enyo.kind({
 		switch(inSender.occupied){
 			case 0: //Seleccionar corral disponible
 				this.clearDesc();
+				this.unselectBY();
 				if(enyo.json.stringify(this.arrSelectedOccupied)!="{}"){
 					for(var sKey in this.arrSelectedOccupied){
 						if(cacheBY.isOccupied(sKey)){
 							this.$[sKey].occupied=1;
-							this.$[sKey].applyStyle("background-color",cacheReceptions.getByID(cacheBY.getRecIDbyBY(sKey)).color);
+//							this.$[sKey].applyStyle("background-color",cacheReceptions.getByID(cacheBY.getRecIDbyBY(sKey)).color);
 						}
 					}
 					this.arrSelectedOccupied={};
@@ -252,8 +256,9 @@ enyo.kind({
 				this.arrSelected[inSender.name]=inSender.name;			
 				inSender.applyStyle("background-color",this.sColorSelect);							
 				break;
-			case 1:
+			case 1: //Seleccionar corral ocupado
 				this.setDesc(inSender.name);
+				this.unselectBY();
 				if(enyo.json.stringify(this.arrSelected)!="{}"){
 					this.$.options.setItems([{caption:"Anexar",value:7}]);
 					this.$.options.render();
@@ -263,16 +268,17 @@ enyo.kind({
 						if(cacheBY.inUse()[sKey].reception_id!=cacheBY.inUse()[inSender.name].reception_id){
 							for(var sKey in this.arrSelectedOccupied){
 								this.$[sKey].occupied=1;
-								this.$[sKey].applyStyle("background-color",cacheReceptions.getByID(cacheBY.getRecIDbyBY(sKey)).color);
-							}
+								this.$[sKey].applyStyle("background-color",this.sColorOccupied);
+							}							
 							this.arrSelectedOccupied={};
 						}
 						break;
-					}
+					}					
 					//cacheBY.get
 					inSender.occupied=3;					
-					this.arrSelectedOccupied[inSender.name]=inSender.name;
-					inSender.applyStyle("background-color",this.sColorSelectOccupied);
+					this.arrSelectedOccupied[inSender.name]=inSender.name;					
+					this.colorBYbyRancherSelected(cacheReceptions.getByID(cacheBY.getRecIDbyBY(inSender.name)).rancher_id);
+										
 				}
 				break;							
 			case 2: //Deseleccionar corral libre
@@ -281,7 +287,7 @@ enyo.kind({
 				this.objSelected.applyStyle("background-color",this.sColorFree);						
 				break;
 						
-			case 3:
+			case 3://Deseleccionar corral ocupado
 				delete this.arrSelectedOccupied[this.objSelected.name];	
 				this.objSelected.occupied=1;
 				this.objSelected.applyStyle("background-color",cacheReceptions.getByID(cacheBY.getRecIDbyBY(this.objSelected.name)).color);									
@@ -291,16 +297,16 @@ enyo.kind({
 	},
 	cellHold:function(inSender, inEvent){
 		inEvent.stopPropagation();
-		
 		this.objSelected=inSender;
 		switch(inSender.occupied){
 			case 0:
 				this.clearDesc();
+				this.unselectBY();
 				if(enyo.json.stringify(this.arrSelectedOccupied)!="{}"){
 					for(var sKey in this.arrSelectedOccupied){
 						if(cacheBY.isOccupied(sKey)){
 							this.$[sKey].occupied=1;
-							this.$[sKey].applyStyle("background-color",cacheReceptions.getByID(cacheBY.getRecIDbyBY(sKey)).color);
+//							this.$[sKey].applyStyle("background-color",cacheReceptions.getByID(cacheBY.getRecIDbyBY(sKey)).color);
 						}
 					}
 					this.arrSelectedOccupied={};
@@ -312,6 +318,7 @@ enyo.kind({
 				break;
 			case 1: 
 				this.setDesc(inSender.name);
+				this.unselectBY();
 				if(enyo.json.stringify(this.arrSelected)!="{}"){
 					this.$.options.setItems([{caption:"Anexar",value:7}]);
 					this.$.options.render();
@@ -332,7 +339,7 @@ enyo.kind({
 					//cacheBY.get
 					inSender.occupied=3;					
 					this.arrSelectedOccupied[inSender.name]=inSender.name;
-					inSender.applyStyle("background-color",this.sColorSelectOccupied);
+					this.colorBYbyRancherSelected(cacheReceptions.getByID(cacheBY.getRecIDbyBY(inSender.name)).rancher_id);
 					this.cellHold(inSender, inEvent);
 				}				
 				break;							
@@ -505,8 +512,8 @@ enyo.kind({
 		}
 		for (var sKey in this.arrSelected){
 			this.$[sKey].occupied=1;
-			this.$[sKey].applyStyle("background-color",cacheReceptions.getByID(cacheBY.getRecIDbyBY(sKey)).color);			
 		}
+		this.colorBYbyRancherSelected(cacheReceptions.getByID(cacheBY.getRecIDbyBY(sKey)).rancher_id);
 		this.arrSelected={};		
 	},
 	releaseBY:function(){
@@ -545,7 +552,7 @@ enyo.kind({
                   if(cacheBY.isOccupied(b.name)){
                       //alert(b.name)
                       this.$[b.name].occupied=1;                      
-                      this.$[b.name].applyStyle("background-color",cacheReceptions.getByID(cacheBY.getRecIDbyBY(b.name)).color);                      
+                      this.$[b.name].applyStyle("background-color",this.sColorOccupied);                      
                   }else{
                       this.$[b.name].occupied=0;                              
                       this.$[b.name].applyStyle("background-color",this.sColorFree);                                                                  
@@ -600,7 +607,7 @@ enyo.kind({
 						if(cacheBY.isOccupied(b.name)){
 							//alert(b.name)
 							this.$[b.name].occupied=1;						
-							this.$[b.name].applyStyle("background-color",cacheReceptions.getByID(cacheBY.getRecIDbyBY(b.name)).color);						
+							this.$[b.name].applyStyle("background-color",this.sColorOccupied);						
 						}else{
 							this.$[b.name].occupied=0;								
 							this.$[b.name].applyStyle("background-color",this.sColorFree);																	
@@ -614,7 +621,27 @@ enyo.kind({
 		this.arrSelected={};
 		this.arrSelectedOccupied={};
 	},
-	
+	colorBYbyRancherSelected:function(rancher_id){
+		this.arrBYbyRancherSelected = cacheReceptions.getActiveBYForListByRancherID(rancher_id);
+		
+		for(i in this.arrBYbyRancherSelected){
+			var activeBY = "" + this.arrBYbyRancherSelected[i].zone_id + this.arrBYbyRancherSelected[i].barnyard_code;
+			this.$[activeBY].applyStyle("background-color",cacheReceptions.getByID(cacheBY.getRecIDbyBY(activeBY)).color);
+		}
+		for(i in this.arrSelectedOccupied){
+			this.$[i].applyStyle("background-color",this.sColorSelectOccupied);	
+		}
+		
+	},
+	unselectBY:function(){
+		
+		for(i in this.arrBYbyRancherSelected){
+			var activeBY = "" + this.arrBYbyRancherSelected[i].zone_id + this.arrBYbyRancherSelected[i].barnyard_code;
+			this.$[activeBY].applyStyle("background-color",this.sColorOccupied);
+		}
+		this.arrBYbyRancherSelected = [];
+		
+	},
 	clearFilter:function(){		
 		this.$.rancherFilter.clear();
 		this.rancherFilterChanged();
