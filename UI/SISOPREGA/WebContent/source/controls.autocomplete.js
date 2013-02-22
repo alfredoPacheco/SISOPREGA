@@ -5,10 +5,13 @@ enyo.kind({
 	navigatingOnList:false,
 	layoutKind : enyo.HFlexLayout,
 	allItems : [],
+	isWithIndex:false,
+	sColorWithOutIndex:"teal",
+	sColorWithIndex:"black",
 	published : {
 		hint : "",
 		index : -1,
-		items : []
+		items : [],
 	},
 	events:{
 		"onSelectItem":"",
@@ -16,6 +19,9 @@ enyo.kind({
 	},
 	getValue : function(){
 		return this.$.textField.getValue();
+	},
+	setValue: function(value){
+		this.$.textField.setValue(value);
 	},
 	setFocus:	function(){
 		this.$.textField.forceFocus();
@@ -27,6 +33,8 @@ enyo.kind({
 		if(this.items.length > 0){
 			if(this.getIndex()>-1){
 				this.$.textField.setValue(this.getCaptionByIndex(this.getIndex()));
+				this.$.textField.$.input.applyStyle("color", this.sColorWithIndex);
+				this.isWithIndex = true;
 			}else{
 				this.$.textField.setValue("");	
 			}
@@ -44,6 +52,7 @@ enyo.kind({
 	create : function() {
 		this.inherited(arguments);
 		this.hintChanged();
+		this.$.textField.$.input.applyStyle("color", this.sColorWithOutIndex);
 //		this.indexChanged();
 	},
 	components : [
@@ -63,6 +72,7 @@ enyo.kind({
 		onkeyup : "key_up",
 		onkeydown: "key_down",
 		onblur : "lostFocus",
+		onchange: "on_change",
 		flex : 1
 	}, {
 		style : "background-color:#DABD8B;",
@@ -98,7 +108,7 @@ enyo.kind({
 		return false;
 	},
 	select_item : function(inSender, inSelected) {
-		this.setIndex(inSender.items[inSelected].value);
+		this.setIndex(inSender.items[inSelected].value);		
 		this.$.textField.forceFocus();
 	},
 	click_button : function(inSender, inEvent) {
@@ -161,7 +171,16 @@ enyo.kind({
 			}else{
 				this.$.drop_down.selected = -1;
 			}	
-			this.navigatingOnList = false;
+			this.navigatingOnList = false;			
+		}else{
+			if(this.$.drop_down.items.length >0){
+				if(this.$.drop_down.selected < this.$.drop_down.items.length - 1){
+					this.$.drop_down.selected ++;
+				}else{
+					this.$.drop_down.selected = 0;
+				}
+				this.setIndex(this.$.drop_down.items[this.$.drop_down.selected].value);
+			}
 		}
 	},
 	selectUp:function(){
@@ -182,6 +201,15 @@ enyo.kind({
 				this.$.drop_down.selected = -1;
 			}	
 			this.navigatingOnList = false;
+		}else{
+			if(this.$.drop_down.items.length >0){
+				if(this.$.drop_down.selected > 0){
+					this.$.drop_down.selected --;
+				}else{
+					this.$.drop_down.selected = this.$.drop_down.items.length - 1;
+				}
+				this.setIndex(this.$.drop_down.items[this.$.drop_down.selected].value);
+			}
 		}
 	},
 	key_up : function(inSender, inEvent) {
@@ -202,6 +230,10 @@ enyo.kind({
 		case (x == 13): // enter
 			return true;
 		}
+		this.isWithIndex = false;
+		this.index = -1;
+		this.$.textField.$.input.applyStyle("color", this.sColorWithOutIndex);
+		
 		value = inSender.value;
 		arrAux = this.findItem(value);
 		this.itemSelectedPopupAux=-1;
@@ -256,5 +288,6 @@ enyo.kind({
 		this.$.textField.setValue("");
 		this.index = -1;
 		this.$.drop_down.selected = -1;
+		this.isWithIndex = false;
 	}
 });
