@@ -69,7 +69,11 @@ enyo.kind({
 		]},					 		
 	],
 	ready:function(){
-		_objPopupHeader = enyo.$.sisoprega_mainMenu_receptionsMap.$.lblInfo;
+		if(enyo.$.sisoprega_receptionsMap){
+    		_objPopupHeader = enyo.$.sisoprega_receptionsMap.$.lblInfo;	
+    	}else if(enyo.$.sisoprega_mainMenu_receptionsMap){
+    		_objPopupHeader = enyo.$.sisoprega_mainMenu_receptionsMap.$.lblInfo;
+    	}   
 	},
 	setupRow:function(inSender, inIndex){		
 		var objInspection;
