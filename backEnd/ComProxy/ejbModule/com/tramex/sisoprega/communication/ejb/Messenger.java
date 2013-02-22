@@ -318,7 +318,9 @@ public class Messenger implements Messageable {
       }
       in.close();
       log.fine("Message from report: " + message);
-      return sendSMS(phone, message) && sendEmail(email, reportName);
+      boolean smsSent = sendSMS(phone, message);
+      boolean emailSent = sendEmail(email, reportName);
+      return smsSent && emailSent;
     } catch (Exception e) {
       log.severe("Unable to read file from localhost." + e.getMessage());
       log.throwing(this.getClass().getCanonicalName(), "sendReport(EnterpriseRancher, reportName)", e);
