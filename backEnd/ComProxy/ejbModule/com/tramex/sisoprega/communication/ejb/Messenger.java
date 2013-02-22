@@ -147,7 +147,7 @@ public class Messenger implements Messageable {
 
   private boolean sendSMS(String to, String message) {
     String from = comProxyProps.getProperty("sms.from");
-    if(to.equals(""))
+    if(to == null || to.equals(""))
       return false;
     Sms sms = new Sms(to, from, message);
     try {
@@ -187,7 +187,7 @@ public class Messenger implements Messageable {
 
     try {
       
-      if(to.equals(""))
+      if(to==null || to.equals(""))
         return false;
       
       URL url = new URL(comProxyProps.getProperty(REPORTING_URL_PROPERTY) + reportName);
@@ -318,7 +318,9 @@ public class Messenger implements Messageable {
       }
       in.close();
       log.fine("Message from report: " + message);
-      return sendSMS(phone, message) && sendEmail(email, reportName);
+      boolean smsSent = sendSMS(phone, message);
+      boolean emailSent = sendEmail(email, reportName);
+      return smsSent && emailSent;
     } catch (Exception e) {
       log.severe("Unable to read file from localhost." + e.getMessage());
       log.throwing(this.getClass().getCanonicalName(), "sendReport(EnterpriseRancher, reportName)", e);

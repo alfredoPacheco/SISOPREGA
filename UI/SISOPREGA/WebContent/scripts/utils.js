@@ -53,13 +53,11 @@ function phoneToMask(p) {
 }
 
 var colorStack = {
-	arrColors:["aquamarine", 	"blueviolet", 		"brown", 
-	           "cadetblue",		"darkolivegreen",	"chocolate",
-	           "cadetblue",		"chartreuse",		"royalblue",
-	           "coral",			"cornflowerblue",	"crimson",
-	           "cyan",			"darkcyan",			"darkgoldenrod",
-	           "darkgray",		"darkgoldenrod",	"darkkhaki",
-	           "salmon",		"darkorange",		"forestgreen"],
+	arrColors:["limegreen",
+	           "goldenrod", 
+	           "darkgray",
+	           "darkkhaki",
+	           "lightsteelblue"],
 	actualIndex:0,
 	pop:function(){
 		this.actualIndex--;
