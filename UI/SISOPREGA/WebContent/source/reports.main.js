@@ -12,7 +12,8 @@ enyo.kind({
 			name : "selection",
 			onReceptions : "showReceptions",
 			onInspections : "showInspections",
-			onFeed : "showFeed"
+			onFeed : "showFeed",
+			onActiveReceptions:"showActiveReceptions"
 		}, {
 			kind : "reports.filter",
 			name : "filter",
@@ -23,6 +24,9 @@ enyo.kind({
 			onGetReport : "showReportsResults"
 		}]
 	}, ],
+	showActiveReceptions : function(){
+	  window.open('/ReportingGateway/GanadoActivoCorrales','_blank');
+	},
 	showReceptions : function() {
 		this.showGenericReport('reception', 'Reporte de Recepciones', 'filterByDate');
 	},

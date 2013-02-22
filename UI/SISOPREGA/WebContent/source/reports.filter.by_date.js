@@ -53,7 +53,7 @@ enyo.kind({
 	},
 	getParams : function() {
 		var fmt = new enyo.g11n.DateFmt({
-			format : "dd/MM/yyyy",
+			format : "MM/dd/yyyy",
 			locale : new enyo.g11n.Locale("es_es")
 		});
 		var params = {

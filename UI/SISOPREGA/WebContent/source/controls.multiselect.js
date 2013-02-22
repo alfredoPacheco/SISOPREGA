@@ -18,6 +18,9 @@ enyo.kind({
 	getValue : function(){
 		return this.$.textField.getValue();
 	},
+	setValue: function(str){
+		this.$.textField.setValue(str);
+	},
 	setFocus:	function(){
 		this.$.textField.forceFocus();
 	},
@@ -38,6 +41,8 @@ enyo.kind({
 		this.doSelectItem();
 	},
 	itemsChanged : function(inOldValue) {
+		this.clear();
+		this.$.drop_down.close();
 		this.$.drop_down.setItems(this.getItems());
 		this.allItems = this.getItems();
 	},

@@ -27,7 +27,7 @@
  * ====================================================================================
  */
 
-var cConsumingGateway =
+var consumingGateway =
   {
 
     SendMessage : function(rancher_id, message) {
@@ -685,5 +685,3 @@ var cConsumingGateway =
         return output;
       },   
   };
-
-var consumingGateway = cConsumingGateway;

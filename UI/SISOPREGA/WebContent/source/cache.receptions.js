@@ -39,6 +39,7 @@ enyo
 				objNew.barnyards = [];
 				objNew.inspections = [];
 				objNew.feed = [];
+				objNew.color = colorStack.pop();
 
 				return objNew;
 			},
@@ -496,7 +497,7 @@ enyo
 				var cgCreate = consumingGateway.Create("Reception", objToSend);
 				if (cgCreate.exceptionId == 0) { // Created successfully
 					objRec.reception_id = cgCreate.generatedId;
-
+					objRec.color = colorStack.pop();
 					for ( var sKey in objRec.barnyards) {
 						if (!cacheBY.setOccupied(sKey, objRec.reception_id)) {
 							cbObj["doCancel"]();
@@ -1061,6 +1062,28 @@ enyo
 						result.push(receptions[i]);							
 					}
 				}
+				return result;
+			},
+			getRanchersByReceptions:function(){
+				var arrResult = [];
+				var result = [];
+				var arrReceptions = this.get();
+				if(arrReceptions.length>0){
+					for (i in arrReceptions){
+						var obj = {
+								value:		arrReceptions[i].rancher_id,
+								caption:	arrReceptions[i].rancher_name
+						};
+						if(!(arrResult[obj.value] in arrResult)){
+							arrResult[obj.value]=obj;
+						}
+					}
+				}
+				
+				for(i in arrResult){
+					result.push(arrResult[i]);
+				}
+				
 				return result;
 			},
 			refreshData : function() {
