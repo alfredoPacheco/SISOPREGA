@@ -28,7 +28,8 @@ enyo.kind(
           style : "max-height:10px",
           className : "headerMain",
           components :
-            [{kind: "AppMenu", name:"menu", width:"300px", components: [
+            [
+             {kind: "AppMenu", name:"menu", width:"300px", components: [
                                             {caption: "Operaciones", onclick: "open_view"},
                                             {caption: "Catálogos", components: [
                                                 {caption: "Ganaderos", onclick: "open_view"},
@@ -95,12 +96,12 @@ enyo.kind(
                 name : "mainMenu"
               },
               {kind:"receptions.barnyards.map", name:"receptionsMap",lazy:true, flex:1},
-              {kind:"catalogs.cattle",name:"catCattle"},
-              {kind:"catalogs.ranchers",name:"catRanchers"},
+              {kind:"catalogs.cattle",name:"catCattle", lazy:true},
+              {kind:"catalogs.ranchers",name:"catRanchers", lazy:true},
               {kind:"reports.main", name:"reports",lazy:true},
               {kind:"inspections.main.fs", name:"inspectionForecast", lazy:true},
               {kind:"users.list", name:"usersList", onAddUser:"showAddUser", onSelectUser:"showEditUser", lazy:true },
-              {kind:"users.create", name:"addUser"},
+              {kind:"users.create", name:"addUser", lazy:true},
               {kind:"file.uploader", name:"fileUploader",lazy:true}
   			]
         },
