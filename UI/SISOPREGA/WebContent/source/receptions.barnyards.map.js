@@ -15,12 +15,10 @@ enyo.kind({
 	arrSelected:{},
 	arrSelectedOccupied:{},
 	arrBYbyRancherSelected:{},
-//	sColorOccupied:"darkorange",
 	sColorOccupied:"#ff7200",
 	sColorFree:"white",	
 	sColorSelect:"lightgreen",
 	sColorSelectOccupied:"#9b7eb1",
-//	sColorSelectOccupied:"yellow",
 	className:"mapBG",
 	create : function() {
 		this.inherited(arguments);

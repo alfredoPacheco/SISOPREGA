@@ -93,12 +93,12 @@ public class Pesage extends BaseReportServlet {
 
         PrintWriter out = response.getWriter();
 
-        double dLibras = rounded2Decs(rs.getDouble("libras"));
-        double dPKilos = rounded2Decs(rs.getDouble("pkilos"));
-        double dPLibras = rounded2Decs(rs.getDouble("plibras"));
+        String sLibras = rounded2Decs(rs.getDouble("libras"));
+        String sPKilos = rounded2Decs(rs.getDouble("pkilos"));
+        String sPLibras = rounded2Decs(rs.getDouble("plibras"));
 
         out.println("Ganado Recibido: " + rs.getLong("cabezas") + " cabezas de " + rs.getString("ganado") + ", "
-            + rs.getDouble("kilos") + " kg. (" + dLibras + " lbs.). Prom por Kg.: " + dPKilos + "; Prom por Lb.: " + dPLibras
+            + rs.getDouble("kilos") + " kg. (" + sLibras + " lbs.). Prom por Kg.: " + sPKilos + "; Prom por Lb.: " + sPLibras
             + ". Corrales: " + rs.getString("corrales") + ".");
 
         out.close();
@@ -125,11 +125,10 @@ public class Pesage extends BaseReportServlet {
     log.exiting(this.getClass().getCanonicalName(), "processRequest");
   }
 
-  private double rounded2Decs(double amount) {
-    amount *= 100;
-    amount = Math.ceil(amount);
-    amount *= 0.01d;
-    return amount;
+  private String rounded2Decs(double amount) {
+    
+    String sAmount = String.valueOf(amount);
+    return sAmount.substring(0, sAmount.indexOf(".") + 3);
+    
   }
-
 }
