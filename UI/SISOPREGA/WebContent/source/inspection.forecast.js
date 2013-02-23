@@ -774,7 +774,7 @@ enyo
 						}
 					}
 					this.$.listAuth.setContent(objFore.auth);
-					this.$.listOrigin.setContent(objFore.origin);
+					this.$.listOrigin.setContent(cacheMan.getLocationByID(objFore.origin).location_name);
 					this.$.listCattleType.setContent(cacheCattle
 							.getByID(objFore.cattle_type).cattype_name);
 					this.$.listQuantity.setContent(objFore.quantity);
