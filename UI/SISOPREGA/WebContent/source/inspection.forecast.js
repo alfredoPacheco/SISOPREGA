@@ -3,15 +3,6 @@ enyo
 			name : "inspection.forecast",
 			kind : enyo.SlidingView,
 			layoutKind : enyo.VFlexLayout,
-			create : function() {
-				this.inherited(arguments);				
-//				
-//				this.$.cattle_type.setItems(cacheCattle.getAllCattleType());
-//				this.$.zone.setItems(cacheMan.getAllZonesForList());
-//				this.$.origin.setItems(cacheMan.getAllLocationsForList());				
-//				this.$.barnyards.setItems(cacheReceptions.getActiveBYForListByRancherID(14));
-				this.$.rancher.setItems(cacheRanchers.getAllForList());
-			},
 			iSelected : null,
 			_id : undefined,
 			objList : [],
@@ -402,9 +393,21 @@ enyo
 				}
 			},
 			ready : function() {
-				this.arrActiveReceptions = cacheReceptions.get();				
+				this.arrActiveReceptions = cacheReceptions.get();
+				
+				this.$.rancher.setItems(cacheRanchers.getAllForList());//				
+				this.$.cattle_type.setItems(cacheCattle.getAllCattleType());
+				this.$.zone.setItems(cacheMan.getAllZonesForList());
+				this.$.origin.setItems(cacheMan.getAllLocationsForList());				
+				this.$.barnyards.setItems(cacheBY.getAllForList());
+				
+				if(this.$.zone.getItems().length > 0 ){
+					this.defaultZone = this.$.zone.getValueByIndex(0);	
+				}
+				
 				this.$.fechaPicker.setValue(new Date());
-				this.cambioDeFecha();			
+				this.cambioDeFecha();
+				this.autoCompleteFields();
 			},
 			resetValues : function() {
 				this.$.rancher.clear();
@@ -470,9 +473,8 @@ enyo
 //							return;
 						}
 						else{
-//							this.$.zone.setIndex();
-							this.$.zone.index=-1;
-							this.$.zone.setValue("");
+							this.$.zone.index=this.defaultZone;
+							this.$.zone.setValue(cacheMan.getZoneByID(this.$.zone.index).zone_name);
 						}
 					}
 					if (this.$.origin.getHighLighted()&& !this.actualAutocompleteFilter.origin_id){
@@ -501,11 +503,11 @@ enyo
 							this.$.cattle_type.setValue("");
 						}
 					}
-					if (this.$.barnyards.getValue().trim()== ""&& !this.actualAutocompleteFilter.reception_id){
+					if (this.$.barnyards.getHighLighted() && !this.actualAutocompleteFilter.reception_id){
 						if(this.arrAutocompleteFilter.length ==1){
 							this.actualAutocompleteFilter.reception_id =true;
 							this.$.barnyards.index=this.arrAutocompleteFilter[0].reception_id;
-							this.$.barnyards.setValue(this.$.barnyards.getCaptionByIndex(this.arrAutocompleteFilter[0].reception_id));
+							this.$.barnyards.setValue(this.$.barnyards.getCaptionByValue(this.arrAutocompleteFilter[0].reception_id));
 //							this.arrAutocompleteFilter =this.filterByReception(this.$.barnyards.index, this.arrAutocompleteFilter);
 //							this.autoCompleteFields();
 						}
@@ -704,7 +706,7 @@ enyo
 				for(i in arrResult){
 					result.push(arrResult[i]);
 				}
-				this.$.zone.setItems(result);
+				this.$.zone.setFilter(result);
 			},
 			load_origins:function(){
 				var arrResult = [];
@@ -723,7 +725,7 @@ enyo
 				for(i in arrResult){
 					result.push(arrResult[i]);
 				}
-				this.$.origin.setItems(result);
+				this.$.origin.setFilter(result);
 			},
 			load_cattles:function(){
 				var arrResult = [];
@@ -742,7 +744,7 @@ enyo
 				for(i in arrResult){
 					result.push(arrResult[i]);
 				}
-				this.$.cattle_type.setItems(result);
+				this.$.cattle_type.setFilter(result);
 			},
 			load_barnyards:function(){
 				var arrResult = [];
@@ -767,7 +769,7 @@ enyo
 				for(i in arrResult){
 					result.push(arrResult[i]);
 				}
-				this.$.barnyards.setItems(result);
+				this.$.barnyards.setFilter(result);
 			},
 			addRancherSelected:function(rancher_id){
 				if (rancher_id > -1){
