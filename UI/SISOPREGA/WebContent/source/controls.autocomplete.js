@@ -5,13 +5,14 @@ enyo.kind({
 	navigatingOnList:false,
 	layoutKind : enyo.HFlexLayout,
 	allItems : [],
-	isWithIndex:false,
 	sColorWithOutIndex:"teal",
 	sColorWithIndex:"black",
 	published : {
 		hint : "",
 		index : -1,
-		items : [],
+		items : [], //items to be contained in the control, for on hold button
+		filter: [],//sub items, for click button
+		highLighted:true
 	},
 	events:{
 		"onSelectItem":"",
@@ -26,15 +27,21 @@ enyo.kind({
 	setFocus:	function(){
 		this.$.textField.forceFocus();
 	},
+	highLightedChanged : function(inOldValue){
+		if(this.highLighted){
+			this.$.textField.$.input.applyStyle("color", this.sColorWithOutIndex);
+		}else{
+			this.$.textField.$.input.applyStyle("color", this.sColorWithIndex);
+		}
+	},
 	hintChanged : function(inOldValue) {
 		this.$.textField.setHint(this.getHint());
 	},
 	indexChanged : function(inOldValue) {
 		if(this.items.length > 0){
 			if(this.getIndex()>-1){
-				this.$.textField.setValue(this.getCaptionByIndex(this.getIndex()));
-				this.$.textField.$.input.applyStyle("color", this.sColorWithIndex);
-				this.isWithIndex = true;
+				this.$.textField.setValue(this.getCaptionByIndex(this.getIndex()));	
+				this.setHighLighted(false);
 			}else{
 				this.$.textField.setValue("");	
 			}
@@ -47,12 +54,13 @@ enyo.kind({
 		this.clear();
 		this.$.drop_down.close();
 		this.$.drop_down.setItems(this.getItems());
-		this.allItems = this.getItems();
+		this.allItems = this.getItems();	
+		this.filter = this.allItems;
 	},
 	create : function() {
 		this.inherited(arguments);
 		this.hintChanged();
-		this.$.textField.$.input.applyStyle("color", this.sColorWithOutIndex);
+		this.highLightedChanged();
 //		this.indexChanged();
 	},
 	components : [
@@ -78,12 +86,14 @@ enyo.kind({
 		style : "background-color:#DABD8B;",
 		kind : "IconButton",
 		icon : "images/icon-arrows-down.png",
-		onclick : "click_button"
+		onclick : "click_button",
+		onmousehold: "hold_button"
+			
 	}], 
 	lostFocus : function(inSender, inEvent) {
 //		if (!this.navigatingOnList && this.$.drop_down.isOpen && this.$.drop_down.selected > -1 && this.$.drop_down.selected != null) {
 //			this.setIndex(this.$.drop_down.items[this.$.drop_down.selected].value);
-			this.$.drop_down.close();
+//			this.$.drop_down.close();
 //		}		
 	},
 	setupItem : function(inSender, InIndex){
@@ -113,13 +123,24 @@ enyo.kind({
 	},
 	click_button : function(inSender, inEvent) {
 		this.itemSelectedPopupAux=-1;
-		this.$.drop_down.setItems(this.allItems);
+		this.$.drop_down.setItems(this.filter);
 		if(this.$.drop_down.items.length > 0){
 			this.$.drop_down.openAtEvent(inEvent);
 			this.$.drop_down.scrollToSelected();
 		}
 		this.$.textField.forceFocus();		
 		return false;
+	},
+	hold_button : function(inSender, inEvent) {
+		inEvent.stopPropagation();
+		this.itemSelectedPopupAux=-1;
+		this.$.drop_down.setItems(this.allItems);
+		if(this.$.drop_down.items.length > 0){
+			this.$.drop_down.openAtEvent(inEvent);
+			this.$.drop_down.scrollToSelected();
+		}
+		this.$.textField.forceFocus();		
+		return true;
 	},
 	key_down : function(inSender, inEvent){		
 		switch(inEvent.keyCode){
@@ -173,6 +194,7 @@ enyo.kind({
 			}	
 			this.navigatingOnList = false;			
 		}else{
+			
 			if(this.$.drop_down.items.length >0){
 				if(this.$.drop_down.selected < this.$.drop_down.items.length - 1){
 					this.$.drop_down.selected ++;
@@ -230,9 +252,8 @@ enyo.kind({
 		case (x == 13): // enter
 			return true;
 		}
-		this.isWithIndex = false;
+		this.setHighLighted(true);
 		this.index = -1;
-		this.$.textField.$.input.applyStyle("color", this.sColorWithOutIndex);
 		
 		value = inSender.value;
 		arrAux = this.findItem(value);
@@ -252,7 +273,7 @@ enyo.kind({
 	findItem : function(criteria) {
 		var result = [];
 		if (criteria != "") {
-			var items = this.getItems();
+			var items = this.allItems;
 			var pattern = new RegExp(criteria.trim(), "ig");
 			for (index in items) {
 				for (prop in items[index]) {
@@ -278,9 +299,9 @@ enyo.kind({
 		}
 	},
 	getIndexByCaption:function(caption){
-		for(i in this.items){
-			if(this.items[i].caption==caption){
-				return this.items[i].value;
+		for(i in this.allItems){
+			if(this.allItems[i].caption==caption){
+				return this.allItems[i].value;
 			}
 		}
 	},
@@ -288,6 +309,6 @@ enyo.kind({
 		this.$.textField.setValue("");
 		this.index = -1;
 		this.$.drop_down.selected = -1;
-		this.isWithIndex = false;
+		this.setHighLighted(true);
 	}
 });
