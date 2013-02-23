@@ -357,18 +357,22 @@ enyo
 			emularTabulacionConEnter:function(inSender){
 				switch(inSender.name){
 				case "rancher":
+					this.$.rancher.setIndex(this.$.rancher.getIndex());
 					this.$.zone.setFocus();
 					break;
 				case "zone":
+					this.$.zone.setIndex(this.$.zone.getIndex());
 					this.$.autorizacion.forceFocus();
 					break;
 				case "autorizacion":
 					this.$.origin.setFocus();
 					break;
 				case "origin":
+					this.$.origin.setIndex(this.$.origin.getIndex());
 					this.$.cattle_type.setFocus();
 					break;		
 				case "cattle_type":
+					this.$.cattle_type.setIndex(this.$.cattle_type.getIndex());
 					this.$.cantidad.forceFocus();
 					break;
 				case "cantidad":
@@ -700,24 +704,32 @@ enyo
 			autoCompleteFields:function(){
 				
 				
-				if (this.$.rancher.getValue().trim()== ""){
+				if (this.$.rancher.isWithIndex == false){
 					if(this.arrFilter.length ==1){
 						this.$.rancher.setIndex(this.arrFilter[0].rancher_id);
+						this.$.rancher.isWithIndex = false;
+						this.$.rancher.$.textField.$.input.applyStyle("color", "teal");
 					}
 				}
-				if (this.$.zone.getValue().trim()== ""){
+				if (this.$.zone.isWithIndex == false){
 					if(this.arrFilter.length ==1){
 						this.$.zone.setIndex(this.arrFilter[0].zone_id);
+						this.$.zone.isWithIndex = false;
+						this.$.zone.$.textField.$.input.applyStyle("color", "teal");
 					}
 				}
-				if (this.$.origin.getValue().trim()== ""){
+				if (this.$.origin.isWithIndex == false){
 					if(this.arrFilter.length ==1){
 						this.$.origin.setIndex(this.arrFilter[0].location_id);
+						this.$.origin.isWithIndex = false;
+						this.$.origin.$.textField.$.input.applyStyle("color", "teal");
 					}
 				}
-				if (this.$.cattle_type.getValue().trim()== ""){
+				if (this.$.cattle_type.isWithIndex == false){
 					if(this.arrFilter.length ==1){
 						this.$.cattle_type.setIndex(this.arrFilter[0].cattype_id);
+						this.$.cattle_type.isWithIndex = false;
+						this.$.cattle_type.$.textField.$.input.applyStyle("color", "teal");
 					}
 				}
 				if (this.$.barnyards.getValue().trim()== ""){

@@ -10,7 +10,6 @@ enyo.kind({
 	arrRec:{},	
 	components:[
 		{kind: enyo.Scroller,flex: 1,
-//    	style: "background-image: url(images/practice_background.png); background-size: cover;",	
  		 components: [
 		{kind: "ModalDialog", caption: "Receptiones Liberadas", 
 			components: [
@@ -69,7 +68,6 @@ enyo.kind({
 		var group = this.getGroupName(inIndex);
 		this.$.divider.setCaption(group);
 		this.$.divider.canGenerate = Boolean(group);
-		//this.$.item.applyStyle("border-top", Boolean(group) ? "none" : "1px solid silver;");
 	},	
 	setupRow:function(inSender, inIndex) {
 		if(this.objList.length>0){

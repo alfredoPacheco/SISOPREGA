@@ -44,7 +44,6 @@ var consumingGateway =
       			data : soapMessage,
       			processData : false,
       			contentType : "text/xml;charset=UTF-8",
-      			async : false,
       			success : function OnSuccess(data) {					
       				result = jQuery(data).find("response").text();
       			},
@@ -70,7 +69,6 @@ var consumingGateway =
       			data : soapMessage,
       			processData : false,
       			contentType : "text/xml;charset=UTF-8",
-      			async : false,
       			success : function OnSuccess(data) {					
       				result = jQuery(data).find("response").text();
       		},

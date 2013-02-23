@@ -1,3 +1,18 @@
+/**
+ * THIS IS A COMMERCIAL PROGRAM PROVIDED FOR TRAMEX AND IT'S ASSOCIATES
+ * BUILT BY EXTERNAL SOFTWARE PROVIDERS.
+ * THE SOFTWARE COMPRISING THIS SYSTEM IS THE PROPERTY OF TRAMEX OR ITS
+ * LICENSORS.
+ * 
+ * ALL COPYRIGHT, PATENT, TRADE SECRET, AND OTHER INTELLECTUAL PROPERTY RIGHTS
+ * IN THE SOFTWARE COMPRISING THIS SYSTEM ARE, AND SHALL REMAIN, THE VALUABLE
+ * PROPERTY OF TRAMEX OR ITS LICENSORS.
+ * 
+ * USE, DISCLOSURE, OR REPRODUCTION OF THIS SOFTWARE IS STRICTLY PROHIBITED,
+ * EXCEPT UNDER WRITTEN LICENSE FROM TRAMEX OR ITS LICENSORS.
+ * 
+ * &copy; COPYRIGHT 2012 TRAMEX. ALL RIGHTS RESERVED.
+ */
 package com.tramex.sisoprega.reporting.txt;
 
 import java.io.IOException;
@@ -78,12 +93,12 @@ public class Pesage extends BaseReportServlet {
 
         PrintWriter out = response.getWriter();
 
-        double dLibras = rounded2Decs(rs.getDouble("libras"));
-        double dPKilos = rounded2Decs(rs.getDouble("pkilos"));
-        double dPLibras = rounded2Decs(rs.getDouble("plibras"));
+        String sLibras = rounded2Decs(rs.getDouble("libras"));
+        String sPKilos = rounded2Decs(rs.getDouble("pkilos"));
+        String sPLibras = rounded2Decs(rs.getDouble("plibras"));
 
         out.println("Ganado Recibido: " + rs.getLong("cabezas") + " cabezas de " + rs.getString("ganado") + ", "
-            + rs.getDouble("kilos") + " kg. (" + dLibras + " lbs.). Prom por Kg.: " + dPKilos + "; Prom por Lb.: " + dPLibras
+            + rs.getDouble("kilos") + " kg. (" + sLibras + " lbs.). Prom por Kg.: " + sPKilos + "; Prom por Lb.: " + sPLibras
             + ". Corrales: " + rs.getString("corrales") + ".");
 
         out.close();
@@ -110,11 +125,10 @@ public class Pesage extends BaseReportServlet {
     log.exiting(this.getClass().getCanonicalName(), "processRequest");
   }
 
-  private double rounded2Decs(double amount) {
-    amount *= 100;
-    amount = Math.ceil(amount);
-    amount *= 0.01d;
-    return amount;
+  private String rounded2Decs(double amount) {
+    
+    String sAmount = String.valueOf(amount);
+    return sAmount.substring(0, sAmount.indexOf(".") + 3);
+    
   }
-
 }

@@ -1028,6 +1028,7 @@ enyo
 								barnyard.barnyard_code = barnyards[property]
 										.substr(1);
 								barnyard.zone = "Chihuahua";
+								barnyard.zone_id = barnyards[property].charAt(0);
 								result.push(barnyard);
 							} else {
 								barnyard.caption = barnyards[property]
@@ -1037,6 +1038,7 @@ enyo
 								barnyard.barnyard_code = barnyards[property]
 										.substr(1);
 								barnyard.zone = "Zona Sur";
+								barnyard.zone_id = barnyards[property].charAt(0);
 								result.push(barnyard);
 							}
 						}
