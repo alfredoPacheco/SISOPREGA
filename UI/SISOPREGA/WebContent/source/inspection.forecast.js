@@ -16,6 +16,7 @@ enyo
 			arrFilter:[],
 			arrAutocompleteFilter:[],
 			defaultZone : undefined,
+			defaultCattle : undefined,
 			actualFilter:{
 					rancher_id : "",
 					zone_id:"",
@@ -39,23 +40,27 @@ enyo
 							name : "left",
 							width : "300px",
 							kind : enyo.SlidingView,
-							components : [ {
-								kind : "Header",
-								name : "encabezadoFecha",
-								style : "background-color:#DABD8B;",
-								pack : "center",
-								components : [ {
-									kind : "Button",
-									content : "Hoy",
-									style : "background-color:#DABD8B;",
-									onclick : "cambiarAHoy"
-								}, {
-									kind : "DatePicker",
-									label : "",
-									name : "fechaPicker",
-									onChange : "cambioDeFecha"
-								} ]
-							}, {
+							components : [ 
+//							               {
+//								kind : "Header",
+//								name : "encabezadoFecha",
+//								style : "background-color:#DABD8B;",
+//								pack : "center",
+//								components : [ 
+//								               {
+//									kind : "Button",
+//									content : "Hoy",
+//									style : "background-color:#DABD8B;",
+//									onclick : "cambiarAHoy"
+//								}, 
+//								{
+//									kind : "DatePicker",
+//									label : "",
+//									name : "fechaPicker",
+//									onChange : "cambioDeFecha"
+//								} ]
+//							}, 
+							{
 								kind : enyo.Scroller,
 								name : "FormScroller",
 								horizontal : false,
@@ -250,13 +255,14 @@ enyo
 												},
 												{
 													content : "Corrales",
-													style : "width:200px;text-align:left;"
+													style : "width:100px;text-align:left;"
 												},
 												{
 						                            kind : "enyo.IconButton",
 						                            name : "btnReport",
 						                            icon : "images/command-menu/menu-icon-cards.png",
-						                            onclick : "enviar_aviso"
+						                            onclick : "enviar_aviso",
+						                            style : "width:30px;"
 						                          }
 												]
 									},
@@ -394,22 +400,63 @@ enyo
 			},
 			ready : function() {
 				this.arrActiveReceptions = cacheReceptions.get();
+				this.arrFilter = this.arrActiveReceptions;
 				
-				this.$.rancher.setItems(cacheRanchers.getAllForList());//				
+				this.$.rancher.setItems(cacheRanchers.getAllForList());
 				this.$.cattle_type.setItems(cacheCattle.getAllCattleType());
 				this.$.zone.setItems(cacheMan.getAllZonesForList());
-				this.$.origin.setItems(cacheMan.getAllLocationsForList());				
-				this.$.barnyards.setItems(cacheBY.getAllForList());
+				this.$.origin.setItems(cacheMan.getAllLocationsForList());
+				this.load_barnyards();
+				this.$.barnyards.setItems(this.$.barnyards.getFilter());
 				
 				if(this.$.zone.getItems().length > 0 ){
-					this.defaultZone = this.$.zone.getValueByIndex(0);	
+					this.defaultZone = this.$.zone.getFirstOne().value;	
+				}
+				if(this.$.cattle_type.getItems().length > 0 ){
+					this.defaultCattle = this.$.cattle_type.getFirstOne().value;	
 				}
 				
-				this.$.fechaPicker.setValue(new Date());
-				this.cambioDeFecha();
-				this.autoCompleteFields();
+				var fmt = new enyo.g11n.DateFmt({
+					format : "yyyy/MM/dd",
+					locale : new enyo.g11n.Locale("es_es")
+				});
+				this.fecha = fmt.format(new Date());
+				this.updateList();
+//				this.$.fechaPicker.setValue(new Date());
+//				this.cambioDeFecha();
+			},
+			updateList : function() {
+				//initializing forecast master values***********************
+				this._id = undefined;
+				this.totalItems = 0;
+				this.objList = [];
+				var arrAllForecasts = [];
+				this.iSelected = null;
+				//**********************************************************
+				
+				//add mode buttons
+				this.$.draDel.setOpen(false);
+				this.$.draUpdate.setOpen(false);
+				this.$.draAdd.setOpen(true);
+				
+				//reset values and load combos
+				this.resetValues();
+				
+				//filling up right side**************************************
+				arrAllForecasts = cacheInspFore.get();
+				for (i in arrAllForecasts) {
+					if (arrAllForecasts[i].fore_date == this.fecha) {
+						this._id = arrAllForecasts[i].id;
+						if (arrAllForecasts[i].fore_details_id) {
+							this.objList.push(arrAllForecasts[i]);
+						}
+					}
+				}
+				this.$.forecastList.render();
+				//***********************************************************
 			},
 			resetValues : function() {
+				//cleaning fileds:
 				this.$.rancher.clear();
 				this.$.autorizacion.setValue("");
 				this.$.origin.clear();
@@ -417,6 +464,8 @@ enyo
 				this.$.cantidad.setValue("");
 				this.$.zone.clear();
 				this.$.barnyards.clear();
+				
+				//cleaning filter:
 				this.actualFilter.rancher_id = "";
 				this.actualFilter.zone_id = "";
 				this.actualFilter.origin_id = "";
@@ -424,29 +473,37 @@ enyo
 				this.actualFilter.reception_id = "";
 				
 				this.arrFilter = this.arrActiveReceptions;
-			},
-			cambioDeFecha : function() {
-				var fmt = new enyo.g11n.DateFmt({
-					format : "yyyy/MM/dd",
-					locale : new enyo.g11n.Locale("es_es")
-				});
-				this.fecha = fmt.format(this.$.fechaPicker.getValue());
 				
+				this.load_barnyards();
+				this.$.barnyards.setItems(this.$.barnyards.getFilter());
 				
-//				this.$.cattle_type.setIndex(1);
-//				this.$.zone.setIndex(1);
+				if(this.$.zone.getItems().length > 0 ){
+					this.defaultZone = this.$.zone.getFirstOne().value;	
+				}
+				if(this.$.cattle_type.getItems().length > 0 ){
+					this.defaultCattle = this.$.cattle_type.getFirstOne().value;	
+				}
 				
-				this.updateList();
 				this.load_combos();
-				
+				this.autoCompleteFields();
 			},
-			cambiarAHoy : function() {
-				this.$.fechaPicker.setValue(new Date());
-				this.cambioDeFecha();
-			},
-			on_select_zone:function(InSender, InEvent){
-				this.defaultZone = this.$.zone.getIndex();
-			},
+//			cambioDeFecha : function() {
+//				var fmt = new enyo.g11n.DateFmt({
+//					format : "yyyy/MM/dd",
+//					locale : new enyo.g11n.Locale("es_es")
+//				});
+//				this.fecha = fmt.format(this.$.fechaPicker.getValue());
+//				
+////				this.$.cattle_type.setIndex(1);
+////				this.$.zone.setIndex(1);
+//				
+//				this.updateList();
+//				
+//			},
+//			cambiarAHoy : function() {
+//				this.$.fechaPicker.setValue(new Date());
+//				this.cambioDeFecha();
+//			},
 			autoCompleteFields:function(){
 				if(this.arrAutocompleteFilter.length == 0) this.arrAutocompleteFilter = this.arrFilter;
 				
@@ -463,20 +520,28 @@ enyo
 							this.$.rancher.setValue("");
 						}
 					}
+					
 					if (this.$.zone.getHighLighted()&& !this.actualAutocompleteFilter.zone_id){
-						if(this.arrAutocompleteFilter.length ==1){
-							this.actualAutocompleteFilter.zone_id =true;
-							this.$.zone.index=this.arrAutocompleteFilter[0].zone_id;
-							this.$.zone.setValue(cacheMan.getZoneByID(this.arrAutocompleteFilter[0].zone_id).zone_name);
-//							this.arrAutocompleteFilter =this.filterByZone(this.$.zone.index, this.arrAutocompleteFilter);
-//							this.autoCompleteFields();
-//							return;
-						}
-						else{
+						if(this.defaultZone){
 							this.$.zone.index=this.defaultZone;
 							this.$.zone.setValue(cacheMan.getZoneByID(this.$.zone.index).zone_name);
+							this.actualAutocompleteFilter.zone_id =true;
+						}else{
+							if(this.arrAutocompleteFilter.length ==1){
+								this.actualAutocompleteFilter.zone_id =true;
+								this.$.zone.index=this.arrAutocompleteFilter[0].zone_id;							
+								this.$.zone.setValue(cacheMan.getZoneByID(this.arrAutocompleteFilter[0].zone_id).zone_name);
+//								this.arrAutocompleteFilter =this.filterByZone(this.$.zone.index, this.arrAutocompleteFilter);
+//								this.autoCompleteFields();
+//								return;
+							}
+							else{
+								this.$.zone.index=-1;
+								this.$.zone.setValue("");
+							}
 						}
 					}
+					
 					if (this.$.origin.getHighLighted()&& !this.actualAutocompleteFilter.origin_id){
 						if(this.arrAutocompleteFilter.length ==1){
 							this.actualAutocompleteFilter.origin_id =true;
@@ -495,28 +560,34 @@ enyo
 							this.actualAutocompleteFilter.cattle_type_id =true;
 							this.$.cattle_type.index=this.arrAutocompleteFilter[0].cattype_id;
 							this.$.cattle_type.setValue(this.arrAutocompleteFilter[0].cattype_name);
-//							this.arrAutocompleteFilter =this.filterByCattle(this.$.cattle_type.index, this.arrAutocompleteFilter);
-//							this.autoCompleteFields();
+//								this.arrAutocompleteFilter =this.filterByCattle(this.$.cattle_type.index, this.arrAutocompleteFilter);
+//								this.autoCompleteFields();
 						}
 						else{
-							this.$.cattle_type.index=-1;
-							this.$.cattle_type.setValue("");
+							if(this.defaultCattle){
+								this.actualAutocompleteFilter.cattle_type_id =true;
+								this.$.cattle_type.index=this.defaultCattle;
+								this.$.cattle_type.setValue(cacheCattle.getByID(this.$.cattle_type.index).cattype_name);
+							}else{
+								this.$.cattle_type.index=-1;
+								this.$.cattle_type.setValue("");
+							}
 						}
 					}
 					if (this.$.barnyards.getHighLighted() && !this.actualAutocompleteFilter.reception_id){
 						if(this.arrAutocompleteFilter.length ==1){
 							this.actualAutocompleteFilter.reception_id =true;
-							this.$.barnyards.index=this.arrAutocompleteFilter[0].reception_id;
-							this.$.barnyards.setValue(this.$.barnyards.getCaptionByValue(this.arrAutocompleteFilter[0].reception_id));
-//							this.arrAutocompleteFilter =this.filterByReception(this.$.barnyards.index, this.arrAutocompleteFilter);
+							this.$.barnyards.value=this.arrAutocompleteFilter[0].reception_id;
+							this.$.barnyards.setText(this.$.barnyards.getCaptionByValue(this.arrAutocompleteFilter[0].reception_id));
+//							this.arrAutocompleteFilter =this.filterByReception(this.$.barnyards.value, this.arrAutocompleteFilter);
 //							this.autoCompleteFields();
 						}
 						else{
-							this.$.barnyards.index=-1;
-							this.$.barnyards.setValue("");
+							this.$.barnyards.value=-1;
+							this.$.barnyards.setText("");
 						}
-					}	
-				
+					}
+					
 				this.arrAutocompleteFilter = [];
 				this.actualAutocompleteFilter={
 					rancher_id : undefined,
@@ -534,17 +605,19 @@ enyo
 					break;
 				case "zone":
 					this.actualFilter.zone_id = InSender.index;
+					this.defaultZone = InSender.index;
 					break;
 				case "origin":
 					this.actualFilter.origin_id = InSender.index;
 					break;
 				case "cattle_type":
 					this.actualFilter.cattle_type_id = InSender.index;
+					this.defaultCattle = InSender.index;
 					break;
 				case "barnyards":
 					this.actualFilter.reception_id = InSender.index;					
 					break;
-				}				
+				}
 				this.applyFilter();
 				this.autoCompleteFields();			
 			},
@@ -809,10 +882,10 @@ enyo
 
 						}
 						strBarnyards = strBarnyards.slice(0, -2);
-						this.$.barnyards.setValue(strBarnyards);
+						this.$.barnyards.setText(strBarnyards);
 					} else {
 						this.$.zone.setIndex(-1);
-						this.$.barnyards.setValue("");
+						this.$.barnyards.setText("");
 					}
 					this.iSelected = inEvent.rowIndex;
 					this.totalItems = 0;
@@ -895,27 +968,6 @@ enyo
 					return false;
 				}
 			},
-			updateList : function() {
-				this._id = undefined;
-				this.totalItems = 0;
-				this.objList = [];
-				var arrAllForecasts = [];
-				this.iSelected = null;
-				this.$.draDel.setOpen(false);
-				this.$.draUpdate.setOpen(false);
-				this.$.draAdd.setOpen(true);
-				this.resetValues();
-				arrAllForecasts = cacheInspFore.get();
-				for (i in arrAllForecasts) {
-					if (arrAllForecasts[i].fore_date == this.fecha) {
-						this._id = arrAllForecasts[i].id;
-						if (arrAllForecasts[i].fore_details_id) {
-							this.objList.push(arrAllForecasts[i]);
-						}
-					}
-				}
-				this.$.forecastList.render();
-			},
 			getSelected : function() {
 				return this.objList[this.iSelected];
 			},
@@ -945,7 +997,7 @@ enyo
 				objInspFore.origin = this.$.origin.getIndex();
 				objInspFore.quantity = this.$.cantidad.getValue();
 
-				var barnyardsAux = this.$.barnyards.getValue().split(",");
+				var barnyardsAux = this.$.barnyards.getText().split(",");
 				for (i in barnyardsAux) {
 					barnyardsAux[i] = barnyardsAux[i].replace(" ", "");
 					barnyardsAux[i] = this.$.zone.getIndex()

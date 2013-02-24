@@ -355,13 +355,13 @@ enyo.kind({
 		for (property in barnyards){
 			var barnyard = {caption:"",value:""};
 			if(barnyards[property].zone_id==1){						
-				barnyard.caption = 	barnyards[property].barnyard_code + " [Chihuahua]";
+				barnyard.caption = 	barnyards[property].barnyard_code;// + " [Chihuahua]";
 				barnyard.value = 	barnyards[property].barnyard_id;
 				barnyard.barnyard_code = barnyards[property].barnyard_code;
 				barnyard.zone = "Chihuahua"; 
 				result.push(barnyard);												
 			}else{						
-				barnyard.caption = barnyards[property].barnyard_code + " [Zona Sur]";
+				barnyard.caption = barnyards[property].barnyard_code;// + " [Zona Sur]";
 				barnyard.value = 	barnyards[property].barnyard_id;
 				barnyard.barnyard_code = barnyards[property].barnyard_code;
 				barnyard.zone = "Zona Sur";

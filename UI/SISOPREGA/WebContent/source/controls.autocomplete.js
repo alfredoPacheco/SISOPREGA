@@ -312,6 +312,19 @@ enyo.kind({
 			return this.allItems[index].value;
 		}
 	},
+	getFirstOne:function(){
+		var lowerValue=undefined;
+		var index = -1;
+		if(this.allItems.length > 0){
+			for (i in this.allItems){
+				if(!lowerValue || lowerValue > parseInt(this.allItems[i].value)){
+					lowerValue = parseInt(this.allItems[i].value);
+					index = i;
+				}	
+			}
+			return this.allItems[index];
+		}
+	},
 	clear:function(){
 		this.$.textField.setValue("");
 		this.index = -1;
