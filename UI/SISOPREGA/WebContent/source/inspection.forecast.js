@@ -1079,7 +1079,11 @@ enyo
 				}
 			},
 			enviar_aviso: function(){
-				
+				// Send communication to customers
+				for(i in this.objList){
+					var report_name = 'ListaInspeccion?rancherId='
+						+ this.objList[i].rancher_id;
+					consumingGateway.SendReport(this.objList[i].rancher_id, report_name);
+				}
 			}
-
 		});
