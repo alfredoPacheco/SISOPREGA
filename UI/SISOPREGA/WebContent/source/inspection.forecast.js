@@ -17,6 +17,7 @@ enyo
 			arrAutocompleteFilter:[],
 			defaultZone : undefined,
 			defaultCattle : undefined,
+//			barnyardsFilter:undefined,
 			actualFilter:{
 					rancher_id : "",
 					zone_id:"",
@@ -406,15 +407,16 @@ enyo
 				this.$.cattle_type.setItems(cacheCattle.getAllCattleType());
 				this.$.zone.setItems(cacheMan.getAllZonesForList());
 				this.$.origin.setItems(cacheMan.getAllLocationsForList());
-				this.load_barnyards();
-				this.$.barnyards.setItems(this.$.barnyards.getFilter());
-				
-				if(this.$.zone.getItems().length > 0 ){
-					this.defaultZone = this.$.zone.getFirstOne().value;	
-				}
-				if(this.$.cattle_type.getItems().length > 0 ){
-					this.defaultCattle = this.$.cattle_type.getFirstOne().value;	
-				}
+								
+//				if(this.$.zone.getItems().length > 0 ){
+//					this.defaultZone = this.$.zone.getFirstOne().value;	
+//				}
+//				if(this.$.cattle_type.getItems().length > 0 ){
+//					this.defaultCattle = this.$.cattle_type.getFirstOne().value;	
+//				}
+//				
+//				this.load_barnyards();
+//				this.$.barnyards.setItems(this.$.barnyards.getFilter());
 				
 				var fmt = new enyo.g11n.DateFmt({
 					format : "yyyy/MM/dd",
@@ -474,9 +476,6 @@ enyo
 				
 				this.arrFilter = this.arrActiveReceptions;
 				
-				this.load_barnyards();
-				this.$.barnyards.setItems(this.$.barnyards.getFilter());
-				
 				if(this.$.zone.getItems().length > 0 ){
 					this.defaultZone = this.$.zone.getFirstOne().value;	
 				}
@@ -485,6 +484,7 @@ enyo
 				}
 				
 				this.load_combos();
+				this.$.barnyards.setItems(this.$.barnyards.getFilter());
 				this.autoCompleteFields();
 			},
 //			cambioDeFecha : function() {
@@ -575,16 +575,17 @@ enyo
 						}
 					}
 					if (this.$.barnyards.getHighLighted() && !this.actualAutocompleteFilter.reception_id){
+						this.$.barnyards.value=-1;
+						this.$.barnyards.setText("");
 						if(this.arrAutocompleteFilter.length ==1){
-							this.actualAutocompleteFilter.reception_id =true;
-							this.$.barnyards.value=this.arrAutocompleteFilter[0].reception_id;
-							this.$.barnyards.setText(this.$.barnyards.getCaptionByValue(this.arrAutocompleteFilter[0].reception_id));
-//							this.arrAutocompleteFilter =this.filterByReception(this.$.barnyards.value, this.arrAutocompleteFilter);
-//							this.autoCompleteFields();
-						}
-						else{
-							this.$.barnyards.value=-1;
-							this.$.barnyards.setText("");
+							var arrBY = this.$.barnyards.getFilter();
+							for (i in arrBY){
+								if(arrBY[i].value == this.arrAutocompleteFilter[0].reception_id){
+									this.actualAutocompleteFilter.reception_id =true;
+									this.$.barnyards.value=arrBY[i].value;
+									this.$.barnyards.setText(arrBY[i].caption);
+								}
+							}	
 						}
 					}
 					
@@ -606,6 +607,9 @@ enyo
 				case "zone":
 					this.actualFilter.zone_id = InSender.index;
 					this.defaultZone = InSender.index;
+					this.load_barnyards();
+//					this.barnyardsFilter.zone_id = this.defaultZone;
+//					this.$.barnyards.setFilterCriteria(this.barnyardsFilter);
 					break;
 				case "origin":
 					this.actualFilter.origin_id = InSender.index;
@@ -613,13 +617,17 @@ enyo
 				case "cattle_type":
 					this.actualFilter.cattle_type_id = InSender.index;
 					this.defaultCattle = InSender.index;
+//					this.barnyardsFilter.cattype_id = this.defaultCattle;
+//					this.$.barnyards.setFilterCriteria(this.barnyardsFilter);
 					break;
 				case "barnyards":
 					this.actualFilter.reception_id = InSender.index;					
 					break;
 				}
 				this.applyFilter();
-				this.autoCompleteFields();			
+				
+				this.autoCompleteFields();
+				
 			},
 			applyFilter:function(){
 				this.arrFilter = this.arrActiveReceptions;
@@ -627,7 +635,7 @@ enyo
 					this.arrFilter = this.filterByRancher(this.actualFilter.rancher_id, this.arrFilter);
 				}
 				if(this.actualFilter.zone_id != ""){
-					this.arrFilter = this.filterByZone(this.actualFilter.zone_id, this.arrFilter);
+//					this.arrFilter = this.filterByZone(this.actualFilter.zone_id, this.arrFilter);
 				}
 				if(this.actualFilter.origin_id != ""){
 					this.arrFilter = this.filterByOrigin(this.actualFilter.origin_id, this.arrFilter);
@@ -660,16 +668,16 @@ enyo
 			},
 			filterByZone:function(zone_id, arrAfected){				
 				var arrResult = [];
-				if (zone_id > -1){
+				if (parseInt(zone_id) > -1){
 					if(arrAfected.length > 0){
 						for (i in arrAfected){
-							if (arrAfected[i].zone_id == zone_id){
+							if (parseInt(arrAfected[i].zone_id) == parseInt(zone_id)){
 								arrResult.push(arrAfected[i]);
 							}
 						}
 					}else{
 						for (i in this.arrActiveReceptions){
-							if (this.arrActiveReceptions[i].zone_id == zone_id){
+							if (parseInt(this.arrActiveReceptions[i].zone_id) == parseInt(zone_id)){
 								arrResult.push(this.arrActiveReceptions[i]);
 							}
 						}	
@@ -822,20 +830,25 @@ enyo
 			load_barnyards:function(){
 				var arrResult = [];
 				var result = [];
-				if(this.arrFilter.length>0){
-					for (i in this.arrFilter){
+				if(this.arrActiveReceptions.length>0){
+					for (i in this.arrActiveReceptions){
 						var auxCaption = "";
-						for(j in this.arrFilter[i].barnyards){
-							auxCaption += this.arrFilter[i].barnyards[j].substring(1) + ", ";
+						for(j in this.arrActiveReceptions[i].barnyards){
+							if (parseInt(this.arrActiveReceptions[i].barnyards[j].substring(1,0)) == parseInt(this.defaultZone)){
+								auxCaption += this.arrActiveReceptions[i].barnyards[j].substring(1) + ", ";	
+							}
 						}
-						auxCaption = auxCaption.slice(0, -2);
-						var obj = {
-								value:		this.arrFilter[i].reception_id,
-								caption:	auxCaption,
-//								barnyards:	this.arrFilter[i].barnyards
-						};						
-						if(!(arrResult[obj.value] in arrResult)){
-							arrResult[obj.value]=obj;	
+						if(auxCaption.length > 0){
+							auxCaption = auxCaption.slice(0, -2);
+							var obj = {
+									value:			this.arrActiveReceptions[i].reception_id,
+									caption:		auxCaption
+//									cattype_id:	this.arrFilter[i].cattype_id,
+//									zone_id:	this.arrFilter[i].zone_id
+							};						
+							if(!(arrResult[obj.value] in arrResult)){
+								arrResult[obj.value]=obj;	
+							}	
 						}
 					}
 				}

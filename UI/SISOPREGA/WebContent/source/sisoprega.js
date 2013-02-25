@@ -187,7 +187,7 @@ enyo.kind(
     		this.addGoBackAction();
     		_objMainHeader.setContent('Lista de Inspección');    		
     		this.$.mainPane.selectViewByName("inspectionForecast");
-    		this.$.inspectionForecast.children[0].cambioDeFecha();
+//    		this.$.inspectionForecast.children[0].cambioDeFecha();
     		break;
     	case 'Usuarios':    		
     		this.addGoBackAction();

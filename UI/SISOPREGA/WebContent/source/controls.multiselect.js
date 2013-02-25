@@ -11,7 +11,8 @@ enyo.kind({
 		value : -1,//normally an object id
 		items : [],//items to be contained in the control, for on hold button
 		filter: [],//sub items, for click button
-		highLighted:true
+		highLighted:true,
+		filterCriteria:{} //object with fields for filter the array: this.filter
 	},
 	itemsSelected:[], //elements with true for every checked item by drop_down items index
 	events:{
@@ -69,8 +70,25 @@ enyo.kind({
 		layoutKind : enyo.VFlexLayout,
 		items:[],
 		width: "300px",height:"300px",
-		setItems:function(items){
-			this.items = items;			
+		setItems:function(items, filter){
+			var newItems=[];
+			var addItem = false;
+			for(fieldFilter in filter){
+				for (j in items){
+					for(fieldItems in items[i]){
+						if(fieldFilter == fieldItems){
+							if(filter[fieldFilter] != items[i][fieldItems]){
+								addItem = false;
+							}
+						}
+					}
+					if(addItem) newItems.push(items[j]);
+				}
+			}
+			if(!filter){
+				newItems = items;
+			}
+			this.items = newItems;			
 		},
 		selected:-1, //index selected in drop_down items
 		components : [ {
