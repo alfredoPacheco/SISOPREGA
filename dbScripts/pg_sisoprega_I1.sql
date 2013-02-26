@@ -566,7 +566,8 @@ CREATE TABLE ctrl_inspection_forecast_detail(
 	auth varchar(10),
 	origin varchar(20),
 	cattle_type integer NOT NULL REFERENCES cat_cattle_type(cattype_id),
-	quantity integer not null
+	quantity integer not null,
+	UNIQUE (forecast_id, rancher_id, zone_id, auth, origin, cattle_type, quantity)
 );
 
 GRANT ALL ON ctrl_inspection_forecast_detail TO sisoprega;
