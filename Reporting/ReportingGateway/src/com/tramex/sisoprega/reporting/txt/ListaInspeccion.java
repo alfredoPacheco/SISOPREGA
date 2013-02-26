@@ -66,15 +66,15 @@ public class ListaInspeccion extends BaseReportServlet {
 
     this.log.fine("rancherId: [" + request.getParameter("rancherId") + "]");
 
-    String sqlString = "SELECT sum(quantity) as cabezas, cattype_name as ganado, "
+    String sqlString = "SELECT quantity as cabezas, cattype_name as ganado, "
         + "array_to_string(array_agg(cb.barnyard_code),',')AS corrales " 
         + "FROM ctrl_inspection_forecast_detail cifd "
-        + "INNER JOIN ctrl_inspection_forecast cif ON cifd.id = cif.id "
+        + "INNER JOIN ctrl_inspection_forecast cif ON cifd.forecast_id = cif.id "
         + "INNER JOIN cat_cattle_type cct ON cifd.cattle_type = cct.cattype_id "
-        + "INNER JOIN ctrl_inspection_forecast_barnyard cifb ON cifb.id = cifd.id "
+        + "INNER JOIN ctrl_inspection_forecast_barnyard cifb ON cifb.detail_id = cifd.id "
         + "INNER JOIN cat_barnyard cb ON cifb.barnyard_id = cb.barnyard_id " 
         + "WHERE rancher_id = ? AND cif.forecast_date >= CURRENT_DATE " 
-        + "GROUP BY cattype_name";
+        + "GROUP BY cattype_name, quantity";
 
     PreparedStatement ps = null;
     ResultSet rs = null;
@@ -86,14 +86,16 @@ public class ListaInspeccion extends BaseReportServlet {
 
       String registros = "";
       while (rs.next()) {
-        registros += " " + rs.getLong("cabezas") + " cabezas de " + rs.getString("ganado") + ", corral(es) " + rs.getString("corrales") + " |";
+        registros += " " + rs.getLong("cabezas") + " cabezas de " + rs.getString("ganado") + ", corral(es) " + rs.getString("corrales") + " -";
       }
 
       if (registros.equals("")) {
         throw new ServletException("Error al obtener registro de lista de inspección.");
       } else {
         PrintWriter out = response.getWriter();
-        out.println("El siguiente ganado ha sido seleccionado para inspeccion en la lista de hoy:" + registros);
+        String cadenaFinal = "Lista de cruce en UGRCH:" + registros;
+        cadenaFinal=cadenaFinal.substring(0, cadenaFinal.length()-3);
+        out.println(cadenaFinal);
         out.close();
       }
 
