@@ -47,3 +47,23 @@ function phoneOut(p){
 
 	  return "" + phone;	
 }
+
+var colorStack = {
+	arrColors:["limegreen",
+	           "goldenrod", 
+	           "darkgray",
+	           "darkkhaki",
+	           "lightsteelblue"],
+	actualIndex:0,
+	pop:function(){
+		this.actualIndex--;
+		if(this.actualIndex == -1){
+			this.actualIndex = this.arrColors.length - 1;
+		}
+		return this.arrColors[this.actualIndex];
+	},
+	getActual:function(){
+		return this.arrColors[this.actualIndex];
+	}
+
+};
