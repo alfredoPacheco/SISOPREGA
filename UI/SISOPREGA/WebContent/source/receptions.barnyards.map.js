@@ -518,7 +518,13 @@ enyo.kind({
 		this.objSelected.occupied=0;
 		this.objSelected.applyStyle("background-color",this.sColorFree);
 		delete this.arrSelectedOccupied[this.objSelected.name];
-		this.$[sKey].removeClass("selectCell");		
+		this.$[this.objSelected.name].removeClass("selectCell");		
+		
+		for (var sKey in this.arrSelectedOccupied){		
+			delete this.arrSelectedOccupied[sKey];	
+			this.$[sKey].occupied=1;
+			this.$[sKey].applyStyle("background-color",cacheReceptions.getByID(cacheBY.getRecIDbyBY(sKey)).color);							
+		}
 	},
 	deselect:function(){
 		for (var sKey in this.arrSelected){
