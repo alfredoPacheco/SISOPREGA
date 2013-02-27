@@ -52,7 +52,7 @@ enyo.kind({
 		}
 		if (this.reportName == 'inspection'){
 			var parameters = this.$.filter.getParams();
-			window.open('/ReportingGateway/CattleInspection?fromDate='+ parameters.start_date+'&toDate='+ parameters.end_date +'&rancherId='+parameters.rancher_id, '_blank');
+			window.open('/ReportingGateway/InspeccionGanado?fromDate='+ parameters.start_date+'&toDate='+ parameters.end_date +'&rancherId='+parameters.rancher_id, '_blank');
 			window.focus();
 		}
 		if (this.reportName == 'feed'){

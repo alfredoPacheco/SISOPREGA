@@ -93,7 +93,7 @@ public class ReporteAlimento extends BaseReportServlet {
     if(rancherId != null && !rancherId.equals("-1"))
       reportURL = "WEB-INF/Reports/Ranchers/EntregaAlimento.jasper";
     else
-      reportURL = "WEB-INF/Reports/Tramex/AllEntregaAlimento.jasper";
+      reportURL = "WEB-INF/Reports/Tramex/TodaEntregaAlimento.jasper";
       
 
     processRequest(reportURL, params, response);

@@ -22,17 +22,16 @@
      cat_zone."zone_name" AS cat_zone_zone_name,
      ctrl_inspection_forecast."forecast_date" AS ctrl_inspection_forecast_forecast_date,
      cat_cattle_type."cattype_name" AS cat_cattle_type_cattype_name,
-     cat_location."location_name" AS cat_location_location_name
+     ctrl_inspection_forecast_detail."origin" AS ctrl_inspection_forecast_detail_origin
 FROM
      "public"."ctrl_inspection_forecast_detail" ctrl_inspection_forecast_detail INNER JOIN "public"."vw_rancher" vw_rancher ON ctrl_inspection_forecast_detail."rancher_id" = vw_rancher."rancher_id"
      INNER JOIN "public"."ctrl_inspection_forecast" ctrl_inspection_forecast ON ctrl_inspection_forecast_detail."forecast_id" = ctrl_inspection_forecast."id"
      INNER JOIN "public"."cat_cattle_type" cat_cattle_type ON ctrl_inspection_forecast_detail."cattle_type" = cat_cattle_type."cattype_id"
-     INNER JOIN "public"."ctrl_reception" ctrl_reception ON ctrl_inspection_forecast_detail."rancher_id" = ctrl_reception."rancher_id"
      INNER JOIN "public"."ctrl_inspection_forecast_barnyard" ctrl_inspection_forecast_barnyard ON ctrl_inspection_forecast_detail."id" = ctrl_inspection_forecast_barnyard."detail_id"
+     INNER JOIN "public"."cat_zone" cat_zone ON ctrl_inspection_forecast_detail."zone_id" = cat_zone."zone_id"
      INNER JOIN "public"."cat_barnyard" cat_barnyard ON ctrl_inspection_forecast_barnyard."barnyard_id" = cat_barnyard."barnyard_id"
-     INNER JOIN "public"."cat_zone" cat_zone ON ctrl_reception."zone_id" = cat_zone."zone_id"
-     INNER JOIN "public"."cat_location" cat_location ON ctrl_reception."location_id" = cat_location."location_id"
-WHERE ctrl_inspection_forecast."forecast_date" >= CURRENT_DATE
+WHERE
+     ctrl_inspection_forecast."forecast_date" >= CURRENT_DATE
 GROUP BY
      ctrl_inspection_forecast_detail_auth,
      vw_rancher_rancher_name,
@@ -40,7 +39,7 @@ GROUP BY
      cat_zone_zone_name,
      ctrl_inspection_forecast_forecast_date,
      cat_cattle_type_cattype_name,
-     cat_location_location_name
+     ctrl_inspection_forecast_detail_origin
 ORDER BY
      vw_rancher."rancher_name" ASC]]>
 	</queryString>
@@ -51,7 +50,7 @@ ORDER BY
 	<field name="cat_zone_zone_name" class="java.lang.String"/>
 	<field name="ctrl_inspection_forecast_forecast_date" class="java.sql.Date"/>
 	<field name="cat_cattle_type_cattype_name" class="java.lang.String"/>
-	<field name="cat_location_location_name" class="java.lang.String"/>
+	<field name="ctrl_inspection_forecast_detail_origin" class="java.lang.String"/>
 	<variable name="ctrl_inspection_forecast_detail_quantity_1" class="java.lang.Integer" resetType="Group" resetGroup="Fecha" calculation="Sum">
 		<variableExpression><![CDATA[$F{ctrl_inspection_forecast_detail_quantity}]]></variableExpression>
 	</variable>
@@ -143,17 +142,17 @@ ORDER BY
 				<text><![CDATA[HOJA DE INSPECCIÓN]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="ca30f748-75e7-43ff-9be7-2608171dd55d" x="5" y="62" width="307" height="16"/>
+				<reportElement uuid="ca30f748-75e7-43ff-9be7-2608171dd55d" x="5" y="61" width="307" height="17"/>
 				<textElement/>
 				<text><![CDATA[Unidad Sanitaria de la Unión Ganadera Regional de Chihuahua ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="fbd59c0d-bd41-4abc-af79-e2c2809c294c" x="5" y="78" width="307" height="13"/>
+				<reportElement uuid="fbd59c0d-bd41-4abc-af79-e2c2809c294c" x="5" y="77" width="307" height="14"/>
 				<textElement/>
 				<text><![CDATA[San Jerónimo, Cd. Juarez, Chihuahua.  ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="e3004a6c-6cd1-4dd7-bae8-640ccb66209f" x="5" y="91" width="429" height="13"/>
+				<reportElement uuid="e3004a6c-6cd1-4dd7-bae8-640ccb66209f" x="5" y="90" width="429" height="14"/>
 				<textElement/>
 				<text><![CDATA[Contrato - Concesión de la secretaria de agricultura y Ganadería Orden de Inspección veterinaria]]></text>
 			</staticText>
@@ -170,62 +169,62 @@ ORDER BY
 		<band splitType="Stretch"/>
 	</pageHeader>
 	<columnHeader>
-		<band height="28" splitType="Stretch">
+		<band height="23" splitType="Stretch">
 			<staticText>
-				<reportElement uuid="3b8922f5-b102-4fb0-b2dc-12749502565f" style="Column header" x="5" y="10" width="68" height="14" forecolor="#3D2201"/>
+				<reportElement uuid="3b8922f5-b102-4fb0-b2dc-12749502565f" style="Column header" x="5" y="5" width="68" height="14" forecolor="#3D2201"/>
 				<textElement/>
 				<text><![CDATA[Fecha]]></text>
 			</staticText>
 			<textField>
-				<reportElement uuid="7faad0d2-44e6-4018-b23b-73de2c9706f6" x="73" y="10" width="68" height="14"/>
+				<reportElement uuid="7faad0d2-44e6-4018-b23b-73de2c9706f6" x="73" y="5" width="68" height="14"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format($F{ctrl_inspection_forecast_forecast_date})]]></textFieldExpression>
 			</textField>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="16" splitType="Stretch">
+		<band height="19" splitType="Stretch">
 			<textField>
-				<reportElement uuid="3d97536c-9de5-4962-8818-a042a4e494da" x="499" y="0" width="61" height="15"/>
-				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA[$F{cat_location_location_name}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement uuid="de05b7d1-cd4c-4be3-bdcb-168bb2b7f5cc" x="433" y="0" width="61" height="15"/>
+				<reportElement uuid="de05b7d1-cd4c-4be3-bdcb-168bb2b7f5cc" x="433" y="0" width="61" height="14"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{ctrl_inspection_forecast_detail_quantity}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="1f952874-406d-4b39-8c7c-891df4f23aa5" x="378" y="0" width="50" height="15"/>
+				<reportElement uuid="1f952874-406d-4b39-8c7c-891df4f23aa5" x="378" y="0" width="50" height="14"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{cat_cattle_type_cattype_name}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="ecf9b91f-b21f-4011-a69f-6d9a67730d07" x="273" y="0" width="100" height="15"/>
+				<reportElement uuid="ecf9b91f-b21f-4011-a69f-6d9a67730d07" x="273" y="0" width="100" height="14"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{cat_zone_zone_name}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="d0817597-821c-4fcf-8c37-67205284d134" x="565" y="0" width="61" height="15"/>
+				<reportElement uuid="d0817597-821c-4fcf-8c37-67205284d134" x="565" y="0" width="61" height="14"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{barnyards}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="3d0858b6-a11e-4b05-9ad0-91e780d39ed8" x="186" y="0" width="83" height="15"/>
+				<reportElement uuid="3d0858b6-a11e-4b05-9ad0-91e780d39ed8" x="186" y="0" width="83" height="14"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{ctrl_inspection_forecast_detail_auth}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement uuid="7fe6285f-fe26-4b0e-aa8c-94f6cf6fe362" style="Detail" x="9" y="0" width="177" height="15"/>
+				<reportElement uuid="7fe6285f-fe26-4b0e-aa8c-94f6cf6fe362" style="Detail" x="9" y="0" width="177" height="14"/>
 				<textElement>
 					<font fontName="SansSerif" size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{vw_rancher_rancher_name}]]></textFieldExpression>
 			</textField>
+			<textField>
+				<reportElement uuid="1c8a303d-49f0-415b-8dd9-a4ec237eebfc" x="499" y="0" width="61" height="14"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{ctrl_inspection_forecast_detail_origin}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 	<columnFooter>
-		<band height="36" splitType="Stretch">
+		<band height="26" splitType="Stretch">
 			<line>
 				<reportElement uuid="94703ecc-4b01-47b9-b7e7-ba57f3881082" positionType="FixRelativeToBottom" x="0" y="3" width="802" height="1"/>
 				<graphicElement>

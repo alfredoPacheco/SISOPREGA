@@ -57,15 +57,15 @@ import com.tramex.sisoprega.reporting.BaseReportServlet;
  * @author Jaime Figueroa
  */
 
-@WebServlet("/CattleInspection")
+@WebServlet("/InspeccionGanado")
 @ServletSecurity(@HttpConstraint(rolesAllowed = {"mx_usr", "rancher"}))
-public class CattleInspection extends BaseReportServlet {
+public class InspeccionGanado extends BaseReportServlet {
   private static final long serialVersionUID = -2403140402336787611L;
 
   /**
    * @see HttpServlet#HttpServlet()
    */
-  public CattleInspection() {
+  public InspeccionGanado() {
     super();
   }
 
@@ -95,9 +95,9 @@ public class CattleInspection extends BaseReportServlet {
 
     String reportURL = "";
     if(rancherId != null && !rancherId.equals("-1"))
-      reportURL = "WEB-INF/Reports/Ranchers/CattleInspection.jasper";
+      reportURL = "WEB-INF/Reports/Ranchers/InspeccionGanado.jasper";
     else
-      reportURL = "WEB-INF/Reports/Tramex/AllCattleInspection.jasper";
+      reportURL = "WEB-INF/Reports/Tramex/TodaInspeccionGanado.jasper";
       
 
     processRequest(reportURL, params, response);

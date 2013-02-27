@@ -54,15 +54,15 @@ import com.tramex.sisoprega.reporting.BaseReportServlet;
  * 
  * @author Jaime Figueroa
  */
-@WebServlet("/CattleReceptionId")
+@WebServlet("/RecepcionGanadoId")
 @ServletSecurity(@HttpConstraint(rolesAllowed = {"mx_usr"}))
-public class CattleReceptionId extends BaseReportServlet {
+public class RecepcionGanadoId extends BaseReportServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public CattleReceptionId() {
+    public RecepcionGanadoId() {
         super();
     }
 
@@ -74,7 +74,7 @@ public class CattleReceptionId extends BaseReportServlet {
 
       params.put("CUS_RECEPTION_ID", Integer.parseInt(request.getParameter("receptionId")));
 
-      String reportURL = "WEB-INF/Reports/Tramex/CattleReceptionId.jasper";
+      String reportURL = "WEB-INF/Reports/Tramex/RecepcionGanadoId.jasper";
 
       processRequest(reportURL, params, response);
 

@@ -1114,7 +1114,7 @@ enyo
 				var month = today.getMonth() + 1;
 				var today_sf = month + '/' + today.getDate() + '/'
 						+ today.getFullYear();
-				var report_name = 'CattleInspection?rancherId='
+				var report_name = 'InspeccionGanado?rancherId='
 						+ rancher_id + '&amp;fromDate=' + today_sf
 						+ '&amp;toDate=' + today_sf;
 				consumingGateway.SendReport(rancher_id, report_name);
