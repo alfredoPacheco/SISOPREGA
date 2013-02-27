@@ -498,7 +498,6 @@ enyo.kind({
 		}	
 		this.deselect();
 		this.$.popMan.close();
-		this.$.rancherFilter.setItems(cacheReceptions.getRanchersByReceptions());
 	},
 	updateBY:function(){		
 		this.$.popMan.close();	
@@ -512,19 +511,22 @@ enyo.kind({
 			this.$[sKey].occupied=1;
 		}
 		this.colorBYbyRancherSelected(cacheReceptions.getByID(cacheBY.getRecIDbyBY(sKey)).rancher_id);
-		this.arrSelected={};		
+		this.arrSelected={};
+		this.$.rancherFilter.setItems(cacheReceptions.getRanchersByReceptions());
 	},
 	releaseBY:function(){
 		this.objSelected.occupied=0;
 		this.objSelected.applyStyle("background-color",this.sColorFree);
 		delete this.arrSelectedOccupied[this.objSelected.name];
-		this.$[this.objSelected.name].removeClass("selectCell");		
-		
-		for (var sKey in this.arrSelectedOccupied){		
-			delete this.arrSelectedOccupied[sKey];	
-			this.$[sKey].occupied=1;
-			this.$[sKey].applyStyle("background-color",cacheReceptions.getByID(cacheBY.getRecIDbyBY(sKey)).color);							
+
+		this.$[this.objSelected.name].removeClass("selectCell");
+		for(i in this.arrBYbyRancherSelected){
+			var activeBY = "" + this.arrBYbyRancherSelected[i].zone_id + this.arrBYbyRancherSelected[i].barnyard_code;
+			if(activeBY == this.objSelected.name){
+				delete this.arrBYbyRancherSelected[i];
+			}
 		}
+		this.$.rancherFilter.setItems(cacheReceptions.getRanchersByReceptions());
 	},
 	deselect:function(){
 		for (var sKey in this.arrSelected){
