@@ -55,15 +55,15 @@ import com.tramex.sisoprega.reporting.BaseReportServlet;
  * @author Jaime Figueroa
  */
 
-@WebServlet("/FeedOrder")
+@WebServlet("/OrdenDeAlimento")
 @ServletSecurity(@HttpConstraint(rolesAllowed = {"mx_usr"}))
-public class FeedOrder extends BaseReportServlet {
+public class OrdenDeAlimento extends BaseReportServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public FeedOrder() {
+    public OrdenDeAlimento() {
         super();
     }
     @Override

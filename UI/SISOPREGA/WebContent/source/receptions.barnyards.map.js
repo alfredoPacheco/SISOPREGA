@@ -486,7 +486,7 @@ enyo.kind({
 				break;
 			case 9: // Imprimir
 			  var receptionId = cacheBY.inUse()[this.objSelected.name].reception_id;
-			  window.open('/ReportingGateway/CattleReceptionId?receptionId=' + receptionId, '_blank');
+			  window.open('/ReportingGateway/RecepcionGanadoId?receptionId=' + receptionId, '_blank');
 		      window.focus();
 			  break;
 		}

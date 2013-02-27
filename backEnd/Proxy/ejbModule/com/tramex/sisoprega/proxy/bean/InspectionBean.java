@@ -133,36 +133,22 @@ public class InspectionBean extends BaseBean implements Cruddable {
       inspection = entityFromRequest(request, Inspection.class);
       this.log.fine("Got inspection from request: " + inspection);
 
-      String qryLogger = "";
-      String queryName = "";
-      Map<String, Object> parameters = new HashMap<String, Object>();
-      if (inspection.getInspectionId() != 0) {
-        queryName = "CRT_INSPECTION_BY_ID";
-        parameters.put("inspectionId", inspection.getInspectionId());
-        qryLogger = "By inspectionId [" + inspection.getInspectionId() +  "]";
-      } else if (inspection.getReceptionId() != 0) {
-        queryName = "INSPECTION_BY_RECEPTION_ID";
-        parameters.put("receptionId", inspection.getReceptionId());
-        qryLogger = "By receptionId [" + inspection.getReceptionId() + "]";
+      List<Inspection> queryResults = getInspections(inspection, response);
+      if(queryResults!=null){
+        if (queryResults.isEmpty()) {
+          response.setError(new Error("VAL02", "No se encontraron datos para el filtro seleccionado", "proxy.InspectionBean.Read"));
+        } else {
+          // Add query results to response
+          response.getRecord().addAll(contentFromList(queryResults, Inspection.class));
+
+          // Add success message to response
+          response.setError(new Error("0", "SUCCESS", "proxy.Inspection.Read"));
+          this.log.info("Read operation execution completed by principal[" + getLoggedUser() + "] on InspectionBean");
+        }
       } else {
-        response.setError(new Error("VAL03", "El filtro especificado no es válido para las inspecciones de ganado",
-            "proxy.InspectionDetail.Read"));
         return response;
       }
-
-      // Query the results through the jpa using a typedQuery
-      List<Inspection> queryResults = dataModel.readDataModelList(queryName, parameters, Inspection.class);
-
-      if (queryResults.isEmpty()) {
-        response.setError(new Error("VAL02", "No se encontraron datos para el filtro seleccionado", "proxy.InspectionBean.Read"));
-      } else {
-        // Add query results to response
-        response.getRecord().addAll(contentFromList(queryResults, Inspection.class));
-
-        // Add success message to response
-        response.setError(new Error("0", "SUCCESS", "proxy.Inspection.Read"));
-        this.log.info("Read operation " + qryLogger + " executed by principal[" + getLoggedUser() + "] on InspectionBean");
-      }
+      
     } catch (Exception e) {
       // something went wrong, alert the server and respond the client
       this.log.severe("Exception found while reading feed inspection");
@@ -272,6 +258,31 @@ public class InspectionBean extends BaseBean implements Cruddable {
     if(!inspections.isEmpty())
       result = inspections.get(0).getInspectionId();
     
+    return result;
+  }
+  
+  List<Inspection> getInspections(Inspection filter, ReadGatewayResponse response) throws IllegalArgumentException, IllegalAccessException{
+    List<Inspection> result = null;
+    
+    String qryLogger = "";
+    String queryName = "";
+    Map<String, Object> parameters = new HashMap<String, Object>();
+    if (filter.getInspectionId() != 0) {
+      queryName = "CRT_INSPECTION_BY_ID";
+      parameters.put("inspectionId", filter.getInspectionId());
+      qryLogger = "By inspectionId [" + filter.getInspectionId() +  "]";
+    } else if (filter.getReceptionId() != 0) {
+      queryName = "INSPECTION_BY_RECEPTION_ID";
+      parameters.put("receptionId", filter.getReceptionId());
+      qryLogger = "By receptionId [" + filter.getReceptionId() + "]";
+    } else {
+      response.setError(new Error("VAL03", "El filtro especificado no es válido para las inspecciones de ganado",
+          "proxy.InspectionDetail.Read"));
+    }
+
+    // Query the results through the jpa using a typedQuery
+    result = dataModel.readDataModelList(queryName, parameters, Inspection.class);
+    this.log.info("Read operation " + qryLogger + " executed by principal[" + getLoggedUser() + "] on InspectionBean");
     return result;
   }
   

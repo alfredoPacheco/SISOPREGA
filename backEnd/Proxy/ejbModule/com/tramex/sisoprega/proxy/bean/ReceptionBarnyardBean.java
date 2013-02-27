@@ -22,19 +22,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.naming.Context;
-import javax.naming.InitialContext;
 
 import com.tramex.sisoprega.common.BaseResponse;
 import com.tramex.sisoprega.common.CreateGatewayResponse;
 import com.tramex.sisoprega.common.Error;
+import com.tramex.sisoprega.common.Field;
 import com.tramex.sisoprega.common.GatewayContent;
 import com.tramex.sisoprega.common.GatewayRequest;
 import com.tramex.sisoprega.common.ReadGatewayResponse;
 import com.tramex.sisoprega.common.UpdateGatewayResponse;
 import com.tramex.sisoprega.common.crud.Cruddable;
 import com.tramex.sisoprega.common.messenger.Messageable;
+import com.tramex.sisoprega.dto.Inspection;
 import com.tramex.sisoprega.dto.Reception;
 import com.tramex.sisoprega.dto.ReceptionBarnyard;
 
@@ -68,6 +69,12 @@ import com.tramex.sisoprega.dto.ReceptionBarnyard;
 @Stateless
 public class ReceptionBarnyardBean extends BaseBean implements Cruddable {
 
+  @EJB(lookup = "java:global/ComProxy/Messenger")
+  private Messageable messenger;
+
+  @EJB(lookup = "java:global/Proxy/InspectionProxy")
+  private Cruddable inspectionBean;
+
   /*
    * (non-Javadoc)
    * 
@@ -97,7 +104,7 @@ public class ReceptionBarnyardBean extends BaseBean implements Cruddable {
         this.log.info("Reception Barnyard [" + recepBarnyard.toString() + "] created by principal[" + getLoggedUser() + "]");
       } else {
         this.log.warning("Error de validación: " + error_description);
-        if(!receptionHasBarnyards(recepBarnyard.getReceptionId()))
+        if (!receptionHasBarnyards(recepBarnyard.getReceptionId()))
           deleteReception(recepBarnyard.getReceptionId());
         response.setError(new Error("VAL01", "Error de validación: " + error_description, "proxy.ReceptionBarnyardBean.Create"));
       }
@@ -249,55 +256,73 @@ public class ReceptionBarnyardBean extends BaseBean implements Cruddable {
 
     try {
       ReceptionBarnyard recepBarnyard = entityFromRequest(request, ReceptionBarnyard.class);
-      if (recepBarnyard.getRecBarnyardId() != 0) {
-        recepBarnyard = dataModel.readSingleDataModel("CRT_RECEPTIONBARNYARD_BY_ID", "recBarnyardId",
-            recepBarnyard.getRecBarnyardId(), ReceptionBarnyard.class);
-        this.log.info("Deleting Reception Barnyard [" + recepBarnyard.toString() + "] by principal[" + getLoggedUser() + "]");
-        dataModel.deleteDataModel(recepBarnyard, getLoggedUser());
-        response.setError(new Error("0", "SUCCESS", "proxy.ReceptionBarnyard.Delete"));
-      } else if (recepBarnyard.getBarnyardId() != 0 && recepBarnyard.getReceptionId() != 0) {
+      if (recepBarnyard.getBarnyardId() != 0 && recepBarnyard.getReceptionId() != 0) {
         Map<String, Object> parameters = new HashMap<String, Object>();
         parameters.put("barnyard_id", recepBarnyard.getBarnyardId());
         parameters.put("reception_id", recepBarnyard.getReceptionId());
         List<ReceptionBarnyard> barnyards = dataModel.readDataModelList("RECEPTION_BARNYARD_BY_BARNYARD_ID_AND_RECEPTION_ID",
             parameters, ReceptionBarnyard.class);
+        
+        if(!barnyards.isEmpty()){
+          log.fine("Deleting detected record");
+          parameters.clear();
+          parameters.put("receptionId", recepBarnyard.getReceptionId());
+          List<ReceptionBarnyard> receptionBarnyards = dataModel.readDataModelList("RECEPTION_BARNYARD_BY_RECEPTION_ID", parameters, ReceptionBarnyard.class);
+          if(receptionBarnyards.size()==1){
+            log.fine("Last barnyard on reception");
+            long receptionId = recepBarnyard.getReceptionId();
 
-        if (!barnyards.isEmpty()) {
+            // last barnyard released.
+            // Evaluate if defects have been raised:
+
+            GatewayRequest req = new GatewayRequest();
+            req.setEntityName("Inspection");
+            GatewayContent content = new GatewayContent();
+            content.getFields().add(new Field("receptionId", String.valueOf(receptionId)));
+            req.setContent(content);
+
+            log.fine("Reading inspection from inspectionBean");
+            List<Inspection> inspections = dataModel.readDataModelList("INSPECTION_BY_RECEPTION_ID", parameters, Inspection.class);
+            if(inspections.isEmpty()){
+              log.fine("No inspection found, creating inspection header");
+              Inspection inspection = new Inspection();
+              inspection.setComments("Inspección realizada sin rechazos.");
+              inspection.setInspectionDate(new Date());
+              inspection.setReceptionId(receptionId);
+              dataModel.createDataModel(inspection);
+              
+              log.info("Inspection created due to removal of last barnyard on reception");
+            }
+
+            DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+            Date date = new Date();
+            
+            String sReport = new String("CattleInspection?rancherId=" + getRancherFromReception(receptionId) + "&fromDate="
+                + dateFormat.format(date) + "&toDate=" + dateFormat.format(date));
+            Reception rec = dataModel.readSingleDataModel("CRT_RECEPTION_BY_ID", "receptionId", receptionId,
+                Reception.class);
+            log.fine(sReport);
+            if (!messenger.sendReport(rec.getRancherId(), sReport)) {
+              response.setError(new Error("VAL04", "El módulo de mensajería no está correctamente instalado",
+                  "proxy.ReceptionBarnyard.Delete"));
+
+            }
+            
+          }
+          
           recepBarnyard = barnyards.get(0);
           this.log.info("Deleting Reception Barnyard [" + recepBarnyard.toString() + "] by barnyardId and receptionId["
               + getLoggedUser() + "]");
           dataModel.deleteDataModel(recepBarnyard, getLoggedUser());
-          parameters.clear();
-          parameters.put("receptionId",recepBarnyard.getReceptionId());
-          barnyards = dataModel.readDataModelList("RECEPTION_BARNYARD_BY_RECEPTION_ID",parameters, ReceptionBarnyard.class);
-          if (barnyards.isEmpty()){
-        	    Context jndiContext = null;
-        	    Messageable messenger = null;
-        	    String commonPrefix = "java:global/ComProxy/";
-        	    try {
-        	      jndiContext = new InitialContext();
-        	      messenger = (Messageable) jndiContext.lookup(commonPrefix + "Messenger");
-        	      log.fine("Messenger instance created.");
-        	    } catch (java.lang.Exception e) {
-        	      log.severe("Unable to load jndi context component");
-        	      log.throwing(this.getClass().getName(), "getCruddable", e);
-        	      response.setError(new Error("VAL04", "El módulo de mensajería no está correctamente instalado", "proxy.ReceptionBarnyard.Delete"));        	      
-        	    }
-
-        	    if (messenger != null) {
-        	    	DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-        	    	Date date = new Date();
-        	    	String sReport= new String("CattleInspection?rancherId="+recepBarnyard.getReceptionId()+"&fromDate="+dateFormat.format(date)+"&toDate="+dateFormat.format(date));
-        	    	Reception rec = dataModel.readSingleDataModel("CRT_RECEPTION_BY_ID","receptionId",recepBarnyard.getReceptionId(), Reception.class);        	    	        	 
-        	    	log.fine(sReport);
-        	      if (!messenger.sendReport(rec.getRancherId(), sReport)) {
-        	    	  response.setError(new Error("VAL04", "El módulo de mensajería no está correctamente instalado", "proxy.ReceptionBarnyard.Delete"));        	              	    	  
-        	      }
-
-        	    }        	  
-          }        	
+          
         }
 
+        response.setError(new Error("0", "SUCCESS", "proxy.ReceptionBarnyard.Delete"));
+      } else if (recepBarnyard.getRecBarnyardId() != 0) {
+        recepBarnyard = dataModel.readSingleDataModel("CRT_RECEPTIONBARNYARD_BY_ID", "recBarnyardId",
+            recepBarnyard.getRecBarnyardId(), ReceptionBarnyard.class);
+        this.log.info("Deleting Reception Barnyard [" + recepBarnyard.toString() + "] by principal[" + getLoggedUser() + "]");
+        dataModel.deleteDataModel(recepBarnyard, getLoggedUser());
         response.setError(new Error("0", "SUCCESS", "proxy.ReceptionBarnyard.Delete"));
       } else {
         this.log.warning("VAL04 - Entity ID Omission.");
@@ -349,6 +374,21 @@ public class ReceptionBarnyardBean extends BaseBean implements Cruddable {
     List<ReceptionBarnyard> receptions = dataModel.readDataModelList("RECEPTION_BARNYARD_BY_RECEPTION_ID", parameters,
         ReceptionBarnyard.class);
     return !receptions.isEmpty();
+  }
+  
+  private long getRancherFromReception(long receptionId){
+    Map<String, Object> parameters = new HashMap<String, Object>();
+    parameters.put("receptionId", receptionId);
+    
+    List<Reception> receptions = dataModel.readDataModelList("CRT_RECEPTION_BY_ID", parameters,
+        Reception.class);
+    
+    long result = 0;
+    if(!receptions.isEmpty()){
+      result = receptions.get(0).getRancherId();
+    }
+    
+    return result;
   }
 
 }
