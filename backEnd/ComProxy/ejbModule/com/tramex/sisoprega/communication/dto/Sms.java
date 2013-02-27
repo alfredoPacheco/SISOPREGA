@@ -35,7 +35,7 @@ package com.tramex.sisoprega.communication.dto;
 public class Sms {
     private final String sTo;
     private final String sFrom;
-    private final String sMsg;
+    private String sMsg;
     public Sms(final String sTo, final String sFrom, final String sMsg){
         this.sFrom=sFrom;
         this.sTo=sTo;
@@ -49,6 +49,9 @@ public class Sms {
     }
     public String getMsg() {
         return sMsg;
+    }
+    public void setMsg(String msg) {
+        this.sMsg = msg;
     }
 }
 

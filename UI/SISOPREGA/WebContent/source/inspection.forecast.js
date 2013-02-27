@@ -3,15 +3,6 @@ enyo
 			name : "inspection.forecast",
 			kind : enyo.SlidingView,
 			layoutKind : enyo.VFlexLayout,
-//			create : function() {
-//				this.inherited(arguments);				
-//				
-//				this.$.cattle_type.setItems(cacheCattle.getAllCattleType());
-//				this.$.zone.setItems(cacheMan.getAllZonesForList());
-//				this.$.origin.setItems(cacheMan.getAllLocationsForList());				
-//				this.$.barnyards.setItems(cacheReceptions.getActiveBYForListByRancherID(14));
-//				this.$.rancher.setItems(cacheRanchers.getAllForList());
-//			},
 			iSelected : null,
 			_id : undefined,
 			objList : [],
@@ -23,14 +14,24 @@ enyo
 			arrReceptions:[],
 			arrActiveReceptions:[],
 			arrFilter:[],
-			defaultZone : 1,
+			arrAutocompleteFilter:[],
+			defaultZone : undefined,
+			defaultCattle : undefined,
+//			barnyardsFilter:undefined,
 			actualFilter:{
 					rancher_id : "",
 					zone_id:"",
 					origin_id : "",
 					cattle_type_id : "",
 					reception_id : "", //reception for barnyards
-			},			
+			},
+			actualAutocompleteFilter:{
+				rancher_id : undefined,
+				zone_id:undefined,
+				origin_id : undefined,
+				cattle_type_id : undefined,
+				reception_id : undefined, //reception for barnyards
+			},
 			components : [ {
 				kind : "SlidingPane",
 				flex : 1,
@@ -40,23 +41,27 @@ enyo
 							name : "left",
 							width : "300px",
 							kind : enyo.SlidingView,
-							components : [ {
-								kind : "Header",
-								name : "encabezadoFecha",
-								style : "background-color:#DABD8B;",
-								pack : "center",
-								components : [ {
-									kind : "Button",
-									content : "Hoy",
-									style : "background-color:#DABD8B;",
-									onclick : "cambiarAHoy"
-								}, {
-									kind : "DatePicker",
-									label : "",
-									name : "fechaPicker",
-									onChange : "cambioDeFecha"
-								} ]
-							}, {
+							components : [ 
+//							               {
+//								kind : "Header",
+//								name : "encabezadoFecha",
+//								style : "background-color:#DABD8B;",
+//								pack : "center",
+//								components : [ 
+//								               {
+//									kind : "Button",
+//									content : "Hoy",
+//									style : "background-color:#DABD8B;",
+//									onclick : "cambiarAHoy"
+//								}, 
+//								{
+//									kind : "DatePicker",
+//									label : "",
+//									name : "fechaPicker",
+//									onChange : "cambioDeFecha"
+//								} ]
+//							}, 
+							{
 								kind : enyo.Scroller,
 								name : "FormScroller",
 								horizontal : false,
@@ -251,13 +256,14 @@ enyo
 												},
 												{
 													content : "Corrales",
-													style : "width:200px;text-align:left;"
+													style : "width:100px;text-align:left;"
 												},
 												{
 						                            kind : "enyo.IconButton",
 						                            name : "btnReport",
 						                            icon : "images/command-menu/menu-icon-cards.png",
-						                            onclick : "enviar_aviso"
+						                            onclick : "enviar_aviso",
+						                            style : "width:30px;"
 						                          }
 												]
 									},
@@ -394,11 +400,65 @@ enyo
 				}
 			},
 			ready : function() {
-				this.arrActiveReceptions = cacheReceptions.get();				
-				this.$.fechaPicker.setValue(new Date());
-				this.cambioDeFecha();			
+				this.arrActiveReceptions = cacheReceptions.get();
+				this.arrFilter = this.arrActiveReceptions;
+				
+				this.$.rancher.setItems(cacheRanchers.getAllForList());
+				this.$.cattle_type.setItems(cacheCattle.getAllCattleType());
+				this.$.zone.setItems(cacheMan.getAllZonesForList());
+				this.$.origin.setItems(cacheMan.getAllLocationsForList());
+								
+//				if(this.$.zone.getItems().length > 0 ){
+//					this.defaultZone = this.$.zone.getFirstOne().value;	
+//				}
+//				if(this.$.cattle_type.getItems().length > 0 ){
+//					this.defaultCattle = this.$.cattle_type.getFirstOne().value;	
+//				}
+//				
+//				this.load_barnyards();
+//				this.$.barnyards.setItems(this.$.barnyards.getFilter());
+				
+				var fmt = new enyo.g11n.DateFmt({
+					format : "yyyy/MM/dd",
+					locale : new enyo.g11n.Locale("es_es")
+				});
+				this.fecha = fmt.format(new Date());
+				this.updateList();
+//				this.$.fechaPicker.setValue(new Date());
+//				this.cambioDeFecha();
+			},
+			updateList : function() {
+				//initializing forecast master values***********************
+				this._id = undefined;
+				this.totalItems = 0;
+				this.objList = [];
+				var arrAllForecasts = [];
+				this.iSelected = null;
+				//**********************************************************
+				
+				//add mode buttons
+				this.$.draDel.setOpen(false);
+				this.$.draUpdate.setOpen(false);
+				this.$.draAdd.setOpen(true);
+				
+				//reset values and load combos
+				this.resetValues();
+				
+				//filling up right side**************************************
+				arrAllForecasts = cacheInspFore.get();
+				for (i in arrAllForecasts) {
+					if (arrAllForecasts[i].fore_date == this.fecha) {
+						this._id = arrAllForecasts[i].id;
+						if (arrAllForecasts[i].fore_details_id) {
+							this.objList.push(arrAllForecasts[i]);
+						}
+					}
+				}
+				this.$.forecastList.render();
+				//***********************************************************
 			},
 			resetValues : function() {
+				//cleaning fileds:
 				this.$.rancher.clear();
 				this.$.autorizacion.setValue("");
 				this.$.origin.clear();
@@ -406,6 +466,8 @@ enyo
 				this.$.cantidad.setValue("");
 				this.$.zone.clear();
 				this.$.barnyards.clear();
+				
+				//cleaning filter:
 				this.actualFilter.rancher_id = "";
 				this.actualFilter.zone_id = "";
 				this.actualFilter.origin_id = "";
@@ -413,76 +475,185 @@ enyo
 				this.actualFilter.reception_id = "";
 				
 				this.arrFilter = this.arrActiveReceptions;
-			},
-			cambioDeFecha : function() {
-				var fmt = new enyo.g11n.DateFmt({
-					format : "yyyy/MM/dd",
-					locale : new enyo.g11n.Locale("es_es")
-				});
-				this.fecha = fmt.format(this.$.fechaPicker.getValue());
 				
+				if(this.$.zone.getItems().length > 0 ){
+					this.defaultZone = this.$.zone.getFirstOne().value;	
+				}
+				if(this.$.cattle_type.getItems().length > 0 ){
+					this.defaultCattle = this.$.cattle_type.getFirstOne().value;	
+				}
 				
-//				this.$.cattle_type.setIndex(1);
-//				this.$.zone.setIndex(1);
-				
-				this.updateList();
 				this.load_combos();
+				this.$.barnyards.setItems(this.$.barnyards.getFilter());
+				this.autoCompleteFields();
+			},
+//			cambioDeFecha : function() {
+//				var fmt = new enyo.g11n.DateFmt({
+//					format : "yyyy/MM/dd",
+//					locale : new enyo.g11n.Locale("es_es")
+//				});
+//				this.fecha = fmt.format(this.$.fechaPicker.getValue());
+//				
+////				this.$.cattle_type.setIndex(1);
+////				this.$.zone.setIndex(1);
+//				
+//				this.updateList();
+//				
+//			},
+//			cambiarAHoy : function() {
+//				this.$.fechaPicker.setValue(new Date());
+//				this.cambioDeFecha();
+//			},
+			autoCompleteFields:function(){
+				if(this.arrAutocompleteFilter.length == 0) this.arrAutocompleteFilter = this.arrFilter;
 				
-			},
-			cambiarAHoy : function() {
-				this.$.fechaPicker.setValue(new Date());
-				this.cambioDeFecha();
-			},
-			on_select_zone:function(InSender, InEvent){
-				this.defaultZone = this.$.zone.getIndex();
+					if (this.$.rancher.getHighLighted() && !this.actualAutocompleteFilter.rancher_id){
+						if(this.arrAutocompleteFilter.length ==1){
+							this.actualAutocompleteFilter.rancher_id =true;
+							this.$.rancher.index=this.arrAutocompleteFilter[0].rancher_id;
+							this.$.rancher.setValue(this.arrAutocompleteFilter[0].rancher_name);
+//							this.arrAutocompleteFilter =this.filterByRancher(this.$.rancher.index, this.arrAutocompleteFilter);
+//							this.autoCompleteFields();
+//							return;
+						}else{
+							this.$.rancher.index=-1;
+							this.$.rancher.setValue("");
+						}
+					}
+					
+					if (this.$.zone.getHighLighted()&& !this.actualAutocompleteFilter.zone_id){
+						if(this.defaultZone){
+							this.$.zone.index=this.defaultZone;
+							this.$.zone.setValue(cacheMan.getZoneByID(this.$.zone.index).zone_name);
+							this.actualAutocompleteFilter.zone_id =true;
+						}else{
+							if(this.arrAutocompleteFilter.length ==1){
+								this.actualAutocompleteFilter.zone_id =true;
+								this.$.zone.index=this.arrAutocompleteFilter[0].zone_id;							
+								this.$.zone.setValue(cacheMan.getZoneByID(this.arrAutocompleteFilter[0].zone_id).zone_name);
+//								this.arrAutocompleteFilter =this.filterByZone(this.$.zone.index, this.arrAutocompleteFilter);
+//								this.autoCompleteFields();
+//								return;
+							}
+							else{
+								this.$.zone.index=-1;
+								this.$.zone.setValue("");
+							}
+						}
+					}
+					
+					if (this.$.origin.getHighLighted()&& !this.actualAutocompleteFilter.origin_id){
+						if(this.arrAutocompleteFilter.length ==1){
+							this.actualAutocompleteFilter.origin_id =true;
+							this.$.origin.index=this.arrAutocompleteFilter[0].location_id;
+							this.$.origin.setValue(this.arrAutocompleteFilter[0].location_name);
+//							this.arrAutocompleteFilter =this.filterByOrigin(this.$.origin.index, this.arrAutocompleteFilter);
+//							this.autoCompleteFields();
+						}
+						else{
+							this.$.origin.index=-1;
+							this.$.origin.setValue("");
+						}
+					}
+					if (this.$.cattle_type.getHighLighted()&& !this.actualAutocompleteFilter.cattle_type_id){
+						if(this.arrAutocompleteFilter.length ==1){
+							this.actualAutocompleteFilter.cattle_type_id =true;
+							this.$.cattle_type.index=this.arrAutocompleteFilter[0].cattype_id;
+							this.$.cattle_type.setValue(this.arrAutocompleteFilter[0].cattype_name);
+//								this.arrAutocompleteFilter =this.filterByCattle(this.$.cattle_type.index, this.arrAutocompleteFilter);
+//								this.autoCompleteFields();
+						}
+						else{
+							if(this.defaultCattle){
+								this.actualAutocompleteFilter.cattle_type_id =true;
+								this.$.cattle_type.index=this.defaultCattle;
+								this.$.cattle_type.setValue(cacheCattle.getByID(this.$.cattle_type.index).cattype_name);
+							}else{
+								this.$.cattle_type.index=-1;
+								this.$.cattle_type.setValue("");
+							}
+						}
+					}
+					if (this.$.barnyards.getHighLighted() && !this.actualAutocompleteFilter.reception_id){
+						this.$.barnyards.value=-1;
+						this.$.barnyards.setText("");
+						if(this.arrAutocompleteFilter.length ==1){
+							var arrBY = this.$.barnyards.getFilter();
+							for (i in arrBY){
+								if(arrBY[i].value == this.arrAutocompleteFilter[0].reception_id){
+									this.actualAutocompleteFilter.reception_id =true;
+									this.$.barnyards.value=arrBY[i].value;
+									this.$.barnyards.setText(arrBY[i].caption);
+								}
+							}	
+						}
+					}
+					
+				this.arrAutocompleteFilter = [];
+				this.actualAutocompleteFilter={
+					rancher_id : undefined,
+					zone_id:undefined,
+					origin_id : undefined,
+					cattle_type_id : undefined,
+					reception_id : undefined, //reception for barnyards
+				};
 			},
 			on_select_item: function(InSender, InEvent){
+				//TODO
 				switch(InSender.name){
 				case "rancher":
 					this.actualFilter.rancher_id = InSender.index;
 					break;
 				case "zone":
 					this.actualFilter.zone_id = InSender.index;
+					this.defaultZone = InSender.index;
+					this.load_barnyards();
+//					this.barnyardsFilter.zone_id = this.defaultZone;
+//					this.$.barnyards.setFilterCriteria(this.barnyardsFilter);
 					break;
 				case "origin":
 					this.actualFilter.origin_id = InSender.index;
 					break;
 				case "cattle_type":
 					this.actualFilter.cattle_type_id = InSender.index;
+					this.defaultCattle = InSender.index;
+//					this.barnyardsFilter.cattype_id = this.defaultCattle;
+//					this.$.barnyards.setFilterCriteria(this.barnyardsFilter);
 					break;
 				case "barnyards":
 					this.actualFilter.reception_id = InSender.index;					
 					break;
-				}				
+				}
 				this.applyFilter();
-//				this.load_combos();
-				this.autoCompleteFields();			
+				
+				this.autoCompleteFields();
+				
 			},
 			applyFilter:function(){
 				this.arrFilter = this.arrActiveReceptions;
 				if(this.actualFilter.rancher_id != ""){
-					this.filterByRancher(this.actualFilter.rancher_id);	
+					this.arrFilter = this.filterByRancher(this.actualFilter.rancher_id, this.arrFilter);
 				}
 				if(this.actualFilter.zone_id != ""){
-					this.filterByZone(this.actualFilter.zone_id);
+//					this.arrFilter = this.filterByZone(this.actualFilter.zone_id, this.arrFilter);
 				}
 				if(this.actualFilter.origin_id != ""){
-					this.filterByOrigin(this.actualFilter.origin_id);
+					this.arrFilter = this.filterByOrigin(this.actualFilter.origin_id, this.arrFilter);
 				}
 				if(this.actualFilter.cattle_type_id != ""){
-					this.filterByCattle(this.actualFilter.cattle_type_id);
+					this.arrFilter = this.filterByCattle(this.actualFilter.cattle_type_id, this.arrFilter);
 				}
 				if(this.actualFilter.reception_id != ""){
-					this.filterByReception(this.actualFilter.reception_id);
+					this.arrFilter = this.filterByReception(this.actualFilter.reception_id, this.arrFilter);
 				}
 			},
-			filterByRancher:function(rancher_id){				
+			filterByRancher:function(rancher_id, arrAfected){				
+				var arrResult = [];
 				if (rancher_id > -1){
-					var arrResult = [];
-					if(this.arrFilter.length > 0){
-						for (i in this.arrFilter){
-							if (this.arrFilter[i].rancher_id == rancher_id){
-								arrResult.push(this.arrFilter[i]);
+					if(arrAfected.length > 0){
+						for (i in arrAfected){
+							if (arrAfected[i].rancher_id == rancher_id){
+								arrResult.push(arrAfected[i]);
 							}
 						}
 					}else{
@@ -492,35 +663,35 @@ enyo
 							}
 						}	
 					}
-					this.arrFilter = arrResult;					
 				}
+				return arrResult;
 			},
-			filterByZone:function(zone_id){				
-				if (zone_id > -1){
-					var arrResult = [];
-					if(this.arrFilter.length > 0){
-						for (i in this.arrFilter){
-							if (this.arrFilter[i].zone_id == zone_id){
-								arrResult.push(this.arrFilter[i]);
+			filterByZone:function(zone_id, arrAfected){				
+				var arrResult = [];
+				if (parseInt(zone_id) > -1){
+					if(arrAfected.length > 0){
+						for (i in arrAfected){
+							if (parseInt(arrAfected[i].zone_id) == parseInt(zone_id)){
+								arrResult.push(arrAfected[i]);
 							}
 						}
 					}else{
 						for (i in this.arrActiveReceptions){
-							if (this.arrActiveReceptions[i].zone_id == zone_id){
+							if (parseInt(this.arrActiveReceptions[i].zone_id) == parseInt(zone_id)){
 								arrResult.push(this.arrActiveReceptions[i]);
 							}
 						}	
 					}
-					this.arrFilter = arrResult;					
 				}
+				return arrResult;
 			},
-			filterByOrigin:function(location_id){				
+			filterByOrigin:function(location_id, arrAfected){				
+				var arrResult = [];
 				if (location_id > -1){
-					var arrResult = [];
-					if(this.arrFilter.length > 0){
-						for (i in this.arrFilter){
-							if (this.arrFilter[i].location_id == location_id){
-								arrResult.push(this.arrFilter[i]);
+					if(arrAfected.length > 0){
+						for (i in arrAfected){
+							if (arrAfected[i].location_id == location_id){
+								arrResult.push(arrAfected[i]);
 							}
 						}
 					}else{
@@ -530,16 +701,16 @@ enyo
 							}
 						}	
 					}
-					this.arrFilter = arrResult;					
 				}
+				return arrResult;	
 			},
-			filterByCattle:function(cattype_id){				
+			filterByCattle:function(cattype_id, arrAfected){				
+				var arrResult = [];
 				if (cattype_id > -1){
-					var arrResult = [];
-					if(this.arrFilter.length > 0){
-						for (i in this.arrFilter){
-							if (this.arrFilter[i].cattype_id == cattype_id){
-								arrResult.push(this.arrFilter[i]);
+					if(arrAfected.length > 0){
+						for (i in arrAfected){
+							if (arrAfected[i].cattype_id == cattype_id){
+								arrResult.push(arrAfected[i]);
 							}
 						}
 					}else{
@@ -548,17 +719,17 @@ enyo
 								arrResult.push(this.arrActiveReceptions[i]);
 							}
 						}	
-					}
-					this.arrFilter = arrResult;					
+					}							
 				}
+				return arrResult;
 			},
-			filterByReception:function(reception_id){				
+			filterByReception:function(reception_id, arrAfected){				
+				var arrResult = [];
 				if (reception_id > -1){
-					var arrResult = [];
-					if(this.arrFilter.length > 0){
-						for (i in this.arrFilter){
-							if (this.arrFilter[i].reception_id == reception_id){
-								arrResult.push(this.arrFilter[i]);
+					if(arrAfected.length > 0){
+						for (i in arrAfected){
+							if (arrAfected[i].reception_id == reception_id){
+								arrResult.push(arrAfected[i]);
 							}
 						}
 					}else{
@@ -568,8 +739,8 @@ enyo
 							}
 						}	
 					}
-					this.arrFilter = arrResult;					
 				}
+				return arrResult;
 			},
 			load_combos:function(){
 				this.load_ranchers();
@@ -597,7 +768,7 @@ enyo
 					result.push(arrResult[i]);
 				}
 
-				this.$.rancher.setItems(result);
+				this.$.rancher.setFilter(result);
 			},
 			load_zones:function(){
 				var arrResult = [];
@@ -616,7 +787,7 @@ enyo
 				for(i in arrResult){
 					result.push(arrResult[i]);
 				}
-				this.$.zone.setItems(result);
+				this.$.zone.setFilter(result);
 			},
 			load_origins:function(){
 				var arrResult = [];
@@ -635,7 +806,7 @@ enyo
 				for(i in arrResult){
 					result.push(arrResult[i]);
 				}
-				this.$.origin.setItems(result);
+				this.$.origin.setFilter(result);
 			},
 			load_cattles:function(){
 				var arrResult = [];
@@ -654,32 +825,37 @@ enyo
 				for(i in arrResult){
 					result.push(arrResult[i]);
 				}
-				this.$.cattle_type.setItems(result);
+				this.$.cattle_type.setFilter(result);
 			},
 			load_barnyards:function(){
 				var arrResult = [];
 				var result = [];
-				if(this.arrFilter.length>0){
-					for (i in this.arrFilter){
+				if(this.arrActiveReceptions.length>0){
+					for (i in this.arrActiveReceptions){
 						var auxCaption = "";
-						for(j in this.arrFilter[i].barnyards){
-							auxCaption += this.arrFilter[i].barnyards[j].substring(1) + ", ";
+						for(j in this.arrActiveReceptions[i].barnyards){
+							if (parseInt(this.arrActiveReceptions[i].barnyards[j].substring(1,0)) == parseInt(this.defaultZone)){
+								auxCaption += this.arrActiveReceptions[i].barnyards[j].substring(1) + ", ";	
+							}
 						}
-						auxCaption = auxCaption.slice(0, -2);
-						var obj = {
-								value:		this.arrFilter[i].reception_id,
-								caption:	auxCaption,
-//								barnyards:	this.arrFilter[i].barnyards
-						};						
-						if(!(arrResult[obj.value] in arrResult)){
-							arrResult[obj.value]=obj;	
+						if(auxCaption.length > 0){
+							auxCaption = auxCaption.slice(0, -2);
+							var obj = {
+									value:			this.arrActiveReceptions[i].reception_id,
+									caption:		auxCaption
+//									cattype_id:	this.arrFilter[i].cattype_id,
+//									zone_id:	this.arrFilter[i].zone_id
+							};						
+							if(!(arrResult[obj.value] in arrResult)){
+								arrResult[obj.value]=obj;	
+							}	
 						}
 					}
 				}
 				for(i in arrResult){
 					result.push(arrResult[i]);
 				}
-				this.$.barnyards.setItems(result);
+				this.$.barnyards.setFilter(result);
 			},
 			addRancherSelected:function(rancher_id){
 				if (rancher_id > -1){
@@ -700,45 +876,7 @@ enyo
 					
 					this.arrReceptions.push(objRancherSelected);
 				}
-			},
-			autoCompleteFields:function(){
-				
-				
-				if (this.$.rancher.isWithIndex == false){
-					if(this.arrFilter.length ==1){
-						this.$.rancher.setIndex(this.arrFilter[0].rancher_id);
-						this.$.rancher.isWithIndex = false;
-						this.$.rancher.$.textField.$.input.applyStyle("color", "teal");
-					}
-				}
-				if (this.$.zone.isWithIndex == false){
-					if(this.arrFilter.length ==1){
-						this.$.zone.setIndex(this.arrFilter[0].zone_id);
-						this.$.zone.isWithIndex = false;
-						this.$.zone.$.textField.$.input.applyStyle("color", "teal");
-					}
-				}
-				if (this.$.origin.isWithIndex == false){
-					if(this.arrFilter.length ==1){
-						this.$.origin.setIndex(this.arrFilter[0].location_id);
-						this.$.origin.isWithIndex = false;
-						this.$.origin.$.textField.$.input.applyStyle("color", "teal");
-					}
-				}
-				if (this.$.cattle_type.isWithIndex == false){
-					if(this.arrFilter.length ==1){
-						this.$.cattle_type.setIndex(this.arrFilter[0].cattype_id);
-						this.$.cattle_type.isWithIndex = false;
-						this.$.cattle_type.$.textField.$.input.applyStyle("color", "teal");
-					}
-				}
-				if (this.$.barnyards.getValue().trim()== ""){
-					if(this.arrFilter.length ==1){
-						this.$.barnyards.setIndex(this.arrFilter[0].reception_id);
-					}
-				}
-				
-			},
+			},			
 			selectForecast : function(inSender, inEvent) {
 				if (objFore = this.objList[inEvent.rowIndex]) {
 					this.$.rancher.setIndex(objFore.rancher_id);
@@ -747,9 +885,8 @@ enyo
 					this.$.cattle_type.setIndex(objFore.cattle_type);
 					
 					this.$.cantidad.setValue(objFore.quantity);
-
+					this.$.zone.setIndex(objFore.zone_id);
 					if (objFore.barnyards.length > 0) {
-						this.$.zone.setIndex(objFore.barnyards[0].zone_id);						
 						var strBarnyards = "";
 						for (i in objFore.barnyards) {
 							strBarnyards = strBarnyards
@@ -757,11 +894,11 @@ enyo
 
 						}
 						strBarnyards = strBarnyards.slice(0, -2);
-						this.$.barnyards.setValue(strBarnyards);
+						this.$.barnyards.setText(strBarnyards);
 					} else {
-						this.$.zone.setIndex(-1);
-						this.$.barnyards.setValue("");
+						this.$.barnyards.setText("");
 					}
+					this.$.barnyards.setHighLighted(false);
 					this.iSelected = inEvent.rowIndex;
 					this.totalItems = 0;
 					this.$.forecastList.render();
@@ -786,7 +923,7 @@ enyo
 						}
 					}
 					this.$.listAuth.setContent(objFore.auth);
-					this.$.listOrigin.setContent(objFore.origin);
+					this.$.listOrigin.setContent(cacheMan.getLocationByID(objFore.origin).location_name);
 					this.$.listCattleType.setContent(cacheCattle
 							.getByID(objFore.cattle_type).cattype_name);
 					this.$.listQuantity.setContent(objFore.quantity);
@@ -843,27 +980,6 @@ enyo
 					return false;
 				}
 			},
-			updateList : function() {
-				this._id = undefined;
-				this.totalItems = 0;
-				this.objList = [];
-				var arrAllForecasts = [];
-				this.iSelected = null;
-				this.$.draDel.setOpen(false);
-				this.$.draUpdate.setOpen(false);
-				this.$.draAdd.setOpen(true);
-				this.resetValues();
-				arrAllForecasts = cacheInspFore.get();
-				for (i in arrAllForecasts) {
-					if (arrAllForecasts[i].fore_date == this.fecha) {
-						this._id = arrAllForecasts[i].id;
-						if (arrAllForecasts[i].fore_details_id) {
-							this.objList.push(arrAllForecasts[i]);
-						}
-					}
-				}
-				this.$.forecastList.render();
-			},
 			getSelected : function() {
 				return this.objList[this.iSelected];
 			},
@@ -893,7 +1009,7 @@ enyo
 				objInspFore.origin = this.$.origin.getIndex();
 				objInspFore.quantity = this.$.cantidad.getValue();
 
-				var barnyardsAux = this.$.barnyards.getValue().split(",");
+				var barnyardsAux = this.$.barnyards.getText().split(",");
 				for (i in barnyardsAux) {
 					barnyardsAux[i] = barnyardsAux[i].replace(" ", "");
 					barnyardsAux[i] = this.$.zone.getIndex()
@@ -962,7 +1078,24 @@ enyo
 				}
 			},
 			enviar_aviso: function(){
+
+				if(confirm("¿Desea enviar los avisos ahora?")){
+					// Send communication to customers				
+					var customers_set = [];
+					if(this.objList.length>0){
+						for (i in this.objList){
+							if(!(customers_set[this.objList[i].rancher_id] in customers_set)){
+								customers_set[this.objList[i].rancher_id]=this.objList[i].rancher_id;
+								var report_name = 'ListaInspeccion?rancherId='
+													+ this.objList[i].rancher_id;
+								consumingGateway.SendReport(this.objList[i].rancher_id, report_name);
+							}
+						}
+						alert("El aviso se ha enviado satisfactoriamente.");
+					}else{
+						cacheMan.setMessage("", "Error. No se ha creado la lista de inspección.");
+					}
+				}
 				
 			}
-
 		});

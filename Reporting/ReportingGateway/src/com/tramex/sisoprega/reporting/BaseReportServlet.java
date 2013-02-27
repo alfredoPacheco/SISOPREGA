@@ -129,7 +129,7 @@ public class BaseReportServlet extends HttpServlet {
    */
   protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     try {
-      log.info("Executing GanadoRecibido by [" + request.getUserPrincipal().getName() + "]");
+      log.info("Executing Report by [" + request.getUserPrincipal().getName() + "]");
       processRequest(request, response);
     } catch (ParseException e) {
       log.severe("parameter parse exception");

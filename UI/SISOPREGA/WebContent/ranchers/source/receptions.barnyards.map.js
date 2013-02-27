@@ -257,7 +257,7 @@ enyo.kind(
       var sColor;
       for ( var i = 0; i < iNumber; i++) {
         var iOccupied;
-        if (cacheBY.isOccupied(sLetter + iStart)) {
+        if (cacheBY.isOccupied(sLetter + Math.abs(iStart))) {
           iOccupied = 1;
           sColor = this.sColorOccupied;
         } else {
@@ -269,7 +269,7 @@ enyo.kind(
             kind : enyo.Control,
             classes : "byCell",
             style : "width:" + sWidth + ";height:" + sHeight + ";align:left" + ";background-color:" + sColor + ";",
-            name : sLetter + iStart,
+            name : sLetter + Math.abs(iStart),
             bBY : true,
             occupied : iOccupied,
             content : sLetter.substr(1) + Math.abs(iStart),

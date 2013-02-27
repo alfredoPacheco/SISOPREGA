@@ -44,7 +44,8 @@ import com.tramex.sisoprega.communication.sms.SmsProvider;
  * MM/DD/YYYY
  * ----------  ---------------------------  -------------------------------------------
  *             Alan del Rio                 Initial Version.
- * 01/26/2013  Diego Torres                 Implement as EJB.            
+ * 01/26/2013  Diego Torres                 Implement as EJB.           
+ * 02/25/2013  Alfredo Pacheco & Diego T.   Cutting msg to 160 characters max 
  * ====================================================================================
  * </PRE>
  * 
@@ -73,11 +74,17 @@ public class MasMensajesProvider implements SmsProvider {
     final String sRequest;
     final URL url;
     try {
+    	
+	  if(sms.getMsg().length() > 160){
+		  sms.setMsg(sms.getMsg().substring(0, 157));
+		  sms.setMsg(sms.getMsg() + "...");
+	  }
       sRequest = String.format(REQUEST, API_URL, this.userID, this.passWord, sms.getTo(),URLEncoder.encode(sms.getMsg(), "UTF-8"));
       url = new URL(sRequest);
       HttpURLConnection conn = (HttpURLConnection) url.openConnection();
       conn.setRequestMethod(REQUEST_GET);
       conn.connect();
+      
       this.setResponse(conn);
       conn.disconnect();
     } catch (MalformedURLException e) {

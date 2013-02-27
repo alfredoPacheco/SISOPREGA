@@ -200,8 +200,8 @@
 .byCell{
 	border-color:black;
 	border-width: 1px;
-	border-style: dashed;
-	font-weight: bold;
+	border-style: solid;
+	/*font-weight: bold;*/
 	box-sizing: border-box;	
 }
 .woodBG{
