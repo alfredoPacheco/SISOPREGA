@@ -39,7 +39,7 @@ public class InspectionForecastDetail {
   private long rancherId;
   private long zoneId;
   private String auth;
-  private String origin;
+  private long origin;
   private long cattleType;
   private long quantity;
   /**
@@ -108,13 +108,13 @@ public class InspectionForecastDetail {
   /**
    * @return the origin
    */
-  public String getOrigin() {
+  public long getOrigin() {
     return origin;
   }
   /**
    * @param origin the origin to set
    */
-  public void setOrigin(String origin) {
+  public void setOrigin(long origin) {
     this.origin = origin;
   }
   /**

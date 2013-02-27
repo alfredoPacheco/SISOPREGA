@@ -22,13 +22,14 @@
      cat_zone."zone_name" AS cat_zone_zone_name,
      ctrl_inspection_forecast."forecast_date" AS ctrl_inspection_forecast_forecast_date,
      cat_cattle_type."cattype_name" AS cat_cattle_type_cattype_name,
-     ctrl_inspection_forecast_detail."origin" AS ctrl_inspection_forecast_detail_origin
+     cat_location."location_name" AS cat_location_location_name
 FROM
      "public"."ctrl_inspection_forecast_detail" ctrl_inspection_forecast_detail INNER JOIN "public"."vw_rancher" vw_rancher ON ctrl_inspection_forecast_detail."rancher_id" = vw_rancher."rancher_id"
      INNER JOIN "public"."ctrl_inspection_forecast" ctrl_inspection_forecast ON ctrl_inspection_forecast_detail."forecast_id" = ctrl_inspection_forecast."id"
      INNER JOIN "public"."cat_cattle_type" cat_cattle_type ON ctrl_inspection_forecast_detail."cattle_type" = cat_cattle_type."cattype_id"
      INNER JOIN "public"."ctrl_inspection_forecast_barnyard" ctrl_inspection_forecast_barnyard ON ctrl_inspection_forecast_detail."id" = ctrl_inspection_forecast_barnyard."detail_id"
      INNER JOIN "public"."cat_zone" cat_zone ON ctrl_inspection_forecast_detail."zone_id" = cat_zone."zone_id"
+     INNER JOIN "public"."cat_location" cat_location ON ctrl_inspection_forecast_detail."origin" = cat_location."location_id"
      INNER JOIN "public"."cat_barnyard" cat_barnyard ON ctrl_inspection_forecast_barnyard."barnyard_id" = cat_barnyard."barnyard_id"
 WHERE
      ctrl_inspection_forecast."forecast_date" >= CURRENT_DATE
@@ -39,7 +40,7 @@ GROUP BY
      cat_zone_zone_name,
      ctrl_inspection_forecast_forecast_date,
      cat_cattle_type_cattype_name,
-     ctrl_inspection_forecast_detail_origin
+     cat_location_location_name
 ORDER BY
      vw_rancher."rancher_name" ASC]]>
 	</queryString>
@@ -50,7 +51,7 @@ ORDER BY
 	<field name="cat_zone_zone_name" class="java.lang.String"/>
 	<field name="ctrl_inspection_forecast_forecast_date" class="java.sql.Date"/>
 	<field name="cat_cattle_type_cattype_name" class="java.lang.String"/>
-	<field name="ctrl_inspection_forecast_detail_origin" class="java.lang.String"/>
+	<field name="cat_location_location_name" class="java.lang.String"/>
 	<variable name="ctrl_inspection_forecast_detail_quantity_1" class="java.lang.Integer" resetType="Group" resetGroup="Fecha" calculation="Sum">
 		<variableExpression><![CDATA[$F{ctrl_inspection_forecast_detail_quantity}]]></variableExpression>
 	</variable>
@@ -75,11 +76,6 @@ ORDER BY
 					<text><![CDATA[Autorización]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="3b8922f5-b102-4fb0-b2dc-12749502565f" style="Column header" x="273" y="0" width="100" height="15" forecolor="#3D2201"/>
-					<textElement textAlignment="Center"/>
-					<text><![CDATA[Origen]]></text>
-				</staticText>
-				<staticText>
 					<reportElement uuid="3b8922f5-b102-4fb0-b2dc-12749502565f" style="Column header" x="378" y="0" width="50" height="15" forecolor="#3D2201"/>
 					<textElement textAlignment="Center"/>
 					<text><![CDATA[Clase]]></text>
@@ -90,12 +86,12 @@ ORDER BY
 					<text><![CDATA[Cantidad]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="3b8922f5-b102-4fb0-b2dc-12749502565f" style="Column header" x="499" y="0" width="61" height="15" forecolor="#3D2201"/>
+					<reportElement uuid="3b8922f5-b102-4fb0-b2dc-12749502565f" style="Column header" x="273" y="1" width="98" height="15" forecolor="#3D2201"/>
 					<textElement textAlignment="Center"/>
 					<text><![CDATA[Localidad]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="3b8922f5-b102-4fb0-b2dc-12749502565f" style="Column header" x="565" y="0" width="61" height="15" forecolor="#3D2201"/>
+					<reportElement uuid="3b8922f5-b102-4fb0-b2dc-12749502565f" style="Column header" x="621" y="0" width="61" height="15" forecolor="#3D2201"/>
 					<textElement textAlignment="Center"/>
 					<text><![CDATA[Corrales]]></text>
 				</staticText>
@@ -105,6 +101,11 @@ ORDER BY
 						<pen lineWidth="0.5" lineColor="#999999"/>
 					</graphicElement>
 				</line>
+				<staticText>
+					<reportElement uuid="3b8922f5-b102-4fb0-b2dc-12749502565f" style="Column header" x="499" y="1" width="112" height="15" forecolor="#3D2201"/>
+					<textElement textAlignment="Center"/>
+					<text><![CDATA[Origen]]></text>
+				</staticText>
 			</band>
 		</groupHeader>
 		<groupFooter>
@@ -200,7 +201,7 @@ ORDER BY
 				<textFieldExpression><![CDATA[$F{cat_zone_zone_name}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="d0817597-821c-4fcf-8c37-67205284d134" x="565" y="0" width="61" height="14"/>
+				<reportElement uuid="d0817597-821c-4fcf-8c37-67205284d134" x="621" y="0" width="61" height="14"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{barnyards}]]></textFieldExpression>
 			</textField>
@@ -217,9 +218,9 @@ ORDER BY
 				<textFieldExpression><![CDATA[$F{vw_rancher_rancher_name}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="1c8a303d-49f0-415b-8dd9-a4ec237eebfc" x="499" y="0" width="61" height="14"/>
-				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA[$F{ctrl_inspection_forecast_detail_origin}]]></textFieldExpression>
+				<reportElement uuid="2804906e-c3b5-4d5c-8500-5ccd702246c3" x="499" y="0" width="112" height="14"/>
+				<textElement textAlignment="Center" verticalAlignment="Top"/>
+				<textFieldExpression><![CDATA[$F{cat_location_location_name}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
