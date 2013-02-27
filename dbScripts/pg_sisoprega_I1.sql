@@ -1,6 +1,6 @@
 /*
  * The database script is executed in mysql command line:
- * \. /path/to/sisoprega_I1.sql
+ * psql -d sisoprega -f /path/to/deploy/pg_sisoprega_I1.sql
  *
  * This script is intended to create only the necesary structure to accomplish iteration 1.
  * 
@@ -566,7 +566,8 @@ CREATE TABLE ctrl_inspection_forecast_detail(
 	auth varchar(10),
 	origin varchar(20),
 	cattle_type integer NOT NULL REFERENCES cat_cattle_type(cattype_id),
-	quantity integer not null
+	quantity integer not null,
+	UNIQUE (forecast_id, rancher_id, zone_id, auth, origin, cattle_type, quantity)
 );
 
 GRANT ALL ON ctrl_inspection_forecast_detail TO sisoprega;

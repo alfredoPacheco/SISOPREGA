@@ -113,8 +113,14 @@ public class Inspection extends BaseReportServlet {
       }
       
       PrintWriter out = response.getWriter();
-	  out.println("Reporte de Rechazos: ");
-	  out.println(sDetails);
+	  
+	  if(sDetails.toString().trim().length() > 0){
+		  out.println("Reporte de Rechazos: ");
+		  out.println(sDetails);}
+	  else{
+		  out.println("Su ganado a cruzado exitosamente sin rechazos.");
+	  }
+		  
 	  out.close();
     } catch (SQLException e) {
       log.severe("SQLException while reading receptions");

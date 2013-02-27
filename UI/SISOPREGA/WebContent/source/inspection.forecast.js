@@ -885,9 +885,8 @@ enyo
 					this.$.cattle_type.setIndex(objFore.cattle_type);
 					
 					this.$.cantidad.setValue(objFore.quantity);
-
+					this.$.zone.setIndex(objFore.zone_id);
 					if (objFore.barnyards.length > 0) {
-						this.$.zone.setIndex(objFore.barnyards[0].zone_id);						
 						var strBarnyards = "";
 						for (i in objFore.barnyards) {
 							strBarnyards = strBarnyards
@@ -897,9 +896,9 @@ enyo
 						strBarnyards = strBarnyards.slice(0, -2);
 						this.$.barnyards.setText(strBarnyards);
 					} else {
-						this.$.zone.setIndex(-1);
 						this.$.barnyards.setText("");
 					}
+					this.$.barnyards.setHighLighted(false);
 					this.iSelected = inEvent.rowIndex;
 					this.totalItems = 0;
 					this.$.forecastList.render();
@@ -1079,11 +1078,24 @@ enyo
 				}
 			},
 			enviar_aviso: function(){
-				// Send communication to customers
-				for(i in this.objList){
-					var report_name = 'ListaInspeccion?rancherId='
-						+ this.objList[i].rancher_id;
-					consumingGateway.SendReport(this.objList[i].rancher_id, report_name);
+
+				if(confirm("¿Desea enviar los avisos ahora?")){
+					// Send communication to customers				
+					var customers_set = [];
+					if(this.objList.length>0){
+						for (i in this.objList){
+							if(!(customers_set[this.objList[i].rancher_id] in customers_set)){
+								customers_set[this.objList[i].rancher_id]=this.objList[i].rancher_id;
+								var report_name = 'ListaInspeccion?rancherId='
+													+ this.objList[i].rancher_id;
+								consumingGateway.SendReport(this.objList[i].rancher_id, report_name);
+							}
+						}
+						alert("El aviso se ha enviado satisfactoriamente.");
+					}else{
+						cacheMan.setMessage("", "Error. No se ha creado la lista de inspección.");
+					}
 				}
+				
 			}
 		});

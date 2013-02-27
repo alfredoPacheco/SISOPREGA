@@ -59,7 +59,7 @@ enyo.kind(
                             hint : "Usuario",
                             selectAllOnFocus : true,
                             onkeydown : "key_down",
-                            value : "admin",
+                            value : "",
                             onfocus : "on_focus",
                             onblur : "lost_focus"
                           },
@@ -69,7 +69,7 @@ enyo.kind(
                             hint : "Contraseña",
                             selectAllOnFocus : true,
                             onkeydown : "key_down",
-                            value : "admin",
+                            value : "",
                             onfocus : "on_focus",
                             onblur : "lost_focus"
                           } ]

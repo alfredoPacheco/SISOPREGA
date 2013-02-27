@@ -93,12 +93,13 @@ public class Pesage extends BaseReportServlet {
 
         PrintWriter out = response.getWriter();
 
+        String sKilos = rounded2Decs(rs.getDouble("kilos"));
         String sLibras = rounded2Decs(rs.getDouble("libras"));
         String sPKilos = rounded2Decs(rs.getDouble("pkilos"));
         String sPLibras = rounded2Decs(rs.getDouble("plibras"));
 
         out.println("Ganado Recibido: " + rs.getLong("cabezas") + " cabezas de " + rs.getString("ganado") + ", "
-            + rs.getDouble("kilos") + " kg. (" + sLibras + " lbs.). Prom por Kg.: " + sPKilos + "; Prom por Lb.: " + sPLibras
+            + sKilos + " kg. (" + sLibras + " lbs.). Prom por Kg.: " + sPKilos + "; Prom por Lb.: " + sPLibras
             + ". Corrales: " + rs.getString("corrales") + ".");
 
         out.close();
@@ -128,7 +129,14 @@ public class Pesage extends BaseReportServlet {
   private String rounded2Decs(double amount) {
     
     String sAmount = String.valueOf(amount);
-    return sAmount.substring(0, sAmount.indexOf(".") + 3);
+    Integer index = sAmount.indexOf(".");
+   
+    if(index > -1 && index < sAmount.length()-2){
+    	sAmount = sAmount.substring(0, sAmount.indexOf(".") + 3);
+    }
+ 
+    return sAmount;
+    
     
   }
 }

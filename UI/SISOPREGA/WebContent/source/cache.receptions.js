@@ -295,9 +295,7 @@ enyo
 								+ cgReadAll.exceptionDescription);
 					}
 				}
-
 				return arrAux;
-
 			},
 			getReceptionHeadcount : function(recID) {
 				var arrAux = [];

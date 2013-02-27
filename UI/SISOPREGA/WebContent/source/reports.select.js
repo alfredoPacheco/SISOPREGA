@@ -17,8 +17,8 @@ enyo.kind({
 		 components: [			
 			{kind: "Spacer"},
 			{kind: "Button", className: "enyo-button-option", caption: "Ganado Recibido", onclick:"doReceptions"},
-			{kind: "Button", className: "enyo-button-option", caption: "Ganado en corrales", onclick:"doActiveReceptions"},
-			{kind: "Button", className: "enyo-button-option", caption: "Ganado Inspecionado", onclick:"doInspections"},
+			{kind: "Button", className: "enyo-button-option", caption: "Ganado en Corrales", onclick:"doActiveReceptions"},
+			{kind: "Button", className: "enyo-button-option", caption: "Ganado Inspeccionado", onclick:"doInspections"},
 			{kind: "Button", className: "enyo-button-option", caption: "Reporte de Alimento", onclick:"doFeed"},
 			{kind: "Spacer"}]}
 	]

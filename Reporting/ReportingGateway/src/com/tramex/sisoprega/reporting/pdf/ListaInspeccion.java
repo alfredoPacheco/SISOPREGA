@@ -26,7 +26,7 @@ public class ListaInspeccion extends BaseReportServlet {
   @Override
   protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException,
       ParseException, JRException {
-    String reportURL = "WEB-INF/Reports/Tramex/ListaInspeccion.jasper";
+    String reportURL = "WEB-INF/Reports/Ranchers/ListaInspeccion.jasper";
     processRequest(reportURL, null, response);
   }
 
