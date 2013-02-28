@@ -13,7 +13,8 @@ enyo.kind({
 			onReceptions : "showReceptions",
 			onInspections : "showInspections",
 			onFeed : "showFeed",
-			onActiveReceptions:"showActiveReceptions"
+			onActiveReceptions:"showActiveReceptions",
+			onInspectionForecast : "showInspectionForecast"
 		}, {
 			kind : "reports.filter",
 			name : "filter",
@@ -40,6 +41,9 @@ enyo.kind({
 	},
 	showFeed : function() {
 		this.showGenericReport('feed', 'Reporte de Alimento', 'filter');
+	},
+	showInspectionForecast : function(){
+	  this.showGenericReport('inspectionForecast', 'Listas de Inspección', 'filterByDate');
 	},
 	showGenericReport : function(reportName, title, viewName) {
 		this.reportName = reportName;
@@ -70,6 +74,14 @@ enyo.kind({
 //			window.focus();
 			this.$.mainPane.selectViewByName("reportViewer");
 			this.$.reportViewer.showReport('/ReportingGateway/ReporteAlimento?fromDate='+ parameters.start_date+'&toDate='+ parameters.end_date +'&rancherId='+parameters.rancher_id);
+		}
+
+		if(this.reportName == 'inspectionForecast'){
+		  var parameters = this.$.filterByDate.getParams();
+//          window.open('/ReportingGateway/ListaInspeccionHistorica?fromDate='+ parameters.start_date+'&toDate='+ parameters.end_date,'_blank');
+//          window.focus();
+          	this.$.mainPane.selectViewByName("reportViewer");
+			this.$.reportViewer.showReport('/ReportingGateway/ListaInspeccionHistorica?fromDate='+ parameters.start_date+'&toDate='+ parameters.end_date);
 		}
 //		cacheMan.goBack();
 	},

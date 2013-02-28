@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ListaInspeccion" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ede80ead-e69f-4f07-9be0-9d5476cede16">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ListaInspeccionHistorica" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ede80ead-e69f-4f07-9be0-9d5476cede16">
 	<property name="ireport.zoom" value="1.0"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.x" value="14"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" fontName="Times New Roman" fontSize="50" isBold="true" pdfFontName="Times-Bold"/>
 	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
@@ -13,6 +13,8 @@
 			<style backcolor="#E6DAC3"/>
 		</conditionalStyle>
 	</style>
+	<parameter name="CUS_FROM_DATE" class="java.util.Date"/>
+	<parameter name="CUS_TO_DATE" class="java.util.Date"/>
 	<queryString>
 		<![CDATA[SELECT
      array_to_string(array_agg(cat_barnyard."barnyard_code"),',') AS barnyards,
@@ -32,7 +34,8 @@ FROM
      INNER JOIN "public"."cat_location" cat_location ON ctrl_inspection_forecast_detail."origin" = cat_location."location_id"
      INNER JOIN "public"."cat_barnyard" cat_barnyard ON ctrl_inspection_forecast_barnyard."barnyard_id" = cat_barnyard."barnyard_id"
 WHERE
-     ctrl_inspection_forecast."forecast_date" >= CURRENT_DATE
+     ctrl_inspection_forecast."forecast_date" >=$P{CUS_FROM_DATE}
+ AND ctrl_inspection_forecast."forecast_date" <= $P{CUS_TO_DATE}
 GROUP BY
      ctrl_inspection_forecast_detail_auth,
      vw_rancher_rancher_name,
@@ -74,7 +77,7 @@ ORDER BY
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="70" splitType="Stretch">
+		<band height="92" splitType="Stretch">
 			<staticText>
 				<reportElement uuid="4f1347ea-bc46-43a9-b79a-3d0c0dc4a5ed" style="Title" x="268" y="0" width="261" height="23"/>
 				<textElement textAlignment="Center" verticalAlignment="Top">
@@ -104,7 +107,7 @@ ORDER BY
 				<text><![CDATA[Contrato - Concesión de la secretaria de agricultura y Ganadería Orden de Inspección veterinaria]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="3b8922f5-b102-4fb0-b2dc-12749502565f" style="Column header" x="499" y="41" width="183" height="26" forecolor="#000000"/>
+				<reportElement uuid="3b8922f5-b102-4fb0-b2dc-12749502565f" style="Column header" x="499" y="63" width="183" height="26" forecolor="#000000"/>
 				<textElement textAlignment="Center" verticalAlignment="Bottom">
 					<font size="12" isUnderline="true"/>
 				</textElement>
@@ -121,6 +124,34 @@ ORDER BY
 				<reportElement uuid="858a6878-7613-41fe-973b-ca077ccbea3d" x="701" y="5" width="100" height="20"/>
 				<textElement verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format($F{ctrl_inspection_forecast_forecast_date})]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="e0869986-31da-4a47-972a-0099a6d37090" x="97" y="71" width="28" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="11" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[DEL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="e0869986-31da-4a47-972a-0099a6d37090" x="245" y="71" width="28" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="11" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Al]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="27ded5d7-5884-4119-8a06-c5576c535fe9" x="125" y="71" width="100" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true" isUnderline="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format($F{ctrl_inspection_forecast_forecast_date})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="00128bb0-cd70-4775-b959-ada4de2f26ee" x="274" y="71" width="100" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true" isUnderline="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format($F{ctrl_inspection_forecast_forecast_date})]]></textFieldExpression>
 			</textField>
@@ -180,6 +211,9 @@ ORDER BY
 				</textElement>
 				<text><![CDATA[Ganadero]]></text>
 			</staticText>
+			<line>
+				<reportElement uuid="472c40fb-2b1e-46b2-8c08-a6e68e23a101" x="0" y="1" width="802" height="1"/>
+			</line>
 		</band>
 	</columnHeader>
 	<detail>
