@@ -518,6 +518,7 @@ enyo.kind({
 		this.objSelected.occupied=0;
 		this.objSelected.applyStyle("background-color",this.sColorFree);
 		delete this.arrSelectedOccupied[this.objSelected.name];
+
 		this.$[this.objSelected.name].removeClass("selectCell");
 		for(i in this.arrBYbyRancherSelected){
 			var activeBY = "" + this.arrBYbyRancherSelected[i].zone_id + this.arrBYbyRancherSelected[i].barnyard_code;
