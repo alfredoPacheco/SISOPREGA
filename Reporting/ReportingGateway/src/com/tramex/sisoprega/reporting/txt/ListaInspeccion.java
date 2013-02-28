@@ -94,7 +94,7 @@ public class ListaInspeccion extends BaseReportServlet {
       } else {
         PrintWriter out = response.getWriter();
         String cadenaFinal = "Lista de cruce en UGRCH:" + registros;
-        cadenaFinal=cadenaFinal.substring(0, cadenaFinal.length()-3);
+        cadenaFinal=cadenaFinal.substring(0, cadenaFinal.length()-2);
         out.println(cadenaFinal);
         out.close();
       }
