@@ -66,19 +66,16 @@ enyo.kind({
 		this.$.main.setIndex(2);		
 	},
 	loadFeedReport:function(){
-		//alert('TODO:Feed')
 		this.reportID=1;
 		this.getParams();
 	},
 	loadInspectionReport:function(){
 		this.reportID=2;
 		this.getParams();		
-		//alert('TODO:Inspection')	
 	},
 	loadHistoricalReport:function(){
 		this.reportID=3;
 		this.getParams();		
-		//alert('TODO:Historical')		
 	},		
 	stepBack:function(){
 		this.$.main.setIndex(1);			
@@ -92,25 +89,25 @@ enyo.kind({
 		var sTitle="";
 			
 		var dFrom=this.$.dFrom.getValue();
-		var sFrom=dFrom.getDate()+"/"+(dFrom.getMonth()+1)+"/"+dFrom.getFullYear();
+		var sFrom=(dFrom.getMonth()+1)+"/"+dFrom.getDate()+"/"+dFrom.getFullYear();
 		var dTo=this.$.dTo.getValue();
-		var sTo=dTo.getDate()+"/"+(dTo.getMonth()+1)+"/"+dTo.getFullYear();
+		var sTo=(dTo.getMonth()+1)+"/"+dTo.getDate()+"/"+dTo.getFullYear();
 		
 		switch(this.reportID){
 			//Alimentacion
 			case 1:
 				sTitle="feed";
-				sURL="/ReportingGateway/ReporteAlimento?fromDate="+sFrom+"&toDate="+sTo+"&rancherId=692";				
+				sURL="/ReportingGateway/ReporteAlimento?fromDate="+sFrom+"&toDate="+sTo;				
 				break;
 			//Inspeccion
 			case 2:
 				sTitle="inspection";			
-				sURL="/ReportingGateway/CattleInspection?fromDate="+sFrom+"&toDate="+sTo+"&rancherId=692";				
+				sURL="/ReportingGateway/InspeccionGanado?fromDate="+sFrom+"&toDate="+sTo;				
 				break;
 			//Recepcion
 			case 3:
 				sTitle="reception";
-				sURL="/ReportingGateway/RecibidoPorGanadero?fromDate="+sFrom+"&toDate="+sTo+"&rancherId=692";				
+				sURL="/ReportingGateway/RecibidoPorGanadero?fromDate="+sFrom+"&toDate="+sTo;				
 				break;				
 		}
 		window.open(sURL,sTitle);

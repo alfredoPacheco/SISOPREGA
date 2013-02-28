@@ -6,7 +6,8 @@ enyo.kind({
 		onReceptions : "",
 		onInspections : "",
 		onFeed: "",
-		onActiveReceptions : ""
+		onActiveReceptions : "",
+		onInspectionForecast : ""
 	},	
 	className:"buttonsBG",
 	components: [
@@ -20,6 +21,7 @@ enyo.kind({
 			{kind: "Button", className: "enyo-button-option", caption: "Ganado en Corrales", onclick:"doActiveReceptions"},
 			{kind: "Button", className: "enyo-button-option", caption: "Ganado Inspeccionado", onclick:"doInspections"},
 			{kind: "Button", className: "enyo-button-option", caption: "Reporte de Alimento", onclick:"doFeed"},
+			{kind: "Button", className: "enyo-button-option", caption: "Listas de inspección", onclick:"doInspectionForecast"},
 			{kind: "Spacer"}]}
 	]
 });
