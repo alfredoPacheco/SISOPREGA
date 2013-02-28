@@ -39,6 +39,7 @@ enyo.kind(
                                             {caption: "Lista de Inspección", onclick: "open_view"},
                                             {caption: "Usuarios", onclick: "open_view"},
                                             {caption: "Carga de Pedimento", onclick: "open_view"}
+//                                            {caption: "Ver reporte embebido", onclick: "open_view"}
                                         ]},
               {
                 name : 'btnGoBack',
@@ -102,7 +103,8 @@ enyo.kind(
               {kind:"inspections.main.fs", name:"inspectionForecast", lazy:true},
               {kind:"users.list", name:"usersList", onAddUser:"showAddUser", onSelectUser:"showEditUser", lazy:true },
               {kind:"users.create", name:"addUser", lazy:true},
-              {kind:"file.uploader", name:"fileUploader",lazy:true}
+              {kind:"file.uploader", name:"fileUploader",lazy:true},
+              {kind:"report.viewer", name:"report_viewer",lazy:false}
   			]
         },
         {
@@ -129,6 +131,9 @@ enyo.kind(
       cacheMan.setGlobalScrim(this.$.scrimMain);
       cacheMan.setGlobalLabel(this.$.lblMainCap);
       _objMainHeader = this.$.lblMainCap;
+      reportViewer = this.$.report_viewer;
+     
+      
     },
     goBack : function() {
       cacheMan.goBack();
@@ -199,6 +204,12 @@ enyo.kind(
     		_objMainHeader.setContent('Cargar Pedimento');
   	      	this.$.mainPane.selectViewByName("fileUploader");
   	      	break;
+//    	case 'Ver reporte embebido':
+//    		this.addGoBackAction();
+//    		_objMainHeader.setContent('Report Viewer');
+//    		this.$.mainPane.selectViewByName("reportViewer");
+//  	      	this.$.reportViewer.showReport();
+//  	      	break;
     	}
     	enyo.$.sisoprega_btnGoBack.setShowing(1);
     },
@@ -227,3 +238,5 @@ enyo.kind(
 		}
 	}
   });
+
+//reportViewer = null;

@@ -22,10 +22,15 @@ enyo.kind({
 			kind : "reports.filter.by_date",
 			name : "filterByDate",
 			onGetReport : "showReportsResults"
-		}]
+		},{kind:"report.viewer", name:"reportViewer",lazy:false}]
 	}, ],
 	showActiveReceptions : function(){
-	  window.open('/ReportingGateway/GanadoActivoCorrales','_blank');
+//	  window.open('/ReportingGateway/GanadoActivoCorrales','_blank');
+		
+//		reportViewer.openReport('/ReportingGateway/GanadoActivoCorrales');
+		this.$.mainPane.selectViewByName("reportViewer");
+    	this.$.reportViewer.showReport('/ReportingGateway/GanadoActivoCorrales');
+    	this.addGoBackAction();
 	},
 	showReceptions : function() {
 		this.showGenericReport('reception', 'Reporte de Recepciones', 'filterByDate');
@@ -47,26 +52,41 @@ enyo.kind({
 		
 		if (this.reportName == 'reception'){
 			var parameters = this.$.filterByDate.getParams();
-			window.open('/ReportingGateway/GanadoRecibido?fromDate='+ parameters.start_date+'&toDate='+ parameters.end_date,'_blank');
-			window.focus();
+//			window.open('/ReportingGateway/GanadoRecibido?fromDate='+ parameters.start_date+'&toDate='+ parameters.end_date,'_blank');
+//			window.focus();
+			this.$.mainPane.selectViewByName("reportViewer");
+			this.$.reportViewer.showReport('/ReportingGateway/GanadoRecibido?fromDate='+ parameters.start_date+'&toDate='+ parameters.end_date);
 		}
 		if (this.reportName == 'inspection'){
 			var parameters = this.$.filter.getParams();
-			window.open('/ReportingGateway/InspeccionGanado?fromDate='+ parameters.start_date+'&toDate='+ parameters.end_date +'&rancherId='+parameters.rancher_id, '_blank');
-			window.focus();
+//			window.open('/ReportingGateway/InspeccionGanado?fromDate='+ parameters.start_date+'&toDate='+ parameters.end_date +'&rancherId='+parameters.rancher_id, '_blank');
+//			window.focus();
+			this.$.mainPane.selectViewByName("reportViewer");
+			this.$.reportViewer.showReport('/ReportingGateway/InspeccionGanado?fromDate='+ parameters.start_date+'&toDate='+ parameters.end_date +'&rancherId='+parameters.rancher_id);
 		}
 		if (this.reportName == 'feed'){
 			var parameters = this.$.filter.getParams();
-			window.open('/ReportingGateway/ReporteAlimento?fromDate='+ parameters.start_date+'&toDate='+ parameters.end_date +'&rancherId='+parameters.rancher_id,'_blank');
-			window.focus();
+//			window.open('/ReportingGateway/ReporteAlimento?fromDate='+ parameters.start_date+'&toDate='+ parameters.end_date +'&rancherId='+parameters.rancher_id,'_blank');
+//			window.focus();
+			this.$.mainPane.selectViewByName("reportViewer");
+			this.$.reportViewer.showReport('/ReportingGateway/ReporteAlimento?fromDate='+ parameters.start_date+'&toDate='+ parameters.end_date +'&rancherId='+parameters.rancher_id);
 		}
-		cacheMan.goBack();
+//		cacheMan.goBack();
 	},
 	addGoBackAction : function() {
 		_gobackStack.push({
 			caption : "Reportes",
 			paneMan : this.$.mainPane,
-			paneName : "selection"
+			paneName : this.$.mainPane.getViewName(), //"selection",
+//			cbObj:		this,
+//			cbMethod:  "whenBack"
 		});
-	}
+	},
+//	addGoBackAction : function() {
+//		_gobackStack.push({
+//			caption : "Reportes",
+//			paneMan : this.$.mainPane,
+//			paneName : "selection"
+//		});
+//	}
 });
