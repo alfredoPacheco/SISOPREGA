@@ -168,7 +168,7 @@ public class Messenger implements Messageable {
 
   private boolean sendSimpleEmail(String to, String message) {
     String from = "tramex@sisoprega.com";
-    String title = "Mensaje simple desde TRAMEX.";
+    String title = "Mensaje de Eastmann Livestock.";
     
     if(to.equals(""))
       return false;

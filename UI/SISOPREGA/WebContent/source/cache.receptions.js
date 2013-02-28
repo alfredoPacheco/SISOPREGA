@@ -1068,8 +1068,9 @@ enyo
 				var arrResult = [];
 				var result = [];
 				var arrReceptions = this.get();
-				if(arrReceptions.length>0){
-					for (i in arrReceptions){
+				
+				for (i in arrReceptions){
+					for(j in arrReceptions[i].barnyards){
 						var obj = {
 								value:		arrReceptions[i].rancher_id,
 								caption:	arrReceptions[i].rancher_name
@@ -1079,6 +1080,7 @@ enyo
 						}
 					}
 				}
+				
 				
 				for(i in arrResult){
 					result.push(arrResult[i]);
