@@ -131,6 +131,7 @@ public class ReceptionBean extends BaseBean implements Cruddable {
       String queryName = "";
       
       if(ejbContext.isCallerInRole("rancher")){
+        log.fine("Retrieving receptions from rancher user [" + getLoggedUser() + "]");
         log.exiting(this.getClass().getCanonicalName(), "Read");
         return readLoggedRancherReceptions(request.getEntityName());
       } else if (reception.getReceptionId() != 0) {
@@ -268,11 +269,13 @@ public class ReceptionBean extends BaseBean implements Cruddable {
 
     if (!ranchers.isEmpty()) {
       RancherUser loggedRancher = ranchers.get(0);
+      log.fine("Rancher found with id:[" + loggedRancher.getRancherId() + "]");
 
       List<Reception> queryResults = loggedRancher.getReceptions();
       if (queryResults.isEmpty()) {
         response.setError(new Error("VAL02", "No se encontraron datos para el filtro seleccionado", "proxy.Reception.Read"));
       } else {
+        log.fine("Found [" + queryResults.size() + "] receptions from rancher [" + loggedRancher.getRancherId() + "]");
         response.getRecord().addAll(contentFromList(queryResults, Reception.class));
 
         response.setError(new Error("0", "SUCCESS", "proxy.Reception.Read"));
