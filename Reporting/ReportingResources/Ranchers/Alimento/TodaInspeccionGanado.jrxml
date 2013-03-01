@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="TodaInspeccionGanado" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="8ce1224d-f511-485b-9e76-7dc49ae8f006">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="InspeccionGanado" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="8ce1224d-f511-485b-9e76-7dc49ae8f006">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
@@ -17,7 +17,7 @@
 	<parameter name="CUS_TO_DATE" class="java.util.Date"/>
 	<queryString>
 		<![CDATA[SELECT
-      SUM(ctrl_inspection_result."hc") AS Rechazos,
+      coalesce(SUM(ctrl_inspection_result."hc"), 0) AS Rechazos,
      vw_rancher."rancher_id",
      vw_rancher."rancher_name" AS vw_rancher_rancher_name,
      ctrl_inspection_result."note" AS ctrl_inspection_result_note,
@@ -30,7 +30,7 @@ FROM
      INNER JOIN "public"."ctrl_inspection" ctrl_inspection ON ctrl_reception."reception_id" = ctrl_inspection."reception_id"
      INNER JOIN "public"."ctrl_reception_headcount" ctrl_reception_headcount ON ctrl_reception."reception_id" = ctrl_reception_headcount."reception_id"
      INNER JOIN "public"."vw_rancher" vw_rancher ON ctrl_reception."rancher_id" = vw_rancher."rancher_id"
-     INNER JOIN "public"."ctrl_inspection_result" ctrl_inspection_result ON ctrl_inspection."inspection_id" = ctrl_inspection_result."inspection_id"
+     LEFT JOIN "public"."ctrl_inspection_result" ctrl_inspection_result ON ctrl_inspection."inspection_id" = ctrl_inspection_result."inspection_id"
 WHERE
      ctrl_inspection."inspection_date" >= $P{CUS_FROM_DATE}
  AND ctrl_inspection."inspection_date" <= $P{CUS_TO_DATE}
@@ -60,6 +60,18 @@ ORDER BY
 	<variable name="rechazos_2" class="java.lang.Long" resetType="Group" resetGroup="Grupo por Ranchero" calculation="Sum">
 		<variableExpression><![CDATA[$F{rechazos}]]></variableExpression>
 	</variable>
+	<variable name="totalcabezas_1" class="java.lang.Integer" resetType="Group" resetGroup="Grupo por Ranchero" calculation="Sum">
+		<variableExpression><![CDATA[$F{totalcabezas}]]></variableExpression>
+	</variable>
+	<variable name="totalcabezas_2" class="java.lang.Integer" resetType="Group" resetGroup="Grupo por Ganado" calculation="Sum">
+		<variableExpression><![CDATA[$F{totalcabezas}]]></variableExpression>
+	</variable>
+	<variable name="rechazos_3" class="java.lang.Long" resetType="Group" resetGroup="Grupo por Ganado" calculation="Sum">
+		<variableExpression><![CDATA[$F{rechazos}]]></variableExpression>
+	</variable>
+	<variable name="rechazos_4" class="java.lang.Long" resetType="Group" resetGroup="Grupo por Ganado" calculation="Sum">
+		<variableExpression><![CDATA[$F{rechazos}]]></variableExpression>
+	</variable>
 	<group name="Fecha de Inspección">
 		<groupExpression><![CDATA[$F{ctrl_inspection_inspection_date}]]></groupExpression>
 		<groupHeader>
@@ -77,25 +89,11 @@ ORDER BY
 					<text><![CDATA[No. de Lote]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="ae3b00b5-29b7-4951-8143-bd1a41e3d4d5" x="241" y="20" width="100" height="13"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font isBold="true"/>
-					</textElement>
-					<text><![CDATA[Total de Cabezas]]></text>
-				</staticText>
-				<staticText>
 					<reportElement uuid="0329d3d7-9730-4ac2-9701-e7b4395f35df" x="113" y="20" width="124" height="13"/>
 					<textElement verticalAlignment="Bottom">
 						<font isBold="true"/>
 					</textElement>
 					<text><![CDATA[Ganadero]]></text>
-				</staticText>
-				<staticText>
-					<reportElement uuid="6ad674a4-53f2-4405-ba77-dbb5d791476c" x="352" y="20" width="69" height="13"/>
-					<textElement textAlignment="Center" verticalAlignment="Bottom">
-						<font isBold="true"/>
-					</textElement>
-					<text><![CDATA[Aceptadas]]></text>
 				</staticText>
 			</band>
 		</groupHeader>
@@ -106,7 +104,7 @@ ORDER BY
 	<group name="Grupo por Ranchero">
 		<groupExpression><![CDATA[$F{vw_rancher_rancher_name}]]></groupExpression>
 		<groupHeader>
-			<band height="19">
+			<band height="20">
 				<textField isStretchWithOverflow="true">
 					<reportElement uuid="94480909-8f3b-4760-b898-f4efa0c886c6" style="Detail" x="113" y="0" width="124" height="15"/>
 					<textElement verticalAlignment="Bottom">
@@ -114,60 +112,108 @@ ORDER BY
 					</textElement>
 					<textFieldExpression><![CDATA[$F{vw_rancher_rancher_name}]]></textFieldExpression>
 				</textField>
-				<staticText>
-					<reportElement uuid="cb5036aa-31ce-4182-b3ae-aabe9074c395" style="Column header" x="530" y="2" width="86" height="15" forecolor="#736343"/>
-					<textElement textAlignment="Justified" verticalAlignment="Middle"/>
-					<text><![CDATA[Razón]]></text>
-				</staticText>
 				<textField>
-					<reportElement uuid="2c95bb51-9878-43ea-9f6f-53e87f10caa4" x="241" y="0" width="100" height="15"/>
-					<textElement textAlignment="Center" verticalAlignment="Bottom">
-						<font fontName="SansSerif" size="10"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$F{totalcabezas}]]></textFieldExpression>
-				</textField>
-				<staticText>
-					<reportElement uuid="96764517-bb07-4133-b1fc-819c6cdec4b5" x="621" y="2" width="64" height="15" forecolor="#736343"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Arial" size="12" isBold="true"/>
-					</textElement>
-					<text><![CDATA[Cantidad]]></text>
-				</staticText>
-				<textField>
-					<reportElement uuid="47447f73-c3af-49c6-aba0-db76cda48aa6" x="1" y="2" width="109" height="13"/>
+					<reportElement uuid="55d0fc7f-ef83-4d31-939b-49db24b47017" x="1" y="0" width="109" height="15"/>
 					<textElement textAlignment="Center" verticalAlignment="Bottom"/>
 					<textFieldExpression><![CDATA[$F{ctrl_reception_reception_id}]]></textFieldExpression>
 				</textField>
-				<textField evaluationTime="Group" evaluationGroup="Grupo por Ranchero">
-					<reportElement uuid="dd26fc58-18de-4ed8-9905-1bd607e0c671" x="352" y="0" width="69" height="15"/>
-					<textElement textAlignment="Center" verticalAlignment="Bottom"/>
-					<textFieldExpression><![CDATA[$F{totalcabezas}-$V{rechazos_2}]]></textFieldExpression>
-				</textField>
-				<staticText>
-					<reportElement uuid="96764517-bb07-4133-b1fc-819c6cdec4b5" x="693" y="2" width="64" height="15" forecolor="#736343"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Arial" size="12" isBold="true"/>
-					</textElement>
-					<text><![CDATA[Ganado]]></text>
-				</staticText>
 			</band>
 		</groupHeader>
 		<groupFooter>
-			<band height="20">
+			<band height="19">
 				<textField>
-					<reportElement uuid="700a6c5d-57f1-4270-a159-ad3f8e3980ce" x="621" y="3" width="64" height="15"/>
+					<reportElement uuid="700a6c5d-57f1-4270-a159-ad3f8e3980ce" x="355" y="3" width="64" height="15"/>
 					<textElement textAlignment="Center" verticalAlignment="Bottom">
 						<font isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{rechazos_1}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement uuid="3ebf91a7-ae69-4cfe-806b-2886d1f70879" x="516" y="3" width="100" height="15"/>
+					<reportElement uuid="3ebf91a7-ae69-4cfe-806b-2886d1f70879" x="250" y="3" width="100" height="15"/>
 					<textElement textAlignment="Center" verticalAlignment="Bottom">
 						<font isBold="true"/>
 					</textElement>
 					<text><![CDATA[Total de Rechazos]]></text>
 				</staticText>
+				<line>
+					<reportElement uuid="b2cdff90-36f1-47df-b3c9-20b44628699c" x="1" y="18" width="436" height="1"/>
+				</line>
+			</band>
+		</groupFooter>
+	</group>
+	<group name="Grupo por Ganado">
+		<groupExpression><![CDATA[$F{cat_cattle_type_cattype_name}]]></groupExpression>
+		<groupHeader>
+			<band height="50">
+				<staticText>
+					<reportElement uuid="96764517-bb07-4133-b1fc-819c6cdec4b5" x="355" y="35" width="64" height="15" forecolor="#736343"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Cantidad]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="cb5036aa-31ce-4182-b3ae-aabe9074c395" style="Column header" x="264" y="35" width="86" height="15" forecolor="#736343"/>
+					<textElement textAlignment="Justified" verticalAlignment="Middle"/>
+					<text><![CDATA[Razón]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="ecfc489d-8d3b-4294-978b-2f8742325d22" x="66" y="0" width="44" height="20"/>
+					<textElement textAlignment="Right"/>
+					<text><![CDATA[Ganado:]]></text>
+				</staticText>
+				<textField evaluationTime="Group" evaluationGroup="Grupo por Ganado">
+					<reportElement uuid="25de01f4-0732-4ab9-8349-5d048408c912" x="113" y="20" width="100" height="15"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{totalcabezas_2}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="81e0f390-4c3b-4c03-bc4a-924340cae45e" x="66" y="20" width="44" height="15"/>
+					<textElement textAlignment="Right">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Cabezas:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="b774c8d3-11a9-481a-831f-dadb3ac2581a" x="50" y="35" width="60" height="15"/>
+					<textElement textAlignment="Right">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Aceptadas:]]></text>
+				</staticText>
+				<textField evaluationTime="Group" evaluationGroup="Grupo por Ganado">
+					<reportElement uuid="d90f22e1-bb3c-4b4a-8a7a-22ac3f3cde5d" x="113" y="35" width="100" height="15"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{totalcabezas_2}-$V{rechazos_4}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement uuid="df3b34bc-2546-4082-8cbb-61bd860a08a7" x="113" y="0" width="124" height="20"/>
+					<textElement/>
+					<textFieldExpression><![CDATA[$F{cat_cattle_type_cattype_name}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="17">
+				<textField>
+					<reportElement uuid="58eddba7-9fe2-48c2-ac40-41ae8d438d00" x="356" y="0" width="63" height="16"/>
+					<textElement textAlignment="Center"/>
+					<textFieldExpression><![CDATA[$V{rechazos_3}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="2cef10ef-59eb-4c9b-8764-fcc699077f2b" x="194" y="0" width="70" height="16"/>
+					<textElement/>
+					<text><![CDATA[Rechazos de]]></text>
+				</staticText>
+				<textField>
+					<reportElement uuid="11fc9418-c948-4988-bcfe-e5040ee0eca4" x="264" y="0" width="86" height="16"/>
+					<textElement/>
+					<textFieldExpression><![CDATA[$F{cat_cattle_type_cattype_name}]]></textFieldExpression>
+				</textField>
 			</band>
 		</groupFooter>
 	</group>
@@ -213,7 +259,7 @@ ORDER BY
 		<band splitType="Stretch"/>
 	</pageHeader>
 	<columnHeader>
-		<band height="33" splitType="Stretch">
+		<band height="32" splitType="Stretch">
 			<line>
 				<reportElement uuid="e04e36a7-051d-4282-97f3-5fe03cc74416" positionType="FixRelativeToBottom" x="0" y="15" width="802" height="1"/>
 				<graphicElement>
@@ -232,24 +278,25 @@ ORDER BY
 	<detail>
 		<band height="17" splitType="Stretch">
 			<frame>
-				<reportElement uuid="f271f658-f279-459c-b0d2-8eabe1e45296" style="Row" mode="Opaque" x="0" y="1" width="802" height="15"/>
-				<textField isStretchWithOverflow="true">
-					<reportElement uuid="18b81242-7d52-41a7-b065-285ea641e864" style="Detail" x="530" y="0" width="86" height="15"/>
-					<textElement textAlignment="Justified" verticalAlignment="Middle">
-						<font size="10"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$F{ctrl_inspection_result_note}]]></textFieldExpression>
-				</textField>
+				<reportElement uuid="f271f658-f279-459c-b0d2-8eabe1e45296" style="Row" mode="Opaque" x="256" y="0" width="174" height="15">
+					<printWhenExpression><![CDATA[$F{ctrl_inspection_result_note}!=null]]></printWhenExpression>
+				</reportElement>
 				<textField>
-					<reportElement uuid="c751631b-c23b-4616-a156-e9fd5445c30b" x="621" y="0" width="64" height="15"/>
+					<reportElement uuid="c751631b-c23b-4616-a156-e9fd5445c30b" x="100" y="0" width="64" height="15">
+						<printWhenExpression><![CDATA[$F{ctrl_inspection_result_note}!=null]]></printWhenExpression>
+					</reportElement>
 					<textElement textAlignment="Center" verticalAlignment="Middle"/>
 					<textFieldExpression><![CDATA[$F{rechazos}]]></textFieldExpression>
 				</textField>
 			</frame>
-			<textField>
-				<reportElement uuid="922aeb6c-006d-4f9e-a815-63c3f08df61d" x="693" y="0" width="64" height="15"/>
-				<textElement textAlignment="Center" verticalAlignment="Bottom"/>
-				<textFieldExpression><![CDATA[$F{cat_cattle_type_cattype_name}]]></textFieldExpression>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="18b81242-7d52-41a7-b065-285ea641e864" style="Detail" x="264" y="0" width="86" height="15">
+					<printWhenExpression><![CDATA[$F{ctrl_inspection_result_note}!=null]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ctrl_inspection_result_note}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
@@ -266,23 +313,23 @@ ORDER BY
 	<pageFooter>
 		<band height="25" splitType="Stretch">
 			<frame>
-				<reportElement uuid="19d5c695-fb8a-4615-b8a8-2cfa9114bd76" mode="Opaque" x="-21" y="1" width="843" height="24" forecolor="#D0B48E" backcolor="#F2EBDF"/>
+				<reportElement uuid="19d5c695-fb8a-4615-b8a8-2cfa9114bd76" mode="Opaque" x="-21" y="1" width="843" height="24" forecolor="#D0B48E" backcolor="#CC9900"/>
 				<textField evaluationTime="Report">
-					<reportElement uuid="63e60796-af58-49cf-955f-d8166240fa57" style="Column header" x="783" y="1" width="40" height="20" forecolor="#736343"/>
+					<reportElement uuid="63e60796-af58-49cf-955f-d8166240fa57" style="Column header" x="783" y="1" width="40" height="20" forecolor="#736343" backcolor="#000000"/>
 					<textElement verticalAlignment="Middle">
 						<font size="10" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement uuid="9fb1bce9-8878-4b36-be35-7d31d17cabfd" style="Column header" x="703" y="1" width="80" height="20" forecolor="#736343"/>
+					<reportElement uuid="9fb1bce9-8878-4b36-be35-7d31d17cabfd" style="Column header" x="703" y="1" width="80" height="20" forecolor="#736343" backcolor="#000000"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font size="10" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
 				</textField>
 				<textField pattern="EEEEE dd MMMMM yyyy">
-					<reportElement uuid="d9a7c9f7-4fa3-47e2-87ff-01b184fdaf24" style="Column header" x="22" y="1" width="197" height="20" forecolor="#736343"/>
+					<reportElement uuid="d9a7c9f7-4fa3-47e2-87ff-01b184fdaf24" style="Column header" x="22" y="1" width="197" height="20" forecolor="#736343" backcolor="#000000"/>
 					<textElement verticalAlignment="Middle">
 						<font size="10" isBold="false"/>
 					</textElement>

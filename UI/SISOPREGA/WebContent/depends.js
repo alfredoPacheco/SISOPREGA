@@ -51,5 +51,6 @@ enyo.depends(
 	"source/users.list.js",
 	"source/users.create.js",
 	"source/cache.users.js",
-	"source/file.uploader.js"
+	"source/file.uploader.js",
+	"source/report.viewer.js"
 );
