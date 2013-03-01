@@ -14,7 +14,7 @@ enyo
 					reception_id : 	objReception.receptionId,
 					rancher_id : 	objReception.rancherId,
 					arrival_date : 	""
-									+ UTCtoNormalDate(objReception.dateAllotted),
+									+ utils.utcToNormalDate(objReception.dateAllotted),
 					cattype_id : 	objReception.cattleType,
 					location_id : 	objReception.locationId,
 					zone_id :		objReception.zoneId	
@@ -39,7 +39,7 @@ enyo
 				objNew.barnyards = [];
 				objNew.inspections = [];
 				objNew.feed = [];
-				objNew.color = colorStack.pop();
+				objNew.color = utils.colorStack.pop();
 
 				return objNew;
 			},
@@ -88,7 +88,7 @@ enyo
 				var objNew = {
 					receptionId : objReception.reception_id,
 					rancherId : objReception.rancher_id,
-					dateAllotted : "" + DateOut(objReception.arrival_date),
+					dateAllotted : "" + utils.dateOut(objReception.arrival_date),
 					cattleType : objReception.cattype_id,
 					locationId : objReception.location_id,
 					zoneId : objReception.zone_id
@@ -160,7 +160,7 @@ enyo
 								weight_uom : undefined
 							};
 							try {
-								inspectionAux.inspectionDate=UTCtoNormalDate(arrInspectionAux[i].inspectionDate);
+								inspectionAux.inspectionDate=utils.utcToNormalDate(arrInspectionAux[i].inspectionDate);
 								inspectionAux.comments=arrInspectionAux[i].comments;
 								inspectionAux.rejected_id = arrInspectionAux[i].inspectionId;
 								// arrFeedAux[i].receptionId;
@@ -495,7 +495,7 @@ enyo
 				var cgCreate = consumingGateway.Create("Reception", objToSend);
 				if (cgCreate.exceptionId == 0) { // Created successfully
 					objRec.reception_id = cgCreate.generatedId;
-					objRec.color = colorStack.pop();
+					objRec.color = utils.colorStack.pop();
 					for ( var sKey in objRec.barnyards) {
 						if (!cacheBY.setOccupied(sKey, objRec.reception_id)) {
 							cbObj["doCancel"]();
@@ -708,7 +708,7 @@ enyo
 
 				var objToSend = {};
 				objToSend.receptionId = objRec.reception_id;
-				// objToSend.feedDate = "" + DateOut(new Date());
+				// objToSend.feedDate = "" + utils.dateOut(new Date());
 				// objToSend.feedOriginator = "";
 				objToSend.handling = objFeed.handling;
 
@@ -815,7 +815,7 @@ enyo
 				objNew.feeding_id = objOld.feeding_id;
 				var objToSend = {};
 				objToSend.orderId = objNew.feeding_id;
-				// objToSend.feedDate = "" + DateOut(new Date());
+				// objToSend.feedDate = "" + utils.dateOut(new Date());
 				// objToSend.feedOriginator = "";
 				objToSend.handling = objNew.handling;
 				objToSend.receptionId = cbObj._objRec.reception_id;
@@ -866,14 +866,14 @@ enyo
 
 				var objToSend = {};
 				objToSend.receptionId = objRec.reception_id;
-				objToSend.inspectionDate = "" + DateOut(new Date());
+				objToSend.inspectionDate = "" + utils.dateOut(new Date());
 
 				var cgCreate = consumingGateway.Create("Inspection", objToSend);
 				if (cgCreate.exceptionId == 0) { // Created successfully
 					objRej.rejected_id = cgCreate.generatedId;
 					
 					if(!objRej.inspectionDate)
-					  objRej.inspectionDate = "" + DateOut(new Date());
+					  objRej.inspectionDate = "" + utils.dateOut(new Date());
 					
 					if (this.createInspectionBarnyard(cgCreate.generatedId,
 							objRec) == true) {
@@ -1099,7 +1099,7 @@ enyo
 				var objToSend = {};
 				objToSend.receptionId = receptionId;
 				objToSend.inspectionId = inspectionId;
-				objToSend.inspectionDate=DateOut(inspectionDate);
+				objToSend.inspectionDate=utils.dateOut(inspectionDate);
 				objToSend.comments = comments;				
 				var objData = consumingGateway.Update("Inspection", objToSend);	
 				if (objData.exceptionId == 0) {

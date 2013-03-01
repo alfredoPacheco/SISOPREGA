@@ -144,7 +144,7 @@ enyo.kind({
 	},
 	saveForecast : function(objForecast) {
 		var objToSend = {};
-		objToSend.forecastDate =  "" + DateOut(objForecast.fore_date);
+		objToSend.forecastDate =  "" + utils.dateOut(objForecast.fore_date);
 		var cgCreate = consumingGateway.Create("InspectionForecast", objToSend);
 		if (cgCreate.exceptionId == 0){ //Created successfully			
 			objForecast.id = cgCreate.generatedId;
@@ -329,14 +329,14 @@ enyo.kind({
 	adaptForecastFromResponse : function(oForecast) {
 		var oForecastResponse = {
 			id :			oForecast.forecastId,
-			fore_date : 	"" + UTCtoNormalDate(oForecast.forecastDate)
+			fore_date : 	"" + utils.utcToNormalDate(oForecast.forecastDate)
 		};
 		return oForecastResponse;
 	},
 	adaptForecastToRequest : function(oForecast) {
 		var oForecastResponse = {
 			forecastId : oForecast.id,
-			forecastDate : "" + DateOut(oForecast.fore_date)
+			forecastDate : "" + utils.dateOut(oForecast.fore_date)
 		};
 		return oForecastResponse;
 	},

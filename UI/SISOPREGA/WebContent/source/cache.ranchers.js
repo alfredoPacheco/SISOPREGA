@@ -137,12 +137,12 @@ enyo
             {
               rancher_id : objRan.rancherId,
               aka : objRan.aka,
-              birth_date : "" + UTCtoNormalDate(objRan.birthDate),
+              birth_date : "" + utils.utcToNormalDate(objRan.birthDate),
               email_add : objRan.emailAddress,
               first_name : objRan.firstName,
               last_name : objRan.lastName,
               mother_name : objRan.motherName,
-              phone_number : phoneToMask(objRan.phone),
+              phone_number : utils.phoneToMask(objRan.phone),
             };
           // Fields out of web service:
           objNew.rfc = "";
@@ -158,12 +158,12 @@ enyo
             {
               rancherId : objRan.rancher_id,
               aka : objRan.aka,
-              birthDate : "" + DateOut(objRan.birth_date),
+              birthDate : "" + utils.dateOut(objRan.birth_date),
               emailAddress : objRan.email_add,
               firstName : objRan.first_name,
               lastName : objRan.last_name,
               motherName : objRan.mother_name,
-              phone : phoneOut(objRan.phone_number)
+              phone : utils.phoneOut(objRan.phone_number)
             };
           return objNew;
         },
@@ -176,9 +176,9 @@ enyo
               first_name : objCon.firstName,
               last_name : objCon.lastName,
               mother_name : objCon.motherName,
-              birth_date : "" + UTCtoNormalDate(objCon.birthDate),
+              birth_date : "" + utils.utcToNormalDate(objCon.birthDate),
               email_add : objCon.emailAddress,
-              phone_number : phoneToMask(objCon.telephone),
+              phone_number : utils.phoneToMask(objCon.telephone),
               address_one : objCon.addressOne,
               address_two : objCon.addressTwo,
               city : objCon.city,
@@ -196,9 +196,9 @@ enyo
               firstName : objCon.first_name,
               lastName : objCon.last_name,
               motherName : objCon.mother_name,
-              birthDate : "" + DateOut(objCon.birth_date),
+              birthDate : "" + utils.dateOut(objCon.birth_date),
               emailAddress : objCon.email_add,
-              telephone : phoneOut(objCon.phone_number),
+              telephone : utils.phoneOut(objCon.phone_number),
               addressOne : objCon.address_one,
               addressTwo : objCon.address_two,
               city : objCon.city,
@@ -251,7 +251,7 @@ enyo
               state_id : objRan.state,
               zip_code : objRan.zipCode,
               rfc : objRan.legalId,
-              phone_number : phoneToMask(objRan.telephone),
+              phone_number : utils.phoneToMask(objRan.telephone),
               email : objRan.email,
               // Fields out of web service:
               contacts : [],
@@ -275,7 +275,7 @@ enyo
               state : objRan.state_id,
               zipCode : objRan.zip_code,
               legalId : objRan.rfc,
-              telephone : phoneOut(objRan.phone_number),
+              telephone : utils.phoneOut(objRan.phone_number),
               email : objRan.email
             };
           return objNew;
@@ -289,9 +289,9 @@ enyo
               first_name : objCon.firstName,
               last_name : objCon.lastName,
               mother_name : objCon.motherName,
-              birth_date : "" + UTCtoNormalDate(objCon.birthDate),
+              birth_date : "" + utils.utcToNormalDate(objCon.birthDate),
               email_add : objCon.emailAddress,
-              phone_number : phoneToMask(objCon.telephone),
+              phone_number : utils.phoneToMask(objCon.telephone),
               address_one : objCon.addressOne,
               address_two : objCon.addressTwo,
               city : objCon.city,
@@ -309,9 +309,9 @@ enyo
               firstName : objCon.first_name,
               lastName : objCon.last_name,
               motherName : objCon.mother_name,
-              birthDate : "" + DateOut(objCon.birth_date),
+              birthDate : "" + utils.dateOut(objCon.birth_date),
               emailAddress : objCon.email_add,
-              telephone : phoneOut(objCon.phone_number),
+              telephone : utils.phoneOut(objCon.phone_number),
               addressOne : objCon.address_one,
               addressTwo : objCon.address_two,
               city : objCon.city,
@@ -895,7 +895,7 @@ enyo
               jQuery.each(this, function(key, value) {
                 objAux[key] = value;
               });
-              objAux.fechaPedimento = "" + UTCtoNormalDate(objAux.fechaPedimento);
+              objAux.fechaPedimento = "" + utils.utcToNormalDate(objAux.fechaPedimento);
               arrAux.push(objAux);
               objAux = {};
             });
@@ -906,7 +906,7 @@ enyo
           var objToSend = {};
           objToSend.folio = objCon.folio;
           objToSend.rancherId = objCon.rancherId;
-          objToSend.fechaPedimento = DateOut(objCon.fechaPedimento);
+          objToSend.fechaPedimento = utils.dateOut(objCon.fechaPedimento);
           var cgDeletePedimento = null;
           cgDeletePedimento = consumingGateway.Delete("Pedimento", objToSend);
 
