@@ -130,7 +130,9 @@ public class Messenger implements Messageable {
    */
   @Override
   public boolean sendSimpleMessage(Rancher rancher, String message) {
-    return sendSMS(rancher.getPhone(), message) && sendSimpleEmail(rancher.getEmailAddress(), message);
+    boolean sentSMS = sendSMS(rancher.getPhone(), message);
+    boolean sentEmail = sendSimpleEmail(rancher.getEmailAddress(), message);
+    return sentSMS && sentEmail;
   }
 
   /*
@@ -142,7 +144,9 @@ public class Messenger implements Messageable {
    */
   @Override
   public boolean sendSimpleMessage(EnterpriseRancher rancher, String message) {
-    return sendSMS(rancher.getTelephone(), message) && sendSimpleEmail(rancher.getEmail(), message);
+    boolean sentSMS = sendSMS(rancher.getTelephone(), message);
+    boolean sentEmail = sendSimpleEmail(rancher.getEmail(), message);
+    return sentSMS && sentEmail;
   }
 
   private boolean sendSMS(String to, String message) {
@@ -231,7 +235,7 @@ public class Messenger implements Messageable {
         return sendReport(person, reportName);
       }
     } catch (Exception e) {
-      log.fine("Person not found with provided id [" + rancherId + "]");
+      log.info("Person not found with provided id [" + rancherId + "]");
     }
 
     EnterpriseRancher enterprise = null;
