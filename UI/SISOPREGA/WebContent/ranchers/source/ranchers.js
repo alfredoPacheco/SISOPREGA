@@ -111,6 +111,8 @@ enyo.kind({
 				break;				
 		}
 		window.open(sURL,sTitle);
+//		utils.openReport(sURL);
+		
 		this.closePopUp();
 	},
 	closePopUp:function(){

@@ -77,13 +77,13 @@ enyo.kind({
 //		if(this.$.reportContainer.$.rViewer){
 //			this.$.reportContainer.$.rViewer.destroy();
 //		}
+			
 		this.$.reportContainer.$.rViewer.setReport(reportName);
-		this.$.reportContainer.$.rViewer.applyStyle("height",null);
 //		this.$.reportContainer.$.rViewer.render();
 		this.$.reportContainer.openAtCenter();				
 	},
 	ready:function(){
-		this.$.reportContainer.createComponent({kind: "controls.reportViewer", name:'rViewer'});
+		this.$.reportContainer.createComponent({kind: "controls.reportViewer", name:'rViewer', style:"min-height:100%"});
 	}
 });
 

@@ -1,21 +1,24 @@
 enyo.kind({
-	name : "controls.reportViewer",
-	kind : enyo.VFlexBox,
+	name : "controls.reportViewer",	
+	kind : enyo.Control,
 	reportName : "",
-	
-	components:[{kind:enyo.Scroller,
-		flex:1,
-	components : [ {
-        kind : enyo.Control,
-        flex : 1,
-        height:"100%",
+//	components:[{kind:enyo.Scroller,
+//		flex:1,
+//	components : [ {
+//        kind : enyo.VFlexBox,
+//        flex : 1,
+        height:"100%",	
 ////        className : "listBG",
-        components :[{name : "reportContainer", allowHtml:true, height:"100%"}],
-	}]
-	}]
-
+        components :[{name : "reportContainer", allowHtml:true, content:"Cargando...", height:"100%"}]
+//	}]
+//	}]
 	,setReport:function(sReportName){
 		this.reportName = sReportName;
+		 this.$.reportContainer.setContent("<iframe id='pdfObjeto' src= '" + sReportName + "' seamless" +
+		 		" scrolling='no' width= '100%' height= '100%'></iframe>");
+//					this.myFunction(sReportName);		
+		
+		
 //		var pdfObject =  new PDFObject({ 
 //			
 //			url: sReportName,
@@ -29,14 +32,36 @@ enyo.kind({
 //		});
 //		pdfObject.embed("reportContainer");
 //		this.$.reportContainer.setContent(myPDF);
-		this.$.reportContainer.setContent("<object id='pdfObjeto' data= '" + this.reportName + "' type='application/pdf' width= '100%' height= 'auto'>"+
-				  "<p>It appears you don't have a PDF plugin for this browser." + 
-				  "No biggie... you can <a href='" + this.reportName + "'>click here to" +
-				  "download the PDF file.</a></p></object>");
-		elem = document.getElementById("pdfObjeto");
+		
+
+//		this.$.reportContainer.setContent("<object id='pdfObjeto' data= '" + this.reportName + "' type='application/pdf' width= '100%' height= '2000px' onload='pdfLoaded()'>"+
+//				  "<p>It appears you don't have a PDF plugin for this browser." + 
+//				  "No biggie... you can <a href='" + this.reportName + "'>click here to" +
+//				  "download the PDF file.</a></p></object>");
+//		elem = document.getElementById("pdfObjeto");
 		
 //		<object data="/pdf/sample.pdf#navpanes=0&amp;toolbar=0&amp;statusbar=0&amp;view=FitV" type="application/pdf" width="100%" height="100%"></object>
-	}
+	},
+//	myFunction:function (sReportName)
+//	{
+//		var xmlhttp;
+//		self = this;
+//		xmlhttp=new XMLHttpRequest();
+//		xmlhttp.onreadystatechange=function(){
+//											  if (xmlhttp.readyState==4 && xmlhttp.status==200)
+//											  {
+//												  self.$.reportContainer.setContent("<object id='pdfObjeto' data= '" + xmlhttp.responseText + "' type='application/pdf' width= '100%' height= '2000px'>"+
+//														  "<p>It appears you don't have a PDF plugin for this browser." + 
+//														  "No biggie... you can <a href='" + sReportName + "'>click here to" +
+//														  "download the PDF file.</a></p></object>");
+//												  
+//											  }
+//										};
+//		xmlhttp.open("POST",sReportName,true);
+//		xmlhttp.send();
+//	
+//	}
+	
 });
 
 /* PDFObject, copyright (C) 2008 Philip Hutchison (pipwerks.com). Documentation and examples are at www.pdfobject.com. Version 1.2, April 2011. MIT style license */

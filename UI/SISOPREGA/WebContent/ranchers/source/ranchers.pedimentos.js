@@ -66,5 +66,7 @@ enyo.kind(
     selectPedimento : function(inSender, inEvent) {
       window.open('/ReportingGateway/Pedimento?folio=' + this.pedimentos[inEvent.rowIndex].folio, '_blank');
       window.focus();
+//      utils.openReport('/ReportingGateway/Pedimento?folio=' + this.pedimentos[inEvent.rowIndex].folio);
+      
     }
   });

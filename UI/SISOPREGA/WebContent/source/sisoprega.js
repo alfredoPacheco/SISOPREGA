@@ -96,13 +96,15 @@ enyo.kind(
                 kind : "main.menu",
                 name : "mainMenu"
               },
+              {kind:"catalogs.main", name:"catalogs",lazy:true},
               {kind:"receptions.barnyards.map", name:"receptionsMap",lazy:true, flex:1},
               {kind:"catalogs.cattle",name:"catCattle", lazy:true},
               {kind:"catalogs.ranchers",name:"catRanchers", lazy:true},
               {kind:"reports.main", name:"reports",lazy:true},
-              {kind:"inspections.main.fs", name:"inspectionForecast", lazy:true},
-              {kind:"users.list", name:"usersList", onAddUser:"showAddUser", onSelectUser:"showEditUser", lazy:true },
+              {kind:"inspections.list", name:"inspections"},
+              {kind:"inspections.main.fs", name:"inspectionForecast", lazy:true},              
               {kind:"users.create", name:"addUser", lazy:true},
+              {kind:"users.list", name:"usersList", onAddUser:"showAddUser", onSelectUser:"showEditUser", lazy:true },
               {kind:"file.uploader", name:"fileUploader",lazy:true},
 //              {kind:"report.viewer", name:"report_viewer",lazy:false}
   			]
@@ -162,45 +164,53 @@ enyo.kind(
     open_menu : function(){
     	this.$.menu.openAroundControl(this.$.btnMenu,"", "left");
     },
-    addGoBackAction:function(){
+    addGoBackAction:function(nextView){
+    	if(_gobackStack.length > 0){
+			if(this.$.mainPane.getViewName()==nextView){
+				return;
+			}
+		}
 		_gobackStack.push({caption:_objMainHeader.getContent(),paneMan:this.$.mainPane,paneName:this.$.mainPane.getViewName()});		
 	},
     open_view : function(InSender, InEvent){
-    	
-    	switch(InSender.caption){
+    	var view = "";
+    	if(InSender.caption){
+    		view = InSender.caption;
+    	}
+    	switch(view){
     	case 'Operaciones':
-    		this.addGoBackAction();	
+    		this.addGoBackAction("receptionsMap");	
     		_objMainHeader.setContent('Corrales');    		
     		this.$.mainPane.selectViewByName("receptionsMap");
     		break;
     	case 'Reportes':
-    		this.addGoBackAction();
+    		this.addGoBackAction("reports");
     		_objMainHeader.setContent('Reportes');		
     		this.$.mainPane.selectViewByName("reports");
     		break;
     	case 'Ganaderos':
-    		this.addGoBackAction();
+    		this.addGoBackAction("catRanchers");
     		_objMainHeader.setContent('Ganaderos');
     		this.$.mainPane.selectViewByName("catRanchers");
     		break;
     	case 'Ganado':
-    		this.addGoBackAction();
+    		this.addGoBackAction("catCattle");
     		_objMainHeader.setContent('Ganado');    				
     		this.$.mainPane.selectViewByName("catCattle");
     		break;
     	case 'Lista de Inspección':
-    		this.addGoBackAction();
+    		this.addGoBackAction("inspectionForecast");
     		_objMainHeader.setContent('Lista de Inspección');    		
     		this.$.mainPane.selectViewByName("inspectionForecast");
 //    		this.$.inspectionForecast.children[0].cambioDeFecha();
     		break;
     	case 'Usuarios':    		
-    		this.addGoBackAction();
+    		this.addGoBackAction("usersList");
     		_objMainHeader.setContent('Lista de Usuarios');
   	      	this.$.mainPane.selectViewByName("usersList");
     		break;
     	case 'Carga de Pedimento':
-    		this.addGoBackAction();
+    		this.addGoBackAction("fileUploader");
     		_objMainHeader.setContent('Cargar Pedimento');
   	      	this.$.mainPane.selectViewByName("fileUploader");
   	      	break;
@@ -216,13 +226,13 @@ enyo.kind(
     showAddUser : function(){
   	  	enyo.$.sisoprega_btnGoBack.setShowing(1);
         _objMainHeader.setContent('Agregar Usuario');
-        this.addGoBackAction();
+        this.addGoBackAction("addUser");
         this.$.mainPane.selectViewByName("addUser");
   	},
   	showEditUser : function(){
   		enyo.$.sisoprega_btnGoBack.setShowing(1);
         _objMainHeader.setContent('Editar Usuario');
-        this.addGoBackAction();
+        this.addGoBackAction("addUser");
         this.$.mainPane.selectViewByName("addUser");
   	},
   	selectView:function(inSender, inView, inPreviousView) {

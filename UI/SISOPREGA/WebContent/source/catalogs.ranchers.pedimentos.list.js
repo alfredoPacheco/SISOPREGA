@@ -88,7 +88,9 @@ enyo.kind(
     },
     selectPedimento : function (inSender, inEvent){
       this.iSelected = inEvent.rowIndex;
-      window.open('/ReportingGateway/Pedimento?rancherId='+ this.objRancher.rancher_id +'&folio='+this.objRancher.pedimentos[inEvent.rowIndex].folio, '_blank');
-      window.focus();
+//      window.open('/ReportingGateway/Pedimento?rancherId='+ this.objRancher.rancher_id +'&folio='+this.objRancher.pedimentos[inEvent.rowIndex].folio, '_blank');
+//      window.focus();
+      utils.openReport('/ReportingGateway/Pedimento?rancherId='+ this.objRancher.rancher_id +'&folio='+this.objRancher.pedimentos[inEvent.rowIndex].folio);
+      
     }
   });
