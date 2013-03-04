@@ -30,7 +30,7 @@ enyo.kind({
 //	 		{kind:"inspections.list", name:"inspections"},
 //	 		{kind:"inspections.main.fs", name:"inspectionForecast", lazy:true},
 //	 		{kind:"users.list", name:"usersList", onAddUser:"showAddUser", onSelectUser:"showEditUser", lazy:true },
-//	 		{kind:"users.create", name:"addUser"},
+	 		{kind:"users.create", name:"addUser"},
 //	 		{kind:"file.uploader", name:"fileUploader",lazy:true}	 		
 		 ]}
 	],
