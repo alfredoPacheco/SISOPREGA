@@ -45,6 +45,7 @@ enyo.depends(
 	"source/cache.inspection.forecast.js",
 	"source/controls.autocomplete.js",
 	"source/controls.multiselect.js",
+	"source/controls.reportViewer.js",
 	"source/catalogs.ranchers.billing.list.js",
 	"source/catalogs.ranchers.users.list.js",
 	"source/catalogs.ranchers.users.create.js",
@@ -52,5 +53,5 @@ enyo.depends(
 	"source/users.create.js",
 	"source/cache.users.js",
 	"source/file.uploader.js",
-	"source/report.viewer.js"
+	"source/utils.js"
 );

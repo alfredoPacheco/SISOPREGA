@@ -35,7 +35,7 @@ function phoneToMask(p){
 	  }
 	  return phone;		
 }
-function phoneOut(p){
+function utils.phoneOut(p){
 	  var phone = p;
 	  if (phone !== undefined) {
 	    phone = phone.replace("(", "");

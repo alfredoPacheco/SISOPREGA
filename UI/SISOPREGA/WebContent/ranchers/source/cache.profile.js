@@ -25,12 +25,12 @@ enyo.kind({
 		if(objResponse.exceptionId != '0'){
 			alert('Error al cargar profile');
 		}else{
-			this.objRancher.phone_number=phoneToMask(this.objRancher.phone_number);
+			this.objRancher.phone_number=utils.phoneToMask(this.objRancher.phone_number);
 		}
     },
     
 	update: function(objUpdate){
-		objUpdate.phone_number=phoneOut(objUpdate.phone_number);
+		objUpdate.phone_number=utils.phoneOut(objUpdate.phone_number);
 		var objResp = null;
 		if(this.objRancher.enterpriseId){
 			objResp = consumingGateway.Update("EnterpriseRancher",objUpdate);
@@ -58,7 +58,7 @@ enyo.kind({
 		}
         var target={rancherId:source.rancherId,
         			aka : source.aka,
-		            birthDate: "" + UTCtoNormalDate(source.birthDate),
+		            birthDate: "" + utils.utcToNormalDate(source.birthDate),
 		            emailAddress: source.emailAddress,
 		            firstName: source.firstName,
 		            lastName: source.lastName,
@@ -99,7 +99,7 @@ enyo.kind({
           jQuery.each(this, function(key, value) {
             objAux[key] = value;
           });
-          objAux.fechaPedimento = "" + UTCtoNormalDate(objAux.fechaPedimento);
+          objAux.fechaPedimento = "" + utils.utcToNormalDate(objAux.fechaPedimento);
           arrAux.push(objAux);
           objAux = {};
         });

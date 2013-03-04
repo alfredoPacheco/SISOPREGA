@@ -23,15 +23,16 @@ enyo.kind({
 			kind : "reports.filter.by_date",
 			name : "filterByDate",
 			onGetReport : "showReportsResults"
-		},{kind:"report.viewer", name:"reportViewer",lazy:false}]
+		}]
 	}, ],
 	showActiveReceptions : function(){
 //	  window.open('/ReportingGateway/GanadoActivoCorrales','_blank');
 		
 //		reportViewer.openReport('/ReportingGateway/GanadoActivoCorrales');
-		this.$.mainPane.selectViewByName("reportViewer");
-    	this.$.reportViewer.showReport('/ReportingGateway/GanadoActivoCorrales');
-    	this.addGoBackAction();
+		utils.openReport('/ReportingGateway/GanadoActivoCorrales');
+//		this.$.mainPane.selectViewByName("reportViewer");
+//    	this.$.reportViewer.showReport('/ReportingGateway/GanadoActivoCorrales');
+//    	this.addGoBackAction();
 	},
 	showReceptions : function() {
 		this.showGenericReport('reception', 'Reporte de Recepciones', 'filterByDate');

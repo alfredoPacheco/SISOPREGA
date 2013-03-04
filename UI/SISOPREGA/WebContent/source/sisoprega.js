@@ -4,7 +4,7 @@ enyo.kind(
     kind : enyo.VFlexBox,
     components :
       [
-		
+       		
         //SCRIM
         {
           kind : enyo.Scrim,
@@ -104,7 +104,7 @@ enyo.kind(
               {kind:"users.list", name:"usersList", onAddUser:"showAddUser", onSelectUser:"showEditUser", lazy:true },
               {kind:"users.create", name:"addUser", lazy:true},
               {kind:"file.uploader", name:"fileUploader",lazy:true},
-              {kind:"report.viewer", name:"report_viewer",lazy:false}
+//              {kind:"report.viewer", name:"report_viewer",lazy:false}
   			]
         },
         {
@@ -131,7 +131,7 @@ enyo.kind(
       cacheMan.setGlobalScrim(this.$.scrimMain);
       cacheMan.setGlobalLabel(this.$.lblMainCap);
       _objMainHeader = this.$.lblMainCap;
-      reportViewer = this.$.report_viewer;
+//      reportViewer = this.$.report_viewer;
      
       
     },
