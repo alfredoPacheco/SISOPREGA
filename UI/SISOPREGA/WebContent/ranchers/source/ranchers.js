@@ -110,8 +110,8 @@ enyo.kind({
 				sURL="/ReportingGateway/RecibidoPorGanadero?fromDate="+sFrom+"&toDate="+sTo;				
 				break;				
 		}
-//		window.open(sURL,sTitle);
-		utils.openReport(sURL);
+		window.open(sURL,sTitle);
+//		utils.openReport(sURL);
 		
 		this.closePopUp();
 	},

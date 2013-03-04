@@ -42,25 +42,25 @@ enyo.kind({
 		
 //		<object data="/pdf/sample.pdf#navpanes=0&amp;toolbar=0&amp;statusbar=0&amp;view=FitV" type="application/pdf" width="100%" height="100%"></object>
 	},
-	myFunction:function (sReportName)
-	{
-		var xmlhttp;
-		self = this;
-		xmlhttp=new XMLHttpRequest();
-		xmlhttp.onreadystatechange=function(){
-											  if (xmlhttp.readyState==4 && xmlhttp.status==200)
-											  {
-												  self.$.reportContainer.setContent("<object id='pdfObjeto' data= '" + xmlhttp.responseText + "' type='application/pdf' width= '100%' height= '2000px'>"+
-														  "<p>It appears you don't have a PDF plugin for this browser." + 
-														  "No biggie... you can <a href='" + sReportName + "'>click here to" +
-														  "download the PDF file.</a></p></object>");
-												  
-											  }
-										};
-		xmlhttp.open("POST",sReportName,true);
-		xmlhttp.send();
-	
-	}
+//	myFunction:function (sReportName)
+//	{
+//		var xmlhttp;
+//		self = this;
+//		xmlhttp=new XMLHttpRequest();
+//		xmlhttp.onreadystatechange=function(){
+//											  if (xmlhttp.readyState==4 && xmlhttp.status==200)
+//											  {
+//												  self.$.reportContainer.setContent("<object id='pdfObjeto' data= '" + xmlhttp.responseText + "' type='application/pdf' width= '100%' height= '2000px'>"+
+//														  "<p>It appears you don't have a PDF plugin for this browser." + 
+//														  "No biggie... you can <a href='" + sReportName + "'>click here to" +
+//														  "download the PDF file.</a></p></object>");
+//												  
+//											  }
+//										};
+//		xmlhttp.open("POST",sReportName,true);
+//		xmlhttp.send();
+//	
+//	}
 	
 });
 
