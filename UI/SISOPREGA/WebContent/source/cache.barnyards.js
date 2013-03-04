@@ -109,7 +109,10 @@ enyo.kind({
 			
 			if (cgReadAll.exceptionId == 0){ //Read successfully
 				for (item in cgReadAll.records){
-					arrAux.push(this.barnyardAdapterToIn(cgReadAll.records[item]));
+					if(cgReadAll.hasOwnProperty(item)){
+						arrAux.push(this.barnyardAdapterToIn(cgReadAll.records[item]));	
+					}
+					
 				}
 			}
 			else{ //Error
