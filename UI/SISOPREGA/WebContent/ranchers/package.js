@@ -3,7 +3,7 @@ enyo.depends(
   "$lib/onyx",
   "$lib/layout",
   "$lib/g11n",  
-  "source/global.utils.js",   
+  "source/utils.js",   
   "source/ranchers.js",
   "source/ranchers.login.js",
   "source/ranchers.pedimentos.js",

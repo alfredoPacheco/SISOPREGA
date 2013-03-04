@@ -478,7 +478,9 @@ enyo.kind(
       this.bySelected.setContent("Alimentando corrales: " + corralesSeleccionados);
     },
     openFeedingReport : function() {
-      window.open('/ReportingGateway/OrdenDeAlimento?orderId='+ this._objRec.feed[this._objRec.feed.length - 1].feeding_id,'_blank');
-      window.focus();
+//      window.open('/ReportingGateway/OrdenDeAlimento?orderId='+ this._objRec.feed[this._objRec.feed.length - 1].feeding_id,'_blank');
+//      window.focus();
+      utils.openReport('/ReportingGateway/OrdenDeAlimento?orderId='+ this._objRec.feed[this._objRec.feed.length - 1].feeding_id);
+      
     }
   });

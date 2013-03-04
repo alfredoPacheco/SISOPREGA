@@ -59,30 +59,34 @@ enyo.kind({
 			var parameters = this.$.filterByDate.getParams();
 //			window.open('/ReportingGateway/GanadoRecibido?fromDate='+ parameters.start_date+'&toDate='+ parameters.end_date,'_blank');
 //			window.focus();
-			this.$.mainPane.selectViewByName("reportViewer");
-			this.$.reportViewer.showReport('/ReportingGateway/GanadoRecibido?fromDate='+ parameters.start_date+'&toDate='+ parameters.end_date);
+//			this.$.mainPane.selectViewByName("reportViewer");
+//			this.$.reportViewer.showReport('/ReportingGateway/GanadoRecibido?fromDate='+ parameters.start_date+'&toDate='+ parameters.end_date);
+			utils.openReport('/ReportingGateway/GanadoRecibido?fromDate='+ parameters.start_date+'&toDate='+ parameters.end_date);
 		}
 		if (this.reportName == 'inspection'){
 			var parameters = this.$.filter.getParams();
 //			window.open('/ReportingGateway/InspeccionGanado?fromDate='+ parameters.start_date+'&toDate='+ parameters.end_date +'&rancherId='+parameters.rancher_id, '_blank');
 //			window.focus();
-			this.$.mainPane.selectViewByName("reportViewer");
-			this.$.reportViewer.showReport('/ReportingGateway/InspeccionGanado?fromDate='+ parameters.start_date+'&toDate='+ parameters.end_date +'&rancherId='+parameters.rancher_id);
+//			this.$.mainPane.selectViewByName("reportViewer");
+//			this.$.reportViewer.showReport('/ReportingGateway/InspeccionGanado?fromDate='+ parameters.start_date+'&toDate='+ parameters.end_date +'&rancherId='+parameters.rancher_id);
+			utils.openReport('/ReportingGateway/InspeccionGanado?fromDate='+ parameters.start_date+'&toDate='+ parameters.end_date +'&rancherId='+parameters.rancher_id);
 		}
 		if (this.reportName == 'feed'){
 			var parameters = this.$.filter.getParams();
 //			window.open('/ReportingGateway/ReporteAlimento?fromDate='+ parameters.start_date+'&toDate='+ parameters.end_date +'&rancherId='+parameters.rancher_id,'_blank');
 //			window.focus();
-			this.$.mainPane.selectViewByName("reportViewer");
-			this.$.reportViewer.showReport('/ReportingGateway/ReporteAlimento?fromDate='+ parameters.start_date+'&toDate='+ parameters.end_date +'&rancherId='+parameters.rancher_id);
+//			this.$.mainPane.selectViewByName("reportViewer");
+//			this.$.reportViewer.showReport('/ReportingGateway/ReporteAlimento?fromDate='+ parameters.start_date+'&toDate='+ parameters.end_date +'&rancherId='+parameters.rancher_id);
+			utils.openReport('/ReportingGateway/ReporteAlimento?fromDate='+ parameters.start_date+'&toDate='+ parameters.end_date +'&rancherId='+parameters.rancher_id);
 		}
 
 		if(this.reportName == 'inspectionForecast'){
 		  var parameters = this.$.filterByDate.getParams();
 //          window.open('/ReportingGateway/ListaInspeccionHistorica?fromDate='+ parameters.start_date+'&toDate='+ parameters.end_date,'_blank');
 //          window.focus();
-          	this.$.mainPane.selectViewByName("reportViewer");
-			this.$.reportViewer.showReport('/ReportingGateway/ListaInspeccionHistorica?fromDate='+ parameters.start_date+'&toDate='+ parameters.end_date);
+//          	this.$.mainPane.selectViewByName("reportViewer");
+//			this.$.reportViewer.showReport('/ReportingGateway/ListaInspeccionHistorica?fromDate='+ parameters.start_date+'&toDate='+ parameters.end_date);
+			utils.openReport('/ReportingGateway/ListaInspeccionHistorica?fromDate='+ parameters.start_date+'&toDate='+ parameters.end_date);
 		}
 //		cacheMan.goBack();
 	},
