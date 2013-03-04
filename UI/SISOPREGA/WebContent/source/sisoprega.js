@@ -236,7 +236,10 @@ enyo.kind(
         this.$.mainPane.selectViewByName("addUser");
   	},
   	selectView:function(inSender, inView, inPreviousView) {
-		if(inView.name=="usersList"){
+  		if(inView.name=="inspectionForecast"){
+  			inView.$.forecast.resetValues();
+  		}
+  		if(inView.name=="usersList"){
 		  inView.updateList();
 		}
 		if(inPreviousView.name == "usersList" && inView.name != "menuOptions"){
