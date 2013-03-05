@@ -94,10 +94,10 @@ public class EnterpriseRancherBean extends BaseBean implements Cruddable {
       }
     } catch (Exception e) {
       // Set exception details
-      if (e instanceof javax.persistence.PersistenceException){
+      if (e instanceof javax.persistence.PersistenceException) {
         this.log.severe("Exception found while create enterprise rancher");
         this.log.throwing(this.getClass().getName(), "Create", e);
-        
+
         response.setError(new Error("DB01", "Los datos que usted ha intentado ingresar, no son permitidos por la base de datos, "
             + "muy probablemente el ganadero que usted quiere agregar ya existe en la base de datos.",
             "proxy.EnterpriseRAncherBean.Create"));
@@ -128,11 +128,11 @@ public class EnterpriseRancherBean extends BaseBean implements Cruddable {
       String qryLogger = "";
       String queryName = "";
       Map<String, Object> parameters = new HashMap<String, Object>();
-      
+
       if (ejbContext.isCallerInRole("rancher")) {
         log.exiting(this.getClass().getCanonicalName(), "Read");
         return readLoggedRancherDetails(request.getEntityName());
-      }else if (enterpriseRancher.getEnterpriseId() != 0) {
+      } else if (enterpriseRancher.getEnterpriseId() != 0) {
         queryName = "ENTERPRISE_RANCHER_BY_ID";
         parameters.put("enterpriseId", enterpriseRancher.getEnterpriseId());
         qryLogger = "By enterpriseId [" + enterpriseRancher.getEnterpriseId() + "]";
@@ -268,13 +268,6 @@ public class EnterpriseRancherBean extends BaseBean implements Cruddable {
     }
 
     if (valid) {
-      // Validar vacio en address one.
-      valid = rancher.getAddressOne().trim().length() > 0;
-      if (!valid)
-        error_description = "La direccion de la empresa es requerida.";
-    }
-
-    if (valid) {
       valid = rancher.getAddressTwo().length() <= 100;
       if (!valid)
         error_description = "La dirección es más grande de lo permitido en la base de datos.";
@@ -287,27 +280,15 @@ public class EnterpriseRancherBean extends BaseBean implements Cruddable {
     }
 
     if (valid) {
-      valid = rancher.getCity().trim().length() > 0;
-      if (!valid)
-        error_description = "La ciudad en la dirección de la empresa es un campo requerido.";
-    }
-
-    if (valid) {
       valid = rancher.getLegalId().length() <= 13;
       if (!valid)
         error_description = "El RFC es más grande de lo permitido en la base de datos.";
     }
 
     if (valid) {
-      valid = rancher.getLegalId().trim().length() > 0;
-      if (!valid)
-        error_description = "El RFC de la empresa es un campo requerido.";
-    }
-
-    if (valid) {
       valid = rancher.getLegalName().length() <= 100;
       if (!valid)
-        error_description = "La razón social es un campo requerido en la base de datos.";
+        error_description = "La razón social es más grande de lo permitido en la base de datos.";
     }
 
     if (valid) {
@@ -323,12 +304,6 @@ public class EnterpriseRancherBean extends BaseBean implements Cruddable {
     }
 
     if (valid) {
-      valid = rancher.getState().trim().length() > 0;
-      if (!valid)
-        error_description = "El estado de la dirección de la empresa es un campo requerido.";
-    }
-
-    if (valid) {
       valid = rancher.getTelephone().length() <= 20;
       if (!valid)
         error_description = "El teléfono de la empresa es más grande de lo permitido en la base de datos.";
@@ -338,12 +313,6 @@ public class EnterpriseRancherBean extends BaseBean implements Cruddable {
       valid = rancher.getZipCode().length() <= 9;
       if (!valid)
         error_description = "El código postal de la empresa es más grande de lo permitido en la base de datos.";
-    }
-
-    if (valid) {
-      valid = rancher.getZipCode().trim().length() > 0;
-      if (!valid)
-        error_description = "El código postal de la empresa es un campo requerido.";
     }
 
     if (valid && rancher.getEmail() != null && rancher.getEmail().trim().length() > 0) {
@@ -392,42 +361,42 @@ public class EnterpriseRancherBean extends BaseBean implements Cruddable {
 
     return !invoices.isEmpty();
   }
-  
-  private ReadGatewayResponse readLoggedRancherDetails(String entityName) throws IllegalArgumentException, IllegalAccessException{
+
+  private ReadGatewayResponse readLoggedRancherDetails(String entityName) throws IllegalArgumentException, IllegalAccessException {
     log.entering(this.getClass().getCanonicalName(), "readLoggedRancherReceptions");
 
     ReadGatewayResponse response = new ReadGatewayResponse();
     response.setEntityName(entityName);
-    
+
     Map<String, Object> parameters = new HashMap<String, Object>();
     parameters.put("userName", getLoggedUser());
-    
+
     List<RancherUser> ranchers = dataModel.readDataModelList("RANCHER_USER_BY_USER_NAME", parameters, RancherUser.class);
-    
-    if(!ranchers.isEmpty()){
+
+    if (!ranchers.isEmpty()) {
       RancherUser loggedRancher = ranchers.get(0);
-      
-      EnterpriseRancher rancher = dataModel.readSingleDataModel("ENTERPRISE_RANCHER_BY_ID", "enterpriseId", loggedRancher.getRancherId(), EnterpriseRancher.class);
-      
-      if(rancher != null){
+
+      EnterpriseRancher rancher = dataModel.readSingleDataModel("ENTERPRISE_RANCHER_BY_ID", "enterpriseId",
+          loggedRancher.getRancherId(), EnterpriseRancher.class);
+
+      if (rancher != null) {
         List<EnterpriseRancher> rancherList = new LinkedList<EnterpriseRancher>();
         rancherList.add(rancher);
-        
+
         response.getRecord().addAll(contentFromList(rancherList, EnterpriseRancher.class));
 
         response.setError(new Error("0", "SUCCESS", "proxy.RancherBean.Read"));
         log.info("Read operation RANCHER BY LOGGED RANCHER executed by principal[" + getLoggedUser() + "] on RancherBean");
-        
-      }else{
+
+      } else {
         response.setError(new Error("VAL02", "No se encontraron datos para el filtro seleccionado", "proxy.RancherBean.Read"));
       }
     } else {
       response.setError(new Error("VAL02", "No se encontraron datos para el filtro seleccionado", "proxy.Reception.Read"));
     }
-    
+
     log.exiting(this.getClass().getCanonicalName(), "readLoggedRancherReceptions");
     return response;
   }
 
-  
 }
