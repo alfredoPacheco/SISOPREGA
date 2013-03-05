@@ -42,6 +42,7 @@ public class Reception {
   private long cattleType;
   private long locationId;
   private long zoneId;
+  private RancherUser rancher_user;
 
   /**
    * @return the receptionId
@@ -147,4 +148,12 @@ public class Reception {
     }
     return false;
   }
+
+public RancherUser getRancher_user() {
+	return rancher_user;
+}
+
+public void setRancher_user(RancherUser rancher_user) {
+	this.rancher_user = rancher_user;
+}
 }
