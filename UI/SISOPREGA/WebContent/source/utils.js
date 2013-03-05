@@ -73,14 +73,21 @@ enyo.kind({
 						width: "95%", height: "95%",scrim: true}              
 	              ],
 	
-	openReport:function(reportName){
-//		if(this.$.reportContainer.$.rViewer){
-//			this.$.reportContainer.$.rViewer.destroy();
-//		}
-		this.$.reportContainer.$.rViewer.setReport(reportName);
-		this.$.reportContainer.$.rViewer.applyStyle("height",null);
-//		this.$.reportContainer.$.rViewer.render();
-		this.$.reportContainer.openAtCenter();				
+	openReport:function(url){
+		// Create link in memory
+	    var a = window.document.createElement("a");
+	    a.target = '_blank';
+	    a.href = url;
+	 
+	    // Dispatch fake click
+	    var e = window.document.createEvent("MouseEvents");
+	    e.initMouseEvent("click", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+	    a.dispatchEvent(e);
+	    return false;
+		
+//		this.$.reportContainer.$.rViewer.setReport(reportName);
+//		this.$.reportContainer.$.rViewer.applyStyle("height",null);
+//		this.$.reportContainer.openAtCenter();				
 	},
 	ready:function(){
 		this.$.reportContainer.createComponent({kind: "controls.reportViewer", name:'rViewer'});

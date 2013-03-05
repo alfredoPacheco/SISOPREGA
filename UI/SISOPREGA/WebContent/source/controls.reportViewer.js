@@ -1,22 +1,25 @@
 enyo.kind({
 	name : "controls.reportViewer",	
-	kind : enyo.Control,
+	kind : enyo.VFlexBox,
 	reportName : "",
-//	components:[{kind:enyo.Scroller,
-//		flex:1,
-//	components : [ {
-//        kind : enyo.VFlexBox,
-//        flex : 1,
-        height:"100%",	
+	flex:1,
+	components:[{kind:enyo.Scroller,
+		flex:1,
+	components : [ {
+        kind : enyo.Control,
+        
 ////        className : "listBG",
-        components :[{name : "reportContainer", allowHtml:true, content:"Cargando...", height:"100%"}]
-//	}]
-//	}]
+        components :[{name : "reportContainer", allowHtml:true, content:"Cargando...", width:'100%', height:"100%"}]
+	}]
+	}]
 	,setReport:function(sReportName){
+		
 		this.reportName = sReportName;
-		 this.$.reportContainer.setContent("<iframe id='pdfObjeto' src= '" + sReportName + "' " +
-		 		" scrolling='no' width= '100%' height= '100%'></iframe>");
-//					this.myFunction(sReportName);		
+//		 this.$.reportContainer.setContent("<iframe id='pdfObjeto' src= '" + sReportName + "' " +
+//		 		" scrolling='no' width= '100%' height= '100%'></iframe>");
+
+		 
+		 //					this.myFunction(sReportName);		
 		
 		
 //		var pdfObject =  new PDFObject({ 
@@ -34,10 +37,10 @@ enyo.kind({
 //		this.$.reportContainer.setContent(myPDF);
 		
 
-//		this.$.reportContainer.setContent("<object id='pdfObjeto' data= '" + this.reportName + "' type='application/pdf' width= '100%' height= '2000px' onload='pdfLoaded()'>"+
-//				  "<p>It appears you don't have a PDF plugin for this browser." + 
-//				  "No biggie... you can <a href='" + this.reportName + "'>click here to" +
-//				  "download the PDF file.</a></p></object>");
+		this.$.reportContainer.setContent("<object id='pdfObjeto' data= '" + this.reportName + "' type='application/pdf' width= '100%' height= '2000px' onload='pdfLoaded()'>"+
+				  "<p>It appears you don't have a PDF plugin for this browser." + 
+				  "No biggie... you can <a href='" + this.reportName + "'>click here to" +
+				  "download the PDF file.</a></p></object>");
 //		elem = document.getElementById("pdfObjeto");
 		
 //		<object data="/pdf/sample.pdf#navpanes=0&amp;toolbar=0&amp;statusbar=0&amp;view=FitV" type="application/pdf" width="100%" height="100%"></object>
