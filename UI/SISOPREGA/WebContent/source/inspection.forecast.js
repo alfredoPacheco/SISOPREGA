@@ -231,8 +231,15 @@ enyo
 										style : "font-size:13px;background-color:#DABD8B;",
 										components : [
 												{
+												    kind : "enyo.IconButton",
+												    name : "btnReport",
+												    icon : "images/command-menu/menu-icon-cards.png",
+												    onclick : "enviar_aviso",
+												    style : "width:30px;"
+												  },
+												{
 													content : "Ganadero",
-													style : "width:250px;text-align:center;"
+													style : "width:185px;text-align:center;"
 												},
 												{
 													content : "Autorización",
@@ -257,14 +264,8 @@ enyo
 												{
 													content : "Corrales",
 													style : "width:100px;text-align:left;"
-												},
-												{
-						                            kind : "enyo.IconButton",
-						                            name : "btnReport",
-						                            icon : "images/command-menu/menu-icon-cards.png",
-						                            onclick : "enviar_aviso",
-						                            style : "width:30px;"
-						                          }
+												}
+												
 												]
 									},
 									{
@@ -611,7 +612,6 @@ enyo
 				};
 			},
 			on_select_item: function(InSender, InEvent){
-				//TODO
 				switch(InSender.name){
 				case "rancher":
 					this.actualFilter.rancher_id = InSender.index;
