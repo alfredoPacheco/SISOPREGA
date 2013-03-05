@@ -43,9 +43,10 @@ GROUP BY
      cat_zone_zone_name,
      ctrl_inspection_forecast_forecast_date,
      cat_cattle_type_cattype_name,
-     cat_location_location_name
+     cat_location_location_name,
+     ctrl_inspection_forecast."id"
 ORDER BY
-     vw_rancher."rancher_name" ASC]]>
+     ctrl_inspection_forecast."id" ASC]]>
 	</queryString>
 	<field name="barnyards" class="java.lang.String"/>
 	<field name="ctrl_inspection_forecast_detail_auth" class="java.lang.String"/>
@@ -260,7 +261,7 @@ ORDER BY
 				</graphicElement>
 			</line>
 			<textField isStretchWithOverflow="true">
-				<reportElement uuid="9a91792d-fcfe-4daa-9d2f-8d155a3f36db" x="455" y="4" width="95" height="21"/>
+				<reportElement uuid="9a91792d-fcfe-4daa-9d2f-8d155a3f36db" x="455" y="4" width="97" height="21"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isPdfEmbedded="false"/>
 				</textElement>
