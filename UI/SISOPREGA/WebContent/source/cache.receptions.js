@@ -322,9 +322,6 @@ enyo.kind(
 
     },
     getFeedOrderBarnyard : function(oID) {
-      // private long feedOrdBarnId;
-      // private long barnyardId;
-      // private long orderId;
 
       var arrAux = [];
       var objToSend = {};
@@ -345,11 +342,6 @@ enyo.kind(
 
     },
     getFeedOrderDetails : function(oID) {
-      // private long fodId;
-      // private long orderId;
-      // private long foodId;
-      // private double quantity;
-
       var arrAux = [];
       var objToSend = {};
       objToSend.orderId = oID;
@@ -629,15 +621,8 @@ enyo.kind(
       }
     },
     createFeedOrder : function(objRec, objFeed) {
-      // private long orderId;
-      // private long receptionId;
-      // private Date feedDate;
-      // private String feedOriginator;
-
       var objToSend = {};
       objToSend.receptionId = objRec.reception_id;
-      // objToSend.feedDate = "" + utils.dateOut(new Date());
-      // objToSend.feedOriginator = "";
       objToSend.handling = objFeed.handling;
 
       var cgCreate = consumingGateway.Create("FeedOrder", objToSend);
@@ -679,12 +664,6 @@ enyo.kind(
       return true;
     },
     createFeedOrderDetails : function(order_id, objFeed) {
-
-      // private long fodId;
-      // private long orderId;
-      // private long foodId;
-      // private double quantity;
-
       var objToSend = {};
       objToSend.orderId = order_id;
 
@@ -734,8 +713,6 @@ enyo.kind(
       objNew.feeding_id = objOld.feeding_id;
       var objToSend = {};
       objToSend.orderId = objNew.feeding_id;
-      // objToSend.feedDate = "" + utils.dateOut(new Date());
-      // objToSend.feedOriginator = "";
       objToSend.handling = objNew.handling;
       objToSend.receptionId = cbObj._objRec.reception_id;
 
@@ -774,10 +751,6 @@ enyo.kind(
       }
     },
     createInspection : function(objRec, objRej) {
-      // private long inspectionId;
-      // private long receptionId;
-      // private Date inspectionDate;
-
       var objToSend = {};
       objToSend.receptionId = objRec.reception_id;
       objToSend.inspectionDate = "" + utils.dateOut(new Date());
@@ -804,9 +777,6 @@ enyo.kind(
       }
     },
     createInspectionBarnyard : function(inspection_id, objRec, objRej) {
-      // private long ibId;
-      // private long inspectionId;
-      // private long barnyardId;
       var objToSend = {};
       objToSend.inspectionId = inspection_id;
       for (prop in objRec.barnyards) {
@@ -820,16 +790,6 @@ enyo.kind(
       return true;
     },
     createInspectionDetails : function(inspection_id, objRec, objRej) {
-
-      // private long inspectionDetailsId;
-      // private long inspectionId;
-      // private long inspectionCodeId;
-      // private long hc;
-      // private double weight;
-      // private long weightUom;
-      // private String note;
-
-      // inspections:[{rejected_id:1,rejected_count:1,reject_id:1,reject_desc:"ENFERMEDAD"}],
       var objToSend = {};
       objToSend.inspectionId = objRej.rejected_id;
       objToSend.inspectionCodeId = objRej.reject_id;
@@ -936,12 +896,6 @@ enyo.kind(
     },
     getAllOriginForList : function() {
       var result = [];
-      //				var receptions = this.get();	
-      //				for (i in receptions){
-      //					
-      //					var cattletype = {caption:cattles[property].cattype_name,value:cattles[property].cattype_id};
-      //					result.push(cattletype);
-      //				}
       return result;
     },
     getReceptionsByRancherID : function(rancher_id) {
