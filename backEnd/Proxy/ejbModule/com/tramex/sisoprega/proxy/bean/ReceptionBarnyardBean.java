@@ -297,7 +297,7 @@ public class ReceptionBarnyardBean extends BaseBean implements Cruddable {
             DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
             Date date = new Date();
             
-            String sReport = new String("CattleInspection?rancherId=" + getRancherFromReception(receptionId) + "&fromDate="
+            String sReport = new String("InspeccionGanado?rancherId=" + getRancherFromReception(receptionId) + "&fromDate="
                 + dateFormat.format(date) + "&toDate=" + dateFormat.format(date));
             Reception rec = dataModel.readSingleDataModel("CRT_RECEPTION_BY_ID", "receptionId", receptionId,
                 Reception.class);
