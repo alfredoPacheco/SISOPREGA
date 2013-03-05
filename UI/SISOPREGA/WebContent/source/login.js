@@ -107,22 +107,22 @@ enyo.kind(
     },
     checkLogIn : function() {
       cacheMan.showScrim();
-      consumingGateway.Login(this.$.user.getValue(), this.$.password.getValue(), this, "loginCallBack");
+      consumingGateway.Login(this.$.user.getValue(), this.$.password.getValue(), this.loginCallBack, this);
     },
-    loginCallBack : function(loginResult) {
+    loginCallBack : function(loginResult, objRef) {
       if (loginResult.exceptionId == 0) {
-        this.$.user.setValue("");
-        this.$.password.setValue("");
+        objRef.$.user.setValue("");
+        objRef.$.password.setValue("");
         cacheRanchers.get();
         cacheCattle.getCattleClass();
         cacheCattle.getCattleType();
         cacheBY.get();
         cacheReceptions.get();
         cacheMan.hideScrim();
-        this.doSucess();
+        objRef.doSucess();
       } else {
         cacheMan.hideScrim();
-        this.doFail();
+        objRef.doFail();
       }
     },
     key_down : function(inSender, inEvent) {

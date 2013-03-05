@@ -80,7 +80,7 @@ var consumingGateway =
 
       return result;
     },
-    Login : function(userId, password, callBackObject, callBackMethod, result) {
+    Login : function(userId, password, callBackMethod, objRef) {
       // Se crea objeto que devolvera la funcion:
       output =
         {
@@ -106,13 +106,13 @@ var consumingGateway =
           success : function OnSuccess(data) {
             output.exceptionDescription = jQuery(data).find("exceptionDescription").text();
             output.exceptionId = jQuery(data).find("exceptionId").text();
-            setTimeout(callBackObject[callBackMethod](output), 1000);
+            setTimeout(function(){callBackMethod(output, objRef);}, 1000);
             return false;
           },
           error : function OnError(request, status, error) {
             output.exceptionId = 1;
             output.exceptionDescription = error;
-            callBackObject[callBackMethod](output);
+            setTimeout(function(){callBackMethod(output, objRef);}, 1000);
             return false;
           }
         });

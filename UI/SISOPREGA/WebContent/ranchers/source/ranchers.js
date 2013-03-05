@@ -14,7 +14,7 @@ enyo.kind({
                      {kind: "onyx.GroupboxHeader", content :"Fecha Inicio"},
                      {kind:"onyx.DatePicker", name:'dFrom', minYear:2013, maxYear:2020, style:"border-width: 0 0px 0px 0px;"},
                      {kind: "onyx.GroupboxHeader", content :"Fecha Fin"},
-                     {kind:"onyx.DatePicker", name:'dTo',minYear:2013, maxYear:2020,style:"border-width: 0 0px 0px 0px;"},
+                     {kind:"onyx.DatePicker", name:'dTo',minYear:2013, maxYear:2020,style:"border-width: 0 0px 0px 0px;z-index:99999999999999"},
                      {kind: "FittableColumns", style:"border-width: 0 0px 0px 0px;",components:[
                           {kind:"onyx.Button", fit:true, onclick:"launchReport",content:"OK",
 						   classes: "onyx-affirmative",style:"border-width: 0 0px 0px 0px;"},
@@ -121,8 +121,6 @@ enyo.kind({
 	updateProfile:function(){
 		if(cacheProfile.update(this.objProfile.getProfile())){
 			alert('Profile Actualizado');
-		}else{
-			alert('Error actualizando profile');
 		}			
 	},
 	changePW:function(){
