@@ -91,6 +91,18 @@ ORDER BY
 	<variable name="calc_avg_pounds_3" class="java.math.BigDecimal" resetType="Group" resetGroup="FechaRecibido" calculation="Sum">
 		<variableExpression><![CDATA[$F{calc_avg_pounds}]]></variableExpression>
 	</variable>
+	<variable name="ctrl_reception_headcount_weight_4" class="java.math.BigDecimal" resetType="Group" resetGroup="FechaRecibido" calculation="Sum">
+		<variableExpression><![CDATA[$F{ctrl_reception_headcount_weight}]]></variableExpression>
+	</variable>
+	<variable name="calc_pounds_3" class="java.math.BigDecimal" resetType="Group" resetGroup="FechaRecibido" calculation="Sum">
+		<variableExpression><![CDATA[$F{calc_pounds}]]></variableExpression>
+	</variable>
+	<variable name="ctrl_reception_headcount_weight_5" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{ctrl_reception_headcount_weight}]]></variableExpression>
+	</variable>
+	<variable name="calc_pounds_4" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{calc_pounds}]]></variableExpression>
+	</variable>
 	<group name="vw_rancher_rancher_name">
 		<groupExpression><![CDATA[$F{vw_rancher_rancher_name}]]></groupExpression>
 	</group>
@@ -217,18 +229,18 @@ ORDER BY
 					<textFieldExpression><![CDATA[$V{ctrl_reception_headcount_hc_3}]]></textFieldExpression>
 				</textField>
 				<textField pattern="#,##0.00">
-					<reportElement uuid="7d7c4142-797c-4701-a739-aaca5b4e67ea" x="289" y="3" width="86" height="16"/>
+					<reportElement uuid="e825aa58-64b6-4cd9-a7c3-48f6be941029" x="289" y="3" width="86" height="16"/>
 					<textElement textAlignment="Center" verticalAlignment="Bottom">
 						<font fontName="Serif" size="12" isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[new Double(String.valueOf($V{calc_avg_kg_3}))]]></textFieldExpression>
+					<textFieldExpression><![CDATA[new Double(String.valueOf($V{ctrl_reception_headcount_weight_4}))/$V{ctrl_reception_headcount_hc_3}]]></textFieldExpression>
 				</textField>
 				<textField pattern="#,##0.00">
-					<reportElement uuid="03950bbc-3222-4c9e-977b-a8df941a0015" x="375" y="3" width="98" height="16"/>
+					<reportElement uuid="85dd551e-6e0e-4d75-9620-c5dbe5355271" x="375" y="3" width="98" height="16"/>
 					<textElement textAlignment="Center" verticalAlignment="Bottom">
 						<font fontName="Serif" size="12" isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[new Double(String.valueOf($V{calc_avg_pounds_3}))]]></textFieldExpression>
+					<textFieldExpression><![CDATA[new Double(String.valueOf($V{calc_pounds_3}))/$V{ctrl_reception_headcount_hc_3}]]></textFieldExpression>
 				</textField>
 			</band>
 		</groupFooter>
@@ -327,20 +339,6 @@ ORDER BY
 				</textElement>
 				<textFieldExpression><![CDATA[new Double(String.valueOf($V{calc_pounds_1}))]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0.00">
-				<reportElement uuid="0761f950-a25a-4a71-ac8d-774bf7551226" x="289" y="0" width="86" height="16"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Serif" size="12" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[new Double(String.valueOf($V{calc_avg_kg_1}))]]></textFieldExpression>
-			</textField>
-			<textField pattern="#,##0.00">
-				<reportElement uuid="d3b38680-73c1-4b43-883f-5bc24bebdba7" x="375" y="0" width="98" height="16"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Serif" size="12" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[new Double(String.valueOf($V{calc_avg_pounds_1}))]]></textFieldExpression>
-			</textField>
 			<staticText>
 				<reportElement uuid="afb1d68e-1729-425d-970d-b346f29bd423" x="6" y="0" width="81" height="16"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -354,6 +352,20 @@ ORDER BY
 					<font fontName="Serif" size="12" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{ctrl_reception_headcount_hc_4}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement uuid="265bdee7-0d09-4aa7-af66-39836b7d3d9b" x="289" y="0" width="86" height="16"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="Serif" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new Double(String.valueOf($V{ctrl_reception_headcount_weight_5}))/$V{ctrl_reception_headcount_hc_4}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement uuid="390cb2ee-baf3-4f0a-bc01-2745b6fb074f" x="375" y="0" width="98" height="16"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="Serif" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new Double(String.valueOf($V{calc_pounds_4}))/$V{ctrl_reception_headcount_hc_4}]]></textFieldExpression>
 			</textField>
 		</band>
 	</summary>
