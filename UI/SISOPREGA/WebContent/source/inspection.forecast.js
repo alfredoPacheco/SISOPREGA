@@ -231,8 +231,15 @@ enyo
 										style : "font-size:13px;background-color:#DABD8B;",
 										components : [
 												{
+												    kind : "enyo.IconButton",
+												    name : "btnReport",
+												    icon : "images/command-menu/menu-icon-cards.png",
+												    onclick : "enviar_aviso",
+												    style : "width:30px;"
+												  },
+												{
 													content : "Ganadero",
-													style : "width:250px;text-align:center;"
+													style : "width:185px;text-align:center;"
 												},
 												{
 													content : "Autorización",
@@ -257,14 +264,8 @@ enyo
 												{
 													content : "Corrales",
 													style : "width:100px;text-align:left;"
-												},
-												{
-						                            kind : "enyo.IconButton",
-						                            name : "btnReport",
-						                            icon : "images/command-menu/menu-icon-cards.png",
-						                            onclick : "enviar_aviso",
-						                            style : "width:30px;"
-						                          }
+												}
+												
 												]
 									},
 									{
@@ -524,16 +525,23 @@ enyo
 					if (this.$.zone.getHighLighted()&& !this.actualAutocompleteFilter.zone_id){
 						if(this.defaultZone){
 							this.$.zone.index=this.defaultZone;
-							this.$.zone.setValue(cacheMan.getZoneByID(this.$.zone.index).zone_name);
 							this.actualAutocompleteFilter.zone_id =true;
+							var oZone = cacheMan.getZoneByID(this.$.zone.index);
+							if(oZone){
+								this.$.zone.setValue(oZone.zone_name);
+							}else{
+								this.$.zone.setValue("");
+							}
 						}else{
 							if(this.arrAutocompleteFilter.length ==1){
 								this.actualAutocompleteFilter.zone_id =true;
 								this.$.zone.index=this.arrAutocompleteFilter[0].zone_id;							
-								this.$.zone.setValue(cacheMan.getZoneByID(this.arrAutocompleteFilter[0].zone_id).zone_name);
-//								this.arrAutocompleteFilter =this.filterByZone(this.$.zone.index, this.arrAutocompleteFilter);
-//								this.autoCompleteFields();
-//								return;
+								var oZone = cacheMan.getZoneByID(this.$.zone.index);
+								if(oZone){
+									this.$.zone.setValue(oZone.zone_name);
+								}else{
+									this.$.zone.setValue("");
+								}
 							}
 							else{
 								this.$.zone.index=-1;
@@ -567,7 +575,12 @@ enyo
 							if(this.defaultCattle){
 								this.actualAutocompleteFilter.cattle_type_id =true;
 								this.$.cattle_type.index=this.defaultCattle;
-								this.$.cattle_type.setValue(cacheCattle.getByID(this.$.cattle_type.index).cattype_name);
+								var oCattle = cacheCattle.getByID(this.$.cattle_type.index);
+								if(oCattle){
+									this.$.cattle_type.setValue(oCattle.cattype_name);	
+								}else{
+									this.$.cattle_type.setValue("");
+								}
 							}else{
 								this.$.cattle_type.index=-1;
 								this.$.cattle_type.setValue("");
@@ -599,7 +612,6 @@ enyo
 				};
 			},
 			on_select_item: function(InSender, InEvent){
-				//TODO
 				switch(InSender.name){
 				case "rancher":
 					this.actualFilter.rancher_id = InSender.index;
@@ -631,19 +643,19 @@ enyo
 			},
 			applyFilter:function(){
 				this.arrFilter = this.arrActiveReceptions;
-				if(this.actualFilter.rancher_id != ""){
+				if(this.actualFilter.rancher_id != "" && this.actualFilter.rancher_id > -1){
 					this.arrFilter = this.filterByRancher(this.actualFilter.rancher_id, this.arrFilter);
 				}
-				if(this.actualFilter.zone_id != ""){
+				if(this.actualFilter.zone_id != "" && this.actualFilter.zone_id > -1){
 //					this.arrFilter = this.filterByZone(this.actualFilter.zone_id, this.arrFilter);
 				}
-				if(this.actualFilter.origin_id != ""){
+				if(this.actualFilter.origin_id != "" && this.actualFilter.origin_id > -1){
 					this.arrFilter = this.filterByOrigin(this.actualFilter.origin_id, this.arrFilter);
 				}
-				if(this.actualFilter.cattle_type_id != ""){
+				if(this.actualFilter.cattle_type_id != "" && this.actualFilter.cattle_type_id > -1){
 					this.arrFilter = this.filterByCattle(this.actualFilter.cattle_type_id, this.arrFilter);
 				}
-				if(this.actualFilter.reception_id != ""){
+				if(this.actualFilter.reception_id != "" && this.actualFilter.reception_id > -1){
 					this.arrFilter = this.filterByReception(this.actualFilter.reception_id, this.arrFilter);
 				}
 			},
@@ -777,8 +789,10 @@ enyo
 					for (i in this.arrFilter){
 						var obj = {
 								value:		this.arrFilter[i].zone_id,
-								caption:	cacheMan.getZoneByID(this.arrFilter[i].zone_id).zone_name
+								caption:	""
 						};
+						var oZone = cacheMan.getZoneByID(this.arrFilter[i].zone_id);
+						if(oZone){obj.caption = oZone.zone_name;}
 						if(!(arrResult[obj.value] in arrResult)){
 							arrResult[obj.value]=obj;	
 						}
@@ -923,27 +937,37 @@ enyo
 						}
 					}
 					this.$.listAuth.setContent(objFore.auth);
-					this.$.listOrigin.setContent(cacheMan.getLocationByID(objFore.origin).location_name);
-					this.$.listCattleType.setContent(cacheCattle
-							.getByID(objFore.cattle_type).cattype_name);
+					var oOrigin = cacheMan.getLocationByID(objFore.origin);
+					if(oOrigin){
+						this.$.listOrigin.setContent(oOrigin.location_name);	
+					}else{
+						this.$.listOrigin.setContent("");
+					}
+					
+					var oCattle = cacheCattle.getByID(objFore.cattle_type);
+					if(oCattle){
+						this.$.listCattleType.setContent(oCattle.cattype_name);	
+					}else{
+						this.$.listCattleType.setContent("");
+					}
+					
 					this.$.listQuantity.setContent(objFore.quantity);
-
+					
+					var oZone = cacheMan.getZoneByID(objFore.zone_id);
+					if(oZone){
+						this.$.listZone.setContent(oZone.zone_name);
+					}else{
+						this.$.listZone.setContent("");
+					}
+					
 					if (objFore.barnyards.length > 0) {
-						if (objFore.barnyards[0].zone_id == 1) {
-							this.$.listZone.setContent("Chihuahua");
-						} else {
-							this.$.listZone.setContent("Zona Sur");
-						}
 						var strBarnyards = "";
 						for (i in objFore.barnyards) {
-							strBarnyards = strBarnyards
-									+ objFore.barnyards[i].barnyard_code + ", ";
-
+							strBarnyards += objFore.barnyards[i].barnyard_code + ", ";
 						}
 						strBarnyards = strBarnyards.slice(0, -2);
 						this.$.listBarnyards.setContent(strBarnyards);
 					} else {
-						this.$.listZone.setContent("");
 						this.$.listBarnyards.setContent("");
 					}
 					if (inIndex == this.iSelected) {
@@ -1086,8 +1110,7 @@ enyo
 						for (i in this.objList){
 							if(!(customers_set[this.objList[i].rancher_id] in customers_set)){
 								customers_set[this.objList[i].rancher_id]=this.objList[i].rancher_id;
-								var report_name = 'ListaInspeccion?rancherId='
-													+ this.objList[i].rancher_id;
+								var report_name = 'ListaInspeccion';
 								consumingGateway.SendReport(this.objList[i].rancher_id, report_name);
 							}
 						}

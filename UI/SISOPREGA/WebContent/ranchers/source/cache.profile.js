@@ -41,6 +41,7 @@ enyo.kind({
 			this.objRancher=objUpdate;
 			return true;
 		}else{
+			alert('Error actualizando perfil: '+ objResp.exceptionDescription);
 			return false;
 		}
 	},	
