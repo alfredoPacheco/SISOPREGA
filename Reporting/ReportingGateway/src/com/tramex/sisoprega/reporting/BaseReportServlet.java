@@ -106,6 +106,8 @@ public class BaseReportServlet extends HttpServlet {
       throws IOException, JRException {
     log.fine("loading report: " + relativeReportURL);
     response.setContentType("application/pdf");
+    
+    //response.setHeader("Content-disposition","attachment; filename=sisoprega.pdf");
     ServletOutputStream out = response.getOutputStream();
     InputStream is = new FileInputStream(getServletContext().getRealPath(relativeReportURL));
     JasperReport reporte = (JasperReport) JRLoader.loadObject(is);
