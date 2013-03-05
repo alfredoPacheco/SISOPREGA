@@ -30,15 +30,16 @@ enyo.kind({
 		]}
 	],
 	checkLogIn:function(){
-	  consumingGateway.Login(this.$.user.hasNode().value, this.$.password.hasNode().value, this, "loginCallBack");
+	  //consumingGateway.Login(this.$.user.hasNode().value, this.$.password.hasNode().value, this, "loginCallBack");
+	  consumingGateway.Login(this.$.user.hasNode().value, this.$.password.hasNode().value, this.loginCallBack, this);
 	},
-	loginCallBack : function(loginResult) {
-      if (loginResult.exceptionId == 0) {
-        this.userID=this.$.user.hasNode().value;
-        this.doSucess();
+	loginCallBack : function(loginResult, objRef) {
+	  if (loginResult.exceptionId == 0) {
+	    objRef.userID=objRef.$.user.hasNode().value;
+	    objRef.doSucess();
       } else {
-        this.$.popLogIn.show();
-        this.doFail();
+        objRef.$.popLogIn.show();
+        objRef.doFail();
       }
     },
 	resetValues:function(){
