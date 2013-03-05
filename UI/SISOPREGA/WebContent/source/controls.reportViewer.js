@@ -14,7 +14,7 @@ enyo.kind({
 //	}]
 	,setReport:function(sReportName){
 		this.reportName = sReportName;
-		 this.$.reportContainer.setContent("<iframe id='pdfObjeto' src= '" + sReportName + "' seamless" +
+		 this.$.reportContainer.setContent("<iframe id='pdfObjeto' src= '" + sReportName + "' " +
 		 		" scrolling='no' width= '100%' height= '100%'></iframe>");
 //					this.myFunction(sReportName);		
 		

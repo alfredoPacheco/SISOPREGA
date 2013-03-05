@@ -760,9 +760,9 @@ enyo
                   value : ranchers[property].rancher_id
                 };
               if (ranchers[property].aka != "") {
-                rancher.caption = ranchers[property].last_name + ', ' + ranchers[property].first_name + ' / ' + ranchers[property].aka;
+                rancher.caption = ranchers[property].rancher_id + " - " + ranchers[property].last_name + ', ' + ranchers[property].first_name + ' / ' + ranchers[property].aka;
               } else {
-                rancher.caption = ranchers[property].last_name + ', ' + ranchers[property].first_name;
+                rancher.caption = ranchers[property].rancher_id + " - " + ranchers[property].last_name + ', ' + ranchers[property].first_name;
               }
               ;
 
@@ -770,7 +770,7 @@ enyo
             } else {
               var rancher =
                 {
-                  caption : ranchers[property].company_name,
+                  caption : ranchers[property].rancher_id + " - " + ranchers[property].company_name,
                   value : ranchers[property].rancher_id
                 };
               result.push(rancher);
