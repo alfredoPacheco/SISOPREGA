@@ -34,8 +34,8 @@ import com.tramex.sisoprega.dto.RancherUser;
 import com.tramex.sisoprega.dto.Reception;
 
 /**
- * This proxy knows the logic to evaluate Reception information and the
- * way to the database in order to save their data. Also, it is contained in EJB
+ * This proxy knows the logic to evaluate Reception information and the way to
+ * the database in order to save their data. Also, it is contained in EJB
  * container, we can apply security and life cycle methods for resources.<BR/>
  * 
  * <B>Revision History:</B>
@@ -52,13 +52,14 @@ import com.tramex.sisoprega.dto.Reception;
  * 02/04/2013  Diego Torres                  Logged user details read request.                             
  * ====================================================================================
  * </PRE>
+ * 
  * @author Jaime Figueroa
  * 
  */
 @Stateless
-@DeclareRoles({"sisoprega_admin", "mx_usr", "rancher"})
+@DeclareRoles({ "sisoprega_admin", "mx_usr", "rancher" })
 public class ReceptionBean extends BaseBean implements Cruddable {
-  
+
   /*
    * (non-Javadoc)
    * 
@@ -80,7 +81,7 @@ public class ReceptionBean extends BaseBean implements Cruddable {
       if (validateEntity(reception)) {
         this.log.finer("Reception succesfully validated");
         dataModel.createDataModel(reception);
-        
+
         String sId = String.valueOf(reception.getReceptionId());
         log.finer("Setting Reception id in response: " + sId);
         response.setGeneratedId(sId);
@@ -129,8 +130,8 @@ public class ReceptionBean extends BaseBean implements Cruddable {
       String qryLogger = "";
       Map<String, Object> parameters = new HashMap<String, Object>();
       String queryName = "";
-      
-      if(ejbContext.isCallerInRole("rancher")){
+
+      if (ejbContext.isCallerInRole("rancher")) {
         log.fine("Retrieving receptions from rancher user [" + getLoggedUser() + "]");
         log.exiting(this.getClass().getCanonicalName(), "Read");
         return readLoggedRancherReceptions(request.getEntityName());
@@ -138,10 +139,10 @@ public class ReceptionBean extends BaseBean implements Cruddable {
         queryName = "CRT_RECEPTION_BY_ID";
         parameters.put("receptionId", reception.getReceptionId());
         qryLogger = "By receptionId [" + reception.getReceptionId() + "]";
-      }else if (reception.getRancherId() != 0){
-          queryName = "RECEPTIONS_BY_RANCHER_ID";
-          parameters.put("rancherID", reception.getRancherId());
-          qryLogger = "By rancherID [" + reception.getRancherId() + "]";    	  
+      } else if (reception.getRancherId() != 0) {
+        queryName = "RECEPTIONS_BY_RANCHER_ID";
+        parameters.put("rancherID", reception.getRancherId());
+        qryLogger = "By rancherID [" + reception.getRancherId() + "]";
       } else {
         queryName = "ALL_RECEPTIONS";
         qryLogger = "By ALL_RECEPTIONS";
@@ -198,7 +199,8 @@ public class ReceptionBean extends BaseBean implements Cruddable {
           log.info("Reception [" + reception.toString() + "] updated by principal[" + getLoggedUser() + "]");
         } else {
           log.warning("Validation error:" + error_description);
-          response.setError(new Error("VAL01", "Error de validación de datos:" + error_description, "proxy.ReceptionBean.Update"));
+          response
+              .setError(new Error("VAL01", "Error de validación de datos:" + error_description, "proxy.ReceptionBean.Update"));
         }
       }
 
@@ -207,8 +209,8 @@ public class ReceptionBean extends BaseBean implements Cruddable {
       log.throwing(this.getClass().getName(), "Update", e);
 
       if (e instanceof javax.persistence.PersistenceException)
-        response.setError(new Error("DB01", "Los datos que usted ha intentado ingresar, no son permitidos por la base de datos, ",
-            "proxy.ReceptionBean.Update"));
+        response.setError(new Error("DB01",
+            "Los datos que usted ha intentado ingresar, no son permitidos por la base de datos, ", "proxy.ReceptionBean.Update"));
       else {
         response.setError(new Error("DB02", "Error en la base de datos:[" + e.getMessage() + "]", "proxy.ReceptionBean.Update"));
       }
@@ -234,11 +236,13 @@ public class ReceptionBean extends BaseBean implements Cruddable {
       Reception reception = entityFromRequest(request, Reception.class);
       if (reception.getReceptionId() == 0) {
         log.warning("VAL04 - Entity ID Omission.");
-        response.setError(new Error("VAL04", "Se ha omitido el id del corral al intentar eliminar el registro.", "proxy.Reception.Delete"));
+        response.setError(new Error("VAL04", "Se ha omitido el id del corral al intentar eliminar el registro.",
+            "proxy.Reception.Delete"));
       } else {
-        reception = dataModel.readSingleDataModel("CRT_RECEPTION_BY_ID", "receptionId", reception.getReceptionId(), Reception.class);
+        reception = dataModel.readSingleDataModel("CRT_RECEPTION_BY_ID", "receptionId", reception.getReceptionId(),
+            Reception.class);
         dataModel.deleteDataModel(reception, getLoggedUser());
-        
+
         response.setError(new Error("0", "SUCCESS", "proxy.Reception.Delete"));
         log.info("Reception successfully deleted by principal [" + getLoggedUser() + "]");
       }
@@ -254,7 +258,7 @@ public class ReceptionBean extends BaseBean implements Cruddable {
     log.exiting(this.getClass().getCanonicalName(), "Delete");
     return response;
   }
-  
+
   private ReadGatewayResponse readLoggedRancherReceptions(String entityName) throws IllegalArgumentException,
       IllegalAccessException {
     log.entering(this.getClass().getCanonicalName(), "readLoggedRancherReceptions");
@@ -271,7 +275,10 @@ public class ReceptionBean extends BaseBean implements Cruddable {
       RancherUser loggedRancher = ranchers.get(0);
       log.fine("Rancher found with id:[" + loggedRancher.getRancherId() + "]");
 
-      List<Reception> queryResults = loggedRancher.getReceptions();
+      parameters.clear();
+      parameters.put("rancherID", loggedRancher.getRancherId());
+      List<Reception> queryResults = dataModel.readDataModelList("RECEPTIONS_BY_RANCHER_ID", parameters, Reception.class);
+
       if (queryResults.isEmpty()) {
         response.setError(new Error("VAL02", "No se encontraron datos para el filtro seleccionado", "proxy.Reception.Read"));
       } else {
@@ -288,5 +295,4 @@ public class ReceptionBean extends BaseBean implements Cruddable {
     log.exiting(this.getClass().getCanonicalName(), "readLoggedRancherReceptions");
     return response;
   }
-
 }

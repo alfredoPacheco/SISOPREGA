@@ -467,9 +467,6 @@
 			<basic name="cattleType">
 				<column name="cattle_type" />
 			</basic>
-			<many-to-one name="rancher_user" fetch="LAZY">
-				<join-column name="rancher_id" referenced-column-name="rancher_id" />
-			</many-to-one>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.ReceptionBarnyard">
