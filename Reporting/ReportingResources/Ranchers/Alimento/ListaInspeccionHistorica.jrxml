@@ -31,7 +31,7 @@ FROM
      INNER JOIN "public"."cat_cattle_type" cat_cattle_type ON ctrl_inspection_forecast_detail."cattle_type" = cat_cattle_type."cattype_id"
      INNER JOIN "public"."ctrl_inspection_forecast_barnyard" ctrl_inspection_forecast_barnyard ON ctrl_inspection_forecast_detail."id" = ctrl_inspection_forecast_barnyard."detail_id"
      INNER JOIN "public"."cat_zone" cat_zone ON ctrl_inspection_forecast_detail."zone_id" = cat_zone."zone_id"
-     INNER JOIN "public"."cat_location" cat_location ON ctrl_inspection_forecast_detail."origin" = cat_location."location_id"
+     LEFT JOIN "public"."cat_location" cat_location ON ctrl_inspection_forecast_detail."origin" = cat_location."location_id"
      INNER JOIN "public"."cat_barnyard" cat_barnyard ON ctrl_inspection_forecast_barnyard."barnyard_id" = cat_barnyard."barnyard_id"
 WHERE
      ctrl_inspection_forecast."forecast_date" >=$P{CUS_FROM_DATE}

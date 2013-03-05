@@ -194,7 +194,7 @@ enyo.kind({
 				return this.getCattleType()[i];
 			}
 		}
-		return [];
+		return null;
 	},
 	getCattleClassByID:function(iID){
 		var arrTemp = [];
