@@ -121,8 +121,6 @@ enyo.kind({
 	updateProfile:function(){
 		if(cacheProfile.update(this.objProfile.getProfile())){
 			alert('Profile Actualizado');
-		}else{
-			alert('Error actualizando profile');
 		}			
 	},
 	changePW:function(){
