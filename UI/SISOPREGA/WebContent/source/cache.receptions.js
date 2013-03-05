@@ -124,7 +124,7 @@ enyo.kind(
           objAux = this.arrReception[a];
           // barnyards::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
           var barnyardAux = this.getReceptionBarnyard(objAux.reception_id);
-          for (b in barnyardAux) {
+          for (var b = 0;b<barnyardAux.length;b++) {
             try {
               var barnyard = cacheBY.getByID(barnyardAux[b].barnyardId);
               objAux.barnyards["" + barnyard.zone_id + barnyard.barnyard_code] = "" + barnyard.zone_id + barnyard.barnyard_code;
@@ -133,7 +133,7 @@ enyo.kind(
           }
           // weight:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
           var arrHeadcountAux = this.getReceptionHeadcount(objAux.reception_id);
-          for (h in arrHeadcountAux) {
+          for (var h=0;h<arrHeadcountAux.length;h++) {
 
             try {
               objAux.weights[0].hcw_id = arrHeadcountAux[h].headcountId;
@@ -146,7 +146,7 @@ enyo.kind(
           // inspections::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
           // inspections:[{reject_desc:"ENFERMEDAD"}],
           var arrInspectionAux = this.getInspection(objAux.reception_id);
-          for (i in arrInspectionAux) {
+          for (var i=0;i<arrInspectionAux.length;i++) {
             var inspectionAux =
               {
                 rejected_count : undefined,
@@ -168,7 +168,7 @@ enyo.kind(
             // Details::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
             var arrInspectionDetailsAux = this.getInspectionDetails(inspectionAux.rejected_id);
 
-            for (id in arrInspectionDetailsAux) {
+            for (var id=0; id<arrInspectionDetailsAux.length;id++) {
               inspectionAux.rejected_count = arrInspectionDetailsAux[id].hc;
               inspectionAux.reject_id = arrInspectionDetailsAux[id].inspectionCodeId;
               inspectionAux.reject_desc = arrInspectionDetailsAux[id].note;
@@ -187,10 +187,10 @@ enyo.kind(
               locale : new enyo.g11n.Locale("en_es")
             });
           var arrFeedAux = this.getFeedOrder(objAux.reception_id);
-          for (f in arrFeedAux) {
+          for (var f=0; f<arrFeedAux.length;f++) {
             var feedAux = {};
-            var fechaAux = new Date(parseInt(arrFeedAux[f].feedDate));
             try {
+              var fechaAux = new Date(parseInt(arrFeedAux[f].feedDate));
               feedAux.feeding_id = arrFeedAux[f].orderId;
               feedAux.handling = arrFeedAux[f].handling;
               feedAux.weight = arrFeedAux[f].weight;
@@ -241,11 +241,6 @@ enyo.kind(
       return this.arrObj;
     },
     getReception : function() {
-      // private long receptionId;
-      // private long rancherId;
-      // private Date dateAllotted;
-      // private long cattleType;
-      // private long locationId;
 
       if (this.receptionWasReadFromGateway == false) {
         this.receptionWasReadFromGateway = true;
@@ -254,9 +249,9 @@ enyo.kind(
         var cgReadAll = consumingGateway.Read("Reception", {});
 
         if (cgReadAll.exceptionId == 0) { // Read successfully
-          for (item in cgReadAll.records) {
-            if (cgReadAll.records.hasOwnProperty(item))
-              arrAux.push(this.receptionAdapterToIn(cgReadAll.records[item]));
+          for(var i = 0; i<cgReadAll.records.length; i++){
+            if(cgReadAll.records[i])
+              arrAux.push(this.receptionAdapterToIn(cgReadAll.records[i]));
           }
         } else { // Error
           if (cgReadAll.exceptionId != "VAL02") { // No data found
@@ -275,7 +270,7 @@ enyo.kind(
       var cgReadAll = consumingGateway.Read("ReceptionBarnyard", objToSend);
 
       if (cgReadAll.exceptionId == 0) { // Read successfully
-        for (item in cgReadAll.records) {
+        for (var item = 0; item<cgReadAll.records.length;item++) {
           arrAux.push(this.receptionBarnyardAdapterToIn(cgReadAll.records[item]));
 
         }
@@ -374,9 +369,6 @@ enyo.kind(
 
     },
     getInspection : function(recID) {
-      // private long inspectionId;
-      // private long receptionId;
-      // private Date inspectionDate;
 
       var arrAux = [];
       var objToSend = {};
@@ -398,9 +390,6 @@ enyo.kind(
 
     },
     getInspectionBarnyard : function(recID) {
-      // private long ibId;
-      // private long inspectionId;
-      // private long barnyardId;
 
       var arrAux = [];
       var objToSend = {};
@@ -421,15 +410,12 @@ enyo.kind(
 
     },
     getInspectionDetails : function(inspID) {
-      // private long inspectionDetailsId;
-      // private long inspectionId;
-      // private long inspectionCodeId;
-      // private long hc;
-      // private double weight;
-      // private long weightUom;
-      // private String note;
 
       var arrAux = [];
+      
+      if(!inspID)
+        return arrAux;
+      
       var objToSend = {};
       objToSend.inspectionId = inspID;
       var cgReadAll = consumingGateway.Read("InspectionDetails", objToSend);
