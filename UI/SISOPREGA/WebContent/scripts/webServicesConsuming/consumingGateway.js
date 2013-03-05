@@ -106,13 +106,13 @@ var consumingGateway =
           success : function OnSuccess(data) {
             output.exceptionDescription = jQuery(data).find("exceptionDescription").text();
             output.exceptionId = jQuery(data).find("exceptionId").text();
-            setTimeout(callBackMethod (output, objRef), 1000);
+            setTimeout(function(){callBackMethod(output, objRef);}, 1000);
             return false;
           },
           error : function OnError(request, status, error) {
             output.exceptionId = 1;
             output.exceptionDescription = error;
-            callBackObject[callBackMethod](output);
+            setTimeout(function(){callBackMethod(output, objRef);}, 1000);
             return false;
           }
         });
