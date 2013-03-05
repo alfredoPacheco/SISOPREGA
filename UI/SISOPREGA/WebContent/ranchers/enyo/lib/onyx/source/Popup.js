@@ -74,10 +74,11 @@ enyo.kind({
 		return onyx.scrim.make();
 	},
 	applyZIndex: function() {
-		// Adjust the zIndex so that popups will properly stack on each other.
+		// Adjust the zIndex so that popups will properly stack on each other.		
 		this._zIndex = onyx.Popup.count * 2 + this.findZIndex() + 1;
 		// leave room for scrim
-		this.applyStyle("z-index", this._zIndex);
+		//this.applyStyle("z-index", this._zIndex);
+		this.applyStyle("z-index", "999999999");
 	},
 	findZIndex: function() {
 		// a default z value

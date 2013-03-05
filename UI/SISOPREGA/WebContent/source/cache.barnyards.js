@@ -13,29 +13,15 @@ enyo.kind({
 		//AJAX
 	},
 	barnyardAdapterToIn:function(objBarnyard){
-		
-//		  _arrBarnyardsList=[
-//		{barnyard_id:1,barnyard_code:"A1",
-//		 barnyard_capacity:[{cattype_id:1,cattype_name:"CABALLOS",head_count:75}]},
-//		{barnyard_id:2,barnyard_code:"A2",
-//		 barnyard_capacity:[{cattype_id:4,cattype_name:"VACAS",head_count:50}]}
-//		];
-				
 		var objNew = {
 				barnyard_id:		objBarnyard.barnyardId,				
 				barnyard_code:		objBarnyard.barnyardCode,
-//				available: 			objBarnyard.available,				
 				zone_id:			objBarnyard.locationId	
 			};
 		
 		return objNew;
 	},
 	barnyardAdapterToOut:function(objBarnyard){
-//		private long barnyardId;    
-//	    private String barnyardCode;
-//	    private boolean available; 
-//	    private long locationId;
-		
 		var objNew = {				
 				barnyardId:			objBarnyard.barnyard_id,				
 				barnyardCode:		objBarnyard.barnyard_code,
@@ -56,9 +42,6 @@ enyo.kind({
 		return objNew;
 	},
 	rec_barnAdapterToOut:function(objRec_Barn){
-//		private long recBarnyardId;
-//	    private long receptionId;
-//	    private long barnyardId;
 		
 		var objNew = {				
 				recBarnyardId:		objRec_Barn.rec_barn_id,				
@@ -96,10 +79,6 @@ enyo.kind({
 		
 	},
 	getBarnyard:function(){
-//		private long barnyardId;    
-//		private String barnyardCode;
-//		private boolean available; 
-//		private long locationId;
 		    		    
 		if (this.barnyardWasReadFromGateway == false){
 			this.barnyardWasReadFromGateway = true;
@@ -108,12 +87,10 @@ enyo.kind({
 			var cgReadAll = consumingGateway.Read("Barnyard", {});
 			
 			if (cgReadAll.exceptionId == 0){ //Read successfully
-				for (item in cgReadAll.records){
-					if(cgReadAll.records.hasOwnProperty(item)){
-						arrAux.push(this.barnyardAdapterToIn(cgReadAll.records[item]));	
-					}
-					
-				}
+			  for(var i =0;i<cgReadAll.records.length;i++){
+			    if(cgReadAll.records[i])
+			      arrAux.push(this.barnyardAdapterToIn(cgReadAll.records[i]));
+			  }
 			}
 			else{ //Error
 				if (cgReadAll.exceptionId != "VAL02"){ //No data found
