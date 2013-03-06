@@ -37,7 +37,6 @@ public class printerHandle extends BaseReportServlet {
 		String sqlString = "";
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-		this.log.info("here");
 		String id = request.getParameter("id");
 		String destinationName = request.getParameter("destination_name");
 		
@@ -45,7 +44,7 @@ public class printerHandle extends BaseReportServlet {
 		
 		if (id == null) {
 			this.log.fine("id: [" + request.getParameter("id")
-					+ "] Action: Delete record");
+					+ "] Action: Retrieve record ");
 			sqlString = "select id, report_name from sys_print_queue where destination_name = ? limit 1";
 			try {
 				ps = conn.prepareStatement(sqlString);
@@ -79,14 +78,16 @@ public class printerHandle extends BaseReportServlet {
 
 		} else {
 			this.log.fine("id: [" + request.getParameter("id")
-					+ "] Action: Retrieve record");
+					+ "] Action: Delete record");
 			sqlString = " delete from sys_print_queue where id = ?";
 
 			try {
 				ps = conn.prepareStatement(sqlString);
 				ps.setLong(1, Long.parseLong(request.getParameter("id")));
 				ps.executeUpdate();
-								
+				PrintWriter out = response.getWriter();
+				out.println("ok");
+				out.close();		
 			} catch (SQLException e) {
 				log.severe("SQLException while deleting printer queue");
 				log.throwing(this.getClass().getCanonicalName(),
