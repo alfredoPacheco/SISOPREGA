@@ -15,6 +15,9 @@
 	</style>
 	<parameter name="CUS_FROM_DATE" class="java.util.Date"/>
 	<parameter name="CUS_TO_DATE" class="java.util.Date"/>
+	<parameter name="CUS_IMG_PATH" class="java.lang.String">
+		<defaultValueExpression><![CDATA["http://sisoprega.com/images/logo_tramex.png"]]></defaultValueExpression>
+	</parameter>
 	<queryString>
 		<![CDATA[SELECT
       coalesce(SUM(ctrl_inspection_result."hc"), 0) AS Rechazos,
@@ -246,13 +249,24 @@ ORDER BY
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="27" splitType="Stretch">
+		<band height="62" splitType="Stretch">
 			<staticText>
-				<reportElement uuid="e960b304-b97c-405c-bf66-b2d5bf3598e5" style="Title" x="1" y="0" width="554" height="26"/>
+				<reportElement uuid="e960b304-b97c-405c-bf66-b2d5bf3598e5" style="Title" x="1" y="36" width="554" height="26"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Serif" size="20" pdfFontName="Times-Roman"/>
 				</textElement>
 				<text><![CDATA[Inspección de Ganado]]></text>
+			</staticText>
+			<image isUsingCache="false" isLazy="true" onErrorType="Blank" evaluationTime="Report">
+				<reportElement uuid="14b95b13-92b9-4b20-a438-b2c19012d258" x="36" y="2" width="45" height="34"/>
+				<imageExpression><![CDATA[$P{CUS_IMG_PATH}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement uuid="5b5a4659-48b9-4114-b7be-2ab78b269c4d" x="0" y="36" width="124" height="13"/>
+				<textElement>
+					<font size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[TRAMEX PRO Customs Brokers]]></text>
 			</staticText>
 		</band>
 	</title>
