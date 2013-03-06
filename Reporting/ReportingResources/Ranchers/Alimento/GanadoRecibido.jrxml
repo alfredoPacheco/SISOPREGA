@@ -5,6 +5,9 @@
 	<property name="ireport.y" value="0"/>
 	<parameter name="CUS_FROM_DATE" class="java.util.Date"/>
 	<parameter name="CUS_TO_DATE" class="java.util.Date"/>
+	<parameter name="CUS_IMG_PATH" class="java.lang.String">
+		<defaultValueExpression><![CDATA["http://sisoprega.com/images/logo_tramex.png"]]></defaultValueExpression>
+	</parameter>
 	<queryString>
 		<![CDATA[SELECT
      vw_rancher."rancher_name" AS vw_rancher_rancher_name,
@@ -212,13 +215,24 @@ ORDER BY
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="28" splitType="Stretch">
+		<band height="73" splitType="Stretch">
 			<staticText>
-				<reportElement uuid="0ca3d7ba-6228-4d67-9fa4-83f66086b594" x="0" y="1" width="751" height="26"/>
+				<reportElement uuid="0ca3d7ba-6228-4d67-9fa4-83f66086b594" x="1" y="47" width="751" height="26"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Serif" size="20" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Reporte de Ganado Recibido]]></text>
+			</staticText>
+			<image isUsingCache="false" isLazy="true" onErrorType="Blank" evaluationTime="Report">
+				<reportElement uuid="9ef18e20-b19e-494e-b343-286a95f25d36" x="46" y="10" width="45" height="34"/>
+				<imageExpression><![CDATA[$P{CUS_IMG_PATH}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement uuid="3433caad-be11-4ba6-bc0f-69bc521f02cf" x="10" y="44" width="124" height="13"/>
+				<textElement>
+					<font size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[TRAMEX PRO Customs Brokers]]></text>
 			</staticText>
 		</band>
 	</title>
