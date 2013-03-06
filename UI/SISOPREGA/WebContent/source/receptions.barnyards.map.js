@@ -486,9 +486,10 @@ enyo.kind({
 				this.objSelected.applyStyle("background-color",cacheReceptions.getByID(cacheBY.getRecIDbyBY(this.objSelected.name)).color);									
 				break;
 			case 9: // Imprimir
-			    consumingGateway.Create("PrintLog", {});
+			    consumingGateway.Create("PrintLog", {reportName:'/ReportingGateway/RecepcionGanadoId?receptionId=' + receptionId,destinationName:'tramex_home'});
 			    break;
 			case 10:// Ver Reporte
+				var receptionId = cacheBY.inUse()[this.objSelected.name].reception_id;
 				  var receptionId = cacheBY.inUse()[this.objSelected.name].reception_id;
 //		      window.open('/ReportingGateway/RecepcionGanadoId?receptionId=' + receptionId, '_blank');
 //			  window.focus();
