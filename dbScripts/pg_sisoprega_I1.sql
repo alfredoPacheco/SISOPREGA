@@ -24,6 +24,7 @@
  * 02/11/2013  Diego Torres                  Changing cat_location for cat_zone
  * 02/16/2013  Alfredo Pacheco		     zone_id field added to cat_reception
  * 02/16/2013  Alfredo Pacheco		     zone_id field added to ctrl_inspection_forecast_detail
+ * 03/05/2013  Diego Torres              adding table for print app.
  * ====================================================================================
  * 
  * Author: Diego Torres
@@ -596,3 +597,13 @@ FROM cat_enterprise_rancher)
 ORDER BY rancher_name;
 
 GRANT ALL ON vw_rancher TO sisoprega;
+
+DROP TABLE IF EXISTS sys_print_queue;
+CREATE TABLE sys_print_queue(
+  id SERIAL PRIMARY KEY,
+  report_name VARCHAR(100) NOT NULL,
+  destination_name VARCHAR(30) NOT NULL
+);
+
+GRANT ALL ON sys_print_queue TO sisoprega;
+GRANT ALL ON sys_print_queue_id_seq TO sisoprega;

@@ -870,4 +870,27 @@
 			</id>
 		</attributes>
 	</entity>
+	<entity class="com.tramex.sisoprega.dto.PrintLog">
+		<table name="sys_print_queue"/>
+		<named-query name="PRINT_RECORD_BY_ID">
+			<description>Retrieves a printing record for a given id.</description>
+			<query>SELECT p FROM PrintLog p WHERE p.recordId = :recordId</query>
+		</named-query>
+		<named-query name="PRINT_RECORDS_BY_DESTINATION">
+			<description>Retrieves all printing records for a given destination.</description>
+			<query>SELECT p FROM PrintLog p WHERE p.destinationName = :destination</query>
+		</named-query>
+		<attributes>
+			<id name="recordId">
+				<column name="id"/>
+				<generated-value strategy="IDENTITY"/>
+			</id>
+			<basic name="reportName">
+				<column name="report_name"/>
+			</basic>
+			<basic name="destinationName">
+				<column name="destination_name"/>
+			</basic>
+		</attributes>
+	</entity>
 </entity-mappings>
