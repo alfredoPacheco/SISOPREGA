@@ -49,7 +49,8 @@ enyo.kind(
               },
               {
                   name : 'btnMenu',
-                  icon : "images/icon-arrows-down.png",                  
+                  kind:"ButtonHeader",
+                  content:"Menu",
                   onclick : "open_menu",
 //                  flex : 2
                 },
