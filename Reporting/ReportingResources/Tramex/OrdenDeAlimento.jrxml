@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="OrdenDeAlimento" language="groovy" pageWidth="612" pageHeight="792" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="aa942456-9dda-43b6-8884-e4b5e0324fce">
-	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.zoom" value="1.6105100000000008"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="CUS_ORDER_ID" class="java.lang.Integer"/>
+	<parameter name="CUS_IMG_PATH" class="java.lang.String">
+		<defaultValueExpression><![CDATA["http://sisoprega.com/images/logo_tramex.png"]]></defaultValueExpression>
+	</parameter>
 	<queryString>
 		<![CDATA[SELECT
      ctrl_feed_order."order_id" AS ctrl_feed_order_order_id,
@@ -40,13 +43,24 @@ GROUP BY ctrl_feed_order_order_id, ctrl_feed_order_feed_date, ctrl_feed_order_ha
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="27" splitType="Stretch">
+		<band height="60" splitType="Stretch">
 			<staticText>
-				<reportElement uuid="88d0cba3-7592-4f3b-8f29-3876910ecba3" x="0" y="0" width="572" height="26"/>
+				<reportElement uuid="88d0cba3-7592-4f3b-8f29-3876910ecba3" x="0" y="34" width="572" height="26"/>
 				<textElement textAlignment="Center">
 					<font size="16" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Orden de Alimento]]></text>
+			</staticText>
+			<image isUsingCache="false" isLazy="true" onErrorType="Blank" evaluationTime="Report">
+				<reportElement uuid="14b95b13-92b9-4b20-a438-b2c19012d258" x="36" y="0" width="45" height="34"/>
+				<imageExpression><![CDATA[$P{CUS_IMG_PATH}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement uuid="5b5a4659-48b9-4114-b7be-2ab78b269c4d" x="0" y="34" width="124" height="13"/>
+				<textElement>
+					<font size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[TRAMEX PRO Customs Brokers]]></text>
 			</staticText>
 		</band>
 	</title>
