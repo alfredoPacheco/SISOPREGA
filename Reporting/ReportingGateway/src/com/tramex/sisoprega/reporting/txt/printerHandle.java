@@ -51,8 +51,9 @@ public class printerHandle extends BaseReportServlet {
 				ps.setString(1, destinationName);
 				rs = ps.executeQuery();
 				if (!rs.next()) {
-					throw new ServletException(
-							"ERROR");
+				  PrintWriter out = response.getWriter();
+                  out.println("ERROR");
+                  out.close();
 				} else {
 
 					PrintWriter out = response.getWriter();
