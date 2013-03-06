@@ -51,7 +51,7 @@ GROUP BY ctrl_feed_order_order_id, ctrl_feed_order_feed_date, ctrl_feed_order_ha
 				</textElement>
 				<text><![CDATA[Orden de Alimento]]></text>
 			</staticText>
-			<image isUsingCache="false" isLazy="true" onErrorType="Blank" evaluationTime="Report">
+			<image isUsingCache="true" isLazy="true" onErrorType="Blank" evaluationTime="Report">
 				<reportElement uuid="14b95b13-92b9-4b20-a438-b2c19012d258" x="36" y="0" width="45" height="34"/>
 				<imageExpression><![CDATA[$P{CUS_IMG_PATH}]]></imageExpression>
 			</image>

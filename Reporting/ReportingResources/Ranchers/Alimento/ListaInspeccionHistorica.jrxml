@@ -15,6 +15,9 @@
 	</style>
 	<parameter name="CUS_FROM_DATE" class="java.util.Date"/>
 	<parameter name="CUS_TO_DATE" class="java.util.Date"/>
+	<parameter name="CUS_IMG_PATH" class="java.lang.String">
+		<defaultValueExpression><![CDATA["http://sisoprega.com/images/logo_tramex.png"]]></defaultValueExpression>
+	</parameter>
 	<queryString>
 		<![CDATA[SELECT
      array_to_string(array_agg(cat_barnyard."barnyard_code"),',') AS barnyards,
@@ -80,32 +83,11 @@ ORDER BY
 	<title>
 		<band height="92" splitType="Stretch">
 			<staticText>
-				<reportElement uuid="4f1347ea-bc46-43a9-b79a-3d0c0dc4a5ed" style="Title" x="142" y="0" width="261" height="28"/>
+				<reportElement uuid="4f1347ea-bc46-43a9-b79a-3d0c0dc4a5ed" style="Title" x="144" y="43" width="261" height="28"/>
 				<textElement textAlignment="Center" verticalAlignment="Top">
 					<font fontName="Serif" size="20" pdfFontName="Times-Roman"/>
 				</textElement>
 				<text><![CDATA[HOJA DE INSPECCIÓN]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="ca30f748-75e7-43ff-9be7-2608171dd55d" x="5" y="28" width="307" height="16"/>
-				<textElement>
-					<font fontName="Serif" size="10"/>
-				</textElement>
-				<text><![CDATA[Unidad Sanitaria de la Unión Ganadera Regional de Chihuahua ]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="fbd59c0d-bd41-4abc-af79-e2c2809c294c" x="5" y="44" width="307" height="13"/>
-				<textElement>
-					<font fontName="Serif" size="10"/>
-				</textElement>
-				<text><![CDATA[San Jerónimo, Cd. Juarez, Chihuahua.  ]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="e3004a6c-6cd1-4dd7-bae8-640ccb66209f" x="5" y="57" width="429" height="13"/>
-				<textElement>
-					<font fontName="Serif" size="10"/>
-				</textElement>
-				<text><![CDATA[Contrato - Concesión de la secretaria de agricultura y Ganadería Orden de Inspección veterinaria]]></text>
 			</staticText>
 			<staticText>
 				<reportElement uuid="3b8922f5-b102-4fb0-b2dc-12749502565f" style="Column header" x="414" y="71" width="138" height="18" forecolor="#000000"/>
@@ -156,6 +138,17 @@ ORDER BY
 				</textElement>
 				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format($F{ctrl_inspection_forecast_forecast_date})]]></textFieldExpression>
 			</textField>
+			<staticText>
+				<reportElement uuid="5b5a4659-48b9-4114-b7be-2ab78b269c4d" x="0" y="34" width="124" height="13"/>
+				<textElement>
+					<font size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[TRAMEX PRO Customs Brokers]]></text>
+			</staticText>
+			<image isUsingCache="true" isLazy="true" onErrorType="Blank" evaluationTime="Report">
+				<reportElement uuid="14b95b13-92b9-4b20-a438-b2c19012d258" x="36" y="0" width="45" height="34"/>
+				<imageExpression><![CDATA[$P{CUS_IMG_PATH}]]></imageExpression>
+			</image>
 		</band>
 	</title>
 	<pageHeader>

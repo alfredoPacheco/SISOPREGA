@@ -3,6 +3,9 @@
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
+	<parameter name="CUS_IMG_PATH" class="java.lang.String">
+		<defaultValueExpression><![CDATA["http://sisoprega.com/images/logo_tramex.png"]]></defaultValueExpression>
+	</parameter>
 	<queryString>
 		<![CDATA[SELECT
      vw_rancher."rancher_name" AS vw_rancher_rancher_name,
@@ -249,13 +252,24 @@ ORDER BY
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="26" splitType="Stretch">
+		<band height="74" splitType="Stretch">
 			<staticText>
-				<reportElement uuid="0ca3d7ba-6228-4d67-9fa4-83f66086b594" x="0" y="0" width="572" height="26"/>
+				<reportElement uuid="0ca3d7ba-6228-4d67-9fa4-83f66086b594" x="0" y="48" width="572" height="26"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Serif" size="20" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Reporte de Ganado en Corrales]]></text>
+			</staticText>
+			<image isUsingCache="false" isLazy="true" onErrorType="Blank" evaluationTime="Report">
+				<reportElement uuid="3a107038-f071-4b37-9dbf-9c8dfdfd312e" x="46" y="10" width="45" height="34"/>
+				<imageExpression><![CDATA[$P{CUS_IMG_PATH}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement uuid="41867a10-faaa-4f69-8860-092f722a6544" x="10" y="44" width="124" height="13"/>
+				<textElement>
+					<font size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[TRAMEX PRO Customs Brokers]]></text>
 			</staticText>
 		</band>
 	</title>
