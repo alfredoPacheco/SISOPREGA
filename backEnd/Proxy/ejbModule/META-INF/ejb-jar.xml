@@ -121,6 +121,10 @@
 			<ejb-name>PedimentoProxy</ejb-name>
 			<ejb-class>com.tramex.sisoprega.text.proxy.bean.PdfUploaderBean</ejb-class>
 		</session>
+		<session>
+			<ejb-name>PrintLogProxy</ejb-name>
+			<ejb-class>com.tramex.sisoprega.proxy.bean.PrintLogBean</ejb-class>
+		</session>
 	</enterprise-beans>
 	<assembly-descriptor>
 		<security-role>
@@ -248,6 +252,10 @@
 			</method>
 			<method>
 				<ejb-name>PedimentoProxy</ejb-name>
+				<method-name>*</method-name>
+			</method>
+			<method>
+				<ejb-name>PrintLogProxy</ejb-name>
 				<method-name>*</method-name>
 			</method>
 		</method-permission>
