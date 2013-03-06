@@ -1110,7 +1110,8 @@ enyo
 						for (i in this.objList){
 							if(!(customers_set[this.objList[i].rancher_id] in customers_set)){
 								customers_set[this.objList[i].rancher_id]=this.objList[i].rancher_id;
-								var report_name = 'ListaInspeccion';
+								var report_name = 'ListaInspeccion?rancherId='
+									+ this.objList[i].rancher_id;
 								consumingGateway.SendReport(this.objList[i].rancher_id, report_name);
 							}
 						}
