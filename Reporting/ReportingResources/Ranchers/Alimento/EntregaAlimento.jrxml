@@ -10,6 +10,9 @@
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
 	<parameter name="CUS_RANCHER_ID" class="java.lang.Integer"/>
+	<parameter name="CUS_IMG_PATH" class="java.lang.String">
+		<defaultValueExpression><![CDATA["http://sisoprega.com/images/logo_tramex.png"]]></defaultValueExpression>
+	</parameter>
 	<queryString>
 		<![CDATA[SELECT
      sum(ctrl_feed_order_details."quantity") AS ctrl_feed_order_details_quantity,
@@ -173,42 +176,53 @@ ORDER BY
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="44" splitType="Stretch">
+		<band height="95" splitType="Stretch">
 			<staticText>
-				<reportElement uuid="479d7307-6e61-4c03-9357-ca455f296e2c" x="0" y="-1" width="554" height="26"/>
+				<reportElement uuid="479d7307-6e61-4c03-9357-ca455f296e2c" x="0" y="51" width="554" height="26"/>
 				<textElement textAlignment="Center">
 					<font fontName="Serif" size="20" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Reporte de Alimento Entregado]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="345bed4b-82e2-46eb-bbdd-5884a63557d1" x="124" y="25" width="19" height="18"/>
+				<reportElement uuid="345bed4b-82e2-46eb-bbdd-5884a63557d1" x="124" y="77" width="19" height="18"/>
 				<textElement textAlignment="Center" verticalAlignment="Bottom">
 					<font fontName="Serif" size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Al]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="f7c168a3-d78a-4958-b52c-97fc940f7180" x="1" y="25" width="23" height="18"/>
+				<reportElement uuid="f7c168a3-d78a-4958-b52c-97fc940f7180" x="1" y="77" width="23" height="18"/>
 				<textElement textAlignment="Center" verticalAlignment="Bottom">
 					<font fontName="Serif" size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Del]]></text>
 			</staticText>
 			<textField>
-				<reportElement uuid="9d037725-5770-4ae4-a3a8-4877c6166599" x="24" y="28" width="100" height="15"/>
+				<reportElement uuid="9d037725-5770-4ae4-a3a8-4877c6166599" x="24" y="80" width="100" height="15"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Arial" size="10" isBold="true" isUnderline="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format($P{CUS_FROM_DATE})]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="6f65f273-a7d7-47cd-85ad-93e3ad1bdab7" x="145" y="28" width="100" height="15"/>
+				<reportElement uuid="6f65f273-a7d7-47cd-85ad-93e3ad1bdab7" x="145" y="80" width="100" height="15"/>
 				<textElement verticalAlignment="Middle">
 					<font size="10" isBold="true" isUnderline="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format($P{CUS_TO_DATE})]]></textFieldExpression>
 			</textField>
+			<image isUsingCache="false" isLazy="true" onErrorType="Blank" evaluationTime="Report">
+				<reportElement uuid="cdc8b79a-cd0c-49d5-b977-3e65c9fad505" x="46" y="10" width="45" height="34"/>
+				<imageExpression><![CDATA[$P{CUS_IMG_PATH}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement uuid="bb22244d-0945-4770-ab9a-7d8b70ef4265" x="10" y="44" width="124" height="13"/>
+				<textElement>
+					<font size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[TRAMEX PRO Customs Brokers]]></text>
+			</staticText>
 		</band>
 	</title>
 	<detail>
