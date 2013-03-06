@@ -6,7 +6,8 @@ enyo.kind({
 					  {caption:"Editar",value:5},
 					  {caption:"Liberar",value:6},
 					  {caption:"Deseleccionar",value:8},
-					  {caption:"Imprimir",value:9}
+					  {caption:"Imprimir",value:9},
+					  {caption:"Ver Reporte",value:10}
 					  ],
     kind: enyo.VFlexBox,
     flex:1,
@@ -485,10 +486,13 @@ enyo.kind({
 				this.objSelected.applyStyle("background-color",cacheReceptions.getByID(cacheBY.getRecIDbyBY(this.objSelected.name)).color);									
 				break;
 			case 9: // Imprimir
-			  var receptionId = cacheBY.inUse()[this.objSelected.name].reception_id;
-//			  window.open('/ReportingGateway/RecepcionGanadoId?receptionId=' + receptionId, '_blank');
-//		      window.focus();
-		      utils.openReport('/ReportingGateway/RecepcionGanadoId?receptionId=' + receptionId);
+			    consumingGateway.Create("PrintLog", {});
+			    break;
+			case 10:// Ver Reporte
+				  var receptionId = cacheBY.inUse()[this.objSelected.name].reception_id;
+//		      window.open('/ReportingGateway/RecepcionGanadoId?receptionId=' + receptionId, '_blank');
+//			  window.focus();
+			  utils.openReport('/ReportingGateway/RecepcionGanadoId?receptionId=' + receptionId); 
 		      
 			  break;
 		}
