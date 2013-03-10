@@ -1,6 +1,7 @@
 enyo.kind({
 	name: "ranchers.profile.enterprise",
-	kind: "FittableColumns",
+	kind: "Scroller",
+	layoutKind:"FittableRowsLayout",
 	classes: "onyx",
 	events: {	
 		onUpdate:"",
@@ -9,55 +10,164 @@ enyo.kind({
 	},
 	iId:null,
 	components: [
-  		{style:"width:1%"},
-  		{style:"width:98%",components:[
+  		{style:"height:10px"},
+  		{style:"width:500px;margin-left: auto;margin-right: auto;",components:[
 			{kind: "onyx.Popup",classes: "onyx", name: "popPassword", centered: true, modal:true,	 floating: true, scrim: true, 
 				components: [
 					{kind: "ranchers.profile.password",name:'passChange',classes: "onyx",onCancel:"closePopPW",onChange:"doChangePW"}
 			]},
-			{kind: "onyx.Groupbox", classes:"onyx-sample-result-box", components: [
-				{kind: "onyx.GroupboxHeader", content: "Razon Social"},
-				{kind: "onyx.InputDecorator", components: [{kind: "onyx.Input",name:"company_name",style:"width:100%", value: "", }]},
-			]},
-			{kind: "onyx.Groupbox", classes:"onyx-sample-result-box", components: [
-				{kind: "onyx.GroupboxHeader", content: "Calle y Numero"},
-				{kind: "onyx.InputDecorator", components: [{kind: "onyx.Input",name:"address_one",style:"width:100%", value: "", }]},
-			]},
-			{kind: "onyx.Groupbox", classes:"onyx-sample-result-box", components: [
-				{kind: "onyx.GroupboxHeader", content: "Colonia"},
-				{kind: "onyx.InputDecorator", components: [{kind: "onyx.Input",name:"address_two",style:"width:100%", value: "", }]},
-			]},
-			{kind: "onyx.Groupbox", classes:"onyx-sample-result-box", components: [
-				{kind: "onyx.GroupboxHeader", content: "Entidad"},
-				{kind: "onyx.InputDecorator", components: [{kind: "onyx.Input",name:"state_id",style:"width:100%", value: "", }]},		
-			]},		
-			{kind: "onyx.Groupbox", classes:"onyx-sample-result-box", components: [
-				{kind: "onyx.GroupboxHeader", content: "Poblacion"},
-				{kind: "onyx.InputDecorator", components: [{kind: "onyx.Input",name:"city_id",style:"width:100%", fit:true,value: "", }]},
-			]},
-			{kind: "onyx.Groupbox", classes:"onyx-sample-result-box", components: [
-				{kind: "onyx.GroupboxHeader", content: "Codigo Postal"},
-				{kind: "onyx.InputDecorator", components: [{kind: "onyx.Input",name:"zip_code",style:"width:100%", fit:true,value: "", }]},
-			]},
-			{kind: "onyx.Groupbox", classes:"onyx-sample-result-box", components: [
-				{kind: "onyx.GroupboxHeader", content: "RFC"},
-				{kind: "onyx.InputDecorator", components: [{kind: "onyx.Input",name:"rfc",style:"width:100%", fit:true,value: "", }]},
-			]},
-			{kind: "onyx.Groupbox", classes:"onyx-sample-result-box", components: [
-				{kind: "onyx.GroupboxHeader", content: "Telefono Celular"},
-				{kind: "onyx.InputDecorator", components: [{kind: "onyx.Input",name:"phone_number",style:"width:100%", 
-				 value: "", onfocus : "applyMask"}]},
-			]},
-			{kind: "onyx.Groupbox", classes:"onyx-sample-result-box", components: [
-				{kind: "onyx.GroupboxHeader", content: "Email"},
-				{kind: "onyx.InputDecorator", components: [{kind: "onyx.Input",name:"email",style:"width:100%", fit:true,value: "", }]},
-			]},
+			
+			{
+		        classes: "onyx-sample-divider",
+		        content: "Raz&oacute;n Social",
+		        allowHtml:true
+		    }, {
+		        classes: "onyx-toolbar-inline",
+		        components: [
+		        {
+		            kind: "onyx.InputDecorator",
+		            style:"width:100%",
+		            components: [{
+		                kind: "onyx.Input",
+		                name:"company_name", value:"",
+		                placeholder: "Escriba el texto aqui"
+		            }]
+		        },
+	        ]},
+	        {
+		        classes: "onyx-sample-divider",
+		        content: "Calle y N&uacute;mero",
+		        allowHtml:true
+		    }, {
+		        classes: "onyx-toolbar-inline",
+		        components: [
+		        {
+		            kind: "onyx.InputDecorator",
+		            style:"width:100%",
+		            components: [{
+		                kind: "onyx.Input",
+		                name:"address_one", value:"",
+		                placeholder: "Escriba el texto aqui"
+		            }]
+		        },
+	        ]},
+	        {
+		        classes: "onyx-sample-divider",
+		        content: "Colonia"
+		    }, {
+		        classes: "onyx-toolbar-inline",
+		        components: [
+		        {
+		            kind: "onyx.InputDecorator",
+		            style:"width:100%",
+		            components: [{
+		                kind: "onyx.Input",
+		                name:"address_two", value:"",
+		                placeholder: "Escriba el texto aqui"
+		            }]
+		        },
+	        ]},
+			
+	        {
+		        classes: "onyx-sample-divider",
+		        content: "Entidad"
+		    }, {
+		        classes: "onyx-toolbar-inline",
+		        components: [
+		        {
+		            kind: "onyx.InputDecorator",
+		            style:"width:100%",
+		            components: [{
+		                kind: "onyx.Input",
+		                name:"state_id", value:"",
+		                placeholder: "Escriba el texto aqui"
+		            }]
+		        },
+	        ]},
+	        {
+		        classes: "onyx-sample-divider",
+		        content: "Poblaci&oacute;n",
+		        allowHtml:true
+		    }, {
+		        classes: "onyx-toolbar-inline",
+		        components: [
+		        {
+		            kind: "onyx.InputDecorator",
+		            style:"width:100%",
+		            components: [{
+		                kind: "onyx.Input",
+		                name:"city_id", value:"",
+		                placeholder: "Escriba el texto aqui"
+		            }]
+		        },
+	        ]},
+	        {
+		        classes: "onyx-sample-divider",
+		        content: "Codigo Postal"
+		    }, {
+		        classes: "onyx-toolbar-inline",
+		        components: [
+		        {
+		            kind: "onyx.InputDecorator",
+		            style:"width:100%",
+		            components: [{
+		                kind: "onyx.Input",
+		                name:"zip_code", value:"",
+		                placeholder: "Escriba el texto aqui"
+		            }]
+		        },
+	        ]},
+	        {
+		        classes: "onyx-sample-divider",
+		        content: "RFC"
+		    }, {
+		        classes: "onyx-toolbar-inline",
+		        components: [
+		        {
+		            kind: "onyx.InputDecorator",
+		            style:"width:100%",
+		            components: [{
+		                kind: "onyx.Input",
+		                name:"rfc", value:"",
+		                placeholder: "Escriba el texto aqui"
+		            }]
+		        },
+	        ]},
+	        {
+		        classes: "onyx-sample-divider",
+		        content: "Telefono Celular"
+		    }, {
+		        classes: "onyx-toolbar-inline",
+		        components: [
+		        {
+		            kind: "onyx.InputDecorator",
+		            style:"width:100%",
+		            components: [{
+		                kind: "onyx.Input",
+		                name:"phone_number", value:"",
+		                placeholder: "Escriba el texto aqui"
+		            }]
+		        },
+	        ]},
+	        {
+		        classes: "onyx-sample-divider",
+		        content: "Email"
+		    }, {
+		        classes: "onyx-toolbar-inline",
+		        components: [
+		        {
+		            kind: "onyx.InputDecorator",
+		            style:"width:100%",
+		            components: [{
+		                kind: "onyx.Input",
+		                name:"email", value:"",
+		                placeholder: "Escriba el texto aqui"
+		            }]
+		        },
+	        ]},
 			{tag:"br"},					
-			{kind: "onyx.Groupbox", classes:"onyx-sample-result-box", components: [
-				{kind: "onyx.GroupboxHeader", content: "-"},
-				{kind:"onyx.Button", onclick:"launchReport",content:"Cambiar Password",
-				 classes: "onyx-blue", style:"width:100%",onclick:"openPopPW"},
-			]},								
+			{kind:"onyx.Button", onclick:"launchReport",content:"Cambiar Password",
+			 classes: "onyx-blue", style:"width:100%",onclick:"openPopPW"},
 			{tag:"br"},						
 			{tag:"br"},										
 			{kind: "FittableColumns", style:"align:center",components:[
@@ -67,8 +177,7 @@ enyo.kind({
 				  {kind:"onyx.Button", onclick:"doCancel",content:"Cancelar",classes: "onyx-negative",
 				   style:"width:49%"},
 			 ]},
-		]},
-       {style:"width:1%"},		 	
+		]}		 	
 	],
 	setProfile:function(objData){
 		this.iId=objData.enterpriseId;
