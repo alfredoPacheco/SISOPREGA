@@ -243,7 +243,7 @@ enyo.kind(
   		if(inView.name=="usersList"){
 		  inView.updateList();
 		}
-		if(inPreviousView.name == "usersList" && inView.name != "menuOptions"){
+		if(inPreviousView.name == "usersList" && inView.name == "addUser"){
 		  var selectedUser = inPreviousView.getSelectedUser();
 		  if(selectedUser)
 		    inView.setUser(selectedUser);

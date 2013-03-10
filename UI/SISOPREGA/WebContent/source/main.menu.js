@@ -8,10 +8,9 @@ enyo.kind({
 	events:{
 		onUpdateLabel:"",
 		onReceptionsMap:""
-		
 	},	
 	components:[
-		{kind: enyo.Pane, onSelectView:"selectView",className:"buttonsBG", flex: 1, name: "mainPane", transitionKind: "enyo.transitions.LeftRightFlyin", 
+		{kind: enyo.Pane,className:"buttonsBG", flex: 1, name: "mainPane", transitionKind: "enyo.transitions.LeftRightFlyin", 
 	     style:"background-size: cover;",				 		
 		 components:[	
 			{kind:"main.menu.options", name:"menuOptions", className:"buttonsBG",style:"width:1030px;margin-left: auto;margin-right: auto;",
@@ -111,20 +110,20 @@ enyo.kind({
 		_gobackStack.push({caption:"Menu Principal",paneMan:this.parent,paneName:"mainMenu"});	
 		
 	},
-	selectView:function(inSender, inView, inPreviousView) {
-		if(inView.name=="usersList"){
-		  inView.updateList();
-		}
-		if(inPreviousView){
-			if(inPreviousView.name == "usersList" && inView.name != "menuOptions"){
-			  var selectedUser = inPreviousView.getSelectedUser();
-			  if(selectedUser)
-			    inView.setUser(selectedUser);
-			  else
-			    inView.toggleAdd();
-			}
-		}
-	}
+//	selectView:function(inSender, inView, inPreviousView) {
+//		if(inView.name=="usersList"){
+//		  inView.updateList();
+//		}
+//		if(inPreviousView){
+//			if(inPreviousView.name == "usersList" && inView.name != "menuOptions"){
+//			  var selectedUser = inPreviousView.getSelectedUser();
+//			  if(selectedUser)
+//			    inView.setUser(selectedUser);
+//			  else
+//			    inView.toggleAdd();
+//			}
+//		}
+//	}
 	
 });
 
