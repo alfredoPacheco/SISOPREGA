@@ -34,6 +34,7 @@ import java.util.regex.Pattern;
  * ----------  ---------------------------  -------------------------------------------
  * 10/28/2012  Diego Torres                 Initial Version.
  * 11/30/2012  Diego Torres                 Empty string dates are as null dates.
+ * 03/10/2013  Alfredo Pacheco              Implemented dates with times. 
  * ====================================================================================
  * </PRE>
  * 
@@ -97,9 +98,23 @@ public class Utils {
         log.finest("found long: " + sValue);
       }
       if (type.getName().equals(Date.class.getName()) && !sValue.trim().equals("")) {
-        Date dValue = new SimpleDateFormat("MM/dd/yyyy").parse(sValue);
-        result = dValue;
-        log.finest("found date: " + sValue);
+    	  String f = "MM/dd/yyyy HH:mm";
+    	  try{
+        	Date dValue = new SimpleDateFormat(f).parse(sValue);
+	        result = dValue;
+	        log.finest("found date: " + sValue);
+        }catch(Exception e){
+        	log.severe("unable parse ["+ sValue +"] to format: " + f);
+        	f = "MM/dd/yyyy";
+        	log.severe("trying to parse [" + sValue + "] to format: " + f);
+        	try{
+	        	Date dValue = new SimpleDateFormat(f).parse(sValue);
+		        result = dValue;
+		        log.finest("found date: " + sValue);
+        	}catch(Exception ex){
+        		log.severe("unable parse ["+ sValue +"] to format: " + f);
+        	}
+        }
       }
       if(type.getName().equals("boolean")){
         result = Boolean.parseBoolean(sValue);

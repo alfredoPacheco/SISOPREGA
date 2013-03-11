@@ -74,7 +74,7 @@ public class FeedOrderBean extends BaseBean implements Cruddable {
     try {
       feedOrd = entityFromRequest(request, FeedOrder.class);
       feedOrd.setFeedOriginator(getLoggedUser());
-      feedOrd.setFeedDate(GregorianCalendar.getInstance().getTime());
+      
 
       this.log.fine("Received FeedOrder in request: " + feedOrd);
 

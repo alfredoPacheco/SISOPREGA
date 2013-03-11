@@ -35,12 +35,14 @@ enyo.kind(
                       name : "handling",
                       hint : "Agregar comentario"
                     },
+                    {kind: "TimePicker", name:"dateTime", style:"color:'black';", is24HrMode: false, label: "Hora"},
                     {
                       kind : "Button",
                       className : "enyo-button-affirmative",
                       caption : "OK",
                       onclick : "closeHandling"
-                    } ]
+                    }
+                    ]
               } ]
         },
         {
@@ -67,7 +69,9 @@ enyo.kind(
                           {
                             name : "by",
                             className : "listFirst",
-                            content : "BY"
+                            style:"font-size:12px;",
+                            content : "BY",
+                            allowHtml:true
                           },
                           {
                             layoutKind : enyo.HFlexLayout,
@@ -112,6 +116,7 @@ enyo.kind(
                           {
                             name : "lblhandling",
                             className : "listSecond",
+                            style:"font-size:12px",
                             content : ""
                           } ]
                     }, ]
@@ -242,7 +247,7 @@ enyo.kind(
           }
           sBy = sBy.slice(0, -2);
           this.$.lblhandling.setContent(objFeed.handling);
-          this.$.by.setContent("" + objFeed.dateAndTime + "   Corrales: [" + sBy + "]");
+          this.$.by.setContent("" + utils.utcToNormalDateTime(objFeed.dateAndTime) + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Corrales: [" + sBy + "]");
           if (objFeedfeed = objFeed.feed[this.$.lblground.feed_id]) {
             if (objFeedfeed.feed_units) {
               this.$.lblground.setContent(objFeedfeed.feed_desc + " ( " + objFeedfeed.feed_units + " )");
@@ -297,10 +302,11 @@ enyo.kind(
     getFeed : function(sOp) {
       var objData =
         {
-          feeding_id : null,
-          barnyards : {},
-          feed : {},
-          handling : ""
+          feeding_id : 	null,
+          barnyards : 	{},
+          feed : 		{},
+          handling : 	"",
+          dateAndTime:			""
         };
 
       var objFeed =
@@ -358,6 +364,8 @@ enyo.kind(
       objFeed.feed_units = this.$.corn.getValue();
       objData.feed[objFeed.feed_id] = objFeed;
       objData.handling = this.$.handling.getValue();
+      objData.dateAndTime = this.$.dateTime.getValue().getTime();
+      
       if (sOp == "add") {
         objData.barnyards = enyo.clone(this._arrBY);
       } else {
@@ -405,6 +413,7 @@ enyo.kind(
         this.toggleUpdate();
         this._arrBYSelected = objFeed.barnyards;
         this.$.handling.setValue(objFeed.handling);
+        this.$.dateTime.setValue(new Date(objFeed.dateAndTime));
       }
 
     },
@@ -465,6 +474,7 @@ enyo.kind(
         this.$.concentrated.setValue("");
         this.$.corn.setValue("");
         this.$.handling.setValue("");
+        this.$.dateTime.setValue(new Date());
       }
       this.updatetList();
     },

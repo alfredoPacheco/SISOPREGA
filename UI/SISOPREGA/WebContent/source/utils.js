@@ -26,6 +26,43 @@ enyo.kind({
 		}
 		return dateFmt;
 	},
+	dateTimeOut : function(normalDate) {
+		var dateFmt = "";
+		if (normalDate != "" && normalDate !== undefined) {
+			var fmt = new enyo.g11n.DateFmt({
+				format : "MM/dd/yyyy hh:mm a",
+				locale : new enyo.g11n.Locale("es_es")
+			});
+			var dateNew = new Date(normalDate);
+			dateFmt = fmt.format(dateNew);
+		}
+		return dateFmt;
+	},
+	utcToNormalDateTime : function(strUTC) {
+		var dateFmt = "";
+		if (strUTC != "" && strUTC !== undefined) {
+			var fmt = new enyo.g11n.DateFmt({
+				format : "MM/dd/yyyy hh:mm a",
+				locale : new enyo.g11n.Locale("es_es")
+			});
+			var dateFromUTC = new Date(parseInt(strUTC));
+			dateFmt = fmt.format(dateFromUTC);
+		}
+
+		return dateFmt;
+	},
+	dateTimeOut : function(normalDate) {
+		var dateFmt = "";
+		if (normalDate != "" && normalDate !== undefined) {
+			var fmt = new enyo.g11n.DateFmt({
+				format : "MM/dd/yyyy HH:mm",
+				locale : new enyo.g11n.Locale("es_es")
+			});
+			var dateNew = new Date(normalDate);
+			dateFmt = fmt.format(dateNew);
+		}
+		return dateFmt;
+	},
 	phoneOut : function(p) {
 
 		var phone = p;
