@@ -82,7 +82,7 @@ enyo.kind(
         {
           kind : enyo.Pane,
           flex : 1,
-          name : "mainPane",
+          name : "accessPane",
           onSelectView:"selectView",
           transitionKind : "enyo.transitions.LeftRightFlyin",
           components :
@@ -97,17 +97,6 @@ enyo.kind(
                 kind : "main.menu",
                 name : "mainMenu"
               },
-              {kind:"catalogs.main", name:"catalogs",lazy:true},
-              {kind:"receptions.barnyards.map", name:"receptionsMap",lazy:true, flex:1},
-              {kind:"catalogs.cattle",name:"catCattle", lazy:true},
-              {kind:"catalogs.ranchers",name:"catRanchers", lazy:true},
-              {kind:"reports.main", name:"reports",lazy:true},
-              {kind:"inspections.list", name:"inspections"},
-              {kind:"inspections.main.fs", name:"inspectionForecast", lazy:true},              
-              {kind:"users.create", name:"addUser", lazy:true},
-              {kind:"users.list", name:"usersList", onAddUser:"showAddUser", onSelectUser:"showEditUser", lazy:true },
-              {kind:"file.uploader", name:"fileUploader",lazy:true},
-//              {kind:"report.viewer", name:"report_viewer",lazy:false}
   			]
         },
         {
@@ -134,27 +123,24 @@ enyo.kind(
       cacheMan.setGlobalScrim(this.$.scrimMain);
       cacheMan.setGlobalLabel(this.$.lblMainCap);
       _objMainHeader = this.$.lblMainCap;
-//      reportViewer = this.$.report_viewer;
-     
-      
+      _goBackButton = this.$.btnGoBack;
     },
     goBack : function() {
       cacheMan.goBack();
-      if (_objMainHeader.getContent() == "Menu Principal") {
-        this.$.btnGoBack.setShowing(!1);
-//        enyo.$.sisoprega_spacerSecond.setShowing(1);
-        _objMainHeader.setStyle("color:#FFF;border:none;font-size:15px; text-align:center;min-width:150px;");
-      } else {
-        this.$.btnGoBack.setShowing(1);
-//        enyo.$.sisoprega_spacerSecond.setShowing(!1);
-      }
-
+//      if (_objMainHeader.getContent() == "Menu Principal") {
+//        this.$.btnGoBack.setShowing(!1);
+////        enyo.$.sisoprega_spacerSecond.setShowing(1);
+//        _objMainHeader.setStyle("color:#FFF;border:none;font-size:15px; text-align:center;min-width:150px;");
+//      } else {
+//        this.$.btnGoBack.setShowing(1);
+////        enyo.$.sisoprega_spacerSecond.setShowing(!1);
+//      }
     },
     goAhead : function() {
       this.$.btnGoBack.setShowing(!1);
 //      enyo.$.sisoprega_spacerSecond.setShowing(1);
       this.$.tbHeader.show();
-      this.$.mainPane.selectViewByName("mainMenu");
+      this.$.accessPane.selectViewByName("mainMenu");
     },
     noAccess : function() {
       cacheMan.setMessage("", "Usuario o contraseña incorrecta.");
@@ -165,14 +151,16 @@ enyo.kind(
     open_menu : function(){
     	this.$.menu.openAroundControl(this.$.btnMenu,"", "left");
     },
-    addGoBackAction:function(nextView){
-    	if(_gobackStack.length > 0){
-			if(this.$.mainPane.getViewName()==nextView){
-				return;
-			}
-		}
-		_gobackStack.push({caption:_objMainHeader.getContent(),paneMan:this.$.mainPane,paneName:this.$.mainPane.getViewName()});		
-	},
+//    addGoBackAction:function(nextView){
+//    	if(_gobackStack.length > 0){
+//			if(this.$.accessPane.getViewName()==nextView){
+//				return;
+//			}
+//		}
+//		_gobackStack.push({	caption:_objMainHeader.getContent(),
+//							paneMan:this.$.accessPane,
+//							paneName:this.$.accessPane.getViewName()});		
+//	},
     open_view : function(InSender, InEvent){
     	var view = "";
     	if(InSender.caption){
@@ -180,77 +168,91 @@ enyo.kind(
     	}
     	switch(view){
     	case 'Operaciones':
-    		this.addGoBackAction("receptionsMap");	
-    		_objMainHeader.setContent('Corrales');    		
-    		this.$.mainPane.selectViewByName("receptionsMap");
+//    		this.addGoBackAction("receptionsMap");	
+    		this.$.mainMenu.$.mainPane.selectViewByName("receptionsMap");
+//    		_objMainHeader.setContent('Corrales');
     		break;
     	case 'Reportes':
-    		this.addGoBackAction("reports");
-    		_objMainHeader.setContent('Reportes');		
-    		this.$.mainPane.selectViewByName("reports");
+//    		this.addGoBackAction("reports");
+//    		_objMainHeader.setContent('Reportes');		
+    		this.$.mainMenu.$.mainPane.selectViewByName("reports");
     		break;
     	case 'Ganaderos':
-    		this.addGoBackAction("catRanchers");
-    		_objMainHeader.setContent('Ganaderos');
-    		this.$.mainPane.selectViewByName("catRanchers");
+//    		this.addGoBackAction("catRanchers");
+//    		_objMainHeader.setContent('Ganaderos');
+    		this.$.mainMenu.$.mainPane.validateView("catalogs");
+    		this.$.mainMenu.$.catalogs.showRanchers();
+    		this.$.mainMenu.$.mainPane.selectViewByName("catalogs");
+//    		_gobackStack.pop();
+//    		_gobackStack.pop();
+//    		_navigatingBack=true;
     		break;
     	case 'Ganado':
-    		this.addGoBackAction("catCattle");
-    		_objMainHeader.setContent('Ganado');    				
-    		this.$.mainPane.selectViewByName("catCattle");
+//    		this.addGoBackAction("catCattle");
+//    		_objMainHeader.setContent('Ganado');    				
+    		this.$.mainMenu.$.mainPane.validateView("catalogs");
+    		this.$.mainMenu.$.catalogs.showCattle();
+    		this.$.mainMenu.$.mainPane.selectViewByName("catalogs");
     		break;
     	case 'Lista de Inspección':
-    		this.addGoBackAction("inspectionForecast");
-    		_objMainHeader.setContent('Lista de Inspección');    		
-    		this.$.mainPane.selectViewByName("inspectionForecast");
+//    		this.addGoBackAction("inspectionForecast");
+//    		_objMainHeader.setContent('Lista de Inspección');    		
+    		this.$.mainMenu.$.mainPane.selectViewByName("inspectionForecast");
 //    		this.$.inspectionForecast.children[0].cambioDeFecha();
     		break;
     	case 'Usuarios':    		
-    		this.addGoBackAction("usersList");
-    		_objMainHeader.setContent('Lista de Usuarios');
-  	      	this.$.mainPane.selectViewByName("usersList");
+//    		this.addGoBackAction("usersList");
+//    		_objMainHeader.setContent('Lista de Usuarios');
+    		this.$.mainMenu.$.mainPane.selectViewByName("usersList");
     		break;
     	case 'Carga de Pedimento':
-    		this.addGoBackAction("fileUploader");
-    		_objMainHeader.setContent('Cargar Pedimento');
-  	      	this.$.mainPane.selectViewByName("fileUploader");
+//    		this.addGoBackAction("fileUploader");
+//    		_objMainHeader.setContent('Cargar Pedimento');
+    		this.$.mainMenu.$.mainPane.selectViewByName("fileUploader");
   	      	break;
-//    	case 'Ver reporte embebido':
-//    		this.addGoBackAction();
-//    		_objMainHeader.setContent('Report Viewer');
-//    		this.$.mainPane.selectViewByName("reportViewer");
-//  	      	this.$.reportViewer.showReport();
-//  	      	break;
     	}
-    	enyo.$.sisoprega_btnGoBack.setShowing(1);
+//    	enyo.$.sisoprega_btnGoBack.setShowing(1);
     },
-    showAddUser : function(){
-  	  	enyo.$.sisoprega_btnGoBack.setShowing(1);
-        _objMainHeader.setContent('Agregar Usuario');
-        this.addGoBackAction("addUser");
-        this.$.mainPane.selectViewByName("addUser");
-  	},
-  	showEditUser : function(){
-  		enyo.$.sisoprega_btnGoBack.setShowing(1);
-        _objMainHeader.setContent('Editar Usuario');
-        this.addGoBackAction("addUser");
-        this.$.mainPane.selectViewByName("addUser");
-  	},
-  	selectView:function(inSender, inView, inPreviousView) {
-  		if(inView.name=="inspectionForecast"){
-  			inView.$.forecast.resetValues();
-  		}
-  		if(inView.name=="usersList"){
-		  inView.updateList();
-		}
-		if(inPreviousView.name == "usersList" && inView.name == "addUser"){
-		  var selectedUser = inPreviousView.getSelectedUser();
-		  if(selectedUser)
-		    inView.setUser(selectedUser);
-		  else
-		    inView.toggleAdd();
-		}
-	}
+//    showAddUser : function(){
+//  	  	enyo.$.sisoprega_btnGoBack.setShowing(1);
+//        _objMainHeader.setContent('Agregar Usuario');
+//        this.addGoBackAction("addUser");
+//        this.$.mainPane.selectViewByName("addUser");
+//  	},
+//  	showEditUser : function(){
+//  		enyo.$.sisoprega_btnGoBack.setShowing(1);
+//        _objMainHeader.setContent('Editar Usuario');
+//        this.addGoBackAction("addUser");
+//        this.$.mainPane.selectViewByName("addUser");
+//  	},
+//  	selectView:function(inSender, inView, inPreviousView) {
+//  		switch(inView.name){
+//  		case "inspectionForecast":
+//  			inView.$.forecast.resetValues();
+//  			break;
+//  		case "usersList":
+//  			inView.updateList();
+//  			break;
+//  		case "catalogs":
+//  			for(var i=_gobackStack.length-1;i>-1;i--){
+//  				console.debug(_gobackStack[i].paneName);
+//  				if(_gobackStack[i].paneName!= "mainMenu"){
+//  					_gobackStack.pop();
+//  				}else{
+//  					break;
+//  				}
+//  			}
+//  			console.debug("seleccionando catMenu...");
+//  			inView.$.mainPane.selectViewByName("catMenu");
+//  			break;
+//  		}
+//  		
+//		if(inPreviousView.name == "usersList" && inView.name == "addUser"){
+//		  var selectedUser = inPreviousView.getSelectedUser();
+//		  if(selectedUser)
+//		    inView.setUser(selectedUser);
+//		  else
+//		    inView.toggleAdd();
+//		}
+//	}
   });
-
-//reportViewer = null;
