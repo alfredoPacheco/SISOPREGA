@@ -183,27 +183,27 @@ ORDER BY
 	</columnHeader>
 	<detail>
 		<band height="27" splitType="Stretch">
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement uuid="de05b7d1-cd4c-4be3-bdcb-168bb2b7f5cc" x="334" y="2" width="61" height="21"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{ctrl_inspection_forecast_detail_quantity}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement uuid="1f952874-406d-4b39-8c7c-891df4f23aa5" x="282" y="2" width="50" height="21"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{cat_cattle_type_cattype_name}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement uuid="ecf9b91f-b21f-4011-a69f-6d9a67730d07" x="396" y="2" width="61" height="21"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{cat_zone_zone_name}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement uuid="3d0858b6-a11e-4b05-9ad0-91e780d39ed8" x="146" y="2" width="75" height="21"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{ctrl_inspection_forecast_detail_auth}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="7fe6285f-fe26-4b0e-aa8c-94f6cf6fe362" style="Detail" x="9" y="2" width="136" height="21"/>
 				<textElement>
 					<font fontName="SansSerif" size="10"/>
@@ -216,7 +216,7 @@ ORDER BY
 					<pen lineWidth="0.5" lineColor="#999999"/>
 				</graphicElement>
 			</line>
-			<textField isStretchWithOverflow="true">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="9a91792d-fcfe-4daa-9d2f-8d155a3f36db" x="458" y="2" width="93" height="20"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{barnyards}]]></textFieldExpression>
