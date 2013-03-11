@@ -79,7 +79,10 @@ enyo.kind(
     },
     selectUser : function(inSender, inEvent) {
       this.iSelected = inEvent.rowIndex;
-      this.doSelect();
+      if(this.iSelected){
+    	  this.doSelect();  
+      }
+      
     },
     getUser : function() {
       return this.objRancher.users[this.iSelected];

@@ -1,6 +1,7 @@
 enyo.kind({
 	name: "ranchers.profile.person",
-	kind: "FittableColumns",
+	kind: "Scroller",
+	layoutKind:"FittableRowsLayout",
 	classes: "onyx",
 	events: {	
 		onUpdate:"",
@@ -9,53 +10,121 @@ enyo.kind({
 	},	
 	iId:null,
 	components: [
-  		{style:"width:1%"},
-  		{style:"width:98%",components:[
+  		{style:"height:10px"},
+  		{style:"width:500px;margin-left: auto;margin-right: auto;",components:[
 			{kind: "onyx.Popup",classes: "onyx", name: "popPassword", centered: true, modal:true,	 floating: true, scrim: true, 
 				components: [
 					{kind: "ranchers.profile.password",name:'passChange',classes: "onyx",onCancel:"closePopPW",onChange:"doChangePW"}
 			]},
-			{kind: "onyx.Groupbox", classes:"onyx-sample-result-box", components: [
-				{kind: "onyx.GroupboxHeader", content: "alias"},
-				{kind: "onyx.InputDecorator", components: [{kind: "onyx.Input",name:"aka",style:"width:100%", value: ""}]},
-			]},			
-			{kind: "onyx.Groupbox", classes:"onyx-sample-result-box", components: [
-				{kind: "onyx.GroupboxHeader", content: "Nombre"},
-				{kind: "onyx.InputDecorator", components: [{kind: "onyx.Input",name:"first_name",style:"width:100%", value: ""}]},
-			]},
-			{tag:"br"},
-			{kind: "onyx.Groupbox", classes:"onyx-sample-result-box", components: [
-				{kind: "onyx.GroupboxHeader", content: "Apellido Paterno"},
-				{kind: "onyx.InputDecorator", components: [{kind: "onyx.Input",name:"last_name",style:"width:100%", value: "", }]},
-			]},
-			{tag:"br"},   		
-			{kind: "onyx.Groupbox", classes:"onyx-sample-result-box", components: [
-				{kind: "onyx.GroupboxHeader", content: "Apellido Materno"},
-				{kind: "onyx.InputDecorator", components: [{kind: "onyx.Input",name:"mother_name",style:"width:100%", value: "", }]},
-			]},
-			{tag:"br"},		
-			{kind: "onyx.Groupbox", classes:"onyx-sample-result-box", components: [
-				{kind: "onyx.GroupboxHeader", content: "Fecha de Nacimiento"},
-				{kind:"onyx.DatePicker", bBlank:true,name:'birth_date', minYear:1900, maxYear:2010, style:"border-width: 0 0px 0px 0px;",
-				 onclick:"reloadControl"},		
-			]},		
-			{tag:"br"},		
-			{kind: "onyx.Groupbox", classes:"onyx-sample-result-box", components: [
-				{kind: "onyx.GroupboxHeader", content: "Email"},
-				{kind: "onyx.InputDecorator", components: [{kind: "onyx.Input",name:"email_add",style:"width:100%", fit:true,value: "", }]},
-			]},
-			{tag:"br"},		
-			{kind: "onyx.Groupbox", classes:"onyx-sample-result-box", components: [
-				{kind: "onyx.GroupboxHeader", content: "Telefono Celular"},
-				{kind: "onyx.InputDecorator", components: [{kind: "onyx.Input",style:"width:100%", value: "", name:"phone_number",
-				                                            onfocus : "applyMask"}]},
-			]},
-			{tag:"br"},
-			{kind: "onyx.Groupbox", classes:"onyx-sample-result-box", components: [
-				{kind: "onyx.GroupboxHeader", content: "-"},
-				{kind:"onyx.Button",content:"Cambiar Password",
+			{
+		        classes: "onyx-sample-divider",
+		        content: "Alias"
+		    }, {
+		        classes: "onyx-toolbar-inline",
+		        components: [
+		        {
+		            kind: "onyx.InputDecorator",
+		            style:"width:100%",
+		            components: [{
+		                kind: "onyx.Input",
+		                name:"aka", value:"",
+		                placeholder: "Escriba el texto aqui"
+		            }]
+		        },
+	        ]},
+	        {
+		        classes: "onyx-sample-divider",
+		        content: "Nombre"
+		    }, {
+		        classes: "onyx-toolbar-inline",
+		        components: [
+		        {
+		            kind: "onyx.InputDecorator",
+		            style:"width:100%",
+		            components: [{
+		                kind: "onyx.Input",
+		                name:"first_name",value:"",
+		                placeholder: "Escriba el texto aqui"
+		            }]
+		        },
+	        ]},
+	        {
+		        classes: "onyx-sample-divider",
+		        content: "Apellido Paterno"
+		    }, {
+		        classes: "onyx-toolbar-inline",
+		        components: [
+		        {
+		            kind: "onyx.InputDecorator",
+		            style:"width:100%",
+		            components: [{
+		                kind: "onyx.Input",
+		                name:"last_name",value:"",
+		                placeholder: "Escriba el texto aqui"
+		            }]
+		        },
+	        ]},
+	        {
+		        classes: "onyx-sample-divider",
+		        content: "Apellido Materno"
+		    }, {
+		        classes: "onyx-toolbar-inline",
+		        components: [
+		        {
+		            kind: "onyx.InputDecorator",
+		            style:"width:100%",
+		            components: [{
+		                kind: "onyx.Input",
+		                name:"mother_name", value:"",
+		                placeholder: "Escriba el texto aqui"
+		            }]
+		        },
+	        ]},
+	        {
+		        classes: "onyx-sample-divider",
+		        content: "Fecha de nacimiento"
+		    }, {
+		        classes: "onyx-toolbar-inline",
+		        style:"width:100%",
+		        components: [
+		        {kind:"onyx.DatePicker", bBlank:true,name:'birth_date', minYear:1900, maxYear:2010, style:"border-width: 0 0px 0px 0px;",
+				 onclick:"reloadControl"},
+	        ]},
+	        {
+		        classes: "onyx-sample-divider",
+		        content: "eMail"
+		    }, {
+		        classes: "onyx-toolbar-inline",
+		        style:"width:100%",
+		        components: [
+		        {
+		            kind: "onyx.InputDecorator",
+		            style:"width:100%",
+		            components: [{
+		                kind: "onyx.Input",
+		                name:"email_add",value:"",
+		                placeholder: "Escriba el texto aqui"
+		            }]
+		        },
+	        ]},
+	        {
+		        classes: "onyx-sample-divider",
+		        content: "Telefono celular"
+		    }, {
+		        classes: "onyx-toolbar-inline",
+		        components: [
+		        {
+		            kind: "onyx.InputDecorator",
+		            style:"width:100%",
+		            components: [{
+		                kind: "onyx.Input",
+		                name:"phone_number",onfocus : "applyMask",
+		                placeholder: "Escriba el texto aqui",
+		            }]
+		        },
+	        ]},
+			{kind:"onyx.Button",content:"Cambiar Password",
 				 classes: "onyx-blue", style:"width:100%",onclick:"openPopPW"},
-			]},								
 			{tag:"br"},						
 			{tag:"br"},										
 			{kind: "FittableColumns", style:"align:center",components:[
@@ -66,7 +135,7 @@ enyo.kind({
 				   style:"width:49%"},
 			 ]},
 		]},
-       {style:"width:1%"},		 	
+		{ fit:true}		 	
 	],
 	openPopPW:function(){
 		this.$.popPassword.show();

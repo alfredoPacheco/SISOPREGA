@@ -211,7 +211,7 @@ var _arrCattleList =
       cattype_id : 4,
       cattype_name : "VACAS"
     }, ];
-var _gobackStack = [];
+
 
 var _arrBarnyardsList =
   [
@@ -267,7 +267,8 @@ var _arrBarnyardsListCatalog =
 
 var _objMainHeader;
 var _objPopupHeader;
-
+var _gobackStack = [];
+var _navigatingBack = false;
 enyo.kind(
   {
     name : "cache",
@@ -296,10 +297,11 @@ enyo.kind(
       this.gblToaster.toastMain.open();
     },
     goBack : function() {
+    	_navigatingBack = true;
       if (_gobackStack.length > 0) {
         var objGB = _gobackStack.pop();
-        this.gblLabel.setContent(objGB.caption);
         objGB.paneMan.selectViewByName(objGB.paneName);
+        this.gblLabel.setContent(objGB.caption);
         if (objGB.cbObj) {
           objGB.cbObj[objGB.cbMethod]();
         }
