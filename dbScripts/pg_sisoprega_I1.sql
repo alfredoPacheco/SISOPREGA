@@ -24,7 +24,8 @@
  * 02/11/2013  Diego Torres                  Changing cat_location for cat_zone
  * 02/16/2013  Alfredo Pacheco		     zone_id field added to cat_reception
  * 02/16/2013  Alfredo Pacheco		     zone_id field added to ctrl_inspection_forecast_detail
- * 03/05/2013  Diego Torres              adding table for print app.
+ * 03/05/2013  Diego Torres                  adding table for print app.
+ * 03/13/2013  Alfredo Pacheco               Three phones by rancher, and sms_phone_chosen fields added.
  * ====================================================================================
  * 
  * Author: Diego Torres
@@ -86,7 +87,10 @@ CREATE TABLE cat_person_rancher (
   mother_name VARCHAR(50),
   birth_date date,
   email_add VARCHAR(150),
-  telephone VARCHAR(20)
+  telephone VARCHAR(20),
+  telephone_2 VARCHAR(20),
+  telephone_3 VARCHAR(20),
+  sms_phone_chosen integer
 );
 
 CREATE UNIQUE INDEX U_cat_person_rancher ON cat_person_rancher (first_name, last_name, mother_name);
@@ -105,6 +109,9 @@ CREATE TABLE cat_enterprise_rancher(
   zip_code VARCHAR(9),
   legal_id VARCHAR(13),
   telephone VARCHAR(20),
+  telephone_2 VARCHAR(20),
+  telephone_3 VARCHAR(20),
+  sms_phone_chosen integer,
   email VARCHAR(150)
 );
 

@@ -308,6 +308,18 @@ public class EnterpriseRancherBean extends BaseBean implements Cruddable {
       if (!valid)
         error_description = "El teléfono de la empresa es más grande de lo permitido en la base de datos.";
     }
+    
+    if (valid) {
+        valid = rancher.getTelephone2().length() <= 20;
+        if (!valid)
+          error_description = "El teléfono 2 de la empresa es más grande de lo permitido en la base de datos.";
+    }
+    
+    if (valid) {
+        valid = rancher.getTelephone3().length() <= 20;
+        if (!valid)
+          error_description = "El teléfono 3 de la empresa es más grande de lo permitido en la base de datos.";
+    }
 
     if (valid) {
       valid = rancher.getZipCode().length() <= 9;

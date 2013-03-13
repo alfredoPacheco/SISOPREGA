@@ -45,16 +45,53 @@ enyo.kind({
 				kind : "Input",
 				name : "rfc",
 				hint : "RFC"
-			},
-
+			},	
 			{
-				kind : "Input",
-				name : "phone_number",
-				hint : "Telefono",
-				inputClassName : "blankInput",
-				focusClassName : "darkFocus",
-				onfocus : "applyMask"
-			},{
+				kind:enyo.Item,
+				layoutKind:"HFlexLayout",
+				components:[{
+					kind : "Input",
+					name : "phone_number",
+					hint : "Telefono",
+					inputClassName : "blankInput",
+					focusClassName : "darkFocus",
+					onfocus : "applyMask",
+					flex:1
+				},
+				{content:"Para envio de SMS", style:"padding-right: 5px;"},
+				{kind: enyo.CheckBox, name:"checkBox1", onChange:"checkboxChanged"}				
+			]},
+			{
+				kind:enyo.Item,
+				layoutKind:"HFlexLayout",
+				components:[{
+					kind : "Input",
+					name : "phone_number2",
+					hint : "Telefono 2",
+					inputClassName : "blankInput",
+					focusClassName : "darkFocus",
+					onfocus : "applyMask",
+					flex:1
+				},
+				{content:"Para envio de SMS", style:"padding-right: 5px;"},
+				{kind: enyo.CheckBox, name:"checkBox2", onChange:"checkboxChanged"}				
+			]},
+			{
+				kind:enyo.Item,
+				layoutKind:"HFlexLayout",
+				components:[{
+					kind : "Input",
+					name : "phone_number3",
+					hint : "Telefono 3",
+					inputClassName : "blankInput",
+					focusClassName : "darkFocus",
+					onfocus : "applyMask",
+					flex:1
+				},
+				{content:"Para envio de SMS", style:"padding-right: 5px;"},
+				{kind: enyo.CheckBox, name:"checkBox3", onChange:"checkboxChanged"}				
+			]},
+			{
 				kind : "Input",
 				name : "email",
 				hint : "E Mail"
@@ -107,6 +144,9 @@ enyo.kind({
 		this.$.zip_code.setValue("");
 		this.$.rfc.setValue("");
 		this.$.phone_number.setValue("");
+		this.$.phone_number2.setValue("");
+		this.$.phone_number3.setValue("");
+		this.setPhoneSMS(0);
 		this.$.email.setValue("");
 	},
 	updateRancher : function() {
@@ -115,31 +155,37 @@ enyo.kind({
 	},
 	getRancher : function() {
 		var objRan = {
-			rancher_id : "",
-			company_name : "",
-			contacts : [],
-			billing : {},
-			rancher_type : 2,
-			address_one : "",
-			address_two : "",
-			city_id : "",
-			city_name : "",
-			state_id : "",
-			state_name : "",
-			zip_code : "",
-			rfc : "",
-			phone_number : "",
-			email : ""
+			rancher_id : 		"",
+			company_name : 		"",
+			contacts : 			[],
+			billing : 			{},
+			rancher_type : 		2,
+			address_one : 		"",
+			address_two : 		"",
+			city_id : 			"",
+			city_name : 		"",
+			state_id : 			"",
+			state_name : 		"",
+			zip_code : 			"",
+			rfc : 				"",
+			phone_number : 		"",
+			phone_number2 : 	"",
+			phone_number3 : 	"",
+			sms_phone_chosen:	0,
+			email : 			""
 		};
-		objRan.company_name = this.$.company_name.getValue();
-		objRan.address_one = this.$.address_one.getValue();
-		objRan.address_two = this.$.address_two.getValue();
-		objRan.state_id = this.$.state_id.getValue();
-		objRan.city_id = this.$.city_id.getValue();
-		objRan.zip_code = this.$.zip_code.getValue();
-		objRan.rfc = this.$.rfc.getValue();
-		objRan.phone_number = this.$.phone_number.getValue();
-		objRan.email = this.$.email.getValue();
+		objRan.company_name = 		this.$.company_name.getValue();
+		objRan.address_one = 		this.$.address_one.getValue();
+		objRan.address_two = 		this.$.address_two.getValue();
+		objRan.state_id = 			this.$.state_id.getValue();
+		objRan.city_id = 			this.$.city_id.getValue();
+		objRan.zip_code = 			this.$.zip_code.getValue();
+		objRan.rfc =	 			this.$.rfc.getValue();
+		objRan.phone_number = 		this.$.phone_number.getValue();
+		objRan.phone_number2 = 		this.$.phone_number2.getValue();
+		objRan.phone_number3 = 		this.$.phone_number3.getValue();
+		objRan.sms_phone_chosen = 	this.getCheckBoxSelected();
+		objRan.email = 				this.$.email.getValue();
 		return objRan;
 	},
 	addRancher : function() {
@@ -163,9 +209,54 @@ enyo.kind({
 		this.$.zip_code.setValue(this.objRan.zip_code);
 		this.$.rfc.setValue(this.objRan.rfc);
 		this.$.phone_number.setValue(this.objRan.phone_number);
+		this.$.phone_number2.setValue(this.objRan.phone_number2);
+		this.$.phone_number3.setValue(this.objRan.phone_number3);
+		this.setPhoneSMS(this.objRan.sms_phone_chosen);
 		this.$.email.setValue(this.objRan.email);
+		
 		this.toggleUpdate();
 
+	},
+	setPhoneSMS : function (intPhone){
+		this.$.checkBox1.setChecked(false);
+		this.$.checkBox2.setChecked(false);
+		this.$.checkBox3.setChecked(false);
+		switch(intPhone){
+		case 1:
+			this.$.checkBox1.setChecked(true);
+			break;
+		case 2:
+			this.$.checkBox2.setChecked(true);
+			break;
+		case 3:
+			this.$.checkBox3.setChecked(true);
+			break;				
+		}
+	},
+	checkboxChanged:function(inSender, inEvent){
+		switch(inSender.name){
+		case 'checkBox1':
+			this.setPhoneSMS(inSender.checked?1:0);
+			break;
+		case 'checkBox2':
+			this.setPhoneSMS(inSender.checked?2:0);
+			break;
+		case 'checkBox3':
+			this.setPhoneSMS(inSender.checked?3:0);
+			break;
+		}
+	},
+	getCheckBoxSelected:function(){
+		if (this.$.checkBox1.checked ==true){
+			return 1;
+		}
+		if (this.$.checkBox2.checked ==true){
+			return 2;
+		}
+		if (this.$.checkBox3.checked ==true){
+			return 3;
+		}
+		return 0;
 	},
 	toggleUpdate : function() {
 		this.$.draAdd.setOpen(false);

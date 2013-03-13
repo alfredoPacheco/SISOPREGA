@@ -143,6 +143,9 @@ enyo
               last_name : objRan.lastName,
               mother_name : objRan.motherName,
               phone_number : utils.phoneToMask(objRan.phone),
+              phone_number2 : utils.phoneToMask(objRan.phone2),
+              phone_number3 : utils.phoneToMask(objRan.phone3),
+              sms_phone_chosen: objRan.smsPhoneChosen
             };
           // Fields out of web service:
           objNew.rfc = "";
@@ -163,7 +166,10 @@ enyo
               firstName : objRan.first_name,
               lastName : objRan.last_name,
               motherName : objRan.mother_name,
-              phone : utils.phoneOut(objRan.phone_number)
+              phone : utils.phoneOut(objRan.phone_number),
+              phone2 : utils.phoneOut(objRan.phone_number2),
+              phone3 : utils.phoneOut(objRan.phone_number3),
+              smsPhoneChosen: objRan.sms_phone_chosen
             };
           return objNew;
         },
@@ -252,6 +258,9 @@ enyo
               zip_code : objRan.zipCode,
               rfc : objRan.legalId,
               phone_number : utils.phoneToMask(objRan.telephone),
+              phone_number2 : utils.phoneToMask(objRan.telephone2),
+              phone_number3 : utils.phoneToMask(objRan.telephone3),
+              sms_phone_chosen: objRan.smsPhoneChosen,
               email : objRan.email,
               // Fields out of web service:
               contacts : [],
@@ -276,6 +285,9 @@ enyo
               zipCode : objRan.zip_code,
               legalId : objRan.rfc,
               telephone : utils.phoneOut(objRan.phone_number),
+              telephone2 : utils.phoneOut(objRan.phone_number2),
+              telephone3 : utils.phoneOut(objRan.phone_number3),
+              smsPhoneChosen: objRan.sms_phone_chosen,
               email : objRan.email
             };
           return objNew;

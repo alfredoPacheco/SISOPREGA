@@ -43,6 +43,9 @@ public class Rancher {
     private Date birthDate;
     private String emailAddress;
     private String phone;
+    private String phone2;
+    private String phone3;
+    private int smsPhoneChosen;
 
     /**
      * @return the rancher_id
@@ -149,19 +152,88 @@ public class Rancher {
 	this.emailAddress = emailAddress;
     }
 
-    public String getPhone() {
-	return phone;
-    }
+        
 
-    public void setPhone(String phone) {
-	this.phone = phone;
-    }
+    /**
+	 * @return the phone
+	 */
+	public String getPhone() {
+		return phone;
+	}
 
-    @Override
+	/**
+	 * @param phone the phone to set
+	 */
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	/**
+	 * @return the phone2
+	 */
+	public String getPhone2() {
+		return phone2;
+	}
+
+	/**
+	 * @param phone2 the phone2 to set
+	 */
+	public void setPhone2(String phone2) {
+		this.phone2 = phone2;
+	}
+
+	/**
+	 * @return the phone3
+	 */
+	public String getPhone3() {
+		return phone3;
+	}
+
+	/**
+	 * @param phone3 the phone3 to set
+	 */
+	public void setPhone3(String phone3) {
+		this.phone3 = phone3;
+	}
+
+	
+	/**
+	 * @return the smsPhoneChosen
+	 */
+	public int getSmsPhoneChosen() {
+		return smsPhoneChosen;
+	}
+
+	/**
+	 * @param smsPhoneChosen the smsPhoneChosen to set
+	 */
+	public void setSmsPhoneChosen(int smsPhoneChosen) {
+		this.smsPhoneChosen = smsPhoneChosen;
+	}
+	
+	/**
+	 * @return the phone for sms usage
+	 */
+	public String getSmsPhone() {
+		switch(smsPhoneChosen){
+		case 1:
+			return phone;
+		case 2:
+			return phone2;
+		case 3:
+			return phone3;
+		default:
+			return "";
+		}
+	}
+	
+	@Override
     public String toString() {
 	return "rancherId:" + rancherId + "; name:" + lastName + " "
 		+ motherName + ", " + firstName + ";alias:" + aka + ";email:"
-		+ emailAddress + ";birthDate:" + birthDate + ";phone:" + phone + ";";
+		+ emailAddress + ";birthDate:" + birthDate + ";phone:" + phone + ";"
+		+ ";phone 2:" + phone2 + ";" + ";phone 3:" + phone3 + ";"
+		+ ";SMS phone chosen:" + smsPhoneChosen + ";";
     }
 
 }

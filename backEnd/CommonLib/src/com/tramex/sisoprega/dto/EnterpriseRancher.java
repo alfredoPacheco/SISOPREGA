@@ -43,6 +43,9 @@ public class EnterpriseRancher {
     private String zipCode;
     private String legalId;
     private String telephone;
+    private String telephone2;
+    private String telephone3;
+    private int smsPhoneChosen;
     private String email;
 
     /**
@@ -179,15 +182,38 @@ public class EnterpriseRancher {
     public void setTelephone(String telephone) {
 	this.telephone = telephone;
     }
-
-    @Override
-    public String toString() {
-	return "enterpriseId:" + enterpriseId + ";legalName:" + legalName
-		+ ";addressOne:" + addressOne + ";addressTwo:" + addressTwo
-		+ ";city:" + city + ";state:" + state + ";zipCode:" + zipCode
-		+ ";legalId:" + legalId + ";telephone:" + telephone + ";";
+    
+    /**
+     * @return the telephone2
+     */
+    public String getTelephone2() {
+	return telephone2;
     }
 
+    /**
+     * @param telephone2
+     *            the telephone2 to set
+     */
+    public void setTelephone2(String telephone2) {
+	this.telephone2 = telephone2;
+    }
+    
+    /**
+     * @return the telephone3
+     */
+    public String getTelephone3() {
+	return telephone3;
+    }
+
+    /**
+     * @param telephone3
+     *            the telephone3 to set
+     */
+    public void setTelephone3(String telephone3) {
+	this.telephone3 = telephone3;
+    }
+
+   
     /**
      * @return the email
      */
@@ -201,4 +227,45 @@ public class EnterpriseRancher {
     public void setEmail(String email) {
       this.email = email;
     }
+
+	/**
+	 * @return the smsPhoneChosen
+	 */
+	public int getSmsPhoneChosen() {
+		return smsPhoneChosen;
+	}
+
+	/**
+	 * @param smsPhoneChosen the smsPhoneChosen to set
+	 */
+	public void setSmsPhoneChosen(int smsPhoneChosen) {
+		this.smsPhoneChosen = smsPhoneChosen;
+	}
+    
+	/**
+	 * @return the phone for sms usage
+	 */
+	public String getSmsPhone() {
+		switch(smsPhoneChosen){
+		case 1:
+			return telephone;
+		case 2:
+			return telephone2;
+		case 3:
+			return telephone3;
+		default:
+			return "";
+		}
+	}
+	
+	 @Override
+	    public String toString() {
+		return "enterpriseId:" + enterpriseId + ";legalName:" + legalName
+			+ ";addressOne:" + addressOne + ";addressTwo:" + addressTwo
+			+ ";city:" + city + ";state:" + state + ";zipCode:" + zipCode
+			+ ";legalId:" + legalId + ";telephone:" + telephone + ";"
+			+ ";telephone 2:" + telephone2 + ";" + ";telephone 3:" + telephone3 + ";"
+			+ ";SMS phone chosen:" + smsPhoneChosen + ";";
+	    }
+    
 }

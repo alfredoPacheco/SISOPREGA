@@ -105,7 +105,7 @@ public class Messenger implements Messageable {
   @Override
   public boolean sendReport(Rancher rancher, String reportName) {
     log.entering(this.getClass().getCanonicalName(), "sendReport");
-    return sendReport(reportName, rancher.getPhone(), rancher.getEmailAddress());
+    return sendReport(reportName, rancher.getSmsPhone(), rancher.getEmailAddress());
   }
 
   /*
@@ -118,7 +118,7 @@ public class Messenger implements Messageable {
   @Override
   public boolean sendReport(EnterpriseRancher rancher, String reportName) {
     log.entering(this.getClass().getCanonicalName(), "sendReport(EnterpriseRancher, reportName)");
-    return sendReport(reportName, rancher.getTelephone(), rancher.getEmail());
+    return sendReport(reportName, rancher.getSmsPhone(), rancher.getEmail());
   }
 
   /*
@@ -130,7 +130,7 @@ public class Messenger implements Messageable {
    */
   @Override
   public boolean sendSimpleMessage(Rancher rancher, String message) {
-    boolean sentSMS = sendSMS(rancher.getPhone(), message);
+    boolean sentSMS = sendSMS(rancher.getSmsPhone(), message);
     boolean sentEmail = sendSimpleEmail(rancher.getEmailAddress(), message);
     return sentSMS && sentEmail;
   }
@@ -144,7 +144,7 @@ public class Messenger implements Messageable {
    */
   @Override
   public boolean sendSimpleMessage(EnterpriseRancher rancher, String message) {
-    boolean sentSMS = sendSMS(rancher.getTelephone(), message);
+    boolean sentSMS = sendSMS(rancher.getSmsPhone(), message);
     boolean sentEmail = sendSimpleEmail(rancher.getEmail(), message);
     return sentSMS && sentEmail;
   }

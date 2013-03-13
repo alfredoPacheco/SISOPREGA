@@ -61,15 +61,54 @@ enyo.kind({
 				inputType : "email",
 				inputClassName : "blankInput",
 				focusClassName : "darkFocus"
-			}, {
-				kind : "Input",
-				name : "phone_number",
-				hint : "Telefono",
-				inputClassName : "blankInput",
-				focusClassName : "darkFocus",
-				onfocus : "applyMask"
-			}]
-		},
+			}, 
+			{
+				kind:enyo.Item,
+				layoutKind:"HFlexLayout",
+				components:[{
+					kind : "Input",
+					name : "phone_number",
+					hint : "Telefono",
+					inputClassName : "blankInput",
+					focusClassName : "darkFocus",
+					onfocus : "applyMask",
+					flex:1
+				},
+				{content:"Para envio de SMS", style:"padding-right: 5px;"},
+				{kind: enyo.CheckBox, name:"checkBox1", onChange:"checkboxChanged"}				
+			]},
+			{
+				kind:enyo.Item,
+				layoutKind:"HFlexLayout",
+				components:[{
+					kind : "Input",
+					name : "phone_number2",
+					hint : "Telefono 2",
+					inputClassName : "blankInput",
+					focusClassName : "darkFocus",
+					onfocus : "applyMask",
+					flex:1
+				},
+				{content:"Para envio de SMS", style:"padding-right: 5px;"},
+				{kind: enyo.CheckBox, name:"checkBox2", onChange:"checkboxChanged"}				
+			]},
+			{
+				kind:enyo.Item,
+				layoutKind:"HFlexLayout",
+				components:[{
+					kind : "Input",
+					name : "phone_number3",
+					hint : "Telefono 3",
+					inputClassName : "blankInput",
+					focusClassName : "darkFocus",
+					onfocus : "applyMask",
+					flex:1
+				},
+				{content:"Para envio de SMS", style:"padding-right: 5px;"},
+				{kind: enyo.CheckBox, name:"checkBox3", onChange:"checkboxChanged"}				
+			]},
+			
+		]},
 		{
 			kind : "Drawer",
 			name : "draAdd",
@@ -118,6 +157,9 @@ enyo.kind({
 //		this.$.birth_date.setNull();
 		this.$.email_add.setValue("");
 		this.$.phone_number.setValue("");
+		this.$.phone_number2.setValue("");
+		this.$.phone_number3.setValue("");
+		this.setPhoneSMS(0);
 	},
 	updateRancher : function() {
 		cacheRanchers.upd(this.objRan, this.getRancher(), this,
@@ -130,15 +172,18 @@ enyo.kind({
 			locale : new enyo.g11n.Locale("es_es")
 		});
 		var objRan = {
-			rancher_id : "",
-			aka : "",
-			birth_date : "",
-			email_add : "",
-			first_name : "",
-			last_name : "",
-			mother_name : "",
-			phone_number : "",
-			rancher_type : 1,
+			rancher_id : 		"",
+			aka : 				"",
+			birth_date : 		"",
+			email_add : 		"",
+			first_name : 		"",
+			last_name : 		"",
+			mother_name : 		"",
+			phone_number : 		"",
+			phone_number2 : 	"",
+			phone_number3 : 	"",
+			sms_phone_chosen:	0,
+			rancher_type : 		1,
 		};
 
 		objRan.aka = this.$.aka.getValue();
@@ -151,7 +196,10 @@ enyo.kind({
 		objRan.first_name = this.$.first_name.getValue();
 		objRan.last_name = this.$.last_name.getValue();
 		objRan.mother_name = this.$.mother_name.getValue();
-		objRan.phone_number = this.$.phone_number.getValue();
+		objRan.phone_number = 		this.$.phone_number.getValue();
+		objRan.phone_number2 = 		this.$.phone_number2.getValue();
+		objRan.phone_number3 = 		this.$.phone_number3.getValue();
+		objRan.sms_phone_chosen = 	this.getCheckBoxSelected();
 
 		return objRan;
 	},
@@ -183,7 +231,51 @@ enyo.kind({
 		this.$.last_name.setValue(this.objRan.last_name);
 		this.$.mother_name.setValue(this.objRan.mother_name);
 		this.$.phone_number.setValue(this.objRan.phone_number);
+		this.$.phone_number2.setValue(this.objRan.phone_number2);
+		this.$.phone_number3.setValue(this.objRan.phone_number3);
+		this.setPhoneSMS(this.objRan.sms_phone_chosen);
 		this.toggleUpdate();
+	},
+	setPhoneSMS : function (intPhone){
+		this.$.checkBox1.setChecked(false);
+		this.$.checkBox2.setChecked(false);
+		this.$.checkBox3.setChecked(false);
+		switch(intPhone){
+		case 1:
+			this.$.checkBox1.setChecked(true);
+			break;
+		case 2:
+			this.$.checkBox2.setChecked(true);
+			break;
+		case 3:
+			this.$.checkBox3.setChecked(true);
+			break;				
+		}
+	},
+	checkboxChanged:function(inSender, inEvent){
+		switch(inSender.name){
+		case 'checkBox1':
+			this.setPhoneSMS(inSender.checked?1:0);
+			break;
+		case 'checkBox2':
+			this.setPhoneSMS(inSender.checked?2:0);
+			break;
+		case 'checkBox3':
+			this.setPhoneSMS(inSender.checked?3:0);
+			break;
+		}
+	},
+	getCheckBoxSelected:function(){
+		if (this.$.checkBox1.checked ==true){
+			return 1;
+		}
+		if (this.$.checkBox2.checked ==true){
+			return 2;
+		}
+		if (this.$.checkBox3.checked ==true){
+			return 3;
+		}
+		return 0;
 	},
 	toggleUpdate : function() {
 		this.$.draAdd.setOpen(false);

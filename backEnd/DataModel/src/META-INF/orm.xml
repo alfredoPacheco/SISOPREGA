@@ -41,6 +41,15 @@
 			<basic name="phone">
 				<column name="telephone" length="20" />
 			</basic>
+			<basic name="phone2">
+				<column name="telephone_2" length="20" />
+			</basic>
+			<basic name="phone3">
+				<column name="telephone_3" length="20" />
+			</basic>
+			<basic name="smsPhoneChosen">
+				<column name="sms_phone_chosen"/>
+			</basic>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.EnterpriseRancher">
@@ -87,6 +96,15 @@
 			</basic>
 			<basic name="telephone">
 				<column name="telephone" length="20" />
+			</basic>
+			<basic name="telephone2">
+				<column name="telephone_2" length="20" />
+			</basic>
+			<basic name="telephone3">
+				<column name="telephone_3" length="20" />
+			</basic>
+			<basic name="smsPhoneChosen">
+				<column name="sms_phone_chosen"/>
 			</basic>
 			<basic name="zipCode">
 				<column name="zip_code" length="9" nullable="false" />
