@@ -180,23 +180,16 @@ enyo.kind(
           }
 
           // feedOrder:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-          var fmt = new enyo.g11n.DateFmt(
-            {
-              date : "short",
-              time : "short",
-              locale : new enyo.g11n.Locale("en_es")
-            });
           var arrFeedAux = this.getFeedOrder(objAux.reception_id);
           for (var f=0; f<arrFeedAux.length;f++) {
             var feedAux = {};
-            try {
-              var fechaAux = new Date(parseInt(arrFeedAux[f].feedDate));
+//            try {
               feedAux.feeding_id = arrFeedAux[f].orderId;
               feedAux.handling = arrFeedAux[f].handling;
               feedAux.weight = arrFeedAux[f].weight;
-              feedAux.dateAndTime = fmt.format(fechaAux);
-            } catch (e) {
-            }
+              feedAux.dateAndTime = arrFeedAux[f].feedDate;
+//            } catch (e) {
+//            }
             // feedOrderBarnyard::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
             if (feedAux.feeding_id) {
               var arrFeedBarnyardAux = this.getFeedOrderBarnyard(feedAux.feeding_id);
@@ -624,18 +617,11 @@ enyo.kind(
       var objToSend = {};
       objToSend.receptionId = objRec.reception_id;
       objToSend.handling = objFeed.handling;
-
+      objToSend.feedDate = utils.dateTimeOut(objFeed.dateAndTime);
+      
       var cgCreate = consumingGateway.Create("FeedOrder", objToSend);
       if (cgCreate.exceptionId == 0) { // Created successfully
         objFeed.feeding_id = cgCreate.generatedId;
-        var fmt = new enyo.g11n.DateFmt(
-          {
-            date : "short",
-            time : "short",
-            locale : new enyo.g11n.Locale("en_es")
-          });
-        var fechaAux = new Date();
-        objFeed.dateAndTime = fmt.format(fechaAux);
         if (cacheReceptions.createFeedOrderBarnyard(cgCreate.generatedId, objFeed) == true) {
           if (cacheReceptions.createFeedOrderDetails(cgCreate.generatedId, objFeed) == true) {
             return true;

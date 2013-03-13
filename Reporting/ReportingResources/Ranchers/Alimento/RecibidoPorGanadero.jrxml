@@ -222,7 +222,7 @@ ORDER BY
 	<title>
 		<band height="60" splitType="Stretch">
 			<staticText>
-				<reportElement uuid="0ca3d7ba-6228-4d67-9fa4-83f66086b594" x="21" y="34" width="551" height="26"/>
+				<reportElement uuid="0ca3d7ba-6228-4d67-9fa4-83f66086b594" x="35" y="34" width="537" height="26"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Serif" size="18" isBold="true"/>
 				</textElement>
