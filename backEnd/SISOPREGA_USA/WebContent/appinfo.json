@@ -1,0 +1,10 @@
+{
+	"id": "com.tramex.sisoprega.us",
+	"version": "1.0.0",
+	"vendor": "TRAMEX",
+	"type": "web",
+	"main": "index.html",
+	"title": "SISOPREGA US",
+	"icon": "../SISOPREGA/images/eastman.png",
+  	"uiRevision": "2"
+}
