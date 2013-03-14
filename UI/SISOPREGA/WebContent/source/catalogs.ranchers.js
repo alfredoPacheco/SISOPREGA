@@ -393,7 +393,7 @@ enyo.kind(
         });
     },
     goBack : function() {
-      this.$.ranchersList.filterRanchers();
+      this.$.ranchersList.filterRanchers();      
       this.$.contactList.updateList();
       this.$.billingList.updateList();
       this.$.usersList.updateList();

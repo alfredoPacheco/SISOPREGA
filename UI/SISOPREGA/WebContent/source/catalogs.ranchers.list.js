@@ -11,12 +11,14 @@ enyo.kind(
       },
     iSelected : null,
     objList : [],
+    allItems:[],
     components :
       [
         {
           kind : enyo.Scroller,
           flex : 1,
           className : "listBG",
+          name:"scroller",
           components :
             [
               {
@@ -50,44 +52,62 @@ enyo.kind(
         },
         {
           kind : "Toolbar",
+          height:'100px;',
           components :
             [
-              {
-                kind : "enyo.IconButton",
-                flex : 1,
-                label : "Persona Fisica",
-                onclick : "doPerson"
-              },
-              {
-                kind : "enyo.IconButton",
-                flex : 1,
-                label : "Empresa Sociedad",
-                onclick : "doEnterprise"
-              },
-              {
-                kind : "ListSelector",
-                name : 'filter_id',
-                label : "Filtro",
-                hideItem : true,
-                onChange : "filterRanchers",
-                items :
-                  [
-                    {
-                      caption : "Persona Fisica",
-                      value : 1
-                    },
-                    {
-                      caption : "Empresa/Sociedad",
-                      value : 2
-                    },
-                    {
-                      caption : "Todo",
-                      value : 3
-                    } ],
-                flex : 1,
-                contentPack : "end"
-              } ]
-        }, ],
+             {kind:enyo.VFlexBox,
+              flex:1,
+              components:[{kind:enyo.HFlexBox,
+					              components:[{
+					                kind : "enyo.IconButton",
+					                style:"",
+					                label : "Nuevo Ganadero",
+					                onclick : "doPerson"
+					              },
+					              {
+					                kind : "enyo.IconButton",
+					                label : "Nueva Empresa",
+					                onclick : "doEnterprise"
+					              },
+					              {
+					                kind : "ListSelector",
+					                name : 'filter_id',
+					                label : "Filtro",
+					                hideItem : true,
+					                onChange : "filterRanchers",
+					                items :
+					                  [
+					                    {
+					                      caption : "Persona Fisica",
+					                      value : 1
+					                    },
+					                    {
+					                      caption : "Empresa/Sociedad",
+					                      value : 2
+					                    },
+					                    {
+					                      caption : "Todo",
+					                      value : 3
+					                    } ],
+					                flex : 1,
+					                contentPack : "end"
+					              }]},
+					              {kind:enyo.HFlexBox,
+					            	  align:"center",
+						              components:[
+						                          {		kind: "ToolInput", name:"rancherFilter", align:"left", onkeyup:"key_up",
+						                        	  	flex:1,  hint:"Filtro de ganadero",changeOnInput: true
+						                          },
+						                          {
+						                        	  	kind: "Button",name:"btnClearFilter", className: "enyo-button-negative",
+						                        	  	caption: "Remover Filtro", onclick: "clearFilter", width:"115px;"
+						                          }]
+					              }
+              
+					  ]}
+              
+             ]}, 
+    ],
     selectRancher : function(inSender, inEvent) {
       if (this.objList[inEvent.rowIndex]) {
         this.iSelected = inEvent.rowIndex;
@@ -152,11 +172,15 @@ enyo.kind(
       }
     },
     ready : function() {
-      this.$.filter_id.setValue(3);
+    	this.$.rancherFilter.setValue("");
+      this.$.filter_id.setValue(3);      
+      this.allItems = cacheRanchers.get();
       this.filterRanchers();
+      
+      
     },
     updateList : function() {
-
+    	
       this.objList = this.objList.sort(function(inA, inB) {
         if (inA.rancher_type == 1) {
           var mother_name = inA.mother_name ? ' ' + inA.mother_name : ' ';
@@ -177,17 +201,71 @@ enyo.kind(
         return inA['sortStr'] < inB['sortStr'] ? -1 : 1;
       });
       this.$.rancherList.render();
+      this.$.scroller.scrollIntoView();
     },
     filterRanchers : function() {
       this.objList = [];
       var objRan;
-      var arrRanchersAux = cacheRanchers.get();
+      
+      var arrRanchersAux = this.allItems;
       for ( var i = 0; i < arrRanchersAux.length; i++) {
         objRan = arrRanchersAux[i];
         if (this.$.filter_id.getValue() == 3 || objRan.rancher_type == this.$.filter_id.getValue()) {
           this.objList.push(arrRanchersAux[i]);
         }
       }
+      
       this.updateList();
-    }
+    },
+    key_up : function(inSender, inEvent) {
+		
+		var value = "";
+		var x = inEvent.keyCode;
+		switch (true) {
+		case (x == 8): // backspace
+		case (x == 32): // space
+		case (x >= 46 && x <= 90): // letters and numbers and delete
+			break;
+		case (x == 16): //Shift
+		case (x == 9): // tab
+		case (x == 38): // up
+		case (x == 40): // down
+		case (x == 37): // left
+		case (x == 39): // right
+		case (x == 13): // enter
+			return true;
+		}
+		
+		value = inSender.value;
+		if(value.trim() != ""){
+			this.objList = this.findItem(value);
+		}
+		else{
+			this.objList = this.allItems;
+		}
+		this.updateList();
+	},
+    findItem : function(criteria) {
+		var result = [];
+		if (criteria != "") {
+			var items = this.allItems;
+			var pattern = new RegExp(criteria.trim(), "ig");
+			for (index in items) {
+				for (prop in items[index]) {
+					pattern.lastIndex = 0;
+					if (pattern.test(items[index][prop])) {
+						var elemento = items[index];
+						result.push(elemento);
+						break;
+					}
+				}
+			}
+		}
+		return result;
+	},
+	clearFilter:function(){
+		this.$.rancherFilter.setValue("");
+		this.objList = this.allItems;
+		this.updateList();
+	}
   });
