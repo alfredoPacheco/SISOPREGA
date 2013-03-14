@@ -76,23 +76,23 @@
 				<generated-value strategy="IDENTITY" />
 			</id>
 			<basic name="addressOne">
-				<column name="address_one" nullable="false" length="100" />
+				<column name="address_one" length="100" />
 			</basic>
 			<basic name="addressTwo">
 				<column name="address_two" length="100" />
 			</basic>
 			<basic name="city">
-				<column name="city" length="80" nullable="false" />
+				<column name="city" length="80"/>
 			</basic>
 			<basic name="legalId">
-				<column name="legal_id" length="13" nullable="false" unique="true" />
+				<column name="legal_id" length="13" unique="true" />
 			</basic>
 			<basic name="legalName">
-				<column name="legal_name" length="100" nullable="false"
+				<column name="legal_name" length="100"
 					unique="true" />
 			</basic>
 			<basic name="state">
-				<column name="address_state" length="80" nullable="false" />
+				<column name="address_state" length="80"/>
 			</basic>
 			<basic name="telephone">
 				<column name="telephone" length="20" />
@@ -107,7 +107,7 @@
 				<column name="sms_phone_chosen"/>
 			</basic>
 			<basic name="zipCode">
-				<column name="zip_code" length="9" nullable="false" />
+				<column name="zip_code" length="9" />
 			</basic>
 		</attributes>
 	</entity>

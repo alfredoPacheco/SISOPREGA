@@ -221,7 +221,7 @@ enyo.kind({
 		this.$.checkBox1.setChecked(false);
 		this.$.checkBox2.setChecked(false);
 		this.$.checkBox3.setChecked(false);
-		switch(intPhone){
+		switch(parseInt(intPhone)){
 		case 1:
 			this.$.checkBox1.setChecked(true);
 			break;
