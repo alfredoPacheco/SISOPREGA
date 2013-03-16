@@ -112,11 +112,35 @@ enyo.kind(
     },
     loginCallBack : function(loginResult, objRef) {
       if (loginResult.exceptionId == 0) {
+        cacheMan.loggedUser = objRef.$.user.getValue();
         objRef.$.user.setValue("");
         objRef.$.password.setValue("");
-        // TODO: Evaluate and load based on results
+        var roles = usGateway.getUserRoles(cacheMan.loggedUser);
+        var isAdmin = false;
+        var isAgency = false;
+        for(var roleIndex in roles){
+          var role = roles[roleIndex];
+          if(role == 'usa_usr' || role == 'admin'){
+            isAdmin = true;
+          } 
+          if(role == 'agency'){
+            isAgency = true;
+          }
+        }
+        
+        if(isAdmin){
+          cacheMan.mainView = 'mainAdmin';
+        }
+        
+        if(isAgency && !isAdmin){
+          cacheMan.mainView = 'mainAgency';
+        }
+        
         cacheMan.hideScrim();
-        objRef.doSucess();
+        if(isAdmin || isAgency)
+          objRef.doSucess();
+        else
+          objRef.doFail();
       } else {
         cacheMan.hideScrim();
         objRef.doFail();

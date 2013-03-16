@@ -382,7 +382,7 @@ public class OperationsGateway {
         log.info("Starting new Session");
         session.setAttribute("userName", userName);
         session.setAttribute("password", password);
-
+        
         result.setError(new Error("0", "Success", "Login"));
         pl.logout();
       } else {

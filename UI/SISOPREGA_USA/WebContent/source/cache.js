@@ -4,6 +4,8 @@ enyo.kind(
     gblLabel : null,
     gblToaster : null,
     gblScrim : null,
+    loggedUser : null,
+    mainView : null,
     setGlobalLabel : function(objVar) {
       this.gblLabel = objVar;
     },

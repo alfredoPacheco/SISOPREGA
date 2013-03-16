@@ -86,5 +86,13 @@ public interface RemoteIdentity {
    * @throws IdentityManagerException
    */
   List<User> allUsers() throws IdentityManagerException;
+  
+  /**
+   * Retrieve a list of roles to which the user belongs.
+   * @param userName
+   * @return
+   * @throws IdentityManagerException
+   */
+  List<String> readUserRoles(String userName) throws IdentityManagerException;
 
 }
