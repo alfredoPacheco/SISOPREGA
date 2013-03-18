@@ -19,6 +19,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -183,6 +184,17 @@ public class IdentityManagerBean extends BaseBean implements RemoteIdentity {
   public boolean validateCurrentPassword(String userName, String password) throws IdentityManagerException {
     User user = getUserFromName(userName);
     return user.getPassword().equals(hashPassword(password));
+  }
+  
+  @Override
+  public List<String> readUserRoles(String userName) throws IdentityManagerException {
+    User user = getUserFromName(userName);
+    List<String> result = new LinkedList<String>();
+    for(Role role : user.getGroups()){
+      result.add(role.getRole_name());
+    }
+    
+    return result;
   }
  
   private User getUserFromName(String userName) throws IdentityManagerException {

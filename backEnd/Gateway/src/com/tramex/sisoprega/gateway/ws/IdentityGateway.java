@@ -191,6 +191,21 @@ public class IdentityGateway {
 
     return getIdentityManager().allUsers();
   }
+  /**
+   * Retrieves all role names for a given user name.
+   * @param userName
+   * @return
+   * @throws IdentityManagerException
+   */
+  @WebMethod(operationName = "ReadUserRoles")
+  public List<String> readUserRoles(@WebParam(name="userName") String userName) throws IdentityManagerException{
+    if (getSessionUserName() == null)
+      throw new WebServiceException("User is not logged in");
+    
+    log.info("Retrieving list of users.");
+    
+    return getIdentityManager().readUserRoles(userName);
+  }
   
   private RemoteIdentity getIdentityManager() {
     Context jndiContext = null;

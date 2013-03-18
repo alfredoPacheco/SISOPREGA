@@ -95,7 +95,7 @@ enyo.kind(
               {
                 name : 'btnLogOut',
                 onclick : "logOut",
-                icon : "../SISOPREGA/images/command-menu/icon-context.png"
+                icon : "../SISOPREGA/images/command-menu/menu-icon-logout.png"
               } ]
         },
         {
@@ -108,6 +108,9 @@ enyo.kind(
             [
               {
                 kind : "login",
+                // to test visibility with no login activity,
+                // change the kind for your own component.
+                //kind : "hermana.de",
                 name : "login",
                 onSucess : "goAhead",
                 onFail : "noAccess"
@@ -151,9 +154,7 @@ enyo.kind(
     goAhead : function() {
       this.$.btnGoBack.setShowing(!1);
       this.$.tbHeader.show();
-      //TODO: Define view based on role.
-      
-      //this.$.mainPane.selectViewByName("mainMenu");
+      this.$.mainPane.selectViewByName(cacheMan.mainView);
     },
     noAccess : function() {
       cacheMan.setMessage("", "Usuario o contraseña incorrecta.");
