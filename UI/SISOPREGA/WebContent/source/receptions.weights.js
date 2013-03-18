@@ -1,55 +1,69 @@
 enyo.kind({
 	name: "receptions.weights",
-	kind: enyo.SlidingView,
-	layoutKind: enyo.VFlexLayout,
+	kind: enyo.VFlexBox,
 	iSelected:null,
 	objReception:null,
 	components:[				
 		{kind: enyo.Scroller,flex: 1,
-//    	 style: "background-image: url(images/practice_background.png); background-size: cover;",			
+    	 className:"listBG",			
  		 components: [
 					{kind: enyo.VirtualRepeater, name: "weightsList", onSetupRow: "setupRow", 
-					 onclick: "selectWeight",								
+					 onclick: "selectWeight",
 						components: [
 							{kind: enyo.SwipeableItem,
 							    onConfirm: "deleteWeight", 							 
 								tapHighlight: true,
+								layoutKind:enyo.HFlexLayout,
 								components: [
-									{name: "hc_weight", 
-									 style: "text-overflow: ellipsis; "+
-									 		 "overflow: hidden; white-space:"+
-											 "nowrap;color:#FFF;", 
+								    {
+								    	flex:1,
+								    	name:'date',
+								    	style: "text-overflow: ellipsis; "+
+								 		 "overflow: hidden; white-space:"+
+										 "nowrap;color:#FFF;",
+								    },
+								    {
+								    	flex:1,
+								    	name:'rancher',
+								    	style: "text-overflow: ellipsis; "+
+								 		 "overflow: hidden; white-space:"+
+										 "nowrap;color:#FFF;",
+								    },								    
+									{
+								    	flex:1,
+								    	name: "hc",
+								    	style: "text-overflow: ellipsis; "+
+								 		 "overflow: hidden; white-space:"+
+										 "nowrap;color:#FFF;"									  
 									},
-									{name: "weight", 
-									 style: "text-overflow: ellipsis; "+
-									 		 "overflow: hidden; white-space:"+
-											 "nowrap;color:#FFF;", 
-									}]}]}]
-		},
-		{kind: "Toolbar",	
-		components: [					 
-		{kind: "ToolInput", name:"hc", width:"23%",  hint:"Cabezas",changeOnInput: true},
-		{kind: "ToolInput", name:"weight", width:"35%",  hint:"KG",changeOnInput: true},
-		{kind: "Drawer", name:"draAdd", components: [ 										
-			{kind: "enyo.IconButton",name:"btnAdd",icon: "images/menu-icon-new.png",
-			 onclick: "addWeight"},
-		]},
-		{kind: "Drawer", name:"draUpdate", components: [		
-			{layoutKind: "HFlexLayout", align: "center",components: [			
-				{kind: "enyo.IconButton",name:"btnUpdate", 
-				icon:"images/btn_edit.png",
-				 flex:1, onclick: "updateWeight"},							
-				{kind: "Button",name:"btnCancel", className: "enyo-button-negative", 
-				 flex:1,caption: "X", onclick: "toggleAdd"},
-			]}
-		]},																		
-		]},					 		
+									{
+										flex:1,
+										name: "weight", 
+										kind:enyo.input
+									},
+									{
+										flex:1,
+										name:'btnSave',
+										kind:enyo.Button,
+										caption:"Guardar"
+										
+									}]
+							}]}]
+		}
 	],
 	setupRow:function(inSender, inIndex) {	
+		if(inIndex < 10){
+			this.$.date.setContent("test");
+			this.$.rancher.setContent("test");
+			this.$.hc.setContent("test");
+			this.$.weight.setContent("test");
+			return true;
+		}
+		
 		var obj;
 		if(this.objReception){
 			if (obj=this.objReception.weights[inIndex]){
-				this.$.hc_weight.setContent(obj.hc+ " / "+
+				this.$.hc.setContent(obj.hc+ " / "+
 											obj.weight + " KG");
 				return true;
 			}
@@ -89,8 +103,6 @@ enyo.kind({
 		this.updateList();		
 	},
 	ready:function(){
-		this.$.draAdd.setOpen(true);
-		this.$.draUpdate.setOpen(false);		
 		this.updateList();
 	},
 	updateList:function(){

@@ -508,7 +508,9 @@ CREATE TABLE ctrl_inspection (
   inspection_id SERIAL PRIMARY KEY,
   reception_id integer NOT NULL REFERENCES ctrl_reception(reception_id),
   inspection_date date NOT NULL,
-  comments text
+  comments text,
+  weight decimal(12,4),
+  weight_uom integer default 1 REFERENCES cat_measurement_unit(unit_id)
 );
 
 CREATE UNIQUE INDEX U_ctrl_inspection(reception_id);

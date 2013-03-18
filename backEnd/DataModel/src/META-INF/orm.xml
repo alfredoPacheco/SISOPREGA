@@ -652,6 +652,12 @@
 			<basic name="comments">
 				<column name="comments" />
 			</basic>
+			<basic name="weight">
+				<column name="weight" />
+			</basic>
+			<basic name="weightUom">
+				<column name="weight_uom" />
+			</basic>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.InspectionBarnyard">
