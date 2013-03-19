@@ -15,33 +15,34 @@ enyo.kind({
 								tapHighlight: true,
 								layoutKind:enyo.HFlexLayout,
 								align:"center",
+								pack:"center",
 								components: [
 								    {
-								    	flex:1,
 								    	name:'date',
 								    	className : "listSecond",
+								    	style:"width:80px;padding-right:20px;"
 								    },
 								    {
-								    	flex:1,
 								    	name:'rancher',
 								    	className : "listSecond",
+								    	style:"width:170px;padding-right:20px;"
 								    },								    
 									{
-								    	flex:1,
 								    	name: "hc",
-								    	className : "listSecond",									  
+								    	className : "listSecond",
+								    	style:"width:70px;padding-right:20px;"
 									},
 									{
-										flex:1,
 										name: "weight", 
-										kind:"Input",
-										width:
+										kind:"ToolInput",
+										width:"70px;",
+										hint:"Peso"	
 									},
 									{
-										flex:1,
 										name:'btnSave',
 										kind:enyo.Button,
-										caption:"Guardar"
+										caption:"Guardar",
+										style:"width:55px;margin-left:20px;"
 										
 									}]
 							}]}]
@@ -93,8 +94,8 @@ enyo.kind({
 		cacheReceptions.addWeight(this.objReception,this.getWeight(),this,"afterAdd");
 	},
 	afterAdd:function(){
-		this.updateList();		
-		this.resetValues();		
+		this.updateList();
+		this.resetValues();
 	},
 	updateWeight:function(){
 		cacheReceptions.updateWeight(this.objReception,this.objReception.weights[this.iSelected],
@@ -109,7 +110,7 @@ enyo.kind({
 		this.updateList();
 	},
 	updateList:function(){
-		this.$.weightsList.render();					
+		this.$.weightsList.render();
 	},
 	selectWeight:function(inSender, inEvent){		
 		this.iSelected=inEvent.rowIndex;
@@ -117,8 +118,7 @@ enyo.kind({
 		this.$.hc.setValue(hcw.hc);
 		this.$.weight.setValue(hcw.weight);
 		this.toggleUpdate();
-		return true;				
-		
+		return true;
 	},	
 	toggleUpdate:function(){
 		this.$.draAdd.setOpen(false);
