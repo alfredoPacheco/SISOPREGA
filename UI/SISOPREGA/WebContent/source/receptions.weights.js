@@ -2,7 +2,7 @@ enyo.kind({
 	name: "receptions.weights",
 	kind: enyo.VFlexBox,
 	iSelected:null,
-	objReception:null,
+	arrReceptions:null,
 	components:[				
 		{kind: enyo.Scroller,flex: 1,
     	 className:"listBG",			
@@ -14,32 +14,28 @@ enyo.kind({
 							    onConfirm: "deleteWeight", 							 
 								tapHighlight: true,
 								layoutKind:enyo.HFlexLayout,
+								align:"center",
 								components: [
 								    {
 								    	flex:1,
 								    	name:'date',
-								    	style: "text-overflow: ellipsis; "+
-								 		 "overflow: hidden; white-space:"+
-										 "nowrap;color:#FFF;",
+								    	className : "listSecond",
 								    },
 								    {
 								    	flex:1,
 								    	name:'rancher',
-								    	style: "text-overflow: ellipsis; "+
-								 		 "overflow: hidden; white-space:"+
-										 "nowrap;color:#FFF;",
+								    	className : "listSecond",
 								    },								    
 									{
 								    	flex:1,
 								    	name: "hc",
-								    	style: "text-overflow: ellipsis; "+
-								 		 "overflow: hidden; white-space:"+
-										 "nowrap;color:#FFF;"									  
+								    	className : "listSecond",									  
 									},
 									{
 										flex:1,
 										name: "weight", 
-										kind:enyo.input
+										kind:"Input",
+										width:
 									},
 									{
 										flex:1,
@@ -52,19 +48,25 @@ enyo.kind({
 		}
 	],
 	setupRow:function(inSender, inIndex) {	
-		if(inIndex < 10){
-			this.$.date.setContent("test");
-			this.$.rancher.setContent("test");
-			this.$.hc.setContent("test");
-			this.$.weight.setContent("test");
-			return true;
-		}
+//		if(inIndex < 10){
+//			this.$.date.setContent("fecha");
+//			this.$.rancher.setContent("ganadero");
+//			this.$.hc.setContent("hc -r");
+//			this.$.weight.setContent("peso");
+//			return true;
+//		}
 		
 		var obj;
-		if(this.objReception){
-			if (obj=this.objReception.weights[inIndex]){
-				this.$.hc.setContent(obj.hc+ " / "+
-											obj.weight + " KG");
+		if(this.arrReceptions[inIndex]){
+			if (obj=this.arrReceptions[inIndex]){
+				this.$.date.setContent(obj.arrival_date);
+				this.$.rancher.setContent(obj.rancher_name);
+				var sum_HCR = 0;
+				for(var i=0; i<obj.inspections.length;i++){
+					sum_HCR += parseInt(obj.inspections[i].rejected_count);
+				}
+				this.$.hc.setContent(sum_HCR);
+				
 				return true;
 			}
 		}
@@ -103,6 +105,7 @@ enyo.kind({
 		this.updateList();		
 	},
 	ready:function(){
+		this.arrReceptions = cacheReceptions.get();
 		this.updateList();
 	},
 	updateList:function(){

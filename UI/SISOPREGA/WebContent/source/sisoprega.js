@@ -38,8 +38,8 @@ enyo.kind(
                                             {caption: "Reportes", onclick: "open_view"},
                                             {caption: "Lista de Inspección", onclick: "open_view"},
                                             {caption: "Usuarios", onclick: "open_view"},
-                                            {caption: "Carga de Pedimento", onclick: "open_view"}
-//                                            {caption: "Ver reporte embebido", onclick: "open_view"}
+                                            {caption: "Carga de Pedimento", onclick: "open_view"},
+                                            {caption: "Auxiliar depurador", onclick: "open_view"}
                                         ]},
               {
                 name : 'btnGoBack',
@@ -97,6 +97,8 @@ enyo.kind(
                 kind : "main.menu",
                 name : "mainMenu"
               },
+              {kind:"receptions.weights", name:"weights"           	  
+              }
   			]
         },
         {
@@ -210,8 +212,10 @@ enyo.kind(
 //    		_objMainHeader.setContent('Cargar Pedimento');
     		this.$.mainMenu.$.mainPane.selectViewByName("fileUploader");
   	      	break;
+    	
+    	case 'Auxiliar depurador':
+    		this.$.accessPane.selectViewByName("weights");
     	}
-//    	enyo.$.sisoprega_btnGoBack.setShowing(1);
     },
 //    showAddUser : function(){
 //  	  	enyo.$.sisoprega_btnGoBack.setShowing(1);

@@ -156,14 +156,15 @@ enyo.kind(
                 weight : undefined,
                 weight_uom : undefined
               };
-            try {
+            
               inspectionAux.inspectionDate = utils.utcToNormalDate(arrInspectionAux[i].inspectionDate);
               inspectionAux.comments = arrInspectionAux[i].comments;
               inspectionAux.rejected_id = arrInspectionAux[i].inspectionId;
               // arrFeedAux[i].receptionId;
-            } catch (e) {
-            }
-
+            
+            objAux.weight_rejected = arrInspectionAux[i].weight; //append field weight_rejected
+            objAux.weight_rejected_uom = arrInspectionAux[i].weightUom; //append weight_rejected_uom field
+            
             // inspections
             // Details::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
             var arrInspectionDetailsAux = this.getInspectionDetails(inspectionAux.rejected_id);
