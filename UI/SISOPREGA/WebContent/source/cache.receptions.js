@@ -592,6 +592,37 @@ enyo.kind(
         cbObj[cbMethod]();
       }
     },
+    updateRejectsWeight:function(objReception, newRejectedWeight, cbObj, cbMethod){
+    	var objToSend = {};
+        var cgUpdate = null;
+        
+        objToSend.inspectionId = objReception.inspections[0].rejected_id;
+        objToSend.receptionId = objReception.reception_id;
+        objToSend.inspectionDate = "" + utils.dateOut(objReception.inspections[0].inspectionDate);
+        objToSend.comments = objReception.inspections[0].comments;
+        objToSend.weight = newRejectedWeight;        
+        objToSend.weightUom="1";//TODO: Pending update weight_uom
+        cgUpdate = consumingGateway.Update("Inspection", objToSend);
+
+        if (cgUpdate.exceptionId == 0) { // Updated successfully
+//          var tamanio = objRancher.billings.length;
+//          for ( var i = 0; i < tamanio; i++) {
+//            if (objRancher.billings[i].billing_id == objOld.billing_id) {
+//              objRancher.billings[i] = objNew;
+//              
+//            }
+//          }
+          objReception.weight_rejected = newRejectedWeight;
+          if (cbMethod) {
+            cbObj[cbMethod]();
+          }
+          return true;
+          
+        } else { // Error
+          cacheMan.setMessage("", "[Exception ID: " + cgUpdate.exceptionId + "] Descripcion: " + cgUpdate.exceptionDescription);
+          return false;
+        }
+    },
     releaseReceptions : function(arrRec, cbObj, cbMethod) {
       // AJAX
       // Update Internal Object

@@ -97,7 +97,7 @@ enyo.kind(
                 kind : "main.menu",
                 name : "mainMenu"
               },
-              {kind:"receptions.weights", name:"weights"           	  
+              {kind:"receptions.weights", name:"weights", lazy:true         	  
               }
   			]
         },
