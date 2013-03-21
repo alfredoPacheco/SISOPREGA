@@ -76,7 +76,8 @@ enyo.kind(
                 name : 'btnLogOut',
 //                flex : 1,
                 onclick : "logOut",
-                icon : "images/command-menu/icon-context.png"
+//                icon : "images/command-menu/icon-context.png"
+                icon : "images/command-menu/menu-icon-logout.png"
               } ]
         },
         {

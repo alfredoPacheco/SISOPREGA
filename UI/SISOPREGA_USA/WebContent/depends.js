@@ -5,5 +5,7 @@ enyo.depends(
   "source/login.js",
   "source/cache.js",
   "source/us.gateway.ws.js",
-  "source/hermana.de.js"
+  "source/hermana.de.js",
+  "source/sales.js",
+  "source/controls.autocomplete.js"
 );
