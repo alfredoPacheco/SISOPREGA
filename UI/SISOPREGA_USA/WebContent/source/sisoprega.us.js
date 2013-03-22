@@ -120,6 +120,11 @@ enyo.kind(
                   name : "sales" ,
                   lazy:"true"
                 },
+                {
+                    kind : "shipments",
+                    name : "shipments" ,
+                    lazy:"true"
+                  },
               
               ]
         },
@@ -163,7 +168,7 @@ enyo.kind(
       this.$.btnGoBack.setShowing(!1);
       this.$.tbHeader.show();
 //      this.$.mainPane.selectViewByName(cacheMan.mainView);
-      this.$.mainPane.selectViewByName("sales");
+      this.$.mainPane.selectViewByName("shipments");
     },
     noAccess : function() {
       cacheMan.setMessage("", "Usuario o contraseña incorrecta.");
