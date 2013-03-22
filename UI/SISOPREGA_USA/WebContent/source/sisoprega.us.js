@@ -117,7 +117,8 @@ enyo.kind(
               },
               {
                   kind : "sales",
-                  name : "sales"                  
+                  name : "sales" ,
+                  lazy:"true"
                 },
               
               ]

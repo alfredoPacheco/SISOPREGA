@@ -44,10 +44,7 @@ enyo.kind({
 								align:"center",
 								pack:"start",
 								height:"65px",
-								components: [
-								             {
-								            	 receptionId:null 
-								             },
+								components: [								             
 								    {
 								    	name:'date',
 								    	className : "listSecond",
