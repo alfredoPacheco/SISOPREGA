@@ -9,5 +9,8 @@ enyo.depends(
   "source/hermana.de.js",
   "source/sales.js",
   "source/controls.autocomplete.js",
-  "source/shipments.js"
+  "source/shipments.js",
+  "source/main.js",
+  "source/catalogs.customers.list.js",
+  "source/cache.customers.js"  
 );
