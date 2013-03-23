@@ -35,7 +35,6 @@ function validateBrowserEnyoTwo(){
 	    switch(sBrowserName){
 	    	case "msie":
 	    		var OS = navigator.appVersion;
-	    		alert(OS)
 		    	if(parseInt(sBrowserVersion)<9 || (OS.indexOf("Windows NT 5.1") != -1) || (OS.indexOf("Windows XP") != -1) ){
 		    		bValidBrowser=false;
 		    		sRedirect="http://windows.microsoft.com/en-US/internet-explorer/download-ie"; 
