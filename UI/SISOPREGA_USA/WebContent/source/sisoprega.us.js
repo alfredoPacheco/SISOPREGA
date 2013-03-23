@@ -107,7 +107,7 @@ enyo.kind(
           components :
             [
               {
-                //kind : "login",
+                kind : "login",
                 // to test visibility with no login activity,
                 // change the kind for your own component.
                 name : "login",
