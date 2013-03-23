@@ -107,13 +107,25 @@ enyo.kind(
           components :
             [
               {
-                kind : "login",
+                //kind : "login",
                 // to test visibility with no login activity,
                 // change the kind for your own component.
                 name : "login",
                 onSucess : "goAhead",
                 onFail : "noAccess"
-              } ]
+              },
+              {
+                  kind : "sales",
+                  name : "sales" ,
+                  lazy:"true"
+                },
+                {
+                    kind : "shipments",
+                    name : "shipments" ,
+                    lazy:"true"
+                  },
+              
+              ]
         },
         {
           kind : enyo.Dialog,
@@ -139,6 +151,7 @@ enyo.kind(
       cacheMan.setGlobalScrim(this.$.scrimMain);
       cacheMan.setGlobalLabel(this.$.lblMainCap);
       _objMainHeader = this.$.lblMainCap;
+      _goBackButton = this.$.btnGoBack;
     },
     goBack : function() {
       cacheMan.goBack();
@@ -153,7 +166,8 @@ enyo.kind(
     goAhead : function() {
       this.$.btnGoBack.setShowing(!1);
       this.$.tbHeader.show();
-      this.$.mainPane.selectViewByName(cacheMan.mainView);
+//      this.$.mainPane.selectViewByName(cacheMan.mainView);
+      this.$.mainPane.selectViewByName("shipments");
     },
     noAccess : function() {
       cacheMan.setMessage("", "Usuario o contraseña incorrecta.");
@@ -219,33 +233,33 @@ enyo.kind(
         this.$.mainPane.selectViewByName("fileUploader");
         break;
       }
-      enyo.$.sisoprega_btnGoBack.setShowing(1);
+//      enyo.$.sisoprega_btnGoBack.setShowing(1);
     },
-    showAddUser : function() {
-      enyo.$.sisoprega_btnGoBack.setShowing(1);
-      _objMainHeader.setContent('Agregar Usuario');
-      this.addGoBackAction("addUser");
-      this.$.mainPane.selectViewByName("addUser");
-    },
-    showEditUser : function() {
-      enyo.$.sisoprega_btnGoBack.setShowing(1);
-      _objMainHeader.setContent('Editar Usuario');
-      this.addGoBackAction("addUser");
-      this.$.mainPane.selectViewByName("addUser");
-    },
-    selectView : function(inSender, inView, inPreviousView) {
-      if (inView.name == "inspectionForecast") {
-        inView.$.forecast.resetValues();
-      }
-      if (inView.name == "usersList") {
-        inView.updateList();
-      }
-      if (inPreviousView.name == "usersList" && inView.name != "menuOptions") {
-        var selectedUser = inPreviousView.getSelectedUser();
-        if (selectedUser)
-          inView.setUser(selectedUser);
-        else
-          inView.toggleAdd();
-      }
-    }
+//    showAddUser : function() {
+//      enyo.$.sisoprega_btnGoBack.setShowing(1);
+//      _objMainHeader.setContent('Agregar Usuario');
+//      this.addGoBackAction("addUser");
+//      this.$.mainPane.selectViewByName("addUser");
+//    },
+//    showEditUser : function() {
+//      enyo.$.sisoprega_btnGoBack.setShowing(1);
+//      _objMainHeader.setContent('Editar Usuario');
+//      this.addGoBackAction("addUser");
+//      this.$.mainPane.selectViewByName("addUser");
+//    },
+//    selectView : function(inSender, inView, inPreviousView) {
+//      if (inView.name == "inspectionForecast") {
+//        inView.$.forecast.resetValues();
+//      }
+//      if (inView.name == "usersList") {
+//        inView.updateList();
+//      }
+//      if (inPreviousView.name == "usersList" && inView.name != "menuOptions") {
+//        var selectedUser = inPreviousView.getSelectedUser();
+//        if (selectedUser)
+//          inView.setUser(selectedUser);
+//        else
+//          inView.toggleAdd();
+//      }
+//    }
   });

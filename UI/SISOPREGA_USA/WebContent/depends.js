@@ -11,6 +11,7 @@ enyo.depends(
   "source/sisoprega.us.js",
   "source/login.js",
   "source/cache.js",
+  "source/cache.pen.js",
   "source/cache.releases.js",
   "source/us.gateway.ws.js",
   "source/hermana.de.js",
@@ -18,5 +19,8 @@ enyo.depends(
   "source/hermana.corte.list.js",
   "source/hermana.gastos.list.js",
   "source/releases.list.js",
-  "source/release.rejects.weight.js"
+  "source/release.rejects.weight.js",
+  "source/pen.map.js",
+  "source/sales.js",
+  "source/shipments.js"
 );

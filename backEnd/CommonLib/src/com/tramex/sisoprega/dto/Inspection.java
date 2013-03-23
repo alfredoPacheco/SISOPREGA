@@ -41,6 +41,8 @@ public class Inspection {
   private long receptionId;
   private Date inspectionDate;
   private String comments;
+  private double weight;
+  private long weightUom = 1;
 
   /**
    * @return the inspectionId
@@ -102,8 +104,39 @@ public class Inspection {
     return comments;
   }
 
-  @Override
+  
+  /**
+ * @return the weight
+ */
+public double getWeight() {
+	return weight;
+}
+
+/**
+ * @param weight the weight to set
+ */
+public void setWeight(double weight) {
+	this.weight = weight;
+}
+
+/**
+ * @return the weightUom
+ */
+public long getWeightUom() {
+	return weightUom;
+}
+
+/**
+ * @param weightUom the weightUom to set
+ */
+public void setWeightUom(long weightUom) {
+	this.weightUom = weightUom;
+}
+
+@Override
   public String toString() {
-    return "inspectionDate:" + inspectionDate + ";inspectionId:" + inspectionId + ";receptionId:" + receptionId + comments +";";
+    return "inspectionDate:" + inspectionDate + ";inspectionId:" + inspectionId + 
+    		";receptionId:" + receptionId + comments + "; weight=" + weight
+				+ "; weightUom=" + weightUom;
   }
 }
