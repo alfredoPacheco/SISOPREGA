@@ -88,7 +88,6 @@ enyo.kind({
 		icon : "images/icon-arrows-down.png",
 		onclick : "click_button",
 		onmousehold: "hold_button"
-			
 	}], 
 	lostFocus : function(inSender, inEvent) {
 //		if (!this.navigatingOnList && this.$.drop_down.isOpen && this.$.drop_down.selected > -1 && this.$.drop_down.selected != null) {

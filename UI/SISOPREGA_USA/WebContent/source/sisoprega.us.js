@@ -95,7 +95,7 @@ enyo.kind(
               {
                 name : 'btnLogOut',
                 onclick : "logOut",
-                icon : "../SISOPREGA/images/command-menu/menu-icon-logout.png"
+                icon : "images/logout.png"
               } ]
         },
         {
@@ -110,7 +110,6 @@ enyo.kind(
                 kind : "login",
                 // to test visibility with no login activity,
                 // change the kind for your own component.
-                //kind : "hermana.de",
                 name : "login",
                 onSucess : "goAhead",
                 onFail : "noAccess"
@@ -135,7 +134,7 @@ enyo.kind(
               } ]
         } ],
     ready : function() {
-      this.$.tbHeader.hide();
+      //this.$.tbHeader.hide();
       cacheMan.setGlobalToaster(this.$);
       cacheMan.setGlobalScrim(this.$.scrimMain);
       cacheMan.setGlobalLabel(this.$.lblMainCap);

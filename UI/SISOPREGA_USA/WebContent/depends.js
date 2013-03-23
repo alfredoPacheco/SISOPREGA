@@ -1,9 +1,22 @@
 // JavaScript Document
 enyo.depends( 
   "../SISOPREGA/css/transitions.css",
+  "../SISOPREGA/source/controls.autocomplete.js",
+  "../SISOPREGA/source/cache.ranchers.js",
+  "../SISOPREGA/source/controls.reportViewer.js",
+  "../SISOPREGA/source/utils.js",
+  "css/controls.css",
+  "source/controls.Table.js",
+  "source/controls.DataTable.js",
   "source/sisoprega.us.js",
   "source/login.js",
   "source/cache.js",
+  "source/cache.releases.js",
   "source/us.gateway.ws.js",
-  "source/hermana.de.js"
+  "source/hermana.de.js",
+  "source/hermana.de.tabs.js",
+  "source/hermana.corte.list.js",
+  "source/hermana.gastos.list.js",
+  "source/releases.list.js",
+  "source/release.rejects.weight.js"
 );
