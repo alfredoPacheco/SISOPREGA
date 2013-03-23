@@ -42,7 +42,7 @@ public class Inspection {
   private Date inspectionDate;
   private String comments;
   private double weight;
-  private long weightUom;
+  private long weightUom = 1;
 
   /**
    * @return the inspectionId

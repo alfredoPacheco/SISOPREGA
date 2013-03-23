@@ -156,14 +156,15 @@ enyo.kind(
                 weight : undefined,
                 weight_uom : undefined
               };
-            try {
+            
               inspectionAux.inspectionDate = utils.utcToNormalDate(arrInspectionAux[i].inspectionDate);
               inspectionAux.comments = arrInspectionAux[i].comments;
               inspectionAux.rejected_id = arrInspectionAux[i].inspectionId;
               // arrFeedAux[i].receptionId;
-            } catch (e) {
-            }
-
+            
+            objAux.weight_rejected = arrInspectionAux[i].weight; //append field weight_rejected
+            objAux.weight_rejected_uom = arrInspectionAux[i].weightUom; //append weight_rejected_uom field
+            
             // inspections
             // Details::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
             var arrInspectionDetailsAux = this.getInspectionDetails(inspectionAux.rejected_id);
@@ -590,6 +591,37 @@ enyo.kind(
       if (cbMethod) {
         cbObj[cbMethod]();
       }
+    },
+    updateRejectsWeight:function(objReception, newRejectedWeight, cbObj, cbMethod){
+    	var objToSend = {};
+        var cgUpdate = null;
+        
+        objToSend.inspectionId = objReception.inspections[0].rejected_id;
+        objToSend.receptionId = objReception.reception_id;
+        objToSend.inspectionDate = "" + utils.dateOut(objReception.inspections[0].inspectionDate);
+        objToSend.comments = objReception.inspections[0].comments;
+        objToSend.weight = newRejectedWeight;        
+        objToSend.weightUom="1";//TODO: Pending update weight_uom
+        cgUpdate = consumingGateway.Update("Inspection", objToSend);
+
+        if (cgUpdate.exceptionId == 0) { // Updated successfully
+//          var tamanio = objRancher.billings.length;
+//          for ( var i = 0; i < tamanio; i++) {
+//            if (objRancher.billings[i].billing_id == objOld.billing_id) {
+//              objRancher.billings[i] = objNew;
+//              
+//            }
+//          }
+          objReception.weight_rejected = newRejectedWeight;
+          if (cbMethod) {
+            cbObj[cbMethod]();
+          }
+          return true;
+          
+        } else { // Error
+          cacheMan.setMessage("", "[Exception ID: " + cgUpdate.exceptionId + "] Descripcion: " + cgUpdate.exceptionDescription);
+          return false;
+        }
     },
     releaseReceptions : function(arrRec, cbObj, cbMethod) {
       // AJAX
