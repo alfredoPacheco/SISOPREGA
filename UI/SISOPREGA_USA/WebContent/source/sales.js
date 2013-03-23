@@ -203,7 +203,6 @@ enyo
 										caption : "Efectuar Venta",
 										onclick : "sell_click",
 										style:"background-color: #DABD8B;"
-											
 									}
 
 							]

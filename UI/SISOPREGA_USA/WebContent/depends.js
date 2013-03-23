@@ -8,6 +8,6 @@ enyo.depends(
   "source/us.gateway.ws.js",
   "source/hermana.de.js",
   "source/sales.js",
-  "source/controls.autocomplete.js"
-  
+  "source/controls.autocomplete.js",
+  "source/shipments.js"
 );
