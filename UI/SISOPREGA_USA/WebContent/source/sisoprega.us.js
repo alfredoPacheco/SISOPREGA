@@ -158,7 +158,6 @@ enyo
 				} else {
 					this.$.btnGoBack.setShowing(1);
 				}
-
 			},
 			goAhead : function() {
 				this.$.btnGoBack.setShowing(!1);
