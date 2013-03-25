@@ -1,7 +1,6 @@
 enyo.kind({
 	name : "catalogs.customers.list",
-	kind : enyo.SlidingView,
-	layoutKind : enyo.VFlexLayout,
+	kind : enyo.VFlexBox,
 	iSelected : null,
 	arrList : [],
 	allItems : [],
@@ -40,14 +39,6 @@ enyo.kind({
 			flex : 1,
 			components : [ {
 				kind : enyo.HFlexBox,
-				components : [ {
-					kind : "enyo.IconButton",
-					style : "",
-					label : "Nuevo",
-//					onclick : "doPerson"
-				}]
-			}, {
-				kind : enyo.HFlexBox,
 				align : "center",
 				components : [ {
 					kind : "ToolInput",
@@ -65,6 +56,15 @@ enyo.kind({
 					onclick : "clearFilter",
 					width : "115px;"
 				} ]
+			},
+			{
+				kind : enyo.HFlexBox,
+				components : [ {
+					kind : "enyo.IconButton",
+					style : "",
+					label : "Nuevo",
+//					onclick : "doPerson"
+				}]
 			}
 
 			]
