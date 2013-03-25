@@ -50,9 +50,13 @@ enyo
 											caption : "Clientes",
 											onclick : "open_view"
 										}, {
-											caption : "Ganado",
+											caption : "Proveedores",
 											onclick : "open_view"
-										} ]
+										},
+										{
+											caption : "Transportistas",
+											onclick : "open_view"
+										}]
 									}
 									// {
 									// caption : "Lista de Inspección",
@@ -121,6 +125,14 @@ enyo
 						}, {
 							kind : "catalogs.customers.list",
 							name : "customersList_kind",
+							lazy : "true"
+						},{
+							kind : "catalogs.providers.list",
+							name : "providersList_kind",
+							lazy : "true"
+						},{
+							kind : "catalogs.drivers.list",
+							name : "driversList_kind",
 							lazy : "true"
 						}, ]
 					},
@@ -216,6 +228,16 @@ enyo
 					// this.addGoBackAction("catCattle");
 					_objMainHeader.setContent('Clientes');
 					this.$.mainPane.selectViewByName("customersList_kind");
+					break;
+				case 'Proveedores':
+					// this.addGoBackAction("catCattle");
+					_objMainHeader.setContent('Proveedores');
+					this.$.mainPane.selectViewByName("providersList_kind");
+					break;
+				case 'Transportistas':
+					// this.addGoBackAction("catCattle");
+					_objMainHeader.setContent('Transportistas');
+					this.$.mainPane.selectViewByName("driversList_kind");
 					break;
 				}
 				// enyo.$.sisoprega_btnGoBack.setShowing(1);

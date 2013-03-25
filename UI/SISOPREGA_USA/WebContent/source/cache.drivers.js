@@ -8,31 +8,27 @@
  * 
  */
 
-var _arrCustomers = [{
+var _arrDrivers = [{
     id : 1,
-    name : "Este es un cliente",
+    name : "Chofer 1",
     address_one : "un domicilio",
     address_two : "una colonia",
     city_id : "1",
     state_id : "1",
-    zip_code : "12345",
-    rfc : "RFC3456789",
-    phone_number : utils.phoneToMask("6561234556"),              
-    email : "correo@correo.com",              
+    zip_code : "13212",
+    phone_number : utils.phoneToMask("6569999999"),              
     city_name : "Juarez",
     state_name : "Chihuahua"
   },
   {
       id : 2,
-      name : "Otro cliente",
+      name : "Chofer 2",
       address_one : "un domicilio 2",
       address_two : "una fraccionamiento",
       city_id : "1",
       state_id : "1",
       zip_code : "54231",
-      rfc : "RFC39999987",
-      phone_number : utils.phoneToMask("6569999990"),              
-      email : "email@gmail.com",              
+      phone_number : utils.phoneToMask("6561111111"),              
       city_name : "Juarez",
       state_name : "Chihuahua"
     }];
@@ -40,9 +36,9 @@ var _arrCustomers = [{
 enyo
     .kind(
       {
-        name : "cache.customers",
+        name : "cache.drivers",
         iLastRanID : null,
-        arrObj : _arrCustomers,
+        arrObj : _arrDrivers,
         gatewayWasRead : false,
         asyncCallBack : null,
         asyncMethod : "",
@@ -369,4 +365,4 @@ enyo
         },
        
       });
-var cacheCustomers = new cache.customers();
+var cacheDrivers = new cache.drivers();

@@ -26,5 +26,11 @@ enyo.depends(
   "source/main.js",
   "source/catalogs.customers.list.js",
   "source/catalogs.customers.create.js",
-  "source/cache.customers.js"
+  "source/cache.customers.js",
+  "source/catalogs.providers.list.js",
+  "source/catalogs.providers.create.js",
+  "source/cache.providers.js",
+  "source/catalogs.drivers.list.js",
+  "source/catalogs.drivers.create.js",
+  "source/cache.drivers.js"
 );
