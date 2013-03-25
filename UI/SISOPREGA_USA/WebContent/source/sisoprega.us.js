@@ -191,7 +191,6 @@ enyo
 				if (InSender.caption) {
 					view = InSender.caption;
 				}
-
 				switch (view) {
 				case 'Capturar Hermana':
 					// this.addGoBackAction("receptionsMap");

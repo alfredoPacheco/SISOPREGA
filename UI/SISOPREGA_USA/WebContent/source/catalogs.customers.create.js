@@ -33,11 +33,11 @@ enyo.kind({
 				hint : "Colonia"
 			}, {
 				kind : "Input",
-				name : "input_city_id",
+				name : "input_city_name",
 				hint : "Poblacion"
 			}, {
 				kind : "Input",
-				name : "input_state_id",
+				name : "input_state_name",
 				hint : "Entidad"
 			}, {
 				kind : "Input",
@@ -119,8 +119,8 @@ enyo.kind({
 		this.$.input_name.setValue("");
 		this.$.input_address_one.setValue("");
 		this.$.input_address_two.setValue("");
-		this.$.input_state_id.setValue("");
-		this.$.input_city_id.setValue("");
+		this.$.input_state_name.setValue("");
+		this.$.input_city_name.setValue("");
 		this.$.input_zip_code.setValue("");
 		this.$.input_rfc.setValue("");
 		this.$.input_phone_number.setValue("");
@@ -147,8 +147,8 @@ enyo.kind({
 		obj.name = this.$.input_name.getValue();
 		obj.address_one = this.$.input_address_one.getValue();
 		obj.address_two = this.$.input_address_two.getValue();
-		obj.state_name = this.$.input_state_id.getValue();
-		obj.city_name = this.$.input_city_id.getValue();
+		obj.state_name = this.$.input_state_name.getValue();
+		obj.city_name = this.$.input_city_name.getValue();
 		obj.zip_code = this.$.input_zip_code.getValue();
 		obj.rfc = this.$.input_rfc.getValue();
 		obj.phone_number = this.$.input_phone_number.getValue();
@@ -171,8 +171,8 @@ enyo.kind({
 		this.$.input_name.setValue(this.obj.name);
 		this.$.input_address_one.setValue(this.obj.address_one);
 		this.$.input_address_two.setValue(this.obj.address_two);
-		this.$.input_state_id.setValue(this.obj.state_id);
-		this.$.input_city_id.setValue(this.obj.city_id);
+		this.$.input_state_name.setValue(this.obj.state_name);
+		this.$.input_city_name.setValue(this.obj.city_name);
 		this.$.input_zip_code.setValue(this.obj.zip_code);
 		this.$.input_rfc.setValue(this.obj.rfc);
 		this.$.input_phone_number.setValue(this.obj.phone_number);

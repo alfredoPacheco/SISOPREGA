@@ -106,7 +106,6 @@ enyo.kind(
           hc : obj.hc,
           weight : obj.weight,
           weightUom : 1
-        // TODO
         };
 
       return objNew;
@@ -282,7 +281,7 @@ enyo.kind(
       var cgReadAll = consumingGateway.Read("ReceptionHeadcount", objToSend);
 
       if (cgReadAll.exceptionId == 0) { // Read successfully
-        for (item in cgReadAll.records) {
+        for(var item = 0 ; item < cgReadAll.records.length; item++){
           arrAux.push(this.receptionHeadcountAdapterToIn(cgReadAll.records[item]));
         }
       } else { // Error
@@ -504,7 +503,6 @@ enyo.kind(
       }
       return null;
     },
-    // TODO
     deleteByID : function(iID) {
       for ( var i = 0; i < this.get().length; i++) {
         if (this.get()[i].reception_id == iID) {

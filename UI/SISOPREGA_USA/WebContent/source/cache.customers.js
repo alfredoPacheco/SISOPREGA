@@ -9,7 +9,7 @@
  */
 
 var _arrCustomers = [{
-    id : "1",
+    id : 1,
     name : "Este es un cliente",
     address_one : "un domicilio",
     address_two : "una colonia",
@@ -23,7 +23,7 @@ var _arrCustomers = [{
     state_name : "Chihuahua"
   },
   {
-      id : "2",
+      id : 2,
       name : "Otro cliente",
       address_one : "un domicilio 2",
       address_two : "una fraccionamiento",
@@ -46,6 +46,7 @@ enyo
         gatewayWasRead : false,
         asyncCallBack : null,
         asyncMethod : "",
+        actual_id:2,
 //        refreshData : function() {
 //          this.gatewayWasRead = false;
 //          this.get();
@@ -248,7 +249,7 @@ enyo
 //            obj.contacts = [];
 //            obj.city_name = "";
 //            obj.state_id = "";
-
+        	obj.id = ++this.actual_id;
             this.arrObj.push(obj);
             if (cbMethod) {
               cbObj[cbMethod]();

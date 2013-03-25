@@ -9,9 +9,9 @@ enyo.kind({
 		width : "80%;",
 		height : "80%;",
 		dismissWithClick : false,
-		showHideMode : "transition",
-		openClassName : "zoomFadeIn",
-		className : "transitioner2",
+//		showHideMode : "transition",
+//		openClassName : "zoomFadeIn",
+//		className : "transitioner2",
 		layoutKind : "VFlexLayout",
 		style : "overflow: hidden;	border-width: 8px;",
 		scrim : true,
@@ -216,6 +216,8 @@ enyo.kind({
 	},
 	add_click : function(inSender, inEvent) {
 		// this.parent.selectViewByName("customersCreate_kind");
+		this.$.popup.validateComponents();
+		this.$.customersCreate_kind.toggleAdd();
 		this.$.popup.openAtCenter();
 	},
 	on_add:function(){
