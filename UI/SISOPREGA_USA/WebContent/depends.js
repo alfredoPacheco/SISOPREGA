@@ -22,9 +22,9 @@ enyo.depends(
   "source/release.rejects.weight.js",
   "source/pen.map.js",
   "source/sales.js",
-  "source/controls.autocomplete.js",
   "source/shipments.js",
   "source/main.js",
   "source/catalogs.customers.list.js",
+  "source/catalogs.customers.create.js",
   "source/cache.customers.js"
 );

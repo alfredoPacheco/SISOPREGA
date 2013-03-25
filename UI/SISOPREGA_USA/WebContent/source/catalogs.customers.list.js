@@ -5,6 +5,26 @@ enyo.kind({
 	arrList : [],
 	allItems : [],
 	components : [ {
+		kind : enyo.Popup,
+		width : "80%;",
+		height : "80%;",
+		dismissWithClick : false,
+		showHideMode : "transition",
+		openClassName : "zoomFadeIn",
+		className : "transitioner2",
+		layoutKind : "VFlexLayout",
+		style : "overflow: hidden;	border-width: 8px;",
+		scrim : true,
+		components : [ {
+			kind : "catalogs.customers.create",
+			name : "customersCreate_kind",
+			lazy : "true",
+			onAdd : "on_add",
+			onUpdate : "on_upd",
+			onCancel: "on_cancel",
+			flex : 1
+		} ]
+	}, {
 		kind : enyo.Scroller,
 		flex : 1,
 		className : "listBG",
@@ -56,15 +76,14 @@ enyo.kind({
 					onclick : "clearFilter",
 					width : "115px;"
 				} ]
-			},
-			{
+			}, {
 				kind : enyo.HFlexBox,
 				components : [ {
 					kind : "enyo.IconButton",
 					style : "",
 					label : "Nuevo",
-//					onclick : "doPerson"
-				}]
+					onclick : "add_click"
+				} ]
 			}
 
 			]
@@ -75,6 +94,9 @@ enyo.kind({
 	selectItem : function(inSender, inEvent) {
 		if (this.arrList[inEvent.rowIndex]) {
 			this.iSelected = inEvent.rowIndex;
+			this.$.popup.validateComponents();
+			this.$.customersCreate_kind.setObj(this.arrList[this.iSelected]);
+			this.$.popup.openAtCenter();
 		}
 	},
 	getSelected : function() {
@@ -106,27 +128,10 @@ enyo.kind({
 		this.$.divider.setCaption(group);
 		this.$.divider.canGenerate = Boolean(group);
 	},
-	setupProductRow : function(inSender, inIndex) {
-		var objItem;
-		if (objItem = this.arrList[inIndex]) {
-			this.setupDivider(inIndex);
-			this.$.importantInfo.setContent(objItem.importantInfo);			
-			this.$.secundaryInfo.setContent(objItem.secundaryInfo);
-			return true;
-		}
-	},
-	deleteItem : function(inSender, inIndex) {
-		if (cacheCustomers.del(this.arrList[inIndex], this, "updateList")) {
-			return true;
-		} else {
-			return false;
-		}
-	},	
 	updateList : function() {
-		this.arrList = this.arrList
-				.sort(function(a, b) {
-					return (a.importantInfo < b.importantInfo) ? -1 : 1;
-				});
+		this.arrList = this.arrList.sort(function(a, b) {
+			return (a.importantInfo < b.importantInfo) ? -1 : 1;
+		});
 		this.$.list.render();
 		this.$.scroller.scrollIntoView();
 	},
@@ -182,7 +187,46 @@ enyo.kind({
 	},
 	ready : function() {
 		this.$.filter.setValue("");
-		this.allItems = cacheCustomers.get();
+		this.allItems = [];
+		var arrAdapterList = cacheCustomers.get();
+		for ( var i = 0; i < arrAdapterList.length; i++) {
+			var obj = arrAdapterList[i];
+			obj.importantInfo = "" + arrAdapterList[i].name;
+			obj.secundaryInfo = "" + arrAdapterList[i].phone_number;
+			this.allItems.push(obj);
+		}
+		this.arrList = this.allItems;
 		this.updateList();
+	},
+	setupProductRow : function(inSender, inIndex) {
+		var objItem;
+		if (objItem = this.arrList[inIndex]) {
+			this.setupDivider(inIndex);
+			this.$.importantInfo.setContent(objItem.importantInfo);
+			this.$.secundaryInfo.setContent(objItem.secundaryInfo);
+			return true;
+		}
+	},
+	deleteItem : function(inSender, inIndex) {
+		if (cacheCustomers.del(this.arrList[inIndex], this, "ready")) {
+			return true;
+		} else {
+			return false;
+		}
+	},
+	add_click : function(inSender, inEvent) {
+		// this.parent.selectViewByName("customersCreate_kind");
+		this.$.popup.openAtCenter();
+	},
+	on_add:function(){
+		this.$.popup.close();
+		this.ready();
+	},
+	on_upd:function(){
+		this.$.popup.close();
+		this.ready();
+	},
+	on_cancel:function(){
+		this.$.popup.close();		
 	},
 });

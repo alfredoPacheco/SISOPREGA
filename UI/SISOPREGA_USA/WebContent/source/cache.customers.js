@@ -7,12 +7,42 @@
  * - 02/03/2013 By Diego Torres: Add rancher user handlers.
  * 
  */
+
+var _arrCustomers = [{
+    id : "1",
+    name : "Este es un cliente",
+    address_one : "un domicilio",
+    address_two : "una colonia",
+    city_id : "1",
+    state_id : "1",
+    zip_code : "12345",
+    rfc : "RFC3456789",
+    phone_number : utils.phoneToMask("6561234556"),              
+    email : "correo@correo.com",              
+    city_name : "Juarez",
+    state_name : "Chihuahua"
+  },
+  {
+      id : "2",
+      name : "Otro cliente",
+      address_one : "un domicilio 2",
+      address_two : "una fraccionamiento",
+      city_id : "1",
+      state_id : "1",
+      zip_code : "54231",
+      rfc : "RFC39999987",
+      phone_number : utils.phoneToMask("6569999990"),              
+      email : "email@gmail.com",              
+      city_name : "Juarez",
+      state_name : "Chihuahua"
+    }];
+
 enyo
     .kind(
       {
         name : "cache.customers",
         iLastRanID : null,
-        arrObj : [],
+        arrObj : _arrCustomers,
         gatewayWasRead : false,
         asyncCallBack : null,
         asyncMethod : "",
@@ -73,34 +103,7 @@ enyo
         get : function() {
         	
         	
-            this.arrObj = [{
-              id : "1",
-              name : "Este es un cliente",
-              address_one : "un domicilio",
-              address_two : "una colonia",
-              city_id : "1",
-              state_id : "1",
-              zip_code : "12345",
-              rfc : "RFC3456789",
-              phone_number : utils.phoneToMask("6561234556"),              
-              email : "correo@correo.com",              
-              city_name : "Juarez",
-              state_name : "Chihuahua"
-            },
-            {
-                id : "2",
-                name : "Otro cliente",
-                address_one : "un domicilio 2",
-                address_two : "una fraccionamiento",
-                city_id : "1",
-                state_id : "1",
-                zip_code : "54231",
-                rfc : "RFC39999987",
-                phone_number : utils.phoneToMask("6569999990"),              
-                email : "email@gmail.com",              
-                city_name : "Juarez",
-                state_name : "Chihuahua"
-              }];
+            
 //          if (this.gatewayWasRead == false) {
 //            this.gatewayWasRead = true;
 //            var objAux = {};
@@ -158,7 +161,30 @@ enyo
 //          }
           return this.arrObj;
         },
-        
+        del : function(delObj, cbObj, cbMethod) {
+//        	var objToSend = {};
+//            objToSend.enterpriseId = delObj.rancher_id;
+
+//            var cgDeleteEnterpriseRancher = consumingGateway.Delete("EnterpriseRancher", objToSend);
+//            if (cgDeleteEnterpriseRancher.exceptionId == 0) { // Deleted
+              // successfully
+              var tamanio = this.get().length;
+              for ( var i = 0; i < tamanio; i++) {
+                if (this.arrObj[i].id == delObj.id) {
+                  this.arrObj.splice(i, 1);                  
+                  if (cbMethod) {
+                    cbObj[cbMethod]();
+                  }
+                  return true;
+                }
+              }
+              return false;
+//            } else { // Error
+//              cacheMan.setMessage("", "[Exception ID: " + cgDeleteEnterpriseRancher.exceptionId + "] Descripcion: "
+//                  + cgDeleteEnterpriseRancher.exceptionDescription);
+//              return false;
+//            }
+        },
         enterpriseRancherAdapterToIn : function(objRan) {
           var objNew =
             {
@@ -208,50 +234,47 @@ enyo
         
        
         
-        createEnterpriseRancher : function(objRan, cbObj, cbMethod) {
+        Create : function(obj, cbObj, cbMethod) {
 
-          var objToSend = this.enterpriseRancherAdapterToOut(objRan);
-          delete objToSend.enterpriseId;
-          var cgCreateEnterpriseRancher = consumingGateway.Create("EnterpriseRancher", objToSend);
-          if (cgCreateEnterpriseRancher.exceptionId == 0) { // Created
-            // successfully
-            objRan.rancher_id = cgCreateEnterpriseRancher.generatedId;
-            this.iLastRanID = objRan.rancher_id;
-            // Fields out of webservice
-            objRan.billing = [];
-            objRan.contacts = [];
-            objRan.city_name = "";
-            objRan.state_id = "";
+//          var objToSend = this.enterpriseRancherAdapterToOut(objRan);
+//          delete objToSend.enterpriseId;
+//          var cgCreateEnterpriseRancher = consumingGateway.Create("EnterpriseRancher", objToSend);
+//          if (cgCreateEnterpriseRancher.exceptionId == 0) { // Created
+//            // successfully
+//            objRan.rancher_id = cgCreateEnterpriseRancher.generatedId;
+//            this.iLastRanID = objRan.rancher_id;
+//            // Fields out of webservice
+//            obj.billing = [];
+//            obj.contacts = [];
+//            obj.city_name = "";
+//            obj.state_id = "";
 
-            this.arrObj.push(objRan);
-            _arrRancherList = this.arrObj;
+            this.arrObj.push(obj);
             if (cbMethod) {
               cbObj[cbMethod]();
             }
             return true;
-          } else { // Error
-            cacheMan.setMessage("", "[Exception ID: " + cgCreateEnterpriseRancher.exceptionId + "] Descripcion: "
-                + cgCreateEnterpriseRancher.exceptionDescription);
-            return false;
-          }
+//          } else { // Error
+//            cacheMan.setMessage("", "[Exception ID: " + cgCreateEnterpriseRancher.exceptionId + "] Descripcion: "
+//                + cgCreateEnterpriseRancher.exceptionDescription);
+//            return false;
+//          }
         },
         
         
-        updateEnterpriseRancher : function(objOld, objNew, cbObj, cbMethod) {
-          objNew.rancher_id = objOld.rancher_id;
-          var objToSend = this.enterpriseRancherAdapterToOut(objNew);
-          var cgUpdateEnterpriseRancher = consumingGateway.Update("EnterpriseRancher", objToSend);
-          if (cgUpdateEnterpriseRancher.exceptionId == 0) { // Updated
+        update : function(objOld, objNew, cbObj, cbMethod) {
+//          objNew.rancher_id = objOld.rancher_id;
+//          var objToSend = this.enterpriseRancherAdapterToOut(objNew);
+//          var cgUpdateEnterpriseRancher = consumingGateway.Update("EnterpriseRancher", objToSend);
+//          if (cgUpdateEnterpriseRancher.exceptionId == 0) { // Updated
             // successfully
             for (prop in objNew) {
               objOld[prop] = objNew[prop];
             }
             var tamanio = this.get().length;
             for ( var i = 0; i < tamanio; i++) {
-              if (this.arrObj[i].rancher_id == objOld.rancher_id) {
+              if (this.arrObj[i].id == objOld.id) {
                 this.arrObj[i] = objOld;
-                _arrRancherList = this.arrObj;
-                cbObj.objRan = objOld;
                 if (cbMethod) {
                   cbObj[cbMethod]();
                 }
@@ -259,44 +282,11 @@ enyo
               }
             }
             return false;
-          } else { // Error
-            cacheMan.setMessage("", "[Exception ID: " + cgUpdateEnterpriseRancher.exceptionId + "] Descripcion: "
-                + cgUpdateEnterpriseRancher.exceptionDescription);
-            return false;
-          }
-        },
-        del : function(delObj, cbObj, cbMethod) {
-          if (delObj.rancher_type == 1) {
-            return this.deleteRancher(delObj, cbObj, cbMethod);
-          } else {
-            return this.deleteEnterpriseRancher(delObj, cbObj, cbMethod);
-          }
-        },
-        
-        deleteEnterpriseRancher : function(delObj, cbObj, cbMethod) {
-          var objToSend = {};
-          objToSend.enterpriseId = delObj.rancher_id;
-
-          var cgDeleteEnterpriseRancher = consumingGateway.Delete("EnterpriseRancher", objToSend);
-          if (cgDeleteEnterpriseRancher.exceptionId == 0) { // Deleted
-            // successfully
-            var tamanio = this.get().length;
-            for ( var i = 0; i < tamanio; i++) {
-              if (this.arrObj[i].rancher_id == delObj.rancher_id) {
-                this.arrObj.splice(i, 1);
-                _arrRancherList = this.arrObj;
-                if (cbMethod) {
-                  cbObj[cbMethod]();
-                }
-                return true;
-              }
-            }
-            return false;
-          } else { // Error
-            cacheMan.setMessage("", "[Exception ID: " + cgDeleteEnterpriseRancher.exceptionId + "] Descripcion: "
-                + cgDeleteEnterpriseRancher.exceptionDescription);
-            return false;
-          }
+//          } else { // Error
+//            cacheMan.setMessage("", "[Exception ID: " + cgUpdateEnterpriseRancher.exceptionId + "] Descripcion: "
+//                + cgUpdateEnterpriseRancher.exceptionDescription);
+//            return false;
+//          }
         },
         ls : function() {
           var _arrRancherListLS = [];
