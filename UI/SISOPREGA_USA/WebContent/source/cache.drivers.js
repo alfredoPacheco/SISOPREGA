@@ -18,7 +18,11 @@ var _arrDrivers = [{
     zip_code : "13212",
     phone_number : utils.phoneToMask("6569999999"),              
     city_name : "Juarez",
-    state_name : "Chihuahua"
+    state_name : "Chihuahua",
+    contacts:[{contact:"Contacto de chofer 1", phone:utils.phoneToMask("6561232323")},
+              {contact:"Contacto 2 de chofer 1", phone:utils.phoneToMask("6562222222")},
+              {contact:"Contacto 3 de chofer 1", phone:utils.phoneToMask("6563333333")},
+              ]
   },
   {
       id : 2,
@@ -30,7 +34,11 @@ var _arrDrivers = [{
       zip_code : "54231",
       phone_number : utils.phoneToMask("6561111111"),              
       city_name : "Juarez",
-      state_name : "Chihuahua"
+      state_name : "Chihuahua",
+      contacts:[{contact:"Contacto de chofer 2", phone:utils.phoneToMask("6566666666")},
+                {contact:"Contacto 2 de chofer 2", phone:utils.phoneToMask("6567777777")},
+                {contact:"Contacto 3 de chofer 2", phone:utils.phoneToMask("6568888888")},
+                ]
     }];
 
 enyo
@@ -285,6 +293,134 @@ enyo
 //            return false;
 //          }
         },
+        getContacts : function(obj) {
+            for (i in this.contactsReadFromGateway) {
+              if (this.contactsReadFromGateway[i] == obj.rancher_id) {
+                return obj.contacts;
+              }
+            }
+            var objAux = {};
+            var arrAux = [];
+            var selfCacheRancher = this;
+            var objToSend = new Object();
+            var cgReadContacts = null;
+
+            this.contactsReadFromGateway.push(obj.rancher_id);
+
+            if (obj.rancher_type == 1) {
+              objToSend.rancherId = obj.rancher_id;
+              cgReadContacts = consumingGateway.Read("RancherContact", objToSend);
+              if (cgReadContacts.exceptionId == 0) { // Read successfully
+                jQuery.each(cgReadContacts.records, function() {
+                  jQuery.each(this, function(key, value) {
+                    objAux[key] = value;
+                  });
+                  arrAux.push(selfCacheRancher.rancherContactAdapterToIn(objAux));
+                });
+              }
+              return obj.contacts = arrAux;
+            } else if (obj.rancher_type == 2) {
+              objToSend.enterpriseId = obj.rancher_id;
+              cgReadContacts = consumingGateway.Read("EnterpriseContact", objToSend);
+              if (cgReadContacts.exceptionId == 0) { // Read successfully
+                jQuery.each(cgReadContacts.records, function() {
+                  jQuery.each(this, function(key, value) {
+                    objAux[key] = value;
+                  });
+                  arrAux.push(selfCacheRancher.enterpriseRancherContactAdapterToIn(objAux));
+                });
+              }
+              return obj.contacts = arrAux;
+            }
+          },
+          addContact : function(objDriver, objCon, cbObj, cbMethod) {
+//            var objToSend = {};
+//            var cgCreateContact = null;
+//
+//            objCon.rancher_id = objDriver.rancher_id;
+//
+//            if (objDriver.rancher_type == 1) {
+//              objToSend = this.rancherContactAdapterToOut(objCon);
+//              delete objToSend.contactId;
+//              cgCreateContact = consumingGateway.Create("RancherContact", objToSend);
+//            } else if (objDriver.rancher_type == 2) {
+//              objToSend = this.enterpriseRancherContactAdapterToOut(objCon);
+//              delete objToSend.contactId;
+//              cgCreateContact = consumingGateway.Create("EnterpriseContact", objToSend);
+//            }
+//
+//            if (cgCreateContact.exceptionId == 0) { // Created successfully
+//              objCon.contact_id = cgCreateContact.generatedId;
+              objDriver.contacts.push(objCon);
+
+              if (cbMethod) {
+                cbObj[cbMethod]();
+              }
+//              return true;
+//            } else { // Error
+//              cacheMan.setMessage("", "[Exception ID: " + cgCreateContact.exceptionId + "] Descripcion: " + cgCreateContact.exceptionDescription);
+//              return false;
+//            }
+
+          },
+          updateContact : function(objRancher, objOld, objNew, cbObj, cbMethod) {
+            var objToSend = {};
+            var cgUpdateContact = null;
+            objNew.rancher_id = objOld.rancher_id;
+            objNew.contact_id = objOld.contact_id;
+
+            if (objRancher.rancher_type == 1) {
+              objToSend = this.rancherContactAdapterToOut(objNew);
+              cgUpdateContact = consumingGateway.Update("RancherContact", objToSend);
+            } else if (objRancher.rancher_type == 2) {
+              objToSend = this.enterpriseRancherContactAdapterToOut(objNew);
+              cgUpdateContact = consumingGateway.Update("EnterpriseContact", objToSend);
+            }
+
+            if (cgUpdateContact.exceptionId == 0) { // Updated successfully
+              var tamanio = objRancher.contacts.length;
+              for ( var i = 0; i < tamanio; i++) {
+                if (objRancher.contacts[i].contact_id == objOld.contact_id) {
+                  objRancher.contacts[i] = objNew;
+                  if (cbMethod) {
+                    cbObj[cbMethod]();
+                  }
+                  return true;
+                }
+              }
+              return false;
+            } else { // Error
+              cacheMan.setMessage("", "[Exception ID: " + cgUpdateContact.exceptionId + "] Descripcion: " + cgUpdateContact.exceptionDescription);
+              return false;
+            }
+          },
+          deleteContact : function(objRancher, objCon, cbObj, cbMethod) {
+            var objToSend = {};
+            objToSend.contactId = objCon.contact_id;
+            var cgDeleteContact = null;
+            if (objRancher.rancher_type == 1) {
+              cgDeleteContact = consumingGateway.Delete("RancherContact", objToSend);
+            } else if (objRancher.rancher_type == 2) {
+              cgDeleteContact = consumingGateway.Delete("EnterpriseContact", objToSend);
+            }
+
+            if (cgDeleteContact.exceptionId == 0) { // Deleted successfully
+              var tamanio = objRancher.contacts.length;
+              for ( var i = 0; i < tamanio; i++) {
+                if (objRancher.contacts[i].contact_id == objCon.contact_id) {
+                  objRancher.contacts.splice(i, 1);
+                  if (cbMethod) {
+                    cbObj[cbMethod]();
+                  }
+                  return true;
+                }
+              }
+              return false;
+            } else { // Error
+              cacheMan.setMessage("", "[Exception ID: " + cgDeleteContact.exceptionId + "] Descripcion: " + cgDeleteContact.exceptionDescription);
+              return false;
+            }
+          },
         ls : function() {
           var _arrRancherListLS = [];
           for ( var i = 0; i < this.get().length; i++) {

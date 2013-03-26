@@ -79,7 +79,8 @@ enyo
 						}, {
 							kind : enyo.Button,
 							caption : "Agregar",
-							onclick : "agregar_click"
+							onclick : "agregar_click",
+							style:"background-color: #DABD8B;"
 						}, ]
 					},
 					{

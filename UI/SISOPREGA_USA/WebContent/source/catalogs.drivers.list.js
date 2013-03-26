@@ -6,12 +6,13 @@ enyo.kind({
 	allItems : [],
 	components : [ {
 		kind : enyo.Popup,
+		name : "popupEdit",
 		width : "80%;",
 		height : "80%;",
 		dismissWithClick : false,
-//		showHideMode : "transition",
-//		openClassName : "zoomFadeIn",
-//		className : "transitioner2",
+		// showHideMode : "transition",
+		// openClassName : "zoomFadeIn",
+		// className : "transitioner2",
 		layoutKind : "VFlexLayout",
 		style : "overflow: hidden;	border-width: 8px;",
 		scrim : true,
@@ -21,8 +22,27 @@ enyo.kind({
 			lazy : "true",
 			onAdd : "on_add",
 			onUpdate : "on_upd",
-			onCancel: "on_cancel",
+			onCancel : "on_cancel",
 			flex : 1
+		} ]
+	}, {
+		kind : enyo.Popup,
+		name : "popupContacts",
+		width : "80%;",
+		height : "80%;",
+		dismissWithClick : false,
+		// showHideMode : "transition",
+		// openClassName : "zoomFadeIn",
+		// className : "transitioner2",
+		layoutKind : "VFlexLayout",
+		style : "overflow: hidden;	border-width: 8px;",
+		scrim : true,
+		components : [ {
+			kind : "catalogs.drivers.contacts",
+			name : "driversContacts_kind",
+			lazy : "true",
+			flex : 1,
+			onOk:"on_ok_contacts"
 		} ]
 	}, {
 		kind : enyo.Scroller,
@@ -40,15 +60,42 @@ enyo.kind({
 				kind : enyo.SwipeableItem,
 				onConfirm : "deleteItem",
 				tapHighlight : true,
+				layoutKind : "HFlexLayout",
 				components : [ {
-					name : "importantInfo",
-					className : "listFirst",
-					content : ""
+					kind : enyo.VFlexBox,
+					components : [ {
+						name : "importantInfo",
+						className : "listFirst",
+						content : ""
+					}, {
+						name : "secundaryInfo",
+						className : "listSecond",
+						content : ""
+					}, ]
 				}, {
-					name : "secundaryInfo",
-					className : "listSecond",
-					content : ""
-				} ]
+					kind : "Spacer"
+				}, {
+					kind : enyo.HFlexBox,
+					components : [ {
+						kind : enyo.Button,
+						name : "edit_button",
+						onclick : "edit_click",
+						caption : "Editar",
+						showing : false,
+						style : "min-width:95px;"
+
+					}, {
+						kind : enyo.Button,
+						name : "contacts_button",
+						onclick : "contacts_click",
+						caption : "Contactos",
+						showing : false,
+						style : "min-width:95px;"
+
+					} ]
+				}
+
+				]
 			} ]
 		} ]
 	}, {
@@ -94,9 +141,10 @@ enyo.kind({
 	selectItem : function(inSender, inEvent) {
 		if (this.arrList[inEvent.rowIndex]) {
 			this.iSelected = inEvent.rowIndex;
-			this.$.popup.validateComponents();
-			this.$.driversCreate_kind.setObj(this.arrList[this.iSelected]);
-			this.$.popup.openAtCenter();
+			this.updateList();
+			// this.$.popupEdit.validateComponents();
+			// this.$.driversCreate_kind.setObj(this.arrList[this.iSelected]);
+			// this.$.popupEdit.openAtCenter();
 		}
 	},
 	getSelected : function() {
@@ -160,6 +208,7 @@ enyo.kind({
 		} else {
 			this.arrList = this.allItems;
 		}
+		this.iSelected = null;
 		this.updateList();
 	},
 	findItem : function(criteria) {
@@ -204,6 +253,14 @@ enyo.kind({
 			this.setupDivider(inIndex);
 			this.$.importantInfo.setContent(objItem.importantInfo);
 			this.$.secundaryInfo.setContent(objItem.secundaryInfo);
+			if (this.iSelected == inIndex) {
+				this.$.contacts_button.show();
+				this.$.edit_button.show();
+			} else {
+				this.$.contacts_button.hide();
+				this.$.edit_button.hide();
+			}
+
 			return true;
 		}
 	},
@@ -216,19 +273,32 @@ enyo.kind({
 	},
 	add_click : function(inSender, inEvent) {
 		// this.parent.selectViewByName("customersCreate_kind");
-		this.$.popup.validateComponents();
+		this.$.popupEdit.validateComponents();
 		this.$.driversCreate_kind.toggleAdd();
-		this.$.popup.openAtCenter();
+		this.$.popupEdit.openAtCenter();
 	},
-	on_add:function(){
-		this.$.popup.close();
+	on_add : function() {
+		this.$.popupEdit.close();
 		this.ready();
 	},
-	on_upd:function(){
-		this.$.popup.close();
+	on_upd : function() {
+		this.$.popupEdit.close();
 		this.ready();
 	},
-	on_cancel:function(){
-		this.$.popup.close();		
+	on_cancel : function() {
+		this.$.popupEdit.close();
 	},
+	contacts_click : function(inSender) {
+		this.$.popupContacts.validateComponents();
+		this.$.driversContacts_kind.setObj(this.arrList[this.iSelected]);
+		this.$.popupContacts.openAtCenter();
+	},
+	edit_click : function() {
+		this.$.popupEdit.validateComponents();
+		this.$.driversCreate_kind.setObj(this.arrList[this.iSelected]);
+		this.$.popupEdit.openAtCenter();
+	},
+	on_ok_contacts:function(){
+		this.$.popupContacts.close();
+	}
 });
