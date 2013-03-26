@@ -34,11 +34,12 @@ enyo.kind({
 			 className: "transitioner2", layoutKind: "VFlexLayout",
 			 style: "overflow: hidden", width: "95%", height: "95%",scrim: true},
 			 
-			 {kind: "Toolbar",style:"height:20px;",components: [    		
-						{kind: "controls.autocomplete",width:"60%", name:"rancherFilter",
+			 {kind: "Toolbar",style:"height:20px;",components: [
+						{kind: "controls.autocomplete",width:"60%;", height:"45px;", name:"rancherFilter",
 							  hint:"Filtro por Ganadero", onSelectItem:"rancherFilterChanged"},
-							{kind: "Button",name:"btnClearFilter", className: "enyo-button-negative",
-                    		   caption: "Remover Filtro", onclick: "clearFilter"}	
+						{kind: "Button",name:"btnClearFilter", className: "enyo-button-negative",
+							   caption: "Remover Filtro", onclick: "clearFilter"}	             
+						
 			]}
 	],
 	ready: function() {

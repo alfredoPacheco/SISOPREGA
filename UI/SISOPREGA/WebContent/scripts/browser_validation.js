@@ -34,9 +34,13 @@ function validateBrowserEnyoTwo(){
 	  var sMsgBox="Esta usando un explorador de internet incompatible, sera redirigido a una pagina para actualizar";
 	    switch(sBrowserName){
 	    	case "msie":
-		    	if(parseInt(sBrowserVersion)<9){
+	    		var OS = navigator.appVersion;
+		    	if(parseInt(sBrowserVersion)<9 || (OS.indexOf("Windows NT 5.1") != -1) || (OS.indexOf("Windows XP") != -1) ){
 		    		bValidBrowser=false;
 		    		sRedirect="http://windows.microsoft.com/en-US/internet-explorer/download-ie"; 
+		    	}else{
+		    		bValidBrowser=false;
+		    		sRedirect="https://www.google.com/intl/en/chrome/browser/";		    	
 		    	}
 		    	break;
 	    	case "mozilla":

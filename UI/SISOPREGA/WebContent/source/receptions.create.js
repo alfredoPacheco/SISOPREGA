@@ -44,7 +44,7 @@ enyo.kind({
 					  {kind: "Item",
 						components: [
 							{content: "Ganadero", className: "enyo-label", flex: 1},
-							{layoutKind: enyo.HFlexLayout,components:[
+							{layoutKind: enyo.HFlexLayout, align:"center", components:[
 								{
 									kind : "controls.autocomplete",
 									name : "rancher_id",

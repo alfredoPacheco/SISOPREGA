@@ -4,7 +4,7 @@ enyo.kind(
     kind : enyo.VFlexBox,
     components :
       [
-        //SCRIM
+        // SCRIM
         {
           kind : enyo.Scrim,
           name : "scrimMain",
@@ -39,8 +39,16 @@ enyo.kind(
                       caption : "Capturar Hermana",
                       onclick : "open_view"
                     },
+                    // {
+                    // caption : "Inventario",
+                    // onclick : "open_view"
+                    // },
                     {
-                      caption : "Inventario",
+                      caption : "Ventas",
+                      onclick : "open_view"
+                    },
+                    {
+                      caption : "Programación de Embarques",
                       onclick : "open_view"
                     },
                     {
@@ -48,30 +56,27 @@ enyo.kind(
                       components :
                         [
                           {
-                            caption : "Ganaderos",
+                            caption : "Clientes",
                             onclick : "open_view"
                           },
                           {
-                            caption : "Ganado",
+                            caption : "Proveedores",
+                            onclick : "open_view"
+                          },
+                          {
+                            caption : "Transportistas",
                             onclick : "open_view"
                           } ]
-                    },
-                    {
-                      caption : "Mapa",
-                      onclick : "open_view"
-                    },
-                    {
-                      caption : "Reportes",
-                      onclick : "open_view"
-                    },
-                    {
-                      caption : "Lista de Inspección",
-                      onclick : "open_view"
-                    },
-                    {
-                      caption : "Usuarios",
-                      onclick : "open_view"
-                    } ]
+                    }
+                  // {
+                  // caption : "Lista de Inspección",
+                  // onclick : "open_view"
+                  // }, {
+                  // caption : "Usuarios",
+                  // onclick : "open_view"
+                  // }
+                  //									
+                  ]
               },
               {
                 name : 'btnGoBack',
@@ -95,7 +100,7 @@ enyo.kind(
               {
                 name : 'btnLogOut',
                 onclick : "logOut",
-                icon : "images/logout.png"
+                icon : "../SISOPREGA/images/command-menu/menu-icon-logout.png"
               } ]
         },
         {
@@ -110,22 +115,45 @@ enyo.kind(
                 kind : "login",
                 // to test visibility with no login activity,
                 // change the kind for your own component.
+                // kind : "hermana.de",
                 name : "login",
                 onSucess : "goAhead",
                 onFail : "noAccess"
               },
               {
-                  kind : "sales",
-                  name : "sales" ,
-                  lazy:"true"
-                },
-                {
-                    kind : "shipments",
-                    name : "shipments" ,
-                    lazy:"true"
-                  },
-              
-              ]
+                kind : "main",
+                name : "main_kind"
+              },
+              {
+                kind : "hermana.de",
+                name : "hermana_kind",
+                lazy : "true"
+              },
+              {
+                kind : "sales",
+                name : "sales_kind",
+                lazy : "true"
+              },
+              {
+                kind : "shipments",
+                name : "shipments_kind",
+                lazy : "true"
+              },
+              {
+                kind : "catalogs.customers.list",
+                name : "customersList_kind",
+                lazy : "true"
+              },
+              {
+                kind : "catalogs.providers.list",
+                name : "providersList_kind",
+                lazy : "true"
+              },
+              {
+                kind : "catalogs.drivers.list",
+                name : "driversList_kind",
+                lazy : "true"
+              }, ]
         },
         {
           kind : enyo.Dialog,
@@ -161,13 +189,12 @@ enyo.kind(
       } else {
         this.$.btnGoBack.setShowing(1);
       }
-
     },
     goAhead : function() {
       this.$.btnGoBack.setShowing(!1);
       this.$.tbHeader.show();
-//      this.$.mainPane.selectViewByName(cacheMan.mainView);
-      this.$.mainPane.selectViewByName("shipments");
+      // this.$.mainPane.selectViewByName(cacheMan.mainView);
+      this.$.mainPane.selectViewByName("main_kind");
     },
     noAccess : function() {
       cacheMan.setMessage("", "Usuario o contraseña incorrecta.");
@@ -197,69 +224,70 @@ enyo.kind(
         view = InSender.caption;
       }
       switch (view) {
-      case 'Operaciones':
-        this.addGoBackAction("receptionsMap");
-        _objMainHeader.setContent('Corrales');
-        this.$.mainPane.selectViewByName("receptionsMap");
+      case 'Capturar Hermana':
+        // this.addGoBackAction("receptionsMap");
+        _objMainHeader.setContent('Hermana');
+        this.$.mainPane.selectViewByName("hermana_kind");
         break;
-      case 'Reportes':
-        this.addGoBackAction("reports");
-        _objMainHeader.setContent('Reportes');
-        this.$.mainPane.selectViewByName("reports");
+      case 'Inventario':
+        // this.addGoBackAction("reports");
+        _objMainHeader.setContent('Inventario');
+        this.$.mainPane.selectViewByName("inventario");
         break;
-      case 'Ganaderos':
-        this.addGoBackAction("catRanchers");
-        _objMainHeader.setContent('Ganaderos');
-        this.$.mainPane.selectViewByName("catRanchers");
+      case 'Ventas':
+        // this.addGoBackAction("catRanchers");
+        _objMainHeader.setContent('Ventas');
+        this.$.mainPane.selectViewByName("sales_kind");
         break;
-      case 'Ganado':
-        this.addGoBackAction("catCattle");
-        _objMainHeader.setContent('Ganado');
-        this.$.mainPane.selectViewByName("catCattle");
+      case 'Programación de Embarques':
+        // this.addGoBackAction("catCattle");
+        _objMainHeader.setContent('Programación de Embarques');
+        this.$.mainPane.selectViewByName("shipments_kind");
         break;
-      case 'Lista de Inspección':
-        this.addGoBackAction("inspectionForecast");
-        _objMainHeader.setContent('Lista de Inspección');
-        this.$.mainPane.selectViewByName("inspectionForecast");
+      case 'Clientes':
+        // this.addGoBackAction("catCattle");
+        _objMainHeader.setContent('Clientes');
+        this.$.mainPane.selectViewByName("customersList_kind");
         break;
-      case 'Usuarios':
-        this.addGoBackAction("usersList");
-        _objMainHeader.setContent('Lista de Usuarios');
-        this.$.mainPane.selectViewByName("usersList");
+      case 'Proveedores':
+        // this.addGoBackAction("catCattle");
+        _objMainHeader.setContent('Proveedores');
+        this.$.mainPane.selectViewByName("providersList_kind");
         break;
-      case 'Carga de Pedimento':
-        this.addGoBackAction("fileUploader");
-        _objMainHeader.setContent('Cargar Pedimento');
-        this.$.mainPane.selectViewByName("fileUploader");
+      case 'Transportistas':
+        // this.addGoBackAction("catCattle");
+        _objMainHeader.setContent('Transportistas');
+        this.$.mainPane.selectViewByName("driversList_kind");
         break;
       }
-//      enyo.$.sisoprega_btnGoBack.setShowing(1);
+      // enyo.$.sisoprega_btnGoBack.setShowing(1);
     },
-//    showAddUser : function() {
-//      enyo.$.sisoprega_btnGoBack.setShowing(1);
-//      _objMainHeader.setContent('Agregar Usuario');
-//      this.addGoBackAction("addUser");
-//      this.$.mainPane.selectViewByName("addUser");
-//    },
-//    showEditUser : function() {
-//      enyo.$.sisoprega_btnGoBack.setShowing(1);
-//      _objMainHeader.setContent('Editar Usuario');
-//      this.addGoBackAction("addUser");
-//      this.$.mainPane.selectViewByName("addUser");
-//    },
-//    selectView : function(inSender, inView, inPreviousView) {
-//      if (inView.name == "inspectionForecast") {
-//        inView.$.forecast.resetValues();
-//      }
-//      if (inView.name == "usersList") {
-//        inView.updateList();
-//      }
-//      if (inPreviousView.name == "usersList" && inView.name != "menuOptions") {
-//        var selectedUser = inPreviousView.getSelectedUser();
-//        if (selectedUser)
-//          inView.setUser(selectedUser);
-//        else
-//          inView.toggleAdd();
-//      }
-//    }
+  // showAddUser : function() {
+  // enyo.$.sisoprega_btnGoBack.setShowing(1);
+  // _objMainHeader.setContent('Agregar Usuario');
+  // this.addGoBackAction("addUser");
+  // this.$.mainPane.selectViewByName("addUser");
+  // },
+  // showEditUser : function() {
+  // enyo.$.sisoprega_btnGoBack.setShowing(1);
+  // _objMainHeader.setContent('Editar Usuario');
+  // this.addGoBackAction("addUser");
+  // this.$.mainPane.selectViewByName("addUser");
+  // },
+  // selectView : function(inSender, inView, inPreviousView) {
+  // if (inView.name == "inspectionForecast") {
+  // inView.$.forecast.resetValues();
+  // }
+  // if (inView.name == "usersList") {
+  // inView.updateList();
+  // }
+  // if (inPreviousView.name == "usersList" && inView.name !=
+  // "menuOptions") {
+  // var selectedUser = inPreviousView.getSelectedUser();
+  // if (selectedUser)
+  // inView.setUser(selectedUser);
+  // else
+  // inView.toggleAdd();
+  // }
+  // }
   });

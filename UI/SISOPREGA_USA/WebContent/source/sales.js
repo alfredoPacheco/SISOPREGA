@@ -38,6 +38,7 @@ enyo
 								width : "80px;"
 							}, {
 								kind : "controls.autocomplete",
+								inputKind: "ToolInput",
 								name : "customer",
 								width : "500px;",
 								height : "35px;",
@@ -57,6 +58,8 @@ enyo
 						pack : "start",
 						components : [ {
 							kind : "controls.autocomplete",
+							inputKind:"ToolInput",
+							height:"35px;",
 							name : "clase",
 							hint : 'Clase',
 							width : "150px;",
@@ -76,7 +79,8 @@ enyo
 						}, {
 							kind : enyo.Button,
 							caption : "Agregar",
-							onclick : "agregar_click"
+							onclick : "agregar_click",
+							style:"background-color: #DABD8B;"
 						}, ]
 					},
 					{
