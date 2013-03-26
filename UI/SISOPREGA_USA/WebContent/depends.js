@@ -11,6 +11,7 @@ enyo.depends(
   "source/sisoprega.us.js",
   "source/login.js",
   "source/cache.js",
+  "source/cache.cattle.quality.js",
   "source/cache.pen.js",
   "source/cache.releases.js",
   "source/us.gateway.ws.js",

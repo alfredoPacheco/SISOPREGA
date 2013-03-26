@@ -1,7 +1,8 @@
 enyo.kind(
   {
     name : "hermana.de",
-    kind : enyo.VFlexBox,
+    kind: enyo.SlidingView,
+    layoutKind: enyo.VFlexLayout,
     events :
       {
         "onSave" : "",
@@ -57,6 +58,8 @@ enyo.kind(
         {
           kind : enyo.Scroller,
           className : "formBG",
+          autoHorizontal : false,
+          horizontal : false,
           flex : 1,
           components :
             [
@@ -115,61 +118,8 @@ enyo.kind(
                           } ]
                     },
                     {
-                      kind : "maklesoft.DataTable",
-                      name : "summary",
-                      rowCount : 5,
-                      colCount : 5,
-                      selectionMode : maklesoft.DataTable.SelectionMode.NONE,
-                      editable : false,
-                      columnNames :
-                        [ "cabezas", "Peso (Kgs)", "Peso (Lbs)", "Prom Lbs" ],
-                      showColumnNames : true,
-                      showRowNumbers : true,
-                      rowNames :
-                        [ "Llegada en México", "Rechazos", "Cruce descontando desechos", "Peso Neto" ],
-                      cellClass : function(rowIndex, colIndex, data) {
-                        var className = "maklesoft-datatable-cell";
-                        if (typeof data == "number") {
-                          className += " maklesoft-datatable-number";
-                        }
-                        return className;
-                      }
-                    },
-                    {
-                      kind : "HFlexBox",
-                      components :
-                        [
-                          {
-                            kind : "Spacer"
-                          },
-                          {
-                            kind : "Spacer"
-                          },
-                          {
-                            kind : "maklesoft.DataTable",
-                            name : "summary-total",
-                            rowCount : 2,
-                            colCount : 2,
-                            selectionMode : maklesoft.DataTable.SelectionMode.NONE,
-                            editable : false,
-                            showColumnNames : false,
-                            showRowNumbers : true,
-                            rowNames :
-                              [ "Aumento", "Porcentaje" ],
-                            cellClass : function(rowIndex, colIndex, data) {
-                              var className = "maklesoft-datatable-cell";
-                              if (typeof data == "number") {
-                                className += " maklesoft-datatable-number";
-                              }
-                              return className;
-                            }
-                          },
-                          {
-                            kind : "Spacer"
-                          } ]
-                    },
-                    {
-                      kind : "hermana.de.tabs"
+                      kind : "hermana.de.tabs",
+                      name : "details"
                     } ]
               } ]
         } ],
@@ -212,6 +162,7 @@ enyo.kind(
             kind : "releases.list",
             name : 'releasesList',
             onCancel : "cancelReleaseSelection",
+            onResolveSelected : "setupReleaseSelection",
             flex : 1
           },
           {
@@ -228,9 +179,60 @@ enyo.kind(
       }
 
     },
-    cancelReleaseSelection : function(){
+    cancelReleaseSelection : function() {
       this.closePopUp();
       this.$.rancher_id.$.textField.forceFocus();
+    },
+    setupReleaseSelection : function() {
+      var summary =
+        {
+          hc : 0,
+          kg : 0.0,
+          lbs: 0.0,
+          avg : 0.0,
+          rejects_hc: 0,
+          rejects_kgs: 0.0,
+          rejects_lbs: 0.0,
+          trade_hc:0,
+          trade_kgs:0.0,
+          trade_lbs:0.0,
+          trade_avg:0.0,
+          net_hc:0,
+          net_kgs:0.0,
+          net_lbs:0.0,
+          net_avg:0.0,
+          delta:0.0,
+          delta_pct:0.0
+        };
+      
+      var releaseObj = null;
+      
+      for (var selectionIndex=0; selectionIndex < this.$.releasesList.selectedIds.length; selectionIndex++) {
+        var selectedId = this.$.releasesList.selectedIds[selectionIndex];
+        releaseObj = releasesCache.getReleaseById(selectedId);
+        
+        summary.hc += releaseObj.heads;
+        summary.kg += releaseObj.weight;
+        summary.rejects_hc += releaseObj.rejects;
+        summary.rejects_kgs += releaseObj.rejectsWeight;
+      }
+      
+      if(releaseObj!=null)
+        this.$.details.setCattleClass(releaseObj.cattleType);
+      
+      summary.lbs = Math.floor((summary.kg * 2.2046)*100)/100;
+      summary.avg = Math.floor((summary.lbs / summary.hc) * 100)/100;
+      summary.rejects_lbs = Math.floor((summary.rejects_kgs * 2.2046)*100)/100;
+      
+      summary.trade_hc = summary.hc - summary.rejects_hc;
+      summary.trade_kgs = summary.kg - summary.rejects_kgs;
+      summary.trade_lbs = Math.floor((summary.trade_kgs * 2.2046)*100)/100;
+      summary.trade_avg = Math.floor((summary.trade_lbs / summary.trade_hc) * 100)/100;
+
+      this.$.details.setReleaseIds(this.$.releasesList.selectedIds);
+      this.$.details.setSummary(summary);
+      this.$.details.updateTableContents();
+      this.closePopUp();
     },
     closePopUp : function() {
       this.$.popMan.close();

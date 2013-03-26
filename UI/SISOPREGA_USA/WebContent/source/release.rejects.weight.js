@@ -8,6 +8,7 @@ enyo.kind(
     listIndex : 0,
     components :
       [
+        {kind:"Spacer"},
         {
           kind : "Input",
           name : "weightInput",
@@ -27,6 +28,7 @@ enyo.kind(
         } ],
         saveRejectedWeight : function(){
           // TODO: Save using web service.
+          releasesCache.updateRejectsWeight(this.rejectedRecord, this.$.weightInput.value);
           alert('El registro de peso de rechazos ha sido grabado exitosamente.');
           this.cancelCheckBox();
           this.doSaved();

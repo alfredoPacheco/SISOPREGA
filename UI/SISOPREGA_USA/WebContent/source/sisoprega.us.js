@@ -146,7 +146,7 @@ enyo.kind(
               } ]
         } ],
     ready : function() {
-      //this.$.tbHeader.hide();
+      this.$.tbHeader.hide();
       cacheMan.setGlobalToaster(this.$);
       cacheMan.setGlobalScrim(this.$.scrimMain);
       cacheMan.setGlobalLabel(this.$.lblMainCap);
