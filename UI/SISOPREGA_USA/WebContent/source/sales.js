@@ -44,10 +44,7 @@ enyo
 								height : "35px;",
 							} ]
 						} ]
-					},
-					{
-
-					},
+					},					
 					{
 						kind : "HFlexBox",
 						className : "listFirst",
@@ -264,6 +261,7 @@ enyo
 			ready : function() {
 				this.$.saleDate.setValue(utils.dateOut(new Date()));
 				this.$.saleDate.$.input.applyStyle("text-align","center");
+				this.$.customer.setItems(cacheCustomers.getAllForList());
 				// this.$.weight.$.input.applyStyle("text-align", "right");
 				// this.$.btnSave.hide();
 				// this.updateList();
