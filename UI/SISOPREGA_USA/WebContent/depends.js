@@ -34,5 +34,14 @@ enyo.depends(
   "source/catalogs.drivers.list.js",
   "source/catalogs.drivers.create.js",
   "source/cache.drivers.js",
-  "source/catalogs.drivers.contacts.js"  
+  "source/catalogs.drivers.contacts.js",
+  "source/admin.inventory.js",
+  "source/admin.purchased.js",
+  "source/admin.sales.js",    
+  "source/admin.shipments.js",      
+  "source/cache.inventory.js",
+  "source/cache.pruchased.js",
+  "source/cache.sales.js",
+  "source/admin.screen.js"  
+  
 );
