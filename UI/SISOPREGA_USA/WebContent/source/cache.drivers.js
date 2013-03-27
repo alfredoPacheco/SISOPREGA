@@ -19,9 +19,9 @@ var _arrDrivers = [{
     phone_number : utils.phoneToMask("6569999999"),              
     city_name : "Juarez",
     state_name : "Chihuahua",
-    contacts:[{contact:"Contacto de chofer 1", phone:utils.phoneToMask("6561232323")},
-              {contact:"Contacto 2 de chofer 1", phone:utils.phoneToMask("6562222222")},
-              {contact:"Contacto 3 de chofer 1", phone:utils.phoneToMask("6563333333")},
+    contacts:[{id:1,contact:"Contacto de chofer 1", phone:utils.phoneToMask("6561232323")},
+              {id:2,contact:"Contacto 2 de chofer 1", phone:utils.phoneToMask("6562222222")},
+              {id:3,contact:"Contacto 3 de chofer 1", phone:utils.phoneToMask("6563333333")},
               ]
   },
   {
@@ -35,9 +35,9 @@ var _arrDrivers = [{
       phone_number : utils.phoneToMask("6561111111"),              
       city_name : "Juarez",
       state_name : "Chihuahua",
-      contacts:[{contact:"Contacto de chofer 2", phone:utils.phoneToMask("6566666666")},
-                {contact:"Contacto 2 de chofer 2", phone:utils.phoneToMask("6567777777")},
-                {contact:"Contacto 3 de chofer 2", phone:utils.phoneToMask("6568888888")},
+      contacts:[{id:4,contact:"Contacto de chofer 2", phone:utils.phoneToMask("6566666666")},
+                {id:5,contact:"Contacto 2 de chofer 2", phone:utils.phoneToMask("6567777777")},
+                {id:6,contact:"Contacto 3 de chofer 2", phone:utils.phoneToMask("6568888888")},
                 ]
     }];
 
@@ -51,6 +51,7 @@ enyo
         asyncCallBack : null,
         asyncMethod : "",
         actual_id:2,
+        actual_contact_id:6,
 //        refreshData : function() {
 //          this.gatewayWasRead = false;
 //          this.get();
@@ -351,6 +352,7 @@ enyo
 //
 //            if (cgCreateContact.exceptionId == 0) { // Created successfully
 //              objCon.contact_id = cgCreateContact.generatedId;
+        	  objCon.id = ++this.actual_contact_id;
               objDriver.contacts.push(objCon);
 
               if (cbMethod) {
@@ -363,25 +365,25 @@ enyo
 //            }
 
           },
-          updateContact : function(objRancher, objOld, objNew, cbObj, cbMethod) {
-            var objToSend = {};
-            var cgUpdateContact = null;
-            objNew.rancher_id = objOld.rancher_id;
-            objNew.contact_id = objOld.contact_id;
-
-            if (objRancher.rancher_type == 1) {
-              objToSend = this.rancherContactAdapterToOut(objNew);
-              cgUpdateContact = consumingGateway.Update("RancherContact", objToSend);
-            } else if (objRancher.rancher_type == 2) {
-              objToSend = this.enterpriseRancherContactAdapterToOut(objNew);
-              cgUpdateContact = consumingGateway.Update("EnterpriseContact", objToSend);
-            }
-
-            if (cgUpdateContact.exceptionId == 0) { // Updated successfully
-              var tamanio = objRancher.contacts.length;
+          updContact : function(obj, objNew, cbObj, cbMethod) {
+//            var objToSend = {};
+//            var cgUpdateContact = null;
+//            objNew.rancher_id = objOld.rancher_id;
+//            objNew.contact_id = objOld.contact_id;
+//
+//            if (objRancher.rancher_type == 1) {
+//              objToSend = this.rancherContactAdapterToOut(objNew);
+//              cgUpdateContact = consumingGateway.Update("RancherContact", objToSend);
+//            } else if (objRancher.rancher_type == 2) {
+//              objToSend = this.enterpriseRancherContactAdapterToOut(objNew);
+//              cgUpdateContact = consumingGateway.Update("EnterpriseContact", objToSend);
+//            }
+//
+//            if (cgUpdateContact.exceptionId == 0) { // Updated successfully
+              var tamanio = obj.contacts.length;
               for ( var i = 0; i < tamanio; i++) {
-                if (objRancher.contacts[i].contact_id == objOld.contact_id) {
-                  objRancher.contacts[i] = objNew;
+                if (obj.contacts[i].id == objNew.id) {
+                  obj.contacts[i] = objNew;
                   if (cbMethod) {
                     cbObj[cbMethod]();
                   }
@@ -389,26 +391,26 @@ enyo
                 }
               }
               return false;
-            } else { // Error
-              cacheMan.setMessage("", "[Exception ID: " + cgUpdateContact.exceptionId + "] Descripcion: " + cgUpdateContact.exceptionDescription);
-              return false;
-            }
+//            } else { // Error
+//              cacheMan.setMessage("", "[Exception ID: " + cgUpdateContact.exceptionId + "] Descripcion: " + cgUpdateContact.exceptionDescription);
+//              return false;
+//            }
           },
-          deleteContact : function(objRancher, objCon, cbObj, cbMethod) {
-            var objToSend = {};
-            objToSend.contactId = objCon.contact_id;
-            var cgDeleteContact = null;
-            if (objRancher.rancher_type == 1) {
-              cgDeleteContact = consumingGateway.Delete("RancherContact", objToSend);
-            } else if (objRancher.rancher_type == 2) {
-              cgDeleteContact = consumingGateway.Delete("EnterpriseContact", objToSend);
-            }
+          delContact : function(objDriver, objCon, cbObj, cbMethod) {
+//            var objToSend = {};
+//            objToSend.contactId = objCon.contact_id;
+//            var cgDeleteContact = null;
+//            if (objDriver.rancher_type == 1) {
+//              cgDeleteContact = consumingGateway.Delete("RancherContact", objToSend);
+//            } else if (objDriver.rancher_type == 2) {
+//              cgDeleteContact = consumingGateway.Delete("EnterpriseContact", objToSend);
+//            }
 
-            if (cgDeleteContact.exceptionId == 0) { // Deleted successfully
-              var tamanio = objRancher.contacts.length;
+//            if (cgDeleteContact.exceptionId == 0) { // Deleted successfully
+              var tamanio = objDriver.contacts.length;
               for ( var i = 0; i < tamanio; i++) {
-                if (objRancher.contacts[i].contact_id == objCon.contact_id) {
-                  objRancher.contacts.splice(i, 1);
+                if (objDriver.contacts[i].id == objCon.id) {
+                  objDriver.contacts.splice(i, 1);
                   if (cbMethod) {
                     cbObj[cbMethod]();
                   }
@@ -416,10 +418,10 @@ enyo
                 }
               }
               return false;
-            } else { // Error
-              cacheMan.setMessage("", "[Exception ID: " + cgDeleteContact.exceptionId + "] Descripcion: " + cgDeleteContact.exceptionDescription);
-              return false;
-            }
+//            } else { // Error
+//              cacheMan.setMessage("", "[Exception ID: " + cgDeleteContact.exceptionId + "] Descripcion: " + cgDeleteContact.exceptionDescription);
+//              return false;
+//            }
           },
         ls : function() {
           var _arrRancherListLS = [];

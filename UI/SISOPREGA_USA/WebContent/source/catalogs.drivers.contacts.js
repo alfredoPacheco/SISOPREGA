@@ -4,7 +4,10 @@ enyo
 			kind : enyo.VFlexBox,
 			className : "formBG",
 			// arrReceptions : null,
-			obj : {contacts:[]},
+			obj : {
+				contacts : []
+			},
+			iSelected : null,
 			events : {
 				onOk : ""
 			},
@@ -30,10 +33,49 @@ enyo
 							onfocus : "applyMask"
 						// style : "margin-right: 15px;"
 						}, {
-							kind : enyo.Button,
-							caption : "Agregar",
-							onclick : "agregar_click"
-						}, ]
+							layoutKind : "HFlexLayout",
+							width:"140px;",							
+							components : [ {
+								kind : "Drawer",
+								name : "draAdd",
+								animate: false,
+								components : [ {
+									layoutKind : "HFlexLayout",
+									align : "center",
+									flex:1,
+									components : [ {
+										kind : "enyo.IconButton",
+										name : "btnAdd",
+										icon : "../SISOPREGA/images/menu-icon-new.png",
+										onclick : "agregar_click",
+										flex:1
+									} ]
+								} ]
+							}, {
+								kind : "Drawer",
+								name : "draUpdate",
+								animate: false,
+								components : [ {
+									layoutKind : "HFlexLayout",
+									align : "center",
+									flex:1,
+									components : [ {
+										kind : "enyo.IconButton",
+										name : "btnUpdate",
+										icon : "../SISOPREGA/images/btn_edit.png",
+//										flex : 1,
+										onclick : "update_click"
+									}, {
+										kind : "Button",
+										name : "btnCancel",
+										className : "enyo-button-negative",
+										flex : 1,
+										caption : "Cancelar",
+										onclick : "cancel_click"
+									}]
+								} ]
+							} ]
+						}]
 					},
 					{
 						kind : enyo.Scroller,
@@ -47,13 +89,16 @@ enyo
 							kind : enyo.VirtualRepeater,
 							name : "list",
 							onSetupRow : "setupRow",
+							onmousedown : "selectItem",
 							components : [ {
-								kind : enyo.Item,
+								kind : enyo.SwipeableItem,
+								onConfirm : "deleteItem",
 								layoutKind : enyo.HFlexLayout,
 								align : "center",
 								pack : "start",
 								height : "40px",
 								className : "listBG",
+								name : "swipeable_item",
 								components : [
 										{
 											name : 'detail_contact',
@@ -79,7 +124,7 @@ enyo
 							kind : "Button",
 							name : "ok_button",
 							className : "enyo-button-affirmative",
-							caption : "Aceptar",
+							caption : "Cerrar",
 							onclick : "ok_click",
 							// flex:1
 							width : "120px;"
@@ -91,13 +136,25 @@ enyo
 					contact : this.$.contact.getValue(),
 					phone : this.$.phone.getValue(),
 				};
+				
+				if(newContact.contact != "" && newContact.phone != ""){
+					this.resetValues();
+					cacheDrivers.addContact(this.obj, newContact, this,
+							"updateList");
 
-				// this.arrDetail.push(newObject);
+					this.$.detailScroller.scrollToBottom();					
+				}else
+					alert("Verifique campos.");
+				
 
-				cacheDrivers.addContact(this.obj, newContact, this,
-						"updateList");
-
-				this.$.detailScroller.scrollToBottom();
+			},
+			deleteItem : function(inSender, inIndex) {
+				if (cacheDrivers.delContact(this.obj,
+						this.obj.contacts[inIndex], this, "updateList")) {
+					return true;
+				} else {
+					return false;
+				}
 			},
 			setupRow : function(inSender, inIndex) {
 				if (this.obj.contacts[inIndex]) {
@@ -105,7 +162,24 @@ enyo
 							.setContent(this.obj.contacts[inIndex].contact);
 					this.$.detail_phone
 							.setContent(this.obj.contacts[inIndex].phone);
+					if (this.iSelected == inIndex) {
+						this.$.swipeable_item.applyStyle("background-color",
+								"wheat");
+					} else {
+						this.$.swipeable_item.applyStyle("background-color",
+								null);
+					}
+
 					return true;
+				}
+			},
+			selectItem : function(inSender, inEvent) {
+				if (this.obj.contacts[inEvent.rowIndex]) {
+					this.iSelected = inEvent.rowIndex;
+					this.updateList();
+					this.toggleUpdate();
+					this.$.contact.setValue(this.obj.contacts[this.iSelected].contact);
+					this.$.phone.setValue(this.obj.contacts[this.iSelected].phone);
 				}
 			},
 			afterUpdate : function() {
@@ -114,13 +188,52 @@ enyo
 			ready : function() {
 				// this.$.weight.$.input.applyStyle("text-align", "right");
 				// this.$.btnSave.hide();
+				this.$.contact.setFocusClassName(null);
+				this.$.phone.setFocusClassName(null);
 				this.updateList();
+				this.resetValues();				
+			},
+			toggleAdd:function(){
+				this.$.draUpdate.setOpen(false);
+				this.$.draAdd.setOpen(true);				
+			},
+			toggleUpdate:function(){
+				this.$.draAdd.setOpen(false);
+				this.$.draUpdate.setOpen(true);
+			},
+			update_click:function(){
+				alert(this.iSelected);
+				var newInfo = {
+						id: this.obj.contacts[this.iSelected].id,
+						contact : this.$.contact.getValue(),
+						phone : this.$.phone.getValue(),
+					};
+					
+					if(newInfo.contact != "" && newInfo.phone != ""){
+						this.resetValues();
+						cacheDrivers.updContact(this.obj, newInfo, this,
+								"updateList");										
+					}else
+						alert("Verifique campos.");
+				
+			},
+			cancel_click:function(){
+				this.resetValues();
+				this.updateList();
+			},
+			resetValues : function() {
+				this.$.contact.setValue("");
+				this.$.phone.setValue("");
+				this.iSelected = null;
+				this.toggleAdd();
+				this.$.contact.forceFocus();
 			},
 			updateList : function() {
 				this.$.list.render();
 			},
 			setObj : function(obj) {
 				this.obj = obj;
+				this.updateList();
 			},
 			ok_click : function() {
 				this.doOk();
