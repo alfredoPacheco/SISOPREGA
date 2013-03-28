@@ -264,6 +264,9 @@ enyo
 				this.$.totalHC.setContent(this.totalHC);
 				this.$.totalWeight.setContent(this.totalWeight);
 			},
+			sell_click:function(){
+				
+			},
 			applyMask : function(inSender) {
 				var _id = inSender.$.input.getId();
 				jQuery(function(j) {
