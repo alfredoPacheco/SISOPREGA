@@ -130,7 +130,7 @@ enyo.kind({
 		cacheProviders.update(this.obj, this.get(), this, "doUpdate");
 	},
 	get : function() {
-		var obj = {
+		var objProvider = {
 			id : "",
 			name : "",
 			address_one : "",
@@ -144,16 +144,16 @@ enyo.kind({
 			phone_number : "",
 			email : ""
 		};
-		obj.name = this.$.input_name.getValue();
-		obj.address_one = this.$.input_address_one.getValue();
-		obj.address_two = this.$.input_address_two.getValue();
-		obj.state_name = this.$.input_state_name.getValue();
-		obj.city_name = this.$.input_city_name.getValue();
-		obj.zip_code = this.$.input_zip_code.getValue();
-		obj.rfc = this.$.input_rfc.getValue();
-		obj.phone_number = this.$.input_phone_number.getValue();
-		obj.email = this.$.input_email.getValue();
-		return obj;
+		objProvider.name = this.$.input_name.getValue();
+		objProvider.address_one = this.$.input_address_one.getValue();
+		objProvider.address_two = this.$.input_address_two.getValue();
+		objProvider.state_name = this.$.input_state_name.getValue();
+		objProvider.city_name = this.$.input_city_name.getValue();
+		objProvider.zip_code = this.$.input_zip_code.getValue();
+		objProvider.rfc = this.$.input_rfc.getValue();
+		objProvider.phone_number = this.$.input_phone_number.getValue();
+		objProvider.email = this.$.input_email.getValue();
+		return objProvider;
 	},
 	add : function() {
 		cacheProviders.Create(this.get(), this, "afterAdd");

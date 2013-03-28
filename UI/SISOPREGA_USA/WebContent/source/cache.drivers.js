@@ -294,6 +294,18 @@ enyo
 //            return false;
 //          }
         },
+        getAllForList : function() {
+    		var result = [];
+    		var items = this.get();
+    		for (var index = 0; index<items.length; index++) {
+    			var item = {
+    				caption : items[index].name,
+    				value : items[index].id
+    			};
+    			result.push(item);
+    		}
+    		return result;
+    	},
         getContacts : function(obj) {
             for (i in this.contactsReadFromGateway) {
               if (this.contactsReadFromGateway[i] == obj.rancher_id) {
@@ -448,45 +460,6 @@ enyo
               return this.get()[i];
             }
           }
-        },
-        
-        getAllForList : function() {
-          var result = [];
-          var ranchers = this.get();
-          for (property in ranchers) {
-            if (ranchers[property].rancher_type == 1) {
-              var rancher =
-                {
-                  caption : "",
-                  value : ranchers[property].rancher_id
-                };
-              if (ranchers[property].aka != "") {
-            	  if(ranchers[property].mother_name != ""){
-            		  rancher.caption = ranchers[property].last_name + ' ' + ranchers[property].mother_name + ', ' + ranchers[property].first_name + ' / ' + ranchers[property].aka;
-            	  }else{
-            		  rancher.caption = ranchers[property].last_name + ', ' + ranchers[property].first_name + ' / ' + ranchers[property].aka;	  
-            	  }
-                
-              } else {
-            	  if(ranchers[property].mother_name != ""){
-            		  rancher.caption = ranchers[property].last_name + ' ' + ranchers[property].mother_name + ', ' + ranchers[property].first_name;
-            	  }else{
-            		  rancher.caption = ranchers[property].last_name + ', ' + ranchers[property].first_name;  
-            	  }
-              }
-
-              result.push(rancher);
-            } else {
-              var rancher =
-                {
-                  caption : ranchers[property].company_name,
-                  value : ranchers[property].rancher_id
-                };
-              result.push(rancher);
-            }
-          }
-          return result;
-
         },
         find : function(criteria, arraySource) {
           var result = [];
