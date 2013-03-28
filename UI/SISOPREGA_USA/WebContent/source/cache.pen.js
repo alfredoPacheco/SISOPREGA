@@ -1,11 +1,28 @@
-enyo.kind({
-	name: "cache.pen", 
-	isOccupied: function(penName){
-		//TODO:Utilizar webservice para consultar ocupacidad del corral.
-		var aleatorio = Math.floor((Math.random()*10)+1);// generar un aleatorio entre el 1 y 10. 
-		return aleatorio == 1; // ocupado si el aleatorio es 1. 
-		
-	}
+enyo.kind(
+  {
+    name : "cache.pen",
+    isOccupied : function(penName) {
+      //TODO:Utilizar webservice para consultar ocupacidad del corral.
+      return false;
+    },
+    getList : function() {
+      var result = [];
+      // TODO: Use web service to retrieve list of pens
 
-});
-var cachePen=new cache.pen();
+      var pen_names =
+        [ "EB1", "EB3", "EB5", "WB1", "WB3", "WB5" ];
+
+      for ( var i = 0; i < pen_names.length; i++) {
+        var pen =
+          {
+            value : i,
+            caption : pen_names[i]
+          };
+        result.push(pen);
+      }
+
+      return result;
+    }
+
+  });
+var cachePen = new cache.pen();

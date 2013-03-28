@@ -38,15 +38,13 @@ enyo
 								width : "80px;"
 							}, {
 								kind : "controls.autocomplete",
+								inputKind: "ToolInput",
 								name : "customer",
 								width : "500px;",
 								height : "35px;",
 							} ]
 						} ]
-					},
-					{
-
-					},
+					},					
 					{
 						kind : "HFlexBox",
 						className : "listFirst",
@@ -57,6 +55,8 @@ enyo
 						pack : "start",
 						components : [ {
 							kind : "controls.autocomplete",
+							inputKind:"ToolInput",
+							height:"35px;",
 							name : "clase",
 							hint : 'Clase',
 							width : "150px;",
@@ -76,7 +76,8 @@ enyo
 						}, {
 							kind : enyo.Button,
 							caption : "Agregar",
-							onclick : "agregar_click"
+							onclick : "agregar_click",
+							style:"background-color: #DABD8B;"
 						}, ]
 					},
 					{
@@ -260,6 +261,7 @@ enyo
 			ready : function() {
 				this.$.saleDate.setValue(utils.dateOut(new Date()));
 				this.$.saleDate.$.input.applyStyle("text-align","center");
+				this.$.customer.setItems(cacheCustomers.getAllForList());
 				// this.$.weight.$.input.applyStyle("text-align", "right");
 				// this.$.btnSave.hide();
 				// this.updateList();

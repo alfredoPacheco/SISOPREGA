@@ -24,7 +24,7 @@ enyo.kind({
 					name : "rancher_id",
 					hint:"",
 					flex:1,
-					contentPack:"end"
+//					contentPack:"end"
 				 } ]
 			}, {
 				kind : "VFlexBox",
