@@ -44,6 +44,10 @@ enyo.kind(
                     // onclick : "open_view"
                     // },
                     {
+                      caption : "Corrales",
+                      onclick : "open_view"
+                    },
+                    {
                       caption : "Ventas",
                       onclick : "open_view"
                     },
@@ -113,10 +117,12 @@ enyo.kind(
             [
               {
                 kind : "login",
+               // kind : "pen.map", 
                 // to test visibility with no login activity,
                 // change the kind for your own component.
                 // kind : "hermana.de",
                 name : "login",
+                //name : "pen.map",
                 onSucess : "goAhead",
                 onFail : "noAccess"
               },
@@ -128,6 +134,11 @@ enyo.kind(
                 kind : "hermana.de",
                 name : "hermana_kind",
                 lazy : "true"
+              },
+              {
+        	kind : "pen.map",
+        	name : "corrales_kind",
+        	lazy : "true"
               },
               {
                 kind : "sales",
@@ -229,6 +240,11 @@ enyo.kind(
         _objMainHeader.setContent('Hermana');
         this.$.mainPane.selectViewByName("hermana_kind");
         break;
+      case 'Corrales':
+	  // this.addGoBackAction("reports");
+	_objMainHeader.setContent('Corrales');
+	this.$.mainPane.selectViewByName("corrales_kind");
+	break;
       case 'Inventario':
         // this.addGoBackAction("reports");
         _objMainHeader.setContent('Inventario');
