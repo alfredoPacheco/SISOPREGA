@@ -298,7 +298,7 @@ enyo.kind({
 		
 		var objToSend = {};
 		objToSend.receptionId = objRec.reception_id;
-		objToSend.barnyardId = cacheBY.getByBarnyard(sID).barnyard_id;
+		objToSend.barnyardId = cachePen.getByBarnyard(sID).barnyard_id;
 		var cgDelete = consumingGateway.Delete("ReceptionBarnyard", objToSend);
 		if (cgDelete.exceptionId == 0){ //Deleted successfully
 			delete objRec.barnyards[sID];
@@ -360,4 +360,4 @@ enyo.kind({
 	
 });
 
-var cacheBY= new cache.barnyards();
+var cachePen= new cache.barnyards();
