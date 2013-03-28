@@ -360,4 +360,4 @@ enyo.kind({
 	
 });
 
-var cachePen= new cache.barnyards();
+var cacheBY= new cache.barnyards();
