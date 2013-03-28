@@ -42,6 +42,7 @@ enyo.depends(
   "source/cache.inventory.js",
   "source/cache.pruchased.js",
   "source/cache.sales.js",
-  "source/admin.screen.js"  
+  "source/admin.screen.js",
+  "source/driver.select.js"
   
 );
