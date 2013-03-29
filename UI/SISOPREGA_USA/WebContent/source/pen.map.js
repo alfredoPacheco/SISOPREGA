@@ -1,10 +1,13 @@
 enyo
 	.kind({
 	    name : "pen.map",
-	    arrOptions : [ {
+	    arrOptions : [
+	                  {
 		caption : "Mover Corral",
-		value : 1
-	    } ],
+		value : 1}, {
+		caption : "Alimento",
+		value : 2 }
+	    ],
 
 	    kind : enyo.HFlexBox,
 	    last : null,
