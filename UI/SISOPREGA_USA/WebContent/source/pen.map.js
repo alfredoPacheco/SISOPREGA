@@ -5,7 +5,7 @@ enyo
 		caption : "Mover Corral",
 		value : 1
 	    } ],
-
+	    style:"background-color:#DABD8B;",
 	    kind : enyo.HFlexBox,
 	    last : null,
 	    flex : 1,

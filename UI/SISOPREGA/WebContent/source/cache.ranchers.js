@@ -535,7 +535,7 @@ enyo
           }
         },
         getContacts : function(objRan) {
-          for (i in this.contactsReadFromGateway) {
+          for (var i = 0;i<this.contactsReadFromGateway.length;i++) {
             if (this.contactsReadFromGateway[i] == objRan.rancher_id) {
               return objRan.contacts;
             }
@@ -663,7 +663,7 @@ enyo
           }
         },
         getBillings : function(objRan) {
-          for (i in this.billingsReadFromGateway) {
+          for (var i = 0; i<this.billingsReadFromGateway.length;i++) {
             if (this.billingsReadFromGateway[i] == objRan.rancher_id) {
               return objRan.billings;
             }

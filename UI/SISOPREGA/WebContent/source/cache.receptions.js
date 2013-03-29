@@ -119,7 +119,7 @@ enyo.kind(
         var objAux = {};
         this.arrObj = [];
 
-        for ( var a in this.arrReception) {
+        for ( var a = 0; a<this.arrReception.length;a++) {
           objAux = this.arrReception[a];
           // barnyards::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
           var barnyardAux = this.getReceptionBarnyard(objAux.reception_id);
@@ -141,7 +141,7 @@ enyo.kind(
             } catch (e) {
             }
           }
-          objAux.hc_aprox = objAux.weights[0].hc;
+          if(objAux.weights) objAux.hc_aprox = objAux.weights[0].hc;
           // inspections::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
           // inspections:[{reject_desc:"ENFERMEDAD"}],
           var arrInspectionAux = this.getInspection(objAux.reception_id);
@@ -197,7 +197,7 @@ enyo.kind(
                 {
                   barnyards : {}
                 };
-              for (fb in arrFeedBarnyardAux) {
+              for (var fb = 0; fb<arrFeedBarnyardAux.length;fb++) {
                 var barnyardAux = cacheBY.getByID(arrFeedBarnyardAux[fb].barnyardId);
                 feedBarnyardAux.barnyards["" + barnyardAux.zone_id + barnyardAux.barnyard_code] = "" + barnyardAux.zone_id
                     + barnyardAux.barnyard_code;
@@ -208,7 +208,7 @@ enyo.kind(
               var arrFeedDetailsAux = this.getFeedOrderDetails(feedAux.feeding_id);
               var feedDetailsAux = {};
               var contAux = 1;
-              for (fd in arrFeedDetailsAux) {
+              for (var fd=0;fd<arrFeedDetailsAux.length;fd++) {
                 feedDetailsAux[contAux] = {};
                 feedDetailsAux[contAux].feed_desc = cacheFeed.getByID(arrFeedDetailsAux[fd].foodId).feed_desc;
                 feedDetailsAux[contAux].feed_units = arrFeedDetailsAux[fd].quantity;
@@ -301,7 +301,7 @@ enyo.kind(
       var cgReadAll = consumingGateway.Read("FeedOrder", objToSend);
 
       if (cgReadAll.exceptionId == 0) { // Read successfully
-        for (item in cgReadAll.records) {
+        for(var item=0; item<cgReadAll.records.length;item++) {
           arrAux.push(this.feedOrderAdapterToIn(cgReadAll.records[item]));
         }
       } else { // Error
@@ -322,7 +322,7 @@ enyo.kind(
       var cgReadAll = consumingGateway.Read("FeedOrderBarnyard", objToSend);
 
       if (cgReadAll.exceptionId == 0) { // Read successfully
-        for (item in cgReadAll.records) {
+        for(var item=0; item<cgReadAll.records.length;item++) {
           arrAux.push(this.feedOrderBarnyardAdapterToIn(cgReadAll.records[item]));
         }
       } else { // Error
@@ -341,7 +341,7 @@ enyo.kind(
       var cgReadAll = consumingGateway.Read("FeedOrderDetails", objToSend);
 
       if (cgReadAll.exceptionId == 0) { // Read successfully
-        for (item in cgReadAll.records) {
+        for(var item=0; item<cgReadAll.records.length;item++) {
           arrAux.push(this.feedOrderDetailsAdapterToIn(cgReadAll.records[item]));
         }
       } else { // Error
@@ -361,7 +361,7 @@ enyo.kind(
       var cgReadAll = consumingGateway.Read("Inspection", objToSend);
 
       if (cgReadAll.exceptionId == 0) { // Read successfully
-        for (item in cgReadAll.records) {
+        for(var item=0; item<cgReadAll.records.length;item++) {
           arrAux.push(this.inspectionAdapterToIn(cgReadAll.records[item]));
         }
       } else { // Error
@@ -382,7 +382,7 @@ enyo.kind(
       var cgReadAll = consumingGateway.Read("InspectionBarnyard", objToSend);
 
       if (cgReadAll.exceptionId == 0) { // Read successfully
-        for (item in cgReadAll.records) {
+        for(var item=0; item<cgReadAll.records.length;item++) {
           arrAux.push(this.inspectionBarnyardAdapterToIn(cgReadAll.records[item]));
         }
       } else { // Error
@@ -406,7 +406,7 @@ enyo.kind(
       var cgReadAll = consumingGateway.Read("InspectionDetails", objToSend);
 
       if (cgReadAll.exceptionId == 0) { // Read successfully
-        for (item in cgReadAll.records) {
+        for(var item=0; item<cgReadAll.records.length;item++) {
           arrAux.push(this.inspectionDetailsAdapterToIn(cgReadAll.records[item]));
         }
       } else { // Error
@@ -880,7 +880,7 @@ enyo.kind(
     getActiveBYForListByRancherID : function(rancher_id) {
       var result = [];
       var receptions = this.get();
-      for (i in receptions) {
+      for (var i= 0; i<receptions.length;i++) {
         if (receptions[i].rancher_id == rancher_id) {
           var barnyards = receptions[i].barnyards;
           for (property in barnyards) {
@@ -917,7 +917,7 @@ enyo.kind(
     getReceptionsByRancherID : function(rancher_id) {
       var result = [];
       var receptions = this.get();
-      for (i in receptions) {
+      for (var i =0;i<receptions.length;i++) {
         if (receptions[i].rancher_id == rancher_id) {
           result.push(receptions[i]);
         }
@@ -929,7 +929,7 @@ enyo.kind(
       var result = [];
       var arrReceptions = this.get();
 
-      for (i in arrReceptions) {
+      for (var i =0;i<arrReceptions.length;i++) {
         for (j in arrReceptions[i].barnyards) {
           var obj =
             {
@@ -942,7 +942,7 @@ enyo.kind(
         }
       }
 
-      for (i in arrResult) {
+      for (var i = 0;i<arrResult.length;i++) {
         result.push(arrResult[i]);
       }
 

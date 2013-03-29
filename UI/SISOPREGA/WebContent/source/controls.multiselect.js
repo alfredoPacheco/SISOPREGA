@@ -74,7 +74,7 @@ enyo.kind({
 			var newItems=[];
 			var addItem = false;
 			for(fieldFilter in filter){
-				for (j in items){
+				for (var j =0;j<items.length;j++){
 					for(fieldItems in items[i]){
 						if(fieldFilter == fieldItems){
 							if(filter[fieldFilter] != items[i][fieldItems]){
@@ -146,7 +146,7 @@ enyo.kind({
 	//on_accept function that select multiple elements in drop_down items
 	on_accept:function(){ //TODO manage index as well
 		var strValue = "";
-		for (i in this.itemsSelected){
+		for (var i = 0;i<this.itemsSelected.length;i++){
 			if(this.itemsSelected[i]){
 				strValue += this.$.drop_down.items[i].caption + ", ";
 			}			

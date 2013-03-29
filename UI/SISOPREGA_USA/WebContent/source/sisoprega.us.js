@@ -31,47 +31,39 @@ enyo
 				    name : "menu",
 				    width : "300px",
 				    components : [ {
-					caption : "Capturar Hermana",
-					onclick : "open_view"
-				    },
-				    // {
-				    // caption : "Inventario",
-				    // onclick : "open_view"
-				    // },
-				    {
-					caption : "Ventas",
+					caption : "Inicio",
 					onclick : "open_view"
 				    }, {
-					caption : "Programación de Embarques",
+					caption : "Reportes",
 					onclick : "open_view"
 				    }, {
-					caption : "Elegir Transportista",
+					caption : "Mapa Mexicano",
 					onclick : "open_view"
 				    }, {
-					caption : "Mapa",
+					caption : "Lista de Inspección",
 					onclick : "open_view"
 				    }, {
 					caption : "Catálogos",
 					components : [ {
+					    caption : "Clases",
+					    onclick : "open_view"
+					}, {
 					    caption : "Clientes",
+					    onclick : "open_view"
+					}, {
+					    caption : "Transportistas",
 					    onclick : "open_view"
 					}, {
 					    caption : "Proveedores",
 					    onclick : "open_view"
 					}, {
-					    caption : "Transportistas",
+					    caption : "Usuarios",
 					    onclick : "open_view"
-					} ]
-				    }
-				    // {
-				    // caption : "Lista de Inspección",
-				    // onclick : "open_view"
-				    // }, {
-				    // caption : "Usuarios",
-				    // onclick : "open_view"
-				    // }
-				    //									
-				    ]
+					}, {
+					    caption : "Conceptos de Gastos",
+					    onclick : "open_view"
+					}, ]
+				    } ]
 				},
 				{
 				    name : 'btnGoBack',
@@ -104,6 +96,7 @@ enyo
 			name : "mainPane",
 			onSelectView : "selectView",
 			transitionKind : "enyo.transitions.LeftRightFlyin",
+			style:"margin-left:auto;margin-right:auto",
 			components : [ {
 			    kind : "login",
 			    // to test visibility with no login activity,
@@ -119,40 +112,63 @@ enyo
 			}, {
 			    kind : "main.agency",
 			    name : "mainAgency",
-			    lazy : "true"
+			    lazy : true
 			}, {
-			    kind : "sales",
-			    name : "sales_kind",
-			    lazy : "true"
-			}, {
-			    kind : "shipments",
-			    name : "shipments_kind",
-			    lazy : "true"
-			}, {
+			    kind : "Scroller",
+			    name : "reports_kind",
+			    lazy : true,
+//			    style:"max-width: 300px;",
+			    layoutKind:"VFlexLayout",
+			    components : [ {
+				kind : "reports.main",
+				name:"reportsMain",
+				style : "min-height:377px;",
+				components : [ {
+				    kind : "reports.us.select",
+				    flex : 1,
+				    style : "margin-top: 43px;"
+				} ]
+			    } ]
+			},
+			 {
+			 kind : "receptions.barnyards.map",
+			 name : "mexMap_kind",
+			 lazy : true
+			 },
+			 {
+			 kind : "inspection.forecast",
+			 name : "inspection_kind",
+			 lazy : true
+			 },
+			// {
+			// kind : "classCattle",
+			// name : "classCattle_kind",
+			// lazy : true
+			// },
+			{
 			    kind : "catalogs.customers.list",
 			    name : "customersList_kind",
-			    lazy : "true"
-			}, {
-			    kind : "catalogs.providers.list",
-			    name : "providersList_kind",
-			    lazy : "true"
+			    lazy : true
 			}, {
 			    kind : "catalogs.drivers.list",
 			    name : "driversList_kind",
-			    lazy : "true"
+			    lazy : true
 			}, {
-			    kind : "driver.select",
-			    name : "driverSelect_kind",
-			    lazy : "true"
-			}, {
-			    kind : "pen.map",
-			    name : "penMap_kind",
-			    lazy : "true"
-			}, {
-			    kind : "admin.screen",
-			    name : "mainAdmin",
-			    lazy : "true"
-			} ]
+			    kind : "catalogs.providers.list",
+			    name : "providersList_kind",
+			    lazy : true
+			},
+			// {
+			// kind : "users",
+			// name : "users_kind",
+			// lazy : true
+			// },
+			// {
+			// kind : "expensesConcepts",
+			// name : "expensesConcepts_kind",
+			// lazy : true
+			// },
+			]
 		    },
 		    {
 			kind : enyo.Dialog,
@@ -222,50 +238,56 @@ enyo
 		    view = InSender.caption;
 		}
 		switch (view) {
-		case 'Capturar Hermana':
+		case 'Inicio':
 		    // this.addGoBackAction("receptionsMap");
-		    _objMainHeader.setContent('Hermana');
-		    this.$.mainPane.selectViewByName("hermana_kind");
+		    _objMainHeader.setContent('Administración');
+		    this.$.mainPane.selectViewByName("mainAdmin");
 		    break;
-		case 'Inventario':
+		case 'Reportes':
+		    // this.addGoBackAction("receptionsMap");
+		    _objMainHeader.setContent('Reportes');
+		    this.$.mainPane.selectViewByName("reports_kind");
+		    this.$.reportsMain.$.reportsPane.selectViewByIndex(0);
+		    break;
+		case 'Mapa Mexicano':
 		    // this.addGoBackAction("reports");
-		    _objMainHeader.setContent('Inventario');
-		    this.$.mainPane.selectViewByName("inventario");
+		     _objMainHeader.setContent('Corrales México');
+		     this.$.mainPane.selectViewByName("mexMap_kind");
 		    break;
-		case 'Ventas':
+		case 'Lista de Inspección':
 		    // this.addGoBackAction("catRanchers");
-		    _objMainHeader.setContent('Ventas');
-		    this.$.mainPane.selectViewByName("sales_kind");
+		     _objMainHeader.setContent('Lista de Inspección');
+		     this.$.mainPane.selectViewByName("inspection_kind");
 		    break;
-		case 'Programación de Embarques':
+		case 'Clases':
 		    // this.addGoBackAction("catCattle");
-		    _objMainHeader.setContent('Programación de Embarques');
-		    this.$.mainPane.selectViewByName("shipments_kind");
+		    // _objMainHeader.setContent('Programación de Embarques');
+		    // this.$.mainPane.selectViewByName("shipments_kind");
 		    break;
 		case 'Clientes':
 		    // this.addGoBackAction("catCattle");
 		    _objMainHeader.setContent('Clientes');
 		    this.$.mainPane.selectViewByName("customersList_kind");
 		    break;
-		case 'Proveedores':
-		    // this.addGoBackAction("catCattle");
-		    _objMainHeader.setContent('Proveedores');
-		    this.$.mainPane.selectViewByName("providersList_kind");
-		    break;
 		case 'Transportistas':
 		    // this.addGoBackAction("catCattle");
 		    _objMainHeader.setContent('Transportistas');
 		    this.$.mainPane.selectViewByName("driversList_kind");
 		    break;
-		case 'Elegir Transportista':
+		case 'Proveedores':
 		    // this.addGoBackAction("catCattle");
-		    _objMainHeader.setContent('Elegrir Transportista');
-		    this.$.mainPane.selectViewByName("driverSelect_kind");
+		    _objMainHeader.setContent('Proveedores');
+		    this.$.mainPane.selectViewByName("providersList_kind");
 		    break;
-		case 'Mapa':
+		case 'Usuarios':
 		    // this.addGoBackAction("catCattle");
-		    _objMainHeader.setContent('Mapa');
-		    this.$.mainPane.selectViewByName("penMap_kind");
+		    // _objMainHeader.setContent('Elegrir Transportista');
+		    // this.$.mainPane.selectViewByName("driverSelect_kind");
+		    break;
+		case 'Conceptos de Gastos':
+		    // this.addGoBackAction("catCattle");
+		    // _objMainHeader.setContent('Mapa');
+		    // this.$.mainPane.selectViewByName("penMap_kind");
 		    break;
 		}
 		// enyo.$.sisoprega_btnGoBack.setShowing(1);

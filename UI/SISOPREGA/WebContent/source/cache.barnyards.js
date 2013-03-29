@@ -115,7 +115,7 @@ enyo.kind({
 			var cgReadAll = consumingGateway.Read("BarnyardCapacity", {});
 			
 			if (cgReadAll.exceptionId == 0){ //Read successfully
-				for (item in cgReadAll.records){
+				for(var item=0; item<cgReadAll.records.length;item++) {
 					arrAux.push(cgReadAll.records[item]);
 				}		    	
 			}
