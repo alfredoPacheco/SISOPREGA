@@ -362,14 +362,14 @@ enyo
 				return result;
 			},
 			getCaptionByIndex : function(index) {
-				for (i in this.allItems) {
+				for (var i= 0;i<this.allItems.length;i++) {
 					if (this.allItems[i].value == index) {
 						return this.allItems[i].caption;
 					}
 				}
 			},
 			getValueByCaption : function(caption) {
-				for (i in this.allItems) {
+				for (var i = 0; i<this.allItems.length;i++) {
 					if (this.allItems[i].caption == caption) {
 						return this.allItems[i].value;
 					}
@@ -384,7 +384,7 @@ enyo
 				var lowerValue = undefined;
 				var index = -1;
 				if (this.allItems.length > 0) {
-					for (i in this.allItems) {
+					for (var i = 0; i<this.allItems.length;i++) {
 						if (!lowerValue
 								|| lowerValue > parseInt(this.allItems[i].value)) {
 							lowerValue = parseInt(this.allItems[i].value);

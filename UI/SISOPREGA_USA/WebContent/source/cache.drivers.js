@@ -307,7 +307,7 @@ enyo
     		return result;
     	},
         getContacts : function(obj) {
-            for (i in this.contactsReadFromGateway) {
+            for (var i = 0;i<this.contactsReadFromGateway.length;i++) {
               if (this.contactsReadFromGateway[i] == obj.rancher_id) {
                 return obj.contacts;
               }

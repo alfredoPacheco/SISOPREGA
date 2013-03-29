@@ -187,7 +187,7 @@ enyo.kind(
                           {
                             kind : "enyo.IconButton",
                             name : "btnReport",
-                            icon : "images/command-menu/menu-icon-cards.png",
+                            icon : "images/menu-icon-cards.png",
                             onclick : "openFeedingReport"
                           },
                           {
@@ -481,7 +481,7 @@ enyo.kind(
     updateHeader : function() {
       var corralesSeleccionados = "";
       var arrAux = this._arrBY;
-      for (i in arrAux) {
+      for (var i =0;i<arrAux.length;i++) {
         corralesSeleccionados = "" + corralesSeleccionados + " " + arrAux[i].slice(1) + " ";
       }
       corralesSeleccionados.slice(-2);

@@ -62,6 +62,9 @@ enyo.kind(
       }
 
       return false; // cattle type not found as compatible in cattleClass
+    },
+    add : function(aClass){
+      this.arrClasses.push(aClass);
     }
   });
 var cacheClasses = new cache.cattle.quality();

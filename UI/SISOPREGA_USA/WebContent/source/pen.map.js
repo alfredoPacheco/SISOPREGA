@@ -9,6 +9,7 @@ enyo
 		value : 2 }
 	    ],
 
+	    style:"background-color:#DABD8B;",
 	    kind : enyo.HFlexBox,
 	    last : null,
 	    flex : 1,

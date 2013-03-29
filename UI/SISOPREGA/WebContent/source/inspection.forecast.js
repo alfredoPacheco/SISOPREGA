@@ -233,7 +233,7 @@ enyo
 												{
 												    kind : "enyo.IconButton",
 												    name : "btnReport",
-												    icon : "images/command-menu/menu-icon-cards.png",
+												    icon : "images/menu-icon-cards.png",
 												    onclick : "enviar_aviso",
 												    style : "width:30px;"
 												  },
@@ -447,7 +447,7 @@ enyo
 				
 				//filling up right side**************************************
 				arrAllForecasts = cacheInspFore.get();
-				for (i in arrAllForecasts) {
+				for (var i =0;i<arrAllForecasts.length;i++) {
 					if (arrAllForecasts[i].fore_date == this.fecha) {
 						this._id = arrAllForecasts[i].id;
 						if (arrAllForecasts[i].fore_details_id) {
@@ -592,7 +592,7 @@ enyo
 						this.$.barnyards.setText("");
 						if(this.arrAutocompleteFilter.length ==1){
 							var arrBY = this.$.barnyards.getFilter();
-							for (i in arrBY){
+							for (var i=0;i<arrBY.length;i++){
 								if(arrBY[i].value == this.arrAutocompleteFilter[0].reception_id){
 									this.actualAutocompleteFilter.reception_id =true;
 									this.$.barnyards.value=arrBY[i].value;
@@ -663,13 +663,13 @@ enyo
 				var arrResult = [];
 				if (rancher_id > -1){
 					if(arrAfected.length > 0){
-						for (i in arrAfected){
+						for(var i =0;i<arrAfected.length;i++){
 							if (arrAfected[i].rancher_id == rancher_id){
 								arrResult.push(arrAfected[i]);
 							}
 						}
 					}else{
-						for (i in this.arrActiveReceptions){
+						for (var i=0;i<this.arrActiveReceptions.length;i++){
 							if (this.arrActiveReceptions[i].rancher_id == rancher_id){
 								arrResult.push(this.arrActiveReceptions[i]);
 							}
@@ -682,13 +682,13 @@ enyo
 				var arrResult = [];
 				if (parseInt(zone_id) > -1){
 					if(arrAfected.length > 0){
-						for (i in arrAfected){
+						for(var i =0;i<arrAfected.length;i++){
 							if (parseInt(arrAfected[i].zone_id) == parseInt(zone_id)){
 								arrResult.push(arrAfected[i]);
 							}
 						}
 					}else{
-						for (i in this.arrActiveReceptions){
+						for (var i=0;i<this.arrActiveReceptions.length;i++){
 							if (parseInt(this.arrActiveReceptions[i].zone_id) == parseInt(zone_id)){
 								arrResult.push(this.arrActiveReceptions[i]);
 							}
@@ -701,13 +701,13 @@ enyo
 				var arrResult = [];
 				if (location_id > -1){
 					if(arrAfected.length > 0){
-						for (i in arrAfected){
+						for(var i =0;i<arrAfected.length;i++){
 							if (arrAfected[i].location_id == location_id){
 								arrResult.push(arrAfected[i]);
 							}
 						}
 					}else{
-						for (i in this.arrActiveReceptions){
+						for (var i=0;i<this.arrActiveReceptions.length;i++){
 							if (this.arrActiveReceptions[i].location_id == location_id){
 								arrResult.push(this.arrActiveReceptions[i]);
 							}
@@ -720,13 +720,13 @@ enyo
 				var arrResult = [];
 				if (cattype_id > -1){
 					if(arrAfected.length > 0){
-						for (i in arrAfected){
+						for(var i =0;i<arrAfected.length;i++){
 							if (arrAfected[i].cattype_id == cattype_id){
 								arrResult.push(arrAfected[i]);
 							}
 						}
 					}else{
-						for (i in this.arrActiveReceptions){
+						for (var i=0;i<this.arrActiveReceptions.length;i++){
 							if (this.arrActiveReceptions[i].cattype_id == cattype_id){
 								arrResult.push(this.arrActiveReceptions[i]);
 							}
@@ -739,13 +739,13 @@ enyo
 				var arrResult = [];
 				if (reception_id > -1){
 					if(arrAfected.length > 0){
-						for (i in arrAfected){
+						for(var i =0;i<arrAfected.length;i++){
 							if (arrAfected[i].reception_id == reception_id){
 								arrResult.push(arrAfected[i]);
 							}
 						}
 					}else{
-						for (i in this.arrActiveReceptions){
+						for (var i=0;i<this.arrActiveReceptions.length;i++){
 							if (this.arrActiveReceptions[i].reception_id == reception_id){
 								arrResult.push(this.arrActiveReceptions[i]);
 							}
@@ -765,7 +765,7 @@ enyo
 				var arrResult = [];
 				var result = [];
 				if(this.arrFilter.length>0){
-					for (i in this.arrFilter){
+					for (var i=0;i<this.arrFilter.length;i++){
 						var obj = {
 								value:		this.arrFilter[i].rancher_id,
 								caption:	this.arrFilter[i].rancher_name
@@ -776,7 +776,7 @@ enyo
 					}
 				}
 					
-				for(i in arrResult){
+				for(var i=0;i<arrResult.length;i++){
 					result.push(arrResult[i]);
 				}
 
@@ -786,7 +786,7 @@ enyo
 				var arrResult = [];
 				var result = [];
 				if(this.arrFilter.length>0){
-					for (i in this.arrFilter){
+					for (var i= 0;i<this.arrFilter.length;i++){
 						var obj = {
 								value:		this.arrFilter[i].zone_id,
 								caption:	""
@@ -798,7 +798,7 @@ enyo
 						}
 					}
 				}
-				for(i in arrResult){
+				for(var i=0;i<arrResult.length;i++){
 					result.push(arrResult[i]);
 				}
 				this.$.zone.setFilter(result);
@@ -807,7 +807,7 @@ enyo
 				var arrResult = [];
 				var result = [];
 				if(this.arrFilter.length>0){
-					for (i in this.arrFilter){
+					for (var i= 0;i<this.arrFilter.length;i++){
 						var obj = {
 								value:		this.arrFilter[i].location_id,
 								caption:	this.arrFilter[i].location_name
@@ -817,7 +817,7 @@ enyo
 						}
 					}
 				}
-				for(i in arrResult){
+				for(var i=0;i<arrResult.length;i++){
 					result.push(arrResult[i]);
 				}
 				this.$.origin.setFilter(result);
@@ -826,7 +826,7 @@ enyo
 				var arrResult = [];
 				var result = [];
 				if(this.arrFilter.length>0){
-					for (i in this.arrFilter){
+					for (var i =0;i<this.arrFilter.length;i++){
 						var obj = {
 								value:		this.arrFilter[i].cattype_id,
 								caption:	this.arrFilter[i].cattype_name
@@ -836,7 +836,7 @@ enyo
 						}
 					}
 				}
-				for(i in arrResult){
+				for(var i=0;i<arrResult.length;i++){
 					result.push(arrResult[i]);
 				}
 				this.$.cattle_type.setFilter(result);
@@ -845,9 +845,9 @@ enyo
 				var arrResult = [];
 				var result = [];
 				if(this.arrActiveReceptions.length>0){
-					for (i in this.arrActiveReceptions){
+					for (var i =0;i<this.arrActiveReceptions.length;i++){
 						var auxCaption = "";
-						for(j in this.arrActiveReceptions[i].barnyards){
+						for(var j = 0; j<this.arrActiveReceptions[i].barnyards.length;j++){
 							if (parseInt(this.arrActiveReceptions[i].barnyards[j].substring(1,0)) == parseInt(this.defaultZone)){
 								auxCaption += this.arrActiveReceptions[i].barnyards[j].substring(1) + ", ";	
 							}
@@ -866,14 +866,14 @@ enyo
 						}
 					}
 				}
-				for(i in arrResult){
+				for(var i=0;i<arrResult.length;i++){
 					result.push(arrResult[i]);
 				}
 				this.$.barnyards.setFilter(result);
 			},
 			addRancherSelected:function(rancher_id){
 				if (rancher_id > -1){
-					for (i in this.arrReceptions){
+					for (var i = 0; i<this.arrReceptions.length;i++){
 						if (this.arrReceptions[i].rancher_id == rancher_id){
 							return;
 						}
@@ -902,7 +902,7 @@ enyo
 					this.$.zone.setIndex(objFore.zone_id);
 					if (objFore.barnyards.length > 0) {
 						var strBarnyards = "";
-						for (i in objFore.barnyards) {
+						for (var i = 0;i<objFore.barnyards.length;i++) {
 							strBarnyards = strBarnyards
 									+ objFore.barnyards[i].barnyard_code + ", ";
 
@@ -962,7 +962,7 @@ enyo
 					
 					if (objFore.barnyards.length > 0) {
 						var strBarnyards = "";
-						for (i in objFore.barnyards) {
+						for (var i = 0;i<objFore.barnyards.length;i++) {
 							strBarnyards += objFore.barnyards[i].barnyard_code + ", ";
 						}
 						strBarnyards = strBarnyards.slice(0, -2);
@@ -1034,7 +1034,7 @@ enyo
 				objInspFore.quantity = this.$.cantidad.getValue();
 
 				var barnyardsAux = this.$.barnyards.getText().split(",");
-				for (i in barnyardsAux) {
+				for (var i=0; i<barnyardsAux.length;i++) {
 					barnyardsAux[i] = barnyardsAux[i].replace(" ", "");
 					barnyardsAux[i] = this.$.zone.getIndex()
 							+ barnyardsAux[i].toUpperCase();
@@ -1107,7 +1107,7 @@ enyo
 					// Send communication to customers				
 					var customers_set = [];
 					if(this.objList.length>0){
-						for (i in this.objList){
+						for (var i = 0;i<this.objList.length;i++){
 							if(!(customers_set[this.objList[i].rancher_id] in customers_set)){
 								customers_set[this.objList[i].rancher_id]=this.objList[i].rancher_id;
 								var report_name = 'ListaInspeccion?rancherId='

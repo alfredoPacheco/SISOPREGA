@@ -2,6 +2,7 @@ enyo.kind(
   {
     name : "hermana.corte.list",
     kind : "VFlexBox",
+    cortes : [],
     components :
       [
         {
@@ -45,14 +46,14 @@ enyo.kind(
             [
               {
                 kind : enyo.VirtualRepeater,
-                name : "forecastList",
-                onSetupRow : "setupForecastRow",
-                onclick : "selectForecast",
+                name : "corteList",
+                onSetupRow : "setupCorteRow",
+                onclick : "selectCorte",
                 components :
                   [
                     {
                       kind : enyo.RowItem,
-                      onConfirm : "dropForecast",
+                      onConfirm : "dropCorte",
                       layoutKind : enyo.HFlexLayout,
                       tapHighlight : true,
                       style : "font-size:13px;",
@@ -111,5 +112,28 @@ enyo.kind(
               }
 
             ]
-        }, ]
+        }, ],
+        addCorte : function(corteObj){
+          cacheCorte.add(corteObj);
+          this.loadCortes();
+        },
+        loadCortes : function(){
+          this.cortes = cacheCorte.get();
+          this.$.corteList.render();
+        },
+        setupCorteRow : function(inSender, inIndex){
+          var objCorte = this.cortes[inIndex];
+          if(objCorte){
+            this.$.listCorral.setContent(objCorte.pen_name);
+            this.$.listClase.setContent(objCorte.cattleClassName);
+            this.$.listCabezas.setContent(utils.formatNumberThousands(objCorte.heads));
+            this.$.listPeso.setContent(utils.formatNumberThousands(objCorte.weight));
+            
+            var avgWeight = Math.floor(objCorte.weight / objCorte.heads*100)/100;
+            this.$.listPromedio.setContent(utils.formatNumberThousands(avgWeight));
+            
+            return true;
+          }
+          return false;
+        }
   });

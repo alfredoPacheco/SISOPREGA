@@ -153,7 +153,7 @@ enyo.kind({
 		
 		if (this._objRec){
 			totalHeads = parseInt(this._objRec.hc_aprox);
-			for (i in this._objRec.inspections){
+			for (var i = 0;i<this._objRec.inspections.length;i++){
 				if (this._objRec.inspections[i]){					
 					totalRejected = totalRejected + parseInt(this._objRec.inspections[i].rejected_count);					
 				}	

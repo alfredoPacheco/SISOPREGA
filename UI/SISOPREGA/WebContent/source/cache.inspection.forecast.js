@@ -12,7 +12,7 @@ enyo.kind({
 //ForecastHead::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 			var arrForecasts = this.getForecast();
 			
-			for (var a in arrForecasts){
+			for (var a = 0;a<arrForecasts.length;a++){
 				
 				var objInsFore={
 						id:					undefined,
@@ -33,7 +33,7 @@ enyo.kind({
 //ForecastDetails:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::				
 				var arrForeDetailAux = this.getForecastDetails(objInsFore.id);
 				
-				for (i in arrForeDetailAux){
+				for (var i = 0; i< arrForeDetailAux.length;i++){
 					objInsFore.fore_details_id=		arrForeDetailAux[i].fore_details_id;
 					objInsFore.rancher_id=			arrForeDetailAux[i].rancher_id;
 					objInsFore.zone_id=				arrForeDetailAux[i].zone_id;
@@ -63,7 +63,7 @@ enyo.kind({
 			var cgReadAll = consumingGateway.Read("InspectionForecast", {});
 			
 			if (cgReadAll.exceptionId == 0){ //Read successfully
-				for (item in cgReadAll.records){
+				for (var item = 0;item<cgReadAll.records.length;item++){
 					arrAux.push(this.adaptForecastFromResponse(cgReadAll.records[item]));
 				}
 			}else{ //Error
@@ -83,7 +83,7 @@ enyo.kind({
 		var cgReadAll = consumingGateway.Read("InspectionForecastDetail", objToSend);
 		
 		if (cgReadAll.exceptionId == 0){ //Read successfully
-			for (item in cgReadAll.records){
+			for(var item=0; item<cgReadAll.records.length;item++) {
 				arrAux.push(this.adaptFDetailsFromResponse(cgReadAll.records[item]));
 			}
 		}else{ //Error
@@ -103,7 +103,7 @@ enyo.kind({
 			var cgReadAll = consumingGateway.Read("InspectionForecastBarnyard", objToSend);
 			
 			if (cgReadAll.exceptionId == 0){ //Read successfully
-				for (item in cgReadAll.records){
+				for(var item=0; item<cgReadAll.records.length;item++) {
 					arrAux.push(cacheBY.getByID(cgReadAll.records[item].barnyardId));					
 				}		    	
 			}
@@ -179,7 +179,7 @@ enyo.kind({
 		var svcOp = consumingGateway.Update("InspectionForecastDetail", objToSend);
 		if (svcOp.exceptionId == 0) {				
 			if (this.updateForecastBarnyards(oFDetail)==true){
-				for (i in this.arrForecast){
+				for (var i=0; i<this.arrForecast.length;i++){
 					if(this.arrForecast[i].fore_details_id == oFDetail.fore_details_id){
 						this.arrForecast[i] = oFDetail;
 						if(cbMethod){
@@ -218,7 +218,7 @@ enyo.kind({
 	saveForecastBarnyard : function(objForecast) {
 		var objToSend = {};
 		objToSend.fdId = objForecast.fore_details_id;		
-		for (i in objForecast.barnyards){
+		for (var i=0;i<objForecast.barnyards.length;i++){
 			objToSend.barnyardId = objForecast.barnyards[i].barnyard_id;	
 			var cgCreate = consumingGateway.Create("InspectionForecastBarnyard", objToSend);
 //			objForecast.barnyards.ifbId = cgCreate.generatedId;

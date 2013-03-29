@@ -1,5 +1,5 @@
 enyo.kind({
-	name : "reports.main",
+	name : "reports.us.main",
 	kind : enyo.VFlexBox,
 	reportName : "",
 	components : [ {
