@@ -44,8 +44,9 @@ enyo
 						// (3).jpg');background-repeat:repeat;margin-top: 5px;",
 						components : [ {
 							kind : enyo.VirtualRepeater,
-							name : "weightsList",
+							name : "list",
 							onSetupRow : "setupRow",
+							onmousedown:"list_mouseDown",
 							components : [ {
 								kind : enyo.Item,
 								layoutKind : enyo.HFlexLayout,
@@ -75,8 +76,8 @@ enyo
 											style : "width:80px;margin-right:15px;"
 										}, {
 											name : "detail_selection",
-											
 											kind : enyo.CheckBox,
+											onclick:"checkBox_click"
 										}, ]
 							} ]
 						} ]
@@ -159,11 +160,11 @@ enyo
 					this.$.detail_client
 							.setContent("Cliente " + inIndex + 1);
 					this.$.detail_hc
-							.setContent("12 " + inIndex + 1);
+							.setContent("12");
 					this.$.detail_class
 							.setContent("Clase  " + inIndex + 1);
 					this.$.detail_weight
-							.setContent("321.1 " + inIndex + 1);
+							.setContent("321.1");
 					return true;
 				}
 
@@ -180,27 +181,27 @@ enyo
 				// this.updateList();
 			},
 			updateList : function() {
-				this.$.weightsList.render();
-			},
-			updateWeight : function(inSender, inEvent) {
-				var objReception = cacheReceptions
-						.getByID(this.arrReceptions[inEvent.rowIndex].reception_id);
-				cacheReceptions.updateRejectsWeight(objReception, this.$.weight
-						.getValue(), this, "afterUpdate");
-			},
-			weight_changed : function(inSender, inEvent) {
-				if (parseFloat(this.arrReceptions[inEvent.rowIndex].weight_rejected) == parseFloat(this.$.weight
-						.getValue())) {
-					this.$.btnSave.hide();
-				} else {
-					this.$.btnSave.show();
-				}
-
-			},
+				this.$.list.render();
+			},			
 			applyMask : function(inSender) {
 				var _id = inSender.$.input.getId();
 				jQuery(function(j) {
 					j(document.getElementById(_id)).mask('99/99/9999');
 				});
+			},
+			checkBox_click:function(inSender, inEvent){
+				var hc = parseFloat(inSender.parent.children[1].getContent());
+				var weight = parseFloat(inSender.parent.children[3].getContent());
+				if(inSender.checked){
+					this.$.totalHC.setContent(parseFloat(this.$.totalHC.getContent())+hc);
+					this.$.totalWeight.setContent(parseFloat(this.$.totalWeight.getContent())+weight);
+				}else{
+					this.$.totalHC.setContent(parseFloat(this.$.totalHC.getContent())-hc);
+					this.$.totalWeight.setContent(parseFloat(this.$.totalWeight.getContent())-weight);
+				}
+				
+			},
+			list_mouseDown:function(inSender){
+//				console.debug(inSender);
 			}
 		});
