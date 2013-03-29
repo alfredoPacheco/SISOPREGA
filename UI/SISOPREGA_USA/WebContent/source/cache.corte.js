@@ -8,6 +8,9 @@ enyo.kind(
     get : function(){
       return this.cortes;
     },
+    remove : function(index){
+      this.cortes.splice(index, 1);
+    },
     clear : function(){
       this.cortes = [];
     }

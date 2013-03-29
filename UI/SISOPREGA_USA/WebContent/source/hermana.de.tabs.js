@@ -99,6 +99,7 @@ enyo.kind(
               {
                 kind : "hermana.corte.list",
                 name : "listaCorte",
+                onRemoveCorte : "corteRemoved",
                 style : "border: thin dotted black; height:250px;"
               } ]
         },
@@ -317,8 +318,8 @@ enyo.kind(
       total_data.push(total_deltaRow);
 
       var total_pctRow = [];
-      total_pctRow.push(this.summary.delta_pct);
-      total_data.push(total_pctRow + '%');
+      total_pctRow.push(this.summary.delta_pct + ' %');
+      total_data.push(total_pctRow);
 
       this.$.summaryTotal.setData(total_data);
 
@@ -360,5 +361,23 @@ enyo.kind(
       this.$.headCount.setValue('');
       this.$.weight.setValue('');
       this.$.penAutoComplete.$.textField.forceFocus();
+    },
+    corteRemoved : function(){
+      this.clearCorteSummary();
+      var cortes = cacheCorte.get();
+      for(var i = 0; i < cortes.length; i++){
+        this.calculateSummaryFromCorte(cortes[i]);
+      }
+    },
+    clearCorteSummary : function(){
+      this.summary.net_hc = 0;
+      this.summary.net_lbs = 0.0;
+      this.summary.net_kgs = 0.0;
+      this.summary.net_avg = 0.0;
+
+      this.summary.delta = this.summary.net_lbs - this.summary.trade_lbs;
+      this.summary.delta_pct = Math.floor((this.summary.delta / this.summary.trade_lbs) * 100);
+
+      this.updateTableContents();
     }
   });

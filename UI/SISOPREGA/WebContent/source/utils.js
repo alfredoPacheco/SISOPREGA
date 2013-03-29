@@ -13,7 +13,11 @@ enyo.kind(
       while (regEx.test(cardinal)) {
         cardinal = cardinal.replace(regEx, '$1' + ',' + '$2');
       }
-      return cardinal + ordinal;
+      
+      var fixedOrdinal = ordinal.length > 3 ? ordinal.substr(0,3) : ordinal;
+      var result = cardinal + fixedOrdinal;
+      
+      return result;
     },
     utcToNormalDate : function(strUTC) {
       var dateFmt = "";

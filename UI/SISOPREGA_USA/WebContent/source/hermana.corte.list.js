@@ -2,6 +2,7 @@ enyo.kind(
   {
     name : "hermana.corte.list",
     kind : "VFlexBox",
+    events : {onRemoveCorte:""},
     cortes : [],
     components :
       [
@@ -31,8 +32,7 @@ enyo.kind(
               {
                 content : "Promedio",
                 style : "width:150px;text-align:center;"
-              }
-            ]
+              } ]
         },
         {
           kind : enyo.Scroller,
@@ -40,7 +40,6 @@ enyo.kind(
           horizontal : false,
           autoHorizontal : false,
           flex : 1,
-          //className : "listBG",
           onScroll : "scroll",
           components :
             [
@@ -52,7 +51,7 @@ enyo.kind(
                 components :
                   [
                     {
-                      kind : enyo.RowItem,
+                      kind : enyo.SwipeableItem,
                       onConfirm : "dropCorte",
                       layoutKind : enyo.HFlexLayout,
                       tapHighlight : true,
@@ -83,7 +82,7 @@ enyo.kind(
                             name : "listPromedio",
                             style : "width:150px;text-align:center;",
                             content : ""
-                          }]
+                          } ]
                     } ]
               } ]
         },
@@ -113,27 +112,33 @@ enyo.kind(
 
             ]
         }, ],
-        addCorte : function(corteObj){
-          cacheCorte.add(corteObj);
-          this.loadCortes();
-        },
-        loadCortes : function(){
-          this.cortes = cacheCorte.get();
-          this.$.corteList.render();
-        },
-        setupCorteRow : function(inSender, inIndex){
-          var objCorte = this.cortes[inIndex];
-          if(objCorte){
-            this.$.listCorral.setContent(objCorte.pen_name);
-            this.$.listClase.setContent(objCorte.cattleClassName);
-            this.$.listCabezas.setContent(utils.formatNumberThousands(objCorte.heads));
-            this.$.listPeso.setContent(utils.formatNumberThousands(objCorte.weight));
-            
-            var avgWeight = Math.floor(objCorte.weight / objCorte.heads*100)/100;
-            this.$.listPromedio.setContent(utils.formatNumberThousands(avgWeight));
-            
-            return true;
-          }
-          return false;
-        }
+    addCorte : function(corteObj) {
+      cacheCorte.add(corteObj);
+      this.loadCortes();
+    },
+    loadCortes : function() {
+      this.cortes = cacheCorte.get();
+      this.$.corteList.render();
+    },
+    setupCorteRow : function(inSender, inIndex) {
+      var objCorte = this.cortes[inIndex];
+      if (objCorte) {
+        this.$.listCorral.setContent(objCorte.pen_name);
+        this.$.listClase.setContent(objCorte.cattleClassName);
+        this.$.listCabezas.setContent(utils.formatNumberThousands(objCorte.heads));
+        this.$.listPeso.setContent(utils.formatNumberThousands(objCorte.weight));
+
+        var avgWeight = Math.floor(objCorte.weight / objCorte.heads * 100) / 100;
+        this.$.listPromedio.setContent(utils.formatNumberThousands(avgWeight));
+
+        return true;
+      }
+      return false;
+    },
+    dropCorte : function(inSender, inIndex) {
+      //cacheReceptions.del(this.cortes[inIndex], this, "loadCortes");
+      cacheCorte.remove(inIndex);
+      this.loadCortes();
+      this.doRemoveCorte();
+    },
   });
