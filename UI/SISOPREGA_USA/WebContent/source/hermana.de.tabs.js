@@ -2,8 +2,13 @@ enyo.kind(
   {
     name : "hermana.de.tabs",
     kind : "VFlexBox",
+    events :
+      {
+        onAddClass : ""
+      },
     summary : null,
     releaseIds : [],
+    cattleClassName : "",
     components :
       [
         {
@@ -49,7 +54,7 @@ enyo.kind(
                   [
                     {
                       kind : "controls.autocomplete",
-                      name : "penAutocomplete",
+                      name : "penAutoComplete",
                       hint : "corral",
                       flex : 1,
                       contentPack : "end",
@@ -66,26 +71,34 @@ enyo.kind(
                     {
                       kind : enyo.IconButton,
                       icon : "../SISOPREGA/images/menu-icon-new.png",
-                      onclick : "addClass"
+                      onclick : "doAddClass"
                     },
                     {
                       kind : "Input",
+                      name : "headCount",
                       style : "width:20%",
                       hint : "Cabezas"
                     },
                     {
                       kind : "Input",
+                      name : "weight",
                       style : "width:20%",
                       hint : "Peso"
                     },
                     {
                       kind : enyo.IconButton,
                       icon : "../SISOPREGA/images/menu-icon-new.png",
-                      onclick : "contextMenuClicked"
+                      onclick : "agregarCorte"
                     } ]
               },
               {
+                kind : "HFlexBox",
+                name : "detailDescription",
+                style : "font-size:small;color:#99CC99;"
+              },
+              {
                 kind : "hermana.corte.list",
+                name : "listaCorte",
                 style : "border: thin dotted black; height:250px;"
               } ]
         },
@@ -205,7 +218,7 @@ enyo.kind(
                     },
                     {
                       kind : "maklesoft.DataTable",
-                      name : "summary-total",
+                      name : "summaryTotal",
                       rowCount : 2,
                       colCount : 2,
                       selectionMode : maklesoft.DataTable.SelectionMode.NONE,
@@ -228,7 +241,7 @@ enyo.kind(
               } ]
         } ],
     ready : function() {
-      this.$.penAutocomplete.setItems(cachePen.getList());
+      this.$.penAutoComplete.setItems(cachePen.getList());
       this.$.classAutoComplete.setItems(cacheClasses.getList());
     },
     showCorte : function() {
@@ -255,8 +268,9 @@ enyo.kind(
       this.$.tabGastos.setShowing(false);
       this.$.tabSummary.setShowing(true);
     },
-    setCattleClass : function(cattleClass){
+    setCattleClass : function(cattleClass, cattleClassName) {
       this.$.classAutoComplete.setItems(cacheClasses.getList(cattleClass));
+      this.cattleClassName = cattleClassName;
     },
     setSummary : function(summaryObj) {
       this.summary = summaryObj;
@@ -268,30 +282,30 @@ enyo.kind(
       var data = [];
 
       var mx_dataRow = [];
-      mx_dataRow.push(this.summary.hc);
-      mx_dataRow.push(this.summary.kg);
-      mx_dataRow.push(this.summary.lbs);
-      mx_dataRow.push(this.summary.avg);
+      mx_dataRow.push(utils.formatNumberThousands(this.summary.hc));
+      mx_dataRow.push(utils.formatNumberThousands(this.summary.kg));
+      mx_dataRow.push(utils.formatNumberThousands(this.summary.lbs));
+      mx_dataRow.push(utils.formatNumberThousands(this.summary.avg));
       data.push(mx_dataRow);
 
       var rejects_dataRow = [];
-      rejects_dataRow.push(this.summary.rejects_hc);
-      rejects_dataRow.push(this.summary.rejects_kgs);
-      rejects_dataRow.push(this.summary.rejects_lbs);
+      rejects_dataRow.push(utils.formatNumberThousands(this.summary.rejects_hc));
+      rejects_dataRow.push(utils.formatNumberThousands(this.summary.rejects_kgs));
+      rejects_dataRow.push(utils.formatNumberThousands(this.summary.rejects_lbs));
       data.push(rejects_dataRow);
 
       var trade_dataRow = [];
-      trade_dataRow.push(this.summary.trade_hc);
-      trade_dataRow.push(this.summary.trade_kgs);
-      trade_dataRow.push(this.summary.trade_lbs);
-      trade_dataRow.push(this.summary.trade_avg);
+      trade_dataRow.push(utils.formatNumberThousands(this.summary.trade_hc));
+      trade_dataRow.push(utils.formatNumberThousands(this.summary.trade_kgs));
+      trade_dataRow.push(utils.formatNumberThousands(this.summary.trade_lbs));
+      trade_dataRow.push(utils.formatNumberThousands(this.summary.trade_avg));
       data.push(trade_dataRow);
 
       var net_dataRow = [];
-      net_dataRow.push(this.summary.net_hc);
-      net_dataRow.push(this.summary.net_kgs);
-      net_dataRow.push(this.summary.net_lbs);
-      net_dataRow.push(this.summary.net_avg);
+      net_dataRow.push(utils.formatNumberThousands(this.summary.net_hc));
+      net_dataRow.push(utils.formatNumberThousands(this.summary.net_kgs));
+      net_dataRow.push(utils.formatNumberThousands(this.summary.net_lbs));
+      net_dataRow.push(utils.formatNumberThousands(this.summary.net_avg));
       data.push(net_dataRow);
 
       this.$.summary.setData(data);
@@ -299,12 +313,52 @@ enyo.kind(
       var total_data = [];
 
       var total_deltaRow = [];
-      total_deltaRow.push(this.summary.delta);
+      total_deltaRow.push(utils.formatNumberThousands(this.summary.delta));
       total_data.push(total_deltaRow);
 
       var total_pctRow = [];
       total_pctRow.push(this.summary.delta_pct);
-      total_data.push(total_pctRow);
+      total_data.push(total_pctRow + '%');
 
+      this.$.summaryTotal.setData(total_data);
+
+      var corteDelta = this.summary.trade_hc - this.summary.net_hc;
+      var detailDescription = "Cortando " + utils.formatNumberThousands(this.summary.trade_hc) + " " + this.cattleClassName + ", "
+          + utils.formatNumberThousands(corteDelta) + " por cortar";
+
+      this.$.detailDescription.setContent(detailDescription);
+    },
+    agregarCorte : function() {
+      var cutRecord =
+        {
+          pen_id : this.$.penAutoComplete.getIndex(),
+          pen_name : this.$.penAutoComplete.getValue(),
+          cattleClassId : this.$.classAutoComplete.getIndex(),
+          cattleClassName : this.$.classAutoComplete.getValue(),
+          heads : this.$.headCount.getValue(),
+          weight : this.$.weight.getValue()
+        };
+
+      this.$.listaCorte.addCorte(cutRecord);
+      this.clearCorteDataEntry();
+      this.calculateSummaryFromCorte(cutRecord);
+    },
+    calculateSummaryFromCorte : function(cutRecord){
+      this.summary.net_hc += Number(cutRecord.heads);
+      this.summary.net_lbs += Number(cutRecord.weight);
+      this.summary.net_kgs += Math.floor(cutRecord.weight * 45.3592) / 100;
+      this.summary.net_avg = this.summary.net_hc == 0 ? 0 : Math.floor(this.summary.net_lbs / this.summary.net_hc * 100) / 100;
+
+      this.summary.delta = this.summary.net_lbs - this.summary.trade_lbs;
+      this.summary.delta_pct = Math.floor((this.summary.delta / this.summary.trade_lbs) * 100);
+
+      this.updateTableContents();
+    },
+    clearCorteDataEntry : function(){
+      this.$.penAutoComplete.clear();
+      this.$.classAutoComplete.clear();
+      this.$.headCount.setValue('');
+      this.$.weight.setValue('');
+      this.$.penAutoComplete.$.textField.forceFocus();
     }
   });

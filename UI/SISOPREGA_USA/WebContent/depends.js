@@ -12,6 +12,7 @@ enyo.depends(
   "source/login.js",
   "source/cache.js",
   "source/cache.cattle.quality.js",
+  "source/cache.corte.js",
   "source/cache.pen.js",
   "source/cache.releases.js",
   "source/us.gateway.ws.js",
@@ -34,5 +35,6 @@ enyo.depends(
   "source/catalogs.drivers.list.js",
   "source/catalogs.drivers.create.js",
   "source/cache.drivers.js",
-  "source/catalogs.drivers.contacts.js"  
+  "source/catalogs.drivers.contacts.js",
+  "source/catalogs.cattle.js"
 );

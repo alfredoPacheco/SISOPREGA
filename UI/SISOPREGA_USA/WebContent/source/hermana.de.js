@@ -1,8 +1,9 @@
 enyo.kind(
   {
     name : "hermana.de",
-    kind: enyo.SlidingView,
-    layoutKind: enyo.VFlexLayout,
+    kind : enyo.SlidingView,
+    layoutKind : enyo.VFlexLayout,
+    selectedCattleId : 0,
     events :
       {
         "onSave" : "",
@@ -119,7 +120,8 @@ enyo.kind(
                     },
                     {
                       kind : "hermana.de.tabs",
-                      name : "details"
+                      name : "details",
+                      onAddClass : "showAddClass"
                     } ]
               } ]
         } ],
@@ -135,6 +137,9 @@ enyo.kind(
     cleanPopUpContents : function() {
       if (this.$.releasesList) {
         this.$.releasesList.destroy();
+      }
+      if (this.$.cattleClass) {
+        this.$.cattleClass.destroy();
       }
     },
     validateSelectedRancher : function() {
@@ -179,6 +184,37 @@ enyo.kind(
       }
 
     },
+    showAddClass : function() {
+      this.cleanPopUpContents();
+      this.$.popMan.createComponent(
+        {
+          kind : "catalogs.cattle",
+          name : 'cattleClass',
+          onCancel : "cancelCattle",
+          onAdd : "addCattle",
+          flex : 1
+        },
+        {
+          owner : this
+        });
+
+      this.$.cattleClass.toggleAdd();
+
+      this.$.popMan.render();
+      this.$.popMan.openAtCenter();
+    },
+    cancelCattle : function() {
+      this.closePopUp();
+    },
+    addCattle : function() {
+      
+      if(this.selectedCattleId!=0)
+        this.$.details.setCattleClass(this.selectedCattleId);
+      else
+        this.$.details.setCattleClass();
+      
+      this.closePopUp();
+    },
     cancelReleaseSelection : function() {
       this.closePopUp();
       this.$.rancher_id.$.textField.forceFocus();
@@ -188,46 +224,50 @@ enyo.kind(
         {
           hc : 0,
           kg : 0.0,
-          lbs: 0.0,
+          lbs : 0.0,
           avg : 0.0,
-          rejects_hc: 0,
-          rejects_kgs: 0.0,
-          rejects_lbs: 0.0,
-          trade_hc:0,
-          trade_kgs:0.0,
-          trade_lbs:0.0,
-          trade_avg:0.0,
-          net_hc:0,
-          net_kgs:0.0,
-          net_lbs:0.0,
-          net_avg:0.0,
-          delta:0.0,
-          delta_pct:0.0
+          rejects_hc : 0,
+          rejects_kgs : 0.0,
+          rejects_lbs : 0.0,
+          trade_hc : 0,
+          trade_kgs : 0.0,
+          trade_lbs : 0.0,
+          trade_avg : 0.0,
+          net_hc : 0,
+          net_kgs : 0.0,
+          net_lbs : 0.0,
+          net_avg : 0.0,
+          delta : 0.0,
+          delta_pct : 0.0
         };
-      
+
       var releaseObj = null;
-      
-      for (var selectionIndex=0; selectionIndex < this.$.releasesList.selectedIds.length; selectionIndex++) {
+
+      for ( var selectionIndex = 0; selectionIndex < this.$.releasesList.selectedIds.length; selectionIndex++) {
         var selectedId = this.$.releasesList.selectedIds[selectionIndex];
         releaseObj = releasesCache.getReleaseById(selectedId);
-        
+
         summary.hc += releaseObj.heads;
         summary.kg += releaseObj.weight;
         summary.rejects_hc += releaseObj.rejects;
         summary.rejects_kgs += releaseObj.rejectsWeight;
       }
-      
-      if(releaseObj!=null)
-        this.$.details.setCattleClass(releaseObj.cattleType);
-      
-      summary.lbs = Math.floor((summary.kg * 2.2046)*100)/100;
-      summary.avg = Math.floor((summary.lbs / summary.hc) * 100)/100;
-      summary.rejects_lbs = Math.floor((summary.rejects_kgs * 2.2046)*100)/100;
-      
+
+      if (releaseObj != null) {
+        this.selectedCattleId = releaseObj.cattleType;
+        this.$.details.setCattleClass(releaseObj.cattleType, releaseObj.cattleName);
+      } else {
+        this.selectedCattleId = 0;
+      }
+
+      summary.lbs = Math.floor((summary.kg * 2.2046) * 100) / 100;
+      summary.avg = Math.floor((summary.lbs / summary.hc) * 100) / 100;
+      summary.rejects_lbs = Math.floor((summary.rejects_kgs * 2.2046) * 100) / 100;
+
       summary.trade_hc = summary.hc - summary.rejects_hc;
       summary.trade_kgs = summary.kg - summary.rejects_kgs;
-      summary.trade_lbs = Math.floor((summary.trade_kgs * 2.2046)*100)/100;
-      summary.trade_avg = Math.floor((summary.trade_lbs / summary.trade_hc) * 100)/100;
+      summary.trade_lbs = Math.floor((summary.trade_kgs * 2.2046) * 100) / 100;
+      summary.trade_avg = Math.floor((summary.trade_lbs / summary.trade_hc) * 100) / 100;
 
       this.$.details.setReleaseIds(this.$.releasesList.selectedIds);
       this.$.details.setSummary(summary);
@@ -236,6 +276,7 @@ enyo.kind(
     },
     closePopUp : function() {
       this.$.popMan.close();
+      this.cleanPopUpContents();
     },
     emularTabulacionConEnter : function(inSender) {
       switch (inSender.name) {
