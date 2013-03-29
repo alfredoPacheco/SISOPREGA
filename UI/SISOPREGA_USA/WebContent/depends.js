@@ -24,6 +24,7 @@ enyo.depends(
   "source/sisoprega.us.js",
   "source/login.js",
   "source/cache.cattle.quality.js",
+  "source/cache.corte.js",
   "source/cache.pen.js",
   "source/cache.releases.js",
   "source/us.gateway.ws.js",
@@ -48,6 +49,7 @@ enyo.depends(
   "source/catalogs.drivers.create.js",
   "source/cache.drivers.js",
   "source/catalogs.drivers.contacts.js",
+  "source/catalogs.cattle.js",
   "source/admin.inventory.js",
   "source/admin.purchased.js",
   "source/admin.sales.js",    
@@ -60,5 +62,4 @@ enyo.depends(
   "source/addCattle.js",
   "source/purchases.js",
   "source/reports.us.select.js"
-  
 );
