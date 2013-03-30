@@ -63,5 +63,6 @@ enyo.depends(
   "source/driver.select.js",
   "source/addCattle.js",
   "source/purchases.js",
-  "source/reports.us.select.js"
+  "source/reports.us.select.js",
+  "source/utils.format.js"
 );
