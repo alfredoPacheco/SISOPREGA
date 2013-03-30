@@ -1,239 +1,167 @@
-enyo
-	.kind({
-	    name : "admin.inventory",
-	    kind : "VFlexBox",
-	    className : "enyo-bg",
-	    events : {
-		onSelect : ""
-	    },
-	    components : [
-		    {
-			kind : enyo.Popup,
-			name : "popup_sales",
-			width : "85%;",
-			height : "85%;",
-			dismissWithClick : true,
-			// showHideMode : "transition",
-			// openClassName : "zoomFadeIn",
-			// className : "transitioner2",
-			layoutKind : "VFlexLayout",
-			style : "overflow: hidden;border-width: 8px;",
-			scrim : true,
-			components : [ {
-			    kind : "sales",
-			    name : "sales_kind",
-			    flex : 1
-			} ]
-		    },
-		    {
-			kind : enyo.Popup,
-			name : "popup_map",
-			width : "85%;",
-			height : "85%;",
-			dismissWithClick : true,
-			// showHideMode : "transition",
-			// openClassName : "zoomFadeIn",
-			// className : "transitioner2",
-			layoutKind : "VFlexLayout",
-			style : "overflow: hidden;border-width: 8px;",
-			scrim : true,
-			components : [ {
-			    kind : "pen.map",
-			    name : "map_kind",
-			    flex : 1
-			} ]
-		    },
-		    {
-			kind : "Toolbar",
-			components : [ {
-			    kind : "VFlexBox",
-			    content : "Inventario",
-			    flex : .17,
-			    onclick : "doSelect",
-			    style : "padding:0px;color:white"
-			}, {
-			    kind : "RowGroup",
-			    flex : .04,
-			    style : "margin:0px;",
-			    components : [ {
-				kind : "VFlexBox",
-				name : "lblPurSumInvHeads",
-				style : "font-size: 0.7em;color:#999;",
-				align : "center",
-				content : "109",
-			    }, ]
-			}, {
-			    kind : "Spacer",
-			    flex : .019
-			}, {
-			    kind : "RowGroup",
-			    flex : .05,
-			    style : "margin:0px;",
-			    components : [ {
-				kind : "VFlexBox",
-				name : "lblPurSumInvWeight",
-				style : "font-size: 0.7em;color:#999",
-				align : "center",
-				content : "10000"
-			    }, ]
-			}, {
-			    kind : "Spacer",
-			    flex : .01
-			}, {
-			    kind : "RowGroup",
-			    layoutKind : enyo.VFlexLayout,
-			    flex : .05,
-			    style : "margin:0px;",
-			    components : [ {
-				kind : "VFlexBox",
-				name : "lblSumInvAveWight",
-				style : "font-size: 0.7em;color:#999",
-				align : "center",
-				content : "372.9"
-			    }, ]
-			},
-
-			{
-			    kind : "Spacer",
-			    flex : .05
-			}, {
-			    kind : "Button",
-			    caption : "+",
-			    onclick : "sales_click"
-			} ]
-		    },
-		    {
-			kind : "Scroller",
-			flex : 1,
-			components : [ {
-			    kind : enyo.VirtualRepeater,
-			    name : "listInventory",
-			    onSetupRow : "loadInventory",
-			    onclick : "doSelectProduct",
-			    components : [ {
-				kind : enyo.Item,
-				components : [
-					{
-					    layoutKind : enyo.HFlexLayout,
-					    components : [ {
-						name : "lblInvType",
-						flex : 1,
-						content : "400+"
-					    }, {
-						name : "lblInvClass",
-						flex : 1.3,
-						content : "Novillos"
-					    }, {
-						name : "lblInvHeads",
-						flex : 1.2,
-						content : "50/100"
-					    }, {
-						name : "lblInvWeight",
-						flex : 1.5,
-						content : "100000"
-					    }, {
-						name : "lblInvInvAverage",
-						flex : 1.2,
-						content : "200"
-					    }, {
-						name : "lblInvFeed",
-						flex : .8,
-						className : "listSecond",
-						content : "200"
-					    }, ]
-					},
-					{
-					    name : "lblInvDesc",
-					    style : "font-size: 0.85em;color:#999",
-					    content : "A1, A2, A3, A4, A5 / ALAN DEL RIO (50) / EASTMAN TRUCK + LA PAZ",
-					    onclick:"desc_click"
-					} ]
-			    } ]
-			} ]
-		    }, {
-			kind : "Toolbar",
-			components : [ {
-			    kind : "VFlexBox",
-			    content : "Total",
-			    flex : .28,
-			    style : "color:white;margin:0"
-			}, {
-			    kind : "RowGroup",
-			    align : "center",
-			    flex : .1,
-			    style : "backgound-color:white;margin:0",
-			    components : [ {
-				name : "lblInvSumHeadClass",
-				kind : "VFlexBox",
-				align : "center",
-				style : "font-size: 0.75em;color:#999",
-				content : "241"
-			    }, ]
-			}, {
-			    kind : "Spacer",
-			    flex : .01
-			}, {
-			    kind : "RowGroup",
-			    align : "center",
-			    flex : .1,
-			    style : "backgound-color:white;margin:0",
-			    components : [ {
-				kind : "VFlexBox",
-				name : "lblInvSumWeight",
-				align : "center",
-				style : "font-size: 0.75em;color:#999",
-				content : "1234"
-			    }, ]
-			}, {
-			    kind : "Spacer",
-			    flex : .01
-			}, {
-			    kind : "RowGroup",
-			    align : "center",
-			    flex : .1,
-			    style : "backgound-color:white;margin:0",
-			    components : [ {
-				kind : "VFlexBox",
-				name : "lblInvSumAvgWeight",
-				align : "center",
-				style : "font-size: 0.75em;color:#999",
-				content : "1233"
-			    }, ]
-			}, {
-			    kind : "Spacer",
-			    flex : .01
-			}, {
-			    kind : "RowGroup",
-			    align : "center",
-			    flex : .1,
-			    style : "backgound-color:white;margin:0",
-			    components : [ {
-				kind : "VFlexBox",
-				name : "lblInvSumFeed",
-				align : "center",
-				style : "font-size: 0.75em;color:#999",
-				content : "1233"
-			    }, ]
-			}, {
-			    kind : "Spacer",
-			    flex : .01
-			} ]
-		    }, ],
-	    updateInventory : function() {
-	    },
-	    calcSummary : function() {
-	    },
-	    loadInventory : function(inSender, inIndex) {
-		if (inIndex < 100) {
-		    return true;
+enyo.kind({
+	name: "admin.inventory",
+	kind: "VFlexBox",
+	className: "enyo-bg",
+	arrData:null,
+	events: {
+		onSelect: "",
+		onSale:"",
+	},		
+	components: [
+		{kind: "Toolbar",
+	     components:[
+			{kind: "VFlexBox",content:"Inventario",flex:.17,onclick:"doSelect",style:"padding:0px;color:white"},
+			{kind:"RowGroup", flex:.04, style:"margin:0px;",
+			 components:[
+				{kind: "VFlexBox",name: "lblPurSumInvHeads",style:"font-size: 0.7em;color:#999;",align:"center",
+				 content: "",},	
+			]},
+			{kind: "Spacer",flex:.019},			
+			{kind:"RowGroup",flex:.05, style:"margin:0px;",
+			 components:[
+				{kind: "VFlexBox",name: "lblPurSumInvWeight",style:"font-size: 0.7em;color:#999",align:"center",
+				 content: ""},
+			]},
+			{kind: "Spacer",flex:.01},						
+			{kind:"RowGroup",layoutKind: enyo.VFlexLayout, flex:.05, style:"margin:0px;",
+			 components:[
+				{kind: "VFlexBox",name: "lblSumInvAveWight",style:"font-size: 0.7em;color:#999",align:"center",
+				 content: ""},
+			]},
+			
+			{kind: "Spacer",flex:.05},				
+			{kind: "Button",caption: "+",onclick:"doSale"}
+		]},		
+		{kind: "Scroller", flex: 1, 
+		 components:[
+			{kind: enyo.VirtualRepeater, name: "listInventory", onSetupRow: "loadInventory", onclick: "doSelect",								
+			components: [
+				{kind: enyo.Item,
+					components: [
+					{layoutKind: enyo.HFlexLayout,components:[
+						{name: "lblInvType",flex:1,
+						 content: ""},
+						{name: "lblInvClass",flex:1.3,
+						 content: "Novillos"},						 
+						{name: "lblInvHeads",flex:1.2,
+						 content: ""},	
+						{name: "lblInvWeight",flex:1.5,
+						 content: ""},
+						{name: "lblInvInvAverage",flex:1.2, 
+						 content: ""},
+						{name: "lblInvFeed",flex:.8, 
+						 className:"listSecond",
+						 content: ""},						 
+					]},
+					{layoutKind: enyo.HFlexLayout,components:[
+						{name: "lblInvBarnyards",style: "font-size: 0.85em;color:#999",flex:1,content:""},						
+						{name: "lblInvDescBuyer",style: "font-size: 0.85em;color:#999",flex:1,content:""},
+						{name: "lblInvDescTruck",style: "font-size: 0.85em;color:#999",flex:1,content:""}						
+						]}
+					]}
+				]}
+		]},
+		{kind: "Toolbar",
+			components:[
+				{kind: "VFlexBox", content:"Total",flex:.28,style:"color:white;margin:0"} ,
+				{kind:"RowGroup", align: "center", flex:.1, style:"backgound-color:white;margin:0",
+				 components:[
+					{name: "lblInvSumHeadClass",kind: "VFlexBox",align:"center",style:"font-size: 0.75em;color:#999",
+					 content: ""},
+				]},
+				{kind: "Spacer",flex:.01},
+				{kind:"RowGroup", align: "center", flex:.1, style:"backgound-color:white;margin:0",
+				 components:[
+					{kind: "VFlexBox",name: "lblInvSumWeight",align:"center",style:"font-size: 0.75em;color:#999",
+					 content: ""},
+				]},
+				{kind: "Spacer",flex:.01},
+				{kind:"RowGroup", align: "center", flex:.1, style:"backgound-color:white;margin:0",
+				 components:[
+					{kind: "VFlexBox",name: "lblInvSumAvgWeight",align:"center",style:"font-size: 0.75em;color:#999",
+					 content: ""},
+				]},				
+				{kind: "Spacer"	,flex:.01},				
+				{kind:"RowGroup", align: "center", flex:.1, style:"backgound-color:white;margin:0",
+				 components:[
+					{kind: "VFlexBox",name: "lblInvSumFeed",align:"center",style:"font-size: 0.75em;color:#999",
+					 content: ""},
+				]},				
+				{kind: "Spacer"	,flex:.01}				
+			]},	
+	],
+	updateInventory:function(){
+	},
+	calcSummary:function(){
+	},
+	loadInventory:function(inSender, inIndex){
+		var objData;
+		if(objData=this.arrData[inIndex]){
+			this.$.lblInvType.setContent(objData.cattle_type);
+			this.$.lblInvClass.setContent(objData.cattle_class);		 
+			this.$.lblInvHeads.setContent(gblUtils.numCD(objData.heads));
+			this.$.lblInvWeight.setContent(gblUtils.numCD(objData.weight));
+			this.$.lblInvInvAverage.setContent(objData.avgweight);
+			this.$.lblInvFeed.setContent(objData.feed);
+			var sTrucks="";
+			for (var j=0;j<objData.trucks.length;j++){
+				sTrucks+=objData.trucks[j]+", ";
+			}
+			if(sTrucks!=""){sTrucks=sTrucks.slice(0,-2);}
+			var sBuyer="";			
+			for (var i=0;i<objData.buyers.length;i++){
+				sBuyer+=objData.buyers[i].name+" ("+objData.buyers[i].heads+"/"+
+						(objData.avgweight*objData.buyers[i].heads).toFixed(2)+"), ";
+			}		
+			if(sBuyer!=""){sBuyer=sBuyer.slice(0,-2);}
+			var sBY="";			
+			for (var i=0;i<objData.barnyards.length;i++){
+				sBY+=objData.barnyards[i]+", ";
+			}					
+			if(sBY!=""){sBY=sBY.slice(0,-2);}			
+			//var sDesc;
+			//sDesc=sBuyer;
+			//if(sTrucks!=""){sDesc+=" - "+sTrucks}
+			this.$.lblInvBarnyards.setContent(sBY);			
+			this.$.lblInvDescBuyer.setContent(sBuyer);
+			this.$.lblInvDescTruck.setContent(sTrucks);
+			return true;
+		}else{
+			return false;			
 		}
-	    },
-	    sales_click : function() {
-		this.$.popup_sales.openAtCenter();
-	    },
-	    desc_click:function(inSender, inEvent){
-		console.debug(inSender);
-		console.debug(inEvent);
-		this.$.popup_map.openAtCenter();
-	    }
-	});
+	},
+	updateSummary:function(){
+		var objData;
+		var iHeads=0;
+		var iSumWeight=0;		
+		var iSumAve=0;		
+		var iSumFeed=0;
+		var iSold=0;
+		var iSoldAve=0;
+		var iSolSum=0;
+		for (var j=0;j<this.arrData.length;j++){
+			iHeads+=this.arrData[j].heads;
+			iSumWeight+=this.arrData[j].weight;
+			iSumAve+=this.arrData[j].avgweight;
+			iSumFeed+=this.arrData[j].feed;
+			for (var i=0;i<this.arrData[j].buyers.length;i++){
+				iSold+=this.arrData[j].buyers[i].heads;				
+				iSoldAve+=this.arrData[j].buyers[i].heads*this.arrData[j].avgweight;
+			//alert((this.arrData[j].buyers[i].heads
+			//		+"+"+this.arrData[j].avgweight)+"="+this.arrData[j].buyers[i].heads*this.arrData[j].avgweight);				
+			}					
+		}
+		iSumAve=iSumAve/this.arrData.length;
+		this.$.lblInvSumHeadClass.setContent(gblUtils.numCD(iHeads));
+		this.$.lblInvSumWeight.setContent(gblUtils.numCD(iSumWeight));
+		this.$.lblInvSumAvgWeight.setContent(iSumAve);
+		this.$.lblInvSumFeed.setContent(iSumFeed);		
+		
+		this.$.lblPurSumInvHeads.setContent(gblUtils.numCD(iHeads-iSold));
+		this.$.lblPurSumInvWeight.setContent(gblUtils.numCD((iSumWeight-iSoldAve).toFixed(2)));
+		this.$.lblSumInvAveWight.setContent(((iSumWeight-iSoldAve)/(iHeads-iSold)).toFixed(2))
+	},
+	ready:function(){
+		this.updateSummary();
+	}
+});
