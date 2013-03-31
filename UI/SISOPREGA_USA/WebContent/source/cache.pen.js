@@ -11,9 +11,20 @@ enyo.kind({
     }
 	return false;
     },
+    getOccupiedBY:function(){
+	var arrE = this.get();
+	for (var i = 0; i < arrE.length; i++){
+	    for(var j in arrE[i].barnyard){
+		if (arrE[i].barnyard.hasOwnProperty(j)){
+		    console.debug(arrE[i].barnyard[j]);    
+		}
+		
+	    }
+	}
+    },
     get : function (){
 	if (this.readFromGateway){
-	    this.arrObj = this.getTest();
+	    this.arrObj = this.getTest(12);
 	    this.readFromGateway = false;
 	}
 	return this.arrObj;
@@ -25,10 +36,9 @@ enyo.kind({
 	    }
 	}
     },
-    getTest : function () {
+    getTest : function (qty) {
 	var result = [];
-	 var mocks = 12;
-	      for ( var i = 0; i < mocks; i++) {
+	      for ( var i = 0; i < qty; i++) {
 	        var mockCattleType = Math.floor((Math.random() * 4) + 1);
 	        var mockCattleName = 'Novillos';
 	        switch (mockCattleType) {
@@ -68,6 +78,9 @@ enyo.kind({
 	        result.push(mockObj); 
 	      }
 	      return result;
+    },
+    create: function (Obj){
+	this.arrObj.push(Obj);
     },
     getList : function() {
 	var result = [];

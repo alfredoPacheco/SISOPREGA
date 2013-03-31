@@ -1,16 +1,19 @@
 enyo
 	.kind({
 	    name : "pen.map",
-	    arrOptions : [
-	                  {
+	    arrOptions : [ {
 		caption : "Mover Corral",
-		value : 1}, {
+		value : 1
+	    }, {
 		caption : "Alimento",
-		value : 2 }
-	    ],
-
-	    style:"background-color:#DABD8B;",
-	    kind : enyo.HFlexBox,
+		value : 2
+	    } ],
+	    arrMovingPen : [ {
+		caption : "Mover aqui",
+		value : 3
+	    }, ],
+	    style : "background-color:#DABD8B;",
+	    kind : enyo.VFlexBox,
 	    last : null,
 	    flex : 1,
 	    arrByMOver : {},
@@ -22,12 +25,31 @@ enyo
 	    sColorFree : "white",
 	    sColorSelect : "lightgreen",
 	    sColorSelectOccupied : "#9b7eb1",
+	    movingPen : false,
+	    movingFrom : null,
+	    movingTo:null,
 	    className : "mapBG",
 	    create : function() {
 		this.inherited(arguments);
 	    },
 
-	    components : [
+	    components : [ {
+		kind : enyo.Popup,
+		name : "popup_movePen",
+		width : "50%;",
+		height : "190px;",
+		dismissWithClick : false,
+		layoutKind : "VFlexLayout",
+		style : "overflow : hiddin; border-with:8px;",
+		scrim : true,
+		components : [ {
+		    kind : "movePen",
+		    name : "movePen_kind",
+		    onCancel : "cancelMoving",
+		    onGuardar : "saveMoving",
+		    flex : 1
+		} ]
+	    },
 
 	    {
 		kind : enyo.BasicScroller,
@@ -45,7 +67,22 @@ enyo
 		    pack : "center"
 
 		} ],
-	    },
+	    }, {
+		kind : enyo.Toolbar,
+		name : "toolbar",
+		pack : "center",
+		align : "center",
+		components : [ {
+		    kind : "VFlexBox",
+		    name : "lblInfo",
+		    style : "color : white;",
+		    pack : "center",
+		    align : "center",
+		    flex : 1,
+		    content : ""
+		} ],
+
+	    }
 
 	    ],
 	    ready : function() {
@@ -254,16 +291,16 @@ enyo
 		this.objSelected = inSender;
 		switch (inSender.occupied) {
 		case 0: // Seleccionar corral disponible, 0= corral sin
-			// recepcion y sin seleccion
+		    // recepcion y sin seleccion
 		    this.clearDesc();
 		    inSender.occupied = 2;
 		    break;
 		case 1: // Seleccionar corral ocupado, 1= corral con recepcion y
-			// sin seleccion.
+		    // sin seleccion.
 		    this.setDesc(inSender.name);
 		    break;
 		case 2: // Deseleccionar corral libre, 2= corral sin recepcion
-			// pero seleccionado.
+		    // pero seleccionado.
 
 		    delete this.arrSelected[this.objSelected.name];
 		    this.objSelected.occupied = 0;
@@ -272,7 +309,7 @@ enyo
 		    break;
 
 		case 3:// Deseleccionar corral ocupado, 3= corral con recepcion
-			// y seleccionado.
+		    // y seleccionado.
 		    delete this.arrSelectedOccupied[this.objSelected.name];
 		    this.objSelected.occupied = 1;
 		    this.objSelected
@@ -285,14 +322,40 @@ enyo
 
 		}
 	    },
-	    actionSelected : function (inSender, inEvent){
-		alert("Moviendo Corral");
+	    actionSelected : function(inSender, inEvent) {
+
+		switch (inEvent.value) {
+		case 1:
+		    this.movingPen = true;
+		    break;
+		case 2:
+		    break;
+		case 3:
+		    var obj = cachePen.getByBarnyard(this.movingFrom.name);
+		    if (obj) {
+			var byName = this.movingTo.name;
+			obj.barnyard.length = 0;
+			obj.barnyard[byName]=byName;
+			this.$.popup_movePen.validateComponents();			
+			this.$.movePen_kind.setObj(obj);
+			this.$.popup_movePen.openAtCenter();
+		    } else {
+			alert("Error");
+		    }
+		    break;
+		}
 	    },
 	    cellHold : function(inSender, inEvent) {
 		inEvent.stopPropagation();
 		this.objSelected = inSender;
 		switch (inSender.occupied) {
 		case 0:
+		    if (this.movingPen) {
+			this.movingTo = inSender;
+			this.$.options.setItems(this.arrMovingPen);
+			this.$.options.render();
+			this.$.options.openAtEvent(inEvent);
+		    }
 		    break;
 		case 1:
 		    inSender.occupied = 3;
@@ -301,6 +364,7 @@ enyo
 		case 2: // Abrir opciones para corral libre
 		    break;
 		case 3: // Abrir opciones para corral ocupado
+		    this.movingFrom = inSender;
 		    this.$.options.setItems(this.arrOptions);
 		    this.$.options.render();
 		    this.$.options.openAtEvent(inEvent);
@@ -314,10 +378,21 @@ enyo
 		_objMainHeader
 			.setStyle("color:#FFF;border:none;font-size:12px; text-align:center;min-width:150px;");
 		var obj = cachePen.getByBarnyard(sBY);
-			if (obj){
-			    _objMainHeader
-			    .setContent("Ganado: " + obj.cattleName + " Cabezas: " + obj.heads + " Peso: " + obj.weight);
-			}else
-			    _objMainHeader.setContent("");
+		if (obj) {
+		    this.$.lblInfo
+			    .setContent("Ganado: " + obj.cattleName
+				    + " Cabezas: " + obj.heads + " Peso: "
+				    + obj.weight);
+		} else
+		    this.$.lblInfo.setContent("");
 	    },
+	    cancelMoving : function() {
+		this.movingPen = false;
+		this.$.popup_movePen.close();
+	    },
+	    saveMoving : function() {
+		var objeto = this.$.movePen_kind.getObj();
+		cachePen.create(objeto);
+		this.$.popup_movePen.close();
+	    }
 	});

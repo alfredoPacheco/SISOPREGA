@@ -64,5 +64,6 @@ enyo.depends(
   "source/addCattle.js",
   "source/purchases.js",
   "source/reports.us.select.js",
-  "source/utils.format.js"
+  "source/utils.format.js",
+  "source/movePen.js"
 );

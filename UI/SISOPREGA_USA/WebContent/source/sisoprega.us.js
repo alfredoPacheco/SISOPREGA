@@ -98,7 +98,7 @@ enyo
 			transitionKind : "enyo.transitions.LeftRightFlyin",
 			style:"margin-left:auto;margin-right:auto",
 			components : [ {
-			    kind : "login",
+			    kind : "pen.map",
 			    // to test visibility with no login activity,
 			    // change the kind for your own component.
 			    // kind : "hermana.de",
