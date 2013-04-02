@@ -6,7 +6,7 @@ enyo
 	    arrDetail : [],
 	    totalHC : 0,
 	    totalWeight : 0,
-	    style:"background-color:#DABD8B;font-size:15px;",
+	    style : "background-color:#DABD8B;font-size:15px;",
 	    components : [
 		    {
 			kind : enyo.VFlexBox,
@@ -21,7 +21,7 @@ enyo
 					    {
 						content : "Fecha:",
 						width : "80px;",
-						style:"text-align: right;"
+						style : "text-align: right;"
 					    },
 					    {
 						kind : "ToolInput",
@@ -43,7 +43,7 @@ enyo
 				    components : [ {
 					content : "Cliente:",
 					width : "80px;",
-					style:"text-align: right;"
+					style : "text-align: right;"
 				    }, {
 					kind : "controls.autocomplete",
 					inputKind : "ToolInput",
@@ -158,23 +158,7 @@ enyo
 					    name : "detail_weight",
 					    className : "listSecond",
 					    style : "width:200px;"
-					},
-				// {
-				// name : "weight",
-				// kind : "ToolInput",
-				// width : "70px;",
-				// hint : "Peso",
-				// oninput : "weight_changed"
-				// }, {
-				// name : 'btnSave',
-				// kind : enyo.Button,
-				// caption : "Guardar",
-				// onclick : "updateWeight",
-				// style :
-				// "width:55px;margin-left:20px;height:20px;"
-				//
-				// }
-				]
+					}, ]
 			    } ]
 			} ]
 		    },
@@ -215,9 +199,7 @@ enyo
 					caption : "Efectuar Venta",
 					onclick : "sell_click",
 					style : "background-color: #DABD8B;"
-				    }
-
-			    ]
+				    } ]
 			} ]
 		    } ],
 	    agregar_click : function() {
@@ -266,8 +248,8 @@ enyo
 		this.totalHC = 0;
 		this.totalWeight = 0;
 		this.$.list.render();
-		this.$.totalHC.setContent(this.totalHC);
-		this.$.totalWeight.setContent(this.totalWeight);
+		this.$.totalHC.setContent(utils.formatNumberThousands(this.totalHC));
+		this.$.totalWeight.setContent(utils.formatNumberThousands(this.totalWeight));
 	    },
 	    sell_click : function() {
 

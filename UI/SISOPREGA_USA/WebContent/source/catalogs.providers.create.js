@@ -44,10 +44,6 @@ enyo.kind({
 				name : "input_zip_code",
 				hint : "Codigo Postal"
 			}, {
-				kind : "Input",
-				name : "input_rfc",
-				hint : "RFC"
-			}, {
 				kind : enyo.Item,
 				layoutKind : "HFlexLayout",
 				components : [ {
@@ -122,7 +118,6 @@ enyo.kind({
 		this.$.input_state_name.setValue("");
 		this.$.input_city_name.setValue("");
 		this.$.input_zip_code.setValue("");
-		this.$.input_rfc.setValue("");
 		this.$.input_phone_number.setValue("");
 		this.$.input_email.setValue("");
 	},
@@ -140,7 +135,6 @@ enyo.kind({
 			state_id : "",
 			state_name : "",
 			zip_code : "",
-			rfc : "",
 			phone_number : "",
 			email : ""
 		};
@@ -150,7 +144,6 @@ enyo.kind({
 		objProvider.state_name = this.$.input_state_name.getValue();
 		objProvider.city_name = this.$.input_city_name.getValue();
 		objProvider.zip_code = this.$.input_zip_code.getValue();
-		objProvider.rfc = this.$.input_rfc.getValue();
 		objProvider.phone_number = this.$.input_phone_number.getValue();
 		objProvider.email = this.$.input_email.getValue();
 		return objProvider;
@@ -174,7 +167,6 @@ enyo.kind({
 		this.$.input_state_name.setValue(this.obj.state_name);
 		this.$.input_city_name.setValue(this.obj.city_name);
 		this.$.input_zip_code.setValue(this.obj.zip_code);
-		this.$.input_rfc.setValue(this.obj.rfc);
 		this.$.input_phone_number.setValue(this.obj.phone_number);
 		this.$.input_email.setValue(this.obj.email);
 

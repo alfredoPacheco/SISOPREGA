@@ -5,9 +5,11 @@ enyo
 	    style : "min-width: 620px;background-color:#DABD8B;",
 	    arrReceptions : null,
 	    arrDetail : [],
-	    events:{
-		onProgram:"",
-		onCancel:""
+	    hc : 0,
+	    weight : 0,
+	    events : {
+		onProgram : "",
+		onCancel : ""
 	    },
 	    components : [
 		    {
@@ -111,15 +113,13 @@ enyo
 						className : "listFirst",
 						style : "background-color:#DABD8B;margin-left:10px;",
 						width : "60px;"
-					    },
-					    {
-						kind:"Spacer"
-					    },
-					    {
-						name:"warning",
-						content:"",
-						style:"color:red"
-					    }]
+					    }, {
+						kind : "Spacer"
+					    }, {
+						name : "warning",
+						content : "",
+						style : "color:red"
+					    } ]
 				},
 				{
 				    kind : enyo.HFlexBox,
@@ -198,26 +198,23 @@ enyo
 		var weight = parseFloat(inSender.parent.children[3]
 			.getContent());
 		if (inSender.checked) {
-		    this.$.totalHC.setContent(parseFloat(this.$.totalHC
-			    .getContent())
-			    + hc);
-		    this.$.totalWeight.setContent(parseFloat(this.$.totalWeight
-			    .getContent())
-			    + weight);
+		    this.hc += hc;
+		    this.weight += weight;
 		} else {
-		    this.$.totalHC.setContent(parseFloat(this.$.totalHC
-			    .getContent())
-			    - hc);
-		    this.$.totalWeight.setContent(parseFloat(this.$.totalWeight
-			    .getContent())
-			    - weight);
+		    this.hc -= hc;
+		    this.weight -= weight;
 		}
+		this.$.totalHC.setContent(utils
+			.formatNumberThousands(this.hc));
+		this.$.totalWeight.setContent(utils
+			.formatNumberThousands(this.weight.toFixed(2)));
 		this.checkQuantity();
 
 	    },
-	    checkQuantity:function(){
-		if(parseFloat(this.$.totalWeight.getContent())>50000)
-		    this.$.warning.setContent("Usted esta programando un embarque superior a 50,000 libras.");
+	    checkQuantity : function() {
+		if (this.weight > 50000)
+		    this.$.warning
+			    .setContent("Usted esta programando un embarque superior a 50,000 libras.");
 		else
 		    this.$.warning.setContent("");
 	    },
