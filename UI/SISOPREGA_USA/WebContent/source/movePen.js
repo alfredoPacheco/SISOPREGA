@@ -108,7 +108,9 @@ enyo.kind({
 	return this.obj;
     },
     save : function (){
-	this.obj.head = this.$.totalHC.getValue();
+	var aux = parseFloat(this.obj.weight) / parseInt(this.obj.heads);
+	this.obj.heads = parseInt(this.$.totalHC.getValue());
+	this.obj.weight = aux * this.obj.heads;
 	this.doGuardar();
     }
     
