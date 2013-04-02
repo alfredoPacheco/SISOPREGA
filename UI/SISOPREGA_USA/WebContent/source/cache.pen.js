@@ -3,20 +3,20 @@ enyo.kind({
     arrObj : [],
     readFromGateway : true,
     isOccupied : function(by) {
-	var arrE = this.get();
-	for (var i = 0; i < arrE.length; i++){
-	    if (by == arrE[i].barnyard[by]){
+	var arrPens = this.get();
+	for (var i = 0; i < arrPens.length; i++){
+	    if (by == arrPens[i].barnyard[by]){
 	return true;
 	}
     }
 	return false;
     },
     getOccupiedBY:function(){
-	var arrE = this.get();
-	for (var i = 0; i < arrE.length; i++){
-	    for(var j in arrE[i].barnyard){
-		if (arrE[i].barnyard.hasOwnProperty(j)){
-		    console.debug(arrE[i].barnyard[j]);    
+	var arrPens = this.get();
+	for (var i = 0; i < arrPens.length; i++){
+	    for(var j in arrPens[i].barnyard){
+		if (arrPens[i].barnyard.hasOwnProperty(j)){
+		    console.debug(arrPens[i].barnyard[j]);    
 		}
 		
 	    }
@@ -79,8 +79,24 @@ enyo.kind({
 	      }
 	      return result;
     },
-    create: function (Obj){
-	this.arrObj.push(Obj);
+    create: function (obj){
+	this.arrObj.push(obj);
+	return true;
+    },
+    update:function(objNew){
+	var arrPens = this.get();
+	for (var i = 0; i < arrPens.length; i++){
+	    if (objNew.recordId == arrPens[i].recordId){
+		arrPens[i]=objNew;
+		return true;
+	    }
+	}
+	return false;
+    },
+    movePen: function (objFrom, objTo){
+	this.arrObj.push(objTo);
+	objFrom.heads -= objTo.heads;
+	return true;
     },
     getList : function() {
 	var result = [];
