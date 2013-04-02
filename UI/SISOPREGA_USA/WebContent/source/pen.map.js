@@ -7,7 +7,10 @@ enyo
 	    }, {
 		caption : "Alimento",
 		value : 2
-	    } ],
+	    }, {
+		caption : "Corte",
+		value : 4
+	    }],
 	    arrMovingPen : [ {
 		caption : "Mover aqui",
 		value : 3
