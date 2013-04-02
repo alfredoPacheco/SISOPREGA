@@ -2,6 +2,7 @@ enyo.kind(
   {
     name : "hermana.gastos.list",
     kind : "VFlexBox",
+	arrData:[],
     components :
       [
         {
@@ -12,11 +13,11 @@ enyo.kind(
             [
               {
                 content : "Concepto",
-                style : "width:450px;text-align:center;"
+                flex:.9
               },
               {
                 content : "Monto",
-                style : "width:150px;text-align:center;"
+                flex:.1
               }
             ]
         },
@@ -32,26 +33,26 @@ enyo.kind(
               {
                 kind : enyo.VirtualRepeater,
                 name : "forecastList",
-                onSetupRow : "setupForecastRow",
-                onclick : "selectForecast",
+                onSetupRow : "loadCharges",
+                onclick : "",
                 components :
                   [
                     {
-                      kind : enyo.RowItem,
-                      onConfirm : "dropForecast",
+                      kind : enyo.SwipeableItem,
+                      onConfirm : "deleteCharge",
                       layoutKind : enyo.HFlexLayout,
                       tapHighlight : true,
                       style : "font-size:13px;",
                       components :
                         [
                           {
-                            name : "listCorral",
-                            style : "width:450px;text-align:left;",
+                            name : "charge_desc",
+                            flex:.9,
                             content : ""
                           },
                           {
-                            name : "listClase",
-                            style : "width:150px;text-align:center;",
+                            name : "charge_price",
+                            flex:.1,
                             content : ""
                           }]
                     } ]
@@ -82,5 +83,22 @@ enyo.kind(
               }
 
             ]
-        }, ]
+        }, ],
+		addCharge:function(arrData){
+			this.arrData.push(arrData);
+			this.render();
+		},
+		loadCharges:function(inSender, inIndex){
+			var objData;
+			if(objData=this.arrData[inIndex]){
+				this.$.charge_desc.setContent(objData.charge_desc);
+				this.$.charge_price.setContent(objData.charge_price);				
+				return true;
+			}else{
+				return false;			
+			}
+		},
+		deleteCharge:function(){
+			return true;
+		}
   });
