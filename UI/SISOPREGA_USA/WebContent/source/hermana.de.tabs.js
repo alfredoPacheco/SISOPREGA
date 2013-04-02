@@ -11,6 +11,16 @@ enyo.kind(
     cattleClassName : "",
     components :
       [
+		{
+			 kind: "Popup",
+			 name: "popMan", 
+			 dismissWithClick:false,
+			 showHideMode: "transition", 
+			 openClassName: "zoomFadeIn",
+			 className: "transitioner2", 
+			 layoutKind: "VFlexLayout",
+			 style: "overflow: hidden", width: "95%", height: "95%",scrim: true,
+		 },	  
         {
           name : "tabButtons",
           kind : "TabGroup",
@@ -161,21 +171,34 @@ enyo.kind(
                 components :
                   [
                     {
-                      kind : "Input",
-                      hint : "Concepto"
-                    },
-                    {
-                      kind : "Input",
-                      hint : "Monto"
+                      kind : "controls.autocomplete",
+                      name : "charge",
+                      hint : "Concepto",
+                      flex : .4,
+                      contentPack : "end",
+					  onSelectItem:"chargeSelected",
+                      onEnter : "chargeSelected"
                     },
                     {
                       kind : enyo.IconButton,
                       icon : "../SISOPREGA/images/menu-icon-new.png",
-                      onclick : "contextMenuClicked"
+                      onclick : "showNewCharge"
+                    },					
+                    {
+                      kind : "Input",
+					  name:"charge_price",
+                      hint : "Monto"
+                    },
+                    {
+                      kind : enyo.IconButton,flex:.1,
+                      icon : "../SISOPREGA/images/menu-icon-new.png",
+					  className : "enyo-button-affirmative",
+                      onclick : "addCharge"
                     } ]
               },
               {
                 kind : "hermana.gastos.list",
+				name:"chargeList",
                 style : "border: thin dotted black; height:250px;"
               } ]
         },
@@ -244,6 +267,7 @@ enyo.kind(
     ready : function() {
       this.$.penAutoComplete.setItems(cachePen.getList());
       this.$.classAutoComplete.setItems(cacheClasses.getList());
+      this.$.charge.setItems(cacheCharges.getList());	  
     },
     showCorte : function() {
       this.$.tabCorte.setShowing(true);
@@ -379,5 +403,31 @@ enyo.kind(
       this.summary.delta_pct = Math.floor((this.summary.delta / this.summary.trade_lbs) * 100);
 
       this.updateTableContents();
-    }
+    },
+	chargeSelected:function(){
+		if(this.$.charge.getIndex()>-1){
+			this.$.charge_price.setValue(cacheCharges.getList()[this.$.charge.getIndex()-1].charge_price);
+		}
+	},
+	addCharge:function(){
+		if(this.$.charge.getIndex()>-1){
+			this.$.chargeList.addCharge(cacheCharges.getList()[this.$.charge.getIndex()-1]);
+			this.$.charge.setIndex(-1)
+			this.$.charge_price.setValue("");
+			this.$.charge.setValue("");
+		}
+	},
+	showNewCharge:function(){
+		if(this.$.dynocon){
+			this.$.dynocon.destroy();
+		}		
+		this.$.popMan.createComponent({kind: "hermana.gastos.concepto",arrData:cachePur.readData(),
+									   onAddCharge:"closePopUp",onCancel:"closePopUp", 
+									   name:'dynocon',flex: 1},{owner:this});
+		this.$.popMan.render();
+		this.$.popMan.openAtCenter();											   		
+	},
+	closePopUp:function(){	
+		this.$.popMan.close();
+	},	
   });

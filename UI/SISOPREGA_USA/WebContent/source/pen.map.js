@@ -7,7 +7,10 @@ enyo
 	    }, {
 		caption : "Alimento",
 		value : 2
-	    } ],
+	    }, {
+		caption : "Corte",
+		value : 4
+	    }],
 	    arrMovingPen : [ {
 		caption : "Mover aqui",
 		value : 3
@@ -323,7 +326,6 @@ enyo
 		}
 	    },
 	    actionSelected : function(inSender, inEvent) {
-
 		switch (inEvent.value) {
 		case 1:
 		    this.movingPen = true;
@@ -331,16 +333,16 @@ enyo
 		case 2:
 		    break;
 		case 3:
-		    var obj = cachePen.getByBarnyard(this.movingFrom.name);
+		    var obj = enyo.clone(cachePen.getByBarnyard(this.movingFrom.name));
 		    if (obj) {
 			var byName = this.movingTo.name;
-			obj.barnyard.length = 0;
+			obj.barnyard = [];
 			obj.barnyard[byName]=byName;
 			this.$.popup_movePen.validateComponents();			
 			this.$.movePen_kind.setObj(obj);
 			this.$.popup_movePen.openAtCenter();
 		    } else {
-			alert("Error");
+			alert("actionSelected Error");
 		    }
 		    break;
 		}
@@ -391,8 +393,14 @@ enyo
 		this.$.popup_movePen.close();
 	    },
 	    saveMoving : function() {
-		var objeto = this.$.movePen_kind.getObj();
-		cachePen.create(objeto);
-		this.$.popup_movePen.close();
+		var movingFrom = cachePen.getByBarnyard(this.movingFrom.name);
+		var movingTo = this.$.movePen_kind.getObj();
+		if (cachePen.movePen(movingFrom, movingTo)){
+		    this.movingPen = false;
+		    this.$.popup_movePen.close();
+		    this.refreshMap();
+		}else{
+		    alert("saveMoving Error");
+		}
 	    }
 	});

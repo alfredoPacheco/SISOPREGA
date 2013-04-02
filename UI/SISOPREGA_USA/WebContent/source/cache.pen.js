@@ -2,6 +2,7 @@ enyo.kind({
     name : "cache.pen",
     arrObj : [],
     readFromGateway : true,
+    lastID:0,
     isOccupied : function(by) {
 	var arrPens = this.get();
 	for (var i = 0; i < arrPens.length; i++){
@@ -18,7 +19,6 @@ enyo.kind({
 		if (arrPens[i].barnyard.hasOwnProperty(j)){
 		    console.debug(arrPens[i].barnyard[j]);    
 		}
-		
 	    }
 	}
     },
@@ -65,7 +65,7 @@ enyo.kind({
 	        	barnyard["1" + "C" + numCorral] = "1" + "C" + numCorral; 
 	        var mockObj =
 	          {
-	            recordId : i,
+	            recordId : ++this.lastID,
 	            cattleType : mockCattleType,
 	            cattleName : mockCattleName,
 	            heads : mockHeads,
@@ -80,6 +80,7 @@ enyo.kind({
 	      return result;
     },
     create: function (obj){
+	obj.recordId = ++this.lastID;
 	this.arrObj.push(obj);
 	return true;
     },
@@ -93,10 +94,13 @@ enyo.kind({
 	}
 	return false;
     },
-    movePen: function (objFrom, objTo){
-	this.arrObj.push(objTo);
-	objFrom.heads -= objTo.heads;
-	return true;
+    movePen: function (objFrom, objTo){	
+	objFrom.heads = parseInt(objFrom.heads) - parseInt(objTo.heads);
+	objFrom.weigth = parseInt(objFrom.weight) - parseInt(objTo.weight);
+	if(this.update(objFrom))
+		if (this.create(objTo))
+			return true;
+	return false;
     },
     getList : function() {
 	var result = [];
