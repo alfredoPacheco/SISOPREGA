@@ -66,5 +66,8 @@ enyo.depends(
   "source/reports.us.select.js",
   "source/utils.format.js",
   "source/movePen.js",
-  "source/alimentoUS.js"
+  "source/alimentoUS.js",
+  "source/hermana.gastos.concepto.js",
+  "source/cache.charges.js"
+  
 );
