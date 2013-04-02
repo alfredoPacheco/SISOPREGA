@@ -202,7 +202,7 @@ enyo
 					kind : enyo.Spacer
 				    }, {
 					kind : enyo.Button,
-					caption : "Efectuar Venta",
+					caption : "Efectuar Compra",
 					onclick : "purchase_click",
 					style : "background-color: #DABD8B;"
 				    }
