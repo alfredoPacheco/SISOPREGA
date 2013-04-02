@@ -1,5 +1,5 @@
 enyo.kind({
-    name : "movePen",
+    name : "alimentoUS",
     kind : enyo.VFlexBox,
     obj : {},
     events : {
@@ -65,6 +65,11 @@ enyo.kind({
 	height : "40px;",
 	style : "font-size:14px;",
 	components : [ {
+	    kind : enyo.Button,
+	    caption : "Corte",
+	    onclick : "corte_click",
+	    style : "background-color: #DABD8B;min-width:70px;"
+	}, {
 	    kind : enyo.Spacer
 	}, {
 	    kind : enyo.Button,
