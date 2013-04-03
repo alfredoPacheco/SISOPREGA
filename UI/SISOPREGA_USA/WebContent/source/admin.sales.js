@@ -41,10 +41,13 @@ enyo.kind({
 						{name: "lblSalesAverage",flex:1, 
 						 content: ""},
 						{kind: "CheckBox", name:"chkSalesShip", iPos:"",checked: false,
-						 style: "margin-right:5px",onChange:"onSelectToShip"},		 
+						 style: "margin-right:5px",onclick:"checkBox_click"},		 
 					]},
-					{name: "lblSalesClient",style: "font-size: 0.85em;color:#999",
-					 content:"Comprador"}								
+					{layoutKind: enyo.HFlexLayout,components:[{name: "lblSalesClient",style: "font-size: 0.85em;color:gray",
+					 content:"Comprador"},{kind:"Spacer"},
+					 {name:"lblShipProgrammed", style:"color:gray;font-size:0.85em;", content:"Programado", showing:false}
+					 ]
+					}					
 					]}
 				]}
 		]},
@@ -84,9 +87,13 @@ enyo.kind({
 			this.$.lblSalesClient.setContent(objData.buyer);
 			this.$.lblSalesClient.setContent(objData.buyer);			
 			this.$.chkSalesShip.iPos=inIndex;
+			if(objData.shipProgramDate){
+			    this.$.chkSalesShip.hide();
+			    this.$.lblShipProgrammed.show();
+			}
 			return true;
 		}else{
-			return false;			
+			return false;
 		}
 	},
 	updateSummary:function(){
@@ -106,35 +113,41 @@ enyo.kind({
 	ready:function(){
 		this.updateSummary();
 	},
-	selectSale:function(inSender, inEvent){
-		if (this.bCheck && this.arrData[inEvent.rowIndex]) {
-			if (this.bSelect){
-				this.arrToShip[this.arrData[inEvent.rowIndex].sale_id]=this.arrData[inEvent.rowIndex];
-				this.iHeads+=this.arrData[inEvent.rowIndex].heads;
-				this.iWeight+=this.arrData[inEvent.rowIndex].weight;				
-			}else{
-				delete this.arrToShip[this.arrData[inEvent.rowIndex].sale_id];
-				this.iHeads-=this.arrData[inEvent.rowIndex].heads;
-				this.iWeight-=this.arrData[inEvent.rowIndex].weight;				
-			}
-			if(this.iWeight>50000){
-				this.$.lblSalesShipment.addClass("redAlert");
-			}else{
-				this.$.lblSalesShipment.removeClass("redAlert");				
-			}
-			if(this.iWeight==0){
-				this.$.lblSalesShipment.setContent("Cabezas - Peso");
-			}else{
-				this.$.lblSalesShipment.setContent(gblUtils.numCD(this.iHeads)+"/"+gblUtils.numCD(this.iWeight));							
-			}
+	calculateTotals : function() {
+		var hc = 0;
+		var weight = 0;
+		var len = this.arrData.length;
+		for ( var i = 0; i < len; i++) {
+		    if (!this.arrData[i].shipProgramDate && this.arrData[i].checked) {
+			hc += this.arrData[i].heads;
+			weight += this.arrData[i].weight;
+		    }
 		}
-		this.bCheck=false;
-	},	
-	onSelectToShip:function(inSender, inEvent){
-		this.bCheck=true;		
-		this.bSelect=inSender.getChecked();
+		if (weight > 50000) {
+		    this.$.lblSalesShipment.addClass("redAlert");
+		} else {
+		    this.$.lblSalesShipment.removeClass("redAlert");
+		}
+		if (weight == 0) {
+		    this.$.lblSalesShipment.setContent("Cabezas - Peso");
+		} else {
+		    this.$.lblSalesShipment.setContent(gblUtils.numCD(hc) + "/"
+			    + gblUtils.numCD(weight));
+		}
+	},
+	checkBox_click : function(inSender, inEvent) {
+		this.arrData[inEvent.rowIndex].checked = inSender.checked;
+		if(inSender.checked)
+		    this.arrToShip[this.arrData[inEvent.rowIndex].sale_id]=this.arrData[inEvent.rowIndex];
+		else
+		    delete this.arrToShip[this.arrData[inEvent.rowIndex].sale_id];
+		this.calculateTotals();
 	},
 	getSalesToShip:function(){
 		return this.arrToShip;
+	},
+	updateList:function(){
+	    this.$.listSales.render();
+	    this.calculateTotals();
 	}
 });

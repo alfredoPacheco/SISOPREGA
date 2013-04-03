@@ -107,5 +107,15 @@ enyo.kind({
 	},
 	getSelectedShipment:function(){
 		return this.objSelectedShipment;
+	},
+	updateList:function(){
+	    this.arrData = [];
+	    var items = cacheShip.readData();
+	    var len = items.length;
+	    for(var i = 0; i<len;i++){
+		//TODO FILTER BY date == today
+		this.arrData.push(items[i]);
+	    }
+	    this.$.listShipments.render();
 	}
 });

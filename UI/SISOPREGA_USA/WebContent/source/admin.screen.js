@@ -76,14 +76,14 @@ enyo.kind({
     }, {
 	kind : enyo.Popup,
 	name : "popup_shipments",
-	width : "85%;",
-	height : "85%;",
+	width : "670px",
+	height : "210px;",
 	dismissWithClick : true,
 	layoutKind : "VFlexLayout",
 	style : "overflow: hidden;border-width: 8px;",
 	scrim : true,
 	components : [ {
-	    kind : "shipments",
+	    kind : "shipments.schedule",
 	    name : "shipments_kind",
 	    flex : 1,
 	    onProgram : "programShipment_click",
@@ -160,11 +160,10 @@ enyo.kind({
     },
     showShipment : function() {
 	this.$.popup_shipments.openAtCenter();
-	enyo.log(this.$.sales.getSalesToShip());
+	this.$.shipments_kind.setArrShipment(this.$.sales.getSalesToShip());
     },
     showSelectShipment : function(arrShipment) {
 	this.$.popup_driver.openAtCenter();
-	alert('TODO: Select Shipment');
 	enyo.log(this.$.shipment.getSelectedShipment());
     },
     capture_hermana_click : function() {
@@ -181,15 +180,15 @@ enyo.kind({
 	this.$.popup_map.openAtCenter();
     },
     programShipment_click : function() {
-	alert("program");
+	this.$.popup_shipments.close();
+	this.$.sales.updateList();
+	this.$.shipment.updateList();
     },
     cancelShipment_click : function() {
-	alert("cancel");
+	this.$.popup_shipments.close();
     },
     cancelDriver_click : function() {
-	alert("cancel");
     },
     saveDriver_click : function() {
-	alert("guardar");
     }
 });
