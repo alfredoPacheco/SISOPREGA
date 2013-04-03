@@ -2,8 +2,13 @@ enyo.kind(
   {
     name : "hermana.corte.list",
     kind : "VFlexBox",
-    events : {onRemoveCorte:""},
+    events :
+      {
+        onRemoveCorte : "",
+        onCorteSelected : ""
+      },
     cortes : [],
+    iSelected : -1,
     components :
       [
         {
@@ -52,10 +57,11 @@ enyo.kind(
                   [
                     {
                       kind : enyo.SwipeableItem,
+                      name : "rowContainer",
                       onConfirm : "dropCorte",
                       layoutKind : enyo.HFlexLayout,
                       tapHighlight : true,
-                      style : "font-size:13px;",
+                      className : "listRow",
                       components :
                         [
                           {
@@ -113,7 +119,6 @@ enyo.kind(
             ]
         }, ],
     addCorte : function(corteObj) {
-      cacheCorte.add(corteObj);
       this.loadCortes();
     },
     loadCortes : function() {
@@ -131,6 +136,11 @@ enyo.kind(
         var avgWeight = Math.floor(objCorte.weight / objCorte.heads * 100) / 100;
         this.$.listPromedio.setContent(utils.formatNumberThousands(avgWeight));
 
+        if (this.iSelected == inIndex) {
+          this.$.rowContainer.applyStyle("background-color", "brown");
+          this.$.rowContainer.applyStyle("color", "#EBCE9C");
+        }
+
         return true;
       }
       return false;
@@ -141,4 +151,9 @@ enyo.kind(
       this.loadCortes();
       this.doRemoveCorte();
     },
+    selectCorte : function(inSender, inEvent) {
+      this.iSelected = inEvent.rowIndex;
+      this.loadCortes();
+      this.doCorteSelected();
+    }
   });

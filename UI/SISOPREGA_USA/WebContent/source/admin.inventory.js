@@ -131,14 +131,12 @@ enyo.kind({
 		}
 	},
 	updateSummary:function(){
-		var objData;
 		var iHeads=0;
 		var iSumWeight=0;		
 		var iSumAve=0;		
 		var iSumFeed=0;
 		var iSold=0;
 		var iSoldAve=0;
-		var iSolSum=0;
 		for (var j=0;j<this.arrData.length;j++){
 			iHeads+=this.arrData[j].heads;
 			iSumWeight+=this.arrData[j].weight;
@@ -159,7 +157,7 @@ enyo.kind({
 		
 		this.$.lblPurSumInvHeads.setContent(gblUtils.numCD(iHeads-iSold));
 		this.$.lblPurSumInvWeight.setContent(gblUtils.numCD((iSumWeight-iSoldAve).toFixed(2)));
-		this.$.lblSumInvAveWight.setContent(((iSumWeight-iSoldAve)/(iHeads-iSold)).toFixed(2))
+		this.$.lblSumInvAveWight.setContent(((iSumWeight-iSoldAve)/(iHeads-iSold)).toFixed(2));
 	},
 	ready:function(){
 		this.updateSummary();
