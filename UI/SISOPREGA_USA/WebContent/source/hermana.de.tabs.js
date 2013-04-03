@@ -11,16 +11,19 @@ enyo.kind(
     cattleClassName : "",
     components :
       [
-		{
-			 kind: "Popup",
-			 name: "popMan", 
-			 dismissWithClick:false,
-			 showHideMode: "transition", 
-			 openClassName: "zoomFadeIn",
-			 className: "transitioner2", 
-			 layoutKind: "VFlexLayout",
-			 style: "overflow: hidden", width: "95%", height: "95%",scrim: true,
-		 },	  
+        {
+          kind : "Popup",
+          name : "popMan",
+          dismissWithClick : false,
+          showHideMode : "transition",
+          openClassName : "zoomFadeIn",
+          className : "transitioner2",
+          layoutKind : "VFlexLayout",
+          style : "overflow: hidden",
+          width : "95%",
+          height : "95%",
+          scrim : true,
+        },
         {
           name : "tabButtons",
           kind : "TabGroup",
@@ -98,6 +101,7 @@ enyo.kind(
                     {
                       kind : enyo.IconButton,
                       icon : "../SISOPREGA/images/menu-icon-new.png",
+                      className : "enyo-button-affirmative",
                       onclick : "agregarCorte"
                     } ]
               },
@@ -125,38 +129,41 @@ enyo.kind(
                 components :
                   [
                     {
-                      kind : "controls.autocomplete",
-                      name : "corral",
-                      hint : "corral",
+                      name : "lblCorralExpo",
                       flex : 1,
                       contentPack : "end",
-                      onEnter : "emularTabulacionConEnter",
-                      style : "width:20%"
                     },
                     {
-                      kind : "Input",
-                      style : "width:20%",
-                      hint : "Clase"
+                      kind : "controls.autocomplete",
+                      name : "classAutoCompleteExpo",
+                      hint : "clase",
+                      flex : 1,
+                      contentPack : "end",
+                      onEnter : "emularTabulacionConEnter"
                     },
                     {
-                      kind : "Input",
-                      style : "width:20%",
-                      hint : "Cabezas"
+                      name : "lblHeadsExpo",
+                      flex : 1,
+                      contentPack : "end",
                     },
                     {
-                      kind : "Input",
-                      style : "width:20%",
-                      hint : "Peso"
+                      name : "lblWeightExpo",
+                      flex : 1,
+                      contentPack : "end",
                     },
                     {
                       kind : enyo.IconButton,
                       icon : "../SISOPREGA/images/menu-icon-new.png",
-                      onclick : "contextMenuClicked"
+                      className : "enyo-button-affirmative",
+                      onclick : "reClassify"
                     } ]
               },
               {
                 kind : "hermana.corte.list",
-                style : "border: thin dotted black; height:250px;"
+                style : "border: thin dotted black; height:250px;",
+                name : "listaCorteExpo",
+                onRemoveCorte : "corteRemoved",
+                onCorteSelected : "setupCorteSelected"
               } ]
         },
         {
@@ -176,29 +183,30 @@ enyo.kind(
                       hint : "Concepto",
                       flex : .4,
                       contentPack : "end",
-					  onSelectItem:"chargeSelected",
+                      onSelectItem : "chargeSelected",
                       onEnter : "chargeSelected"
                     },
                     {
                       kind : enyo.IconButton,
                       icon : "../SISOPREGA/images/menu-icon-new.png",
                       onclick : "showNewCharge"
-                    },					
+                    },
                     {
                       kind : "Input",
-					  name:"charge_price",
+                      name : "charge_price",
                       hint : "Monto"
                     },
                     {
-                      kind : enyo.IconButton,flex:.1,
+                      kind : enyo.IconButton,
+                      flex : .1,
                       icon : "../SISOPREGA/images/menu-icon-new.png",
-					  className : "enyo-button-affirmative",
+                      className : "enyo-button-affirmative",
                       onclick : "addCharge"
                     } ]
               },
               {
                 kind : "hermana.gastos.list",
-				name:"chargeList",
+                name : "chargeList",
                 style : "border: thin dotted black; height:250px;"
               } ]
         },
@@ -267,7 +275,8 @@ enyo.kind(
     ready : function() {
       this.$.penAutoComplete.setItems(cachePen.getList());
       this.$.classAutoComplete.setItems(cacheClasses.getList());
-      this.$.charge.setItems(cacheCharges.getList());	  
+      this.$.classAutoCompleteExpo.setItems(cacheClasses.getList());
+      this.$.charge.setItems(cacheCharges.getList());
     },
     showCorte : function() {
       this.$.tabCorte.setShowing(true);
@@ -364,11 +373,13 @@ enyo.kind(
           weight : this.$.weight.getValue()
         };
 
+      cacheCorte.add(cutRecord);
       this.$.listaCorte.addCorte(cutRecord);
+      this.$.listaCorteExpo.addCorte(cutRecord);
       this.clearCorteDataEntry();
       this.calculateSummaryFromCorte(cutRecord);
     },
-    calculateSummaryFromCorte : function(cutRecord){
+    calculateSummaryFromCorte : function(cutRecord) {
       this.summary.net_hc += Number(cutRecord.heads);
       this.summary.net_lbs += Number(cutRecord.weight);
       this.summary.net_kgs += Math.floor(cutRecord.weight * 45.3592) / 100;
@@ -379,21 +390,23 @@ enyo.kind(
 
       this.updateTableContents();
     },
-    clearCorteDataEntry : function(){
+    clearCorteDataEntry : function() {
       this.$.penAutoComplete.clear();
       this.$.classAutoComplete.clear();
       this.$.headCount.setValue('');
       this.$.weight.setValue('');
       this.$.penAutoComplete.$.textField.forceFocus();
     },
-    corteRemoved : function(){
+    corteRemoved : function() {
       this.clearCorteSummary();
       var cortes = cacheCorte.get();
-      for(var i = 0; i < cortes.length; i++){
+      for ( var i = 0; i < cortes.length; i++) {
         this.calculateSummaryFromCorte(cortes[i]);
       }
+      this.$.listaCorte.loadCortes();
+      this.$.listaCorteExpo.loadCortes();
     },
-    clearCorteSummary : function(){
+    clearCorteSummary : function() {
       this.summary.net_hc = 0;
       this.summary.net_lbs = 0.0;
       this.summary.net_kgs = 0.0;
@@ -404,30 +417,59 @@ enyo.kind(
 
       this.updateTableContents();
     },
-	chargeSelected:function(){
-		if(this.$.charge.getIndex()>-1){
-			this.$.charge_price.setValue(cacheCharges.getList()[this.$.charge.getIndex()-1].charge_price);
-		}
-	},
-	addCharge:function(){
-		if(this.$.charge.getIndex()>-1){
-			this.$.chargeList.addCharge(cacheCharges.getList()[this.$.charge.getIndex()-1]);
-			this.$.charge.setIndex(-1)
-			this.$.charge_price.setValue("");
-			this.$.charge.setValue("");
-		}
-	},
-	showNewCharge:function(){
-		if(this.$.dynocon){
-			this.$.dynocon.destroy();
-		}		
-		this.$.popMan.createComponent({kind: "hermana.gastos.concepto",arrData:cachePur.readData(),
-									   onAddCharge:"closePopUp",onCancel:"closePopUp", 
-									   name:'dynocon',flex: 1},{owner:this});
-		this.$.popMan.render();
-		this.$.popMan.openAtCenter();											   		
-	},
-	closePopUp:function(){	
-		this.$.popMan.close();
-	},	
+    chargeSelected : function() {
+      if (this.$.charge.getIndex() > -1) {
+        this.$.charge_price.setValue(cacheCharges.getList()[this.$.charge.getIndex() - 1].charge_price);
+      }
+    },
+    addCharge : function() {
+      if (this.$.charge.getIndex() > -1) {
+        this.$.chargeList.addCharge(cacheCharges.getList()[this.$.charge.getIndex() - 1]);
+        this.$.charge.setIndex(-1);
+        this.$.charge_price.setValue("");
+        this.$.charge.setValue("");
+      }
+    },
+    showNewCharge : function() {
+      if (this.$.dynocon) {
+        this.$.dynocon.destroy();
+      }
+      this.$.popMan.createComponent(
+        {
+          kind : "hermana.gastos.concepto",
+          arrData : cachePur.readData(),
+          onAddCharge : "closePopUp",
+          onCancel : "closePopUp",
+          name : 'dynocon',
+          flex : 1
+        },
+        {
+          owner : this
+        });
+      this.$.popMan.render();
+      this.$.popMan.openAtCenter();
+    },
+    closePopUp : function() {
+      this.$.popMan.close();
+    },
+    setupCorteSelected : function(){
+      if(this.$.listaCorteExpo.iSelected == undefined){
+        
+        this.$.lblCorralExpo.setContent("");
+        this.$.lblHeadsExpo.setContent("");
+        this.$.lblWeightExpo.setContent("");
+        this.$.classAutoCompleteExpo.setIndex(-1);
+        
+        return false;
+      }
+        
+
+      var cortes = cacheCorte.get();
+      var selectedCorte = cortes[this.$.listaCorteExpo.iSelected];
+      
+      this.$.lblCorralExpo.setContent("Corral: " + selectedCorte.pen_name);
+      this.$.lblHeadsExpo.setContent("Cabezas: " +  utils.formatNumberThousands(selectedCorte.heads));
+      this.$.lblWeightExpo.setContent("Peso: " + utils.formatNumberThousands(selectedCorte.weight) + " lbs.");
+      this.$.classAutoCompleteExpo.setIndex(selectedCorte.cattleClassId);
+    }
   });

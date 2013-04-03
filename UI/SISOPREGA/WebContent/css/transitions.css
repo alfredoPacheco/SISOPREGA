@@ -264,3 +264,14 @@
 	text-align:center;
 	vertical-align:central;
 }
+.listRow{
+	font-size:13px;
+	height:40px;
+}
+.selectedListRow {
+	font-size:13px;
+	background-color:brown;
+	//color:#DABD8B;
+	color:#EBCE9C;
+	height:40px;
+}
