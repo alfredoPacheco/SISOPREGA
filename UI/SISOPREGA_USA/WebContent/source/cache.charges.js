@@ -19,7 +19,12 @@ enyo.kind({
 			arrData.push(obj);
 		}					   
 		return arrData;
-    }
+    },
+	addData:function(arrData,cbObj,cbFunction){
+		//TODO:Sort
+		this.arrData.push(arrData);
+		cbObj[cbFunction]();
+	}
 
 });
 var cacheCharges = new cache.charges();

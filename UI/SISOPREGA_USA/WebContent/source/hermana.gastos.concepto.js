@@ -4,7 +4,7 @@ enyo.kind({
 	layoutKind : "VFlexLayout",
 	iCreated : null,
 	events : {
-		"onAddRancher" : "",
+		"onAddCharge" : "",
 		"onUpdateRancher" : "",
 		"onCancel" : ""
 	},
@@ -15,21 +15,13 @@ enyo.kind({
 		className : "formBG",
 		components : [ {
 			kind : "RowGroup",
-			defaultKind : "HFlexBox",
 			caption : "",
 			components : [ {
-				kind : "Input",
-				name : "charge_desc",
-				hint : "Concepto",
-				inputClassName : "blankInput",
-				focusClassName : "darkFocus"
-			}, {
-				kind : "Input",
-				name : "charge_price",
-				hint : "Costo",
-				inputClassName : "blankInput",
-				focusClassName : "darkFocus"
-			}
+				kind : "HFlexBox",
+				components:[
+					{kind : "Input",name : "charge_desc",hint : "Concepto",flex:.7}, 
+					//{kind : "Input",name : "charge_price",hint : "Costo",flex:.3,}
+					]}
 		]},
 		{
 			kind : "Drawer",
@@ -39,7 +31,7 @@ enyo.kind({
 				name : "btnAdd",
 				className : "enyo-button-affirmative",
 				caption : "Crear",
-				onclick : "addRancher"
+				onclick : "doAddCharge"
 			}, ]
 		}, {
 			kind : "Drawer",
@@ -78,4 +70,7 @@ enyo.kind({
 		this.$.draUpdate.setOpen(false);
 		this.resetValues();
 	},
+	getCharge:function(){
+		return {charge_id:8,charge_desc:this.$.charge_desc.getValue()};
+	}
 });

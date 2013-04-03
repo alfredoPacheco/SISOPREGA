@@ -11,19 +11,14 @@ enyo.kind(
     cattleClassName : "",
     components :
       [
-        {
-          kind : "Popup",
-          name : "popMan",
-          dismissWithClick : false,
-          showHideMode : "transition",
-          openClassName : "zoomFadeIn",
-          className : "transitioner2",
-          layoutKind : "VFlexLayout",
-          style : "overflow: hidden",
-          width : "95%",
-          height : "95%",
-          scrim : true,
-        },
+		{
+			 kind: "Popup",
+			 name: "popNewCharge", 
+			 dismissWithClick:false,
+			 layoutKind: "VFlexLayout",			 
+			 style: "overflow: hidden", width: "95%", height: "30%",scrim: true,
+			 components:[{kind: "hermana.gastos.concepto",name:"concepto",onAddCharge:"addNewCharge",onCancel:"closePopUp",flex: 1}]
+		 },	
         {
           name : "tabButtons",
           kind : "TabGroup",
@@ -417,42 +412,33 @@ enyo.kind(
 
       this.updateTableContents();
     },
-    chargeSelected : function() {
-      if (this.$.charge.getIndex() > -1) {
-        this.$.charge_price.setValue(cacheCharges.getList()[this.$.charge.getIndex() - 1].charge_price);
-      }
-    },
-    addCharge : function() {
-      if (this.$.charge.getIndex() > -1) {
-        this.$.chargeList.addCharge(cacheCharges.getList()[this.$.charge.getIndex() - 1]);
-        this.$.charge.setIndex(-1);
-        this.$.charge_price.setValue("");
-        this.$.charge.setValue("");
-      }
-    },
-    showNewCharge : function() {
-      if (this.$.dynocon) {
-        this.$.dynocon.destroy();
-      }
-      this.$.popMan.createComponent(
-        {
-          kind : "hermana.gastos.concepto",
-          arrData : cachePur.readData(),
-          onAddCharge : "closePopUp",
-          onCancel : "closePopUp",
-          name : 'dynocon',
-          flex : 1
-        },
-        {
-          owner : this
-        });
-      this.$.popMan.render();
-      this.$.popMan.openAtCenter();
-    },
-    closePopUp : function() {
-      this.$.popMan.close();
-    },
-    setupCorteSelected : function(){
+	chargeSelected:function(){
+		if(this.$.charge.getIndex()>-1){
+			//this.$.price.setValue(cacheCharges.getList()[this.$.charge.getIndex()-1].charge_price);
+		}
+	},
+	addCharge:function(){
+		if(this.$.charge.getIndex()>-1){
+			this.$.chargeList.addCharge({charge_desc:this.$.charge.getValue(),charge_price:this.$.price.getValue()});
+			this.$.charge.setIndex(-1);
+			this.$.price.setValue("");
+			this.$.charge.setValue("");
+		}else{
+			alert("Concepto no registrado");
+		}
+	},
+	showNewCharge:function(){
+		this.$.popNewCharge.openAtCenter();											   		
+	},
+	closePopUp:function(){	
+      	this.$.charge.setItems(cacheCharges.getList());
+		this.$.charge.render();
+		this.$.popNewCharge.close();
+	},
+	addNewCharge:function(){
+		cacheCharges.addData(this.$.concepto.getCharge(),this,"closePopUp");
+	},    
+	setupCorteSelected : function(){
       if(this.$.listaCorteExpo.iSelected == undefined){
         
         this.$.lblCorralExpo.setContent("");
