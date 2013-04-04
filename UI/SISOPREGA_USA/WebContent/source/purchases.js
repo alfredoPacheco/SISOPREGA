@@ -20,7 +20,7 @@ enyo
 					    {
 						content : "Fecha:",
 						width : "80px;",
-						style : "text-align: right;"
+						style : "text-align: right;margin-right:5px;"
 					    },
 					    {
 						kind : "ToolInput",
@@ -42,7 +42,7 @@ enyo
 				    components : [ {
 					content : "Proveedor:",
 					width : "80px;",
-					style : "text-align: right;"
+					style : "text-align: right;margin-right:5px;"
 				    }, {
 					kind : "controls.autocomplete",
 					inputKind : "ToolInput",

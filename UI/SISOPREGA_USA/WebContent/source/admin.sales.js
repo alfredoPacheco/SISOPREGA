@@ -24,26 +24,51 @@ enyo.kind({
 				]},
 				{kind: "Spacer",flex:.1},
 				{kind: "Button",caption: "+",onclick:"doShipment"}
-			]},			
+			]},
+			{//HEADER:
+				kind : "HFlexBox",
+				className : "listFirst",
+				style : "font-size:13px;background-color:#DABD8B;border-bottom-style: solid;border-bottom-color: black;padding: 0px 10px;border-width: 1px;",
+				height : "30px",
+				align : "center",
+				pack : "start",
+				components : [
+					{
+					    content : 'Fecha',
+					    flex:1
+					},{
+					    content : 'Cabezas',
+					    flex:1.5, style:"text-align: right;"
+					},{
+					    content : 'Peso',
+					    flex:1.5, style:"text-align: right;"
+					},{
+					    content : 'Promedio',
+					    flex:1.5, style:"text-align: right;margin-right:10px;"
+					},{
+					    content : '',
+					    width:"30px"
+					},]
+			    },
 		{kind: "Scroller", flex: 1, 
 		 components:[
 			{kind: enyo.VirtualRepeater, name: "listSales", onSetupRow: "loadSales", onclick: "selectSale",								
 			components: [
-				{kind: enyo.Item,
+				{kind: enyo.Item, style:"font-size:14px;",
 					components: [
-					{layoutKind: enyo.HFlexLayout,components:[
-						{name: "lblSalesDate",flex:.9,
+					{layoutKind: enyo.HFlexLayout, align:"center",components:[
+						{name: "lblSalesDate",flex:1,
 						 content: ""},
-						{name: "lblSalesHeads",flex:1,
-						 content: ""},	
-						{name: "lblSalesWeight",flex:1,
-						 content: ""},
-						{name: "lblSalesAverage",flex:1, 
-						 content: ""},
+						{name: "lblSalesHeads",flex:1.5,
+						 content: "", style:"text-align: right;"},	
+						{name: "lblSalesWeight",flex:1.5,
+						 content: "", style:"text-align: right;"},
+						{name: "lblSalesAverage",flex:1.5, 
+						 content: "", style:"text-align: right;margin-right:10px;"},
 						{kind: "CheckBox", name:"chkSalesShip", iPos:"",checked: false,
-						 style: "margin-right:5px",onclick:"checkBox_click"},		 
+						 onclick:"checkBox_click"},		 
 					]},
-					{layoutKind: enyo.HFlexLayout,components:[{name: "lblSalesClient",style: "font-size: 0.85em;color:gray",
+					{layoutKind: enyo.HFlexLayout,components:[{name: "lblSalesClient",style: "font-size: 0.85em;color:#008B8B",
 					 content:"Comprador"},{kind:"Spacer"},
 					 {name:"lblShipProgrammed", style:"color:gray;font-size:0.85em;", content:"Programado", showing:false}
 					 ]
@@ -91,6 +116,8 @@ enyo.kind({
 			    this.$.chkSalesShip.hide();
 			    this.$.lblShipProgrammed.show();
 			}
+			if(inIndex % 2 == 0)inSender.$.client.$.client.applyStyle("background-color","#DFC699");
+//			if(inIndex % 2 == 0)inSender.$.client.$.client.applyStyle("background-color","#DCC190");
 			return true;
 		}else{
 			return false;

@@ -31,26 +31,48 @@ enyo.kind({
 			{kind: "Spacer",flex:.02},				
 			{kind: "Button",caption: "+",onclick:"doPurchase"}
 		]},
+		{//HEADER:
+			kind : "HFlexBox",
+			className : "listFirst",
+			style : "font-size:13px;background-color:#DABD8B;border-bottom-style: solid;border-bottom-color: black;padding: 0px 10px;border-width: 1px;",
+			height : "30px",
+			align : "center",
+			pack : "start",
+			components : [
+				{
+				    content : 'Fecha',
+				    flex:1
+				},{
+				    content : 'Cabezas',
+				    flex:1.5, style:"text-align: right;"
+				},{
+				    content : 'Peso',
+				    flex:1.5, style:"text-align: right;"
+				},{
+				    content : 'Promedio',
+				    flex:1.5, style:"text-align: right;"
+				}]
+		    },
 		{kind: "Scroller", flex: 1, 
 		 components:[
 			{kind: enyo.VirtualRepeater, name: "listPurchased", onSetupRow: "loadPurchased", onclick: "doSelect",								
 			components: [
-				{kind: enyo.Item,		
+				{kind: enyo.Item, style:"font-size:14px;",	
 					components: [
 					{layoutKind: enyo.HFlexLayout,components:[
-						{name: "lblPurDate",flex:.8,
+						{name: "lblPurDate",flex:1,
 						 content: ""},	
-						{name: "lblPurHeads",flex:1,
-						 content: ""},	
-						{name: "lblPurWeight",flex:1,
-						 content: ""},
-						{name: "lblPurAveWeight",flex:1, 
-						 content: ""},
+						{name: "lblPurHeads",flex:1.5,
+						 content: "", style:"text-align: right;"},	
+						{name: "lblPurWeight",flex:1.5,
+						 content: "", style:"text-align: right;"},
+						{name: "lblPurAveWeight",flex:1.5, 
+						 content: "", style:"text-align: right;"},
 					]},
 					{layoutKind: enyo.HFlexLayout,
 					 components:[
-						{name: "lblPurSeller",flex:.45,style: "font-size: 0.85em;color:#999",content:""},
-						{kind: "VFlexBox",name: "lblPurRew",flex:.1,style: "font-size: 0.85em;color:#999",align:"center",content:""},				
+						{name: "lblPurSeller",flex:.45,style: "font-size: 0.85em;color:#008B8B",content:""},
+						{kind: "VFlexBox",name: "lblPurRew",flex:.1,style: "font-size: 0.85em;color:#008B8B",align:"center",content:""},				
 						{kind: "Spacer",flex:.4}						
 					]}
 					]}
@@ -98,6 +120,8 @@ enyo.kind({
 					this.$.lblPurRew.setContent("("+objData.reweight+")");
 				}
 			}
+			if(inIndex % 2 == 0)inSender.$.client.$.client.applyStyle("background-color","#DFC699");
+//			if(inIndex % 2 == 0)inSender.$.client.$.client.applyStyle("background-color","#DCC190");
 			return true;
 		}else{
 			return false;			
