@@ -14,11 +14,11 @@ enyo.kind({
 	height : "40px;",
 	components : [ {
 	    content : "Fecha y Hora:",
-	    width : "160px;",
+	    width : "166px;",
 	    style : "text-align: right;margin-right:10px;"
 	}, {
 	    kind : "ToolInput",
-	    name : "moveDate",
+	    name : "feedDate",
 	    hint : "mes/dia/año",
 	    // width : "103px;",
 	    flex : 1,
@@ -35,7 +35,7 @@ enyo.kind({
 	// },
 	{
 	    kind : "ToolInput",
-	    name : "moveTime",
+	    name : "feedTime",
 	    // width : "103px;",
 	    hint : "HH:MM",
 	    flex : 1,
@@ -49,27 +49,26 @@ enyo.kind({
 	pack : "center",
 	height : "40px;",
 	components : [ {
-	    content : "Cantidad de cabezas:",
-	    width : "160px;",
+	    content : "Cantidad de Alimento:",
+	    width : "166px;",
 	    style : "text-align: right;margin-right:10px;"
 	}, {
 	    kind : "ToolInput",
 	    name : "totalHC",
-	    hint : '',
+	    hint : '1.5 % del peso total.... Lbs',
 	    flex : 1,
 	// style:"max-width: 500px;"
-	}, ]
+	}, {
+	    content : "Lbs",
+	    width : "30px;",
+	    style: "text-align: right;margin-right:10px;"
+	}]
     }, {
 	kind : enyo.HFlexBox,
 	align : "center",
 	height : "40px;",
 	style : "font-size:14px;",
-	components : [ {
-	    kind : enyo.Button,
-	    caption : "Corte",
-	    onclick : "corte_click",
-	    style : "background-color: #DABD8B;min-width:70px;"
-	}, {
+	components : [{
 	    kind : enyo.Spacer
 	}, {
 	    kind : enyo.Button,
@@ -86,8 +85,8 @@ enyo.kind({
     // ]},
     ],
     ready : function() {
-	this.$.moveDate.setValue(utils.dateOut(new Date()));
-	this.$.moveDate.$.input.applyStyle("text-align", "left");
+	this.$.feedDate.setValue(utils.dateOut(new Date()));
+	this.$.feedDate.$.input.applyStyle("text-align", "left");
     },
     applyMask : function(inSender) {
 	var _id = inSender.$.input.getId();
@@ -110,6 +109,9 @@ enyo.kind({
     save : function (){
 	this.obj.head = this.$.totalHC.getValue();
 	this.doGuardar();
+    },
+    cancel: function (){
+	
     }
     
 });

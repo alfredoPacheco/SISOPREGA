@@ -9,11 +9,11 @@ enyo
 		value : 2
 	    }, {
 		caption : "Corte",
-		value : 4
+		value : 3
 	    }],
 	    arrMovingPen : [ {
 		caption : "Mover aqui",
-		value : 3
+		value : 4
 	    }, ],
 	    style : "background-color:#DABD8B;",
 	    kind : enyo.VFlexBox,
@@ -50,6 +50,23 @@ enyo
 		    name : "movePen_kind",
 		    onCancel : "cancelMoving",
 		    onGuardar : "saveMoving",
+		    flex : 1
+		} ]
+	    },
+	    {
+		kind : enyo.Popup,
+		name : "popup_alimentoUS",
+		width : "50%;",
+		height : "190px;",
+		dismissWithClick : false,
+		layoutKind : "VFlexLayout",
+		style : "overflow : hiddin; border-with:8px;",
+		scrim : true,
+		components : [ {
+		    kind : "alimentoUS",
+		    name : "alimento_kind",
+		    onCancel : "cancelFeed",
+		    onGuardar : "saveFeed",
 		    flex : 1
 		} ]
 	    },
@@ -331,8 +348,11 @@ enyo
 		    this.movingPen = true;
 		    break;
 		case 2:
+		    this.$.popup_alimentoUS.openAtCenter();
 		    break;
-		case 3:
+		case 3: 
+		    break;
+		case 4:
 		    var obj = enyo.clone(cachePen.getByBarnyard(this.movingFrom.name));
 		    if (obj) {
 			var byName = this.movingTo.name;
@@ -402,5 +422,11 @@ enyo
 		}else{
 		    alert("saveMoving Error");
 		}
+	    },
+	    cancelFeed : function() {
+		this.$.popup_alimentoUS.close();
+	    },
+	    saveFeed : function() {
+		alert ("Se guadado");
 	    }
 	});
