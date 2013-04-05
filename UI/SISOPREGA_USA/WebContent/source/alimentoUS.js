@@ -54,8 +54,8 @@ enyo.kind({
 	    style : "text-align: right;margin-right:10px;"
 	}, {
 	    kind : "ToolInput",
-	    name : "totalHC",
-	    hint : '1.5 % del peso total.... Lbs',
+	    name : "feedQtyPorcentage",
+	    hint : '',
 	    flex : 1,
 	// style:"max-width: 500px;"
 	}, {
@@ -87,6 +87,7 @@ enyo.kind({
     ready : function() {
 	this.$.feedDate.setValue(utils.dateOut(new Date()));
 	this.$.feedDate.$.input.applyStyle("text-align", "left");
+	this.$.feedTime.setValue(new Date().toLocaleTimeString().substring(0,5));
     },
     applyMask : function(inSender) {
 	var _id = inSender.$.input.getId();
@@ -102,14 +103,21 @@ enyo.kind({
     },
     setObj : function (objt){
 	this.obj = objt; 
+	this.calculateFeedQty();
     },
     getObj : function (){
 	return this.obj;
     },
     save : function (){
-	this.obj.head = this.$.totalHC.getValue();
+	this.obj.feedQty = this.$.feedQtyPorcentage.getValue();
 	this.doGuardar();
     },
+    calculateFeedQty : function ()
+    {
+	this.$.feedQtyPorcentage.setValue (utils.formatNumberThousands(this.obj.weight * .015));
+	
+    },
+    
     cancel: function (){
 	
     }

@@ -348,6 +348,8 @@ enyo
 		    this.movingPen = true;
 		    break;
 		case 2:
+		    this.$.popup_alimentoUS.validateComponents();
+		    this.$.alimento_kind.setObj(cachePen.getByBarnyard(this.objSelected.name));
 		    this.$.popup_alimentoUS.openAtCenter();
 		    break;
 		case 3: 
