@@ -31,32 +31,59 @@ enyo.kind({
 			
 			{kind: "Spacer",flex:.05},				
 			{kind: "Button",caption: "+",onclick:"doSale"}
-		]},		
+		]},	
+		{//HEADER:
+			kind : "HFlexBox",
+			className : "listFirst",
+			style : "font-size:13px;background-color:#DABD8B;border-bottom-style: solid;border-bottom-color: black;padding: 0px 10px;border-width: 1px;",
+			height : "30px",
+			align : "center",
+			pack : "start",
+			components : [
+				{
+				    content : 'Tipo',
+				    flex:1
+				},{
+				    content : 'Clase',
+				    flex:1
+				},{
+				    content : 'Cabezas',
+				    flex:1, style:"text-align: right;"
+				},{
+				    content : 'Peso',
+				    flex:1, style:"text-align: right;"
+				},{
+				    content : 'Promedio',
+				    flex:1, style:"text-align: right;"
+				},{
+				    content : 'Alimento',
+				    flex:.9, style:"text-align: right;"
+				},]
+		    },
 		{kind: "Scroller", flex: 1, 
 		 components:[
 			{kind: enyo.VirtualRepeater, name: "listInventory", onSetupRow: "loadInventory", onclick: "doSelect",								
 			components: [
-				{kind: enyo.Item,
+				{kind: enyo.Item, style:"font-size: 14px;",
 					components: [
 					{layoutKind: enyo.HFlexLayout,components:[
 						{name: "lblInvType",flex:1,
 						 content: ""},
-						{name: "lblInvClass",flex:1.3,
+						{name: "lblInvClass",flex:1,
 						 content: "Novillos"},						 
-						{name: "lblInvHeads",flex:1.2,
-						 content: ""},	
-						{name: "lblInvWeight",flex:1.5,
-						 content: ""},
-						{name: "lblInvInvAverage",flex:1.2, 
-						 content: ""},
-						{name: "lblInvFeed",flex:.8, 
-						 className:"listSecond",
-						 content: ""},						 
+						{name: "lblInvHeads",flex:1,
+						 content: "", style:"text-align: right;"},	
+						{name: "lblInvWeight",flex:1,
+						 content: "", style:"text-align: right;"},
+						{name: "lblInvInvAverage",flex:1, 
+						 content: "", style:"text-align: right;"},
+						{name: "lblInvFeed",flex:.9, 
+						 content: "", style:"text-align: right;"},						 
 					]},
 					{layoutKind: enyo.HFlexLayout,components:[
-						{name: "lblInvBarnyards",style: "font-size: 0.85em;color:#999",flex:1,content:""},						
-						{name: "lblInvDescBuyer",style: "font-size: 0.85em;color:#999",flex:1,content:""},
-						{name: "lblInvDescTruck",style: "font-size: 0.85em;color:#999",flex:1,content:""}						
+						{name: "lblInvBarnyards",style: "font-size: 0.85em;color:#008B8B",flex:1,content:""},						
+						{name: "lblInvDescBuyer",style: "font-size: 0.85em;color:#008B8B",flex:1,content:""},
+						{name: "lblInvDescTruck",style: "font-size: 0.85em;color:#008B8B",flex:1,content:""}						
 						]}
 					]}
 				]}
@@ -125,6 +152,9 @@ enyo.kind({
 			this.$.lblInvBarnyards.setContent(sBY);			
 			this.$.lblInvDescBuyer.setContent(sBuyer);
 			this.$.lblInvDescTruck.setContent(sTrucks);
+			
+			if(inIndex % 2 == 0)inSender.$.client.$.client.applyStyle("background-color","#DFC699");
+//			if(inIndex % 2 == 0)inSender.$.client.$.client.applyStyle("background-color","#DCC190");
 			return true;
 		}else{
 			return false;			

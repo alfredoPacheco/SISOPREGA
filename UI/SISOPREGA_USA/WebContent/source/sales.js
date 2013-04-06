@@ -2,7 +2,6 @@ enyo
 	.kind({
 	    name : "sales",
 	    kind : enyo.VFlexBox,
-	    arrReceptions : null,
 	    arrDetail : [],
 	    totalHC : 0,
 	    totalWeight : 0,
@@ -21,7 +20,7 @@ enyo
 					    {
 						content : "Fecha:",
 						width : "80px;",
-						style : "text-align: right;"
+						style : "text-align: right;margin-right:5px;"
 					    },
 					    {
 						kind : "ToolInput",
@@ -43,7 +42,7 @@ enyo
 				    components : [ {
 					content : "Cliente:",
 					width : "80px;",
-					style : "text-align: right;"
+					style : "text-align: right;margin-right:5px;"
 				    }, {
 					kind : "controls.autocomplete",
 					inputKind : "ToolInput",
@@ -88,7 +87,7 @@ enyo
 			    style : "background-color: #DABD8B;"
 			}, ]
 		    },
-		    {
+		    {//HEADER:
 			kind : "HFlexBox",
 			className : "listFirst",
 			style : "font-size:13px;background-color:#DABD8B;border-bottom-style: solid;border-bottom-color: #482400;",

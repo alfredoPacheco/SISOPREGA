@@ -183,6 +183,7 @@ enyo.kind({
 	this.$.popup_shipments.close();
 	this.$.sales.updateList();
 	this.$.shipment.updateList();
+	this.$.shipment.moveToBottom();
     },
     cancelShipment_click : function() {
 	this.$.popup_shipments.close();
