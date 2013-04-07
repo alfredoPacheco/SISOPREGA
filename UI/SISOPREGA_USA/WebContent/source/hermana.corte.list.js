@@ -123,9 +123,9 @@ enyo.kind(
       this.loadCortes(arrCorte);
     },
     loadCortes : function(arrCorte) {
-      if(arrCorte)
+      if (arrCorte)
         this.cortes = arrCorte;
-      
+
       this.$.corteList.render();
     },
     setupCorteRow : function(inSender, inIndex) {
@@ -149,15 +149,15 @@ enyo.kind(
       return false;
     },
     dropCorte : function(inSender, inIndex) {
-      
-      if(this.isForExporter)
-        cacheCorte.remove(inIndex);
-      else
+
+      if (this.isForExporter)
         cacheCorte.removeExpo(inIndex);
-      
+      else
+        cacheCorte.remove(inIndex);
+
       this.iSelected = -1;
       this.loadCortes();
-      
+
       this.doRemoveCorte();
     },
     selectCorte : function(inSender, inEvent) {

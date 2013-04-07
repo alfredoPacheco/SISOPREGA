@@ -21,7 +21,7 @@ enyo.kind(
       // Recalculate summary for exporter
       for ( var i = 0; i < this.cortesExpo.length; i++) {
         var removeIndex = -1;
-        for ( var j = 0; j < this.cortesExpo.recordIds.length; j++) {
+        for ( var j = 0; j < this.cortesExpo[i].recordIds.length; j++) {
           if (this.cortesExpo[i].recordIds[j] == index) {
             removeIndex = j;
           }
@@ -33,9 +33,13 @@ enyo.kind(
           this.cortesExpo[i].heads -= removedRecord.heads;
           this.cortesExpo[i].weight -= removedRecord.weight;
           this.cortesExpo[i].recordIds.splice(removeIndex, 1);
+          
+          if(this.cortesExpo[i].recordIds.length <= 0)
+            this.cortesExpo.splice(i, 1);
+          
           break;
         }
-
+        
       }
 
       this.cortes.splice(index, 1);

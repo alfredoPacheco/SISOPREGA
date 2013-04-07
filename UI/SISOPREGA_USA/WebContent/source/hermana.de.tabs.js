@@ -75,6 +75,7 @@ enyo.kind(
                       kind : "controls.autocomplete",
                       name : "penAutoComplete",
                       hint : "corral",
+                      inputKind : "ToolInput",
                       flex : 1,
                       contentPack : "end",
                       onEnter : "emularTabulacionConEnter"
@@ -315,6 +316,8 @@ enyo.kind(
       this.$.classAutoComplete.setItems(cacheClasses.getList());
       this.$.classAutoCompleteExpo.setItems(cacheClasses.getList());
       this.$.charge.setItems(cacheCharges.getList());
+      this.$.listaCorteExpo.$.rowContainer.setConfirmCaption("Reestablecer");
+      this.$.listaCorteExpo.isForExporter = true;
     },
     showCorte : function() {
       this.$.tabCorte.setShowing(true);
