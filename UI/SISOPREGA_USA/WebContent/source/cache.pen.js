@@ -101,12 +101,20 @@ enyo.kind({
     },
     movePen : function(objFrom, objTo, objMovement) {
 	objFrom.heads = parseInt(objFrom.heads) - parseInt(objMovement.heads);
-	objFrom.weight = parseInt(objFrom.weight) - parseInt(objMovement.weight);
-	objTo.heads = parseInt(objTo.heads) + parseInt(objMovement.heads);
-	objTo.weight = parseInt(objTo.weight) + parseInt(objMovement.weight);
-	if (this.update(objFrom))
-	    if (this.create(objTo))
-		return true;
+	objFrom.weight = parseInt(objFrom.weight)
+		- parseInt(objMovement.weight);
+
+	if (objTo) {
+	    objTo.heads = parseInt(objTo.heads) + parseInt(objMovement.heads);
+	    objTo.weight = parseInt(objTo.weight) + parseInt(objMovement.weight);
+	    if (this.update(objFrom))
+		if (this.update(objTo))
+		    return true;
+	}else{
+	    if (this.update(objFrom))
+		    if (this.create(objMovement))
+			return true;    
+	}	
 	return false;
     },
     getList : function() {
@@ -127,11 +135,11 @@ enyo.kind({
     },
     addFeed : function(objPen, objFeed) {
 	var obj = this.getByID(objPen.recordId);
-	if (obj){
+	if (obj) {
 	    obj.feed = objFeed;
 	    return true;
 	}
-	alert ("Error al intentar guardad el alimento");
+	alert("Error al intentar guardad el alimento");
 	return false;
     },
     getByID : function(id) {
