@@ -83,6 +83,8 @@ enyo.kind({
     ready : function() {
 	this.$.moveDate.setValue(utils.dateOut(new Date()));
 	this.$.moveDate.$.input.applyStyle("text-align", "left");
+	this.$.moveTime.setValue(new Date().toLocaleTimeString()
+		.substring(0, 5));
     },
     applyMask : function(inSender) {
 	var _id = inSender.$.input.getId();

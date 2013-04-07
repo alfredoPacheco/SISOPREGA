@@ -10,7 +10,7 @@ enyo
 	    }, {
 		caption : "Corte",
 		value : 3
-	    }],
+	    } ],
 	    arrMovingPen : [ {
 		caption : "Mover aqui",
 		value : 4
@@ -30,7 +30,7 @@ enyo
 	    sColorSelectOccupied : "#9b7eb1",
 	    movingPen : false,
 	    movingFrom : null,
-	    movingTo:null,
+	    movingTo : null,
 	    className : "mapBG",
 	    create : function() {
 		this.inherited(arguments);
@@ -52,8 +52,7 @@ enyo
 		    onGuardar : "saveMoving",
 		    flex : 1
 		} ]
-	    },
-	    {
+	    }, {
 		kind : enyo.Popup,
 		name : "popup_alimentoUS",
 		width : "50%;",
@@ -98,8 +97,16 @@ enyo
 		    style : "color : white;",
 		    pack : "center",
 		    align : "center",
+		    allowHtml : true,
 		    flex : 1,
 		    content : ""
+		}, {
+		    kind : enyo.Button,
+		    onclick : "cancelMoving",
+		    name : "btnCancelMoving",
+		    caption : "Cancelar",
+		    showing : false
+
 		} ],
 
 	    }
@@ -312,12 +319,28 @@ enyo
 		switch (inSender.occupied) {
 		case 0: // Seleccionar corral disponible, 0= corral sin
 		    // recepcion y sin seleccion
-		    this.clearDesc();
-		    inSender.occupied = 2;
+		    if (this.movingPen) {
+			this.movingTo = inSender;
+			if (this.movingFrom.name != this.movingTo.name){
+			this.$.options.setItems(this.arrMovingPen);
+			this.$.options.render();
+			this.$.options.openAtEvent(inEvent);}
+		    } else {
+			this.clearDesc();
+			inSender.occupied = 2;
+		    }
 		    break;
 		case 1: // Seleccionar corral ocupado, 1= corral con recepcion y
 		    // sin seleccion.
-		    this.setDesc(inSender.name);
+		    if (this.movingPen) {
+			this.movingTo = inSender;
+			if (this.movingFrom.name != this.movingTo.name){
+			this.$.options.setItems(this.arrMovingPen);
+			this.$.options.render();
+			this.$.options.openAtEvent(inEvent);}
+		    } else {
+			this.setDesc(inSender.name);
+		    }
 		    break;
 		case 2: // Deseleccionar corral libre, 2= corral sin recepcion
 		    // pero seleccionado.
@@ -332,12 +355,12 @@ enyo
 		    // y seleccionado.
 		    delete this.arrSelectedOccupied[this.objSelected.name];
 		    this.objSelected.occupied = 1;
-		    this.objSelected
-			    .applyStyle(
-				    "background-color",
-				    cacheReceptions
-					    .getByID(cachePen
-						    .getRecIDbyBY(this.objSelected.name)).color);
+		    // this.objSelected
+		    // .applyStyle(
+		    // "background-color",
+		    // cacheReceptions
+		    // .getByID(cachePen
+		    // .getRecIDbyBY(this.objSelected.name)).color);
 		    break;
 
 		}
@@ -346,26 +369,41 @@ enyo
 		switch (inEvent.value) {
 		case 1:
 		    this.movingPen = true;
+		    this.$.toolbar.applyStyle("background-color", "#800000");
+		    this.$.lblInfo.setContent("Seleccione el corral destino");
+		    this.$.btnCancelMoving.show();
 		    break;
 		case 2:
 		    this.$.popup_alimentoUS.validateComponents();
-		    this.$.alimento_kind.setObj(cachePen.getByBarnyard(this.objSelected.name));
+		    this.$.alimento_kind.setObj(cachePen
+			    .getByBarnyard(this.objSelected.name));
 		    this.$.popup_alimentoUS.openAtCenter();
 		    break;
-		case 3: 
+		case 3:
 		    break;
 		case 4:
-		    var obj = enyo.clone(cachePen.getByBarnyard(this.movingFrom.name));
-		    if (obj) {
-			var byName = this.movingTo.name;
-			obj.barnyard = [];
-			obj.barnyard[byName]=byName;
-			this.$.popup_movePen.validateComponents();			
-			this.$.movePen_kind.setObj(obj);
-			this.$.popup_movePen.openAtCenter();
+
+		    var objFrom = enyo.clone(cachePen
+			    .getByBarnyard(this.movingFrom.name));
+		    var objTo = cachePen.getByBarnyard(this.movingTo.name);
+
+		    if (objFrom.cattleName == objTo.cattleName)
+			    {
+
+			if (objFrom) {
+			    var byName = this.movingTo.name;
+			    objFrom.barnyard = [];
+			    objFrom.barnyard[byName] = byName;
+			    this.$.popup_movePen.validateComponents();
+			    this.$.movePen_kind.setObj(objFrom);
+			    this.$.popup_movePen.openAtCenter();
+			} else {
+			    alert("actionSelected Error");
+			}
 		    } else {
-			alert("actionSelected Error");
+			alert("No es posible mezclar clases de ganado en un corral");
 		    }
+
 		    break;
 		}
 	    },
@@ -376,14 +414,23 @@ enyo
 		case 0:
 		    if (this.movingPen) {
 			this.movingTo = inSender;
+			if (this.movingFrom.name != this.movingTo.name){
 			this.$.options.setItems(this.arrMovingPen);
 			this.$.options.render();
-			this.$.options.openAtEvent(inEvent);
+			this.$.options.openAtEvent(inEvent);}
 		    }
 		    break;
 		case 1:
-		    inSender.occupied = 3;
-		    this.cellHold(inSender, inEvent);
+		    if (this.movingPen) {
+			this.movingTo = inSender;
+			if (this.movingFrom.name != this.movingTo.name){
+			this.$.options.setItems(this.arrMovingPen);
+			this.$.options.render();
+			this.$.options.openAtEvent(inEvent);}
+		    } else {
+			inSender.occupied = 3;
+			this.cellHold(inSender, inEvent);
+		    }
 		    break;
 		case 2: // Abrir opciones para corral libre
 		    break;
@@ -403,25 +450,36 @@ enyo
 			.setStyle("color:#FFF;border:none;font-size:12px; text-align:center;min-width:150px;");
 		var obj = cachePen.getByBarnyard(sBY);
 		if (obj) {
-		    this.$.lblInfo
-			    .setContent("Ganado: " + obj.cattleName
-				    + " Cabezas: " + obj.heads + " Peso: "
-				    + obj.weight);
+		    var dateAux = "";
+		    if (obj.feed.dateAndTime) {
+			dateAux = obj.feed.dateAndTime.toLocaleString();
+		    }
+		    this.$.lblInfo.setContent("Ganado: " + obj.cattleName
+			    + " Cabezas: " + obj.heads + " Peso: " + obj.weight
+			    + "<br /> Almento: " + dateAux + " "
+			    + obj.feed.quantity + " Lb");
 		} else
 		    this.$.lblInfo.setContent("");
 	    },
 	    cancelMoving : function() {
 		this.movingPen = false;
 		this.$.popup_movePen.close();
+		this.$.toolbar.applyStyle("background-color", null);
+		this.$.btnCancelMoving.hide();
+		this.setDesc(this.movingFrom.name);
 	    },
 	    saveMoving : function() {
 		var movingFrom = cachePen.getByBarnyard(this.movingFrom.name);
-		var movingTo = this.$.movePen_kind.getObj();
-		if (cachePen.movePen(movingFrom, movingTo)){
+		var movingTo = cachePen.getByBarnyard(this.movingTo.name);
+		var objMovement = this.$.movePen_kind.getObj();
+		if (cachePen.movePen(movingFrom, movingTo, objMovement)) {
 		    this.movingPen = false;
 		    this.$.popup_movePen.close();
 		    this.refreshMap();
-		}else{
+		    this.$.toolbar.applyStyle("background-color", null);
+		    this.$.btnCancelMoving.hide();
+		    this.setDesc(this.movingTo.name);
+		} else {
 		    alert("saveMoving Error");
 		}
 	    },
@@ -429,6 +487,8 @@ enyo
 		this.$.popup_alimentoUS.close();
 	    },
 	    saveFeed : function() {
-		alert ("Se guadado");
+		this.$.popup_alimentoUS.close();
+		this.refreshMap();
+		this.setDesc(this.objSelected.name);
 	    }
 	});

@@ -59,16 +59,16 @@ enyo.kind({
 	    flex : 1,
 	// style:"max-width: 500px;"
 	}, {
-	    content : "Lbs",
+	    content : "Lb",
 	    width : "30px;",
-	    style: "text-align: right;margin-right:10px;"
-	}]
+	    style : "text-align: right;margin-right:10px;"
+	} ]
     }, {
 	kind : enyo.HFlexBox,
 	align : "center",
 	height : "40px;",
 	style : "font-size:14px;",
-	components : [{
+	components : [ {
 	    kind : enyo.Spacer
 	}, {
 	    kind : enyo.Button,
@@ -87,7 +87,8 @@ enyo.kind({
     ready : function() {
 	this.$.feedDate.setValue(utils.dateOut(new Date()));
 	this.$.feedDate.$.input.applyStyle("text-align", "left");
-	this.$.feedTime.setValue(new Date().toLocaleTimeString().substring(0,5));
+	this.$.feedTime.setValue(new Date().toLocaleTimeString()
+		.substring(0, 5));
     },
     applyMask : function(inSender) {
 	var _id = inSender.$.input.getId();
@@ -101,25 +102,31 @@ enyo.kind({
 	    j(document.getElementById(_id)).mask('99:99');
 	});
     },
-    setObj : function (objt){
-	this.obj = objt; 
+    setObj : function(objt) {
+	this.obj = objt;
 	this.calculateFeedQty();
     },
-    getObj : function (){
+    getObj : function() {
 	return this.obj;
     },
-    save : function (){
-	this.obj.feedQty = this.$.feedQtyPorcentage.getValue();
-	this.doGuardar();
+    save : function() {
+	this.obj.feed.quantity = this.$.feedQtyPorcentage.getValue();
+	var dateAux = new Date("" + this.$.feedDate.getValue() + " "
+		+ this.$.feedTime.getValue());
+	this.obj.feed.dateAndTime = dateAux;
+	if (cachePen.addFeed(this.obj, this.obj.feed)) {
+	    this.doGuardar();
+	}
+
     },
-    calculateFeedQty : function ()
-    {
-	this.$.feedQtyPorcentage.setValue (utils.formatNumberThousands(this.obj.weight * .015));
-	
+    calculateFeedQty : function() {
+	this.$.feedQtyPorcentage.setValue(utils
+		.formatNumberThousands(this.obj.weight * .015));
+
     },
-    
-    cancel: function (){
-	
+
+    cancel : function() {
+
     }
-    
+
 });
