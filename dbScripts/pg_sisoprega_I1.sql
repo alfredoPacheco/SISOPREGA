@@ -675,7 +675,8 @@ GRANT ALL ON cat_expense_concept_concept_id_seq TO sisoprega;
 
 DROP TABLE IF EXISTS ctrl_hermana_expense CASCADE;
 CREATE TABLE ctrl_hermana_expense(
-    expense_id  SERIAL PRIMARY KEY,
+	expense_id   SERIAL PRIMARY KEY,
+    concept_id  integer NOT NULL REFERENCES cat_expense_concept(concept_id),
 	hermana_id  integer NOT NULL REFERENCES ctrl_hermana(hermana_id),
 	amount      decimal(12,2) NOT NULL
 );

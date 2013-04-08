@@ -943,7 +943,79 @@
 				<column name="max_weight" />
 			</basic>
 			<basic name="forHorses">
-				<column name="for_horses"/>
+				<column name="for_horses" />
+			</basic>
+		</attributes>
+	</entity>
+	<entity class="com.tramex.sisoprega.dto.HermanaCorteExportador">
+		<table name="ctrl_hermana_corte_exportador" />
+		<attributes>
+			<id name="corteExpo">
+				<column name="corte_expo" />
+				<generated-value strategy="IDENTITY" />
+			</id>
+			<basic name="hermanaId">
+				<column name="hermana_id"/>
+			</basic>
+			<basic name="qualityId">
+				<column name="qualtiy_id"/>
+			</basic>
+		</attributes>
+	</entity>
+	<entity class="com.tramex.sisoprega.dto.HermanaCorte">
+		<table name="ctrl_hermana_corte"/>
+		<attributes>
+			<id name="corte">
+				<column name="corte"/>
+				<generated-value strategy="IDENTITY"/>
+			</id>
+			<basic name="hermanaId">
+				<column name="hermana_id"/>
+			</basic>
+			<basic name="barnyardId">
+				<column name="barnyard_id"/>
+			</basic>
+			<basic name="qualityId">
+				<column name="qualtiy_id"/>
+			</basic>
+			<basic name="corteExpo">
+				<column name="corte_expo"/>
+			</basic>
+			<basic name="heads">
+				<column name="heads"/>
+			</basic>
+			<basic name="weight">
+				<column name="weight"/>
+			</basic>
+		</attributes>
+	</entity>
+	<entity class="com.tramex.sisoprega.dto.ExpenseConcept">
+		<table name="cat_expense_concept"/>
+		<attributes>
+			<id name="conceptId">
+				<column name="concept_id"/>
+				<generated-value strategy="IDENTITY"/>
+			</id>
+			<basic name="conceptName">
+				<column name="concept_name"/>
+			</basic>
+			<basic name="expenseFormula">
+				<column name="expense_formula"/>
+			</basic>
+		</attributes>
+	</entity>
+	<entity class="com.tramex.sisoprega.dto.HermanaExpense">
+		<table name="ctrl_hermana_expense"/>
+		<attributes>
+			<id name="expenseId">
+				<column name="expense_id"/>
+				<generated-value strategy="IDENTITY"/>
+			</id>
+			<basic name="hermanaId">
+				<column name="hermana_id"/>
+			</basic>
+			<basic name="conceptId">
+				<column name="concept_id"/>
 			</basic>
 		</attributes>
 	</entity>

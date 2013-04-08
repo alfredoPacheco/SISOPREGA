@@ -2,6 +2,7 @@ package com.tramex.sisoprega.dto;
 
 public class HermanaExpense {
   private long expenseId;
+  private long conceptId;
   private long hermanaId;
   private double amount;
   /**
@@ -39,6 +40,19 @@ public class HermanaExpense {
    */
   public void setAmount(double amount) {
     this.amount = amount;
+  }
+  
+  /**
+   * @return the conceptId
+   */
+  public long getConceptId() {
+    return conceptId;
+  }
+  /**
+   * @param conceptId the conceptId to set
+   */
+  public void setConceptId(long conceptId) {
+    this.conceptId = conceptId;
   }
   
   @Override
