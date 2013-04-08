@@ -611,7 +611,7 @@ GRANT ALL ON vw_rancher TO sisoprega;
 /* *************************************************************
 I2 Tables.
    ************************************************************ */
-DROP TABLE IF EXISTS ctrl_hermana;
+DROP TABLE IF EXISTS ctrl_hermana CASCADE;
 CREATE TABLE ctrl_hermana(
 	hermana_id SERIAL PRIMARY KEY,
 	entry_no   VARCHAR(10) UNIQUE NOT NULL,
@@ -626,32 +626,36 @@ CREATE TABLE ctrl_hermana(
 GRANT ALL ON ctrl_hermana TO sisoprega;
 GRANT ALL ON ctrl_hermana_hermana_id_seq TO sisoprega;
 
-DROP TABLE IF EXISTS cat_cattle_quality;
+DROP TABLE IF EXISTS cat_cattle_quality CASCADE;
 CREATE TABLE cat_cattle_quality(
 	quality_id    SERIAL PRIMARY KEY,
 	quality_name  VARCHAR(20) UNIQUE NOT NULL,
 	min_weight    decimal(12,4) NOT NULL DEFAULT 0,
-	max_weight    decimal(12,4) NOT NULL DEFAULT 0
+	max_weight    decimal(12,4) NOT NULL DEFAULT 0,
+	for_horses    boolean DEFAULT FALSE
 );
 
 GRANT ALL ON cat_cattle_quality TO sisoprega;
 GRANT ALL ON cat_cattle_quality_quality_id_seq TO sisoprega;
 
-DROP TABLE IF EXISTS cat_cattle_quality_cattle_type;
-CREATE TABLE cat_cattle_quality_cattle_type(
-	qualtiy_id  integer NOT NULL REFERENCES cat_cattle_quality(quality_id),
-	cattle_type integer NOT NULL REFERENCES cat_cattle_type(cattype_id)
+
+DROP TABLE IF EXISTS ctrl_hermana_corte_exportador CASCADE;
+CREATE TABLE ctrl_hermana_corte_exportador(
+	corte_expo  SERIAL PRIMARY KEY,
+	hermana_id  integer NOT NULL REFERENCES ctrl_hermana(hermana_id),
+	qualtiy_id  integer NOT NULL REFERENCES cat_cattle_quality(quality_id)
 );
 
-GRANT ALL ON cat_cattle_quality_cattle_type TO sisoprega;
-CREATE UNIQUE INDEX U_cattle_quality_cattle_type ON cat_cattle_quality_cattle_type(qualtiy_id, cattle_type);
+GRANT ALL ON ctrl_hermana_corte_exportador TO sisoprega;
+GRANT ALL ON ctrl_hermana_corte_exportador_corte_expo_seq TO sisoprega;
 
-DROP TABLE IF EXISTS ctrl_hermana_corte;
+DROP TABLE IF EXISTS ctrl_hermana_corte CASCADE;
 CREATE TABLE ctrl_hermana_corte(
 	corte       SERIAL PRIMARY KEY,
 	hermana_id  integer NOT NULL REFERENCES ctrl_hermana(hermana_id),
 	barnyard_id integer NOT NULL REFERENCES cat_barnyard(barnyard_id),
 	qualtiy_id  integer NOT NULL REFERENCES cat_cattle_quality(quality_id),
+	corte_expo  integer NOT NULL REFERENCES ctrl_hermana_corte_exportador(corte_expo),
 	heads       integer not null,
 	weight      decimal(12,4) not null
 );
@@ -659,25 +663,7 @@ CREATE TABLE ctrl_hermana_corte(
 GRANT ALL ON ctrl_hermana_corte TO sisoprega;
 GRANT ALL ON ctrl_hermana_corte_corte_seq TO sisoprega;
 
-DROP TABLE IF EXISTS ctrl_hermana_corte_exportador;
-CREATE TABLE ctrl_hermana_corte_exportador(
-	corte_expo  SERIAL PRIMARY KEY,
-	hermana_id  integer NOT NULL REFERENCES ctrl_hermana(hermana_id)
-);
-
-GRANT ALL ON ctrl_hermana_corte_exportador TO sisoprega;
-GRANT ALL ON ctrl_hermana_corte_exportador_corte_expo_seq TO sisoprega;
-
-DROP TABLE IF EXISTS ctrl_hermana_corte_exportador_corte;
-CREATE TABLE ctrl_hermana_corte_exportador_corte(
-    corte_expo integer NOT NULL REFERENCES ctrl_hermana_corte_exportador(corte_expo),
-    corte integer NOT NULL REFERENCES ctrl_hermana_corte(corte)
-);
-
-GRANT ALL ON ctrl_hermana_corte_exportador_corte TO sisoprega;
-CREATE UNIQUE INDEX U_ctrl_hermana_corte_exportador_corte ON ctrl_hermana_corte_exportador_corte(corte_expo, corte);
-
-DROP TABLE IF EXISTS cat_expense_concept;
+DROP TABLE IF EXISTS cat_expense_concept CASCADE;
 CREATE TABLE cat_expense_concept(
 	concept_id      SERIAL PRIMARY KEY,
 	concept_name    VARCHAR(30) UNIQUE NOT NULL,
@@ -687,8 +673,9 @@ CREATE TABLE cat_expense_concept(
 GRANT ALL ON cat_expense_concept TO sisoprega;
 GRANT ALL ON cat_expense_concept_concept_id_seq TO sisoprega;
 
-DROP TABLE IF EXISTS ctrl_hermana_expense;
+DROP TABLE IF EXISTS ctrl_hermana_expense CASCADE;
 CREATE TABLE ctrl_hermana_expense(
-    expense_id     SERIAL PRIMARY KEY,
+    expense_id  SERIAL PRIMARY KEY,
+	hermana_id  integer NOT NULL REFERENCES ctrl_hermana(hermana_id),
 	amount      decimal(12,2) NOT NULL
 );

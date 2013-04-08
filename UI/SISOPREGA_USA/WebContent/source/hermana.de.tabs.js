@@ -84,6 +84,7 @@ enyo.kind(
                       kind : "controls.autocomplete",
                       name : "classAutoComplete",
                       hint : "clase",
+                      inputKind : "ToolInput",
                       flex : 1,
                       contentPack : "end",
                       onEnter : "emularTabulacionConEnter"
