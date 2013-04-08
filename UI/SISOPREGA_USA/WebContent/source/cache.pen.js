@@ -64,7 +64,7 @@ enyo.kind({
 		    * mockRejects;
 	    var numCorral = Math.floor((Math.random() * 12) + 1);
 	    var barnyard = [];
-	    barnyard["1" + "C" + numCorral] = "1" + "C" + numCorral;
+	    barnyard["3" + "C" + numCorral] = "3" + "C" + numCorral;
 	    var mockObj = {
 		recordId : ++this.lastID,
 		cattleType : mockCattleType,
@@ -141,6 +141,18 @@ enyo.kind({
 	    }
 	}
 	return null;
+    },
+    merma : function (objPen,heads){
+//calcular peso
+	var pesoPromedio = Number(objPen.weight)/Number(objPen.heads);
+	var pesoMermado = pesoPromedio * heads;
+// asignar nuevos valores	
+	objPen.weight = Number(objPen.weight) - Number(pesoMermado);
+	objPen.heads = parseInt(objPen.heads) - parseInt(heads);
+    },
+// comentarios de la merma
+    coment : function (){
+		
     }
 
 });

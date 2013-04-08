@@ -69,5 +69,6 @@ enyo.depends(
   "source/alimentoUS.js",
   "source/hermana.gastos.concepto.js",
   "source/cache.charges.js",
-  "source/shipments.schedule.js"
+  "source/shipments.schedule.js",
+  "source/corte.js"
 );
