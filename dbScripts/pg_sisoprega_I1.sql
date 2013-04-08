@@ -26,6 +26,7 @@
  * 02/16/2013  Alfredo Pacheco		     zone_id field added to ctrl_inspection_forecast_detail
  * 03/05/2013  Diego Torres                  adding table for print app.
  * 03/13/2013  Alfredo Pacheco               Three phones by rancher, and sms_phone_chosen fields added.
+ * 04/06/2013  Diego Torres                  Adding tables for I2
  * ====================================================================================
  * 
  * Author: Diego Torres
@@ -607,12 +608,75 @@ ORDER BY rancher_name;
 
 GRANT ALL ON vw_rancher TO sisoprega;
 
-DROP TABLE IF EXISTS sys_print_queue;
-CREATE TABLE sys_print_queue(
-  id SERIAL PRIMARY KEY,
-  report_name VARCHAR(100) NOT NULL,
-  destination_name VARCHAR(30) NOT NULL
+/* *************************************************************
+I2 Tables.
+   ************************************************************ */
+DROP TABLE IF EXISTS ctrl_hermana CASCADE;
+CREATE TABLE ctrl_hermana(
+	hermana_id SERIAL PRIMARY KEY,
+	entry_no   VARCHAR(10) UNIQUE NOT NULL,
+	ref_no     VARCHAR(10) UNIQUE NOT NULL,
+	consignee  VARCHAR(80),
+	account_of VARCHAR(80),
+	rancher_id integer NOT NULL REFERENCES cat_rancher(rancher_id),
+	hermana_by varchar(50),
+	de_when    timestamp DEFAULT current_timestamp
 );
 
-GRANT ALL ON sys_print_queue TO sisoprega;
-GRANT ALL ON sys_print_queue_id_seq TO sisoprega;
+GRANT ALL ON ctrl_hermana TO sisoprega;
+GRANT ALL ON ctrl_hermana_hermana_id_seq TO sisoprega;
+
+DROP TABLE IF EXISTS cat_cattle_quality CASCADE;
+CREATE TABLE cat_cattle_quality(
+	quality_id    SERIAL PRIMARY KEY,
+	quality_name  VARCHAR(20) UNIQUE NOT NULL,
+	min_weight    decimal(12,4) NOT NULL DEFAULT 0,
+	max_weight    decimal(12,4) NOT NULL DEFAULT 0,
+	for_horses    boolean DEFAULT FALSE
+);
+
+GRANT ALL ON cat_cattle_quality TO sisoprega;
+GRANT ALL ON cat_cattle_quality_quality_id_seq TO sisoprega;
+
+
+DROP TABLE IF EXISTS ctrl_hermana_corte_exportador CASCADE;
+CREATE TABLE ctrl_hermana_corte_exportador(
+	corte_expo  SERIAL PRIMARY KEY,
+	hermana_id  integer NOT NULL REFERENCES ctrl_hermana(hermana_id),
+	qualtiy_id  integer NOT NULL REFERENCES cat_cattle_quality(quality_id)
+);
+
+GRANT ALL ON ctrl_hermana_corte_exportador TO sisoprega;
+GRANT ALL ON ctrl_hermana_corte_exportador_corte_expo_seq TO sisoprega;
+
+DROP TABLE IF EXISTS ctrl_hermana_corte CASCADE;
+CREATE TABLE ctrl_hermana_corte(
+	corte       SERIAL PRIMARY KEY,
+	hermana_id  integer NOT NULL REFERENCES ctrl_hermana(hermana_id),
+	barnyard_id integer NOT NULL REFERENCES cat_barnyard(barnyard_id),
+	qualtiy_id  integer NOT NULL REFERENCES cat_cattle_quality(quality_id),
+	corte_expo  integer NOT NULL REFERENCES ctrl_hermana_corte_exportador(corte_expo),
+	heads       integer not null,
+	weight      decimal(12,4) not null
+);
+
+GRANT ALL ON ctrl_hermana_corte TO sisoprega;
+GRANT ALL ON ctrl_hermana_corte_corte_seq TO sisoprega;
+
+DROP TABLE IF EXISTS cat_expense_concept CASCADE;
+CREATE TABLE cat_expense_concept(
+	concept_id      SERIAL PRIMARY KEY,
+	concept_name    VARCHAR(30) UNIQUE NOT NULL,
+	expense_formula VARCHAR(50)
+);
+
+GRANT ALL ON cat_expense_concept TO sisoprega;
+GRANT ALL ON cat_expense_concept_concept_id_seq TO sisoprega;
+
+DROP TABLE IF EXISTS ctrl_hermana_expense CASCADE;
+CREATE TABLE ctrl_hermana_expense(
+	expense_id   SERIAL PRIMARY KEY,
+    concept_id  integer NOT NULL REFERENCES cat_expense_concept(concept_id),
+	hermana_id  integer NOT NULL REFERENCES ctrl_hermana(hermana_id),
+	amount      decimal(12,2) NOT NULL
+);

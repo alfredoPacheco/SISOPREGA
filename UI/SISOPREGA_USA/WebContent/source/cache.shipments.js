@@ -7,7 +7,7 @@ enyo.kind({
 	depdate : "01/01",
 	deptime : "09:00",
 	truck : "PAEZ Truck",
-	cattle_class : "Novillos",
+	cattleName : "Novillos",
 	heads : 127,
 	weight : 45520,
 	aveweight : 359
@@ -17,7 +17,7 @@ enyo.kind({
 	depdate : "01/01",
 	deptime : "11:00",
 	truck : "La Canada",
-	cattle_class : "Novillos",
+	cattleName : "Novillos",
 	heads : 178,
 	weight : 95130,
 	aveweight : 534.4
@@ -27,7 +27,7 @@ enyo.kind({
 	depdate : "01/01",
 	deptime : "12:00",
 	truck : "VMMA",
-	cattle_class : "Novillos",
+	cattleName : "Novillos",
 	heads : 219,
 	weight : 97220,
 	aveweight : 443.9
@@ -37,7 +37,7 @@ enyo.kind({
 	depdate : "01/01",
 	deptime : "13:00",
 	truck : "Pendiente",
-	cattle_class : "Novillos",
+	cattleName : "Novillos",
 	heads : 13,
 	weight : 9055,
 	aveweight : 696.5

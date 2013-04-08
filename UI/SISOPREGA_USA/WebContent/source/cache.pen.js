@@ -62,9 +62,10 @@ enyo.kind({
 	    var mockRejects = Math.floor(Math.random() * 5);
 	    var mockRejectsWeight = Math.floor((Math.random() * 450) + 100)
 		    * mockRejects;
-	    var numCorral = Math.floor((Math.random() * 12) + 1);
+	    var numCorral = Math.floor((Math.random() * 34) + 1);
 	    var barnyard = [];
 	    barnyard["3" + "C" + numCorral] = "3" + "C" + numCorral;
+
 	    var mockObj = {
 		recordId : ++this.lastID,
 		cattleType : mockCattleType,
@@ -73,11 +74,17 @@ enyo.kind({
 		weight : mockWeight,
 		rejects : mockRejects,
 		rejectsWeight : mockRejectsWeight,
+		avgweight:0,
 		barnyard : barnyard,
 		feed : {
 		    dateAndTime : null,
 		    quantity : 0
 		},
+		buyers : [ {
+		    name : "Hasco",
+		    heads : 127
+		} ],
+		trucks : [ "Paez Truck" ],
 		occupied : 1
 	    };
 	    result.push(mockObj);
@@ -101,12 +108,21 @@ enyo.kind({
     },
     movePen : function(objFrom, objTo, objMovement) {
 	objFrom.heads = parseInt(objFrom.heads) - parseInt(objMovement.heads);
-	objFrom.weight = parseInt(objFrom.weight) - parseInt(objMovement.weight);
-	objTo.heads = parseInt(objTo.heads) + parseInt(objMovement.heads);
-	objTo.weight = parseInt(objTo.weight) + parseInt(objMovement.weight);
-	if (this.update(objFrom))
-	    if (this.create(objTo))
-		return true;
+	objFrom.weight = parseInt(objFrom.weight)
+		- parseInt(objMovement.weight);
+
+	if (objTo) {
+	    objTo.heads = parseInt(objTo.heads) + parseInt(objMovement.heads);
+	    objTo.weight = parseInt(objTo.weight)
+		    + parseInt(objMovement.weight);
+	    if (this.update(objFrom))
+		if (this.update(objTo))
+		    return true;
+	} else {
+	    if (this.update(objFrom))
+		if (this.create(objMovement))
+		    return true;
+	}
 	return false;
     },
     getList : function() {
@@ -127,11 +143,11 @@ enyo.kind({
     },
     addFeed : function(objPen, objFeed) {
 	var obj = this.getByID(objPen.recordId);
-	if (obj){
+	if (obj) {
 	    obj.feed = objFeed;
 	    return true;
 	}
-	alert ("Error al intentar guardad el alimento");
+	alert("Error al intentar guardad el alimento");
 	return false;
     },
     getByID : function(id) {

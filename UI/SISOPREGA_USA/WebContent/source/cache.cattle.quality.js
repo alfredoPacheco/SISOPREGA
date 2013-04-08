@@ -34,6 +34,17 @@ enyo.kind(
       this.arrClasses.push(this.internalMock(11, "Sinaloas 300's", cattle_types, 271, 0));
       this.arrClasses.push(this.internalMock(12, "Plain 100's", cattle_types, 0.0, 0.0));
       this.arrClasses.push(this.internalMock(13, "Horses", [3], 0.0, 0.0));
+      return this.arrClasses;
+    },
+    getByID:function(id){
+	var arrAux = this.get();
+	var len = arrAux.length;
+	for(var i=0; i<len;i++){
+	    if (parseInt(id)==parseInt(arrAux[i].id)){
+		return arrAux[i];
+	    }
+	}
+	return null;
     },
     getList : function(cattleType) {
       var result = [];
@@ -52,7 +63,6 @@ enyo.kind(
       return result;
     },
     inClass : function(cattleType, cattleClass) {
-
       if (!cattleType)
         return true;
 
@@ -60,7 +70,6 @@ enyo.kind(
         if (cattleClass.cattle_types[i] == cattleType)
           return true; // cattle type found as compatible in cattleClass
       }
-
       return false; // cattle type not found as compatible in cattleClass
     },
     add : function(aClass){

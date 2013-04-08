@@ -408,21 +408,21 @@ enyo
 		    var objFrom = enyo.clone(cachePen
 			    .getByBarnyard(this.movingFrom.name));
 		    var objTo = cachePen.getByBarnyard(this.movingTo.name);
-
-		    if (objFrom.cattleName == objTo.cattleName) {
-
-			if (objFrom) {
-			    var byName = this.movingTo.name;
-			    objFrom.barnyard = [];
-			    objFrom.barnyard[byName] = byName;
-			    this.$.popup_movePen.validateComponents();
-			    this.$.movePen_kind.setObj(objFrom);
-			    this.$.popup_movePen.openAtCenter();
-			} else {
-			    alert("actionSelected Error");
+		    if (objTo && objFrom) {
+			if (objFrom.cattleName != objTo.cattleName) {
+			    alert("No es posible mezclar clases de ganado en un corral");
+			    break;
 			}
+		    }
+		    if (objFrom) {
+			var byName = this.movingTo.name;
+			objFrom.barnyard = [];
+			objFrom.barnyard[byName] = byName;
+			this.$.popup_movePen.validateComponents();
+			this.$.movePen_kind.setObj(objFrom);
+			this.$.popup_movePen.openAtCenter();
 		    } else {
-			alert("No es posible mezclar clases de ganado en un corral");
+			alert("actionSelected Error");
 		    }
 
 		    break;

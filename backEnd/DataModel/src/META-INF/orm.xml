@@ -48,7 +48,7 @@
 				<column name="telephone_3" length="20" />
 			</basic>
 			<basic name="smsPhoneChosen">
-				<column name="sms_phone_chosen"/>
+				<column name="sms_phone_chosen" />
 			</basic>
 		</attributes>
 	</entity>
@@ -82,17 +82,16 @@
 				<column name="address_two" length="100" />
 			</basic>
 			<basic name="city">
-				<column name="city" length="80"/>
+				<column name="city" length="80" />
 			</basic>
 			<basic name="legalId">
 				<column name="legal_id" length="13" unique="true" />
 			</basic>
 			<basic name="legalName">
-				<column name="legal_name" length="100"
-					unique="true" />
+				<column name="legal_name" length="100" unique="true" />
 			</basic>
 			<basic name="state">
-				<column name="address_state" length="80"/>
+				<column name="address_state" length="80" />
 			</basic>
 			<basic name="telephone">
 				<column name="telephone" length="20" />
@@ -104,7 +103,7 @@
 				<column name="telephone_3" length="20" />
 			</basic>
 			<basic name="smsPhoneChosen">
-				<column name="sms_phone_chosen"/>
+				<column name="sms_phone_chosen" />
 			</basic>
 			<basic name="zipCode">
 				<column name="zip_code" length="9" />
@@ -809,7 +808,7 @@
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.InspectionForecastBarnyard">
-		<table name="ctrl_inspection_forecast_barnyard"/>
+		<table name="ctrl_inspection_forecast_barnyard" />
 		<named-query name="FORECAST_BARNAYARD_BY_ID">
 			<description>Retrieve a single record of forecast barnyard by its given id</description>
 			<query>SELECT forecastBarnyard FROM InspectionForecastBarnyard forecastBarnyard WHERE forecastBarnyard.ifbId = :ifbId</query>
@@ -820,19 +819,19 @@
 		</named-query>
 		<attributes>
 			<id name="ifbId">
-				<column name="id"/>
-				<generated-value strategy="IDENTITY"/>
+				<column name="id" />
+				<generated-value strategy="IDENTITY" />
 			</id>
 			<basic name="barnyardId">
-				<column name="barnyard_id"/>
+				<column name="barnyard_id" />
 			</basic>
 			<basic name="fdId">
-				<column name="detail_id"/>
+				<column name="detail_id" />
 			</basic>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.RancherUser">
-		<table name="cat_rancher_user"/>
+		<table name="cat_rancher_user" />
 		<named-query name="RANCHER_USER_BY_RECORD_ID">
 			<description>Retrieve a single record of rancher user by its record id</description>
 			<query>SELECT rUser FROM RancherUser rUser WHERE rUser.recordId = :recordId</query>
@@ -847,14 +846,14 @@
 		</named-query>
 		<attributes>
 			<id name="recordId">
-				<column name="record_id"/>
-				<generated-value strategy="IDENTITY"/>
+				<column name="record_id" />
+				<generated-value strategy="IDENTITY" />
 			</id>
 			<basic name="rancherId">
-				<column name="rancher_id"/>
+				<column name="rancher_id" />
 			</basic>
 			<basic name="user_name">
-				<column name="user_name"/>
+				<column name="user_name" />
 			</basic>
 			<one-to-many name="receptions" fetch="LAZY">
 				<join-column name="rancher_id" referenced-column-name="rancher_id" />
@@ -862,7 +861,7 @@
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.identity.dto.User">
-		<table name="sys_sisoprega_user"/>
+		<table name="sys_sisoprega_user" />
 		<named-query name="USER_BY_NAME">
 			<description>Retrieves a single record by the given user name</description>
 			<query>SELECT u FROM User u WHERE u.userName = :userName</query>
@@ -873,47 +872,150 @@
 		</named-query>
 		<attributes>
 			<id name="userName">
-				<column name="user_name"/>	
+				<column name="user_name" />
 			</id>
 			<basic name="password">
-				<column name="user_password"/>
+				<column name="user_password" />
 			</basic>
 			<one-to-many name="groups">
-				<join-column name="user_name" referenced-column-name="user_name"/>
-				<cascade> 
+				<join-column name="user_name" referenced-column-name="user_name" />
+				<cascade>
 					<cascade-all />
 				</cascade>
 			</one-to-many>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.identity.dto.Role">
-		<table name="sys_sisoprega_role"/>
+		<table name="sys_sisoprega_role" />
 		<attributes>
 			<id name="record_id">
-				<generated-value strategy="IDENTITY"/>
+				<generated-value strategy="IDENTITY" />
 			</id>
 		</attributes>
 	</entity>
-	<entity class="com.tramex.sisoprega.dto.PrintLog">
-		<table name="sys_print_queue"/>
-		<named-query name="PRINT_RECORD_BY_ID">
-			<description>Retrieves a printing record for a given id.</description>
-			<query>SELECT p FROM PrintLog p WHERE p.recordId = :recordId</query>
-		</named-query>
-		<named-query name="PRINT_RECORDS_BY_DESTINATION">
-			<description>Retrieves all printing records for a given destination.</description>
-			<query>SELECT p FROM PrintLog p WHERE p.destinationName = :destination</query>
-		</named-query>
+
+	<!-- **************************************************************************** -->
+	<!-- ENTITIES FOR I2 -->
+	<!-- **************************************************************************** -->
+	<entity class="com.tramex.sisoprega.dto.Hermana">
+		<table name="ctrl_hermana" />
 		<attributes>
-			<id name="recordId">
-				<column name="id"/>
+			<id name="hermanaId">
+				<column name="hermana_id" />
+				<generated-value strategy="IDENTITY" />
+			</id>
+			<basic name="entryNo">
+				<column name="entry_no" />
+			</basic>
+			<basic name="refNo">
+				<column name="ref_no" />
+			</basic>
+			<basic name="consignee" />
+			<basic name="accountOf">
+				<column name="account_of" />
+			</basic>
+			<basic name="rancherId">
+				<column name="rancher_id" />
+			</basic>
+			<basic name="hermanaBy">
+				<column name="hermana_by" />
+			</basic>
+			<basic name="deWhen">
+				<column name="de_when" />
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+		</attributes>
+	</entity>
+	<entity class="com.tramex.sisoprega.dto.CattleQuality">
+		<table name="cat_cattle_quality" />
+		<attributes>
+			<id name="qualityId">
+				<column name="quality_id" />
+				<generated-value strategy="IDENTITY" />
+			</id>
+			<basic name="qualityName">
+				<column name="quality_name" />
+			</basic>
+			<basic name="minWeight">
+				<column name="min_weight" />
+			</basic>
+			<basic name="maxWeight">
+				<column name="max_weight" />
+			</basic>
+			<basic name="forHorses">
+				<column name="for_horses" />
+			</basic>
+		</attributes>
+	</entity>
+	<entity class="com.tramex.sisoprega.dto.HermanaCorteExportador">
+		<table name="ctrl_hermana_corte_exportador" />
+		<attributes>
+			<id name="corteExpo">
+				<column name="corte_expo" />
+				<generated-value strategy="IDENTITY" />
+			</id>
+			<basic name="hermanaId">
+				<column name="hermana_id"/>
+			</basic>
+			<basic name="qualityId">
+				<column name="qualtiy_id"/>
+			</basic>
+		</attributes>
+	</entity>
+	<entity class="com.tramex.sisoprega.dto.HermanaCorte">
+		<table name="ctrl_hermana_corte"/>
+		<attributes>
+			<id name="corte">
+				<column name="corte"/>
 				<generated-value strategy="IDENTITY"/>
 			</id>
-			<basic name="reportName">
-				<column name="report_name"/>
+			<basic name="hermanaId">
+				<column name="hermana_id"/>
 			</basic>
-			<basic name="destinationName">
-				<column name="destination_name"/>
+			<basic name="barnyardId">
+				<column name="barnyard_id"/>
+			</basic>
+			<basic name="qualityId">
+				<column name="qualtiy_id"/>
+			</basic>
+			<basic name="corteExpo">
+				<column name="corte_expo"/>
+			</basic>
+			<basic name="heads">
+				<column name="heads"/>
+			</basic>
+			<basic name="weight">
+				<column name="weight"/>
+			</basic>
+		</attributes>
+	</entity>
+	<entity class="com.tramex.sisoprega.dto.ExpenseConcept">
+		<table name="cat_expense_concept"/>
+		<attributes>
+			<id name="conceptId">
+				<column name="concept_id"/>
+				<generated-value strategy="IDENTITY"/>
+			</id>
+			<basic name="conceptName">
+				<column name="concept_name"/>
+			</basic>
+			<basic name="expenseFormula">
+				<column name="expense_formula"/>
+			</basic>
+		</attributes>
+	</entity>
+	<entity class="com.tramex.sisoprega.dto.HermanaExpense">
+		<table name="ctrl_hermana_expense"/>
+		<attributes>
+			<id name="expenseId">
+				<column name="expense_id"/>
+				<generated-value strategy="IDENTITY"/>
+			</id>
+			<basic name="hermanaId">
+				<column name="hermana_id"/>
+			</basic>
+			<basic name="conceptId">
+				<column name="concept_id"/>
 			</basic>
 		</attributes>
 	</entity>

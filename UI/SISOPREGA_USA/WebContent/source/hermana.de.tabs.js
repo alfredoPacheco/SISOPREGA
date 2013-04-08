@@ -11,14 +11,25 @@ enyo.kind(
     cattleClassName : "",
     components :
       [
-		{
-			 kind: "Popup",
-			 name: "popNewCharge", 
-			 dismissWithClick:false,
-			 layoutKind: "VFlexLayout",			 
-			 style: "overflow: hidden", width: "95%", height: "30%",scrim: true,
-			 components:[{kind: "hermana.gastos.concepto",name:"concepto",onAddCharge:"addNewCharge",onCancel:"closePopUp",flex: 1}]
-		 },	
+        {
+          kind : "Popup",
+          name : "popNewCharge",
+          dismissWithClick : false,
+          layoutKind : "VFlexLayout",
+          style : "overflow: hidden",
+          width : "95%",
+          height : "30%",
+          scrim : true,
+          components :
+            [
+              {
+                kind : "hermana.gastos.concepto",
+                name : "concepto",
+                onAddCharge : "addNewCharge",
+                onCancel : "closePopUp",
+                flex : 1
+              } ]
+        },
         {
           name : "tabButtons",
           kind : "TabGroup",
@@ -64,6 +75,7 @@ enyo.kind(
                       kind : "controls.autocomplete",
                       name : "penAutoComplete",
                       hint : "corral",
+                      inputKind : "ToolInput",
                       flex : 1,
                       contentPack : "end",
                       onEnter : "emularTabulacionConEnter"
@@ -72,6 +84,7 @@ enyo.kind(
                       kind : "controls.autocomplete",
                       name : "classAutoComplete",
                       hint : "clase",
+                      inputKind : "ToolInput",
                       flex : 1,
                       contentPack : "end",
                       onEnter : "emularTabulacionConEnter"
@@ -120,6 +133,38 @@ enyo.kind(
           components :
             [
               {
+                kind : "Toolbar",
+                name : "ExpoToolBar",
+                align : "left",
+                pack : "left",
+                style : "background:#C9C9C9;min-height:10px;height:45px;",
+                components :
+                  [
+                    {
+                      name : 'btnPrint',
+                      onclick : "printHermana",
+                      icon : "images/print.png"
+                    },
+                    {
+                      name : 'btnSave',
+                      onclick : "saveHermana",
+                      icon : "images/save.png"
+                    },
+                    {
+                      name : 'btnCancel',
+                      onclick : "resetForm",
+                      icon : "images/cancel.png"
+                    },
+                    {
+                      fit : true
+                    },
+                    {
+                      name : 'btnSend',
+                      onclick : "open",
+                      icon : "images/envelope.png"
+                    } ]
+              },
+              {
                 kind : "HFlexBox",
                 components :
                   [
@@ -157,7 +202,7 @@ enyo.kind(
                 kind : "hermana.corte.list",
                 style : "border: thin dotted black; height:250px;",
                 name : "listaCorteExpo",
-                onRemoveCorte : "corteRemoved",
+                onRemoveCorte : "clearCorteExpoDataEntry",
                 onCorteSelected : "setupCorteSelected"
               } ]
         },
@@ -272,6 +317,8 @@ enyo.kind(
       this.$.classAutoComplete.setItems(cacheClasses.getList());
       this.$.classAutoCompleteExpo.setItems(cacheClasses.getList());
       this.$.charge.setItems(cacheCharges.getList());
+      this.$.listaCorteExpo.$.rowContainer.setConfirmCaption("Reestablecer");
+      this.$.listaCorteExpo.isForExporter = true;
     },
     showCorte : function() {
       this.$.tabCorte.setShowing(true);
@@ -369,8 +416,10 @@ enyo.kind(
         };
 
       cacheCorte.add(cutRecord);
-      this.$.listaCorte.addCorte(cutRecord);
-      this.$.listaCorteExpo.addCorte(cutRecord);
+
+      this.$.listaCorte.setCortes(cacheCorte.get());
+      this.$.listaCorteExpo.setCortes(cacheCorte.getExpo());
+
       this.clearCorteDataEntry();
       this.calculateSummaryFromCorte(cutRecord);
     },
@@ -392,6 +441,12 @@ enyo.kind(
       this.$.weight.setValue('');
       this.$.penAutoComplete.$.textField.forceFocus();
     },
+    clearCorteExpoDataEntry : function() {
+      this.$.lblCorralExpo.setContent("");
+      this.$.lblHeadsExpo.setContent("");
+      this.$.lblWeightExpo.setContent("");
+      this.$.classAutoCompleteExpo.clear();
+    },
     corteRemoved : function() {
       this.clearCorteSummary();
       var cortes = cacheCorte.get();
@@ -412,50 +467,94 @@ enyo.kind(
 
       this.updateTableContents();
     },
-	chargeSelected:function(){
-		if(this.$.charge.getIndex()>-1){
-			//this.$.price.setValue(cacheCharges.getList()[this.$.charge.getIndex()-1].charge_price);
-		}
-	},
-	addCharge:function(){
-		if(this.$.charge.getIndex()>-1){
-			this.$.chargeList.addCharge({charge_desc:this.$.charge.getValue(),charge_price:this.$.price.getValue()});
-			this.$.charge.setIndex(-1);
-			this.$.price.setValue("");
-			this.$.charge.setValue("");
-		}else{
-			alert("Concepto no registrado");
-		}
-	},
-	showNewCharge:function(){
-		this.$.popNewCharge.openAtCenter();											   		
-	},
-	closePopUp:function(){	
-      	this.$.charge.setItems(cacheCharges.getList());
-		this.$.charge.render();
-		this.$.popNewCharge.close();
-	},
-	addNewCharge:function(){
-		cacheCharges.addData(this.$.concepto.getCharge(),this,"closePopUp");
-	},    
-	setupCorteSelected : function(){
-      if(this.$.listaCorteExpo.iSelected == undefined){
-        
+    chargeSelected : function() {
+      if (this.$.charge.getIndex() > -1) {
+        //this.$.price.setValue(cacheCharges.getList()[this.$.charge.getIndex()-1].charge_price);
+      }
+    },
+    addCharge : function() {
+      if (this.$.charge.getIndex() > -1) {
+        this.$.chargeList.addCharge(
+          {
+            charge_desc : this.$.charge.getValue(),
+            charge_price : this.$.price.getValue()
+          });
+        this.$.charge.setIndex(-1);
+        this.$.price.setValue("");
+        this.$.charge.setValue("");
+      } else {
+        alert("Concepto no registrado");
+      }
+    },
+    showNewCharge : function() {
+      this.$.popNewCharge.openAtCenter();
+    },
+    closePopUp : function() {
+      this.$.charge.setItems(cacheCharges.getList());
+      this.$.charge.render();
+      this.$.popNewCharge.close();
+    },
+    addNewCharge : function() {
+      cacheCharges.addData(this.$.concepto.getCharge(), this, "closePopUp");
+    },
+    setupCorteSelected : function() {
+      if (this.$.listaCorteExpo.iSelected == undefined) {
+
         this.$.lblCorralExpo.setContent("");
         this.$.lblHeadsExpo.setContent("");
         this.$.lblWeightExpo.setContent("");
         this.$.classAutoCompleteExpo.setIndex(-1);
-        
+
         return false;
       }
-        
 
-      var cortes = cacheCorte.get();
+      var cortes = cacheCorte.getExpo();
       var selectedCorte = cortes[this.$.listaCorteExpo.iSelected];
-      
+
       this.$.lblCorralExpo.setContent("Corral: " + selectedCorte.pen_name);
-      this.$.lblHeadsExpo.setContent("Cabezas: " +  utils.formatNumberThousands(selectedCorte.heads));
+      this.$.lblHeadsExpo.setContent("Cabezas: " + utils.formatNumberThousands(selectedCorte.heads));
       this.$.lblWeightExpo.setContent("Peso: " + utils.formatNumberThousands(selectedCorte.weight) + " lbs.");
       this.$.classAutoCompleteExpo.setIndex(selectedCorte.cattleClassId);
+    },
+    reClassify : function() {
+      if (this.$.listaCorteExpo.iSelected == -1) {
+        alert("No hay registro seleccionado para re clasificación");
+        return false;
+      }
+
+      var selectedIdx = this.$.listaCorteExpo.iSelected;
+      var selectedCorteExpo = cacheCorte.cortesExpo[selectedIdx];
+
+      // Find a row where it can be re classified.
+      var cortes = cacheCorte.getExpo();
+      var reclassifiedInRecord = false;
+      for ( var corteIdx = 0; corteIdx < cortes.length; corteIdx++) {
+        if (selectedIdx != corteIdx && this.$.classAutoCompleteExpo.getIndex() == cortes[corteIdx].cattleClassId) {
+          // found record, merge and delete
+          cacheCorte.cortesExpo[corteIdx].pen_name += ", " + selectedCorteExpo.pen_name;
+          cacheCorte.cortesExpo[corteIdx].heads = Number(cacheCorte.cortesExpo[corteIdx].heads) + Number(selectedCorteExpo.heads);
+          cacheCorte.cortesExpo[corteIdx].weight = Number(cacheCorte.cortesExpo[corteIdx].weight) + Number(selectedCorteExpo.weight);
+
+          for ( var rIdx = 0; rIdx < selectedCorteExpo.recordIds.length; rIdx++) {
+            cacheCorte.cortesExpo[corteIdx].recordIds.push(selectedCorteExpo.recordIds[rIdx]);
+          }
+
+          reclassifiedInRecord = true;
+
+          this.$.listaCorteExpo.iSelected = -1;
+          cacheCorte.cortesExpo.splice(selectedIdx, 1);
+
+          break;
+        }
+      }
+
+      if (!reclassifiedInRecord) {
+        // no record found for classification, reclassify in own record
+        cacheCorte.cortesExpo[selectedIdx].cattleClassId = this.$.classAutoCompleteExpo.getIndex();
+        cacheCorte.cortesExpo[selectedIdx].cattleClassName = this.$.classAutoCompleteExpo.getValue();
+      }
+
+      this.$.listaCorteExpo.setCortes(cacheCorte.getExpo());
+
     }
   });
