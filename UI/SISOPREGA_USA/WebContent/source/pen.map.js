@@ -8,7 +8,7 @@ enyo
 		caption : "Alimento",
 		value : 2
 	    }, {
-		caption : "Corte",
+		caption : "Merma",
 		value : 3
 	    } ],
 	    arrMovingPen : [ {
@@ -68,6 +68,22 @@ enyo
 		    onGuardar : "saveFeed",
 		    flex : 1
 		} ]
+	    }, {
+		kind : enyo.Popup,
+		name : "popup_corte",
+		width : "50%;",
+		height : "225px;",
+		dismissWithClick : false,
+		layoutKind : "VFlexLayout",
+		style : "overflow : hiddin; border-with:8px;",
+		scrim : true,
+		components : [ {
+		    kind : "corte",
+		    name : "corte_kind",
+		    onCancel : "cancelCorte",
+		    onGuardar : "saveCorte",
+		    flex : 1
+		} ]
 	    },
 
 	    {
@@ -117,61 +133,61 @@ enyo
 		// this.addRow(true);
 		this.addRow();
 		this.addRowHeader();
-		this.createCells("2A", 1, 4, "50px", "50px", 1);
+		this.createCells("4A", 1, 4, "50px", "50px", 1);
 		this.splitRow();
-		this.createCells("1A", 1, 8, "50px", "50px", 1);
+		this.createCells("3A", 1, 8, "50px", "50px", 1);
 		this.splitRow();
-		this.createCells("1A", 9, 6, "50px", "50px", 1);
-		this.createCells("1A", 15, 1, "100px", "50px", 1);
+		this.createCells("3A", 9, 6, "50px", "50px", 1);
+		this.createCells("3A", 15, 1, "100px", "50px", 1);
 
 		this.addRow(true);
-		this.createCells("2B", 1, 2, "100px", "50px", 2);
+		this.createCells("4B", 1, 2, "100px", "50px", 2);
 		this.splitRow();
-		this.createCells("1B", 1, 4, "100px", "50px", 6);
+		this.createCells("3B", 1, 4, "100px", "50px", 6);
 		this.splitRow();
-		this.createCells("1B", 25, 1, "100px", "50px", 2);
-		this.createCells("1B", 27, 3, "100px", "50px", 2);
+		this.createCells("3B", 25, 1, "100px", "50px", 2);
+		this.createCells("3B", 27, 3, "100px", "50px", 2);
 
 		this.addRow();
-		this.createCells("2B", -12, 6, "33.33px", "25px");
+		this.createCells("4B", -12, 6, "33.33px", "25px");
 		this.splitRow();
-		this.createCells("1B", 2, 12, "33.33px", "25px");
+		this.createCells("3B", 2, 12, "33.33px", "25px");
 		this.splitRow();
-		this.createCells("1B", 26, 4, "100px", "25px");
+		this.createCells("3B", 26, 4, "100px", "25px");
 
 		this.addRow(true);
-		this.createCells("2C", 1, 6, "33.33px", "25px");
+		this.createCells("4C", 1, 6, "33.33px", "25px");
 		this.splitRow();
-		this.createCells("1C", 1, 12, "33.33px", "25px");
+		this.createCells("3C", 1, 12, "33.33px", "25px");
 		this.splitRow();
-		this.createCells("1C", 25, 3, "100px", "25px");
-		this.createCells("1C", 31, 2, "50px", "25px");
+		this.createCells("3C", 25, 3, "100px", "25px");
+		this.createCells("3C", 31, 2, "50px", "25px");
 
 		this.addRow();
-		this.createCells("2C", 2, 4, "50px", "50px");
+		this.createCells("4C", 2, 4, "50px", "50px");
 		this.splitRow();
-		this.createCells("1C", 2, 2, "50px", "50px");
-		this.createCells("1C", 8, 2, "50px", "50px");
-		this.createCells("1C", 14, 3, "50px", "50px");
-		this.createCells("1C", 22, 1, "50px", "50px");
+		this.createCells("3C", 2, 2, "50px", "50px");
+		this.createCells("3C", 8, 2, "50px", "50px");
+		this.createCells("3C", 14, 3, "50px", "50px");
+		this.createCells("3C", 22, 1, "50px", "50px");
 		this.splitRow();
-		this.createCells("1C", 26, 3, "100px", "50px");
-		this.createCells("1C", 32, 2, "50px", "50px");
+		this.createCells("3C", 26, 3, "100px", "50px");
+		this.createCells("3C", 32, 2, "50px", "50px");
 
 		this.addRow(true);
-		this.createCells("2D", 1, 4, "50px", "50px");
+		this.createCells("4D", 1, 4, "50px", "50px");
 		this.splitRow();
 
-		this.createCells("1D", 1, 8, "50px", "50px");
+		this.createCells("3D", 1, 8, "50px", "50px");
 		this.splitRow();
-		this.createCells("1D", 17, 8, "50px", "50px");
+		this.createCells("3D", 17, 8, "50px", "50px");
 
 		this.addRow();
-		this.createCells("2D", 2, 4, "50px", "50px");
+		this.createCells("4D", 2, 4, "50px", "50px");
 		this.splitRow();
-		this.createCells("1D", 2, 8, "50px", "50px");
+		this.createCells("3D", 2, 8, "50px", "50px");
 		this.splitRow();
-		this.createCells("1D", 18, 4, "100px", "50px");
+		this.createCells("3D", 18, 4, "100px", "50px");
 
 	    },
 	    addRow : function(bDiv) {
@@ -382,6 +398,10 @@ enyo
 		    this.$.popup_alimentoUS.openAtCenter();
 		    break;
 		case 3:
+		    this.$.popup_corte.validateComponents();
+		    this.$.corte_kind.setObj(cachePen
+			    .getByBarnyard(this.objSelected.name));
+		    this.$.popup_corte.openAtCenter();
 		    break;
 		case 4:
 
@@ -457,8 +477,8 @@ enyo
 		    if (obj.feed.dateAndTime) {
 			dateAux = obj.feed.dateAndTime.toLocaleString();
 		    }
-		    this.$.lblInfo.setContent("Ganado: " + obj.cattleName
-			    + " Cabezas: " + obj.heads + " Peso: " + obj.weight
+		    this.$.lblInfo.setContent("Ganado: " + obj.heads + " "
+			    + obj.cattleName  + " Peso: " + obj.weight + " Lb"
 			    + "<br /> Almento: " + dateAux + " "
 			    + obj.feed.quantity + " Lb");
 		} else
@@ -491,6 +511,14 @@ enyo
 	    },
 	    saveFeed : function() {
 		this.$.popup_alimentoUS.close();
+		this.refreshMap();
+		this.setDesc(this.objSelected.name);
+	    },
+	    cancelCorte : function() {
+		this.$.popup_corte.close();
+	    },
+	    saveCorte : function() {
+		this.$.popup_corte.close();
 		this.refreshMap();
 		this.setDesc(this.objSelected.name);
 	    }
