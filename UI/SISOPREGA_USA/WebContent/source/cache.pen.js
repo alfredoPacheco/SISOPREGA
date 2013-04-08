@@ -63,7 +63,7 @@ enyo.kind({
 	    var mockRejectsWeight = Math.floor((Math.random() * 450) + 100)
 		    * mockRejects;
 	    var numCorral = Math.floor((Math.random() * 34) + 1);
-	    var barnyard = [];
+	    var barnyard = {};
 	    barnyard["3" + "C" + numCorral] = "3" + "C" + numCorral;
 
 	    var mockObj = {
