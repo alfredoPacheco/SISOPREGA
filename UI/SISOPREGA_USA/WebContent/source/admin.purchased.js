@@ -81,25 +81,7 @@ enyo.kind({
 					 content: ""},
 				]},				
 			]},	
-			{kind: "Toolbar",layoutKind: enyo.HFlexLayout,style:"padding:0px;color:white",
-				 components:[
-				         {kind: "VFlexBox", content:"Ending Inv.",flex:1.5,style:"color:white;margin:0;font-size:15px;"},
-					{kind:"RowGroup",layoutKind: enyo.VFlexLayout, flex:1, style:"margin:0px;",
-					 components:[
-						{kind:"VFlexBox",name: "lblPurSumInvHeads",style:"text-align:center;font-size: 0.7em;color:#999;",align:"center",allowHtml:true, 
-						 content: "",},
-					]},
-					{kind:"RowGroup",layoutKind: enyo.VFlexLayout, flex:1, style:"margin:0px;",
-					 components:[
-						{kind:"VFlexBox",name: "lblPurSumInvWeight",style:"text-align:center;font-size: 0.7em;color:#999",align:"center",allowHtml:true, 
-						 content: ""},
-					]},
-					{kind:"RowGroup",layoutKind: enyo.VFlexLayout, flex:1, style:"margin:0px;",
-					 components:[
-						{kind:"VFlexBox",name: "lblSumInvAveWight",style:"text-align:center;font-size: 0.7em;color:#999",align:"center",allowHtml:true, 
-						 content: ""},
-					]},
-				]},
+			
 
 	],
 	loadPurchased:function(inSender, inIndex) {		
@@ -144,11 +126,6 @@ enyo.kind({
 			}
 			
 		}
-		
-		this.$.lblPurSumInvHeads.setContent("Cabezas<br />" + "+"+gblUtils.numCD(iHeadHeads));
-		this.$.lblPurSumInvWeight.setContent("Peso<br />" + "+"+gblUtils.numCD(iHeadWeight));
-		this.$.lblSumInvAveWight.setContent("Peso Prom.<br />" + "+"+gblUtils.numCD(((iFotAve/this.arrData.length)-
-												(iHeadAve/this.arrData.length)).toFixed(2)));
 
 		this.$.lblPurSumHeads.setContent("Cabezas<br />" + gblUtils.numCD(iFotHeads));
 		this.$.lblPurSumWeight.setContent("Peso<br />" + gblUtils.numCD(iFotWeight));
