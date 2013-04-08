@@ -102,7 +102,7 @@ enyo
 				depdate : ("" + this.arrToShip[i].shipProgramDate).substring(0,5),
 				deptime : "",
 				truck : "",
-				cattle_class : this.arrToShip[i].cattle_class,
+				cattleName : this.arrToShip[i].cattleName,
 				heads : this.arrToShip[i].heads,
 				weight : this.arrToShip[i].weight,
 				aveweight : this.arrToShip[i].aveweight,

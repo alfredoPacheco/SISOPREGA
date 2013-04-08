@@ -10,25 +10,7 @@ enyo.kind({
 	components: [
 		{kind: "Toolbar",
 	     components:[
-			{kind: "VFlexBox",content:"Inventario",flex:.17,onclick:"doSelect",style:"padding:0px;color:white"},
-			{kind:"RowGroup", flex:.04, style:"margin:0px;",
-			 components:[
-				{kind: "VFlexBox",name: "lblPurSumInvHeads",style:"font-size: 0.7em;color:#999;",align:"center",
-				 content: "",},	
-			]},
-			{kind: "Spacer",flex:.019},			
-			{kind:"RowGroup",flex:.05, style:"margin:0px;",
-			 components:[
-				{kind: "VFlexBox",name: "lblPurSumInvWeight",style:"font-size: 0.7em;color:#999",align:"center",
-				 content: ""},
-			]},
-			{kind: "Spacer",flex:.01},						
-			{kind:"RowGroup",layoutKind: enyo.VFlexLayout, flex:.05, style:"margin:0px;",
-			 components:[
-				{kind: "VFlexBox",name: "lblSumInvAveWight",style:"font-size: 0.7em;color:#999",align:"center",
-				 content: ""},
-			]},
-			
+			{kind: "VFlexBox",content:"Inventario",flex:.17,onclick:"doSelect",style:"padding:0px;color:white;font-size:15px;"},
 			{kind: "Spacer",flex:.05},				
 			{kind: "Button",caption: "+",onclick:"doSale"}
 		]},	
@@ -90,32 +72,47 @@ enyo.kind({
 		]},
 		{kind: "Toolbar",
 			components:[
-				{kind: "VFlexBox", content:"Total",flex:.28,style:"color:white;margin:0"} ,
-				{kind:"RowGroup", align: "center", flex:.1, style:"backgound-color:white;margin:0",
+				
+				{kind:"RowGroup",contentFit:true, align: "center", flex:.1, style:"backgound-color:white;margin:0;",
 				 components:[
-					{name: "lblInvSumHeadClass",kind: "VFlexBox",align:"center",style:"font-size: 0.75em;color:#999",
+					{name: "lblInvSumHeadClass",kind: "VFlexBox",align:"center",allowHtml:true, style:"text-align:center;font-size: 0.75em;color:#999;",
+					 content: "", },
+				]},
+				{kind:"RowGroup",contentFit:true, align: "center", flex:.1, style:"backgound-color:white;margin:0",
+				 components:[
+					{kind: "VFlexBox",name: "lblInvSumWeight",align:"center",allowHtml:true, style:"text-align:center;font-size: 0.75em;color:#999;",
 					 content: ""},
 				]},
-				{kind: "Spacer",flex:.01},
-				{kind:"RowGroup", align: "center", flex:.1, style:"backgound-color:white;margin:0",
+				{kind:"RowGroup",contentFit:true, align: "center", flex:.1, style:"backgound-color:white;margin:0",
 				 components:[
-					{kind: "VFlexBox",name: "lblInvSumWeight",align:"center",style:"font-size: 0.75em;color:#999",
+					{kind: "VFlexBox",name: "lblInvSumAvgWeight",align:"center",allowHtml:true, style:"text-align:center;font-size: 0.75em;color:#999;",
 					 content: ""},
+				]},				
+				{kind:"RowGroup", contentFit:true,align: "center", flex:.1, style:"backgound-color:white;margin:0",
+				 components:[
+					{kind: "VFlexBox",name: "lblInvSumFeed",align:"center",allowHtml:true, style:"text-align:center;font-size: 0.75em;color:#999;",
+					 content: ""},
+				]},				
+			]},
+			{kind: "Toolbar",
+			     components:[
+			                 {kind: "VFlexBox", content:"Ending Inv.",flex:1.5,style:"color:white;margin:0;font-size:15px;"},
+					{kind:"RowGroup", flex:1, style:"margin:0px;", 
+					 components:[
+						{kind: "VFlexBox",name: "lblPurSumInvHeads",allowHtml:true, style:"text-align:center;font-size: 0.7em;color:#999;",align:"center",
+						 content: "",},						 
+					]},
+					{kind:"RowGroup",flex:1, style:"margin:0px;",
+					 components:[
+						{kind: "VFlexBox",name: "lblPurSumInvWeight",allowHtml:true, style:"text-align:center;font-size: 0.7em;color:#999",align:"center",
+						 content: ""},
+					]},
+					{kind:"RowGroup",layoutKind: enyo.VFlexLayout, flex:1, style:"margin:0px;",
+					 components:[
+						{kind: "VFlexBox",name: "lblSumInvAveWight",allowHtml:true, style:"text-align:center;font-size: 0.7em;color:#999",align:"center",
+						 content: ""},
+					]}
 				]},
-				{kind: "Spacer",flex:.01},
-				{kind:"RowGroup", align: "center", flex:.1, style:"backgound-color:white;margin:0",
-				 components:[
-					{kind: "VFlexBox",name: "lblInvSumAvgWeight",align:"center",style:"font-size: 0.75em;color:#999",
-					 content: ""},
-				]},				
-				{kind: "Spacer"	,flex:.01},				
-				{kind:"RowGroup", align: "center", flex:.1, style:"backgound-color:white;margin:0",
-				 components:[
-					{kind: "VFlexBox",name: "lblInvSumFeed",align:"center",style:"font-size: 0.75em;color:#999",
-					 content: ""},
-				]},				
-				{kind: "Spacer"	,flex:.01}				
-			]},	
 	],
 	updateInventory:function(){
 	},
@@ -124,12 +121,20 @@ enyo.kind({
 	loadInventory:function(inSender, inIndex){
 		var objData;
 		if(objData=this.arrData[inIndex]){
-			this.$.lblInvType.setContent(objData.cattle_type);
-			this.$.lblInvClass.setContent(objData.cattle_class);		 
+		    	var cattle_name = cacheClasses.getByID(objData.cattleType);
+		    	if(cattle_name){
+		    	cattle_name = cattle_name.name;
+		    	}
+		    	else{
+		    	cattle_name = "";   
+		    	}
+		    	
+			this.$.lblInvType.setContent(cattle_name);
+			this.$.lblInvClass.setContent(objData.cattleName);		 
 			this.$.lblInvHeads.setContent(gblUtils.numCD(objData.heads));
 			this.$.lblInvWeight.setContent(gblUtils.numCD(objData.weight));
 			this.$.lblInvInvAverage.setContent(objData.avgweight);
-			this.$.lblInvFeed.setContent(objData.feed);
+			this.$.lblInvFeed.setContent(objData.feed.quantity);
 			var sTrucks="";
 			for (var j=0;j<objData.trucks.length;j++){
 				sTrucks+=objData.trucks[j]+", ";
@@ -142,8 +147,8 @@ enyo.kind({
 			}		
 			if(sBuyer!=""){sBuyer=sBuyer.slice(0,-2);}
 			var sBY="";			
-			for (var i=0;i<objData.barnyards.length;i++){
-				sBY+=objData.barnyards[i]+", ";
+			for (var i in objData.barnyard){
+				sBY+=objData.barnyard[i]+", ";
 			}					
 			if(sBY!=""){sBY=sBY.slice(0,-2);}			
 			//var sDesc;
@@ -171,7 +176,7 @@ enyo.kind({
 			iHeads+=this.arrData[j].heads;
 			iSumWeight+=this.arrData[j].weight;
 			iSumAve+=this.arrData[j].avgweight;
-			iSumFeed+=this.arrData[j].feed;
+			iSumFeed+=this.arrData[j].feed.quantity;
 			for (var i=0;i<this.arrData[j].buyers.length;i++){
 				iSold+=this.arrData[j].buyers[i].heads;				
 				iSoldAve+=this.arrData[j].buyers[i].heads*this.arrData[j].avgweight;
@@ -180,14 +185,14 @@ enyo.kind({
 			}					
 		}
 		iSumAve=iSumAve/this.arrData.length;
-		this.$.lblInvSumHeadClass.setContent(gblUtils.numCD(iHeads));
-		this.$.lblInvSumWeight.setContent(gblUtils.numCD(iSumWeight));
-		this.$.lblInvSumAvgWeight.setContent(iSumAve);
-		this.$.lblInvSumFeed.setContent(iSumFeed);		
+		this.$.lblInvSumHeadClass.setContent("Cabezas<br />" + gblUtils.numCD(iHeads));
+		this.$.lblInvSumWeight.setContent("Peso<br />" + gblUtils.numCD(iSumWeight));
+		this.$.lblInvSumAvgWeight.setContent("Peso Prom.<br />" + iSumAve);
+		this.$.lblInvSumFeed.setContent("Alimento<br />" + iSumFeed);		
 		
-		this.$.lblPurSumInvHeads.setContent(gblUtils.numCD(iHeads-iSold));
-		this.$.lblPurSumInvWeight.setContent(gblUtils.numCD((iSumWeight-iSoldAve).toFixed(2)));
-		this.$.lblSumInvAveWight.setContent(((iSumWeight-iSoldAve)/(iHeads-iSold)).toFixed(2));
+		this.$.lblPurSumInvHeads.setContent("Cabezas<br />" + gblUtils.numCD(iHeads-iSold));
+		this.$.lblPurSumInvWeight.setContent("Peso<br />" + gblUtils.numCD((iSumWeight-iSoldAve).toFixed(2)));
+		this.$.lblSumInvAveWight.setContent("Peso Prom.<br />" + ((iSumWeight-iSoldAve)/(iHeads-iSold)).toFixed(2));
 	},
 	ready:function(){
 		this.updateSummary();

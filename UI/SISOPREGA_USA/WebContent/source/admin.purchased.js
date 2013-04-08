@@ -11,23 +11,7 @@ enyo.kind({
 	components: [
 		{kind: "Toolbar",layoutKind: enyo.HFlexLayout,style:"padding:0px;color:white",
 		 components:[
-			{kind: "VFlexBox",content:"Compras",flex:.1,onclick:"doSelect"} ,
-			{kind:"RowGroup",layoutKind: enyo.VFlexLayout, flex:.08, style:"margin:0px;",
-			 components:[
-				{kind:"VFlexBox",name: "lblPurSumInvHeads",style:"font-size: 0.7em;color:#999;",align:"center",
-				 content: "",},
-			]},
-			{kind:"RowGroup",layoutKind: enyo.VFlexLayout, flex:.14, style:"margin:0px;",
-			 components:[
-				{kind:"VFlexBox",name: "lblPurSumInvWeight",style:"font-size: 0.7em;color:#999",align:"center",
-				 content: ""},
-			]},
-			{kind:"RowGroup",layoutKind: enyo.VFlexLayout, flex:.08, style:"margin:0px;",
-			 components:[
-				{kind:"VFlexBox",name: "lblSumInvAveWight",style:"font-size: 0.7em;color:#999",align:"center",
-				 content: ""},
-			]},
-			
+			{kind: "VFlexBox",content:"Compras",style:"font-size:15px;",flex:.1,onclick:"doSelect"} ,
 			{kind: "Spacer",flex:.02},				
 			{kind: "Button",caption: "+",onclick:"doPurchase"}
 		]},
@@ -80,33 +64,47 @@ enyo.kind({
 		]},
 		{kind: "Toolbar",
 			components:[
-				{kind: "VFlexBox", content:"Total",flex:.18,style:"color:white;margin:0"},
-				{kind: "Spacer",flex:.08},				
-				{kind:"RowGroup", align: "center", flex:.1, style:"backgound-color:white;margin:0",
+				{kind:"RowGroup", align: "center", flex:.1, style:"backgound-color:white;margin:0",contentFit:true,
 				 components:[
-					{kind: "VFlexBox",name: "lblPurSumHeads",align:"center",
-					 className:"listSecond",style:"font-size: 0.75em;color:#999",
+					{kind: "VFlexBox",name: "lblPurSumHeads",align:"center",allowHtml:true, 
+					 className:"listSecond",style:"text-align:center;font-size: 0.75em;color:#999",
 					 content: ""},
 				]},
-				{kind: "Spacer",flex:.12},
-				{kind:"RowGroup", align: "center", flex:.15, style:"backgound-color:white;margin:0",
+				{kind:"RowGroup", align: "center", flex:.15, style:"backgound-color:white;margin:0",contentFit:true,
 				 components:[
-					{kind: "VFlexBox",name: "lblPurSumWeight",align:"center",style:"font-size: 0.75em;color:#999",
-					 content: ""},
+					{kind: "VFlexBox",name: "lblPurSumWeight",align:"center",style:"text-align:center;font-size: 0.75em;color:#999",
+					 content: "",allowHtml:true },
 				]},
-				{kind: "Spacer",flex:.10},
-				{kind:"RowGroup", align: "center", flex:.12, style:"backgound-color:white;margin:0",
+				{kind:"RowGroup", align: "center", flex:.12, style:"backgound-color:white;margin:0",contentFit:true,
 				 components:[
-					{kind: "VFlexBox",name: "lblSumAveWeight",align:"center",style:"font-size: 0.75em;color:#999",
+					{kind: "VFlexBox",name: "lblSumAveWeight",align:"center",style:"text-align:center;font-size: 0.75em;color:#999",allowHtml:true, 
 					 content: ""},
 				]},				
-				{kind: "Spacer",flex:.17},				
 			]},	
+			{kind: "Toolbar",layoutKind: enyo.HFlexLayout,style:"padding:0px;color:white",
+				 components:[
+				         {kind: "VFlexBox", content:"Ending Inv.",flex:1.5,style:"color:white;margin:0;font-size:15px;"},
+					{kind:"RowGroup",layoutKind: enyo.VFlexLayout, flex:1, style:"margin:0px;",
+					 components:[
+						{kind:"VFlexBox",name: "lblPurSumInvHeads",style:"text-align:center;font-size: 0.7em;color:#999;",align:"center",allowHtml:true, 
+						 content: "",},
+					]},
+					{kind:"RowGroup",layoutKind: enyo.VFlexLayout, flex:1, style:"margin:0px;",
+					 components:[
+						{kind:"VFlexBox",name: "lblPurSumInvWeight",style:"text-align:center;font-size: 0.7em;color:#999",align:"center",allowHtml:true, 
+						 content: ""},
+					]},
+					{kind:"RowGroup",layoutKind: enyo.VFlexLayout, flex:1, style:"margin:0px;",
+					 components:[
+						{kind:"VFlexBox",name: "lblSumInvAveWight",style:"text-align:center;font-size: 0.7em;color:#999",align:"center",allowHtml:true, 
+						 content: ""},
+					]},
+				]},
 
 	],
 	loadPurchased:function(inSender, inIndex) {		
 		var objData;
-		//{seller:"Inventory",cattle_class:"Novillos",heads:109,weight:40650,aveweight:372.9,reweight:536}
+		//{seller:"Inventory",cattleName:"Novillos",heads:109,weight:40650,aveweight:372.9,reweight:536}
 		if(objData=this.arrData[inIndex]){
 			this.$.lblPurDate.setContent(objData.purdate);
 			this.$.lblPurHeads.setContent(objData.heads);
@@ -147,14 +145,14 @@ enyo.kind({
 			
 		}
 		
-		this.$.lblPurSumInvHeads.setContent("+"+gblUtils.numCD(iHeadHeads));
-		this.$.lblPurSumInvWeight.setContent("+"+gblUtils.numCD(iHeadWeight));
-		this.$.lblSumInvAveWight.setContent("+"+gblUtils.numCD(((iFotAve/this.arrData.length)-
+		this.$.lblPurSumInvHeads.setContent("Cabezas<br />" + "+"+gblUtils.numCD(iHeadHeads));
+		this.$.lblPurSumInvWeight.setContent("Peso<br />" + "+"+gblUtils.numCD(iHeadWeight));
+		this.$.lblSumInvAveWight.setContent("Peso Prom.<br />" + "+"+gblUtils.numCD(((iFotAve/this.arrData.length)-
 												(iHeadAve/this.arrData.length)).toFixed(2)));
 
-		this.$.lblPurSumHeads.setContent(gblUtils.numCD(iFotHeads));
-		this.$.lblPurSumWeight.setContent(gblUtils.numCD(iFotWeight));
-		this.$.lblSumAveWeight.setContent((iFotAve/this.arrData.length).toFixed(2));				
+		this.$.lblPurSumHeads.setContent("Cabezas<br />" + gblUtils.numCD(iFotHeads));
+		this.$.lblPurSumWeight.setContent("Peso<br />" + gblUtils.numCD(iFotWeight));
+		this.$.lblSumAveWeight.setContent("Peso Prom.<br />" + (iFotAve/this.arrData.length).toFixed(2));				
 	},
 	ready:function(){
 		this.updateSummary();

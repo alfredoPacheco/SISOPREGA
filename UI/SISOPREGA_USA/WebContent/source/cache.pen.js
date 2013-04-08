@@ -62,9 +62,10 @@ enyo.kind({
 	    var mockRejects = Math.floor(Math.random() * 5);
 	    var mockRejectsWeight = Math.floor((Math.random() * 450) + 100)
 		    * mockRejects;
-	    var numCorral = Math.floor((Math.random() * 12) + 1);
-	    var barnyard = [];
+	    var numCorral = Math.floor((Math.random() * 34) + 1);
+	    var barnyard = {};
 	    barnyard["1" + "C" + numCorral] = "1" + "C" + numCorral;
+
 	    var mockObj = {
 		recordId : ++this.lastID,
 		cattleType : mockCattleType,
@@ -73,11 +74,17 @@ enyo.kind({
 		weight : mockWeight,
 		rejects : mockRejects,
 		rejectsWeight : mockRejectsWeight,
+		avgweight:0,
 		barnyard : barnyard,
 		feed : {
 		    dateAndTime : null,
 		    quantity : 0
 		},
+		buyers : [ {
+		    name : "Hasco",
+		    heads : 127
+		} ],
+		trucks : [ "Paez Truck" ],
 		occupied : 1
 	    };
 	    result.push(mockObj);
@@ -106,15 +113,16 @@ enyo.kind({
 
 	if (objTo) {
 	    objTo.heads = parseInt(objTo.heads) + parseInt(objMovement.heads);
-	    objTo.weight = parseInt(objTo.weight) + parseInt(objMovement.weight);
+	    objTo.weight = parseInt(objTo.weight)
+		    + parseInt(objMovement.weight);
 	    if (this.update(objFrom))
 		if (this.update(objTo))
 		    return true;
-	}else{
+	} else {
 	    if (this.update(objFrom))
-		    if (this.create(objMovement))
-			return true;    
-	}	
+		if (this.create(objMovement))
+		    return true;
+	}
 	return false;
     },
     getList : function() {

@@ -15,7 +15,7 @@ enyo.kind({
 	components: [
 		{kind: "Toolbar",
 			components:[
-				{kind: "VFlexBox",content:"Ventas",onclick:"doSelect",flex:.3,style:"color:white"} ,
+				{kind: "VFlexBox",content:"Ventas",onclick:"doSelect",flex:.3,style:"color:white;font-size:15px;"} ,
 				{kind:"RowGroup",layoutKind: enyo.VFlexLayout, align: "center", flex:.7, style:"margin:0",
 				 components:[
 					{name: "lblSalesShipment",
@@ -78,28 +78,28 @@ enyo.kind({
 		]},
 		{kind: "Toolbar",
 			components:[
-				{kind: "VFlexBox", content:"Total",flex:.20,style:"color:white;margin:0"},
-				{kind: "Spacer",flex:.07},				
-				{kind:"RowGroup", align: "center", flex:.1, style:"backgound-color:white;margin:0",
+				{kind: "VFlexBox", content:"Total",flex:1,style:"color:white;margin:0;font-size:15px;"},
+				{kind: "Spacer",flex:.2},				
+				{kind:"RowGroup", align: "center", flex:1, style:"backgound-color:white;margin:0",
 				 components:[
 					{kind: "VFlexBox",name: "lblSalesSumHeads",align:"center",style:"font-size: 0.75em;color:#999",
 					 content: ""},
 				]},
-				{kind: "Spacer",flex:.15},
-				{kind:"RowGroup", align: "center", flex:.15, style:"backgound-color:white;margin:0",
+				{kind: "Spacer",flex:.2},
+				{kind:"RowGroup", align: "center", flex:1, style:"backgound-color:white;margin:0",
 				 components:[
 					{kind: "VFlexBox",name: "lblSalesSumWeight",align:"center",
 					 style:"font-size: 0.75em;color:#999",
 					 content: ""},
 				]},
-				{kind: "Spacer",flex:.07},
-				{kind:"RowGroup", align: "center", flex:.12, style:"backgound-color:white;margin:0",
+				{kind: "Spacer",flex:.2},
+				{kind:"RowGroup", align: "center", flex:1, style:"backgound-color:white;margin:0",
 				 components:[
 					{kind: "VFlexBox",name: "lblSumAveWeight",align:"center",
 					 className:"listSecond",style:"font-size: 0.75em;color:#999",
 					 content: ""},
 				]},				
-				{kind: "Spacer",flex:.28},				
+				{kind: "Spacer",flex:.2},				
 			]},	
 	],
 	loadSales:function(inSender, inIndex) {		

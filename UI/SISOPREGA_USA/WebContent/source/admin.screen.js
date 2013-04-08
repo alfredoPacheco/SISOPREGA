@@ -117,7 +117,7 @@ enyo.kind({
 		kind : "admin.inventory",
 		flex : 1,
 		maxState : false,
-		arrData : cacheInv.readData(),
+		arrData : cachePen.get(),
 		onSale : "showSale",
 		onSelect : "inventory_select"
 	    } ]
