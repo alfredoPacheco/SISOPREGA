@@ -847,7 +847,8 @@ enyo
 				if(this.arrActiveReceptions.length>0){
 					for (var i =0;i<this.arrActiveReceptions.length;i++){
 						var auxCaption = "";
-						for(var j = 0; j<this.arrActiveReceptions[i].barnyards.length;j++){
+						for(var j in this.arrActiveReceptions[i].barnyards){
+						    if(this.arrActiveReceptions[i].barnyards.hasOwnProperty(j))
 							if (parseInt(this.arrActiveReceptions[i].barnyards[j].substring(1,0)) == parseInt(this.defaultZone)){
 								auxCaption += this.arrActiveReceptions[i].barnyards[j].substring(1) + ", ";	
 							}

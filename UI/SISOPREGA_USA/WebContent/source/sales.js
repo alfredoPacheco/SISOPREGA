@@ -35,21 +35,23 @@ enyo
 						style : "background-color:#DABD8B;margin-left:2px;font-size:12px;",
 						width : "80px;"
 					    }, ]
-				}, {
+				},
+				{
 				    kind : enyo.HFlexBox,
 				    align : "center",
 				    height : "40px;",
-				    components : [ {
-					content : "Cliente:",
-					width : "80px;",
-					style : "text-align: right;margin-right:5px;"
-				    }, {
-					kind : "controls.autocomplete",
-					inputKind : "ToolInput",
-					name : "customer",
-					width : "500px;",
-					height : "35px;",
-				    } ]
+				    components : [
+					    {
+						content : "Cliente:",
+						width : "80px;",
+						style : "text-align: right;margin-right:5px;"
+					    }, {
+						kind : "controls.autocomplete",
+						inputKind : "ToolInput",
+						name : "customer",
+						width : "500px;",
+						height : "35px;",
+					    } ]
 				} ]
 		    },
 		    {
@@ -69,16 +71,17 @@ enyo
 			    width : "150px;",
 			    style : "margin-right: 15px;"
 			}, {
+			    kind : "controls.autocomplete",
+			    inputKind : "ToolInput",
+			    name : "corrales",
+			    width : "300px;",
+			    height : "35px;",
+			    style : "margin-right: 15px;"
+			}, {
 			    kind : "ToolInput",
 			    name : "cabezas",
 			    hint : 'Cabezas',
 			    width : "150px;",
-			    style : "margin-right: 15px;"
-			}, {
-			    kind : "ToolInput",
-			    name : "corrales",
-			    hint : "Corrales",
-			    width : "300px;",
 			    style : "margin-right: 15px;"
 			}, {
 			    kind : enyo.Button,
@@ -87,7 +90,7 @@ enyo
 			    style : "background-color: #DABD8B;"
 			}, ]
 		    },
-		    {//HEADER:
+		    {// HEADER:
 			kind : "HFlexBox",
 			className : "listFirst",
 			style : "font-size:13px;background-color:#DABD8B;border-bottom-style: solid;border-bottom-color: #482400;",
@@ -242,13 +245,18 @@ enyo
 		this.$.saleDate.setValue(utils.dateOut(new Date()));
 		this.$.saleDate.$.input.applyStyle("text-align", "center");
 		this.$.customer.setItems(cacheCustomers.getAllForList());
+		this.$.clase.setItems(cachePen.getClassesInPensForList());
+		this.$.corrales.setItems(cachePen.getBarnyardsOccupiedForList());
+		
 	    },
 	    updateList : function() {
 		this.totalHC = 0;
 		this.totalWeight = 0;
 		this.$.list.render();
-		this.$.totalHC.setContent(utils.formatNumberThousands(this.totalHC));
-		this.$.totalWeight.setContent(utils.formatNumberThousands(this.totalWeight));
+		this.$.totalHC.setContent(utils
+			.formatNumberThousands(this.totalHC));
+		this.$.totalWeight.setContent(utils
+			.formatNumberThousands(this.totalWeight));
 	    },
 	    sell_click : function() {
 

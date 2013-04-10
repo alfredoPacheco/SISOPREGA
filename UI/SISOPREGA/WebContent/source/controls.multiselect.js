@@ -56,10 +56,26 @@ enyo.kind({
 	itemsChanged : function(inOldValue) {
 		this.clear();
 		this.$.drop_down.close();
-		this.$.drop_down.setItems(this.getItems());
-		this.allItems = this.getItems();
+		this.allItems = [];
+		var arrItemsAux = this.getItems();
+		for ( var i = 0; i < arrItemsAux.length; i++) {
+		    if (arrItemsAux[i]) {
+			this.allItems.push(arrItemsAux[i]);
+		    }
+		}
 		this.filter = this.allItems;
-	},
+		this.$.drop_down.setItems(this.allItems);
+	    },
+	    setFilter : function(items) {
+		this.filter = [];
+		var arrItemsAux = items;
+		for ( var i = 0; i < arrItemsAux.length; i++) {
+		    if (arrItemsAux[i]) {
+			this.filter.push(arrItemsAux[i]);
+		    }
+		}
+		// this.$.drop_down.setItems(this.allItems);
+	    },
 	create : function() {
 		this.inherited(arguments);
 		this.hintChanged();
@@ -225,7 +241,7 @@ enyo.kind({
 			//TODO is this code used?:
 //			this.$.list.controlsToRow(this.$.drop_down.selected);
 //			this.$.scroller.scrollIntoView(this.$.item.getBounds().top, 0);
-			this.$.drop_down.openAtEvent(inEvent);
+			this.$.drop_down.openAroundControl(this.$.textField, "", "left");
 			this.$.drop_down.render();
 		}
 		this.$.textField.forceFocus();		
@@ -238,7 +254,7 @@ enyo.kind({
 		this.$.drop_down.setItems(this.allItems);
 		if(this.$.drop_down.items.length > 0){
 			this.$.drop_down.selected = 0;
-			this.$.drop_down.openAtEvent(inEvent);
+			this.$.drop_down.openAroundControl(this.$.textField, "", "left");
 			this.$.drop_down.render();
 		}
 		this.$.textField.forceFocus();		
