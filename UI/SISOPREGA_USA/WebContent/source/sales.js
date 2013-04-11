@@ -2,10 +2,14 @@ enyo
 	.kind({
 	    name : "sales",
 	    kind : enyo.VFlexBox,
+	    objMaster : {},
 	    arrDetail : [],
 	    totalHC : 0,
 	    totalWeight : 0,
 	    style : "background-color:#DABD8B;font-size:15px;",
+	    events : {
+		onSell : ""
+	    },
 	    components : [
 		    {
 			kind : enyo.VFlexBox,
@@ -69,12 +73,13 @@ enyo
 			    name : "clase",
 			    hint : 'Clase',
 			    width : "150px;",
-			    style : "margin-right: 15px;"
+			    style : "margin-right: 15px;",
+			    onSelectItem : "clase_select"
 			}, {
 			    kind : "controls.autocomplete",
 			    inputKind : "ToolInput",
 			    name : "corrales",
-			    width : "300px;",
+			    width : "200px;",
 			    height : "35px;",
 			    style : "margin-right: 15px;"
 			}, {
@@ -103,13 +108,13 @@ enyo
 				    // className : "listSecond",
 				    style : "width:153px;margin-right:15px;margin-left:107px;",
 				}, {
+				    content : "Corrales",
+				    // className : "listSecond",
+				    style : "width:200px;margin-right:15px;"
+				}, {
 				    content : 'Cantidad',
 				    // className : "listSecond",
 				    style : "width:153px;margin-right:15px;"
-				}, {
-				    content : "Corrales",
-				    // className : "listSecond",
-				    style : "width:300px;margin-right:15px;"
 				}, {
 				    content : "Peso",
 				    style : "width:300px;margin-right:15px;"
@@ -123,6 +128,8 @@ enyo
 			flex : 1,
 			// className : "listBG",
 			style : "background-color: #482400;",
+			autoHorizontal : false,
+			horizontal : false,
 			// style:"background-image:url('images/images
 			// (3).jpg');background-repeat:repeat;margin-top: 5px;",
 			components : [ {
@@ -148,18 +155,18 @@ enyo
 					    style : "width:153px;margin-right:15px;margin-left:23px;",
 					},
 					{
+					    name : "detail_corrales",
+					    className : "listSecond",
+					    style : "width:200px;margin-right:15px;"
+					},
+					{
 					    name : 'detail_cabezas',
 					    className : "listSecond",
 					    style : "width:153px;margin-right:15px;"
-					},
-					{
-					    name : "detail_corrales",
-					    className : "listSecond",
-					    style : "width:300px;margin-right:15px;"
 					}, {
 					    name : "detail_weight",
 					    className : "listSecond",
-					    style : "width:200px;"
+					    style : "width:100px;"
 					}, ]
 			    } ]
 			} ]
@@ -193,7 +200,7 @@ enyo
 					name : "totalWeight",
 					className : "listFirst",
 					style : "background-color:#DABD8B;margin-left:10px;",
-					width : "60px;"
+					width : "100px;"
 				    }, {
 					kind : enyo.Spacer
 				    }, {
@@ -209,8 +216,8 @@ enyo
 		var newObject = {
 		    clase : this.$.clase.getValue(),
 		    cabezas : this.$.cabezas.getValue(),
-		    corrales : this.$.corrales.getValue(),
-		    pesoPromedio : 12.4
+		    corral : this.$.corrales.getValue(),
+		    pesoPromedio : this.$.corrales.getItemSelected().object.avgweight,
 		};
 
 		this.arrDetail.push(newObject);
@@ -246,8 +253,9 @@ enyo
 		this.$.saleDate.$.input.applyStyle("text-align", "center");
 		this.$.customer.setItems(cacheCustomers.getAllForList());
 		this.$.clase.setItems(cachePen.getClassesInPensForList());
-		this.$.corrales.setItems(cachePen.getBarnyardsOccupiedForList());
-		
+		this.$.corrales
+			.setItems(cachePen.getBarnyardsOccupiedForList());
+
 	    },
 	    updateList : function() {
 		this.totalHC = 0;
@@ -258,8 +266,29 @@ enyo
 		this.$.totalWeight.setContent(utils
 			.formatNumberThousands(this.totalWeight));
 	    },
+	    getSale : function() {
+		this.objMaster.date = this.$.saleDate.getValue();
+		this.objMaster.customer = this.$.customer.getValue();		
+		this.objMaster.detail = this.arrDetail;
+		return this.objMaster;
+	    },
 	    sell_click : function() {
+		cacheSales.sell(this.getSale(), this, "after_sell");
+	    },
+	    after_sell : function() {
+		this.doSell();
+	    },
+	    clase_select : function(inSender) {
+		console.debug(inSender);
+		var filter = [];
+		var items = this.$.corrales.getItems();
+		for ( var i = 0; i < items.length; i++) {
+		    if (items[i].object.cattleName == this.$.clase.getValue()) {
+			filter.push(items[i]);
+		    }
+		}
 
+		this.$.corrales.setFilter(filter);
 	    },
 	    applyMask : function(inSender) {
 		var _id = inSender.$.input.getId();

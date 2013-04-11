@@ -13,6 +13,7 @@ enyo.kind(
           layoutKind : "VFlexLayout",
           style : "overflow: hidden;border-width: 8px;",
           scrim : true,
+          onSale : "save_sale",
           components :
             [
               {
@@ -208,10 +209,10 @@ enyo.kind(
     },
     buy_cattle_click : function() {
       this.$.popup_add.close();
-      
-      if(this.$.purchases_kind)
+
+      if (this.$.purchases_kind)
         this.$.purchases_kind.updateList();
-      
+
       this.$.popup_purchases.openAtCenter();
     },
     inventory_select : function(inSender, inEvent) {
@@ -235,5 +236,8 @@ enyo.kind(
     savePurchaseGroup : function() {
       this.$.purchased.updateList();
       this.$.popup_purchases.close();
+    },
+    save_sale : function() {
+      alert("venta realizada");
     }
   });

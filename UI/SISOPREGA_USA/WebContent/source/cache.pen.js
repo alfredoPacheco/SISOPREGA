@@ -65,31 +65,35 @@ enyo.kind(
         var barnyard = {};
         barnyard["3" + "C" + numCorral] = "3" + "C" + numCorral;
 
-
-	    var mockObj = {
-		recordId : ++this.lastID,
-		cattleType : mockCattleType,
-		cattleName : mockCattleName,
-		heads : mockHeads,
-		weight : mockWeight,
-		rejects : mockRejects,
-		rejectsWeight : mockRejectsWeight,
-		avgweight : 0,
-		barnyard : barnyard,
-		feed : {
-		    dateAndTime : null,
-		    quantity : 0
-		},
-		buyers : [ {
-		    name : "Hasco",
-		    heads : 127
-		} ],
-		trucks : [ "Paez Truck" ],
-		occupied : 1
-	    };
-	    result.push(mockObj);
-	}
-	return result;
+        var mockObj =
+          {
+            recordId : ++this.lastID,
+            cattleType : mockCattleType,
+            cattleName : mockCattleName,
+            heads : mockHeads,
+            weight : mockWeight,
+            rejects : mockRejects,
+            rejectsWeight : mockRejectsWeight,
+            avgweight : mockWeight / mockHeads,
+            barnyard : "3" + "C" + numCorral,
+            feed :
+              {
+                dateAndTime : null,
+                quantity : 0
+              },
+            buyers :
+              [
+                {
+                  name : "Hasco",
+                  heads : 127
+                } ],
+            trucks :
+              [ "Paez Truck" ],
+            occupied : 1
+          };
+        result.push(mockObj);
+      }
+      return result;
     },
     create : function(obj) {
       obj.recordId = ++this.lastID;
@@ -160,57 +164,67 @@ enyo.kind(
     },
     merma : function(objPen, heads) {
 
-	// calcular peso
-	var pesoPromedio = Number(objPen.weight) / Number(objPen.heads);
-	var pesoMermado = pesoPromedio * heads;
-	// asignar nuevos valores
-	objPen.weight = Number(objPen.weight) - Number(pesoMermado);
-	objPen.heads = parseInt(objPen.heads) - parseInt(heads);
+      // calcular peso
+      var pesoPromedio = Number(objPen.weight) / Number(objPen.heads);
+      var pesoMermado = pesoPromedio * heads;
+      // asignar nuevos valores
+      objPen.weight = Number(objPen.weight) - Number(pesoMermado);
+      objPen.heads = parseInt(objPen.heads) - parseInt(heads);
     },
     // comentarios de la merma
     coment : function() {
 
     },
     getClassesInPensForList : function() {
-	var setAux = {};
-	var result = [];
-	var items = this.get();
-	for ( var index = 0; index < items.length; index++) {
-	    var item = {
-		caption : items[index].cattleName,
-		value : index
-	    // items[index].id TODO: work with id
-	    };
-	    if (!setAux.hasOwnProperty(item.caption)) {
-		setAux[item.caption] = item;
-		result.push(item);
-	    }
-	}
-	return result;
+      var setAux = {};
+      var result = [];
+      var items = this.get();
+      for ( var index = 0; index < items.length; index++) {
+        var item =
+          {
+            caption : items[index].cattleName,
+            value : index
+          // items[index].id TODO: work with id
+          };
+        if (!setAux.hasOwnProperty(item.caption)) {
+          setAux[item.caption] = item;
+          result.push(item);
+        }
+      }
+      return result;
     },
     getBarnyardsOccupiedForList : function() {
-	var setAux = {};
-	var result = [];
-	var items = this.get();
-	for ( var index = 0; index < items.length; index++) {
-	    var auxCaption = "";
-	    for ( var j in items[index].barnyard) {
-		if (items[index].barnyard.hasOwnProperty(j))
-		    auxCaption += items[index].barnyard[j].substring(1) + ", ";
-	    }
-	    if (auxCaption.length > 0) {
-		auxCaption = auxCaption.slice(0, -2);
-		var item = {
-		    value : items[index].recordId,
-		    caption : auxCaption
-		};
-		if (!setAux.hasOwnProperty(item.caption)) {
-			setAux[item.caption] = item;
-			result.push(item);
-		}
-	    }
-	}
-	return result;
+      var setAux = {};
+      var result = [];
+      var items = this.get();
+      for ( var index = 0; index < items.length; index++) {
+        var auxCaption = "";
+        for ( var j in items[index].barnyard) {
+          if (items[index].barnyard.hasOwnProperty(j)) {
+            auxCaption = items[index].barnyard[j].substring(1);
+            var item =
+              {
+                value : items[index].recordId,
+                caption : auxCaption,
+                object : items[index]
+              };
+            if (!setAux.hasOwnProperty(item.caption)) {
+              setAux[item.caption] = item;
+              result.push(item);
+            }
+          }
+        }
+
+      }
+      return result;
     },
-});
+    substractHeadsInPen : function(by, heads) {
+      var reception = cachePen.getByBarnyard(by);
+      if (reception) {
+        reception.heads -= heads;
+        return true;
+      }
+      return false;
+    }
+  });
 var cachePen = new cache.pen();
