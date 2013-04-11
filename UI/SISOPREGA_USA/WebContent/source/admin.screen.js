@@ -10,6 +10,7 @@ enyo.kind({
 	layoutKind : "VFlexLayout",
 	style : "overflow: hidden;border-width: 8px;",
 	scrim : true,
+	onSale : "save_sale",
 	components : [ {
 	    kind : "sales",
 	    name : "sales_kind",
@@ -191,5 +192,8 @@ enyo.kind({
     cancelDriver_click : function() {
     },
     saveDriver_click : function() {
+    },
+    save_sale:function(){
+	alert("venta realizada");
     }
 });

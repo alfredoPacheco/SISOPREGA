@@ -63,8 +63,6 @@ enyo.kind({
 	    var mockRejectsWeight = Math.floor((Math.random() * 450) + 100)
 		    * mockRejects;
 	    var numCorral = Math.floor((Math.random() * 34) + 1);
-	    var barnyard = {};
-	    barnyard["3" + "C" + numCorral] = "3" + "C" + numCorral;
 
 	    var mockObj = {
 		recordId : ++this.lastID,
@@ -74,8 +72,8 @@ enyo.kind({
 		weight : mockWeight,
 		rejects : mockRejects,
 		rejectsWeight : mockRejectsWeight,
-		avgweight : 0,
-		barnyard : barnyard,
+		avgweight : mockWeight / mockHeads,
+		barnyard : "3" + "C" + numCorral,
 		feed : {
 		    dateAndTime : null,
 		    quantity : 0
@@ -194,22 +192,30 @@ enyo.kind({
 	for ( var index = 0; index < items.length; index++) {
 	    var auxCaption = "";
 	    for ( var j in items[index].barnyard) {
-		if (items[index].barnyard.hasOwnProperty(j))
-		    auxCaption += items[index].barnyard[j].substring(1) + ", ";
-	    }
-	    if (auxCaption.length > 0) {
-		auxCaption = auxCaption.slice(0, -2);
-		var item = {
-		    value : items[index].recordId,
-		    caption : auxCaption
-		};
-		if (!setAux.hasOwnProperty(item.caption)) {
+		if (items[index].barnyard.hasOwnProperty(j)) {
+		    auxCaption = items[index].barnyard[j].substring(1);
+		    var item = {
+			value : items[index].recordId,
+			caption : auxCaption,
+			object : items[index]
+		    };
+		    if (!setAux.hasOwnProperty(item.caption)) {
 			setAux[item.caption] = item;
 			result.push(item);
+		    }
 		}
 	    }
+
 	}
 	return result;
     },
+    substractHeadsInPen : function(by, heads) {
+	var reception = cachePen.getByBarnyard(by);
+	if (reception) {
+	    reception.heads -= heads;
+	    return true;
+	}
+	return false;
+    }
 });
 var cachePen = new cache.pen();

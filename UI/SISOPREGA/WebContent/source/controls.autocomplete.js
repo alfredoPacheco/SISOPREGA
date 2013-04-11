@@ -76,6 +76,7 @@ enyo
 			this.allItems.push(arrItemsAux[i]);
 		    }
 		}
+		this.allItems.sort(function(a,b){return a.caption >b.caption;});
 		this.filter = this.allItems;
 		this.$.drop_down.setItems(this.allItems);
 	    },
@@ -87,6 +88,7 @@ enyo
 			this.filter.push(arrItemsAux[i]);
 		    }
 		}
+		this.filter.sort(function(a,b){return a.caption >b.caption;});
 		// this.$.drop_down.setItems(this.allItems);
 	    },
 	    create : function() {
@@ -405,6 +407,13 @@ enyo
 			}
 		    }
 		    return this.allItems[index];
+		}
+	    },
+	    getItemSelected:function(){
+		for ( var i = 0; i < this.allItems.length; i++) {
+		    if (this.allItems[i].value == this.getIndex()) {
+			return this.allItems[i];
+		    }
 		}
 	    },
 	    clear : function() {
