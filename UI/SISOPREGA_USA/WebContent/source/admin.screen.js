@@ -196,7 +196,7 @@ enyo.kind({
     on_sale : function() {
 	this.$.popup_sales.close();
 	this.$.inventory.updateView();
-	this.$.sales.$.updateView();
+	this.$.sales.updateView();
 	this.$.sales.moveToBottom();
     },
     on_cancel_sale : function() {
