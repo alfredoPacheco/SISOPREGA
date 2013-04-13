@@ -92,9 +92,9 @@ enyo.kind({
 		var objData;
 		if(objData=this.arrData[inIndex]){
 			this.$.lblSalesDate.setContent(objData.depdate+" "+objData.deptime);
-			this.$.lblSalesHeads.setContent(gblUtils.numCD(objData.heads));
-			this.$.lblSalesWeight.setContent(gblUtils.numCD(objData.weight));
-			this.$.lblSalesAverage.setContent(objData.aveweight);
+			this.$.lblSalesHeads.setContent(gblUtils.numCD(objData.totalHeads));
+			this.$.lblSalesWeight.setContent(gblUtils.numCD(objData.totalWeight));
+			this.$.lblSalesAverage.setContent(objData.aveWeight);
 			this.$.lblSalesClient.setContent(objData.buyer);	
 			this.$.lblSalesTruck.setContent(objData.truck);
 			if(inIndex % 2 == 0)inSender.$.client.$.client.applyStyle("background-color","#DFC699");
@@ -110,9 +110,9 @@ enyo.kind({
 		var iAve=0;		
 		
 		for (var j=0;j<this.arrData.length;j++){
-			iHeads+=this.arrData[j].heads;			
-			iWeight+=this.arrData[j].weight;
-			iAve+=this.arrData[j].aveweight;			
+			iHeads+=this.arrData[j].totalHeads;			
+			iWeight+=this.arrData[j].totalWeight;
+			iAve+=this.arrData[j].aveWeight;			
 		}
 		
 		this.$.lblSalesSumHeads.setContent(gblUtils.numCD(iHeads));

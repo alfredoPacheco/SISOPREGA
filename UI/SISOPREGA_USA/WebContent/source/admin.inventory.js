@@ -146,15 +146,18 @@ enyo.kind({
 						(objData.avgweight*objData.buyers[i].heads).toFixed(2)+"), ";
 			}		
 			if(sBuyer!=""){sBuyer=sBuyer.slice(0,-2);}
-			var sBY="";			
-			for (var i in objData.barnyard){
-				sBY+=objData.barnyard[i]+", ";
-			}					
-			if(sBY!=""){sBY=sBY.slice(0,-2);}			
+//			var sBY="";			
+//			for (var i in objData.barnyard){
+//				sBY+=objData.barnyard[i]+", ";
+//			}					
+//			if(sBY!=""){sBY=sBY.slice(0,-2);}
+			
+			
+			
 			//var sDesc;
 			//sDesc=sBuyer;
 			//if(sTrucks!=""){sDesc+=" - "+sTrucks}
-			this.$.lblInvBarnyards.setContent(sBY);			
+			this.$.lblInvBarnyards.setContent(objData.barnyard);			
 			this.$.lblInvDescBuyer.setContent(sBuyer);
 			this.$.lblInvDescTruck.setContent(sTrucks);
 			
@@ -187,7 +190,7 @@ enyo.kind({
 		iSumAve=iSumAve/this.arrData.length;
 		this.$.lblInvSumHeadClass.setContent("Cabezas<br />" + gblUtils.numCD(iHeads));
 		this.$.lblInvSumWeight.setContent("Peso<br />" + gblUtils.numCD(iSumWeight));
-		this.$.lblInvSumAvgWeight.setContent("Peso Prom.<br />" + iSumAve);
+		this.$.lblInvSumAvgWeight.setContent("Peso Prom.<br />" + gblUtils.numCD(iSumAve));
 		this.$.lblInvSumFeed.setContent("Alimento<br />" + iSumFeed);		
 		
 		this.$.lblPurSumInvHeads.setContent("Cabezas<br />" + gblUtils.numCD(iHeads-iSold));
@@ -196,5 +199,9 @@ enyo.kind({
 	},
 	ready:function(){
 		this.updateSummary();
+	},
+	updateView:function(){
+	    this.$.listInventory.render();
+	    this.updateSummary();
 	}
 });

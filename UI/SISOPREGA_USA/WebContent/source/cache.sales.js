@@ -2,40 +2,125 @@ enyo.kind({
     name : "cache.sales",
     cacheData : [ {
 	sale_id : 1,
-	buyer : "Hascon",
-	seller : "",
-	cattleName : "Novillos",
-	heads : 127,
-	weight : 45590,
-	aveweight : 359.0,
-	saledate : "01/01"
+	buyer:"un cliente",
+	sale_date:new Date(),
+	totalHeads:123,
+	totalWeight:123.23,
+	aveWeight:1.01,
+	detail:[{
+	    aveWeight:152.23,
+	    cattleName:"Caballos",
+	    heads:91,
+	    pen:"3C12",
+	    weight:13832
+	},{
+	    aveWeight: 235,
+	    cattleName: "Novillos",
+	    heads: 78,
+	    pen: "3C21",
+	    weight: 18330
+	}]	
     }, {
 	sale_id : 2,
-	buyer : "Welton",
-	seller : "",
-	cattleName : "Novillos",
-	heads : 178,
-	weight : 95130,
-	aveweight : 534.4,
-	saledate : "01/01"
+	buyer:"segundo cliente",
+	sale_date:new Date(),
+	totalHeads:123,
+	totalWeight:123.23,
+	aveWeight:1.01,
+	detail:[{
+	    aveWeight:152.23,
+	    cattleName:"Caballos",
+	    heads:91,
+	    pen:"3C12",
+	    weight:13832
+	},{
+	    aveWeight: 235,
+	    cattleName: "Novillos",
+	    heads: 78,
+	    pen: "3C21",
+	    weight: 18330
+	}]	
     }, {
 	sale_id : 3,
-	buyer : "Friona",
-	seller : "",
-	cattleName : "Novillos",
-	heads : 219,
-	weight : 97220,
-	aveweight : 443.9,
-	saledate : "01/01"
+	buyer:"terecer clinet",
+	sale_date:new Date(),
+	totalHeads:123,
+	totalWeight:123.23,
+	aveWeight:1.01,
+	detail:[{
+	    aveWeight:152.23,
+	    cattleName:"Caballos",
+	    heads:91,
+	    pen:"3C12",
+	    weight:13832
+	},{
+	    aveWeight: 235,
+	    cattleName: "Novillos",
+	    heads: 78,
+	    pen: "3C21",
+	    weight: 18330
+	}]	
     }, {
 	sale_id : 4,
-	buyer : "Alvaro Bustillos",
-	cattleName : "Novillos",
-	heads : 13,
-	weight : 9055,
-	aveweight : 696.5,
-	saledate : "01/01"
-    } ],
+	buyer:"cuarto cliente",
+	sale_date:new Date(),
+	totalHeads:123,
+	totalWeight:123.23,
+	aveWeight:1.01,
+	detail:[{
+	    aveWeight:152.23,
+	    cattleName:"Caballos",
+	    heads:91,
+	    pen:"3C12",
+	    weight:13832
+	},{
+	    aveWeight: 235,
+	    cattleName: "Novillos",
+	    heads: 78,
+	    pen: "3C21",
+	    weight: 18330
+	}]	
+    }, {
+	sale_id : 5,
+	buyer:"quinto cliente",
+	sale_date:new Date(),
+	totalHeads:123,
+	totalWeight:123.23,
+	aveWeight:1.01,
+	detail:[{
+	    aveWeight:152.23,
+	    cattleName:"Caballos",
+	    heads:91,
+	    pen:"3C12",
+	    weight:13832
+	},{
+	    aveWeight: 235,
+	    cattleName: "Novillos",
+	    heads: 78,
+	    pen: "3C21",
+	    weight: 18330
+	}]	
+    }, {
+	sale_id : 6,
+	buyer:"sexto cliente",
+	sale_date:new Date(),
+	totalHeads:123,
+	totalWeight:123.23,
+	aveWeight:1.01,
+	detail:[{
+	    aveWeight:152.23,
+	    cattleName:"Caballos",
+	    heads:91,
+	    pen:"3C12",
+	    weight:13832
+	},{
+	    aveWeight: 235,
+	    cattleName: "Novillos",
+	    heads: 78,
+	    pen: "3C21",
+	    weight: 18330
+	}]	
+    }, ], 
     createData : function() {
     },
     readData : function() {
@@ -44,7 +129,7 @@ enyo.kind({
     sell : function(objSale, cbObj, cbMethod) {
 	this.cacheData.push(objSale);
 	for(var i=0;i<objSale.detail.length;i++){
-	    if(!cachePen.substractHeadsInPen(objSale.detail[i].corral,objSale.detail[i].cabezas)){
+	    if(!cachePen.substractHeadsInPen(objSale.detail[i].pen,objSale.detail[i].heads)){
 		return false;
 	    }
 	}

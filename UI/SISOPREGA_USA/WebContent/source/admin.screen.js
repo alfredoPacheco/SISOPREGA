@@ -10,11 +10,12 @@ enyo.kind({
 	layoutKind : "VFlexLayout",
 	style : "overflow: hidden;border-width: 8px;",
 	scrim : true,
-	onSale : "save_sale",
 	components : [ {
 	    kind : "sales",
 	    name : "sales_kind",
-	    flex : 1
+	    flex : 1,
+	    onSale : "on_sale",
+	    onCancel:"on_cancel_sale"
 	} ]
     }, {
 	kind : enyo.Popup,
@@ -176,24 +177,24 @@ enyo.kind({
 	this.$.popup_purchases.openAtCenter();
     },
     inventory_select : function(inSender, inEvent) {
-	console.debug(inSender);
-	console.debug(inEvent);
 	this.$.popup_map.openAtCenter();
     },
     programShipment_click : function() {
 	this.$.popup_shipments.close();
-	this.$.sales.updateList();
+	this.$.sales.updateView();
 	this.$.shipment.updateList();
 	this.$.shipment.moveToBottom();
     },
     cancelShipment_click : function() {
 	this.$.popup_shipments.close();
     },
-    cancelDriver_click : function() {
+    on_sale:function(){
+	this.$.popup_sales.close();
+	this.$.inventory.updateView();
+	this.$.sales.$.updateView();
+	this.$.sales.moveToBottom();
     },
-    saveDriver_click : function() {
-    },
-    save_sale:function(){
-	alert("venta realizada");
+    on_cancel_sale:function(){
+	this.$.popup_sales.close();
     }
 });

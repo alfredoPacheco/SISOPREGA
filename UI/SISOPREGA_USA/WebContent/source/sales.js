@@ -8,7 +8,8 @@ enyo
 	    totalWeight : 0,
 	    style : "background-color:#DABD8B;font-size:15px;",
 	    events : {
-		onSell : ""
+		onSale : "",
+		onCancel:""
 	    },
 	    components : [
 		    {
@@ -208,16 +209,22 @@ enyo
 					caption : "Efectuar Venta",
 					onclick : "sell_click",
 					style : "background-color: #DABD8B;"
+				    },{
+					kind : enyo.Button,
+					caption : "Cacelar",
+					onclick : "cancel_click",
+					style : "background-color: #DABD8B;"
 				    } ]
 			} ]
 		    } ],
 	    agregar_click : function() {
 
 		var newObject = {
-		    clase : this.$.clase.getValue(),
-		    cabezas : this.$.cabezas.getValue(),
-		    corral : this.$.corrales.getValue(),
-		    pesoPromedio : this.$.corrales.getItemSelected().object.avgweight,
+		    cattleName : this.$.clase.getValue(),
+		    heads : parseInt(this.$.cabezas.getValue()),
+		    pen : this.$.corrales.getItemSelected().object.barnyard,
+		    aveWeight : this.$.corrales.getItemSelected().object.aveWeight,
+		    weight : this.$.corrales.getItemSelected().object.avgweight * this.$.cabezas.getValue()
 		};
 
 		this.arrDetail.push(newObject);
@@ -230,14 +237,13 @@ enyo
 		if (this.arrDetail[inIndex]) {
 		    this.$.detail_number.setContent(inIndex + 1);
 		    this.$.detail_clase
-			    .setContent(this.arrDetail[inIndex].clase);
+			    .setContent(this.arrDetail[inIndex].cattleName);
 		    this.$.detail_cabezas
-			    .setContent(this.arrDetail[inIndex].cabezas);
+			    .setContent(this.arrDetail[inIndex].heads);
 		    this.$.detail_corrales
-			    .setContent(this.arrDetail[inIndex].corrales);
+			    .setContent(this.arrDetail[inIndex].pen);
 		    this.$.detail_weight
-			    .setContent(parseFloat(this.arrDetail[inIndex].cabezas)
-				    * parseFloat(this.arrDetail[inIndex].pesoPromedio));
+			    .setContent(this.arrDetail[inIndex].weight);
 		    this.totalHC += parseFloat(this.$.detail_cabezas
 			    .getContent());
 		    this.totalWeight += parseFloat(this.$.detail_weight
@@ -267,16 +273,19 @@ enyo
 			.formatNumberThousands(this.totalWeight));
 	    },
 	    getSale : function() {
-		this.objMaster.date = this.$.saleDate.getValue();
-		this.objMaster.customer = this.$.customer.getValue();		
+		this.objMaster.sale_date = new Date(this.$.saleDate.getValue());
+		this.objMaster.buyer = this.$.customer.getValue();		
 		this.objMaster.detail = this.arrDetail;
+		this.objMaster.totalHeads=this.totalHC;
+		this.objMaster.totalWeight=this.totalWeight;
+		this.objMaster.aveWeight=this.totalWeight / this.totalHC;
 		return this.objMaster;
 	    },
 	    sell_click : function() {
 		cacheSales.sell(this.getSale(), this, "after_sell");
 	    },
 	    after_sell : function() {
-		this.doSell();
+		this.doSale();
 	    },
 	    clase_select : function(inSender) {
 		console.debug(inSender);
@@ -289,6 +298,9 @@ enyo
 		}
 
 		this.$.corrales.setFilter(filter);
+	    },
+	    cancel_click:function(){
+		this.doCancel();
 	    },
 	    applyMask : function(inSender) {
 		var _id = inSender.$.input.getId();
