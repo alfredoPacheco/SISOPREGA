@@ -274,6 +274,16 @@ enyo.kind(
       this.$.details.updateTableContents();
       this.closePopUp();
     },
+    saveHermana : function(){
+      // TODO: Save data to inner cache, then to database.
+      for ( var recordIndex = 0; recordIndex < this.arrDetail.length; recordIndex++) {
+        var purchase = this.purchaseFromRecord(recordIndex);
+        cachePur.createPurchase(purchase);
+      }
+
+      this.arrDetail = [];
+      this.doPurchaseCompleted();
+    },
     closePopUp : function() {
       this.$.popMan.close();
       this.cleanPopUpContents();

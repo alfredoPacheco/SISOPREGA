@@ -15,7 +15,7 @@ enyo.kind({
 	    name : "sales_kind",
 	    flex : 1,
 	    onSale : "on_sale",
-	    onCancel:"on_cancel_sale"
+	    onCancel : "on_cancel_sale"
 	} ]
     }, {
 	kind : enyo.Popup,
@@ -59,6 +59,7 @@ enyo.kind({
 	components : [ {
 	    kind : "purchases",
 	    name : "purchases_kind",
+	    onPurchaseCompleted : "savePurchaseGroup",
 	    flex : 1
 	} ]
     }, {
@@ -131,7 +132,7 @@ enyo.kind({
 		kind : "admin.purchased",
 		flex : 1,
 		maxState : false,
-		arrData : cachePur.readData(),
+		arrData : cachePur.get(),
 		onPurchase : "showPurchase"
 	    } ]
 	}, {
@@ -174,6 +175,10 @@ enyo.kind({
     },
     buy_cattle_click : function() {
 	this.$.popup_add.close();
+
+	if (this.$.purchases_kind)
+	    this.$.purchases_kind.updateList();
+
 	this.$.popup_purchases.openAtCenter();
     },
     inventory_select : function(inSender, inEvent) {
@@ -188,13 +193,17 @@ enyo.kind({
     cancelShipment_click : function() {
 	this.$.popup_shipments.close();
     },
-    on_sale:function(){
+    on_sale : function() {
 	this.$.popup_sales.close();
 	this.$.inventory.updateView();
 	this.$.sales.$.updateView();
 	this.$.sales.moveToBottom();
     },
-    on_cancel_sale:function(){
+    on_cancel_sale : function() {
 	this.$.popup_sales.close();
+    },
+    savePurchaseGroup : function() {
+	this.$.purchased.updateList();
+	this.$.popup_purchases.close();
     }
 });

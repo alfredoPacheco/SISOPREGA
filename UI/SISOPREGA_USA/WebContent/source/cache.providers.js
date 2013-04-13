@@ -9,7 +9,7 @@
 
 var _arrProviders = [ {
     id : 1,
-    name : "Este es un proveedor",
+    name : "El Paso Cattle",
     address_one : "un domicilio",
     address_two : "una colonia",
     city_id : "1",
@@ -21,7 +21,7 @@ var _arrProviders = [ {
     state_name : "Chihuahua"
 }, {
     id : 2,
-    name : "Otro proveedor",
+    name : "Alvaro Bustillos",
     address_one : "un domicilio 2",
     address_two : "una fraccionamiento",
     city_id : "1",
