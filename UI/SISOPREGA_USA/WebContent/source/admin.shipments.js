@@ -39,7 +39,7 @@ enyo.kind({
 			    },
 		{kind: "Scroller", flex: 1, name:"scroller",
 		 components:[
-			{kind: enyo.VirtualRepeater, name: "listShipments", onSetupRow: "loadShipments", onclick: "selectShipRow",								
+			{kind: enyo.VirtualRepeater, name: "listShipments", onSetupRow: "loadShipments",								
 			components: [
 				{kind: enyo.Item, style:"font-size:14px;",
 					components: [
@@ -123,14 +123,11 @@ enyo.kind({
 		this.updateSummary();
 	},
 	selectShipRow:function(inSender, inEvent){
-		if(this.bSelect){
-			this.objSelectedShipment=this.arrData[inEvent.rowIndex];
-			this.doSelectedShipment();
-		}
-		this.bSelect=false;
+		
 	},
-	selectShipment:function(){
-		this.bSelect=true;
+	selectShipment:function(inSender, inEvent){
+	    this.objSelectedShipment=this.arrData[inEvent.rowIndex];
+	    this.doSelectedShipment();
 	},
 	getSelectedShipment:function(){
 		return this.objSelectedShipment;

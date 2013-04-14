@@ -30,6 +30,7 @@ enyo
 					    {
 						kind : "ToolInput",
 						name : "saleDate",
+						hint:"mes/dia/año",
 						width : "135px;",
 						height : "35px;",
 						onfocus : "applyMask"
@@ -54,6 +55,7 @@ enyo
 						kind : "controls.autocomplete",
 						inputKind : "ToolInput",
 						name : "customer",
+						hint : 'Cliente',
 						width : "500px;",
 						height : "35px;",
 					    } ]
@@ -80,6 +82,7 @@ enyo
 			    kind : "controls.autocomplete",
 			    inputKind : "ToolInput",
 			    name : "corrales",
+			    hint : 'Corrales',
 			    width : "200px;",
 			    height : "35px;",
 			    style : "margin-right: 15px;"
@@ -239,11 +242,11 @@ enyo
 		    this.$.detail_clase
 			    .setContent(this.arrDetail[inIndex].cattleName);
 		    this.$.detail_cabezas
-			    .setContent(this.arrDetail[inIndex].heads);
+			    .setContent(utils.formatNumberThousands(this.arrDetail[inIndex].heads));
 		    this.$.detail_corrales
-			    .setContent(this.arrDetail[inIndex].pen);
+			    .setContent(this.arrDetail[inIndex].pen.substring(1));
 		    this.$.detail_weight
-			    .setContent(this.arrDetail[inIndex].weight);
+			    .setContent(utils.formatNumberThousands(this.arrDetail[inIndex].weight) + " lb");
 		    this.totalHC += parseFloat(this.$.detail_cabezas
 			    .getContent());
 		    this.totalWeight += parseFloat(this.$.detail_weight
@@ -254,14 +257,23 @@ enyo
 	    afterUpdate : function() {
 		this.updateList();
 	    },
-	    ready : function() {
+	    reset:function(){
 		this.$.saleDate.setValue(utils.dateOut(new Date()));
-		this.$.saleDate.$.input.applyStyle("text-align", "center");
 		this.$.customer.setItems(cacheCustomers.getAllForList());
 		this.$.clase.setItems(cachePen.getClassesInPensForList());
-		this.$.corrales
-			.setItems(cachePen.getBarnyardsOccupiedForList());
-
+		this.$.corrales.setItems(cachePen.getBarnyardsOccupiedForList());
+		this.objMaster = {};
+		this.arrDetail= [];
+		this.totalHC = 0;
+		this.totalWeight= 0;
+		this.$.cabezas.setValue("");
+		this.updateList();
+	    },
+	    ready : function() {
+		this.$.saleDate.$.input.applyStyle("text-align", "center");
+		this.$.saleDate.$.input.applyStyle("color", "black");
+		this.$.cabezas.$.input.applyStyle("color", "black");
+		this.reset();
 	    },
 	    updateList : function() {
 		this.totalHC = 0;
@@ -300,6 +312,7 @@ enyo
 		this.$.corrales.setFilter(filter);
 	    },
 	    cancel_click:function(){
+		this.reset();
 		this.doCancel();
 	    },
 	    applyMask : function(inSender) {

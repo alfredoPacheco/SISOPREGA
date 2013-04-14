@@ -157,7 +157,7 @@ enyo.kind({
 			//var sDesc;
 			//sDesc=sBuyer;
 			//if(sTrucks!=""){sDesc+=" - "+sTrucks}
-			this.$.lblInvBarnyards.setContent(objData.barnyard);			
+			this.$.lblInvBarnyards.setContent(objData.barnyard.substring(1));			
 			this.$.lblInvDescBuyer.setContent(sBuyer);
 			this.$.lblInvDescTruck.setContent(sTrucks);
 			
@@ -190,8 +190,8 @@ enyo.kind({
 		iSumAve=iSumAve/this.arrData.length;
 		this.$.lblInvSumHeadClass.setContent("Cabezas<br />" + gblUtils.numCD(iHeads));
 		this.$.lblInvSumWeight.setContent("Peso<br />" + gblUtils.numCD(iSumWeight));
-		this.$.lblInvSumAvgWeight.setContent("Peso Prom.<br />" + gblUtils.numCD(iSumAve));
-		this.$.lblInvSumFeed.setContent("Alimento<br />" + iSumFeed);		
+		this.$.lblInvSumAvgWeight.setContent("Peso Prom.<br />" + gblUtils.numCD(iSumAve.toFixed(2)));
+		this.$.lblInvSumFeed.setContent("Alimento<br />" + gblUtils.numCD(iSumFeed.toFixed(2)));		
 		
 		this.$.lblPurSumInvHeads.setContent("Cabezas<br />" + gblUtils.numCD(iHeads-iSold));
 		this.$.lblPurSumInvWeight.setContent("Peso<br />" + gblUtils.numCD((iSumWeight-iSoldAve).toFixed(2)));

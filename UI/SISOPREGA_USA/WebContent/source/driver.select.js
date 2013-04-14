@@ -6,6 +6,7 @@ enyo
 		onCancel:"",
 		onGuardar:""
 	    },
+	    obj:{},
 	    style : "padding:10px;font-size:17px;background-color:#DABD8B;",
 	    components : [ {
 		kind : enyo.HFlexBox,
@@ -118,6 +119,9 @@ enyo
 		this.$.releaseDate.setValue(utils.dateOut(new Date()));
 		this.$.releaseDate.$.input.applyStyle("text-align", "left");
 		this.$.carrier.setItems(cacheDrivers.getAllForList());
+	    },
+	    setObj:function(obj){
+		this.obj = obj;
 	    },
 	    applyMask : function(inSender) {
 		var _id = inSender.$.input.getId();

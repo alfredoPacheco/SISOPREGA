@@ -155,7 +155,7 @@ enyo.kind({
 	    } ]
 	}, ]
     } ],
-    showSale : function() {
+    showSale : function() {	
 	this.$.popup_sales.openAtCenter();
     },
     showPurchase : function() {
@@ -167,7 +167,7 @@ enyo.kind({
     },
     showSelectShipment : function(arrShipment) {
 	this.$.popup_driver.openAtCenter();
-	enyo.log(this.$.shipment.getSelectedShipment());
+	this.$.driver_kind.setObj(this.$.shipment.getSelectedShipment());
     },
     capture_hermana_click : function() {
 	this.$.popup_add.close();

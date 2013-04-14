@@ -107,8 +107,8 @@ enyo.kind({
 		if(objData=this.arrData[inIndex]){
 			this.$.lblSalesDate.setContent(objData.sale_date.toLocaleDateString());
 			this.$.lblSalesHeads.setContent(gblUtils.numCD(objData.totalHeads));
-			this.$.lblSalesWeight.setContent(gblUtils.numCD(objData.totalWeight));
-			this.$.lblSalesAverage.setContent(gblUtils.numCD(objData.aveWeight));	
+			this.$.lblSalesWeight.setContent(utils.formatNumberThousands(gblUtils.numCD(objData.totalWeight)));
+			this.$.lblSalesAverage.setContent(utils.formatNumberThousands(gblUtils.numCD(objData.aveWeight)));	
 			this.$.lblSalesClient.setContent(objData.buyer);
 			this.$.chkSalesShip.iPos=inIndex;
 			if(objData.shipProgramDate){
