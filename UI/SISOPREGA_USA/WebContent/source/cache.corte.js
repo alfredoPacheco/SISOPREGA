@@ -3,7 +3,13 @@ enyo.kind(
     name : "cache.corte",
     cortes : [],
     cortesExpo : [],
+    selectedRancherId: -1,
+    selectedRancherName : "",
+    selectedCattleType : "",
     add : function(corteObj) {
+      corteObj.rancherId = this.selectedRancherId;
+      corteObj.rancherName = this.selectedRancherName;
+      corteObj.cattleType = this.selectedCattleType;
       this.cortes.push(corteObj);
 
       // Summarize for exporter

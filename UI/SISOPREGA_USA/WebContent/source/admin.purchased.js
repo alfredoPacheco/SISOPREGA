@@ -211,7 +211,7 @@ enyo
           this.$.lblPurDate.setContent(objData.purdate);
           this.$.lblPurHeads.setContent(objData.heads);
           this.$.lblPurWeight.setContent(gblUtils.numCD(objData.weight));
-          this.$.lblPurAveWeight.setContent(objData.aveweight);
+          this.$.lblPurAveWeight.setContent(utils.formatNumberThousands(objData.aveweight));
           if (objData.reweight) {
             if (objData.reweight > 0) {
               this.$.lblPurRew.setContent("(+" + objData.reweight + ")");

@@ -90,6 +90,7 @@ enyo.kind(
               {
                 kind : "hermana.de",
                 name : "hermana_kind",
+                onSave : "savePurchaseGroup",
                 flex : 1
               } ]
         },
@@ -235,7 +236,15 @@ enyo.kind(
     },
     savePurchaseGroup : function() {
       this.$.purchased.updateList();
-      this.$.popup_purchases.close();
+      
+      if(this.$.popup_purchases){
+        this.$.popup_purchases.close();
+      }
+      
+      if(this.$.popup_hermana){
+        this.$.popup_hermana.close();
+      }
+        
     },
     save_sale : function() {
       alert("venta realizada");
