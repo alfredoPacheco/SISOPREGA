@@ -103,9 +103,9 @@ enyo
 				deptime : "",
 				truck : "",
 				cattleName : this.arrToShip[i].cattleName,
-				heads : this.arrToShip[i].heads,
-				weight : this.arrToShip[i].weight,
-				aveweight : this.arrToShip[i].aveweight,
+				totalHeads : this.arrToShip[i].totalHeads,
+				totalWeight : this.arrToShip[i].totalWeight,
+				aveWeight : this.arrToShip[i].aveWeight,
 				shipCarrier:this.arrToShip[i].shipCarrier,
 				shipProgramDate:this.arrToShip[i].shipProgramDate
 				

@@ -39,7 +39,7 @@ enyo.kind({
 			    },
 		{kind: "Scroller", flex: 1, name:"scroller",
 		 components:[
-			{kind: enyo.VirtualRepeater, name: "listShipments", onSetupRow: "loadShipments", onclick: "selectShipRow",								
+			{kind: enyo.VirtualRepeater, name: "listShipments", onSetupRow: "loadShipments",								
 			components: [
 				{kind: enyo.Item, style:"font-size:14px;",
 					components: [
@@ -92,9 +92,9 @@ enyo.kind({
 		var objData;
 		if(objData=this.arrData[inIndex]){
 			this.$.lblSalesDate.setContent(objData.depdate+" "+objData.deptime);
-			this.$.lblSalesHeads.setContent(gblUtils.numCD(objData.heads));
-			this.$.lblSalesWeight.setContent(gblUtils.numCD(objData.weight));
-			this.$.lblSalesAverage.setContent(objData.aveweight);
+			this.$.lblSalesHeads.setContent(gblUtils.numCD(objData.totalHeads));
+			this.$.lblSalesWeight.setContent(gblUtils.numCD(objData.totalWeight));
+			this.$.lblSalesAverage.setContent(objData.aveWeight);
 			this.$.lblSalesClient.setContent(objData.buyer);	
 			this.$.lblSalesTruck.setContent(objData.truck);
 			if(inIndex % 2 == 0)inSender.$.client.$.client.applyStyle("background-color","#DFC699");
@@ -110,9 +110,9 @@ enyo.kind({
 		var iAve=0;		
 		
 		for (var j=0;j<this.arrData.length;j++){
-			iHeads+=this.arrData[j].heads;			
-			iWeight+=this.arrData[j].weight;
-			iAve+=this.arrData[j].aveweight;			
+			iHeads+=this.arrData[j].totalHeads;			
+			iWeight+=this.arrData[j].totalWeight;
+			iAve+=this.arrData[j].aveWeight;			
 		}
 		
 		this.$.lblSalesSumHeads.setContent(gblUtils.numCD(iHeads));
@@ -123,14 +123,11 @@ enyo.kind({
 		this.updateSummary();
 	},
 	selectShipRow:function(inSender, inEvent){
-		if(this.bSelect){
-			this.objSelectedShipment=this.arrData[inEvent.rowIndex];
-			this.doSelectedShipment();
-		}
-		this.bSelect=false;
+		
 	},
-	selectShipment:function(){
-		this.bSelect=true;
+	selectShipment:function(inSender, inEvent){
+	    this.objSelectedShipment=this.arrData[inEvent.rowIndex];
+	    this.doSelectedShipment();
 	},
 	getSelectedShipment:function(){
 		return this.objSelectedShipment;

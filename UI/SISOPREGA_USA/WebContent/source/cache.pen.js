@@ -5,13 +5,14 @@ enyo.kind(
     readFromGateway : true,
     lastID : 0,
     isOccupied : function(by) {
-      var arrPens = this.get();
-      for ( var i = 0; i < arrPens.length; i++) {
-        if (by == arrPens[i].barnyard[by]) {
-          return true;
-        }
-      }
-      return false;
+
+	var arrPens = this.get();
+	for ( var i = 0; i < arrPens.length; i++) {
+	    if (by == arrPens[i].barnyard) {
+		return true;
+	    }
+	}
+	return false;
     },
     getOccupiedBY : function() {
       var arrPens = this.get();
@@ -25,17 +26,17 @@ enyo.kind(
     },
     get : function() {
       if (this.readFromGateway) {
-        this.arrObj = this.getTest(12);
+        this.arrObj = this.getTest(3);
         this.readFromGateway = false;
       }
       return this.arrObj;
     },
     getByBarnyard : function(by) {
-      for ( var i = 0; i < this.arrObj.length; i++) {
-        if (by == this.arrObj[i].barnyard[by]) {
-          return this.arrObj[i];
-        }
-      }
+	for ( var i = 0; i < this.arrObj.length; i++) {
+	    if (by == this.arrObj[i].barnyard) {
+		return this.arrObj[i];
+	    }
+	}
     },
     getTest : function(qty) {
       var result = [];
@@ -194,29 +195,38 @@ enyo.kind(
       return result;
     },
     getBarnyardsOccupiedForList : function() {
-      var setAux = {};
-      var result = [];
-      var items = this.get();
-      for ( var index = 0; index < items.length; index++) {
-        var auxCaption = "";
-        for ( var j in items[index].barnyard) {
-          if (items[index].barnyard.hasOwnProperty(j)) {
-            auxCaption = items[index].barnyard[j].substring(1);
-            var item =
-              {
-                value : items[index].recordId,
-                caption : auxCaption,
-                object : items[index]
-              };
-            if (!setAux.hasOwnProperty(item.caption)) {
-              setAux[item.caption] = item;
-              result.push(item);
-            }
-          }
-        }
+	var setAux = {};
+	var result = [];
+	var items = this.get();
+	for ( var index = 0; index < items.length; index++) {
+	    var item = {
+		value : items[index].recordId,
+		caption : items[index].barnyard.substring(1),
+		object : items[index]
+	    };
+	    if (!setAux.hasOwnProperty(item.caption)) {
+		setAux[item.caption] = item;
+		result.push(item);
+	    }
 
-      }
-      return result;
+	    // var auxCaption = "";
+	    // for ( var j in items[index].barnyard) {
+	    // if (items[index].barnyard.hasOwnProperty(j)) {
+	    // auxCaption = items[index].barnyard[j].substring(1);
+	    // var item = {
+	    // value : items[index].recordId,
+	    // caption : auxCaption,
+	    // object : items[index]
+	    // };
+	    // if (!setAux.hasOwnProperty(item.caption)) {
+	    // setAux[item.caption] = item;
+	    // result.push(item);
+	    // }
+	    // }
+	    // }
+
+	}
+	return result;
     },
     substractHeadsInPen : function(by, heads) {
       var reception = cachePen.getByBarnyard(by);

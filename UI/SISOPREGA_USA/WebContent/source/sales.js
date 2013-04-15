@@ -8,7 +8,8 @@ enyo
 	    totalWeight : 0,
 	    style : "background-color:#DABD8B;font-size:15px;",
 	    events : {
-		onSell : ""
+		onSale : "",
+		onCancel:""
 	    },
 	    components : [
 		    {
@@ -29,6 +30,7 @@ enyo
 					    {
 						kind : "ToolInput",
 						name : "saleDate",
+						hint:"mes/dia/año",
 						width : "135px;",
 						height : "35px;",
 						onfocus : "applyMask"
@@ -53,6 +55,7 @@ enyo
 						kind : "controls.autocomplete",
 						inputKind : "ToolInput",
 						name : "customer",
+						hint : 'Cliente',
 						width : "500px;",
 						height : "35px;",
 					    } ]
@@ -79,6 +82,7 @@ enyo
 			    kind : "controls.autocomplete",
 			    inputKind : "ToolInput",
 			    name : "corrales",
+			    hint : 'Corrales',
 			    width : "200px;",
 			    height : "35px;",
 			    style : "margin-right: 15px;"
@@ -208,16 +212,22 @@ enyo
 					caption : "Efectuar Venta",
 					onclick : "sell_click",
 					style : "background-color: #DABD8B;"
+				    },{
+					kind : enyo.Button,
+					caption : "Cacelar",
+					onclick : "cancel_click",
+					style : "background-color: #DABD8B;"
 				    } ]
 			} ]
 		    } ],
 	    agregar_click : function() {
 
 		var newObject = {
-		    clase : this.$.clase.getValue(),
-		    cabezas : this.$.cabezas.getValue(),
-		    corral : this.$.corrales.getValue(),
-		    pesoPromedio : this.$.corrales.getItemSelected().object.avgweight,
+		    cattleName : this.$.clase.getValue(),
+		    heads : parseInt(this.$.cabezas.getValue()),
+		    pen : this.$.corrales.getItemSelected().object.barnyard,
+		    aveWeight : this.$.corrales.getItemSelected().object.aveWeight,
+		    weight : this.$.corrales.getItemSelected().object.avgweight * this.$.cabezas.getValue()
 		};
 
 		this.arrDetail.push(newObject);
@@ -230,14 +240,13 @@ enyo
 		if (this.arrDetail[inIndex]) {
 		    this.$.detail_number.setContent(inIndex + 1);
 		    this.$.detail_clase
-			    .setContent(this.arrDetail[inIndex].clase);
+			    .setContent(this.arrDetail[inIndex].cattleName);
 		    this.$.detail_cabezas
-			    .setContent(this.arrDetail[inIndex].cabezas);
+			    .setContent(utils.formatNumberThousands(this.arrDetail[inIndex].heads));
 		    this.$.detail_corrales
-			    .setContent(this.arrDetail[inIndex].corrales);
+			    .setContent(this.arrDetail[inIndex].pen.substring(1));
 		    this.$.detail_weight
-			    .setContent(parseFloat(this.arrDetail[inIndex].cabezas)
-				    * parseFloat(this.arrDetail[inIndex].pesoPromedio));
+			    .setContent(utils.formatNumberThousands(this.arrDetail[inIndex].weight) + " lb");
 		    this.totalHC += parseFloat(this.$.detail_cabezas
 			    .getContent());
 		    this.totalWeight += parseFloat(this.$.detail_weight
@@ -248,14 +257,23 @@ enyo
 	    afterUpdate : function() {
 		this.updateList();
 	    },
-	    ready : function() {
+	    reset:function(){
 		this.$.saleDate.setValue(utils.dateOut(new Date()));
-		this.$.saleDate.$.input.applyStyle("text-align", "center");
 		this.$.customer.setItems(cacheCustomers.getAllForList());
 		this.$.clase.setItems(cachePen.getClassesInPensForList());
-		this.$.corrales
-			.setItems(cachePen.getBarnyardsOccupiedForList());
-
+		this.$.corrales.setItems(cachePen.getBarnyardsOccupiedForList());
+		this.objMaster = {};
+		this.arrDetail= [];
+		this.totalHC = 0;
+		this.totalWeight= 0;
+		this.$.cabezas.setValue("");
+		this.updateList();
+	    },
+	    ready : function() {
+		this.$.saleDate.$.input.applyStyle("text-align", "center");
+		this.$.saleDate.$.input.applyStyle("color", "black");
+		this.$.cabezas.$.input.applyStyle("color", "black");
+		this.reset();
 	    },
 	    updateList : function() {
 		this.totalHC = 0;
@@ -267,16 +285,19 @@ enyo
 			.formatNumberThousands(this.totalWeight));
 	    },
 	    getSale : function() {
-		this.objMaster.date = this.$.saleDate.getValue();
-		this.objMaster.customer = this.$.customer.getValue();		
+		this.objMaster.sale_date = new Date(this.$.saleDate.getValue());
+		this.objMaster.buyer = this.$.customer.getValue();		
 		this.objMaster.detail = this.arrDetail;
+		this.objMaster.totalHeads=this.totalHC;
+		this.objMaster.totalWeight=this.totalWeight;
+		this.objMaster.aveWeight=this.totalWeight / this.totalHC;
 		return this.objMaster;
 	    },
 	    sell_click : function() {
 		cacheSales.sell(this.getSale(), this, "after_sell");
 	    },
 	    after_sell : function() {
-		this.doSell();
+		this.doSale();
 	    },
 	    clase_select : function(inSender) {
 		console.debug(inSender);
@@ -289,6 +310,10 @@ enyo
 		}
 
 		this.$.corrales.setFilter(filter);
+	    },
+	    cancel_click:function(){
+		this.reset();
+		this.doCancel();
 	    },
 	    applyMask : function(inSender) {
 		var _id = inSender.$.input.getId();

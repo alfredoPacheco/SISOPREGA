@@ -13,7 +13,8 @@ enyo.kind(
           layoutKind : "VFlexLayout",
           style : "overflow: hidden;border-width: 8px;",
           scrim : true,
-          onSale : "save_sale",
+          onSale : "on_sale",
+          onCancel : "on_cancel_sale",
           components :
             [
               {
@@ -202,7 +203,7 @@ enyo.kind(
     },
     showSelectShipment : function(arrShipment) {
       this.$.popup_driver.openAtCenter();
-      enyo.log(this.$.shipment.getSelectedShipment());
+      this.$.driver_kind.setObj(this.$.shipment.getSelectedShipment());
     },
     capture_hermana_click : function() {
       this.$.popup_add.close();
@@ -217,36 +218,36 @@ enyo.kind(
       this.$.popup_purchases.openAtCenter();
     },
     inventory_select : function(inSender, inEvent) {
-      console.debug(inSender);
-      console.debug(inEvent);
       this.$.popup_map.openAtCenter();
     },
     programShipment_click : function() {
       this.$.popup_shipments.close();
-      this.$.sales.updateList();
+      this.$.sales.updateView();
       this.$.shipment.updateList();
       this.$.shipment.moveToBottom();
     },
     cancelShipment_click : function() {
       this.$.popup_shipments.close();
     },
-    cancelDriver_click : function() {
+    on_sale : function() {
+      this.$.popup_sales.close();
+      this.$.inventory.updateView();
+      this.$.sales.updateView();
+      this.$.sales.moveToBottom();
     },
-    saveDriver_click : function() {
+    on_cancel_sale : function() {
+      this.$.popup_sales.close();
     },
     savePurchaseGroup : function() {
       this.$.purchased.updateList();
-      
-      if(this.$.popup_purchases){
+
+      if (this.$.popup_purchases) {
         this.$.popup_purchases.close();
       }
-      
-      if(this.$.popup_hermana){
+
+      if (this.$.popup_hermana) {
         this.$.popup_hermana.close();
       }
-        
-    },
-    save_sale : function() {
-      alert("venta realizada");
+
     }
   });

@@ -105,12 +105,11 @@ enyo.kind({
 	loadSales:function(inSender, inIndex) {		
 		var objData;
 		if(objData=this.arrData[inIndex]){
-			this.$.lblSalesDate.setContent(objData.saledate);
-			this.$.lblSalesHeads.setContent(gblUtils.numCD(objData.heads));
-			this.$.lblSalesWeight.setContent(gblUtils.numCD(objData.weight));
-			this.$.lblSalesAverage.setContent(gblUtils.numCD(objData.aveweight));	
+			this.$.lblSalesDate.setContent(objData.sale_date.toLocaleDateString());
+			this.$.lblSalesHeads.setContent(gblUtils.numCD(objData.totalHeads));
+			this.$.lblSalesWeight.setContent(utils.formatNumberThousands(gblUtils.numCD(objData.totalWeight)));
+			this.$.lblSalesAverage.setContent(utils.formatNumberThousands(gblUtils.numCD(objData.aveWeight)));	
 			this.$.lblSalesClient.setContent(objData.buyer);
-			this.$.lblSalesClient.setContent(objData.buyer);			
 			this.$.chkSalesShip.iPos=inIndex;
 			if(objData.shipProgramDate){
 			    this.$.chkSalesShip.hide();
@@ -129,9 +128,9 @@ enyo.kind({
 		var iAve=0;		
 		
 		for (var j=0;j<this.arrData.length;j++){
-			iHeads+=this.arrData[j].heads;		
-			iWeight+=this.arrData[j].weight;
-			iAve+=this.arrData[j].aveweight;					
+			iHeads+=this.arrData[j].totalHeads;		
+			iWeight+=this.arrData[j].totalWeight;
+			iAve+=this.arrData[j].aveWeight;					
 		}
 		this.$.lblSalesSumHeads.setContent(gblUtils.numCD(iHeads));
 		this.$.lblSalesSumWeight.setContent(gblUtils.numCD(iWeight));
@@ -146,8 +145,8 @@ enyo.kind({
 		var len = this.arrData.length;
 		for ( var i = 0; i < len; i++) {
 		    if (!this.arrData[i].shipProgramDate && this.arrData[i].checked) {
-			hc += this.arrData[i].heads;
-			weight += this.arrData[i].weight;
+			hc += this.arrData[i].totalHeads;
+			weight += this.arrData[i].totalWeight;
 		    }
 		}
 		if (weight > 50000) {
@@ -173,8 +172,13 @@ enyo.kind({
 	getSalesToShip:function(){
 		return this.arrToShip;
 	},
-	updateList:function(){
+	updateView:function(){
 	    this.$.listSales.render();
+	    this.updateSummary();
 	    this.calculateTotals();
+	},
+	moveToBottom:function(){
+	    this.$.scroller.scrollTo(this.$.scroller
+			.getBoundaries().bottom, 0);
 	}
 });
