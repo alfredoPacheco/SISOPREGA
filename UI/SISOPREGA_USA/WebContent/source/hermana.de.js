@@ -155,6 +155,9 @@ enyo.kind(
         alert('El exportador que usted ha capturado (' + rancherName + ') no se encuentra en la lista, por favor seleccione un exportador válido');
         return false;
       }
+      
+      cacheCorte.selectedRancherId = rancherId;
+      cacheCorte.selectedRancherName = rancherName;
 
       return true;
     },
@@ -256,6 +259,7 @@ enyo.kind(
       if (releaseObj != null) {
         this.selectedCattleId = releaseObj.cattleType;
         this.$.details.setCattleClass(releaseObj.cattleType, releaseObj.cattleName);
+        cacheCorte.selectedCattleType = releaseObj.cattleName;
       } else {
         this.selectedCattleId = 0;
       }
@@ -275,14 +279,44 @@ enyo.kind(
       this.closePopUp();
     },
     saveHermana : function(){
-      // TODO: Save data to inner cache, then to database.
-      for ( var recordIndex = 0; recordIndex < this.arrDetail.length; recordIndex++) {
-        var purchase = this.purchaseFromRecord(recordIndex);
+      // TODO: Save data to database.
+      var arrCortes = this.$.details.$.listaCorte.cortes;
+      for ( var recordIndex = 0; recordIndex < arrCortes.length; recordIndex++) {
+        var purchase = this.purchaseFromCorte(arrCortes[recordIndex]);
         cachePur.createPurchase(purchase);
       }
 
-      this.arrDetail = [];
-      this.doPurchaseCompleted();
+      this.doSave();
+    },
+    purchaseFromCorte : function(corte){
+      
+      var selected = false;
+      var purchaseId = 0;
+
+      while (!selected) {
+        var possibleId = Math.floor((Math.random() * 100) + 1);
+        var purchases = cachePur.get().purchased;
+        for ( var i = 0; i < purchases.length; i++) {
+          if (purchases[i].id == possibleId)
+            break;
+        }
+        purchaseId = possibleId;
+        selected = true;
+      }
+      
+      var objPurchase =
+        {
+          id : purchaseId,
+          purdate : utils.dateOut(new Date()),
+          seller : corte.rancherName,
+          cattleId : corte.cattleClassId,
+          cattleName : corte.cattleType,
+          heads : Number(corte.heads),
+          weight : Number(corte.weight),
+          aveweight : Number(corte.weight) / Number(corte.heads)
+        };
+
+      return objPurchase;
     },
     closePopUp : function() {
       this.$.popMan.close();
