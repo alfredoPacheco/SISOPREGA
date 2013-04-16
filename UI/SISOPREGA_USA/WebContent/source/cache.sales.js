@@ -1,5 +1,6 @@
 enyo.kind({
     name : "cache.sales",
+    lastID:6,
     cacheData : [ {
 	sale_id : 1,
 	buyer:"un cliente",
@@ -127,6 +128,7 @@ enyo.kind({
 	return this.cacheData;
     },
     sell : function(objSale, cbObj, cbMethod) {
+	objSale.sale_id = ++this.lastID;
 	this.cacheData.push(objSale);
 	for(var i=0;i<objSale.detail.length;i++){
 	    if(!cachePen.substractHeadsInPen(objSale.detail[i].pen,objSale.detail[i].heads)){

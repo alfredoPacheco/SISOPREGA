@@ -41,6 +41,19 @@ enyo.kind({
 	totalHeads : 13,
 	totalWeight : 9055,
 	aveWeight : 696.5
+    },
+    {
+	aveWeight: 1.01,
+	buyer: "sexto cliente",
+	cattleName: "Caballos",
+	depdate: "04/14",
+	deptime: "12:00",
+	shipCarrier: "Chofer 1",
+	shipProgramDate: "04/14/2013",
+	shipment_id: 5,
+	totalHeads: 123,
+	totalWeight: 123.23,
+	truck: ""
     } ],
     createData : function(obj) {
 	obj.shipment_id = ++this.lastID;
