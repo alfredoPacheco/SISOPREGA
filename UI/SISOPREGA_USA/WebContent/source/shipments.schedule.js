@@ -2,7 +2,7 @@ enyo.kind({
     name : "shipments.schedule",
     kind : enyo.VFlexBox,
     style : "background-color:#DABD8B;font-size:15px;",
-    arrToShip : [],
+    arrToShip : {},
     events : {
 	onProgram : "",
 	onCancel : ""
@@ -96,15 +96,13 @@ enyo.kind({
 	this.arrToShip = arr;
     },
     program_click : function() {
-	var len = this.arrToShip.length;
-	for ( var i = 0; i < len; i++) {
-	    if (this.arrToShip[i]) {
+	for(var i in this.arrToShip){
+	    if(this.arrToShip.hasOwnProperty(i)){
 		this.arrToShip[i].shipProgramDateTime = new Date("" + this.$.programDate
 			.getValue() + " " + this.$.programTime.getValue());
 		this.arrToShip[i].shipCarrier = this.$.carrier.getValue();
 		var obj = {
 		    buyer : 			this.arrToShip[i].buyer,
-		    truck : 			null,
 		    cattleName : 		this.arrToShip[i].cattleName,
 		    totalHeads : 		this.arrToShip[i].totalHeads,
 		    totalWeight : 		this.arrToShip[i].totalWeight,

@@ -109,15 +109,23 @@ enyo
 	    // ]},
 	    ],
 	    ready : function() {
-		this.$.releaseDate.setValue(utils.dateOut(new Date()));
 		this.$.releaseDate.$.input.applyStyle("text-align", "center");
 		this.$.releaseTime.$.input.applyStyle("text-align", "center");
+		this.reset();
+	    },
+	    reset:function(){
+		this.$.releaseDate.setValue(utils.dateOut(new Date()));
 		this.$.releaseTime.setValue(new Date().toLocaleTimeString()
 			.substring(0, 5));
 		this.$.carrier.setItems(cacheDrivers.getAllForList());
+		this.$.carrier.clear();
+		this.$.plate.setValue("");
+		this.$.driver.setValue("");
 	    },
 	    setObj:function(obj){
 		this.obj = obj;
+		this.reset();
+		this.$.carrier.setValue(obj.shipCarrier);
 	    },
 	    save_release:function(){
 		cacheShip.releaseShip(this.getObj(), this, "afterSaveRelease");		

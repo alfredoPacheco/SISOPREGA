@@ -6,7 +6,7 @@ enyo.kind({
 	iSelected:{},
 	iHeads:null,
 	iWeight:null,
-	arrToShip:[],
+	arrToShip:{},
 	events: {
 		onSelect: "",
 		onShipment:""
@@ -114,6 +114,7 @@ enyo.kind({
 			if(objData.shipProgramDateTime){
 			    this.$.chkSalesShip.hide();
 			    this.$.lblShipProgrammed.show();
+			    this.$.lblShipProgrammed.setContent("Programado para " + objData.shipProgramDateTime.toLocaleDateString());
 			    this.$.lblSalesAverage.applyStyle("margin-right","47px");
 			}else{
 			    this.$.lblShipProgrammed.hide();

@@ -129,7 +129,7 @@ enyo.kind(
                 kind : "driver.select",
                 name : "driver_kind",
                 flex : 1,
-                onCancel : "cancelDriver_click",
+                onCancel : "cancel_release",
                 onAfterSave : "releaseShipment"
               } ]
         },
@@ -198,8 +198,13 @@ enyo.kind(
       this.$.popup_add.openAtCenter();
     },
     showShipment : function() {
-      this.$.popup_shipments.openAtCenter();
-      this.$.shipments_kind.setArrShipment(this.$.sales.getSalesToShip());
+	this.$.popup_shipments.validateComponents();
+	if(enyo.json.stringify(this.$.sales.getSalesToShip())!="{}"){
+	    this.$.shipments_kind.setArrShipment(this.$.sales.getSalesToShip());
+	    this.$.popup_shipments.openAtCenter();    
+	}else{
+	    alert("No hay registros seleccionados");
+	}
     },
     showSelectShipment : function(arrShipment) {
       this.$.popup_driver.openAtCenter();
@@ -222,6 +227,7 @@ enyo.kind(
     },
     programShipment_click : function() {
       this.$.popup_shipments.close();
+      this.$.sales.arrToShip={};
       this.$.sales.updateView();
       this.$.shipment.updateList();
       this.$.shipment.moveToBottom();
@@ -250,5 +256,8 @@ enyo.kind(
     releaseShipment:function(){
 	this.$.popup_driver.close();
 	this.$.shipment.updateList();
+    },
+    cancel_release:function(){
+	this.$.popup_driver.close();
     }
   });
