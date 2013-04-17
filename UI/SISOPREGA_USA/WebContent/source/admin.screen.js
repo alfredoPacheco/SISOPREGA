@@ -130,7 +130,7 @@ enyo.kind(
                 name : "driver_kind",
                 flex : 1,
                 onCancel : "cancelDriver_click",
-                onGuardar : "saveDriver_click"
+                onAfterSave : "releaseShipment"
               } ]
         },
         {
@@ -240,14 +240,15 @@ enyo.kind(
     },
     savePurchaseGroup : function() {
       this.$.purchased.updateList();
-
       if (this.$.popup_purchases) {
         this.$.popup_purchases.close();
       }
-
       if (this.$.popup_hermana) {
         this.$.popup_hermana.close();
       }
-
+    },
+    releaseShipment:function(){
+	this.$.popup_driver.close();
+	this.$.shipment.updateList();
     }
   });

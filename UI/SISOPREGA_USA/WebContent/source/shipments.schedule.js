@@ -103,16 +103,14 @@ enyo.kind({
 			.getValue() + " " + this.$.programTime.getValue());
 		this.arrToShip[i].shipCarrier = this.$.carrier.getValue();
 		var obj = {
-		    buyer : this.arrToShip[i].buyer,
-		    depdate : this.arrToShip[i].shipProgramDateTime.toLocaleDateString(),
-		    deptime : this.arrToShip[i].shipProgramDateTime.toLocaleTimeString().substring(0,5),
-		    truck : "",
-		    cattleName : this.arrToShip[i].cattleName,
-		    totalHeads : this.arrToShip[i].totalHeads,
-		    totalWeight : this.arrToShip[i].totalWeight,
-		    aveWeight : this.arrToShip[i].aveWeight,
-		    shipCarrier : this.arrToShip[i].shipCarrier,
-		    shipProgramDateTime : this.arrToShip[i].shipProgramDateTime
+		    buyer : 			this.arrToShip[i].buyer,
+		    truck : 			null,
+		    cattleName : 		this.arrToShip[i].cattleName,
+		    totalHeads : 		this.arrToShip[i].totalHeads,
+		    totalWeight : 		this.arrToShip[i].totalWeight,
+		    aveWeight : 		this.arrToShip[i].aveWeight,
+		    shipCarrier : 		this.arrToShip[i].shipCarrier,
+		    shipProgramDateTime :	this.arrToShip[i].shipProgramDateTime
 		};
 		cacheShip.createData(obj);
 	    }

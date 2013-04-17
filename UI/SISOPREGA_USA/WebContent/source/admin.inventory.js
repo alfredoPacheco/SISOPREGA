@@ -24,7 +24,7 @@ enyo.kind({
 			components : [
 				{
 				    content : 'Tipo',
-				    flex:1
+				    flex:1.5
 				},{
 				    content : 'Clase',
 				    flex:1
@@ -44,12 +44,12 @@ enyo.kind({
 		    },
 		{kind: "Scroller", flex: 1, 
 		 components:[
-			{kind: enyo.VirtualRepeater, name: "listInventory", onSetupRow: "loadInventory", onclick: "doSelect",								
+			{kind: enyo.VirtualRepeater, name: "listInventory", onSetupRow: "loadInventory", 								
 			components: [
-				{kind: enyo.Item, style:"font-size: 14px;",
+				{kind: enyo.Item, style:"font-size: 14px;",onclick: "doSelect",
 					components: [
 					{layoutKind: enyo.HFlexLayout,components:[
-						{name: "lblInvType",flex:1,
+						{name: "lblInvType",flex:1.5,
 						 content: ""},
 						{name: "lblInvClass",flex:1,
 						 content: "Novillos"},						 
@@ -63,9 +63,9 @@ enyo.kind({
 						 content: "", style:"text-align: right;"},						 
 					]},
 					{layoutKind: enyo.HFlexLayout,components:[
-						{name: "lblInvBarnyards",style: "font-size: 0.85em;color:#008B8B",flex:1,content:""},						
-						{name: "lblInvDescBuyer",style: "font-size: 0.85em;color:#008B8B",flex:1,content:""},
-						{name: "lblInvDescTruck",style: "font-size: 0.85em;color:#008B8B",flex:1,content:""}						
+						{name: "lblInvBarnyards",style: "font-size: 0.85em;color:#008B8B;text-align:left;",flex:1,content:""},						
+						{name: "lblInvDescBuyer",style: "font-size: 0.85em;color:#008B8B;text-align:center;",flex:1,content:""},
+						{name: "lblInvDescTruck",style: "font-size: 0.85em;color:#008B8B;text-align:right;",flex:1,content:""}						
 						]}
 					]}
 				]}

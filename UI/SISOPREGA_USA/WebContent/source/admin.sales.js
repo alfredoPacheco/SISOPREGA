@@ -44,7 +44,7 @@ enyo.kind({
 					    flex:1.5, style:"text-align: right;"
 					},{
 					    content : 'Promedio',
-					    flex:1.5, style:"text-align: right;margin-right:10px;"
+					    flex:1.5, style:"text-align: right;margin-right:17px;"
 					},{
 					    content : '',
 					    width:"30px"
@@ -64,7 +64,7 @@ enyo.kind({
 						{name: "lblSalesWeight",flex:1.5,
 						 content: "", style:"text-align: right;"},
 						{name: "lblSalesAverage",flex:1.5, 
-						 content: "", style:"text-align: right;margin-right:10px;"},
+						 content: "", style:"text-align: right;margin-right:17px;"},
 						{kind: "CheckBox", name:"chkSalesShip", iPos:"",checked: false,
 						 onclick:"checkBox_click"},		 
 					]},
@@ -111,10 +111,16 @@ enyo.kind({
 			this.$.lblSalesAverage.setContent(utils.formatNumberThousands(gblUtils.numCD(objData.aveWeight)));	
 			this.$.lblSalesClient.setContent(objData.buyer);
 			this.$.chkSalesShip.iPos=inIndex;
-			if(objData.shipProgramDate){
+			if(objData.shipProgramDateTime){
 			    this.$.chkSalesShip.hide();
 			    this.$.lblShipProgrammed.show();
+			    this.$.lblSalesAverage.applyStyle("margin-right","47px");
+			}else{
+			    this.$.lblShipProgrammed.hide();
+			    this.$.chkSalesShip.show();
+			    this.$.lblSalesAverage.applyStyle("margin-right","17px");
 			}
+			    
 			if(inIndex % 2 == 0)inSender.$.client.$.client.applyStyle("background-color","#DFC699");
 //			if(inIndex % 2 == 0)inSender.$.client.$.client.applyStyle("background-color","#DCC190");
 			return true;
@@ -144,7 +150,7 @@ enyo.kind({
 		var weight = 0;
 		var len = this.arrData.length;
 		for ( var i = 0; i < len; i++) {
-		    if (!this.arrData[i].shipProgramDate && this.arrData[i].checked) {
+		    if (!this.arrData[i].shipProgramDateTime && this.arrData[i].checked) {
 			hc += this.arrData[i].totalHeads;
 			weight += this.arrData[i].totalWeight;
 		    }
