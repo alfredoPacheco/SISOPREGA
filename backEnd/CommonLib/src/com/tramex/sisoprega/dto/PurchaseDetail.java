@@ -16,7 +16,7 @@
 package com.tramex.sisoprega.dto;
 
 /**
- * data model for hermana corte exportador.
+ * cattle purchase details data model.
  *  
  * <B>Revision History:</B>
  * 
@@ -25,7 +25,7 @@ package com.tramex.sisoprega.dto;
  * Date        By                           Description
  * MM/DD/YYYY
  * ----------  ---------------------------  -------------------------------------------
- * Apr 7, 2013     Diego Torres                 Initial Version.
+ * Apr 18, 2013     Diego Torres                 Initial Version.
  * ====================================================================================
  * </PRE>
  * 
@@ -33,71 +33,76 @@ package com.tramex.sisoprega.dto;
  *
  * 
  */
-public class HermanaCorteExportador {
-  private long corteExpo;
-  private long hermanaId;
+public class PurchaseDetail {
+  private long recordId;
+  private long barnyardId;
   private long qualityId;
-  private double purchasePrice = 0.0d;
-  
+  private long heads;
+  private double weight;
   /**
-   * @return the corteExpo
+   * @return the recordId
    */
-  public long getCorteExpo() {
-    return corteExpo;
+  public long getRecordId() {
+    return recordId;
   }
-  
   /**
-   * @param corteExpo the corteExpo to set
+   * @param recordId the recordId to set
    */
-  public void setCorteExpo(long corteExpo) {
-    this.corteExpo = corteExpo;
+  public void setRecordId(long recordId) {
+    this.recordId = recordId;
   }
-  
   /**
-   * @return the hermanaId
+   * @return the barnyardId
    */
-  public long getHermanaId() {
-    return hermanaId;
+  public long getBarnyardId() {
+    return barnyardId;
   }
-  
   /**
-   * @param hermanaId the hermanaId to set
+   * @param barnyardId the barnyardId to set
    */
-  public void setHermanaId(long hermanaId) {
-    this.hermanaId = hermanaId;
+  public void setBarnyardId(long barnyardId) {
+    this.barnyardId = barnyardId;
   }
-  
   /**
    * @return the qualityId
    */
   public long getQualityId() {
     return qualityId;
   }
-  
   /**
    * @param qualityId the qualityId to set
    */
   public void setQualityId(long qualityId) {
     this.qualityId = qualityId;
   }
-  
   /**
-   * @return the purchasePrice
+   * @return the heads
    */
-  public double getPurchasePrice() {
-    return purchasePrice;
+  public long getHeads() {
+    return heads;
   }
-
   /**
-   * @param purchasePrice the purchasePrice to set
+   * @param heads the heads to set
    */
-  public void setPurchasePrice(double purchasePrice) {
-    this.purchasePrice = purchasePrice;
+  public void setHeads(long heads) {
+    this.heads = heads;
+  }
+  /**
+   * @return the weight
+   */
+  public double getWeight() {
+    return weight;
+  }
+  /**
+   * @param weight the weight to set
+   */
+  public void setWeight(double weight) {
+    this.weight = weight;
   }
 
   @Override
   public String toString() {
-    return "corteExpo:" + corteExpo + ";hermanaId:" + hermanaId + ";qualityId:" + qualityId + ";";
+    return "recordId:" + recordId + ";barnyardId:" + barnyardId + ";qualityId:" + qualityId + ";heads:" + heads + ";weight:" + weight + ";";
   }
   
 }
