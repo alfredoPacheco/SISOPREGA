@@ -10,7 +10,7 @@
 
 var _arrDrivers = [{
     id : 1,
-    name : "Chofer 1",
+    name : "Transportista 1",
     address_one : "un domicilio",
     address_two : "una colonia",
     city_id : "1",
@@ -19,14 +19,14 @@ var _arrDrivers = [{
     phone_number : utils.phoneToMask("6569999999"),              
     city_name : "Juarez",
     state_name : "Chihuahua",
-    contacts:[{id:1,contact:"Contacto de chofer 1", phone:utils.phoneToMask("6561232323")},
-              {id:2,contact:"Contacto 2 de chofer 1", phone:utils.phoneToMask("6562222222")},
-              {id:3,contact:"Contacto 3 de chofer 1", phone:utils.phoneToMask("6563333333")},
+    contacts:[{id:1,contact:"Contacto de transportista 1", phone:utils.phoneToMask("6561232323")},
+              {id:2,contact:"Contacto 2 de transportista 1", phone:utils.phoneToMask("6562222222")},
+              {id:3,contact:"Contacto 3 de transportista 1", phone:utils.phoneToMask("6563333333")},
               ]
   },
   {
       id : 2,
-      name : "Chofer 2",
+      name : "Transportista 2",
       address_one : "un domicilio 2",
       address_two : "una fraccionamiento",
       city_id : "1",
@@ -35,9 +35,9 @@ var _arrDrivers = [{
       phone_number : utils.phoneToMask("6561111111"),              
       city_name : "Juarez",
       state_name : "Chihuahua",
-      contacts:[{id:4,contact:"Contacto de chofer 2", phone:utils.phoneToMask("6566666666")},
-                {id:5,contact:"Contacto 2 de chofer 2", phone:utils.phoneToMask("6567777777")},
-                {id:6,contact:"Contacto 3 de chofer 2", phone:utils.phoneToMask("6568888888")},
+      contacts:[{id:4,contact:"Contacto de transportista 2", phone:utils.phoneToMask("6566666666")},
+                {id:5,contact:"Contacto 2 de transportista 2", phone:utils.phoneToMask("6567777777")},
+                {id:6,contact:"Contacto 3 de transportista 2", phone:utils.phoneToMask("6568888888")},
                 ]
     }];
 

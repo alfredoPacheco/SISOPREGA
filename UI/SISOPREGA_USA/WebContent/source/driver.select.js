@@ -4,7 +4,7 @@ enyo
 	    kind : enyo.VFlexBox,
 	    events:{
 		onCancel:"",
-		onGuardar:""
+		onAfterSave:""
 	    },
 	    obj:{},
 	    style : "padding:10px;font-size:17px;background-color:#DABD8B;",
@@ -24,7 +24,7 @@ enyo
 		    flex : 1,
 		    height : "35px;",
 		    hint : "Transportista",
-		// style:"max-width: 500px;"
+		    width:"500px"
 		} ]
 	    }, {
 		kind : enyo.HFlexBox,
@@ -77,13 +77,6 @@ enyo
 		    onfocus : "applyMask",
 		// style:"text-align: right;max-width: 500px;"
 		},
-		// {
-		// content : 'mes/dia/año',
-		// className : "listFirst",
-		// style :
-		// "background-color:#DABD8B;margin-left:2px;font-size:12px;",
-		// width : "80px;"
-		// },
 		{
 		    kind : "ToolInput",
 		    name : "releaseTime",
@@ -104,7 +97,7 @@ enyo
 		}, {
 		    kind : enyo.Button,
 		    caption : "Guardar",
-		    onclick : "doGuardar",
+		    onclick : "save_release",
 		    style : "background-color: #DABD8B;min-width:70px;"
 		},{
 		    kind : enyo.Button,
@@ -116,12 +109,36 @@ enyo
 	    // ]},
 	    ],
 	    ready : function() {
+		this.$.releaseDate.$.input.applyStyle("text-align", "center");
+		this.$.releaseTime.$.input.applyStyle("text-align", "center");
+		this.reset();
+	    },
+	    reset:function(){
 		this.$.releaseDate.setValue(utils.dateOut(new Date()));
-		this.$.releaseDate.$.input.applyStyle("text-align", "left");
+		this.$.releaseTime.setValue(new Date().toLocaleTimeString()
+			.substring(0, 5));
 		this.$.carrier.setItems(cacheDrivers.getAllForList());
+		this.$.carrier.clear();
+		this.$.plate.setValue("");
+		this.$.driver.setValue("");
 	    },
 	    setObj:function(obj){
 		this.obj = obj;
+		this.reset();
+		this.$.carrier.setValue(obj.shipCarrier);
+	    },
+	    save_release:function(){
+		cacheShip.releaseShip(this.getObj(), this, "afterSaveRelease");		
+	    },
+	    afterSaveRelease:function(){
+		this.doAfterSave();
+	    },
+	    getObj:function(){
+		this.obj.carrier = this.$.carrier.getValue();
+		this.obj.plates = this.$.plate.getValue();
+		this.obj.driver = this.$.driver.getValue();
+		this.obj.releaseDate = new Date("" + this.$.releaseDate.getValue() + " " + this.$.releaseTime.getValue());		
+		return this.obj;
 	    },
 	    applyMask : function(inSender) {
 		var _id = inSender.$.input.getId();

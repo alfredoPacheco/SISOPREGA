@@ -21,7 +21,7 @@ enyo.kind({
 				pack : "start",
 				components : [
 					{
-					    content : 'Fecha',
+					    content : 'Fecha programada',
 					    flex:1
 					},{
 					    content : 'Cabezas',
@@ -31,7 +31,7 @@ enyo.kind({
 					    flex:1.5, style:"text-align: right;"
 					},{
 					    content : 'Promedio',
-					    flex:1.5, style:"text-align: right;margin-right:10px;"
+					    flex:1.5, style:"text-align: right;margin-right:13px;"
 					},{
 					    content : '',
 					    width:"34px;"
@@ -44,20 +44,20 @@ enyo.kind({
 				{kind: enyo.Item, style:"font-size:14px;",
 					components: [
 						{layoutKind: enyo.HFlexLayout, align:"center", components:[
-							{name: "lblSalesDate",flex:1,
+							{name: "lblShipProgramDate",flex:1,
 							 content: ""},
-							{name: "lblSalesHeads",flex:1.5,
+							{name: "lblShipHeads",flex:1.5,
 							 content: "", style:"text-align: right;"},	
-							{name: "lblSalesWeight",flex:1.5,
+							{name: "lblShipWeight",flex:1.5,
 							 content: "", style:"text-align: right;"},
-							{name: "lblSalesAverage",flex:1.5, 
+							{name: "lblShipAverage",flex:1.5, 
 							 content: "", style:"text-align: right;margin-right:10px;"},
-							{kind: "Button", width:"26px", height:"24px",name:"btn",caption:"-",style: "margin-right:0px;padding:0px;",onclick:"selectShipment"},		 
+							{kind: "Button", width:"26px", height:"24px",name:"btnRelease",caption:"-",style: "margin-right:0px;padding:0px;",onclick:"selectShipment"},		 
 						]},
 						{layoutKind: enyo.HFlexLayout,
 						 components:[
-							{name: "lblSalesClient",flex:.45,style: "font-size: 0.85em;color:#008B8B",content:""},
-							{name: "lblSalesTruck",flex:.55,style: "font-size: 0.85em;color:#008B8B",content:""},						
+							{name: "lblShipClient",style: "font-size: 0.85em;color:#008B8B",content:""},
+							{name:"lblShipReleased",flex:1, style:"color:gray;font-size:0.85em;text-align:right;", content:"Liberado", showing:false}
 						]}
 					]}
 				]}
@@ -68,20 +68,20 @@ enyo.kind({
 				{kind: "Spacer",flex:.2},				
 				{kind:"RowGroup", align: "center", flex:1, style:"backgound-color:white;margin:0",
 				 components:[
-					{kind: "VFlexBox",name: "lblSalesSumHeads",align:"center",style:"font-size: 0.75em;color:#999",
+					{kind: "VFlexBox",name: "lblShipSumHeads",align:"center",style:"font-size: 0.75em;color:#999",
 					 content: ""},
 				]},
 				{kind: "Spacer",flex:.2},
 				{kind:"RowGroup", align: "center", flex:1, style:"backgound-color:white;margin:0",
 				 components:[
-					{kind: "VFlexBox",name: "lblSalesSumWeight",align:"center",
+					{kind: "VFlexBox",name: "lblShipSumWeight",align:"center",
 					 style:"font-size: 0.75em;color:#999",
 					 content: ""},
 				]},
 				{kind: "Spacer",flex:.2},
 				{kind:"RowGroup", align: "center", flex:1, style:"backgound-color:white;margin:0",
 				 components:[
-					{kind: "VFlexBox",name: "lblSalesSumAveWeight",align:"center",
+					{kind: "VFlexBox",name: "lblShipSumAveWeight",align:"center",
 					 style:"font-size: 0.75em;color:#999",
 					 content: ""},
 				]},				
@@ -91,14 +91,23 @@ enyo.kind({
 	loadShipments:function(inSender, inIndex) {		
 		var objData;
 		if(objData=this.arrData[inIndex]){
-			this.$.lblSalesDate.setContent(objData.depdate+" "+objData.deptime);
-			this.$.lblSalesHeads.setContent(gblUtils.numCD(objData.totalHeads));
-			this.$.lblSalesWeight.setContent(gblUtils.numCD(objData.totalWeight));
-			this.$.lblSalesAverage.setContent(objData.aveWeight);
-			this.$.lblSalesClient.setContent(objData.buyer);	
-			this.$.lblSalesTruck.setContent(objData.truck);
+			this.$.lblShipProgramDate.setContent(objData.shipProgramDateTime.toLocaleDateString()+ " " +objData.shipProgramDateTime.toLocaleTimeString().substring(0,5));
+			this.$.lblShipHeads.setContent(gblUtils.numCD(objData.totalHeads));
+			this.$.lblShipWeight.setContent(gblUtils.numCD(objData.totalWeight));
+			this.$.lblShipAverage.setContent(objData.aveWeight);
+			this.$.lblShipClient.setContent(objData.buyer);	
 			if(inIndex % 2 == 0)inSender.$.client.$.client.applyStyle("background-color","#DFC699");
 //			if(inIndex % 2 == 0)inSender.$.client.$.client.applyStyle("background-color","#DCC190");
+			if(objData.hasOwnProperty("releaseDate")){
+			    this.$.btnRelease.hide();
+			    this.$.lblShipReleased.show();
+			    this.$.lblShipReleased.setContent("Liberado el " + objData.releaseDate.toLocaleString());
+			    this.$.lblShipAverage.applyStyle("margin-right","47px");
+			}else{
+			    this.$.lblShipReleased.hide();
+			    this.$.btnRelease.show();
+			    this.$.lblShipAverage.applyStyle("margin-right","10px");
+			}
 			return true;
 		}else{
 			return false;			
@@ -115,12 +124,12 @@ enyo.kind({
 			iAve+=this.arrData[j].aveWeight;			
 		}
 		
-		this.$.lblSalesSumHeads.setContent(gblUtils.numCD(iHeads));
-		this.$.lblSalesSumWeight.setContent(gblUtils.numCD(iWeight));
-		this.$.lblSalesSumAveWeight.setContent((iAve/this.arrData.length).toFixed(2));				
+		this.$.lblShipSumHeads.setContent(gblUtils.numCD(iHeads));
+		this.$.lblShipSumWeight.setContent(gblUtils.numCD(iWeight));
+		this.$.lblShipSumAveWeight.setContent((iAve/this.arrData.length).toFixed(2));				
 	},
 	ready:function(){
-		this.updateSummary();
+	    this.updateSummary();
 	},
 	selectShipRow:function(inSender, inEvent){
 		
@@ -130,14 +139,13 @@ enyo.kind({
 	    this.doSelectedShipment();
 	},
 	getSelectedShipment:function(){
-		return this.objSelectedShipment;
+	    return this.objSelectedShipment;
 	},
 	updateList:function(){
 	    this.arrData = [];
 	    var items = cacheShip.readData();
 	    var len = items.length;
 	    for(var i = 0; i<len;i++){
-		//TODO FILTER BY date == today
 		this.arrData.push(items[i]);
 	    }
 	    this.$.listShipments.render();

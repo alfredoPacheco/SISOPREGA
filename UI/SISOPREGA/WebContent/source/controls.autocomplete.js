@@ -16,7 +16,7 @@ enyo
 		filter : [],// sub items, for click button
 		highLighted : true,
 		width : null,
-		height : "50px;",
+		height : "50px",
 		inputKind : "Input"
 	    },
 	    events : {

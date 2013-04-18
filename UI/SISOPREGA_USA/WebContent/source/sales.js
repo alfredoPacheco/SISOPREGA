@@ -224,10 +224,10 @@ enyo
 
 		var newObject = {
 		    cattleName : this.$.clase.getValue(),
-		    heads : parseInt(this.$.cabezas.getValue()),
+		    heads : Number(this.$.cabezas.getValue()),
 		    pen : this.$.corrales.getItemSelected().object.barnyard,
-		    aveWeight : this.$.corrales.getItemSelected().object.aveWeight,
-		    weight : this.$.corrales.getItemSelected().object.avgweight * this.$.cabezas.getValue()
+		    aveWeight : this.$.corrales.getItemSelected().object.avgweight,
+		    weight : Number(this.$.corrales.getItemSelected().object.avgweight) * Number(this.$.cabezas.getValue())
 		};
 
 		this.arrDetail.push(newObject);
@@ -247,10 +247,8 @@ enyo
 			    .setContent(this.arrDetail[inIndex].pen.substring(1));
 		    this.$.detail_weight
 			    .setContent(utils.formatNumberThousands(this.arrDetail[inIndex].weight) + " lb");
-		    this.totalHC += parseFloat(this.$.detail_cabezas
-			    .getContent());
-		    this.totalWeight += parseFloat(this.$.detail_weight
-			    .getContent());
+		    this.totalHC += Number(this.arrDetail[inIndex].heads);
+		    this.totalWeight += Number(this.arrDetail[inIndex].weight);
 		    return true;
 		}
 	    },
@@ -290,7 +288,7 @@ enyo
 		this.objMaster.detail = this.arrDetail;
 		this.objMaster.totalHeads=this.totalHC;
 		this.objMaster.totalWeight=this.totalWeight;
-		this.objMaster.aveWeight=this.totalWeight / this.totalHC;
+		this.objMaster.aveWeight=Number(this.totalWeight) / Number(this.totalHC);
 		return this.objMaster;
 	    },
 	    sell_click : function() {
@@ -300,7 +298,6 @@ enyo
 		this.doSale();
 	    },
 	    clase_select : function(inSender) {
-		console.debug(inSender);
 		var filter = [];
 		var items = this.$.corrales.getItems();
 		for ( var i = 0; i < items.length; i++) {
@@ -308,7 +305,6 @@ enyo
 			filter.push(items[i]);
 		    }
 		}
-
 		this.$.corrales.setFilter(filter);
 	    },
 	    cancel_click:function(){
