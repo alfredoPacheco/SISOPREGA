@@ -641,9 +641,10 @@ GRANT ALL ON cat_cattle_quality_quality_id_seq TO sisoprega;
 
 DROP TABLE IF EXISTS ctrl_hermana_corte_exportador CASCADE;
 CREATE TABLE ctrl_hermana_corte_exportador(
-	corte_expo  SERIAL PRIMARY KEY,
-	hermana_id  integer NOT NULL REFERENCES ctrl_hermana(hermana_id),
-	qualtiy_id  integer NOT NULL REFERENCES cat_cattle_quality(quality_id)
+	corte_expo      SERIAL PRIMARY KEY,
+	hermana_id      integer NOT NULL REFERENCES ctrl_hermana(hermana_id),
+	qualtiy_id      integer NOT NULL REFERENCES cat_cattle_quality(quality_id),
+	purchase_price  money NOT NULL DEFAULT 0.0
 );
 
 GRANT ALL ON ctrl_hermana_corte_exportador TO sisoprega;
@@ -679,4 +680,32 @@ CREATE TABLE ctrl_hermana_expense(
     concept_id  integer NOT NULL REFERENCES cat_expense_concept(concept_id),
 	hermana_id  integer NOT NULL REFERENCES ctrl_hermana(hermana_id),
 	amount      decimal(12,2) NOT NULL
+);
+
+DROP TABLE IF EXISTS cat_seller CASCADE;
+CREATE TABLE cat_seller(
+	seller_id    SERIAL PRIMARY KEY,
+	seller_name  varchar(80) UNIQUE NOT NULL
+);
+
+GRANT ALL ON cat_seller TO sisoprega;
+GRANT ALL ON cat_seller_seller_id_seq TO sisoprega;
+
+DROP TABLE IF EXISTS ctrl_purchase CASCADE;
+CREATE TABLE ctrl_purchase(
+	purchase_id    SERIAL PRIMARY KEY,
+	seller_id      integer NOT NULL REFERENCES cat_seller(seller_id),
+	cattype_id     integer NOT NULL REFERENCES cat_cattle_type(cattype_id)
+);
+
+GRANT ALL ON ctrl_purchase TO sisoprega;
+GRANT ALL ON ctrl_purchase_purchase_id_seq TO sisoprega;
+
+DROP TABLE IF EXISTS ctrl_purchase_detail CASCADE;
+CREATE TABLE ctrl_purchase_detail(
+	record_id    SERIAL PRIMARY KEY,
+	barnyard_id  integer NOT NULL REFERENCES cat_barnyard(barnyard_id),
+	qualtiy_id   integer NOT NULL REFERENCES cat_cattle_quality(quality_id),
+	heads        integer not null,
+	weight       decimal(12,4) not null
 );
