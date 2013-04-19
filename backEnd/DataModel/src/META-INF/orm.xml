@@ -960,6 +960,9 @@
 			<basic name="qualityId">
 				<column name="qualtiy_id"/>
 			</basic>
+			<basic name="purchasePrice">
+				<column name="purchase_price"/>
+			</basic>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.HermanaCorte">
@@ -1016,6 +1019,48 @@
 			</basic>
 			<basic name="conceptId">
 				<column name="concept_id"/>
+			</basic>
+		</attributes>
+	</entity>
+	<entity class="com.tramex.sisoprega.dto.Seller">
+		<table name="cat_seller"/>
+		<attributes>
+			<id name="sellerId">
+				<column name="seller_id"/>
+				<generated-value strategy="IDENTITY"/>
+			</id>
+			<basic name="sellerName">
+				<column name="seller_name"/>
+			</basic>
+		</attributes>
+	</entity>
+	<entity class="com.tramex.sisoprega.dto.Purchase">
+		<table name="ctrl_purchase"/>
+		<attributes>
+			<id name="purchaseId">
+				<column name="purchase_id"/>
+				<generated-value strategy="IDENTITY"/>
+			</id>
+			<basic name="sellerId">
+				<column name="seller_id"/>
+			</basic>
+			<basic name="cattleTypeId">
+				<column name="cattype_id"/>
+			</basic>
+		</attributes>
+	</entity>
+	<entity class="com.tramex.sisoprega.dto.PurchaseDetail">
+		<table name="ctrl_purchase_detail"/>
+		<attributes>
+			<id name="recordId">
+				<column name="record_id"/>
+				<generated-value strategy="IDENTITY"/>
+			</id>
+			<basic name="barnyardId">
+				<column name="barnyard_id"/>
+			</basic>
+			<basic name="qualityId">
+				<column name="quality_id"/>
 			</basic>
 		</attributes>
 	</entity>

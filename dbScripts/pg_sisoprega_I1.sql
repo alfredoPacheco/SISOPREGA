@@ -705,7 +705,7 @@ DROP TABLE IF EXISTS ctrl_purchase_detail CASCADE;
 CREATE TABLE ctrl_purchase_detail(
 	record_id    SERIAL PRIMARY KEY,
 	barnyard_id  integer NOT NULL REFERENCES cat_barnyard(barnyard_id),
-	qualtiy_id   integer NOT NULL REFERENCES cat_cattle_quality(quality_id),
+	quality_id   integer NOT NULL REFERENCES cat_cattle_quality(quality_id),
 	heads        integer not null,
 	weight       decimal(12,4) not null
 );
