@@ -4,6 +4,7 @@ enyo
 	    kind : enyo.VFlexBox,
 	    selectedCattleId : 0,
 	    style : "background-color:#DABD8B;font-size:15px;",
+	    align:"left",
 	    events : {
 		"onSave" : "",
 		"onCancel" : ""
@@ -46,14 +47,18 @@ enyo
 		    icon : "images/search.png"
 		} ]
 	    },
-
+	    {
+		kind : enyo.VFlexBox,
+		style : "padding:20px;",
+		pack : "center",		
+		components : [
 	    {
 		kind : enyo.HFlexBox,
 		align : "center",
 		height : "40px;",
 		components : [ {
 		    content : "Entry No",
-		    width : "80px;",
+		    width : "95px;",
 		    style : "text-align: right;margin-right:5px;"
 		}, {
 		    kind : "ToolInput",
@@ -63,14 +68,14 @@ enyo
 		    height : "35px;",
 		}, {
 		    content : "Ref #",
-		    width : "80px;",
+		    width : "95px;",
 		    style : "text-align: right;margin-right:5px;"
 		}, {
 		    kind : "ToolInput",
 		    name : "refNo",
 		    hint : "Ref #",
-		    width : "135px;",
-		    height : "35px;",
+		    width : "135px",
+		    height : "35px",
 		}, ]
 	    }, {
 		kind : enyo.HFlexBox,
@@ -78,14 +83,14 @@ enyo
 		height : "40px;",
 		components : [ {
 		    content : "Consignatario",
-		    width : "80px;",
+		    width : "95px",
 		    style : "text-align: right;margin-right:5px;"
 		}, {
 		    kind : "ToolInput",
 		    name : "consignee",
 		    hint : "Consignatario",
-		    width : "135px;",
-		    height : "35px;",
+		    width : "500px",
+		    height : "35px",
 		    // contentPack : "end",
 		    onEnter : "emularTabulacionConEnter"
 		} ]
@@ -95,14 +100,14 @@ enyo
 		height : "40px;",
 		components : [ {
 		    content : "Cobrar A",
-		    width : "80px;",
+		    width : "95px",
 		    style : "text-align: right;margin-right:5px;"
 		}, {
 		    kind : "ToolInput",
 		    name : "accountOf",
 		    hint : "Cobrar A",
-		    width : "135px;",
-		    height : "35px;",
+		    width : "500px",
+		    height : "35px",
 		    // contentPack : "end",
 		    onEnter : "emularTabulacionConEnter"
 		} ]
@@ -112,7 +117,7 @@ enyo
 		height : "40px;",
 		components : [ {
 		    content : "Exportador:",
-		    width : "80px;",
+		    width : "95px;",
 		    style : "text-align: right;margin-right:5px;"
 		}, {
 		    kind : "controls.autocomplete",
@@ -128,10 +133,10 @@ enyo
 		    icon : "images/search.png",
 		    onclick : "showAvailReleases"
 		} ]
-	    }, {
-		kind : enyo.HFlexBox,
-		align : "center",
-		height : "40px;",
+	    }]}, {
+		kind : enyo.VFlexBox,
+		align : "left",
+		height : "40px",
 		components : [ {
 		    kind : "hermana.de.tabs",
 		    name : "details",

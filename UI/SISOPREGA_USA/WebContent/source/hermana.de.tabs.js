@@ -78,7 +78,9 @@ enyo.kind(
                       inputKind : "ToolInput",
                       flex : 1,
                       contentPack : "end",
-                      onEnter : "emularTabulacionConEnter"
+                      onEnter : "emularTabulacionConEnter",
+                      height:"41px",
+                      width:"200px"
                     },
                     {
                       kind : "controls.autocomplete",
@@ -87,42 +89,52 @@ enyo.kind(
                       inputKind : "ToolInput",
                       flex : 1,
                       contentPack : "end",
-                      onEnter : "emularTabulacionConEnter"
+                      onEnter : "emularTabulacionConEnter",
+                      height:"41px",
+                      width:"300px"
                     },
                     {
                       kind : enyo.IconButton,
                       icon : "../SISOPREGA/images/menu-icon-new.png",
-                      onclick : "doAddClass"
+                      onclick : "doAddClass",
+                      height: "20px",
+                      style:"padding: 5px;margin-left: 5px;"
                     },
                     {
-                      kind : "Input",
+                      kind : "ToolInput",
                       name : "headCount",
                       style : "width:20%",
-                      hint : "Cabezas"
+                      hint : "Cabezas",
+                      height:"41px",
+                      width:"200px"
                     },
                     {
-                      kind : "Input",
+                      kind : "ToolInput",
                       name : "weight",
                       style : "width:20%",
-                      hint : "Peso"
+                      hint : "Peso",
+                      height:"41px",
+                      width:"200px"
                     },
                     {
                       kind : enyo.IconButton,
                       icon : "../SISOPREGA/images/menu-icon-new.png",
                       className : "enyo-button-affirmative",
-                      onclick : "agregarCorte"
+                      onclick : "agregarCorte",
+                      height:"20px"
                     } ]
               },
-              {
-                kind : "HFlexBox",
-                name : "detailDescription",
-                style : "font-size:small;color:#99CC99;"
-              },
+//              {
+//                kind : "HFlexBox",
+//                name : "detailDescription",
+//                style : "font-size:small;color:#99CC99;"
+//              },
               {
                 kind : "hermana.corte.list",
                 name : "listaCorte",
                 onRemoveCorte : "corteRemoved",
-                style : "border: thin dotted black; height:250px;"
+                style : "border: solid 1px black;",
+                height:"200px"
               } ]
         },
         {
@@ -166,12 +178,14 @@ enyo.kind(
               },
               {
                 kind : "HFlexBox",
+                align:"center",
                 components :
                   [
                     {
                       name : "lblCorralExpo",
                       flex : 1,
                       contentPack : "end",
+                      height:"41px"
                     },
                     {
                       kind : "controls.autocomplete",
@@ -179,23 +193,27 @@ enyo.kind(
                       hint : "clase",
                       flex : 1,
                       contentPack : "end",
-                      onEnter : "emularTabulacionConEnter"
+                      onEnter : "emularTabulacionConEnter",
+                      height:"41px"
                     },
                     {
                       name : "lblHeadsExpo",
                       flex : 1,
                       contentPack : "end",
+                      height:"41px"
                     },
                     {
                       name : "lblWeightExpo",
                       flex : 1,
                       contentPack : "end",
+                      height:"41px"
                     },
                     {
                       kind : enyo.IconButton,
                       icon : "../SISOPREGA/images/menu-icon-new.png",
                       className : "enyo-button-affirmative",
-                      onclick : "reClassify"
+                      onclick : "reClassify",
+                      height:"20px"
                     } ]
               },
               {
