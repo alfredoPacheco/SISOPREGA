@@ -33,31 +33,45 @@ enyo.kind(
         {
           name : "tabButtons",
           kind : "TabGroup",
+          width: "750px",
           components :
             [
               {
                 kind : "TabButton",
                 name : "btnCorte",
+                tab:1,
                 content : "Corte",
-                onclick : "showCorte"
+                onclick : "tabClicked",
+                height:"30px",
+                style:"-webkit-border-image: none;color: white;background-color: chocolate;border-style: solid;border-width: 1px 1px 0px 1px;border-color: #333;border-radius: 10px 10px 0px 0px;font-size:15px;padding: 5px 0px 0px 0px;"
+                    
               },
               {
                 kind : "TabButton",
                 name : "btnCorteExportador",
+                tab:2,
                 content : "Corte Exportador",
-                onclick : "showCorteExportador"
+                onclick : "tabClicked",
+                height:"30px",
+                style:"-webkit-border-image: none;color: white;background-color: chocolate;border-style: solid;border-width: 1px 1px 0px 1px;border-color: #333;border-radius: 10px 10px 0px 0px;font-size:15px;padding: 5px 0px 0px 0px;"
               },
               {
                 kind : "TabButton",
                 name : "btnGastos",
+                tab:3,
                 content : "Gastos",
-                onclick : "showGastos"
+                onclick : "tabClicked",
+                height:"30px",
+                style:"-webkit-border-image: none;color: white;background-color: chocolate;border-style: solid;border-width: 1px 1px 0px 1px;border-color: #333;border-radius: 10px 10px 0px 0px;font-size:15px;padding: 5px 0px 0px 0px;"
               },
               {
                 kind : "TabButton",
                 name : "btnSummary",
+                tab:4,
                 content : "Resumen",
-                onclick : "showSummary"
+                onclick : "tabClicked",
+                height:"30px",
+                style:"-webkit-border-image: none;color: white;background-color: chocolate;border-style: solid;border-width: 1px 1px 0px 1px;border-color: #333;border-radius: 10px 10px 0px 0px;font-size:15px;padding: 5px 0px 0px 0px;"	
               } ]
         },
         {
@@ -65,6 +79,7 @@ enyo.kind(
           name : "tabCorte",
           className : "tab",
           showing : true,
+          height: "285px",
           components :
             [
               {
@@ -74,38 +89,39 @@ enyo.kind(
                     {
                       kind : "controls.autocomplete",
                       name : "penAutoComplete",
-                      hint : "corral",
+                      hint : "Corral",
                       inputKind : "ToolInput",
                       flex : 1,
                       contentPack : "end",
                       onEnter : "emularTabulacionConEnter",
-                      height:"41px",
+                      height:"35px",
                       width:"200px"
                     },
                     {
                       kind : "controls.autocomplete",
                       name : "classAutoComplete",
-                      hint : "clase",
+                      hint : "Clase",
                       inputKind : "ToolInput",
                       flex : 1,
                       contentPack : "end",
                       onEnter : "emularTabulacionConEnter",
-                      height:"41px",
+                      height:"35px",
                       width:"300px"
                     },
                     {
                       kind : enyo.IconButton,
                       icon : "../SISOPREGA/images/menu-icon-new.png",
                       onclick : "doAddClass",
-                      height: "20px",
-                      style:"padding: 5px;margin-left: 5px;"
+                      height: "23px",
+                      width: "23px",
+                      style:"padding: 2px;margin-top: 0px;background-color: #DABD8B;"
                     },
                     {
                       kind : "ToolInput",
                       name : "headCount",
                       style : "width:20%",
                       hint : "Cabezas",
-                      height:"41px",
+                      height:"35px",
                       width:"200px"
                     },
                     {
@@ -113,7 +129,7 @@ enyo.kind(
                       name : "weight",
                       style : "width:20%",
                       hint : "Peso",
-                      height:"41px",
+                      height:"35px",
                       width:"200px"
                     },
                     {
@@ -121,19 +137,22 @@ enyo.kind(
                       icon : "../SISOPREGA/images/menu-icon-new.png",
                       className : "enyo-button-affirmative",
                       onclick : "agregarCorte",
-                      height:"20px"
+                      height: "23px",
+                      width: "23px",
+                      style:"padding: 2px;margin-top: 0px;"
                     } ]
               },
-//              {
-//                kind : "HFlexBox",
-//                name : "detailDescription",
-//                style : "font-size:small;color:#99CC99;"
-//              },
+              {
+                kind : "HFlexBox",
+                name : "detailDescription",                
+                style : "font-size:13px;",
+                height:"17px"
+              },
               {
                 kind : "hermana.corte.list",
                 name : "listaCorte",
                 onRemoveCorte : "corteRemoved",
-                style : "border: solid 1px black;",
+//                style : "border: solid 1px black;",
                 height:"200px"
               } ]
         },
@@ -142,6 +161,7 @@ enyo.kind(
           name : "tabCorteExportador",
           className : "tab",
           showing : false,
+          height: "285px",
           components :
             [
               {
@@ -149,76 +169,89 @@ enyo.kind(
                 name : "ExpoToolBar",
                 align : "left",
                 pack : "left",
-                style : "background:#C9C9C9;min-height:10px;height:45px;",
+                style : "background-color:transparent;-webkit-border-image:none;min-height:10px;height:45px;",
                 components :
                   [
                     {
                       name : 'btnPrint',
                       onclick : "printHermana",
-                      icon : "images/print.png"
+                      icon : "images/print.png",
                     },
                     {
                       name : 'btnSave',
                       onclick : "saveHermana",
-                      icon : "images/save.png"
+                      icon : "images/save.png",
                     },
                     {
                       name : 'btnCancel',
                       onclick : "resetForm",
-                      icon : "images/cancel.png"
+                      icon : "images/cancel.png",
                     },
                     {
-                      fit : true
+                      fit : true,
                     },
                     {
                       name : 'btnSend',
                       onclick : "open",
-                      icon : "images/envelope.png"
+                      icon : "images/envelope.png",
                     } ]
               },
               {
                 kind : "HFlexBox",
-                align:"center",
+                align:"stretch",
+                height:"35px",
                 components :
                   [
                     {
+                	kind:"ToolInput",
+                	disabled:true,
                       name : "lblCorralExpo",
                       flex : 1,
                       contentPack : "end",
-                      height:"41px"
+                      hint:"",
+                      height:"35px"
                     },
                     {
                       kind : "controls.autocomplete",
                       name : "classAutoCompleteExpo",
+                      inputKind:"ToolInput",
                       hint : "clase",
                       flex : 1,
                       contentPack : "end",
                       onEnter : "emularTabulacionConEnter",
-                      height:"41px"
+                      height:"35px"
                     },
                     {
+                	kind:"ToolInput",
+                	disabled:true,
                       name : "lblHeadsExpo",
                       flex : 1,
                       contentPack : "end",
-                      height:"41px"
+                      hint:"",
+                      height:"35px"
                     },
                     {
+                	kind:"ToolInput",
+                	disabled:true,
                       name : "lblWeightExpo",
                       flex : 1,
                       contentPack : "end",
-                      height:"41px"
+                      hint:"",
+                      height:"35px"
                     },
                     {
                       kind : enyo.IconButton,
                       icon : "../SISOPREGA/images/menu-icon-new.png",
                       className : "enyo-button-affirmative",
                       onclick : "reClassify",
-                      height:"20px"
+                      height:"20px",
+                      style:"padding: 2px;margin-top: 0px;width: 23px;height: 23px;"
                     } ]
               },
               {
                 kind : "hermana.corte.list",
-                style : "border: thin dotted black; height:250px;",
+//                style : "border: thin dotted black;", 
+                height:"200px",
                 name : "listaCorteExpo",
                 onRemoveCorte : "clearCorteExpoDataEntry",
                 onCorteSelected : "setupCorteSelected"
@@ -229,6 +262,7 @@ enyo.kind(
           name : "tabGastos",
           className : "tab",
           showing : false,
+          height: "285px",
           components :
             [
               {
@@ -273,6 +307,7 @@ enyo.kind(
           name : "tabSummary",
           className : "tab",
           showing : false,
+          height: "285px",
           components :
             [
               {
@@ -337,6 +372,30 @@ enyo.kind(
       this.$.charge.setItems(cacheCharges.getList());
       this.$.listaCorteExpo.$.rowContainer.setConfirmCaption("Reestablecer");
       this.$.listaCorteExpo.isForExporter = true;
+      this.tabClicked(this.$.btnCorte);
+    },
+    tabClicked:function(inSender, inEvent){
+	this.$.btnCorte.applyStyle("background-color", "chocolate");
+	this.$.btnCorteExportador.applyStyle("background-color", "chocolate");
+	this.$.btnGastos.applyStyle("background-color", "chocolate");
+	this.$.btnSummary.applyStyle("background-color", "chocolate");
+	
+	inSender.applyStyle("background-color", "#333");
+	
+	switch(inSender.tab){
+	case 1:
+	    this.showCorte();
+	    break;
+	case 2:
+	    this.showCorteExportador();
+	    break;
+	case 3:
+	    this.showGastos();
+	    break;
+	case 4:
+	    this.showSummary();
+	    break;
+	} 
     },
     showCorte : function() {
       this.$.tabCorte.setShowing(true);
@@ -460,9 +519,9 @@ enyo.kind(
       this.$.penAutoComplete.$.textField.forceFocus();
     },
     clearCorteExpoDataEntry : function() {
-      this.$.lblCorralExpo.setContent("");
-      this.$.lblHeadsExpo.setContent("");
-      this.$.lblWeightExpo.setContent("");
+      this.$.lblCorralExpo.setValue("");
+      this.$.lblHeadsExpo.setValue("");
+      this.$.lblWeightExpo.setValue("");
       this.$.classAutoCompleteExpo.clear();
     },
     corteRemoved : function() {
@@ -517,10 +576,9 @@ enyo.kind(
     },
     setupCorteSelected : function() {
       if (this.$.listaCorteExpo.iSelected == undefined) {
-
-        this.$.lblCorralExpo.setContent("");
-        this.$.lblHeadsExpo.setContent("");
-        this.$.lblWeightExpo.setContent("");
+        this.$.lblCorralExpo.setValue("");
+        this.$.lblHeadsExpo.setValue("");
+        this.$.lblWeightExpo.setValue("");
         this.$.classAutoCompleteExpo.setIndex(-1);
 
         return false;
@@ -529,9 +587,9 @@ enyo.kind(
       var cortes = cacheCorte.getExpo();
       var selectedCorte = cortes[this.$.listaCorteExpo.iSelected];
 
-      this.$.lblCorralExpo.setContent("Corral: " + selectedCorte.pen_name);
-      this.$.lblHeadsExpo.setContent("Cabezas: " + utils.formatNumberThousands(selectedCorte.heads));
-      this.$.lblWeightExpo.setContent("Peso: " + utils.formatNumberThousands(selectedCorte.weight) + " lbs.");
+      this.$.lblCorralExpo.setValue("Corral: " + selectedCorte.pen_name);
+      this.$.lblHeadsExpo.setValue("Cabezas: " + utils.formatNumberThousands(selectedCorte.heads));
+      this.$.lblWeightExpo.setValue("Peso: " + utils.formatNumberThousands(selectedCorte.weight) + " lbs.");
       this.$.classAutoCompleteExpo.setIndex(selectedCorte.cattleClassId);
     },
     reClassify : function() {

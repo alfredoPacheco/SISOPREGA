@@ -26,7 +26,7 @@ enyo
 		name : "HermanaToolBar",
 		align : "left",
 		pack : "left",
-		style : "background:#C9C9C9;min-height:10px;height:45px;",
+		style : "background:#333;min-height:10px;height:45px;",
 		components : [ {
 		    name : 'btnPrint',
 		    onclick : "printHermana",
@@ -48,14 +48,20 @@ enyo
 		} ]
 	    },
 	    {
+	    kind:enyo.Scroller,
+	    flex:1,
+	    components:[
+	    {
 		kind : enyo.VFlexBox,
 		style : "padding:20px;",
-		pack : "center",		
+		pack : "center",
+		flex:1,
 		components : [
 	    {
 		kind : enyo.HFlexBox,
 		align : "center",
-		height : "40px;",
+		height : "32px",
+		style:"margin-bottom: 8px;",
 		components : [ {
 		    content : "Entry No",
 		    width : "95px;",
@@ -63,7 +69,7 @@ enyo
 		}, {
 		    kind : "ToolInput",
 		    name : "entryNo",
-		    hint : "Entry No",
+		    hint : "",
 		    width : "135px;",
 		    height : "35px;",
 		}, {
@@ -73,14 +79,15 @@ enyo
 		}, {
 		    kind : "ToolInput",
 		    name : "refNo",
-		    hint : "Ref #",
+		    hint : "",
 		    width : "135px",
 		    height : "35px",
 		}, ]
 	    }, {
 		kind : enyo.HFlexBox,
 		align : "center",
-		height : "40px;",
+		height : "32px",
+		style:"margin-bottom: 8px;",
 		components : [ {
 		    content : "Consignatario",
 		    width : "95px",
@@ -88,7 +95,7 @@ enyo
 		}, {
 		    kind : "ToolInput",
 		    name : "consignee",
-		    hint : "Consignatario",
+		    hint : "",
 		    width : "500px",
 		    height : "35px",
 		    // contentPack : "end",
@@ -97,7 +104,8 @@ enyo
 	    }, {
 		kind : enyo.HFlexBox,
 		align : "center",
-		height : "40px;",
+		height : "32px",
+		style:"margin-bottom: 8px;",
 		components : [ {
 		    content : "Cobrar A",
 		    width : "95px",
@@ -105,7 +113,7 @@ enyo
 		}, {
 		    kind : "ToolInput",
 		    name : "accountOf",
-		    hint : "Cobrar A",
+		    hint : "",
 		    width : "500px",
 		    height : "35px",
 		    // contentPack : "end",
@@ -114,7 +122,8 @@ enyo
 	    }, {
 		kind : enyo.HFlexBox,
 		align : "center",
-		height : "40px;",
+		height : "32px",
+		style:"margin-bottom: 8px;",
 		components : [ {
 		    content : "Exportador:",
 		    width : "95px;",
@@ -123,7 +132,7 @@ enyo
 		    kind : "controls.autocomplete",
 		    inputKind : "ToolInput",
 		    name : "rancher_id",
-		    hint : 'Exportador',
+		    hint : '',
 		    width : "500px;",
 		    height : "35px;",
 		    // contentPack : "end",
@@ -131,18 +140,27 @@ enyo
 		}, {
 		    kind : enyo.IconButton,
 		    icon : "images/search.png",
-		    onclick : "showAvailReleases"
+		    onclick : "showAvailReleases",
+		    height: "23px",
+	            width: "23px",
+	            style:"padding: 2px;margin-top: 0px;background-color: #DABD8B;"
 		} ]
 	    }]}, {
 		kind : enyo.VFlexBox,
 		align : "left",
 		height : "40px",
+		width: "945px",
+		style:"margin-left: 20px;",		
 		components : [ {
 		    kind : "hermana.de.tabs",
 		    name : "details",
 		    onAddClass : "showAddClass"
 		} ]
-	    } ],
+	    } 
+	    
+	]}
+	    
+	    ],
 	    ready : function() {
 		this.$.rancher_id.setItems(cacheRanchers.getAllForList());
 	    },

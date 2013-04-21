@@ -126,7 +126,7 @@ enyo
 	    components : [ {
 		name : "drop_down",
 		kind : enyo.PopupList,
-		style : "width:300px;",
+		width:"300px",		
 		modal : false,
 		onSelect : "select_item",
 		onSetupItem : "setupItem",
