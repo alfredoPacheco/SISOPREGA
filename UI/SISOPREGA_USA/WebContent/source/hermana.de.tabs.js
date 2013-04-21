@@ -43,7 +43,7 @@ enyo.kind(
                 content : "Corte",
                 onclick : "tabClicked",
                 height:"30px",
-                style:"-webkit-border-image: none;color: white;background-color: chocolate;border-style: solid;border-width: 1px 1px 0px 1px;border-color: #333;border-radius: 10px 10px 0px 0px;font-size:15px;padding: 5px 0px 0px 0px;"
+                style:"-webkit-border-image: none;color: white;background-color: chocolate;border-style: solid;border-width: 1px 1px 0px 1px;border-color: #333;border-radius: 30px 10px 0px 0px;font-size:15px;padding: 5px 0px 0px 0px;"
                     
               },
               {
@@ -53,7 +53,7 @@ enyo.kind(
                 content : "Corte Exportador",
                 onclick : "tabClicked",
                 height:"30px",
-                style:"-webkit-border-image: none;color: white;background-color: chocolate;border-style: solid;border-width: 1px 1px 0px 1px;border-color: #333;border-radius: 10px 10px 0px 0px;font-size:15px;padding: 5px 0px 0px 0px;"
+                style:"-webkit-border-image: none;color: white;background-color: chocolate;border-style: solid;border-width: 1px 1px 0px 1px;border-color: #333;border-radius: 30px 10px 0px 0px;font-size:15px;padding: 5px 0px 0px 0px;"
               },
               {
                 kind : "TabButton",
@@ -62,7 +62,7 @@ enyo.kind(
                 content : "Gastos",
                 onclick : "tabClicked",
                 height:"30px",
-                style:"-webkit-border-image: none;color: white;background-color: chocolate;border-style: solid;border-width: 1px 1px 0px 1px;border-color: #333;border-radius: 10px 10px 0px 0px;font-size:15px;padding: 5px 0px 0px 0px;"
+                style:"-webkit-border-image: none;color: white;background-color: chocolate;border-style: solid;border-width: 1px 1px 0px 1px;border-color: #333;border-radius: 30px 10px 0px 0px;font-size:15px;padding: 5px 0px 0px 0px;"
               },
               {
                 kind : "TabButton",
@@ -71,7 +71,7 @@ enyo.kind(
                 content : "Resumen",
                 onclick : "tabClicked",
                 height:"30px",
-                style:"-webkit-border-image: none;color: white;background-color: chocolate;border-style: solid;border-width: 1px 1px 0px 1px;border-color: #333;border-radius: 10px 10px 0px 0px;font-size:15px;padding: 5px 0px 0px 0px;"	
+                style:"-webkit-border-image: none;color: white;background-color: chocolate;border-style: solid;border-width: 1px 1px 0px 1px;border-color: #333;border-radius: 30px 10px 0px 0px;font-size:15px;padding: 5px 0px 0px 0px;"	
               } ]
         },
         {
@@ -153,7 +153,8 @@ enyo.kind(
                 name : "listaCorte",
                 onRemoveCorte : "corteRemoved",
 //                style : "border: solid 1px black;",
-                height:"200px"
+//                height:"200px",
+                flex:1
               } ]
         },
         {
@@ -204,12 +205,12 @@ enyo.kind(
                   [
                     {
                 	kind:"ToolInput",
-                	disabled:true,
                       name : "lblCorralExpo",
                       flex : 1,
                       contentPack : "end",
                       hint:"",
-                      height:"35px"
+                      height:"35px",
+                      disabled:true
                     },
                     {
                       kind : "controls.autocomplete",
@@ -223,21 +224,21 @@ enyo.kind(
                     },
                     {
                 	kind:"ToolInput",
-                	disabled:true,
                       name : "lblHeadsExpo",
                       flex : 1,
                       contentPack : "end",
                       hint:"",
-                      height:"35px"
+                      height:"35px",
+                      disabled:true
                     },
                     {
                 	kind:"ToolInput",
-                	disabled:true,
                       name : "lblWeightExpo",
                       flex : 1,
                       contentPack : "end",
                       hint:"",
-                      height:"35px"
+                      height:"35px",
+                      disabled:true
                     },
                     {
                       kind : enyo.IconButton,
@@ -251,7 +252,8 @@ enyo.kind(
               {
                 kind : "hermana.corte.list",
 //                style : "border: thin dotted black;", 
-                height:"200px",
+//                height:"200px",
+                flex:1,
                 name : "listaCorteExpo",
                 onRemoveCorte : "clearCorteExpoDataEntry",
                 onCorteSelected : "setupCorteSelected"
@@ -273,33 +275,42 @@ enyo.kind(
                       kind : "controls.autocomplete",
                       name : "charge",
                       hint : "Concepto",
+                      inputKind:"ToolInput",
                       flex : .4,
                       contentPack : "end",
                       onSelectItem : "chargeSelected",
-                      onEnter : "chargeSelected"
+                      onEnter : "chargeSelected",
+                      height:"35px"                      
                     },
                     {
                       kind : enyo.IconButton,
                       icon : "../SISOPREGA/images/menu-icon-new.png",
-                      onclick : "showNewCharge"
+                      onclick : "showNewCharge",
+                      height:"23px",
+                      width:"23px",
+                      style:"padding: 2px;margin-top:0px;background-color: #DABD8B;"
                     },
                     {
-                      kind : "Input",
+                      kind : "ToolInput",
                       name : "charge_price",
-                      hint : "Monto"
+                      hint : "Monto",
+                      height:"35px"
                     },
                     {
                       kind : enyo.IconButton,
-                      flex : .1,
                       icon : "../SISOPREGA/images/menu-icon-new.png",
                       className : "enyo-button-affirmative",
-                      onclick : "addCharge"
+                      onclick : "addCharge",
+                      height:"23px",
+                      width:"23px",
+                      style:"padding: 2px;margin-top:0px;"
                     } ]
               },
               {
                 kind : "hermana.gastos.list",
                 name : "chargeList",
-                style : "border: thin dotted black; height:250px;"
+//                style : "border: thin dotted black;",
+                flex:1
               } ]
         },
         {
@@ -373,6 +384,16 @@ enyo.kind(
       this.$.listaCorteExpo.$.rowContainer.setConfirmCaption("Reestablecer");
       this.$.listaCorteExpo.isForExporter = true;
       this.tabClicked(this.$.btnCorte);
+      
+      this.$.lblCorralExpo.$.input.applyStyle("-webkit-text-fill-color","black");
+      this.$.lblCorralExpo.$.input.applyStyle("opacity","1");
+      
+      this.$.lblHeadsExpo.$.input.applyStyle("-webkit-text-fill-color","black");
+      this.$.lblHeadsExpo.$.input.applyStyle("opacity","1");
+      
+      this.$.lblWeightExpo.$.input.applyStyle("-webkit-text-fill-color","black");
+      this.$.lblWeightExpo.$.input.applyStyle("opacity","1");
+      
     },
     tabClicked:function(inSender, inEvent){
 	this.$.btnCorte.applyStyle("background-color", "chocolate");

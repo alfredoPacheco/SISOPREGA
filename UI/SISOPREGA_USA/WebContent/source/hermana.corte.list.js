@@ -144,8 +144,8 @@ enyo.kind(
         this.$.listPromedio.setContent(utils.formatNumberThousands(avgWeight));
 
         if (this.iSelected == inIndex) {
-          this.$.rowContainer.applyStyle("background-color", "brown");
-          this.$.rowContainer.applyStyle("color", "#EBCE9C");
+          this.$.rowContainer.applyStyle("background-color", "wheat");
+//          this.$.rowContainer.applyStyle("color", "#EBCE9C");
         }
 
         return true;
