@@ -11,13 +11,16 @@ enyo.kind(
                     kind:"Button",
                     caption:"Compra de Ganado",
                     flex:1,
-                    onclick:"doBuyCattle"
+                    onclick:"doBuyCattle",
+                    style:"display: table-cell;vertical-align: middle;height: 35px;"
                 },
+                {kind:enyo.Spacer, flex:.1},
                 {
                     kind:"Button",
                     caption:"Captura de Hermana",
                     flex:1,
-                    onclick:"doCaptureHermana"
+                    onclick:"doCaptureHermana",
+                    style:"display: table-cell;vertical-align: middle;height: 35px;"
                 }
                 ]
   });

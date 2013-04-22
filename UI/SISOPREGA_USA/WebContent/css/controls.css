@@ -77,8 +77,8 @@ Startpoint for range selection
 }
 
 .tab {
-	background: whitesmoke;
-	border: 1px dotted silver;
+	/*background: #482400;*/
+	border: 10px solid;
 	padding: 6px;
 	margin: 0;
 }

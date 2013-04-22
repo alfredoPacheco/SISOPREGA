@@ -131,7 +131,7 @@ enyo.kind({
 	objSale.sale_id = ++this.lastID;
 	this.cacheData.push(objSale);
 	for(var i=0;i<objSale.detail.length;i++){
-	    if(!cachePen.substractHeadsInPen(objSale.detail[i].pen,objSale.detail[i].heads)){
+	    if(!this.markSoldHeads(objSale.detail[i].pen,objSale.detail[i].heads, objSale.buyer)){
 		return false;
 	    }
 	}
@@ -139,6 +139,19 @@ enyo.kind({
 	    cbObj[cbMethod]();
 	}
 	return true;
+    },
+    markSoldHeads:function(sBy, iHeads, sBuyerName){
+	var reception = cachePen.getByBarnyard(sBy);
+	if (reception) {
+	    var buyer = {
+		    name:sBuyerName,
+		    heads:iHeads
+	    };
+	    reception.buyers.push(buyer);
+	    return true;
+	}
+	alert("Ha ocurrido un error al momento de intentar marcar las cabezas vendidas.");
+	return false;
     },
     updateData : function() {
     },

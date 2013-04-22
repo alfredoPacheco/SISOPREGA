@@ -13,10 +13,12 @@ enyo.kind(
     components :
       [
         {
-          kind : "Header",
-          name : "encabezado",
-          //className : "listFirst",
-          style : "font-size:13px;background-color:#DABD8B;",
+            kind : "HFlexBox",
+    	className : "listFirst",
+    	style : "font-size:13px;background-color:#DABD8B;border-bottom-style: solid;border-bottom-color: #482400;",
+    	height : "30px",
+    	align : "center",
+    	pack : "start",
           components :
             [
               {
@@ -46,7 +48,7 @@ enyo.kind(
           horizontal : false,
           autoHorizontal : false,
           flex : 1,
-          onScroll : "scroll",
+          style : "background-color: #482400;",
           components :
             [
               {
@@ -62,7 +64,9 @@ enyo.kind(
                       onConfirm : "dropCorte",
                       layoutKind : enyo.HFlexLayout,
                       tapHighlight : true,
-                      className : "listRow",
+                      className : "listBG",
+                      style:"font-size:15px;",
+                      height : "40px",
                       components :
                         [
                           {
@@ -140,8 +144,8 @@ enyo.kind(
         this.$.listPromedio.setContent(utils.formatNumberThousands(avgWeight));
 
         if (this.iSelected == inIndex) {
-          this.$.rowContainer.applyStyle("background-color", "brown");
-          this.$.rowContainer.applyStyle("color", "#EBCE9C");
+          this.$.rowContainer.applyStyle("background-color", "wheat");
+//          this.$.rowContainer.applyStyle("color", "#EBCE9C");
         }
 
         return true;

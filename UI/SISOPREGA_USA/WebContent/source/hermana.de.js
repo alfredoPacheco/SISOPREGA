@@ -4,6 +4,7 @@ enyo
 	    kind : enyo.VFlexBox,
 	    selectedCattleId : 0,
 	    style : "background-color:#DABD8B;font-size:15px;",
+	    align:"left",
 	    events : {
 		"onSave" : "",
 		"onCancel" : ""
@@ -25,7 +26,7 @@ enyo
 		name : "HermanaToolBar",
 		align : "left",
 		pack : "left",
-		style : "background:#C9C9C9;min-height:10px;height:45px;",
+		style : "background:#333;min-height:10px;height:45px;",
 		components : [ {
 		    name : 'btnPrint',
 		    onclick : "printHermana",
@@ -46,79 +47,92 @@ enyo
 		    icon : "images/search.png"
 		} ]
 	    },
-
+	    {
+	    kind:enyo.Scroller,
+	    flex:1,
+	    components:[
+	    {
+		kind : enyo.VFlexBox,
+		style : "padding:20px;",
+		pack : "center",
+		flex:1,
+		components : [
 	    {
 		kind : enyo.HFlexBox,
 		align : "center",
-		height : "40px;",
+		height : "32px",
+		style:"margin-bottom: 8px;",
 		components : [ {
 		    content : "Entry No",
-		    width : "80px;",
+		    width : "95px;",
 		    style : "text-align: right;margin-right:5px;"
 		}, {
 		    kind : "ToolInput",
 		    name : "entryNo",
-		    hint : "Entry No",
+		    hint : "",
 		    width : "135px;",
 		    height : "35px;",
 		}, {
 		    content : "Ref #",
-		    width : "80px;",
+		    width : "95px;",
 		    style : "text-align: right;margin-right:5px;"
 		}, {
 		    kind : "ToolInput",
 		    name : "refNo",
-		    hint : "Ref #",
-		    width : "135px;",
-		    height : "35px;",
+		    hint : "",
+		    width : "135px",
+		    height : "35px",
 		}, ]
 	    }, {
 		kind : enyo.HFlexBox,
 		align : "center",
-		height : "40px;",
+		height : "32px",
+		style:"margin-bottom: 8px;",
 		components : [ {
 		    content : "Consignatario",
-		    width : "80px;",
+		    width : "95px",
 		    style : "text-align: right;margin-right:5px;"
 		}, {
 		    kind : "ToolInput",
 		    name : "consignee",
-		    hint : "Consignatario",
-		    width : "135px;",
-		    height : "35px;",
+		    hint : "",
+		    width : "500px",
+		    height : "35px",
 		    // contentPack : "end",
 		    onEnter : "emularTabulacionConEnter"
 		} ]
 	    }, {
 		kind : enyo.HFlexBox,
 		align : "center",
-		height : "40px;",
+		height : "32px",
+		style:"margin-bottom: 8px;",
 		components : [ {
 		    content : "Cobrar A",
-		    width : "80px;",
+		    width : "95px",
 		    style : "text-align: right;margin-right:5px;"
 		}, {
 		    kind : "ToolInput",
 		    name : "accountOf",
-		    hint : "Cobrar A",
-		    width : "135px;",
-		    height : "35px;",
+		    hint : "",
+		    width : "500px",
+		    height : "35px",
 		    // contentPack : "end",
 		    onEnter : "emularTabulacionConEnter"
 		} ]
 	    }, {
 		kind : enyo.HFlexBox,
 		align : "center",
-		height : "40px;",
+		height : "32px",
+		style:"margin-bottom: 8px;",
 		components : [ {
 		    content : "Exportador:",
-		    width : "80px;",
+		    width : "95px;",
 		    style : "text-align: right;margin-right:5px;"
 		}, {
 		    kind : "controls.autocomplete",
 		    inputKind : "ToolInput",
 		    name : "rancher_id",
-		    hint : 'Exportador',
+		    hint : '',
 		    width : "500px;",
 		    height : "35px;",
 		    // contentPack : "end",
@@ -126,18 +140,27 @@ enyo
 		}, {
 		    kind : enyo.IconButton,
 		    icon : "images/search.png",
-		    onclick : "showAvailReleases"
+		    onclick : "showAvailReleases",
+		    height: "23px",
+	            width: "23px",
+	            style:"padding: 2px;margin-top: 0px;background-color: #DABD8B;"
 		} ]
-	    }, {
-		kind : enyo.HFlexBox,
-		align : "center",
-		height : "40px;",
+	    }]}, {
+		kind : enyo.VFlexBox,
+		align : "left",
+		height : "40px",
+		width: "945px",
+		style:"margin-left: 20px;",		
 		components : [ {
 		    kind : "hermana.de.tabs",
 		    name : "details",
 		    onAddClass : "showAddClass"
 		} ]
-	    } ],
+	    } 
+	    
+	]}
+	    
+	    ],
 	    ready : function() {
 		this.$.rancher_id.setItems(cacheRanchers.getAllForList());
 	    },
@@ -177,7 +200,6 @@ enyo
 		return true;
 	    },
 	    showAvailReleases : function() {
-
 		if (this.validateSelectedRancher()) {
 		    this.cleanPopUpContents();
 		    this.$.popMan.createComponent({
@@ -198,7 +220,6 @@ enyo
 		    this.$.popMan.render();
 		    this.$.popMan.openAtCenter();
 		}
-
 	    },
 	    showAddClass : function() {
 		this.cleanPopUpContents();

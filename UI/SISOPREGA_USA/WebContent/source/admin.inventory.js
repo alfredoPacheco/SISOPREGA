@@ -64,8 +64,8 @@ enyo.kind({
 					]},
 					{layoutKind: enyo.HFlexLayout,components:[
 						{name: "lblInvBarnyards",style: "font-size: 0.85em;color:#008B8B;text-align:left;",flex:1,content:""},						
-						{name: "lblInvDescBuyer",style: "font-size: 0.85em;color:#008B8B;text-align:center;",flex:1,content:""},
-						{name: "lblInvDescTruck",style: "font-size: 0.85em;color:#008B8B;text-align:right;",flex:1,content:""}						
+						{name: "lblInvDescBuyer",allowHtml:true, style: "font-size: 0.85em;color:#008B8B;text-align:right;",flex:1,content:""},
+//						{name: "lblInvDescTruck",style: "font-size: 0.85em;color:#008B8B;text-align:right;",flex:1,content:""}						
 						]}
 					]}
 				]}
@@ -135,17 +135,17 @@ enyo.kind({
 			this.$.lblInvWeight.setContent(gblUtils.numCD(objData.weight));
 			this.$.lblInvInvAverage.setContent(objData.avgweight);
 			this.$.lblInvFeed.setContent(objData.feed.quantity);
-			var sTrucks="";
-			for (var j=0;j<objData.trucks.length;j++){
-				sTrucks+=objData.trucks[j]+", ";
-			}
-			if(sTrucks!=""){sTrucks=sTrucks.slice(0,-2);}
+//			var sTrucks="";
+//			for (var j=0;j<objData.trucks.length;j++){
+//				sTrucks+=objData.trucks[j]+", ";
+//			}
+//			if(sTrucks!=""){sTrucks=sTrucks.slice(0,-2);}
 			var sBuyer="";			
 			for (var i=0;i<objData.buyers.length;i++){
 				sBuyer+=objData.buyers[i].name+" ("+objData.buyers[i].heads+"/"+
-						(objData.avgweight*objData.buyers[i].heads).toFixed(2)+"), ";
+						(objData.avgweight*objData.buyers[i].heads).toFixed(2)+")<br />";
 			}		
-			if(sBuyer!=""){sBuyer=sBuyer.slice(0,-2);}
+			if(sBuyer!=""){sBuyer=sBuyer.slice(0,-6);}
 //			var sBY="";			
 //			for (var i in objData.barnyard){
 //				sBY+=objData.barnyard[i]+", ";
@@ -159,7 +159,7 @@ enyo.kind({
 			//if(sTrucks!=""){sDesc+=" - "+sTrucks}
 			this.$.lblInvBarnyards.setContent(objData.barnyard.substring(1));			
 			this.$.lblInvDescBuyer.setContent(sBuyer);
-			this.$.lblInvDescTruck.setContent(sTrucks);
+//			this.$.lblInvDescTruck.setContent(sTrucks);
 			
 			if(inIndex % 2 == 0)inSender.$.client.$.client.applyStyle("background-color","#DFC699");
 //			if(inIndex % 2 == 0)inSender.$.client.$.client.applyStyle("background-color","#DCC190");

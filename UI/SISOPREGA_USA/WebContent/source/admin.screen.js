@@ -12,15 +12,15 @@ enyo.kind(
           dismissWithClick : true,
           layoutKind : "VFlexLayout",
           style : "overflow: hidden;border-width: 8px;",
-          scrim : true,
-          onSale : "on_sale",
-          onCancel : "on_cancel_sale",
+          scrim : true,          
           components :
             [
               {
                 kind : "sales",
                 name : "sales_kind",
-                flex : 1
+                flex : 1,
+                onSale : "on_sale",
+                onCancel : "on_cancel_sale"
               } ]
         },
         {
@@ -43,7 +43,7 @@ enyo.kind(
         {
           kind : enyo.Popup,
           name : "popup_add",
-          width : "400px;",
+          width : "330px;",
           height : "70px;",
           dismissWithClick : true,
           layoutKind : "VFlexLayout",
@@ -80,8 +80,8 @@ enyo.kind(
         {
           kind : enyo.Popup,
           name : "popup_hermana",
-          width : "90%;",
-          height : "90%;",
+          width : "1000px;",
+          height : "85%;",
           dismissWithClick : true,
           layoutKind : "VFlexLayout",
           style : "overflow: hidden;border-width: 8px;",

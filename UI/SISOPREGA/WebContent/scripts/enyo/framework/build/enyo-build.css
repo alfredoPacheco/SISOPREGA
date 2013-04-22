@@ -1067,7 +1067,7 @@ html, body, input, button {
 	top: 0px;
 	-webkit-box-sizing: border-box;
 	border-width: 24px;
-	-webkit-border-image: url(palm/themes/Onyx/images/popup.png) 24 24 24 24 stretch stretch;
+	/*-webkit-border-image: url(palm/themes/Onyx/images/popup.png) 24 24 24 24 stretch stretch;*/
 }
 
 @media (-webkit-min-device-pixel-ratio:1.5) {
