@@ -224,7 +224,7 @@ enyo.kind({
 	return result;
     },
     substractHeadsInPen : function(by, heads) {
-	var reception = cachePen.getByBarnyard(by);
+	var reception = this.getByBarnyard(by);
 	if (reception) {
 	    var weightToSubstract = Number(heads) * Number(reception.avgweight);
 	    reception.heads = Number(reception.heads) - Number(heads);
