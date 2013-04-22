@@ -200,7 +200,6 @@ enyo
 		return true;
 	    },
 	    showAvailReleases : function() {
-
 		if (this.validateSelectedRancher()) {
 		    this.cleanPopUpContents();
 		    this.$.popMan.createComponent({
@@ -221,7 +220,6 @@ enyo
 		    this.$.popMan.render();
 		    this.$.popMan.openAtCenter();
 		}
-
 	    },
 	    showAddClass : function() {
 		this.cleanPopUpContents();

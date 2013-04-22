@@ -12,11 +12,10 @@ enyo.kind({
 	pack:"start",
 	components : [ {
 	    content : "Concepto",
-	    flex : .7
+	    style : "width:700px;margin-right:15px;margin-left:14px;",
 	}, {
 	    content : "Monto",
-	    style : "text-align:center;",
-	    flex : .3
+	    style : "width:200px;margin-right:15px;text-align:center;",
 	} ]
     }, {
 	kind : enyo.Scroller,
@@ -40,33 +39,29 @@ enyo.kind({
 		style : "font-size:13px;",
 		components : [ {
 		    name : "charge_desc",
-		    flex : .7,
+		    style : "width:700px;margin-right:15px;",
 		    content : ""
 		}, {
 		    name : "charge_price",
-		    flex : .3,
+		    style : "width:107px;margin-right:15px;text-align:right;",
 		    content : ""
 		} ]
 	    } ]
 	} ]
     }, {
 	kind : "HFlexBox",
-	components : [ {
-	    kind : "Spacer",
-	    flex : .84
-	}, {
+	components : [  {
 	    kind : "HFlexBox",
 	    flex : .05,
-	    content : "Total"
+	    content : "Total",
+	    style:"text-align:right;"
 	}, {
 	    kind : "HFlexBox",
-	    flex : .07,
+	    width:"200px",
+	    style:"margin-right:20px;",
 	    name : "charge_summary",
 	    content : ""
-	}, {
-	    kind : "Spacer",
-	    flex : .04
-	} ]
+	}]
     } ],
     addCharge : function(arrData) {
 	this.arrData.push(arrData);

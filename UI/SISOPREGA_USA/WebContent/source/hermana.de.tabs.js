@@ -14,11 +14,12 @@ enyo.kind(
         {
           kind : "Popup",
           name : "popNewCharge",
-          dismissWithClick : false,
+          dismissWithClick : true,
           layoutKind : "VFlexLayout",
           style : "overflow: hidden",
           width : "95%",
           height : "30%",
+          style:"max-width: 600px;max-height: 140px;",
           scrim : true,
           components :
             [
@@ -567,7 +568,7 @@ enyo.kind(
     },
     chargeSelected : function() {
       if (this.$.charge.getIndex() > -1) {
-        //this.$.price.setValue(cacheCharges.getList()[this.$.charge.getIndex()-1].charge_price);
+        //this.$.charge_price.setValue(cacheCharges.getList()[this.$.charge.getIndex()-1].charge_price);
       }
     },
     addCharge : function() {
@@ -575,10 +576,10 @@ enyo.kind(
         this.$.chargeList.addCharge(
           {
             charge_desc : this.$.charge.getValue(),
-            charge_price : this.$.price.getValue()
+            charge_price : this.$.charge_price.getValue()
           });
         this.$.charge.setIndex(-1);
-        this.$.price.setValue("");
+        this.$.charge_price.setValue("");
         this.$.charge.setValue("");
       } else {
         alert("Concepto no registrado");
