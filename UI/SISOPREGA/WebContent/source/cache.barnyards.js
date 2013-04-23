@@ -301,7 +301,17 @@ enyo.kind({
 		var cgDelete = consumingGateway.Delete("ReceptionBarnyard", objToSend);
 		if (cgDelete.exceptionId == 0){ //Deleted successfully
 			delete objRec.barnyards[sID];
-			delete this.arrObjInUse[sID];					
+			delete this.arrObjInUse[sID];
+			var barnyardsLeft=false;
+			for(var b in objRec.barnyards){
+			    if(objRec.barnyards.hasOwnProperty(b)){
+				barnyardsLeft = true;
+				break;
+			    }
+			}
+			if(!barnyardsLeft){
+			    cacheReceptions.sendInspectionReport(objRec.rancher_id);
+			}
 			if(cbMethod){
 				cbObj[cbMethod]();
 			}	
