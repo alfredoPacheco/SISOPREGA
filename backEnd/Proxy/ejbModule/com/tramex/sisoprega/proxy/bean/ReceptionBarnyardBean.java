@@ -15,8 +15,6 @@
  */
 package com.tramex.sisoprega.proxy.bean;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -59,7 +57,8 @@ import com.tramex.sisoprega.dto.ReceptionBarnyard;
  * 01/22/2013  Diego Torres                   Implementing DataModel.
  * 02/04/2013  Jaime Figueroa                 Verificar en Proxy que no haya receptiones activas en 
  *                                            corrales secionados.
- * 02/19/2013  Alan del Rio                   Evaluate when deleting last barnyarnd and trigger sendReport                        
+ * 02/19/2013  Alan del Rio                   Evaluate when deleting last barnyarnd and trigger sendReport      
+ * 04/22/2013  Diego Torres                   Removing send report after release of barnyard from reception.                  
  *  ====================================================================================
  * </PRE>
  * 
@@ -262,13 +261,14 @@ public class ReceptionBarnyardBean extends BaseBean implements Cruddable {
         parameters.put("reception_id", recepBarnyard.getReceptionId());
         List<ReceptionBarnyard> barnyards = dataModel.readDataModelList("RECEPTION_BARNYARD_BY_BARNYARD_ID_AND_RECEPTION_ID",
             parameters, ReceptionBarnyard.class);
-        
-        if(!barnyards.isEmpty()){
+
+        if (!barnyards.isEmpty()) {
           log.fine("Deleting detected record");
           parameters.clear();
           parameters.put("receptionId", recepBarnyard.getReceptionId());
-          List<ReceptionBarnyard> receptionBarnyards = dataModel.readDataModelList("RECEPTION_BARNYARD_BY_RECEPTION_ID", parameters, ReceptionBarnyard.class);
-          if(receptionBarnyards.size()==1){
+          List<ReceptionBarnyard> receptionBarnyards = dataModel.readDataModelList("RECEPTION_BARNYARD_BY_RECEPTION_ID",
+              parameters, ReceptionBarnyard.class);
+          if (receptionBarnyards.size() == 1) {
             log.fine("Last barnyard on reception");
             long receptionId = recepBarnyard.getReceptionId();
 
@@ -282,39 +282,25 @@ public class ReceptionBarnyardBean extends BaseBean implements Cruddable {
             req.setContent(content);
 
             log.fine("Reading inspection from inspectionBean");
-            List<Inspection> inspections = dataModel.readDataModelList("INSPECTION_BY_RECEPTION_ID", parameters, Inspection.class);
-            if(inspections.isEmpty()){
+            List<Inspection> inspections = dataModel
+                .readDataModelList("INSPECTION_BY_RECEPTION_ID", parameters, Inspection.class);
+            if (inspections.isEmpty()) {
               log.fine("No inspection found, creating inspection header");
               Inspection inspection = new Inspection();
               inspection.setComments("Inspección realizada sin rechazos.");
               inspection.setInspectionDate(new Date());
               inspection.setReceptionId(receptionId);
               dataModel.createDataModel(inspection);
-              
+
               log.info("Inspection created due to removal of last barnyard on reception");
             }
-
-            DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-            Date date = new Date();
-            
-            String sReport = new String("InspeccionGanado?rancherId=" + getRancherFromReception(receptionId) + "&fromDate="
-                + dateFormat.format(date) + "&toDate=" + dateFormat.format(date));
-            Reception rec = dataModel.readSingleDataModel("CRT_RECEPTION_BY_ID", "receptionId", receptionId,
-                Reception.class);
-            log.fine(sReport);
-            if (!messenger.sendReport(rec.getRancherId(), sReport)) {
-              response.setError(new Error("VAL04", "El módulo de mensajería no está correctamente instalado",
-                  "proxy.ReceptionBarnyard.Delete"));
-
-            }
-            
           }
-          
+
           recepBarnyard = barnyards.get(0);
           this.log.info("Deleting Reception Barnyard [" + recepBarnyard.toString() + "] by barnyardId and receptionId["
               + getLoggedUser() + "]");
           dataModel.deleteDataModel(recepBarnyard, getLoggedUser());
-          
+
         }
 
         response.setError(new Error("0", "SUCCESS", "proxy.ReceptionBarnyard.Delete"));
@@ -375,20 +361,4 @@ public class ReceptionBarnyardBean extends BaseBean implements Cruddable {
         ReceptionBarnyard.class);
     return !receptions.isEmpty();
   }
-  
-  private long getRancherFromReception(long receptionId){
-    Map<String, Object> parameters = new HashMap<String, Object>();
-    parameters.put("receptionId", receptionId);
-    
-    List<Reception> receptions = dataModel.readDataModelList("CRT_RECEPTION_BY_ID", parameters,
-        Reception.class);
-    
-    long result = 0;
-    if(!receptions.isEmpty()){
-      result = receptions.get(0).getRancherId();
-    }
-    
-    return result;
-  }
-
 }
