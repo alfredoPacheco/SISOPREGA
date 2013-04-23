@@ -98,8 +98,8 @@ enyo.kind(
         {
           kind : enyo.Popup,
           name : "popup_shipments",
-          width : "670px",
-          height : "210px;",
+          width : "1024px",
+          height : "80%",
           dismissWithClick : true,
           layoutKind : "VFlexLayout",
           style : "overflow: hidden;border-width: 8px;",

@@ -177,7 +177,13 @@ enyo.kind({
 		this.calculateTotals();
 	},
 	getSalesToShip:function(){
-		return this.arrToShip;
+	    var response=[];
+	    for(var i in this.arrToShip){
+		if(this.arrToShip.hasOwnProperty(i)){
+		    response.push(this.arrToShip[i]);
+		}
+	    }
+	    return response;
 	},
 	updateView:function(){
 	    this.$.listSales.render();
