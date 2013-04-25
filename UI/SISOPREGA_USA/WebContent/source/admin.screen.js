@@ -199,9 +199,10 @@ enyo.kind(
     },
     showShipment : function() {
 	this.$.popup_shipments.validateComponents();
-	if(enyo.json.stringify(this.$.sales.getSalesToShip())!="{}"){
+	if(this.$.sales.getSalesToShip().length > 0){
 	    this.$.shipments_kind.setArrShipment(this.$.sales.getSalesToShip());
-	    this.$.popup_shipments.openAtCenter();    
+	    this.$.popup_shipments.openAtCenter();
+	    this.$.shipments_kind.updateList();
 	}else{
 	    alert("No hay registros seleccionados");
 	}
