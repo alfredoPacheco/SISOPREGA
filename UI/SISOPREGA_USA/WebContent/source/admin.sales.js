@@ -186,7 +186,12 @@ enyo.kind({
 	    return response;
 	},
 	updateView:function(){
-	    this.$.listSales.render();
+//	    this.arrToShip = {};
+//	    this.iSelected={};
+//	    this.iHeads=null;
+//	    this.iWeight=null;
+//	    this.arrData = cachePen.get();
+	    this.$.listSales.render();	    
 	    this.updateSummary();
 	    this.calculateTotals();
 	},

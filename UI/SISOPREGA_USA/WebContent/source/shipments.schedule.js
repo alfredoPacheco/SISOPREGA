@@ -126,12 +126,15 @@ enyo.kind({
 	    name : "list",
 	    onSetupRow : "setupRow",
 	    components : [ {
-		kind : enyo.Item,
+		kind : enyo.SwipeableItem,
 		layoutKind : enyo.HFlexLayout,
 		align : "center",
 		pack : "start",
 		height : "40px",
 		className : "listBG",
+    		name : "rowItem",
+    		onConfirm : "resetItem",
+    		confirmCaption:"Reestablecer",
 		components : [
 			{
 			    name : 'detail_number',
@@ -243,6 +246,7 @@ enyo.kind({
 	    for(var j = 0;j<this.arrToShip[i].detail.length;j++){
 		var objShipmentDetailed = this.arrToShip[i].detail[j];
 		objShipmentDetailed.buyer = this.arrToShip[i].buyer;
+		objShipmentDetailed.sale_id = this.arrToShip[i].sale_id;
 		this.arrToShipDetailed.push(objShipmentDetailed);
 	    }
 	}	
@@ -280,6 +284,26 @@ enyo.kind({
     },
     on_cancel_split:function(){
 	this.$.popup_split.close();
+    },
+    resetItem:function(inSender, inIndex){
+	console.debug(inSender);
+	console.debug(inIndex);
+	var len = this.arrToShipDetailed.length;
+	var firstFound = -1;
+	for (var i=0;i<len;i++){
+		if(this.arrToShipDetailed[i].pen == this.arrToShipDetailed[inIndex].pen){
+		    if(firstFound > -1){
+			this.arrToShipDetailed[firstFound].heads += this.arrToShipDetailed[i].heads;
+			this.arrToShipDetailed.splice(i,1);
+			if(inIndex >= i)inIndex--;
+			i--;
+			len--;
+		    }else{
+			firstFound = i;
+		    }
+		}
+	}
+	this.updateList();
     },
     applyMask : function(inSender) {
 	var _id = inSender.$.input.getId();
