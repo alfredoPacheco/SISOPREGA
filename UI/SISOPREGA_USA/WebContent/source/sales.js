@@ -221,13 +221,13 @@ enyo
 			} ]
 		    } ],
 	    agregar_click : function() {
-
 		var newObject = {
 		    cattleName : this.$.clase.getValue(),
 		    heads : Number(this.$.cabezas.getValue()),
 		    pen : this.$.corrales.getItemSelected().object.barnyard,
 		    aveWeight : this.$.corrales.getItemSelected().object.avgweight,
-		    weight : Number(this.$.corrales.getItemSelected().object.avgweight) * Number(this.$.cabezas.getValue())
+		    weight : Number(this.$.corrales.getItemSelected().object.avgweight) * Number(this.$.cabezas.getValue()),
+		    id_inventory:this.$.corrales.getItemSelected().object.recordId
 		};
 
 		this.arrDetail.push(newObject);
