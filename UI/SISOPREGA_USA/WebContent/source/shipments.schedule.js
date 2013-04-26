@@ -2,10 +2,12 @@ enyo.kind({
     name : "shipments.schedule",
     kind : enyo.VFlexBox,
     style : "background-color:#DABD8B;font-size:15px;",
-    arrToShip : [],
+    arrSales : [],
     arrToShipDetailed:[],
-    totalHC : 0,
-    totalWeight : 0,
+    arrToShip:{},
+    iHeads:null,
+    iWeight:null,
+    itemNumber:0,
     events : {
 	onProgram : "",
 	onCancel : ""
@@ -182,12 +184,44 @@ enyo.kind({
 			}]
 	    } ]
 	} ]
-    },  
+    },
     {
 	kind : enyo.VFlexBox,
 	style : "padding:20px;",
 	pack : "center",
 	components : [ {
+		kind : enyo.HFlexBox,
+		align : "center",
+		height : "40px;",
+		style : "font-size:14px;",
+		components : [
+				{
+					content : "Total Cabezas:",
+				},
+				{
+					content : '0',
+					name : "totalHC",
+					className : "listFirst",
+					style : "background-color:#DABD8B;margin-left:10px",
+					width : "60px;"
+				},
+				{
+					content : "Total Peso:",
+				},
+				{
+					content : '0',
+					name : "totalWeight",
+					className : "listFirst",
+					style : "background-color:#DABD8B;margin-left:10px;",
+					width : "60px;"
+				}, {
+					kind : "Spacer"
+				}, {
+					name : "warning",
+					content : "",
+					style : "color:red"
+				} ]
+	},{
 	    kind : enyo.HFlexBox,
 	    align : "center",
 	    height : "40px;",
@@ -233,20 +267,27 @@ enyo.kind({
 		    .setContent(utils.formatNumberThousands(this.arrToShipDetailed[inIndex].weight) + " lb");
 	    this.totalHC += Number(this.arrToShipDetailed[inIndex].heads);
 	    this.totalWeight += Number(this.arrToShipDetailed[inIndex].weight);
+	    if(this.arrToShipDetailed[inIndex].checked) {
+		this.$.chkToShip.setChecked(true);
+		this.arrToShip[this.arrToShipDetailed[inIndex].itemNumber]=this.arrToShipDetailed[inIndex];
+	    }
 	    return true;
 	}
     },
     updateList:function(){
 	this.$.list.render();
+	this.calculateTotals();
     },
     setArrShipment : function(arr) {
-	this.arrToShip = arr;
+	this.arrToShip = {};
+	this.arrSales = arr;
 	this.arrToShipDetailed = [];
-	for(var i = 0; i<this.arrToShip.length;i++){
-	    for(var j = 0;j<this.arrToShip[i].detail.length;j++){
-		var objShipmentDetailed = this.arrToShip[i].detail[j];
-		objShipmentDetailed.buyer = this.arrToShip[i].buyer;
-		objShipmentDetailed.sale_id = this.arrToShip[i].sale_id;
+	for(var i = 0; i<this.arrSales.length;i++){
+	    for(var j = 0;j<this.arrSales[i].detail.length;j++){
+		var objShipmentDetailed = this.arrSales[i].detail[j];
+		objShipmentDetailed.buyer = this.arrSales[i].buyer;
+		objShipmentDetailed.sale_id = this.arrSales[i].sale_id;
+		objShipmentDetailed.itemNumber = this.itemNumber++;
 		this.arrToShipDetailed.push(objShipmentDetailed);
 	    }
 	}	
@@ -279,23 +320,23 @@ enyo.kind({
     },
     on_accept_split:function(inSender, objNew){
 	this.$.popup_split.close();
+	objNew.itemNumber = this.itemNumber++;
 	this.arrToShipDetailed.push(objNew);
 	this.updateList();
     },
     on_cancel_split:function(){
 	this.$.popup_split.close();
     },
-    resetItem:function(inSender, inIndex){
-	console.debug(inSender);
-	console.debug(inIndex);
+    resetItem:function(inSender, inIndex){	
 	var len = this.arrToShipDetailed.length;
 	var firstFound = -1;
+	var itemInIndex = this.arrToShipDetailed[inIndex];
 	for (var i=0;i<len;i++){
-		if(this.arrToShipDetailed[i].pen == this.arrToShipDetailed[inIndex].pen){
+		if(this.arrToShipDetailed[i].detailNumber == itemInIndex.detailNumber){
 		    if(firstFound > -1){
-			this.arrToShipDetailed[firstFound].heads += this.arrToShipDetailed[i].heads;
-			this.arrToShipDetailed.splice(i,1);
-			if(inIndex >= i)inIndex--;
+			this.arrToShipDetailed[firstFound].heads += Number(this.arrToShipDetailed[i].heads);
+			this.arrToShipDetailed[firstFound].weight += Number(this.arrToShipDetailed[i].weight);
+			this.arrToShipDetailed.splice(i,1);			
 			i--;
 			len--;
 		    }else{
@@ -304,6 +345,35 @@ enyo.kind({
 		}
 	}
 	this.updateList();
+    },    
+    checkBox_click : function(inSender, inEvent) {
+    	this.arrToShipDetailed[inEvent.rowIndex].checked = inSender.checked;
+    	if(inSender.checked)
+    	    this.arrToShip[this.arrToShipDetailed[inEvent.rowIndex].itemNumber]=this.arrToShipDetailed[inEvent.rowIndex];
+    	else
+    	    delete this.arrToShip[this.arrToShipDetailed[inEvent.rowIndex].itemNumber];
+    	this.calculateTotals();
+    },
+    calculateTotals : function() {
+	var hc = 0;
+	var weight = 0;
+	for ( var i in this.arrToShip) {
+	    if (this.arrToShip.hasOwnProperty(i)){
+		if (!this.arrToShip[i].shipProgramDateTime && this.arrToShip[i].checked) {
+			hc += this.arrToShip[i].heads;
+			weight += this.arrToShip[i].weight;
+		    }
+	    }
+	}
+	if (weight > 50000) {
+	    this.$.warning.setContent("Usted esta programando un embarque superior a 50,000 lb");
+	} else {
+	    this.$.warning.setContent("");
+	}
+	
+	this.$.totalHC.setContent(utils.formatNumberThousands(hc));
+	this.$.totalWeight.setContent(utils.formatNumberThousands(weight));
+		
     },
     applyMask : function(inSender) {
 	var _id = inSender.$.input.getId();

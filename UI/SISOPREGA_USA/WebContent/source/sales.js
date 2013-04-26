@@ -6,6 +6,7 @@ enyo
 	    arrDetail : [],
 	    totalHC : 0,
 	    totalWeight : 0,
+	    detailNumber:0,
 	    style : "background-color:#DABD8B;font-size:15px;",
 	    events : {
 		onSale : "",
@@ -223,11 +224,13 @@ enyo
 	    agregar_click : function() {
 
 		var newObject = {
+		    detailNumber : this.detailNumber++,
 		    cattleName : this.$.clase.getValue(),
 		    heads : Number(this.$.cabezas.getValue()),
 		    pen : this.$.corrales.getItemSelected().object.barnyard,
 		    aveWeight : this.$.corrales.getItemSelected().object.avgweight,
-		    weight : Number(this.$.corrales.getItemSelected().object.avgweight) * Number(this.$.cabezas.getValue())
+		    weight : Number(this.$.corrales.getItemSelected().object.avgweight)
+			    * Number(this.$.cabezas.getValue())
 		};
 
 		this.arrDetail.push(newObject);

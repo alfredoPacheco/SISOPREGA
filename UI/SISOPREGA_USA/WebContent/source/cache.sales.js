@@ -9,12 +9,14 @@ enyo.kind({
 	totalWeight:123.23,
 	aveWeight:1.01,
 	detail:[{
-	    aveWeight:152.23,
+	    detailNumber:1,
+	    aveWeight:152,
 	    cattleName:"Caballos",
 	    heads:91,
 	    pen:"3C12",
 	    weight:13832
 	},{
+	    detailNumber:2,
 	    aveWeight: 235,
 	    cattleName: "Novillos",
 	    heads: 78,
@@ -29,12 +31,14 @@ enyo.kind({
 	totalWeight:123.23,
 	aveWeight:1.01,
 	detail:[{
-	    aveWeight:152.23,
+	    detailNumber:1,
+	    aveWeight:152,
 	    cattleName:"Caballos",
 	    heads:91,
 	    pen:"3C12",
 	    weight:13832
 	},{
+	    detailNumber:2,
 	    aveWeight: 235,
 	    cattleName: "Novillos",
 	    heads: 78,
@@ -49,79 +53,21 @@ enyo.kind({
 	totalWeight:123.23,
 	aveWeight:1.01,
 	detail:[{
-	    aveWeight:152.23,
+	    detailNumber:1,
+	    aveWeight:152,
 	    cattleName:"Caballos",
 	    heads:91,
 	    pen:"3C12",
 	    weight:13832
 	},{
+	    detailNumber:2,
 	    aveWeight: 235,
 	    cattleName: "Novillos",
 	    heads: 78,
 	    pen: "3C21",
 	    weight: 18330
 	}]	
-    }, {
-	sale_id : 4,
-	buyer:"cuarto cliente",
-	sale_date:new Date(),
-	totalHeads:123,
-	totalWeight:123.23,
-	aveWeight:1.01,
-	detail:[{
-	    aveWeight:152.23,
-	    cattleName:"Caballos",
-	    heads:91,
-	    pen:"3C12",
-	    weight:13832
-	},{
-	    aveWeight: 235,
-	    cattleName: "Novillos",
-	    heads: 78,
-	    pen: "3C21",
-	    weight: 18330
-	}]	
-    }, {
-	sale_id : 5,
-	buyer:"quinto cliente",
-	sale_date:new Date(),
-	totalHeads:123,
-	totalWeight:123.23,
-	aveWeight:1.01,
-	detail:[{
-	    aveWeight:152.23,
-	    cattleName:"Caballos",
-	    heads:91,
-	    pen:"3C12",
-	    weight:13832
-	},{
-	    aveWeight: 235,
-	    cattleName: "Novillos",
-	    heads: 78,
-	    pen: "3C21",
-	    weight: 18330
-	}]	
-    }, {
-	sale_id : 6,
-	buyer:"sexto cliente",
-	sale_date:new Date(),
-	totalHeads:123,
-	totalWeight:123.23,
-	aveWeight:1.01,
-	detail:[{
-	    aveWeight:152.23,
-	    cattleName:"Caballos",
-	    heads:91,
-	    pen:"3C12",
-	    weight:13832
-	},{
-	    aveWeight: 235,
-	    cattleName: "Novillos",
-	    heads: 78,
-	    pen: "3C21",
-	    weight: 18330
-	}]	
-    }, ], 
+    },  ], 
     createData : function() {
     },
     readData : function() {
