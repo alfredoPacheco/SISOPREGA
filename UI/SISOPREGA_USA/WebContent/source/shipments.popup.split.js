@@ -66,7 +66,9 @@ enyo.kind({
     accept_click : function() {
 	var objNew = enyo.clone(this.objToSplit);
 	this.objToSplit.heads -= Number(this.$.txtQuantity.getValue());
+	this.objToSplit.weight -= Number(this.$.txtQuantity.getValue()) * Number(this.objToSplit.aveWeight);
 	objNew.heads = Number(this.$.txtQuantity.getValue());
+	objNew.weight = Number(this.objToSplit.aveWeight) * Number(this.$.txtQuantity.getValue());
 	this.doAccept(objNew);
     },
     cancel_click : function() {
@@ -76,8 +78,6 @@ enyo.kind({
 	this.objToSplit = obj;
     },
     on_input:function(inSender, inEvent){
-	console.debug(inSender);
-	console.debug(inEvent);
 	if(isNaN(Number(inSender.value))){
 	    return false;
 	}else{

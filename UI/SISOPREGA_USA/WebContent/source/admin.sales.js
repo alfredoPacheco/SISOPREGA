@@ -6,12 +6,11 @@ enyo.kind({
 	iSelected:{},
 	iHeads:null,
 	iWeight:null,
-	arrToShip:{},
+	arrSelectedItems:{},
 	events: {
 		onSelect: "",
 		onShipment:""
 	},
-	bCheck:false,			
 	components: [
 		{kind: "Toolbar",
 			components:[
@@ -171,22 +170,22 @@ enyo.kind({
 	checkBox_click : function(inSender, inEvent) {
 		this.arrData[inEvent.rowIndex].checked = inSender.checked;
 		if(inSender.checked)
-		    this.arrToShip[this.arrData[inEvent.rowIndex].sale_id]=this.arrData[inEvent.rowIndex];
+		    this.arrSelectedItems[this.arrData[inEvent.rowIndex].sale_id]=this.arrData[inEvent.rowIndex];
 		else
-		    delete this.arrToShip[this.arrData[inEvent.rowIndex].sale_id];
+		    delete this.arrSelectedItems[this.arrData[inEvent.rowIndex].sale_id];
 		this.calculateTotals();
 	},
-	getSalesToShip:function(){
+	getSelectedItems:function(){
 	    var response=[];
-	    for(var i in this.arrToShip){
-		if(this.arrToShip.hasOwnProperty(i)){
-		    response.push(this.arrToShip[i]);
+	    for(var i in this.arrSelectedItems){
+		if(this.arrSelectedItems.hasOwnProperty(i)){
+		    response.push(this.arrSelectedItems[i]);
 		}
 	    }
 	    return response;
 	},
 	updateView:function(){
-//	    this.arrToShip = {};
+//	    this.arrSelectedItems = {};
 //	    this.iSelected={};
 //	    this.iHeads=null;
 //	    this.iWeight=null;
