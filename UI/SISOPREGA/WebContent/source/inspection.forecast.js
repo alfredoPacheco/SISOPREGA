@@ -239,7 +239,7 @@ enyo
 												  },
 												{
 													content : "Ganadero",
-													style : "width:185px;text-align:center;"
+													style : "width:150px;text-align:right;margin-right:35px;"
 												},
 												{
 													content : "Autorización",
@@ -290,7 +290,7 @@ enyo
 												components : [
 														{
 															name : "listRancher",
-															style : "width:250px;text-align:left;",
+															style : "width:215px;text-align:right;margin-right:35px;",
 															content : ""
 														},
 														{
@@ -320,7 +320,7 @@ enyo
 														},
 														{
 															name : "listBarnyards",
-															style : "width:200px;text-align:left;",
+															style : "width:100px;text-align:left;",
 															content : ""
 														} ]
 											} ]
