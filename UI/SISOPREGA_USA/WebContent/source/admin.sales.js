@@ -105,9 +105,9 @@ enyo.kind({
 		var objData;
 		if(objData=this.arrData[inIndex]){
 			this.$.lblSalesDate.setContent(objData.sale_date.toLocaleDateString());
-			this.$.lblSalesHeads.setContent(gblUtils.numCD(objData.totalHeads));
-			this.$.lblSalesWeight.setContent(utils.formatNumberThousands(gblUtils.numCD(objData.totalWeight)));
-			this.$.lblSalesAverage.setContent(utils.formatNumberThousands(gblUtils.numCD(objData.aveWeight)));	
+			this.$.lblSalesHeads.setContent(utils.formatNumberThousands(objData.totalHeads));
+			this.$.lblSalesWeight.setContent(utils.formatNumberThousands(utils.formatNumberThousands(objData.totalWeight)));
+			this.$.lblSalesAverage.setContent(utils.formatNumberThousands(utils.formatNumberThousands(objData.aveWeight)));	
 			this.$.lblSalesClient.setContent(objData.buyer);
 			this.$.chkSalesShip.iPos=inIndex;
 			if(objData.shipProgramDateTime){
@@ -138,9 +138,9 @@ enyo.kind({
 			iWeight+=this.arrData[j].totalWeight;
 			iAve+=this.arrData[j].aveWeight;					
 		}
-		this.$.lblSalesSumHeads.setContent(gblUtils.numCD(iHeads));
-		this.$.lblSalesSumWeight.setContent(gblUtils.numCD(iWeight));
-		this.$.lblSumAveWeight.setContent(gblUtils.numCD((iAve/this.arrData.length).toFixed(2)));
+		this.$.lblSalesSumHeads.setContent(utils.formatNumberThousands(iHeads));
+		this.$.lblSalesSumWeight.setContent(utils.formatNumberThousands(iWeight));
+		this.$.lblSumAveWeight.setContent(utils.formatNumberThousands((iAve/this.arrData.length).toFixed(2)));
 	},
 	ready:function(){
 		this.updateSummary();
@@ -163,8 +163,8 @@ enyo.kind({
 		if (weight == 0) {
 		    this.$.lblSalesShipment.setContent("Cabezas - Peso");
 		} else {
-		    this.$.lblSalesShipment.setContent(gblUtils.numCD(hc) + "/"
-			    + gblUtils.numCD(weight));
+		    this.$.lblSalesShipment.setContent(utils.formatNumberThousands(hc) + "/"
+			    + utils.formatNumberThousands(weight));
 		}
 	},
 	checkBox_click : function(inSender, inEvent) {
