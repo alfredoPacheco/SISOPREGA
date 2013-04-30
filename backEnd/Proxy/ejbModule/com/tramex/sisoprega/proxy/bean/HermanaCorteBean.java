@@ -15,10 +15,6 @@
  */
 package com.tramex.sisoprega.proxy.bean;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.tramex.sisoprega.common.BaseResponse;
 import com.tramex.sisoprega.common.CreateGatewayResponse;
 import com.tramex.sisoprega.common.Error;
@@ -35,6 +31,9 @@ import com.tramex.sisoprega.dto.HermanaCorte;
  */
 public class HermanaCorteBean extends BaseBean implements Cruddable {
 
+  /* (non-Javadoc)
+   * @see com.tramex.sisoprega.common.crud.Cruddable#Create(com.tramex.sisoprega.common.GatewayRequest)
+   */
   @Override
   public CreateGatewayResponse Create(GatewayRequest request) {
     this.log.entering(this.getClass().getCanonicalName(), "CreateGatewayResponse Create(GatewayRequest request)");
@@ -43,13 +42,13 @@ public class HermanaCorteBean extends BaseBean implements Cruddable {
     try {
       hermanaCorte = entityFromRequest(request, HermanaCorte.class);
 
-      this.log.fine("Received Hermana in request: " + hermanaCorte);
+      this.log.fine("Received HermanaCorte in request: " + hermanaCorte);
 
       if (validateEntity(hermanaCorte)) {
-        this.log.finer("Hermana succesfully validated");
+        this.log.finer("HermanaCorte succesfully validated");
         dataModel.createDataModel(hermanaCorte);
 
-        String sId = String.valueOf(hermanaCorte.getBarnyardId());
+        String sId = String.valueOf(hermanaCorte.getCorte());
         this.log.finer("Setting FeedOrder id in response: " + sId);
         response.setGeneratedId(sId);
         response.setError(new Error("0", "SUCCESS", "proxy.HermanaCorteBean.Create"));
@@ -75,15 +74,15 @@ public class HermanaCorteBean extends BaseBean implements Cruddable {
     return response;
   }
 
+  /* (non-Javadoc)
+   * @see com.tramex.sisoprega.common.crud.Cruddable#Read(com.tramex.sisoprega.common.GatewayRequest)
+   */
   @Override
   public ReadGatewayResponse Read(GatewayRequest request) {
     // TODO Auto-generated method stub
     return null;
   }
-
-  /* (non-Javadoc)
-   * @see com.tramex.sisoprega.common.crud.Cruddable#Update(com.tramex.sisoprega.common.GatewayRequest)
-   */
+  
   @Override
   public UpdateGatewayResponse Update(GatewayRequest request) {
     this.log.entering(this.getClass().getCanonicalName(), "UpdateGatewayResponse Update(GatewayRequest request)");
@@ -135,13 +134,13 @@ public class HermanaCorteBean extends BaseBean implements Cruddable {
 
     try {
       HermanaCorte hermanaCorte = entityFromRequest(request, HermanaCorte.class);
-      if (hermanaCorte.getHermanaId() == 0) {
+      if (hermanaCorte.getCorte() == 0) {
         this.log.warning("VAL04 - Entity ID Omission.");
 
         response.setError(new Error("VAL04", "Se ha omitido el id de la orden del registro de exportación al intentar eliminar el registro.",
             "proxy.HermanaCorteBean.Delete"));
       } else {
-        hermanaCorte = dataModel.readSingleDataModel("HERMANA_BY_ID", "hermanaId", hermanaCorte.getHermanaId(), HermanaCorte.class);
+        hermanaCorte = dataModel.readSingleDataModel("HERMANA_BY_ID", "corte", hermanaCorte.getCorte(), HermanaCorte.class);
         this.log.info("Deleting HermanaCorte [" + hermanaCorte.toString() + "] by principal[" + getLoggedUser() + "]");
         dataModel.deleteDataModel(hermanaCorte, getLoggedUser());
 

@@ -17,29 +17,60 @@ package com.tramex.sisoprega.proxy.bean;
 
 import com.tramex.sisoprega.common.BaseResponse;
 import com.tramex.sisoprega.common.CreateGatewayResponse;
+import com.tramex.sisoprega.common.Error;
+import com.tramex.sisoprega.common.GatewayContent;
 import com.tramex.sisoprega.common.GatewayRequest;
 import com.tramex.sisoprega.common.ReadGatewayResponse;
 import com.tramex.sisoprega.common.UpdateGatewayResponse;
 import com.tramex.sisoprega.common.crud.Cruddable;
+import com.tramex.sisoprega.dto.Seller;
 
 /**
  * @author Jaime Figueroa
  *
  */
-public class SellerBean implements Cruddable {
+public class SellerBean extends BaseBean implements Cruddable {
 
-  /* (non-Javadoc)
-   * @see com.tramex.sisoprega.common.crud.Cruddable#Create(com.tramex.sisoprega.common.GatewayRequest)
-   */
   @Override
   public CreateGatewayResponse Create(GatewayRequest request) {
-    // TODO Auto-generated method stub
-    return null;
+    this.log.entering(this.getClass().getCanonicalName(), "CreateGatewayResponse Create(GatewayRequest request)");
+    CreateGatewayResponse response = new CreateGatewayResponse();
+    Seller seller = null;
+    try {
+      seller = entityFromRequest(request, Seller.class);
+
+      this.log.fine("Received Hermana in request: " + seller);
+
+      if (validateEntity(seller)) {
+        this.log.finer("Seller succesfully validated");
+        dataModel.createDataModel(seller);
+
+        String sId = String.valueOf(seller.getSellerId());
+        this.log.finer("Setting FeedOrder id in response: " + sId);
+        response.setGeneratedId(sId);
+        response.setError(new Error("0", "SUCCESS", "proxy.SellerBean.Create"));
+        this.log.info("Seller [" + seller.toString() + "] created by principal[" + getLoggedUser() + "]");
+      } else {
+        this.log.warning("Error de validación: " + error_description);
+        response.setError(new Error("VAL01", "Error de validación: " + error_description, "proxy.FeedOrderBean.Create"));
+      }
+
+    } catch (Exception e) {
+      this.log.severe("Exception found while creating SellerBean");
+      this.log.throwing(this.getClass().getName(), "CreateGatewayResponse Create(GatewayRequest request)", e);
+
+      if (e instanceof javax.persistence.PersistenceException)
+        response.setError(new Error("DB01", "Los datos que usted ha intentado ingresar, no son permitidos por la base de datos",
+            "proxy.SellerBean.Create"));
+      else {
+        response.setError(new Error("DB02", "Create exception: " + e.getMessage(), "proxy.SellerBean.Create"));
+      }
+    }
+
+    this.log.exiting(this.getClass().getCanonicalName(), "CreateGatewayResponse Create(GatewayRequest request)");
+    return response;
   }
 
-  /* (non-Javadoc)
-   * @see com.tramex.sisoprega.common.crud.Cruddable#Read(com.tramex.sisoprega.common.GatewayRequest)
-   */
   @Override
   public ReadGatewayResponse Read(GatewayRequest request) {
     // TODO Auto-generated method stub
@@ -51,8 +82,46 @@ public class SellerBean implements Cruddable {
    */
   @Override
   public UpdateGatewayResponse Update(GatewayRequest request) {
-    // TODO Auto-generated method stub
-    return null;
+    this.log.entering(this.getClass().getCanonicalName(), "UpdateGatewayResponse Update(GatewayRequest request)");
+    UpdateGatewayResponse response = new UpdateGatewayResponse();
+    Seller sellera = null;
+    try {
+      sellera = entityFromRequest(request, Seller.class);
+      
+      if (sellera.getSellerId() == 0) {
+        this.log.warning("VAL04 - Entity ID Omission.");
+        response.setError(new Error("VAL04", "Se ha omitido el id del registro de exportación al intentar actualizar sus datos.",
+            "proxy.SellerBean.Update"));
+      } else {
+        if (validateEntity(sellera)) {
+          dataModel.updateDataModel(sellera);
+
+          GatewayContent content = getContentFromEntity(sellera, Seller.class);
+          response.setUpdatedRecord(content);
+
+          response.setError(new Error("0", "SUCCESS", "proxy.SellerBean.Update"));
+          this.log.info("Seller [" + sellera.toString() + "] updated by principal[" + getLoggedUser() + "]");
+        } else {
+          this.log.warning("Validation error:" + error_description);
+          response
+              .setError(new Error("VAL01", "Error de validación de datos:" + error_description, "proxy.SellerBean.Update"));
+        }
+      }
+
+    } catch (Exception e) {
+      this.log.severe("Exception found while updating Seller");
+      this.log.throwing(this.getClass().getName(), "UpdateGatewayResponse Update(GatewayRequest request)", e);
+
+      if (e instanceof javax.persistence.PersistenceException)
+        response.setError(new Error("DB01", "Los datos que usted ha intentado ingresar, no son permitidos por la base de datos",
+            "proxy.SellerBean.Update"));
+      else {
+        response.setError(new Error("DB02", "Error en la base de datos:[" + e.getMessage() + "]", "proxy.SellerBean.Update"));
+      }
+    }
+
+    this.log.exiting(this.getClass().getCanonicalName(), "UpdateGatewayResponse Update(GatewayRequest request)");
+    return response;
   }
 
   /* (non-Javadoc)
@@ -60,8 +129,34 @@ public class SellerBean implements Cruddable {
    */
   @Override
   public BaseResponse Delete(GatewayRequest request) {
-    // TODO Auto-generated method stub
-    return null;
+    this.log.entering(this.getClass().getCanonicalName(), "BaseResponse Delete(GatewayRequest request)");
+    BaseResponse response = new BaseResponse();
+
+    try {
+      Seller seller = entityFromRequest(request, Seller.class);
+      if (seller.getSellerId() == 0) {
+        this.log.warning("VAL04 - Entity ID Omission.");
+
+        response.setError(new Error("VAL04", "Se ha omitido el id de la orden del registro de exportación al intentar eliminar el registro.",
+            "proxy.SellerBean.Delete"));
+      } else {
+        seller = dataModel.readSingleDataModel("HERMANA_BY_ID", "SellerId", seller.getSellerId(), Seller.class);
+        this.log.info("Deleting Seller [" + seller.toString() + "] by principal[" + getLoggedUser() + "]");
+        dataModel.deleteDataModel(seller, getLoggedUser());
+
+        response.setError(new Error("0", "SUCCESS", "proxy.SellerBean.Delete"));
+      }
+    } catch (Exception e) {
+      this.log.severe("Exception found while deleting Seller");
+      this.log.throwing(this.getClass().getName(), "BaseResponse Delete(GatewayRequest request)", e);
+
+      response.setError(new Error("DEL01",
+          "Error al intentar borrar datos, es probable que esta entidad tenga otras entidades relacionadas",
+          "proxy.SellerBean.Delete"));
+    }
+
+    this.log.exiting(this.getClass().getCanonicalName(), "BaseResponse Delete(GatewayRequest request)");
+    return response;
   }
 
 }
