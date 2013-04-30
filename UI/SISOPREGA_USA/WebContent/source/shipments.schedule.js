@@ -247,6 +247,8 @@ enyo.kind({
 	this.$.programDate.setValue(utils.dateOut(new Date()));
 	this.$.programDate.$.input.applyStyle("text-align", "center");
 	this.$.programTime.$.input.applyStyle("text-align", "center");
+	this.$.programDate.$.input.applyStyle("text-align", "black");
+	this.$.programTime.$.input.applyStyle("text-align", "black");
 	this.$.programTime.setValue(new Date().toLocaleTimeString()
 		.substring(0, 5));
 	this.$.carrier.setItems(cacheDrivers.getAllForList());
@@ -266,7 +268,9 @@ enyo.kind({
 		    .setContent(utils.formatNumberThousands(this.arrToShipDetailed[inIndex].weight) + " lb");
 	    this.totalHC += Number(this.arrToShipDetailed[inIndex].heads);
 	    this.totalWeight += Number(this.arrToShipDetailed[inIndex].weight);
-	    if(this.arrToShipDetailed[inIndex].checked) {
+	    if(this.arrToShipDetailed[inIndex].shipProgramDateTime){
+		this.$.chkToShip.hide();
+	    }else if(this.arrToShipDetailed[inIndex].checked) {
 		this.$.chkToShip.setChecked(true);
 	    }
 	    return true;
@@ -279,17 +283,29 @@ enyo.kind({
     setArrShipment : function(arr) {
 	this.arrSales = arr;
 	this.arrToShipDetailed = [];
+	
 	for(var i = 0; i<this.arrSales.length;i++){
-	    for(var j = 0;j<this.arrSales[i].detail.length;j++){
-		var objShipmentDetailed = this.arrSales[i].detail[j];
-		objShipmentDetailed.buyer = this.arrSales[i].buyer;
-		objShipmentDetailed.sale_id = this.arrSales[i].sale_id;
-		objShipmentDetailed.itemNumber = this.itemNumber++;
-		this.arrToShipDetailed.push(objShipmentDetailed);
-	    }
-	}	
+	    if(this.arrSales[i].arrToShipDetailed){
+		for(var k=0;k<this.arrSales[i].arrToShipDetailed.length;k++){
+		    var objShipmentDetailed = this.arrSales[i].arrToShipDetailed[k];
+		    objShipmentDetailed.itemNumber = this.itemNumber++;
+		    objShipmentDetailed.checked = false;
+		    this.arrToShipDetailed.push(objShipmentDetailed);
+		}
+	    }else{	
+		for(var j=0;j<this.arrSales[i].detail.length;j++){
+		    var objShipmentDetailed = enyo.clone(this.arrSales[i].detail[j]);
+		    objShipmentDetailed.buyer = this.arrSales[i].buyer;
+		    objShipmentDetailed.sale_id = this.arrSales[i].sale_id;
+		    objShipmentDetailed.itemNumber = this.itemNumber++;
+		    this.arrToShipDetailed.push(objShipmentDetailed);
+		}
+	    }    
+	}
+		
     },
     program_click : function() {
+	this.initializeShipsInSales();
 	for(var i =0;i<this.arrToShipDetailed.length;i++){
 	    if(this.arrToShipDetailed[i].checked){
 		this.arrToShipDetailed[i].shipProgramDateTime = new Date("" + this.$.programDate
@@ -302,12 +318,31 @@ enyo.kind({
     		    totalWeight : 		this.arrToShipDetailed[i].weight,
     		    aveWeight : 		this.arrToShipDetailed[i].aveWeight,
     		    shipCarrier : 		this.arrToShipDetailed[i].shipCarrier,
-    		    shipProgramDateTime :	this.arrToShipDetailed[i].shipProgramDateTime
+    		    shipProgramDateTime :	this.arrToShipDetailed[i].shipProgramDateTime,
+    		    sale_id:			this.arrToShipDetailed[i].sale_id
     	    	};
-    	    	cacheShip.createData(obj);
+    	    	if(!cacheShip.createData(obj,this,"setShipToSale",this.arrToShipDetailed[i])){
+    	    	    return;
+    	    	}
+    	    }else{
+    		this.setShipToSale(this.arrToShipDetailed[i]);
     	    }
 	}
 	this.doProgram();
+    },
+    initializeShipsInSales:function(){
+	for(var i=0;i<this.arrSales.length;i++){
+	    this.arrSales[i].arrToShipDetailed=[];
+	    cacheShip.removeShipBySale(this.arrSales[i].sale_id);
+	}
+    },
+    setShipToSale:function(objShip){
+	for(var i=0;i<this.arrSales.length;i++){
+	    if(this.arrSales[i].sale_id==objShip.sale_id){
+		this.arrSales[i].arrToShipDetailed.push(objShip);
+		break;
+	    }
+	}
     },
     split_click:function(inSender, inEvent){
 	this.$.popup_split.validateComponents();

@@ -69,7 +69,7 @@ enyo.kind({
 					]},
 					{layoutKind: enyo.HFlexLayout,components:[{name: "lblSalesClient",style: "font-size: 0.85em;color:#008B8B",
 					 content:"Comprador"},{kind:"Spacer"},
-					 {name:"lblShipProgrammed", style:"color:gray;font-size:0.85em;", content:"Programado", showing:false}
+					 {name:"lblShipProgrammed",allowHtml:true, style:"color:gray;font-size:0.85em;text-align:right;", content:""}
 					 ]
 					}					
 					]}
@@ -110,10 +110,22 @@ enyo.kind({
 			this.$.lblSalesAverage.setContent(utils.formatNumberThousands(utils.formatNumberThousands(objData.aveWeight)));	
 			this.$.lblSalesClient.setContent(objData.buyer);
 			this.$.chkSalesShip.iPos=inIndex;
-			if(objData.shipProgramDateTime){
-			    this.$.chkSalesShip.hide();
+			if(objData.arrToShipDetailed){			    
+			    var strShipDescription = "";
+			    var totalHeadsProgrammed = 0;
+			    for(var i=0;i<objData.arrToShipDetailed.length;i++){
+				if(objData.arrToShipDetailed[i].shipProgramDateTime){
+				    totalHeadsProgrammed += Number(objData.arrToShipDetailed[i].heads);
+				    strShipDescription += "(" + objData.arrToShipDetailed[i].heads + " / " + objData.arrToShipDetailed[i].weight + 
+				    	") para " + objData.arrToShipDetailed[i].shipProgramDateTime.toLocaleDateString() + "<br />";    
+				}
+			    }
+			    if(strShipDescription!=""){strShipDescription=strShipDescription.slice(0,-6);}
+			    if(totalHeadsProgrammed >= objData.totalHeads){
+				this.$.chkSalesShip.hide();
+			    }
+			    this.$.lblShipProgrammed.setContent(strShipDescription);
 			    this.$.lblShipProgrammed.show();
-			    this.$.lblShipProgrammed.setContent("Programado para " + objData.shipProgramDateTime.toLocaleDateString());
 			    this.$.lblSalesAverage.applyStyle("margin-right","47px");
 			}else{
 			    this.$.lblShipProgrammed.hide();
