@@ -304,7 +304,8 @@ enyo.kind({
 	}
 		
     },
-    program_click : function() {	
+    program_click : function() {
+	var arrToShip = [];
 	for(var i =0;i<this.arrToShipDetailed.length;i++){
 	    if(this.arrToShipDetailed[i].checked){
 		this.arrToShipDetailed[i].shipProgramDateTime = new Date("" + this.$.programDate
@@ -320,13 +321,50 @@ enyo.kind({
     		    shipProgramDateTime :	this.arrToShipDetailed[i].shipProgramDateTime,
     		    sale_id:			this.arrToShipDetailed[i].sale_id
     	    	};
-    	    	if(!cacheShip.createData(obj,this,"setShipToSale",this.arrToShipDetailed[i])){
-    	    	    return;
-    	    	}
+    	    	arrToShip.push(obj);
+    	    	this.setShipToSale(this.arrToShipDetailed[i]);
+//    	    	if(!cacheShip.createData(obj,this,"setShipToSale",this.arrToShipDetailed[i])){
+//    	    	    return;
+//    	    	}
     	    }
 	    else{
     		this.setShipToSale(this.arrToShipDetailed[i]);
     	    }
+	}
+	
+	this.saveShip(arrToShip);
+    },
+    saveShip:function(arrShip){
+	var arrByBuyer={};
+	var arrByCattle={};
+	for(var i=0;i<arrShip.length;i++){
+	    if(!(arrShip[i].buyer in arrByBuyer)){
+		arrByBuyer[arrShip[i].buyer] = [];
+	    }
+	    arrByBuyer[arrShip[i].buyer].push(arrShip[i]);
+	}
+	
+	for(i in arrByBuyer){
+	    if (arrByBuyer.hasOwnProperty(i)){
+		for(var j=0;j<arrByBuyer[i].length;j++){
+		    if(!(arrByBuyer[i][j].cattleName in arrByCattle)){
+			arrByCattle[arrByBuyer[i][j].cattleName]=arrByBuyer[i][j];
+		    }else{
+			arrByCattle[arrByBuyer[i][j].cattleName].totalHeads += arrByBuyer[i][j].totalHeads;
+			arrByCattle[arrByBuyer[i][j].cattleName].totalWeight += arrByBuyer[i][j].totalWeight;
+		    }
+		}
+		
+		for(p in arrByCattle){
+		    if(arrByCattle.hasOwnProperty(p)){
+			if(!cacheShip.createData(arrByCattle[p])){
+			    return;
+			}    
+		    }
+		}
+		
+		arrByBuyer={};
+	    }
 	}
 	this.doProgram();
     },

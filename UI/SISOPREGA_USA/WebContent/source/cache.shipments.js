@@ -24,12 +24,11 @@ enyo.kind({
 	totalHeads: 123,
 	totalWeight: 123.23,
     }],
-    createData : function(obj, cbObj, cbMethod, objShipSource) {
+    createData : function(obj, cbObj, cbMethod) {
 	obj.shipment_id = ++this.lastID;
-	objShipSource.shipment_id = obj.shipment_id;
 	this.cacheData.push(obj);
 	if (cbMethod) {
-	    cbObj[cbMethod](objShipSource);
+	    cbObj[cbMethod]();
 	}
 	return true;
     },
