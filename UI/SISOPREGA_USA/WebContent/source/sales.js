@@ -98,7 +98,19 @@ enyo
 			    caption : "Agregar",
 			    onclick : "agregar_click",
 			    style : "background-color: #DABD8B;"
-			}, ]
+			},{
+			    content:'<button type="button" style="border: 0;background-color: transparent;">Agregar</button>',
+			    allowHtml:true,
+			    onclick : "agregar_click",
+			    onmousedown:"buttonDown",
+			    onmouseup:"buttonUp",
+			    onmouseout:"buttonUp",
+			    onmouseover:"buttonDown",
+//			    className:"enyo-button enyo-button-hot enyo-button-down",
+			    className:"enyo-button",
+			    style : "background-color:  #DABD8B;",
+			    
+			} ]
 		    },
 		    {// HEADER:
 			kind : "HFlexBox",
@@ -221,6 +233,14 @@ enyo
 				    } ]
 			} ]
 		    } ],
+		    buttonDown:function(inSender, inEvent){
+			if(inEvent.which){
+			    inSender.setClassName("enyo-button enyo-button-hot enyo-button-down");    
+			}			
+		    },
+		    buttonUp:function(inSender, inEvent){
+			inSender.setClassName("enyo-button");			
+		    },
 	    agregar_click : function() {
 		var newObject = {
 		    detailNumber : this.detailNumber++,
@@ -298,6 +318,7 @@ enyo
 	    },
 	    after_sell : function() {
 		this.doSale();
+		this.reset();
 	    },
 	    clase_select : function(inSender) {
 		var filter = [];

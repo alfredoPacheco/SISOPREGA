@@ -363,7 +363,7 @@ enyo.kind({
 		    }
 		}
 		
-		arrByBuyer={};
+		arrByCattle={};
 	    }
 	}
 	this.doProgram();
