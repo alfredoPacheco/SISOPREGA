@@ -3,7 +3,6 @@ enyo.kind({
 	kind: "VFlexBox",
 	className: "enyo-bg",
 	arrData:null,
-	iSelected:{},
 	iHeads:null,
 	iWeight:null,
 	arrSelectedItems:{},
@@ -122,6 +121,7 @@ enyo.kind({
 			    }
 			    if(strShipDescription!=""){strShipDescription=strShipDescription.slice(0,-6);}
 			    if(totalHeadsProgrammed >= objData.totalHeads){
+				this.$.chkSalesShip.setChecked(false);
 				this.$.chkSalesShip.hide();
 			    }
 			    this.$.lblShipProgrammed.setContent(strShipDescription);
@@ -197,8 +197,7 @@ enyo.kind({
 	    return response;
 	},
 	updateView:function(){
-//	    this.arrSelectedItems = {};
-//	    this.iSelected={};
+	    this.arrSelectedItems = {};
 //	    this.iHeads=null;
 //	    this.iWeight=null;
 //	    this.arrData = cachePen.get();

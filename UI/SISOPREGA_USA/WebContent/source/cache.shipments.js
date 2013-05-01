@@ -26,6 +26,7 @@ enyo.kind({
     }],
     createData : function(obj, cbObj, cbMethod, objShipSource) {
 	obj.shipment_id = ++this.lastID;
+	objShipSource.shipment_id = obj.shipment_id;
 	this.cacheData.push(obj);
 	if (cbMethod) {
 	    cbObj[cbMethod](objShipSource);

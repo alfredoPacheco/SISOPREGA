@@ -283,7 +283,7 @@ enyo.kind({
     setArrShipment : function(arr) {
 	this.arrSales = arr;
 	this.arrToShipDetailed = [];
-	
+	this.itemNumber= 0;
 	for(var i = 0; i<this.arrSales.length;i++){
 	    if(this.arrSales[i].arrToShipDetailed){
 		for(var k=0;k<this.arrSales[i].arrToShipDetailed.length;k++){
@@ -304,8 +304,7 @@ enyo.kind({
 	}
 		
     },
-    program_click : function() {
-	this.initializeShipsInSales();
+    program_click : function() {	
 	for(var i =0;i<this.arrToShipDetailed.length;i++){
 	    if(this.arrToShipDetailed[i].checked){
 		this.arrToShipDetailed[i].shipProgramDateTime = new Date("" + this.$.programDate
@@ -324,23 +323,44 @@ enyo.kind({
     	    	if(!cacheShip.createData(obj,this,"setShipToSale",this.arrToShipDetailed[i])){
     	    	    return;
     	    	}
-    	    }else{
+    	    }
+	    else{
     		this.setShipToSale(this.arrToShipDetailed[i]);
     	    }
 	}
 	this.doProgram();
     },
-    initializeShipsInSales:function(){
-	for(var i=0;i<this.arrSales.length;i++){
-	    this.arrSales[i].arrToShipDetailed=[];
-	    cacheShip.removeShipBySale(this.arrSales[i].sale_id);
-	}
-    },
     setShipToSale:function(objShip){
+	var shipAlreadyExistsInShip=false;
 	for(var i=0;i<this.arrSales.length;i++){
 	    if(this.arrSales[i].sale_id==objShip.sale_id){
-		this.arrSales[i].arrToShipDetailed.push(objShip);
-		break;
+		if(!("arrToShipDetailed" in this.arrSales[i])){
+		    this.arrSales[i].arrToShipDetailed=[];
+		    this.arrSales[i].arrToShipDetailed.push(objShip);
+		    break;
+		}else{
+		    if(objShip.shipment_id !== undefined){
+    		    	shipAlreadyExistsInShip=false;
+    		    	for(var j=0;j<this.arrSales[i].arrToShipDetailed.length;j++){
+    		    	    if(objShip.shipment_id == this.arrSales[i].arrToShipDetailed[j].shipment_id){
+    		    		shipAlreadyExistsInShip=true;
+    		    		break;
+    		    	    }
+    		    	}
+		    }
+		    else{
+			for(var j=0;j<this.arrSales[i].arrToShipDetailed.length;j++){
+    		    	    if(objShip.itemNumber == this.arrSales[i].arrToShipDetailed[j].itemNumber){
+    		    		shipAlreadyExistsInShip=true;
+    		    		break;
+    		    	    }
+    		    	}
+		    }
+		    if(!shipAlreadyExistsInShip){
+		    	    this.arrSales[i].arrToShipDetailed.push(objShip);
+		    	    break;
+		    }
+		}
 	    }
 	}
     },
