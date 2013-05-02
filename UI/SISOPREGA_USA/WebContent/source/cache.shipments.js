@@ -24,13 +24,26 @@ enyo.kind({
 	totalHeads: 123,
 	totalWeight: 123.23,
     }],
-    createData : function(obj) {
+    createData : function(obj, cbObj, cbMethod) {
 	obj.shipment_id = ++this.lastID;
 	this.cacheData.push(obj);
+	if (cbMethod) {
+	    cbObj[cbMethod]();
+	}
+	return true;
     },
     releaseShip : function(objShip, cbObj, cbMethod) {
 	if (cbMethod) {
 	    cbObj[cbMethod]();
+	}
+    },
+    removeShipBySale:function(sale_id){
+	var len = this.cacheData.length;
+	for(var i=0;i<len;i++){
+	    if(this.cacheData[i].sale_id == sale_id){
+		this.cacheData.splice(i,1);
+		len--;
+	    }
 	}
     },
     readData : function() {

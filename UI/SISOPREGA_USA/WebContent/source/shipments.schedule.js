@@ -4,7 +4,6 @@ enyo.kind({
     style : "background-color:#DABD8B;font-size:15px;",
     arrSales : [],
     arrToShipDetailed:[],
-    arrToShip:{},
     iHeads:null,
     iWeight:null,
     itemNumber:0,
@@ -248,6 +247,8 @@ enyo.kind({
 	this.$.programDate.setValue(utils.dateOut(new Date()));
 	this.$.programDate.$.input.applyStyle("text-align", "center");
 	this.$.programTime.$.input.applyStyle("text-align", "center");
+	this.$.programDate.$.input.applyStyle("text-align", "black");
+	this.$.programTime.$.input.applyStyle("text-align", "black");
 	this.$.programTime.setValue(new Date().toLocaleTimeString()
 		.substring(0, 5));
 	this.$.carrier.setItems(cacheDrivers.getAllForList());
@@ -267,9 +268,10 @@ enyo.kind({
 		    .setContent(utils.formatNumberThousands(this.arrToShipDetailed[inIndex].weight) + " lb");
 	    this.totalHC += Number(this.arrToShipDetailed[inIndex].heads);
 	    this.totalWeight += Number(this.arrToShipDetailed[inIndex].weight);
-	    if(this.arrToShipDetailed[inIndex].checked) {
+	    if(this.arrToShipDetailed[inIndex].shipProgramDateTime){
+		this.$.chkToShip.hide();
+	    }else if(this.arrToShipDetailed[inIndex].checked) {
 		this.$.chkToShip.setChecked(true);
-		this.arrToShip[this.arrToShipDetailed[inIndex].itemNumber]=this.arrToShipDetailed[inIndex];
 	    }
 	    return true;
 	}
@@ -279,36 +281,126 @@ enyo.kind({
 	this.calculateTotals();
     },
     setArrShipment : function(arr) {
-	this.arrToShip = {};
 	this.arrSales = arr;
 	this.arrToShipDetailed = [];
+	this.itemNumber= 0;
 	for(var i = 0; i<this.arrSales.length;i++){
-	    for(var j = 0;j<this.arrSales[i].detail.length;j++){
-		var objShipmentDetailed = this.arrSales[i].detail[j];
-		objShipmentDetailed.buyer = this.arrSales[i].buyer;
-		objShipmentDetailed.sale_id = this.arrSales[i].sale_id;
-		objShipmentDetailed.itemNumber = this.itemNumber++;
-		this.arrToShipDetailed.push(objShipmentDetailed);
-	    }
-	}	
+	    if(this.arrSales[i].arrToShipDetailed){
+		for(var k=0;k<this.arrSales[i].arrToShipDetailed.length;k++){
+		    var objShipmentDetailed = this.arrSales[i].arrToShipDetailed[k];
+		    objShipmentDetailed.itemNumber = this.itemNumber++;
+		    objShipmentDetailed.checked = false;
+		    this.arrToShipDetailed.push(objShipmentDetailed);
+		}
+	    }else{	
+		for(var j=0;j<this.arrSales[i].detail.length;j++){
+		    var objShipmentDetailed = enyo.clone(this.arrSales[i].detail[j]);
+		    objShipmentDetailed.buyer = this.arrSales[i].buyer;
+		    objShipmentDetailed.sale_id = this.arrSales[i].sale_id;
+		    objShipmentDetailed.itemNumber = this.itemNumber++;
+		    this.arrToShipDetailed.push(objShipmentDetailed);
+		}
+	    }    
+	}
+		
     },
     program_click : function() {
-	for(var i =0;i<this.arrToShip.length;i++){
-	    this.arrToShip[i].shipProgramDateTime = new Date("" + this.$.programDate
+	var arrToShip = [];
+	for(var i =0;i<this.arrToShipDetailed.length;i++){
+	    if(this.arrToShipDetailed[i].checked){
+		this.arrToShipDetailed[i].shipProgramDateTime = new Date("" + this.$.programDate
 			.getValue() + " " + this.$.programTime.getValue());
-	    this.arrToShip[i].shipCarrier = this.$.carrier.getValue();
-	    var obj = {
-		    buyer : 			this.arrToShip[i].buyer,
-		    cattleName : 		this.arrToShip[i].cattleName,
-		    totalHeads : 		this.arrToShip[i].totalHeads,
-		    totalWeight : 		this.arrToShip[i].totalWeight,
-		    aveWeight : 		this.arrToShip[i].aveWeight,
-		    shipCarrier : 		this.arrToShip[i].shipCarrier,
-		    shipProgramDateTime :	this.arrToShip[i].shipProgramDateTime
-	    };
-	    cacheShip.createData(obj);
+		this.arrToShipDetailed[i].shipCarrier = this.$.carrier.getValue();
+    	    	var obj = {
+    		    buyer : 			this.arrToShipDetailed[i].buyer,
+    		    cattleName : 		this.arrToShipDetailed[i].cattleName,
+    		    totalHeads : 		this.arrToShipDetailed[i].heads,
+    		    totalWeight : 		this.arrToShipDetailed[i].weight,
+    		    aveWeight : 		this.arrToShipDetailed[i].aveWeight,
+    		    shipCarrier : 		this.arrToShipDetailed[i].shipCarrier,
+    		    shipProgramDateTime :	this.arrToShipDetailed[i].shipProgramDateTime,
+    		    sale_id:			this.arrToShipDetailed[i].sale_id
+    	    	};
+    	    	arrToShip.push(obj);
+    	    	this.setShipToSale(this.arrToShipDetailed[i]);
+//    	    	if(!cacheShip.createData(obj,this,"setShipToSale",this.arrToShipDetailed[i])){
+//    	    	    return;
+//    	    	}
+    	    }
+	    else{
+    		this.setShipToSale(this.arrToShipDetailed[i]);
+    	    }
+	}
+	
+	this.saveShip(arrToShip);
+    },
+    saveShip:function(arrShip){
+	var arrByBuyer={};
+	var arrByCattle={};
+	for(var i=0;i<arrShip.length;i++){
+	    if(!(arrShip[i].buyer in arrByBuyer)){
+		arrByBuyer[arrShip[i].buyer] = [];
+	    }
+	    arrByBuyer[arrShip[i].buyer].push(arrShip[i]);
+	}
+	
+	for(i in arrByBuyer){
+	    if (arrByBuyer.hasOwnProperty(i)){
+		for(var j=0;j<arrByBuyer[i].length;j++){
+		    if(!(arrByBuyer[i][j].cattleName in arrByCattle)){
+			arrByCattle[arrByBuyer[i][j].cattleName]=arrByBuyer[i][j];
+		    }else{
+			arrByCattle[arrByBuyer[i][j].cattleName].totalHeads += arrByBuyer[i][j].totalHeads;
+			arrByCattle[arrByBuyer[i][j].cattleName].totalWeight += arrByBuyer[i][j].totalWeight;
+		    }
+		}
+		
+		for(p in arrByCattle){
+		    if(arrByCattle.hasOwnProperty(p)){
+			if(!cacheShip.createData(arrByCattle[p])){
+			    return;
+			}    
+		    }
+		}
+		
+		arrByCattle={};
+	    }
 	}
 	this.doProgram();
+    },
+    setShipToSale:function(objShip){
+	var shipAlreadyExistsInShip=false;
+	for(var i=0;i<this.arrSales.length;i++){
+	    if(this.arrSales[i].sale_id==objShip.sale_id){
+		if(!("arrToShipDetailed" in this.arrSales[i])){
+		    this.arrSales[i].arrToShipDetailed=[];
+		    this.arrSales[i].arrToShipDetailed.push(objShip);
+		    break;
+		}else{
+		    if(objShip.shipment_id !== undefined){
+    		    	shipAlreadyExistsInShip=false;
+    		    	for(var j=0;j<this.arrSales[i].arrToShipDetailed.length;j++){
+    		    	    if(objShip.shipment_id == this.arrSales[i].arrToShipDetailed[j].shipment_id){
+    		    		shipAlreadyExistsInShip=true;
+    		    		break;
+    		    	    }
+    		    	}
+		    }
+		    else{
+			for(var j=0;j<this.arrSales[i].arrToShipDetailed.length;j++){
+    		    	    if(objShip.itemNumber == this.arrSales[i].arrToShipDetailed[j].itemNumber){
+    		    		shipAlreadyExistsInShip=true;
+    		    		break;
+    		    	    }
+    		    	}
+		    }
+		    if(!shipAlreadyExistsInShip){
+		    	    this.arrSales[i].arrToShipDetailed.push(objShip);
+		    	    break;
+		    }
+		}
+	    }
+	}
     },
     split_click:function(inSender, inEvent){
 	this.$.popup_split.validateComponents();
@@ -348,21 +440,15 @@ enyo.kind({
     },    
     checkBox_click : function(inSender, inEvent) {
     	this.arrToShipDetailed[inEvent.rowIndex].checked = inSender.checked;
-    	if(inSender.checked)
-    	    this.arrToShip[this.arrToShipDetailed[inEvent.rowIndex].itemNumber]=this.arrToShipDetailed[inEvent.rowIndex];
-    	else
-    	    delete this.arrToShip[this.arrToShipDetailed[inEvent.rowIndex].itemNumber];
     	this.calculateTotals();
     },
     calculateTotals : function() {
 	var hc = 0;
 	var weight = 0;
-	for ( var i in this.arrToShip) {
-	    if (this.arrToShip.hasOwnProperty(i)){
-		if (!this.arrToShip[i].shipProgramDateTime && this.arrToShip[i].checked) {
-			hc += this.arrToShip[i].heads;
-			weight += this.arrToShip[i].weight;
-		    }
+	for ( var i = 0;i<this.arrToShipDetailed.length;i++){
+	    if (!this.arrToShipDetailed[i].shipProgramDateTime && this.arrToShipDetailed[i].checked) {
+		hc += this.arrToShipDetailed[i].heads;
+		weight += this.arrToShipDetailed[i].weight;
 	    }
 	}
 	if (weight > 50000) {

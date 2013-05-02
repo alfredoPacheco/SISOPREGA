@@ -481,8 +481,10 @@ enyo.kind(
     updateHeader : function() {
       var corralesSeleccionados = "";
       var arrAux = this._arrBY;
-      for (var i =0;i<arrAux.length;i++) {
-        corralesSeleccionados = "" + corralesSeleccionados + " " + arrAux[i].slice(1) + " ";
+      for (var i in arrAux) {
+	  if(arrAux.hasOwnProperty(i)){
+	      corralesSeleccionados = "" + corralesSeleccionados + " " + arrAux[i].slice(1) + " ";      
+	  }
       }
       corralesSeleccionados.slice(-2);
       this.bySelected.setContent("Alimentando corrales: " + corralesSeleccionados);

@@ -3,7 +3,6 @@ enyo.kind({
 	kind: "VFlexBox",
 	className: "enyo-bg",
 	arrData:null,
-	iSelected:{},
 	iHeads:null,
 	iWeight:null,
 	arrSelectedItems:{},
@@ -69,7 +68,7 @@ enyo.kind({
 					]},
 					{layoutKind: enyo.HFlexLayout,components:[{name: "lblSalesClient",style: "font-size: 0.85em;color:#008B8B",
 					 content:"Comprador"},{kind:"Spacer"},
-					 {name:"lblShipProgrammed", style:"color:gray;font-size:0.85em;", content:"Programado", showing:false}
+					 {name:"lblShipProgrammed",allowHtml:true, style:"color:gray;font-size:0.85em;text-align:right;", content:""}
 					 ]
 					}					
 					]}
@@ -105,15 +104,28 @@ enyo.kind({
 		var objData;
 		if(objData=this.arrData[inIndex]){
 			this.$.lblSalesDate.setContent(objData.sale_date.toLocaleDateString());
-			this.$.lblSalesHeads.setContent(gblUtils.numCD(objData.totalHeads));
-			this.$.lblSalesWeight.setContent(utils.formatNumberThousands(gblUtils.numCD(objData.totalWeight)));
-			this.$.lblSalesAverage.setContent(utils.formatNumberThousands(gblUtils.numCD(objData.aveWeight)));	
+			this.$.lblSalesHeads.setContent(utils.formatNumberThousands(objData.totalHeads));
+			this.$.lblSalesWeight.setContent(utils.formatNumberThousands(utils.formatNumberThousands(objData.totalWeight)));
+			this.$.lblSalesAverage.setContent(utils.formatNumberThousands(utils.formatNumberThousands(objData.aveWeight)));	
 			this.$.lblSalesClient.setContent(objData.buyer);
 			this.$.chkSalesShip.iPos=inIndex;
-			if(objData.shipProgramDateTime){
-			    this.$.chkSalesShip.hide();
+			if(objData.arrToShipDetailed){			    
+			    var strShipDescription = "";
+			    var totalHeadsProgrammed = 0;
+			    for(var i=0;i<objData.arrToShipDetailed.length;i++){
+				if(objData.arrToShipDetailed[i].shipProgramDateTime){
+				    totalHeadsProgrammed += Number(objData.arrToShipDetailed[i].heads);
+				    strShipDescription += "(" + objData.arrToShipDetailed[i].heads + " / " + objData.arrToShipDetailed[i].weight + 
+				    	") para " + objData.arrToShipDetailed[i].shipProgramDateTime.toLocaleDateString() + "<br />";    
+				}
+			    }
+			    if(strShipDescription!=""){strShipDescription=strShipDescription.slice(0,-6);}
+			    if(totalHeadsProgrammed >= objData.totalHeads){
+				this.$.chkSalesShip.setChecked(false);
+				this.$.chkSalesShip.hide();
+			    }
+			    this.$.lblShipProgrammed.setContent(strShipDescription);
 			    this.$.lblShipProgrammed.show();
-			    this.$.lblShipProgrammed.setContent("Programado para " + objData.shipProgramDateTime.toLocaleDateString());
 			    this.$.lblSalesAverage.applyStyle("margin-right","47px");
 			}else{
 			    this.$.lblShipProgrammed.hide();
@@ -138,9 +150,9 @@ enyo.kind({
 			iWeight+=this.arrData[j].totalWeight;
 			iAve+=this.arrData[j].aveWeight;					
 		}
-		this.$.lblSalesSumHeads.setContent(gblUtils.numCD(iHeads));
-		this.$.lblSalesSumWeight.setContent(gblUtils.numCD(iWeight));
-		this.$.lblSumAveWeight.setContent(gblUtils.numCD((iAve/this.arrData.length).toFixed(2)));
+		this.$.lblSalesSumHeads.setContent(utils.formatNumberThousands(iHeads));
+		this.$.lblSalesSumWeight.setContent(utils.formatNumberThousands(iWeight));
+		this.$.lblSumAveWeight.setContent(utils.formatNumberThousands((iAve/this.arrData.length).toFixed(2)));
 	},
 	ready:function(){
 		this.updateSummary();
@@ -163,8 +175,8 @@ enyo.kind({
 		if (weight == 0) {
 		    this.$.lblSalesShipment.setContent("Cabezas - Peso");
 		} else {
-		    this.$.lblSalesShipment.setContent(gblUtils.numCD(hc) + "/"
-			    + gblUtils.numCD(weight));
+		    this.$.lblSalesShipment.setContent(utils.formatNumberThousands(hc) + "/"
+			    + utils.formatNumberThousands(weight));
 		}
 	},
 	checkBox_click : function(inSender, inEvent) {
@@ -185,8 +197,7 @@ enyo.kind({
 	    return response;
 	},
 	updateView:function(){
-//	    this.arrSelectedItems = {};
-//	    this.iSelected={};
+	    this.arrSelectedItems = {};
 //	    this.iHeads=null;
 //	    this.iWeight=null;
 //	    this.arrData = cachePen.get();

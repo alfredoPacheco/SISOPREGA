@@ -201,14 +201,35 @@ enyo.kind({
 	resetValues:function(){
 		this.$.rancher_id.setIndex(-1);
 		this.$.cattype_id.setIndex(1);
-		this.$.zone_id.setIndex(1);
+		
+		this.$.zone_id.setIndex(this.deduceZone() || 1);
+		
 		this.$.location_id.setIndex(1);		
 		this.$.arrival_date.setValue(new Date());
 		this.$.hc_aprox.setValue("");
 	},
+	deduceZone : function() {
+            var zone = null;
+            if (this.arrBY) {
+        	for ( var i in this.arrBY) {
+        	    if (this.arrBY.hasOwnProperty(i)) {
+        		if (zone) {
+        		    if (zone != this.arrBY[i].substring(0, 1)) {
+        			return 1;
+        		    }
+        		} else {
+        		    zone = this.arrBY[i].substring(0, 1);
+        		}
+        	    }
+        	}
+        	return Number(zone);
+            }
+            return null;
+	},
 	setReception:function(receptionDef,arrBY){
-		this.resetValues();
-		this.arrBY=arrBY;
+	    this.arrBY=arrBY;
+	    this.resetValues();
+		
 		
 		var sBY="";
 		
