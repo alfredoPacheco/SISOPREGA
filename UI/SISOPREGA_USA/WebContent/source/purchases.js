@@ -19,6 +19,25 @@ enyo.kind(
           components :
             [
               {
+                kind : enyo.Popup,
+                width : "80%;",
+                height : "80%;",
+                dismissWithClick : false,
+                layoutKind : "VFlexLayout",
+                style : "overflow: hidden;  border-width: 8px;",
+                scrim : true,
+                components :
+                  [
+                    {
+                      kind : "catalogs.providers.create",
+                      name : "providersCreate_kind",
+                      lazy : "true",
+                      onAdd : "supplierCreated",
+                      onCancel : "closePopUp",
+                      flex : 1
+                    } ]
+              },
+              {
                 kind : enyo.HFlexBox,
                 align : "center",
                 height : "40px;",
@@ -58,8 +77,16 @@ enyo.kind(
                       kind : "controls.autocomplete",
                       inputKind : "ToolInput",
                       name : "provider",
-                      width : "250px;",
+                      width : "275px;",
                       height : "35px;",
+                    },
+                    {
+                      kind : enyo.IconButton,
+                      icon : "../SISOPREGA/images/menu-icon-new.png",
+                      onclick : "doAddSupplier",
+                      height : "23px",
+                      width : "23px",
+                      style : "padding: 2px;margin-top: 0px;background-color: #DABD8B;"
                     },
                     {
                       content : "Ganado:",
@@ -70,7 +97,7 @@ enyo.kind(
                       kind : "controls.autocomplete",
                       inputKind : "ToolInput",
                       name : "cattleType",
-                      width : "250px;",
+                      width : "200px;",
                       height : "35px;",
                     } ]
               } ]
@@ -371,5 +398,18 @@ enyo.kind(
       jQuery(function(j) {
         j(document.getElementById(_id)).mask('99/99/9999');
       });
+    },
+    doAddSupplier : function(){
+      this.$.popup.validateComponents();
+      this.$.providersCreate_kind.toggleAdd();
+      this.$.popup.openAtCenter();
+    },
+    closePopUp : function(){
+      this.$.popup.close();
+    },
+    supplierCreated : function(){
+      this.$.popup.close();
+      this.$.provider.clear();
+      this.$.provider.setItems(cacheProviders.getAllForList());
     }
   });
