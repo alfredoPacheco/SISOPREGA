@@ -126,6 +126,7 @@ enyo.kind({
 	    kind : enyo.VirtualRepeater,
 	    name : "list",
 	    onSetupRow : "setupRow",
+	    style:"font-size: 15px;",
 	    components : [ {
 		kind : enyo.SwipeableItem,
 		layoutKind : enyo.HFlexLayout,
@@ -168,17 +169,22 @@ enyo.kind({
 			},
 			{
 				kind : enyo.HFlexBox,
-				components : [ {
-				    
+				components : [{
 					kind : enyo.Button,
 					name : "split_button",
 					onclick : "split_click",
 					caption : "Dividir",
-					style : "min-width:50px;margin-top:-6px;padding: 0px 9px;min-height:20px;background-color: #DABD8B;",
+					style : "min-width:50px;margin-top:-2px;padding: 0px 9px;min-height:22px;background-color: #DABD8B;",
 					width:"70px"
-
 				}, 
-				{kind: "CheckBox", name:"chkToShip", style:"margin-top: -6px;margin-left:20px;", iPos:"",checked: false, onclick:"checkBox_click"}
+				{kind: "CheckBox", name:"chkToShip", style:"margin-top: -2px;margin-left:20px;", iPos:"",checked: false, onclick:"checkBox_click"},
+				 {
+				    name:"lblAlreadyProgrammed",
+				    content:"",
+				    style:"font-size: 13px;margin-top: -6px;",
+				    showing:false,
+				    allowHtml:true
+				}
 				]
 			}]
 	    } ]
@@ -270,6 +276,13 @@ enyo.kind({
 	    this.totalWeight += Number(this.arrToShipDetailed[inIndex].weight);
 	    if(this.arrToShipDetailed[inIndex].shipProgramDateTime){
 		this.$.chkToShip.hide();
+		this.$.split_button.hide();
+		this.$.rowItem.setSwipeable(false);
+		this.$.lblAlreadyProgrammed.setContent("Programado para " + this.arrToShipDetailed[inIndex].shipProgramDateTime.toLocaleDateString() +
+			" " + this.arrToShipDetailed[inIndex].shipProgramDateTime.toLocaleTimeString().substring(0,5) +
+			"<br />Transporte: " + this.arrToShipDetailed[inIndex].shipCarrier);
+		this.$.lblAlreadyProgrammed.show();
+		
 	    }else if(this.arrToShipDetailed[inIndex].checked) {
 		this.$.chkToShip.setChecked(true);
 	    }
@@ -319,7 +332,8 @@ enyo.kind({
     		    aveWeight : 		this.arrToShipDetailed[i].aveWeight,
     		    shipCarrier : 		this.arrToShipDetailed[i].shipCarrier,
     		    shipProgramDateTime :	this.arrToShipDetailed[i].shipProgramDateTime,
-    		    sale_id:			this.arrToShipDetailed[i].sale_id
+    		    sale_id:			this.arrToShipDetailed[i].sale_id,
+    		    id_inventory:		this.arrToShipDetailed[i].id_inventory
     	    	};
     	    	arrToShip.push(obj);
     	    	this.setShipToSale(this.arrToShipDetailed[i]);
@@ -332,7 +346,11 @@ enyo.kind({
     	    }
 	}
 	
-	this.saveShip(arrToShip);
+	if(arrToShip.length){
+	    this.saveShip(arrToShip);    
+	}else{
+	    alert("nada seleccionado");//TODO aviso con enyo
+	}
     },
     saveShip:function(arrShip){
 	var arrByBuyer={};
@@ -366,6 +384,7 @@ enyo.kind({
 		arrByCattle={};
 	    }
 	}
+	
 	this.doProgram();
     },
     setShipToSale:function(objShip){

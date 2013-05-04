@@ -107,6 +107,16 @@ enyo.kind({
 	}
 	return false;
     },
+    del:function(objDel){
+	var arrPens = this.get();
+	for ( var i = 0; i < arrPens.length; i++) {
+	    if (objDel.recordId == arrPens[i].recordId) {
+		arrPens.splice(i,1);		
+		return true;
+	    }
+	}
+	return false;
+    },
     movePen : function(objFrom, objTo, objMovement) {
 	objFrom.heads = parseInt(objFrom.heads) - parseInt(objMovement.heads);
 	objFrom.weight = parseInt(objFrom.weight)
@@ -230,7 +240,11 @@ enyo.kind({
 	    reception.heads = Number(reception.heads) - Number(heads);
 	    reception.weight = Number(reception.weight) - weightToSubstract;
 	    reception.avgweight = Number(reception.weight) / Number(reception.heads);
-	    return true;
+	    if(reception.heads <1){
+		if(this.del(reception)){
+		    return true;
+		}
+	    }
 	}
 	return false;
     }

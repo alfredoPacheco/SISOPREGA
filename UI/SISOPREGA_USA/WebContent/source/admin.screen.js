@@ -43,7 +43,7 @@ enyo.kind(
         {
           kind : enyo.Popup,
           name : "popup_add",
-          width : "330px;",
+          width : "343px;",
           height : "70px;",
           dismissWithClick : true,
           layoutKind : "VFlexLayout",
@@ -257,6 +257,7 @@ enyo.kind(
     releaseShipment:function(){
 	this.$.popup_driver.close();
 	this.$.shipment.updateList();
+	this.$.inventory.updateView();
     },
     cancel_release:function(){
 	this.$.popup_driver.close();
