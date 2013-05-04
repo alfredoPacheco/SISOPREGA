@@ -1,73 +1,106 @@
 enyo.kind({
     name : "cache.sales",
     lastID:6,
-    cacheData : [ {
-	sale_id : 1,
-	buyer:"un cliente",
-	sale_date:new Date(),
-	totalHeads:123,
-	totalWeight:123.23,
-	aveWeight:1.01,
-	detail:[{
-	    detailNumber:1,
-	    aveWeight:152,
-	    cattleName:"Caballos",
-	    heads:91,
-	    pen:"3C12",
-	    weight:13832
-	},{
-	    detailNumber:2,
-	    aveWeight: 235,
-	    cattleName: "Novillos",
-	    heads: 78,
-	    pen: "3C21",
-	    weight: 18330
-	}]	
-    }, {
-	sale_id : 2,
-	buyer:"segundo cliente",
-	sale_date:new Date(),
-	totalHeads:123,
-	totalWeight:123.23,
-	aveWeight:1.01,
-	detail:[{
-	    detailNumber:1,
-	    aveWeight:152,
-	    cattleName:"Caballos",
-	    heads:91,
-	    pen:"3C12",
-	    weight:13832
-	},{
-	    detailNumber:2,
-	    aveWeight: 235,
-	    cattleName: "Novillos",
-	    heads: 78,
-	    pen: "3C21",
-	    weight: 18330
-	}]	
-    }, {
-	sale_id : 3,
-	buyer:"terecer clinet",
-	sale_date:new Date(),
-	totalHeads:123,
-	totalWeight:123.23,
-	aveWeight:1.01,
-	detail:[{
-	    detailNumber:1,
-	    aveWeight:152,
-	    cattleName:"Caballos",
-	    heads:91,
-	    pen:"3C12",
-	    weight:13832
-	},{
-	    detailNumber:2,
-	    aveWeight: 235,
-	    cattleName: "Novillos",
-	    heads: 78,
-	    pen: "3C21",
-	    weight: 18330
-	}]	
-    },  ], 
+    cacheData : [ 
+                 //Correct model:
+//                  {
+//                 arrToShipDetailed:[{
+//                     aveWeight: 469,
+//                     buyer: "Este es un cliente",
+//                     cattleName: "Caballos",
+//                     checked: true,
+//                     detailNumber: 0,
+//                     heads: 23,
+//                     id_inventory: 1,
+//                     itemNumber: 0,
+//                     pen: "3C2",
+//                     sale_id: 7,
+//                     shipCarrier: "Transportista 1",
+//                     shipProgramDateTime: new Date(),
+//                     weight: 10787
+//                 },{
+//                     aveWeight: 278,
+//                     buyer: "Este es un cliente",
+//                     cattleName: "Novillos",
+//                     detailNumber: 1,
+//                     heads: 32,
+//                     id_inventory: 3,
+//                     itemNumber: 1,
+//                     pen: "3C32",
+//                     sale_id: 7,
+//                     weight: 8896
+//                 }],
+//	sale_id : 1,
+//	buyer:"un cliente",
+//	sale_date:new Date(),
+//	totalHeads:123,
+//	totalWeight:123.23,
+//	aveWeight:1.01,
+//	detail:[{
+//	    detailNumber:1,
+//	    aveWeight:152,
+//	    cattleName:"Caballos",
+//	    heads:91,
+//	    id_inventory: 1,
+//	    pen:"3C12",
+//	    weight:13832
+//	},{
+//	    detailNumber:2,
+//	    aveWeight: 235,
+//	    cattleName: "Novillos",
+//	    heads: 78,
+//	    id_inventory: 2,
+//	    pen: "3C21",
+//	    weight: 18330
+//	}]	
+//                 Finish correct model
+//    }, {
+//	sale_id : 2,
+//	buyer:"segundo cliente",
+//	sale_date:new Date(),
+//	totalHeads:123,
+//	totalWeight:123.23,
+//	aveWeight:1.01,
+//	detail:[{
+//	    detailNumber:1,
+//	    aveWeight:152,
+//	    cattleName:"Caballos",
+//	    heads:91,
+//	    pen:"3C12",
+//	    weight:13832
+//	},{
+//	    detailNumber:2,
+//	    aveWeight: 235,
+//	    cattleName: "Novillos",
+//	    heads: 78,
+//	    pen: "3C21",
+//	    weight: 18330
+//	}]	
+//    }, {
+//	sale_id : 3,
+//	buyer:"terecer clinet",
+//	sale_date:new Date(),
+//	totalHeads:123,
+//	totalWeight:123.23,
+//	aveWeight:1.01,
+//	detail:[{
+//	    detailNumber:1,
+//	    aveWeight:152,
+//	    cattleName:"Caballos",
+//	    heads:91,
+//	    pen:"3C12",
+//	    weight:13832
+//	},{
+//	    detailNumber:2,
+//	    aveWeight: 235,
+//	    cattleName: "Novillos",
+//	    heads: 78,
+//	    pen: "3C21",
+//	    weight: 18330
+//	}]	
+//    },
+//    
+    ], 
     createData : function() {
     },
     readData : function() {

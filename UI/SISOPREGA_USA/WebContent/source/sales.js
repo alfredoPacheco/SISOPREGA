@@ -93,13 +93,8 @@ enyo
 			    hint : 'Cabezas',
 			    width : "150px;",
 			    style : "margin-right: 15px;"
-			}, {
-			    kind : enyo.Button,
-			    caption : "Agregar",
-			    onclick : "agregar_click",
-			    style : "background-color: #DABD8B;"
-			},{
-			    content:'<button type="button" style="border: 0;background-color: transparent;">Agregar</button>',
+			},	{
+			    content:'<button type="button" style="border: 0;background-color: transparent;margin: 0px;padding: 0px;color: #292929;font-size: 16px;">Agregar</button>',
 			    allowHtml:true,
 			    onclick : "agregar_click",
 			    onmousedown:"buttonDown",
@@ -255,8 +250,10 @@ enyo
 		this.arrDetail.push(newObject);
 		this.updateList();
 
+		this.$.clase.setFocus();
 		this.$.detailScroller.scrollTo(this.$.detailScroller
 			.getBoundaries().bottom, 0);
+		
 	    },
 	    setupRow : function(inSender, inIndex) {
 		if (this.arrDetail[inIndex]) {
