@@ -1032,6 +1032,18 @@
 			<basic name="sellerName">
 				<column name="seller_name"/>
 			</basic>
+			<basic name="addressOne">
+				<column name="address_one" />
+			</basic>
+			<basic name="addressTwo">
+				<column name="address_two" />
+			</basic>
+			<basic name="addressState">
+				<column name="address_state" />
+			</basic>
+			<basic name="zipCode">
+				<column name="zip_code" />
+			</basic>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.Purchase">

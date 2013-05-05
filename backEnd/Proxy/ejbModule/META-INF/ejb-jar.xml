@@ -125,6 +125,11 @@
 			<ejb-name>PrintLogProxy</ejb-name>
 			<ejb-class>com.tramex.sisoprega.proxy.bean.PrintLogBean</ejb-class>
 		</session>
+		<!-- I2 PROXIES -->
+		<session>
+			<ejb-name>SellerProxy</ejb-name>
+			<ejb-class>com.tramex.sisoprega.proxy.bean.SellerBean</ejb-class>
+		</session>
 	</enterprise-beans>
 	<assembly-descriptor>
 		<security-role>

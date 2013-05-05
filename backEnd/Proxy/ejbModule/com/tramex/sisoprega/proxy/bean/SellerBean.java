@@ -15,6 +15,9 @@
  */
 package com.tramex.sisoprega.proxy.bean;
 
+import javax.annotation.security.DeclareRoles;
+import javax.ejb.Stateless;
+
 import com.tramex.sisoprega.common.BaseResponse;
 import com.tramex.sisoprega.common.CreateGatewayResponse;
 import com.tramex.sisoprega.common.Error;
@@ -29,6 +32,8 @@ import com.tramex.sisoprega.dto.Seller;
  * @author Jaime Figueroa
  *
  */
+@Stateless
+@DeclareRoles({ "sisoprega_admin", "mx_usr", "rancher" })
 public class SellerBean extends BaseBean implements Cruddable {
 
   @Override

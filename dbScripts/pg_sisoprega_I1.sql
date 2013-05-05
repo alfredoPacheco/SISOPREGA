@@ -685,7 +685,14 @@ CREATE TABLE ctrl_hermana_expense(
 DROP TABLE IF EXISTS cat_seller CASCADE;
 CREATE TABLE cat_seller(
 	seller_id    SERIAL PRIMARY KEY,
-	seller_name  varchar(80) UNIQUE NOT NULL
+	seller_name  varchar(80) UNIQUE NOT NULL,
+	address_one  varchar(250),
+	address_two  varchar(250),
+	city         varchar(80),
+	address_state varchar(80),
+	zip_code varchar(20),
+	phone varchar(20),
+	email varchar(20)
 );
 
 GRANT ALL ON cat_seller TO sisoprega;
