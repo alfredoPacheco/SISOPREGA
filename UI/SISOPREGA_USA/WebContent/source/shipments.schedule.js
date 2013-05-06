@@ -444,15 +444,18 @@ enyo.kind({
 	var itemInIndex = this.arrToShipDetailed[inIndex];
 	for (var i=0;i<len;i++){
 		if(this.arrToShipDetailed[i].detailNumber == itemInIndex.detailNumber){
-		    if(firstFound > -1){
-			this.arrToShipDetailed[firstFound].heads += Number(this.arrToShipDetailed[i].heads);
-			this.arrToShipDetailed[firstFound].weight += Number(this.arrToShipDetailed[i].weight);
-			this.arrToShipDetailed.splice(i,1);			
-			i--;
-			len--;
-		    }else{
-			firstFound = i;
+		    if(!this.arrToShipDetailed[i].hasOwnProperty("shipProgramDateTime")){
+			if(firstFound > -1){
+			    this.arrToShipDetailed[firstFound].heads += Number(this.arrToShipDetailed[i].heads);
+			    this.arrToShipDetailed[firstFound].weight += Number(this.arrToShipDetailed[i].weight);
+			    this.arrToShipDetailed.splice(i,1);			
+			    i--;
+			    len--;
+			}else{
+			    firstFound = i;
+			}
 		    }
+		    
 		}
 	}
 	this.updateList();
