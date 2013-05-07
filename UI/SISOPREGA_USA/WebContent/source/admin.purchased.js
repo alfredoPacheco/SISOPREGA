@@ -140,58 +140,22 @@ enyo
                   kind : "Toolbar",
                   components :
                     [
-                      {
-                        kind : "RowGroup",
-                        align : "center",
-                        flex : .1,
-                        style : "backgound-color:white;margin:0",
-                        contentFit : true,
-                        components :
-                          [
-                            {
-                              kind : "VFlexBox",
-                              name : "lblPurSumHeads",
-                              align : "center",
-                              allowHtml : true,
-                              className : "listSecond",
-                              style : "text-align:center;font-size: 0.75em;color:#999",
-                              content : ""
-                            }, ]
-                      },
-                      {
-                        kind : "RowGroup",
-                        align : "center",
-                        flex : .15,
-                        style : "backgound-color:white;margin:0",
-                        contentFit : true,
-                        components :
-                          [
-                            {
-                              kind : "VFlexBox",
-                              name : "lblPurSumWeight",
-                              align : "center",
-                              style : "text-align:center;font-size: 0.75em;color:#999",
-                              content : "",
-                              allowHtml : true
-                            }, ]
-                      },
-                      {
-                        kind : "RowGroup",
-                        align : "center",
-                        flex : .12,
-                        style : "backgound-color:white;margin:0",
-                        contentFit : true,
-                        components :
-                          [
-                            {
-                              kind : "VFlexBox",
-                              name : "lblSumAveWeight",
-                              align : "center",
-                              style : "text-align:center;font-size: 0.75em;color:#999",
-                              allowHtml : true,
-                              content : ""
-                            }, ]
-                      }, ]
+                        {kind:"RowGroup",contentFit:true, align: "center", flex:.1, style:"backgound-color:white;margin:0;",
+                        	 components:[
+                        		{name: "lblPurSumHeads",kind: "VFlexBox",align:"center",allowHtml:true, style:"text-align:center;font-size: 0.75em;color:#999;",
+                        		 content: "", },
+                        	]},
+                        	{kind:"RowGroup",contentFit:true, align: "center", flex:.1, style:"backgound-color:white;margin:0",
+                        	 components:[
+                        		{kind: "VFlexBox",name: "lblPurSumWeight",align:"center",allowHtml:true, style:"text-align:center;font-size: 0.75em;color:#999;",
+                        		 content: ""},
+                        	]},
+                        	{kind:"RowGroup",contentFit:true, align: "center", flex:.1, style:"backgound-color:white;margin:0",
+                        	 components:[
+                        		{kind: "VFlexBox",name: "lblSumAveWeight",align:"center",allowHtml:true, style:"text-align:center;font-size: 0.75em;color:#999;",
+                        		 content: ""},
+                        	]}	
+                       ]
                 }, ],
         loadPurchased : function(inSender, inIndex) {
           var objData = undefined;
@@ -210,7 +174,7 @@ enyo
 
           this.$.lblPurDate.setContent(objData.purdate);
           this.$.lblPurHeads.setContent(objData.heads);
-          this.$.lblPurWeight.setContent(gblUtils.numCD(objData.weight));
+          this.$.lblPurWeight.setContent(utils.formatNumberThousands(objData.weight));
           this.$.lblPurAveWeight.setContent(utils.formatNumberThousands(objData.aveweight));
           if (objData.reweight) {
             if (objData.reweight > 0) {
@@ -240,9 +204,14 @@ enyo
           iHeadWeight += this.arrData.inventory.weight;
           iHeadAve = iHeadWeight / iHeadHeads;
 
-          this.$.lblPurSumHeads.setContent("Cabezas<br />" + gblUtils.numCD(iFotHeads));
-          this.$.lblPurSumWeight.setContent("Peso<br />" + gblUtils.numCD(iFotWeight));
-          this.$.lblSumAveWeight.setContent("Peso Prom.<br />" + (iFotWeight / iFotHeads).toFixed(2));
+          this.$.lblPurSumHeads.setContent("Cabezas<br />" + utils.formatNumberThousands(iFotHeads.toFixed(2)));
+          this.$.lblPurSumWeight.setContent("Peso<br />" + utils.formatNumberThousands(iFotWeight.toFixed(2)));
+          var avg = null;
+	    if(avg=(iFotWeight / iFotHeads)){
+		this.$.lblSumAveWeight.setContent("Peso Prom.<br />" + utils.formatNumberThousands(avg.toFixed(2)));    
+	    }else{
+		this.$.lblSumAveWeight.setContent("Peso Prom.<br />0.00");
+	    }
         },
         updateList : function() {
           this.arrData = cachePur.get();

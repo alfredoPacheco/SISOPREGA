@@ -64,36 +64,30 @@ enyo.kind({
 		]},
 		{kind: "Toolbar",
 			components:[
-				{kind: "VFlexBox", content:"Total",flex:1,style:"color:white;margin:0;font-size:15px;"},
-				{kind: "Spacer",flex:.2},				
-				{kind:"RowGroup", align: "center", flex:1, style:"backgound-color:white;margin:0",
-				 components:[
-					{kind: "VFlexBox",name: "lblShipSumHeads",align:"center",style:"font-size: 0.75em;color:#999",
-					 content: ""},
-				]},
-				{kind: "Spacer",flex:.2},
-				{kind:"RowGroup", align: "center", flex:1, style:"backgound-color:white;margin:0",
-				 components:[
-					{kind: "VFlexBox",name: "lblShipSumWeight",align:"center",
-					 style:"font-size: 0.75em;color:#999",
-					 content: ""},
-				]},
-				{kind: "Spacer",flex:.2},
-				{kind:"RowGroup", align: "center", flex:1, style:"backgound-color:white;margin:0",
-				 components:[
-					{kind: "VFlexBox",name: "lblShipSumAveWeight",align:"center",
-					 style:"font-size: 0.75em;color:#999",
-					 content: ""},
-				]},				
-				{kind: "Spacer",flex:.2},				
+                        	{kind:"RowGroup",contentFit:true, align: "center", flex:.1, style:"backgound-color:white;margin:0;",
+                        	 components:[
+                        		{name: "lblShipSumHeads",kind: "VFlexBox",align:"center",allowHtml:true, style:"text-align:center;font-size: 0.75em;color:#999;",
+                        		 content: "", },
+                        	]},
+                        	{kind:"RowGroup",contentFit:true, align: "center", flex:.1, style:"backgound-color:white;margin:0",
+                        	 components:[
+                        		{kind: "VFlexBox",name: "lblShipSumWeight",align:"center",allowHtml:true, style:"text-align:center;font-size: 0.75em;color:#999;",
+                        		 content: ""},
+                        	]},
+                        	{kind:"RowGroup",contentFit:true, align: "center", flex:.1, style:"backgound-color:white;margin:0",
+                        	 components:[
+                        		{kind: "VFlexBox",name: "lblShipSumAveWeight",align:"center",allowHtml:true, style:"text-align:center;font-size: 0.75em;color:#999;",
+                        		 content: ""},
+                        	]},	
+							
 			]},	
 	],
 	loadShipments:function(inSender, inIndex) {		
 		var objData;
 		if(objData=this.arrData[inIndex]){
 			this.$.lblShipProgramDate.setContent(objData.shipProgramDateTime.toLocaleDateString()+ " " +objData.shipProgramDateTime.toLocaleTimeString().substring(0,5));
-			this.$.lblShipHeads.setContent(gblUtils.numCD(objData.totalHeads));
-			this.$.lblShipWeight.setContent(gblUtils.numCD(objData.totalWeight));
+			this.$.lblShipHeads.setContent(utils.formatNumberThousands(objData.totalHeads));
+			this.$.lblShipWeight.setContent(utils.formatNumberThousands(objData.totalWeight));
 			this.$.lblShipAverage.setContent(objData.aveWeight);
 			this.$.lblShipClient.setContent(objData.buyer);	
 			if(inIndex % 2 == 0)inSender.$.client.$.client.applyStyle("background-color","#DFC699");
@@ -114,19 +108,24 @@ enyo.kind({
 		}
 	},
 	updateSummary:function(){
-		var iHeads=0;		
-		var iWeight=0;
-		var iAve=0;		
-		
-		for (var j=0;j<this.arrData.length;j++){
-			iHeads+=this.arrData[j].totalHeads;			
-			iWeight+=this.arrData[j].totalWeight;
-			iAve+=this.arrData[j].aveWeight;			
-		}
-		
-		this.$.lblShipSumHeads.setContent(gblUtils.numCD(iHeads));
-		this.$.lblShipSumWeight.setContent(gblUtils.numCD(iWeight));
-		this.$.lblShipSumAveWeight.setContent((iAve/this.arrData.length).toFixed(2));				
+	    var iHeads=0;		
+	    var iWeight=0;
+	    var iAve=0;		
+	    
+	    for (var j=0;j<this.arrData.length;j++){
+		iHeads+=this.arrData[j].totalHeads;			
+		iWeight+=this.arrData[j].totalWeight;
+		iAve+=this.arrData[j].aveWeight;			
+	    }
+	    
+	    this.$.lblShipSumHeads.setContent("Cabezas<br />" + utils.formatNumberThousands(iHeads.toFixed(2)));
+	    this.$.lblShipSumWeight.setContent("Peso<br />" + utils.formatNumberThousands(iWeight.toFixed(2)));
+	    var avg = null;
+	    if(avg=(iAve/this.arrData.length)){
+		this.$.lblShipSumAveWeight.setContent("Peso Prom.<br />" + utils.formatNumberThousands(avg.toFixed(2)));    
+	    }else{
+		this.$.lblShipSumAveWeight.setContent("Peso Prom.<br />0.00");
+	    }
 	},
 	ready:function(){
 	    this.updateSummary();

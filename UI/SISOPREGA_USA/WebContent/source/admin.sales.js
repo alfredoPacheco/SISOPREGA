@@ -76,28 +76,21 @@ enyo.kind({
 		]},
 		{kind: "Toolbar",
 			components:[
-				{kind: "VFlexBox", content:"Total",flex:1,style:"color:white;margin:0;font-size:15px;"},
-				{kind: "Spacer",flex:.2},				
-				{kind:"RowGroup", align: "center", flex:1, style:"backgound-color:white;margin:0",
-				 components:[
-					{kind: "VFlexBox",name: "lblSalesSumHeads",align:"center",style:"font-size: 0.75em;color:#999",
-					 content: ""},
-				]},
-				{kind: "Spacer",flex:.2},
-				{kind:"RowGroup", align: "center", flex:1, style:"backgound-color:white;margin:0",
-				 components:[
-					{kind: "VFlexBox",name: "lblSalesSumWeight",align:"center",
-					 style:"font-size: 0.75em;color:#999",
-					 content: ""},
-				]},
-				{kind: "Spacer",flex:.2},
-				{kind:"RowGroup", align: "center", flex:1, style:"backgound-color:white;margin:0",
-				 components:[
-					{kind: "VFlexBox",name: "lblSumAveWeight",align:"center",
-					 className:"listSecond",style:"font-size: 0.75em;color:#999",
-					 content: ""},
-				]},				
-				{kind: "Spacer",flex:.2},				
+			       {kind:"RowGroup",contentFit:true, align: "center", flex:.1, style:"backgound-color:white;margin:0;",
+                            	 components:[
+                            		{name: "lblSalesSumHeads",kind: "VFlexBox",align:"center",allowHtml:true, style:"text-align:center;font-size: 0.75em;color:#999;",
+                            		 content: "", },
+                            	]},
+                            	{kind:"RowGroup",contentFit:true, align: "center", flex:.1, style:"backgound-color:white;margin:0",
+                            	 components:[
+                            		{kind: "VFlexBox",name: "lblSalesSumWeight",align:"center",allowHtml:true, style:"text-align:center;font-size: 0.75em;color:#999;",
+                            		 content: ""},
+                            	]},
+                            	{kind:"RowGroup",contentFit:true, align: "center", flex:.1, style:"backgound-color:white;margin:0",
+                            	 components:[
+                            		{kind: "VFlexBox",name: "lblSumAveWeight",align:"center",allowHtml:true, style:"text-align:center;font-size: 0.75em;color:#999;",
+                            		 content: ""},
+                            	]},	
 			]},	
 	],
 	loadSales:function(inSender, inIndex) {		
@@ -142,18 +135,23 @@ enyo.kind({
 		}
 	},
 	updateSummary:function(){
-		var iHeads=0;		
-		var iWeight=0;
-		var iAve=0;		
+	    var iHeads=0;		
+	    var iWeight=0;
+	    var iAve=0;		
 		
-		for (var j=0;j<this.arrData.length;j++){
-			iHeads+=this.arrData[j].totalHeads;		
-			iWeight+=this.arrData[j].totalWeight;
-			iAve+=this.arrData[j].aveWeight;					
-		}
-		this.$.lblSalesSumHeads.setContent(utils.formatNumberThousands(iHeads));
-		this.$.lblSalesSumWeight.setContent(utils.formatNumberThousands(iWeight));
-		this.$.lblSumAveWeight.setContent(utils.formatNumberThousands((iAve/this.arrData.length).toFixed(2)));
+	    for (var j=0;j<this.arrData.length;j++){
+		iHeads+=this.arrData[j].totalHeads;		
+		iWeight+=this.arrData[j].totalWeight;
+		iAve+=this.arrData[j].aveWeight;					
+	    }
+	    this.$.lblSalesSumHeads.setContent("Cabezas<br />" + utils.formatNumberThousands(iHeads.toFixed(2)));
+	    this.$.lblSalesSumWeight.setContent("Peso<br />" + utils.formatNumberThousands(iWeight.toFixed(2)));
+	    var avg = null;
+	    if(avg=(iAve/this.arrData.length)){
+		this.$.lblSumAveWeight.setContent("Peso Prom.<br />" + utils.formatNumberThousands(avg.toFixed(2)));    
+	    }else{
+		this.$.lblSumAveWeight.setContent("Peso Prom.<br />0.00");
+	    }
 	},
 	ready:function(){
 		this.updateSummary();
