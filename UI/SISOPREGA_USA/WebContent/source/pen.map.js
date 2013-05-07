@@ -416,8 +416,9 @@ enyo
 		    }
 		    if (objFrom) {
 			var byName = this.movingTo.name;
-			objFrom.barnyard = [];
-			objFrom.barnyard[byName] = byName;
+//			objFrom.barnyard = [];
+//			objFrom.barnyard[byName] = byName;
+			objFrom.barnyard = byName;
 			this.$.popup_movePen.validateComponents();
 			this.$.movePen_kind.setObj(objFrom);
 			this.$.popup_movePen.openAtCenter();

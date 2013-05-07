@@ -110,7 +110,7 @@ enyo.kind({
 	return this.obj;
     },
     save : function() {
-	this.obj.feed.quantity = this.$.feedQtyPorcentage.getValue();
+	this.obj.feed.quantity = Number(this.$.feedQtyPorcentage.getValue());
 	var dateAux = new Date("" + this.$.feedDate.getValue() + " "
 		+ this.$.feedTime.getValue());
 	this.obj.feed.dateAndTime = dateAux;

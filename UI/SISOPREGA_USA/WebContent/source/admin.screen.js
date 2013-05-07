@@ -32,6 +32,7 @@ enyo.kind(
           layoutKind : "VFlexLayout",
           style : "overflow: hidden;border-width: 8px;",
           scrim : true,
+          onClose:"on_popup_map_close",
           components :
             [
               {
@@ -261,5 +262,8 @@ enyo.kind(
     },
     cancel_release:function(){
 	this.$.popup_driver.close();
+    },
+    on_popup_map_close:function(){
+	this.$.inventory.updateView();
     }
   });

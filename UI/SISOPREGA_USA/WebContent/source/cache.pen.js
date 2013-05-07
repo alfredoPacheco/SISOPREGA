@@ -241,10 +241,11 @@ enyo.kind({
 	    reception.weight = Number(reception.weight) - weightToSubstract;
 	    reception.avgweight = Number(reception.weight) / Number(reception.heads);
 	    if(reception.heads <1){
-		if(this.del(reception)){
-		    return true;
+		if(!this.del(reception)){
+		    return false;
 		}
 	    }
+	    return true;
 	}
 	return false;
     }
