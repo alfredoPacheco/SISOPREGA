@@ -692,7 +692,7 @@ CREATE TABLE cat_seller(
 	address_state varchar(80),
 	zip_code varchar(20),
 	phone varchar(20),
-	email varchar(20)
+	email varchar(150)
 );
 
 GRANT ALL ON cat_seller TO sisoprega;

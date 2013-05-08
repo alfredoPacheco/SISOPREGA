@@ -1024,6 +1024,14 @@
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.Seller">
 		<table name="cat_seller"/>
+		<named-query name="SELLER_BY_ID">
+			<description>Retrieve a single seller record by it's ID</description>
+			<query>SELECT iSeller FROM Seller iSeller WHERE iSeller.sellerId = :sellerId</query>
+		</named-query>
+		<named-query name="ALL_SELLERS">
+			<description>Retrieve all seller records from database.</description>
+			<query>SELECT iSeller FROM Seller iSeller</query>
+		</named-query>
 		<attributes>
 			<id name="sellerId">
 				<column name="seller_id"/>

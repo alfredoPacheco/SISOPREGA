@@ -345,6 +345,8 @@ enyo.kind(
       this.$.list.render();
       this.$.totalHC.setContent(utils.formatNumberThousands(this.totalHC));
       this.$.totalWeight.setContent(utils.formatNumberThousands(this.totalWeight));
+      
+      this.$.provider.setItems(cacheProviders.getAllForList());
     },
     dropPurchase : function(inSender, inIndex) {
       // TODO: Remove corte from cache
