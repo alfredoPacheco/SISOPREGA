@@ -41,7 +41,9 @@ enyo.kind({
 		 components:[
 			{kind: enyo.VirtualRepeater, name: "listShipments", onSetupRow: "loadShipments",								
 			components: [
-				{kind: enyo.Item, style:"font-size:14px;",
+				{kind: enyo.SwipeableItem, style:"font-size:14px;",
+				    confirmCaption:"Eliminar",
+				    onConfirm:"onDeleteShip",
 					components: [
 						{layoutKind: enyo.HFlexLayout, align:"center", components:[
 							{name: "lblShipProgramDate",flex:1,
@@ -152,5 +154,8 @@ enyo.kind({
 	moveToBottom:function(){
 	    this.$.scroller.scrollTo(this.$.scroller
 			.getBoundaries().bottom, 0);
+	},
+	onDeleteShip:function(inSender, inIndex){
+	    alert("eliminado ship");
 	}
 });

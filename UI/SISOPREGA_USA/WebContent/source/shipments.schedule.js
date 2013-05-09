@@ -354,7 +354,8 @@ enyo.kind({
     },
     saveShip:function(arrShip){
 	var arrByBuyer={};
-	var arrByCattle={};
+	var objShip = {arrDetail:{}, totalHeads:0, totalWeight:0};
+	
 	for(var i=0;i<arrShip.length;i++){
 	    if(!(arrShip[i].buyer in arrByBuyer)){
 		arrByBuyer[arrShip[i].buyer] = [];
@@ -365,23 +366,22 @@ enyo.kind({
 	for(i in arrByBuyer){
 	    if (arrByBuyer.hasOwnProperty(i)){
 		for(var j=0;j<arrByBuyer[i].length;j++){
-		    if(!(arrByBuyer[i][j].cattleName in arrByCattle)){
-			arrByCattle[arrByBuyer[i][j].cattleName]=arrByBuyer[i][j];
-		    }else{
-			arrByCattle[arrByBuyer[i][j].cattleName].totalHeads += arrByBuyer[i][j].totalHeads;
-			arrByCattle[arrByBuyer[i][j].cattleName].totalWeight += arrByBuyer[i][j].totalWeight;
+		    if(!(arrByBuyer[i][j].cattleName in objShip.arrDetail)){
+			objShip.arrDetail[arrByBuyer[i][j].cattleName]=[];			
 		    }
+		    objShip.arrDetail[arrByBuyer[i][j].cattleName].push(arrByBuyer[i][j]);
+		    objShip.totalHeads += arrByBuyer[i][j].totalHeads;
+		    objShip.totalWeight += arrByBuyer[i][j].totalWeight;
 		}
 		
-		for(p in arrByCattle){
-		    if(arrByCattle.hasOwnProperty(p)){
-			if(!cacheShip.createData(arrByCattle[p])){
+		for(p in objShip.arrDetail){
+		    if(objShip.arrDetail.hasOwnProperty(p)){
+			if(!cacheShip.createData(objShip.arrDetail[p])){
 			    return;
 			}    
 		    }
 		}
-		
-		arrByCattle={};
+		objShip = {arrDetail:{}, totalHeads:0, totalWeight:0};arrByCattle={};
 	    }
 	}
 	
