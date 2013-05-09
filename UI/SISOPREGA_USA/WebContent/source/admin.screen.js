@@ -12,7 +12,7 @@ enyo.kind(
           dismissWithClick : true,
           layoutKind : "VFlexLayout",
           style : "overflow: hidden;border-width: 8px;",
-          scrim : true,          
+          scrim : true,
           components :
             [
               {
@@ -32,7 +32,7 @@ enyo.kind(
           layoutKind : "VFlexLayout",
           style : "overflow: hidden;border-width: 8px;",
           scrim : true,
-          onClose:"on_popup_map_close",
+          onClose : "on_popup_map_close",
           components :
             [
               {
@@ -199,14 +199,14 @@ enyo.kind(
       this.$.popup_add.openAtCenter();
     },
     showShipment : function() {
-	this.$.popup_shipments.validateComponents();
-	if(this.$.sales.getSelectedItems().length > 0){
-	    this.$.shipments_kind.setArrShipment(this.$.sales.getSelectedItems());
-	    this.$.popup_shipments.openAtCenter();
-	    this.$.shipments_kind.updateList();
-	}else{
-	    alert("No hay registros seleccionados");
-	}
+      this.$.popup_shipments.validateComponents();
+      if (this.$.sales.getSelectedItems().length > 0) {
+        this.$.shipments_kind.setArrShipment(this.$.sales.getSelectedItems());
+        this.$.popup_shipments.openAtCenter();
+        this.$.shipments_kind.updateList();
+      } else {
+        alert("No hay registros seleccionados");
+      }
     },
     showSelectShipment : function(arrShipment) {
       this.$.popup_driver.openAtCenter();
@@ -229,7 +229,7 @@ enyo.kind(
     },
     programShipment_click : function() {
       this.$.popup_shipments.close();
-      this.$.sales.arrToShip={};
+      this.$.sales.arrToShip = {};
       this.$.sales.updateView();
       this.$.shipment.updateList();
       this.$.shipment.moveToBottom();
@@ -255,15 +255,15 @@ enyo.kind(
         this.$.popup_hermana.close();
       }
     },
-    releaseShipment:function(){
-	this.$.popup_driver.close();
-	this.$.shipment.updateList();
-	this.$.inventory.updateView();
+    releaseShipment : function() {
+      this.$.popup_driver.close();
+      this.$.shipment.updateList();
+      this.$.inventory.updateView();
     },
-    cancel_release:function(){
-	this.$.popup_driver.close();
+    cancel_release : function() {
+      this.$.popup_driver.close();
     },
-    on_popup_map_close:function(){
-	this.$.inventory.updateView();
+    on_popup_map_close : function() {
+      this.$.inventory.updateView();
     }
   });

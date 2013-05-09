@@ -26,6 +26,7 @@ package com.tramex.sisoprega.dto;
  * MM/DD/YYYY
  * ----------  ---------------------------  -------------------------------------------
  * Apr 18, 2013     Diego Torres                 Initial Version.
+ * 05/08/2013       Diego Torres                 Additional fields agregated during design of UI catalog.
  * ====================================================================================
  * </PRE>
  * 
@@ -73,7 +74,7 @@ public class Seller {
   public void setSellerName(String sellerName) {
     this.sellerName = sellerName;
   }
-  
+
   /**
    * @return the addressOne
    */
@@ -82,7 +83,8 @@ public class Seller {
   }
 
   /**
-   * @param addressOne the addressOne to set
+   * @param addressOne
+   *          the addressOne to set
    */
   public void setAddressOne(String addressOne) {
     this.addressOne = addressOne;
@@ -96,7 +98,8 @@ public class Seller {
   }
 
   /**
-   * @param addressTwo the addressTwo to set
+   * @param addressTwo
+   *          the addressTwo to set
    */
   public void setAddressTwo(String addressTwo) {
     this.addressTwo = addressTwo;
@@ -110,7 +113,8 @@ public class Seller {
   }
 
   /**
-   * @param city the city to set
+   * @param city
+   *          the city to set
    */
   public void setCity(String city) {
     this.city = city;
@@ -124,7 +128,8 @@ public class Seller {
   }
 
   /**
-   * @param addressState the addressState to set
+   * @param addressState
+   *          the addressState to set
    */
   public void setAddressState(String addressState) {
     this.addressState = addressState;
@@ -138,7 +143,8 @@ public class Seller {
   }
 
   /**
-   * @param zipCode the zipCode to set
+   * @param zipCode
+   *          the zipCode to set
    */
   public void setZipCode(String zipCode) {
     this.zipCode = zipCode;
@@ -152,7 +158,8 @@ public class Seller {
   }
 
   /**
-   * @param phone the phone to set
+   * @param phone
+   *          the phone to set
    */
   public void setPhone(String phone) {
     this.phone = phone;
@@ -166,7 +173,8 @@ public class Seller {
   }
 
   /**
-   * @param email the email to set
+   * @param email
+   *          the email to set
    */
   public void setEmail(String email) {
     this.email = email;
@@ -174,6 +182,7 @@ public class Seller {
 
   @Override
   public String toString() {
-    return "sellerId:" + sellerId + ";sellerName:" + sellerName + ";";
+    return "sellerId:" + sellerId + ";sellerName:" + sellerName + ";addressOne:" + addressOne + ";addressTwo:" + addressTwo
+        + ";city:" + city + ";state:" + addressState + ";zip:" + zipCode + ";telephone:" + phone + ";email:" + email + ";";
   }
 }

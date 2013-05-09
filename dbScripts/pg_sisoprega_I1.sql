@@ -27,6 +27,7 @@
  * 03/05/2013  Diego Torres                  adding table for print app.
  * 03/13/2013  Alfredo Pacheco               Three phones by rancher, and sms_phone_chosen fields added.
  * 04/06/2013  Diego Torres                  Adding tables for I2
+ * 05/08/2013  Diego Torres                  Adding zones for I2: 3 = West; 4 = East
  * ====================================================================================
  * 
  * Author: Diego Torres
@@ -328,6 +329,9 @@ GRANT ALL ON cat_zone_zone_id_seq TO sisoprega;
 
 INSERT INTO cat_zone(zone_name) VALUES('Chihuahua');
 INSERT INTO cat_zone(zone_name) VALUES('Zona Sur');
+-- I2 Zones 3 = West, 4 = East
+INSERT INTO cat_zone(zone_name) VALUES('West');
+INSERT INTO cat_zone(zone_name) VALUES('East');
 
 /*
  Table structure for table cat_barnyards
@@ -643,7 +647,7 @@ DROP TABLE IF EXISTS ctrl_hermana_corte_exportador CASCADE;
 CREATE TABLE ctrl_hermana_corte_exportador(
 	corte_expo      SERIAL PRIMARY KEY,
 	hermana_id      integer NOT NULL REFERENCES ctrl_hermana(hermana_id),
-	qualtiy_id      integer NOT NULL REFERENCES cat_cattle_quality(quality_id),
+	quality_id      integer NOT NULL REFERENCES cat_cattle_quality(quality_id),
 	purchase_price  money NOT NULL DEFAULT 0.0
 );
 
@@ -655,7 +659,7 @@ CREATE TABLE ctrl_hermana_corte(
 	corte       SERIAL PRIMARY KEY,
 	hermana_id  integer NOT NULL REFERENCES ctrl_hermana(hermana_id),
 	barnyard_id integer NOT NULL REFERENCES cat_barnyard(barnyard_id),
-	qualtiy_id  integer NOT NULL REFERENCES cat_cattle_quality(quality_id),
+	quality_id  integer NOT NULL REFERENCES cat_cattle_quality(quality_id),
 	corte_expo  integer NOT NULL REFERENCES ctrl_hermana_corte_exportador(corte_expo),
 	heads       integer not null,
 	weight      decimal(12,4) not null
@@ -692,7 +696,7 @@ CREATE TABLE cat_seller(
 	address_state varchar(80),
 	zip_code varchar(20),
 	phone varchar(20),
-	email varchar(20)
+	email varchar(150)
 );
 
 GRANT ALL ON cat_seller TO sisoprega;
