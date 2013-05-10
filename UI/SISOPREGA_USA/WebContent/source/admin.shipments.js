@@ -87,11 +87,11 @@ enyo.kind({
 	loadShipments:function(inSender, inIndex) {		
 		var objData;
 		if(objData=this.arrData[inIndex]){
-			this.$.lblShipProgramDate.setContent(objData.shipProgramDateTime.toLocaleDateString()+ " " +objData.shipProgramDateTime.toLocaleTimeString().substring(0,5));
+			this.$.lblShipProgramDate.setContent(objData[0].shipProgramDateTime.toLocaleDateString()+ " " +objData[0].shipProgramDateTime.toLocaleTimeString().substring(0,5));
 			this.$.lblShipHeads.setContent(utils.formatNumberThousands(objData.totalHeads));
 			this.$.lblShipWeight.setContent(utils.formatNumberThousands(objData.totalWeight));
-			this.$.lblShipAverage.setContent(objData.aveWeight);
-			this.$.lblShipClient.setContent(objData.buyer);	
+			this.$.lblShipAverage.setContent(objData[0].aveWeight);
+			this.$.lblShipClient.setContent(objData[0].buyer);	
 			if(inIndex % 2 == 0)inSender.$.client.$.client.applyStyle("background-color","#DFC699");
 //			if(inIndex % 2 == 0)inSender.$.client.$.client.applyStyle("background-color","#DCC190");
 			if(objData.hasOwnProperty("releaseDate")){
@@ -117,7 +117,7 @@ enyo.kind({
 	    for (var j=0;j<this.arrData.length;j++){
 		iHeads+=this.arrData[j].totalHeads;			
 		iWeight+=this.arrData[j].totalWeight;
-		iAve+=this.arrData[j].aveWeight;			
+		iAve+=this.arrData[j][0].aveWeight;			
 	    }
 	    
 	    this.$.lblShipSumHeads.setContent("Cabezas<br />" + utils.formatNumberThousands(iHeads.toFixed(2)));
