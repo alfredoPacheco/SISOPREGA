@@ -4,7 +4,8 @@ enyo.kind({
 	arrPostReception:[{caption:"Alimento",value:3},
 				      {caption:"Inspeccion",value:4},
 					  {caption:"Editar",value:5},
-					  {caption:"Liberar",value:6},
+					  {caption:"Liberar Corral",value:6},
+					  {caption:"Liberar Lote", value:10},
 					  {caption:"Deseleccionar",value:8},
 					  {caption:"Imprimir",value:9}
 					  ],
@@ -472,11 +473,11 @@ enyo.kind({
 				this.$.popMan.render();
 				this.$.popMan.openAtCenter();		
 				break;
-			case 6: //Liberar
+			case 6: //Liberar corral
 				var objRec=cacheReceptions.getByID(cacheBY.inUse()[this.objSelected.name].reception_id);			
 				cacheBY.releaseBY(objRec,this.objSelected.name,this,"releaseBY");
-				break;
-			case 7:
+				break;			
+			case 7: 
 				var objRec=cacheReceptions.getByID(cacheBY.inUse()[this.objSelected.name].reception_id);
 				cacheReceptions.appendBY(objRec,this.arrSelected,this,"updateBY");
 				break;	
@@ -492,6 +493,10 @@ enyo.kind({
 			  utils.openReport('/ReportingGateway/RecepcionGanadoId?receptionId=' + receptionId); 
 		      
 			  break;
+			case 10: //Liberar lote
+				var objRec=cacheReceptions.getByID(cacheBY.inUse()[this.objSelected.name].reception_id);			
+				cacheBY.releaseBYbyReception(objRec,this,"releaseReception");
+				break;
 		}
 	},
 	closePopUp:function(){	
@@ -530,6 +535,15 @@ enyo.kind({
 			}
 		}
 		this.$.rancherFilter.setItems(cacheReceptions.getRanchersByReceptions());
+	},
+	releaseReception:function(){
+	    for(by in this.arrByMOver){
+		this.$[by].occupied = 0;
+		this.$[by].applyStyle("background-color",this.sColorFree);
+		this.$[by].removeClass("selectCell");
+	    }
+	    this.clearFilter();
+	    
 	},
 	deselect:function(){
 		for (var sKey in this.arrSelected){

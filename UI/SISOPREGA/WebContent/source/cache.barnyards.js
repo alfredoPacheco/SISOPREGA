@@ -320,6 +320,14 @@ enyo.kind({
 			cacheMan.setMessage("", "[Exception ID: " + cgDelete.exceptionId + "] Descripcion: " + cgDelete.exceptionDescription);			
 		}
 	},
+	releaseBYbyReception:function(objRec,cbObj,cbMethod){
+	    for (by in objRec.barnyards){
+		this.releaseBY(objRec, by);
+	    };
+	    if(cbMethod){
+		cbObj[cbMethod]();
+	    }
+	},
 	inUse:function(){
 		return this.arrObjInUse;
 	},	
