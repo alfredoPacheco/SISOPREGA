@@ -15,6 +15,10 @@
  */
 package com.tramex.sisoprega.proxy.bean;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import com.tramex.sisoprega.common.BaseResponse;
 import com.tramex.sisoprega.common.CreateGatewayResponse;
 import com.tramex.sisoprega.common.Error;
@@ -23,6 +27,7 @@ import com.tramex.sisoprega.common.GatewayRequest;
 import com.tramex.sisoprega.common.ReadGatewayResponse;
 import com.tramex.sisoprega.common.UpdateGatewayResponse;
 import com.tramex.sisoprega.common.crud.Cruddable;
+import com.tramex.sisoprega.dto.Hermana;
 import com.tramex.sisoprega.dto.HermanaCorte;
 
 /**
@@ -79,8 +84,57 @@ public class HermanaCorteBean extends BaseBean implements Cruddable {
    */
   @Override
   public ReadGatewayResponse Read(GatewayRequest request) {
-    // TODO Auto-generated method stub
-    return null;
+    this.log.entering(this.getClass().getCanonicalName(), "ReadGatewayResponse Read(GatewayRequest request)");
+
+    ReadGatewayResponse response = new ReadGatewayResponse();
+    response.setEntityName(request.getEntityName());
+
+    Hermana hermana = null;
+    try {
+      hermana = entityFromRequest(request, Hermana.class);
+      this.log.fine("Got Hermana from request: " + hermana);
+
+      String qryLogger = "";
+      String queryName = "";
+      Map<String, Object> parameters = new HashMap<String, Object>();
+      if (hermana.getHermanaId() != 0) {
+        queryName = "HERMANA_BY_ID";
+        parameters.put("hermanaId", hermana.getHermanaId());
+        qryLogger = "By hermanaId [" + hermana.getHermanaId() + "]";
+      } else if (hermana.getRancherId() != 0) {
+        queryName = "HERMANA_BY_RANCHER_ID";
+        parameters.put("rancherId", hermana.getRancherId());
+        qryLogger = "By rancherId [" + hermana.getRancherId() + "]";
+      } else {
+        response.setError(new Error("VAL03", "El filtro especificado no es válido para los registros de exportación de ganado",
+            "proxy.HermanaBean.Read"));
+        return response;
+      }
+
+      // Query the results through the jpa using a typedQuery
+      List<Hermana> queryResults = dataModel.readDataModelList(queryName, parameters, Hermana.class);
+
+      if (queryResults.isEmpty()) {
+        response.setError(new Error("VAL02", "No se encontraron datos para el filtro seleccionado", "proxy.HermanaBean.Read"));
+      } else {
+        // Add query results to response
+        response.getRecord().addAll(contentFromList(queryResults, Hermana.class));
+
+        // Add success message to response
+        response.setError(new Error("0", "SUCCESS", "proxy.HermanaBean.Read"));
+        this.log.info("Read operation " + qryLogger + " executed by principal[" + getLoggedUser() + "] on HermanaBean");
+      }
+    } catch (Exception e) {
+      // something went wrong, alert the server and respond the client
+      this.log.severe("Exception found while reading hermana");
+      this.log.throwing(this.getClass().getCanonicalName(), "ReadGatewayResponse Read(GatewayRequest request)", e);
+
+      response.setError(new Error("DB02", "Read exception: " + e.getMessage(), "proxy.HermanaBean.Read"));
+    }
+
+    // end and respond.
+    this.log.exiting(this.getClass().getCanonicalName(), "ReadGatewayResponse Read(GatewayRequest request)");
+    return response;
   }
   
   @Override

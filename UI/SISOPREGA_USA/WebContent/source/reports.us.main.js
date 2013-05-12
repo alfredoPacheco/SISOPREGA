@@ -35,7 +35,7 @@ enyo.kind({
 //    	this.addGoBackAction();
 	},
 	showReceptions : function() {
-		this.showGenericReport('reception', 'Reporte de Recepciones', 'filterByDate');
+		this.showGenericReport('reception', 'Reporte de Recepciones', 'filter');
 	},
 	showInspections : function() {
 		this.showGenericReport('inspection', 'Reporte de Inspección', 'filter');
@@ -61,7 +61,7 @@ enyo.kind({
 //			window.focus();
 //			this.$.reportsPane.selectViewByName("reportViewer");
 //			this.$.reportViewer.showReport('/ReportingGateway/GanadoRecibido?fromDate='+ parameters.start_date+'&toDate='+ parameters.end_date);
-			utils.openReport('/ReportingGateway/GanadoRecibido?fromDate='+ parameters.start_date+'&toDate='+ parameters.end_date);
+			utils.openReport('/ReportingGateway/GanadoRecibido?fromDate='+ parameters.start_date+'&toDate='+ parameters.end_date +'&rancherId='+parameters.rancher_id);
 		}
 		if (this.reportName == 'inspection'){
 			var parameters = this.$.filter.getParams();
