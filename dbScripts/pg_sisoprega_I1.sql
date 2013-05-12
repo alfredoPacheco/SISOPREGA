@@ -55,7 +55,7 @@ GRANT ALL ON sys_sisoprega_user TO sisoprega;
 DROP TABLE IF EXISTS sys_sisoprega_role CASCADE;
 CREATE TABLE sys_sisoprega_role(
     record_id SERIAL PRIMARY KEY,
-	user_name varchar(30) NOT NULL REFERENCES sys_sisoprega_user(user_name),
+	user_name varchar(30) NOT NULL REFERENCES sys_sisoprega_user(user_name) ON UPDATE CASCADE,
 	role_name varchar(20) NOT NULL
 );
 

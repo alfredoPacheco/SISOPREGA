@@ -19,6 +19,7 @@ enyo.depends(
   "../source/cache.receptions.js",  
   "../source/cache.barnyards.js", 
   "../source/cache.cattle.js",   
+  "../source/utils.js",
   "css/cssx.css",
   "../css/transitions.css"  
 );
