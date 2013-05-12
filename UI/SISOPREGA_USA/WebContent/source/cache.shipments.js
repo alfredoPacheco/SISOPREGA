@@ -39,7 +39,7 @@ enyo.kind({
 	return true;
     },
     releaseShip : function(objShip, cbObj, cbMethod) {
-	if(!cachePen.substractHeadsInPen(cachePen.getByID(objShip.id_inventory).barnyard, objShip.totalHeads)){
+	if(!cachePen.substractHeadsInPen(cachePen.getByID(objShip[0].id_inventory).barnyard, objShip.totalHeads)){
 	    return false;
 	}
 	
