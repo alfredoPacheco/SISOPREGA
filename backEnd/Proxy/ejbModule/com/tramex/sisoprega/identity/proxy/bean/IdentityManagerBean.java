@@ -23,6 +23,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 
 import com.tramex.sisoprega.identity.IdentityManagerException;
@@ -52,6 +53,7 @@ import com.tramex.sisoprega.proxy.bean.BaseBean;
  * 
  */
 @Stateless
+@RolesAllowed("sisoprega_admin")
 public class IdentityManagerBean extends BaseBean implements RemoteIdentity {
 
   /*
@@ -183,6 +185,7 @@ public class IdentityManagerBean extends BaseBean implements RemoteIdentity {
   @Override
   public boolean validateCurrentPassword(String userName, String password) throws IdentityManagerException {
     User user = getUserFromName(userName);
+    log.fine("[" + user.getPassword() + "] == [" + hashPassword(password) + "] ?");
     return user.getPassword().equals(hashPassword(password));
   }
   
@@ -205,7 +208,7 @@ public class IdentityManagerBean extends BaseBean implements RemoteIdentity {
     if (!users.isEmpty()) {
       return users.get(0);
     } else {
-      throw new IdentityManagerException("Unable to find given user for password reset.");
+      throw new IdentityManagerException("Unable to find given user.");
     }
   }
   

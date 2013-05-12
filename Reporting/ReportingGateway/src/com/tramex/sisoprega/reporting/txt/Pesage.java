@@ -38,7 +38,7 @@ import com.tramex.sisoprega.reporting.BaseReportServlet;
 /**
  * Servlet implementation class Pesage
  */
-@WebServlet("/SMS/RecibidoPorGanadero")
+@WebServlet("/SMS/GanadoRecibido")
 @ServletSecurity(@HttpConstraint(rolesAllowed = { "mx_usr" }))
 public class Pesage extends BaseReportServlet {
   private static final long serialVersionUID = 1L;

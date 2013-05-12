@@ -28,5 +28,25 @@
 				</login-config>
 			</webservice-endpoint>
 		</ejb>
+		<ejb>
+			<ejb-name>IdentityGatewayBean</ejb-name>
+			<webservice-endpoint>
+				<port-component-name>IdentityGateway</port-component-name>
+				<login-config>
+					<auth-method>BASIC</auth-method>
+					<realm>security</realm>
+				</login-config>
+			</webservice-endpoint>
+		</ejb>
+		<ejb>
+			<ejb-name>EchoesGatewayBean</ejb-name>
+			<webservice-endpoint>
+				<port-component-name>EchoesGateway</port-component-name>
+				<login-config>
+					<auth-method>BASIC</auth-method>
+					<realm>security</realm>
+				</login-config>
+			</webservice-endpoint>
+		</ejb>
 	</enterprise-beans>
 </sun-ejb-jar>

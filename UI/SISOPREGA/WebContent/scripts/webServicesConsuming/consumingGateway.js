@@ -34,16 +34,19 @@ var consumingGateway =
       var result = 'OK';
       var soapMessage = soapHeader + '<ws:SendSimpleMessage>';
       soapMessage += '<rancherId>' + rancher_id + '</rancherId><message>' + message + '</message>';
+      soapMessage += '<userName>' + utils.getCookie("username") + '</userName><password>' + utils.getCookie("pass") + '</password>';
       soapMessage += '</ws:SendSimpleMessage>';
       soapMessage += soapFooter;
 
       		jQuery.ajax({
-      			url : gatewayWsURL,
+      			url : echoWsURL,
       			type : "POST",
       			dataType : "xml",
       			data : soapMessage,
       			processData : false,
       			contentType : "text/xml;charset=UTF-8",
+                username : utils.getCookie("username"),
+                password : utils.getCookie("pass"),
       			success : function OnSuccess(data) {					
       				result = jQuery(data).find("response").text();
       			},
@@ -59,16 +62,19 @@ var consumingGateway =
       var result = 'OK';
       var soapMessage = soapHeader + '<ws:SendReport>';
       soapMessage += '<rancherId>' + rancher_id + '</rancherId><reportName>' + reportName + '</reportName>';
+      soapMessage += '<userName>' + utils.getCookie("username") + '</userName><password>' + utils.getCookie("pass") + '</password>';
       soapMessage += '</ws:SendReport>';
       soapMessage += soapFooter;
       
       		jQuery.ajax({
-      			url : gatewayWsURL,
+      			url : echoWsURL,
       			type : "POST",
       			dataType : "xml",
       			data : soapMessage,
       			processData : false,
       			contentType : "text/xml;charset=UTF-8",
+                username : utils.getCookie("username"),
+                password : utils.getCookie("pass"),
       			success : function OnSuccess(data) {					
       				result = jQuery(data).find("response").text();
       		},
@@ -87,30 +93,45 @@ var consumingGateway =
           exceptionDescription : "Success",
           exceptionId : 0
         };
-
+      
       // SOAP Message:
       var soapMessage = soapHeader + '<ws:Login>';
-      soapMessage += '<userName>' + userId + '</userName><password>' + password + '</password>';
-      soapMessage += '</ws:Login>';
-      soapMessage += soapFooter;
+      soapMessage += '<userName>' + userId + '</userName>';
+      soapMessage += '<password>' + password + '</password>';
+      soapMessage += '</ws:Login>' + soapFooter;
 
       // Ajax request:
       jQuery.ajax(
         {
-          url : gatewayWsURL,
+          url : '/DMZGatewayBeanService/DMZGateway',
           type : "POST",
           dataType : "xml",
           data : soapMessage,
           processData : false,
           contentType : "text/xml;charset=UTF-8",
           success : function OnSuccess(data) {
-            output.exceptionDescription = jQuery(data).find("exceptionDescription").text();
-            output.exceptionId = jQuery(data).find("exceptionId").text();
+            
+            var result = jQuery(data).find("return").text();
+            if(result == 'OK'){
+              output.exceptionDescription = "SUCCESS";
+              output.exceptionId = 0;
+              
+              utils.setCookie("username", userId, 365);
+              utils.setCookie("pass", password, 365);
+              
+            } else if(result == 'FAIL'){
+              output.exceptionDescription = "Contraseña incorrecta";
+              output.exceptionId = 1;
+            } else {
+              output.exceptionDescription = "El usuario no existe";
+              output.exceptionId = 2;
+            }
+            
             setTimeout(function(){callBackMethod(output, objRef);}, 1000);
             return false;
           },
           error : function OnError(request, status, error) {
-            output.exceptionId = 1;
+            output.exceptionId = 3;
             output.exceptionDescription = error;
             setTimeout(function(){callBackMethod(output, objRef);}, 1000);
             return false;
@@ -149,6 +170,8 @@ var consumingGateway =
           data : soapMessage,
           processData : false,
           contentType : "text/xml;charset=UTF-8",
+          username : utils.getCookie("username"),
+          password : utils.getCookie("pass"),
           async : false,
           success : function OnSuccess(data) {
             output.exceptionDescription = jQuery(data).find("exceptionDescription").text();
@@ -195,6 +218,12 @@ var consumingGateway =
       });
 
       soapMessage += '</ws:Read>' + soapFooter;
+      
+      if(utils.getCookie("username")==null){
+        alert('Usuario no identificado');
+        consumingGateway.LogOut();
+      }
+        
 
       // Ajax request:
       jQuery.ajax(
@@ -205,9 +234,10 @@ var consumingGateway =
           data : soapMessage,
           processData : false,
           contentType : "text/xml;charset=UTF-8",
+          username : utils.getCookie("username"),
+          password : utils.getCookie("pass"),
           async : false,
           success : function OnSuccess(data) {
-
             output.exceptionDescription = jQuery(data).find("exceptionDescription").text();
             output.exceptionId = jQuery(data).find("exceptionId").text();
             if (output.exceptionId == "GW01") {
@@ -251,6 +281,11 @@ var consumingGateway =
           records : []
         };
 
+      if(utils.getCookie("username")==null){
+        alert('Usuario no identificado');
+        consumingGateway.LogOut();
+      }
+      
       // SOAP Message:
       var soapMessage = soapHeader + '<ws:Read>';
       soapMessage += '<entityName>' + entityName + '</entityName>';
@@ -273,8 +308,9 @@ var consumingGateway =
           data : soapMessage,
           processData : false,
           contentType : "text/xml;charset=UTF-8",
+          username : utils.getCookie("username"),
+          password : utils.getCookie("pass"),
           success : function OnSuccess(data) {
-
             output.exceptionDescription = jQuery(data).find("exceptionDescription").text();
             output.exceptionId = jQuery(data).find("exceptionId").text();
             if (output.exceptionId == "GW01") {
@@ -344,6 +380,8 @@ var consumingGateway =
           data : soapMessage,
           processData : false,
           contentType : "text/xml;charset=UTF-8",
+          username : utils.getCookie("username"),
+          password : utils.getCookie("pass"),
           async : false,
           success : function OnSuccess(data) {
             output.exceptionDescription = jQuery(data).find("exceptionDescription").text();
@@ -408,6 +446,8 @@ var consumingGateway =
           data : soapMessage,
           processData : false,
           contentType : "text/xml;charset=UTF-8",
+          username : utils.getCookie("username"),
+          password : utils.getCookie("pass"),
           async : false,
           success : function OnSuccess(data) {
             output.exceptionDescription = jQuery(data).find("exceptionDescription").text();
@@ -436,30 +476,13 @@ var consumingGateway =
           exceptionDescription : "Success",
           exceptionId : 0,
         };
+      
+      utils.setCookie("lastUser", utils.getCookie("username"), 365);
+      utils.setCookie("lastPass", utils.getCookie("pass"), 365);
+      
+      utils.setCookie("username", "", -1);
+      utils.setCookie("pass", "", -1);
 
-      // SOAP Message:
-      var soapMessage = soapHeader + '<ws:Logout/>' + soapFooter;
-
-      // Ajax request:
-      jQuery.ajax(
-        {
-          url : gatewayWsURL,
-          type : "POST",
-          dataType : "xml",
-          data : soapMessage,
-          processData : false,
-          contentType : "text/xml;charset=UTF-8",
-          async : false,
-          success : function OnSuccess(data) {
-            output.result = jQuery(data).find("return").text();
-          },
-          error : function OnError(request, status, error) {
-            output.exceptionId = 1;
-            output.exceptionDescription = error;
-            alert(output.exceptionDescription);
-
-          }
-        });
       try {
         enyo.$.sisoprega.destroy();
       } catch (e) {
@@ -485,6 +508,8 @@ var consumingGateway =
           data : soapMessage,
           processData : false,
           contentType : "text/xml;charset=UTF-8",
+          username : utils.getCookie("username"),
+          password : utils.getCookie("pass"),
           async : false,
           success : function OnSuccess(data) {
             output = jQuery(data).find("return").text();
@@ -524,6 +549,8 @@ var consumingGateway =
           data : soapMessage,
           processData : false,
           contentType : "text/xml;charset=UTF-8",
+          username : utils.getCookie("username"),
+          password : utils.getCookie("pass"),
           async : false,
           success : function OnSuccess(data) {
             output = jQuery(data).find("return").text();
@@ -550,6 +577,8 @@ var consumingGateway =
           data : soapMessage,
           processData : false,
           contentType : "text/xml;charset=UTF-8",
+          username : utils.getCookie("username"),
+          password : utils.getCookie("pass"),
           async : false,
           success : function OnSuccess(data) {
             jQuery(data).find("return").each(function() {
@@ -591,6 +620,8 @@ var consumingGateway =
           data : soapMessage,
           processData : false,
           contentType : "text/xml;charset=UTF-8",
+          username : utils.getCookie("username"),
+          password : utils.getCookie("pass"),
           async : false,
           success : function OnSuccess(data) {
             output = jQuery(data).find("return").text();
@@ -618,6 +649,8 @@ var consumingGateway =
           data : soapMessage,
           processData : false,
           contentType : "text/xml;charset=UTF-8",
+          username : utils.getCookie("username"),
+          password : utils.getCookie("pass"),
           async : false,
           success : function OnSuccess(data) {
             output = jQuery(data).find("return").text();
@@ -646,9 +679,12 @@ var consumingGateway =
             data : soapMessage,
             processData : false,
             contentType : "text/xml;charset=UTF-8",
+            username : utils.getCookie("username"),
+            password : utils.getCookie("pass"),
             async : false,
             success : function OnSuccess(data) {
               output = jQuery(data).find("return").text();
+              utils.setCookie("pass", newPassword, 365);
             },
             error:function OnError(request, status, error) {
               alert('Erro al intentar actualizar password');
@@ -672,6 +708,8 @@ var consumingGateway =
             data : soapMessage,
             processData : false,
             contentType : "text/xml;charset=UTF-8",
+            username : utils.getCookie("username"),
+            password : utils.getCookie("pass"),
             async : false,
             success : function OnSuccess(data) {
               output = jQuery(data).find("return").text();

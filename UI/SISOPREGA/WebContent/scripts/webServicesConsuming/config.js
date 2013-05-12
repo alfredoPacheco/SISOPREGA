@@ -30,11 +30,14 @@
  */
 
 var serverHost = '';
-var gatewayApp_path = '/Gateway/GatewayService';
+var gatewayApp_path = '/GatewayBeanService/Gateway';
 var gatewayWsURL = serverHost + gatewayApp_path;
 
-var identityApp_path = '/Gateway/IdentityService';
-var identityWsURL = serverHost + identityApp_path; 
+var identityApp_path = '/IdentityGatewayBeanService/IdentityGateway';
+var identityWsURL = serverHost + identityApp_path;
+
+var echoApp_path = '/EchoesGatewayBeanService/EchoesGateway';
+var echoWsURL = serverHost + echoApp_path;
 
 var soapHeader = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="http://ws.gateway.sisoprega.tramex.com/">';
 	soapHeader += '<soapenv:Header/><soapenv:Body>';

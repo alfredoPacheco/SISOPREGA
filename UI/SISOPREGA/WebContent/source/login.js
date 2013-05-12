@@ -104,6 +104,10 @@ enyo.kind(
     ready : function() {
       this.$.user.$.input.applyStyle("color", "white");
       this.$.password.$.input.applyStyle("color", "white");
+      
+      this.$.user.setValue(utils.getCookie("lastUser"));
+      this.$.password.setValue(utils.getCookie("lastPass"));
+      
     },
     checkLogIn : function() {
       cacheMan.showScrim();

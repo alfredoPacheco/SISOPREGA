@@ -19,8 +19,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import javax.annotation.Resource;
-import javax.annotation.security.DeclareRoles;
-import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.LocalBean;
 import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
@@ -60,7 +59,7 @@ import com.tramex.sisoprega.common.crud.Cruddable;
 @Stateless
 @WebService(name = "Gateway")
 @LocalBean
-@DeclareRoles("sisoprega_admin")
+@RolesAllowed({"sisoprega_admin", "mx_usr", "us_usr", "rancher"})
 public class GatewayBean {
 
   private Logger log = Logger.getLogger(GatewayBean.class.getCanonicalName());
@@ -73,14 +72,12 @@ public class GatewayBean {
    * 
    * @return
    */
-  @PermitAll
   @WebMethod
   public String Ping() {
     log.info("Ping service executed by [" + ejbContext.getCallerPrincipal().getName() + "]");
     return "OK";
   }
 
-  @PermitAll
   @WebMethod(operationName = "Create")
   public CreateGatewayResponse CreateGateway(@WebParam(name = "requestId") String requestId,
       @WebParam(name = "entityName") String entityName, @WebParam(name = "field") List<Field> content) {
@@ -134,7 +131,6 @@ public class GatewayBean {
    * @param content
    * @return
    */
-  @PermitAll
   @WebMethod(operationName = "Read")
   public ReadGatewayResponse ReadGateway(@WebParam(name = "requestId") String requestId,
       @WebParam(name = "entityName") String entityName, @WebParam(name = "field") List<Field> content) {
@@ -196,7 +192,6 @@ public class GatewayBean {
    * @param content
    * @return
    */
-  @PermitAll
   @WebMethod(operationName = "Update")
   public UpdateGatewayResponse UpdateGateway(@WebParam(name = "requestId") String requestId,
       @WebParam(name = "entityName") String entityName, @WebParam(name = "field") List<Field> content) {

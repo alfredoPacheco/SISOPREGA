@@ -13,10 +13,10 @@ enyo.kind(
       while (regEx.test(cardinal)) {
         cardinal = cardinal.replace(regEx, '$1' + ',' + '$2');
       }
-      
-      var fixedOrdinal = ordinal.length > 3 ? ordinal.substr(0,3) : ordinal;
+
+      var fixedOrdinal = ordinal.length > 3 ? ordinal.substr(0, 3) : ordinal;
       var result = cardinal + fixedOrdinal;
-      
+
       return result;
     },
     utcToNormalDate : function(strUTC) {
@@ -165,6 +165,34 @@ enyo.kind(
           kind : "controls.reportViewer",
           name : 'rViewer'
         });
+    },
+    getCookie : function(cookieName) {
+      var cookieValue = document.cookie;
+      var cookieStart = cookieValue.indexOf(" " + cookieName + "=");
+      if (cookieStart == -1)
+        cookieStart = cookieValue.indexOf(cookieName + "=");
+      
+      if (cookieStart == -1)
+        cookieValue = null;
+      else {
+        cookieStart = cookieValue.indexOf("=", cookieStart) + 1;
+        var cookieEnd = cookieValue.indexOf(";", cookieStart);
+
+        if (cookieEnd == -1)
+          cookieEnd = cookieValue.length;
+
+        cookieValue = unescape(cookieValue.substring(cookieStart, cookieEnd));
+      }
+
+      return cookieValue;
+
+    },
+    setCookie : function(cookieName, value, expirationDays) {
+      var expirationDate = new Date();
+      expirationDate.setDate(expirationDate.getDate() + expirationDays);
+
+      var cookieValue = escape(value) + ((expirationDays == null) ? "" : "; expires=" + expirationDate.toUTCString());
+      document.cookie = cookieName + "=" + cookieValue;
     }
   });
 
