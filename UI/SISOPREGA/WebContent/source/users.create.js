@@ -204,7 +204,7 @@ enyo.kind(
       }
       var newUser =
         {
-          user_name : this.$.user_name.getValue(),
+          user_name : this.$.user_name.getValue().toUpperCase(),
           password : this.$.password.getValue(),
           groups : []
         };
