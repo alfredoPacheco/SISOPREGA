@@ -13,6 +13,7 @@
  * 
  * &copy; COPYRIGHT 2012 TRAMEX. ALL RIGHTS RESERVED.
  */
+
 package com.tramex.sisoprega.reporting.pdf;
 
 import java.io.IOException;
@@ -35,12 +36,10 @@ import net.sf.jasperreports.engine.JRException;
 import com.tramex.sisoprega.reporting.BaseReportServlet;
 
 /**
- * Servlet implementation class GanadoRecibido
+ * Servlet implementation class ReceivedCattleRacher
  * 
  * This report shows feed order using dateAlloted and rancherId as parameters.
- * http
- * ://host/ReportingGateway/GanadoRecibido?fromDate=[MM/dd/yyyy]&toDate=[MM/dd
- * /yyyy]
+ * http://host/ReportingGateway/RecibidoPorGanadero?fromDate=[MM/dd/yyyy]&toDate=[MM/dd/yyyy]&rancherId=[0]
  * 
  * <B>Revision History:</B>
  * 
@@ -61,30 +60,45 @@ import com.tramex.sisoprega.reporting.BaseReportServlet;
 @WebServlet("/GanadoRecibido")
 @ServletSecurity(@HttpConstraint(rolesAllowed = {"mx_usr", "rancher"}))
 public class GanadoRecibido extends BaseReportServlet {
+  
+  private static final long serialVersionUID = -6219583962715558016L;
 
-  private static final long serialVersionUID = -3931253027518760935L;
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public GanadoRecibido() {
+        super();
+    }
 
-  /**
-   * @see HttpServlet#HttpServlet()
-   */
-  public GanadoRecibido() {
-    super();
-  }
+    @Override
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException,
+        ParseException, JRException {
+      Map<String, Object> params = new HashMap<String, Object>();
+      log.fine("fromDate: [" + request.getParameter("fromDate") + "]");
+      log.fine("toDate: [" + request.getParameter("toDate") + "]");
+      String rancherId = request.getParameter("rancherId");
+      
+      if(request.isUserInRole("rancher"))
+        rancherId = rancherFromLoggedUser(request);
+      
+      log.fine("rancherId: [" + rancherId + "]");
 
-  @Override
-  protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException,
-      ParseException, JRException {
-    Map<String, Object> params = new HashMap<String, Object>();
-    log.fine("fromDate: [" + request.getParameter("fromDate") + "]");
-    log.fine("toDate: [" + request.getParameter("toDate") + "]");
+      Date fromDate = new SimpleDateFormat("MM/dd/yyyy").parse(request.getParameter("fromDate"));
+      Date toDate = new SimpleDateFormat("MM/dd/yyyy").parse(request.getParameter("toDate"));
+      
+      params.put("CUS_FROM_DATE", fromDate);
+      params.put("CUS_TO_DATE", toDate);
+      
+      if(rancherId != null && !rancherId.equals("-1"))
+        params.put("CUS_RANCHER_ID", Integer.parseInt(rancherId));
 
-    Date fromDate = new SimpleDateFormat("MM/dd/yyyy").parse(request.getParameter("fromDate"));
-    Date toDate = new SimpleDateFormat("MM/dd/yyyy").parse(request.getParameter("toDate"));
+      String reportURL = "";
+      if(rancherId != null && !rancherId.equals("-1"))
+        reportURL = "WEB-INF/Reports/Ranchers/RecibidoPorGanadero.jasper";
+      else
+        reportURL = "WEB-INF/Reports/Tramex/GanadoRecibido.jasper";
+      
+      processRequest(reportURL, params, response);
 
-    params.put("CUS_FROM_DATE", fromDate);
-    params.put("CUS_TO_DATE", toDate);
-
-    String reportURL = "WEB-INF/Reports/Tramex/GanadoRecibido.jasper";
-    processRequest(reportURL, params, response);
-  }
+    }
 }

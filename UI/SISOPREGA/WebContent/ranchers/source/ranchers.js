@@ -107,7 +107,7 @@ enyo.kind({
 			//Recepcion
 			case 3:
 				sTitle="reception";
-				sURL="/ReportingGateway/RecibidoPorGanadero?fromDate="+sFrom+"&toDate="+sTo;				
+				sURL="/ReportingGateway/GanadoRecibido?fromDate="+sFrom+"&toDate="+sTo;				
 				break;				
 		}
 		window.open(sURL,sTitle);
