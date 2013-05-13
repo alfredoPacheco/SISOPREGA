@@ -12,6 +12,7 @@
 	<security-role-mapping>
 		<role-name>sisoprega_admin</role-name>
 		<group-name>admin</group-name>
+		<principal-name>ADMIN</principal-name>
 	</security-role-mapping>
 	<security-role-mapping>
 		<role-name>rancher</role-name>
@@ -51,6 +52,16 @@
 					<realm>security</realm>
 				</login-config>
 			</webservice-endpoint>
+		</ejb>
+		<ejb>
+			<ejb-name>DMZGatewayBean</ejb-name>
+			<ior-security-config>
+				<as-context>
+					<auth-method>BASIC</auth-method>
+					<realm>security</realm>
+					<required>false</required>
+				</as-context>
+			</ior-security-config>
 		</ejb>
 	</enterprise-beans>
 </sun-ejb-jar>

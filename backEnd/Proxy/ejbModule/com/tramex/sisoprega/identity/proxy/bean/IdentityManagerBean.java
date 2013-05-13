@@ -184,6 +184,7 @@ public class IdentityManagerBean extends BaseBean implements RemoteIdentity {
    */
   @Override
   public boolean validateCurrentPassword(String userName, String password) throws IdentityManagerException {
+    log.fine("validatingCurrenPassword using [" + getLoggedUser() + "] as principal");
     User user = getUserFromName(userName);
     log.fine("[" + user.getPassword() + "] == [" + hashPassword(password) + "] ?");
     return user.getPassword().equals(hashPassword(password));
