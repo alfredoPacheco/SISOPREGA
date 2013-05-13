@@ -141,6 +141,12 @@
 		<security-role>
 			<role-name>rancher</role-name>
 		</security-role>
+		<security-role>
+			<role-name>agency</role-name>
+		</security-role>
+		<security-role>
+			<role-name>us_usr</role-name>
+		</security-role>
 		<method-permission>
 			<role-name>mx_usr</role-name>
 			<method>
@@ -411,6 +417,44 @@
 			</method>
 			<method>
 				<ejb-name>LocationProxy</ejb-name>
+				<method-name>Read</method-name>
+			</method>
+		</method-permission>
+		<method-permission>
+			<role-name>agency</role-name>
+			<method>
+				<ejb-name>BarnyardProxy</ejb-name>
+				<method-name>Read</method-name>
+			</method>
+			<method>
+				<ejb-name>RancherProxy</ejb-name>
+				<method-name>Read</method-name>
+			</method>
+			<method>
+				<ejb-name>EnterpriseRancherProxy</ejb-name>
+				<method-name>Read</method-name>
+			</method>
+		</method-permission>
+		<method-permission>
+			<role-name>us_usr</role-name>
+			<method>
+				<ejb-name>BarnyardProxy</ejb-name>
+				<method-name>Read</method-name>
+			</method>
+			<method>
+				<ejb-name>RancherProxy</ejb-name>
+				<method-name>Read</method-name>
+			</method>
+			<method>
+				<ejb-name>EnterpriseRancherProxy</ejb-name>
+				<method-name>Read</method-name>
+			</method>
+			<method>
+				<ejb-name>CattleClassProxy</ejb-name>
+				<method-name>Read</method-name>
+			</method>			
+			<method>
+				<ejb-name>CattleTypeProxy</ejb-name>
 				<method-name>Read</method-name>
 			</method>
 		</method-permission>

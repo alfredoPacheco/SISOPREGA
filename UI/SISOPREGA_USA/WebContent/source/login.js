@@ -59,7 +59,6 @@ enyo.kind(
                             hint : "Usuario",
                             selectAllOnFocus : true,
                             onkeydown : "key_down",
-                            value : "admin",
                             onfocus : "on_focus",
                             onblur : "lost_focus"
                           },
@@ -69,7 +68,6 @@ enyo.kind(
                             hint : "Contraseña",
                             selectAllOnFocus : true,
                             onkeydown : "key_down",
-                            value : "admin",
                             onfocus : "on_focus",
                             onblur : "lost_focus"
                           } ]
@@ -104,6 +102,8 @@ enyo.kind(
     ready : function() {
       this.$.user.$.input.applyStyle("color", "white");
       this.$.password.$.input.applyStyle("color", "white");
+      this.$.user.setValue(utils.getCookie("lastUser"));
+      this.$.password.setValue(utils.getCookie("lastPass"));
       this.$.user.forceFocus();
     },
     checkLogIn : function() {
@@ -120,7 +120,7 @@ enyo.kind(
         var isAgency = false;
         for(var roleIndex in roles){
           var role = roles[roleIndex];
-          if(role == 'usa_usr' || role == 'admin'){
+          if(role == 'usa_user' || role == 'admin'){
             isAdmin = true;
           } 
           if(role == 'agency'){

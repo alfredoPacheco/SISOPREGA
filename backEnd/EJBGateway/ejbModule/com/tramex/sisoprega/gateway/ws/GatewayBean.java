@@ -59,7 +59,7 @@ import com.tramex.sisoprega.common.crud.Cruddable;
 @Stateless
 @WebService(name = "Gateway")
 @LocalBean
-@RolesAllowed({"sisoprega_admin", "mx_usr", "us_usr", "rancher"})
+@RolesAllowed({"sisoprega_admin", "mx_usr", "us_usr", "rancher", "agency"})
 public class GatewayBean {
 
   private Logger log = Logger.getLogger(GatewayBean.class.getCanonicalName());

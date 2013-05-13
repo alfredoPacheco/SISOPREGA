@@ -17,6 +17,8 @@ enyo.kind({
         data : soapMessage,
         processData : false,
         contentType : "text/xml;charset=UTF-8",
+        username : utils.getCookie("username"),
+        password : utils.getCookie("pass"),
         async : false,
         success : function OnSuccess(data) {
           jQuery(data).find("return").each(function() {

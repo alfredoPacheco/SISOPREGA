@@ -189,6 +189,7 @@ public class IdentityManagerBean extends BaseBean implements RemoteIdentity {
     return user.getPassword().equals(hashPassword(password));
   }
   
+  @RolesAllowed({"sisoprega_admin", "agency", "us_usr"})
   @Override
   public List<String> readUserRoles(String userName) throws IdentityManagerException {
     User user = getUserFromName(userName);

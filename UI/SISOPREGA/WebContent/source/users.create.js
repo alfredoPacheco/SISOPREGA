@@ -69,6 +69,66 @@ enyo.kind(
                       components :
                         [
                           {
+                            content : "USA User",
+                            className : "enyo-label",
+                            flex : 1
+                          },
+                          {
+                            kind : "CheckBox",
+                            name : "isUsaUser"
+                          } ]
+                    },
+                    {
+                      layoutKind : enyo.HFlexLayout,
+                      align : "center",
+                      components :
+                        [
+                          {
+                            content : "Agency",
+                            className : "enyo-label",
+                            flex : 1
+                          },
+                          {
+                            kind : "CheckBox",
+                            name : "isAgency"
+                          } ]
+                    },
+                    {
+                      layoutKind : enyo.HFlexLayout,
+                      align : "center",
+                      components :
+                        [
+                          {
+                            content : "Dealer",
+                            className : "enyo-label",
+                            flex : 1
+                          },
+                          {
+                            kind : "CheckBox",
+                            name : "isDealer"
+                          } ]
+                    },
+                    {
+                      layoutKind : enyo.HFlexLayout,
+                      align : "center",
+                      components :
+                        [
+                          {
+                            content : "Accountant",
+                            className : "enyo-label",
+                            flex : 1
+                          },
+                          {
+                            kind : "CheckBox",
+                            name : "isAccountant"
+                          } ]
+                    },
+                    {
+                      layoutKind : enyo.HFlexLayout,
+                      align : "center",
+                      components :
+                        [
+                          {
                             content : "Admin",
                             className : "enyo-label",
                             flex : 1
@@ -129,8 +189,12 @@ enyo.kind(
       this.$.user_name.setValue("");
       this.$.password.setValue("");
       this.$.confirm_password.setValue("");
-      this.$.isAdmin.setChecked(false);
       this.$.isMexUser.setChecked(false);
+      this.$.isUsaUser.setChecked(false);
+      this.$.isAgency.setChecked(false);
+      this.$.isDealer.setChecked(false);
+      this.$.isAccountant.setChecked(false);
+      this.$.isAdmin.setChecked(false);
     },
     setUser : function(parUser) {
       this.resetValues();
@@ -143,10 +207,18 @@ enyo.kind(
 
         // Iterate groups to set check box values
         for (index in parUser.groups) {
-          if (parUser.groups[index] == 'admin') {
-            this.$.isAdmin.setChecked(true);
-          } else if (parUser.groups[index] == 'mex_user') {
+          if (parUser.groups[index] == 'mex_user') {
             this.$.isMexUser.setChecked(true);
+          } else if (parUser.groups[index] == 'usa_user') {
+            this.$.isUsaUser.setChecked(true);
+          } else if (parUser.groups[index] == 'agency') {
+            this.$.isAgency.setChecked(true);
+          } else if (parUser.groups[index] == 'dealer') {
+            this.$.isDealer.setChecked(true);
+          } else if (parUser.groups[index] == 'accountant') {
+            this.$.isAccountant.setChecked(true);
+          } else if (parUser.groups[index] == 'admin') {
+            this.$.isAdmin.setChecked(true);
           }
 
         } // for
@@ -182,6 +254,38 @@ enyo.kind(
         if (this.userHasGroup("mex_user"))
           cacheUsers.removeGroup(this.objUser.userName, "mex_user");
       }
+      
+      if (this.$.isUsaUser.getChecked()) {
+        if (!this.userHasGroup("usa_user"))
+          cacheUsers.addGroup(this.objUser.userName, "usa_user");
+      } else {
+        if (this.userHasGroup("usa_user"))
+          cacheUsers.removeGroup(this.objUser.userName, "usa_user");
+      }
+      
+      if (this.$.isAgency.getChecked()) {
+        if (!this.userHasGroup("agency"))
+          cacheUsers.addGroup(this.objUser.userName, "agency");
+      } else {
+        if (this.userHasGroup("agency"))
+          cacheUsers.removeGroup(this.objUser.userName, "agency");
+      }
+      
+      if (this.$.isDealer.getChecked()) {
+        if (!this.userHasGroup("dealer"))
+          cacheUsers.addGroup(this.objUser.userName, "dealer");
+      } else {
+        if (this.userHasGroup("dealer"))
+          cacheUsers.removeGroup(this.objUser.userName, "dealer");
+      }
+      
+      if (this.$.isAccountant.getChecked()) {
+        if (!this.userHasGroup("accountant"))
+          cacheUsers.addGroup(this.objUser.userName, "accountant");
+      } else {
+        if (this.userHasGroup("accountant"))
+          cacheUsers.removeGroup(this.objUser.userName, "accountant");
+      }
 
       if (this.$.isAdmin.getChecked()) {
         if (!this.userHasGroup("admin"))
@@ -209,13 +313,33 @@ enyo.kind(
           groups : []
         };
 
-      if (this.$.isAdmin.getChecked()) {
-        var role = {role_name:'admin'};
+      if (this.$.isMexUser.getChecked()) {
+        var role = {role_name:'mex_user'};
         newUser.groups.push(role);
       }
       
-      if (this.$.isMexUser.getChecked()) {
-        var role = {role_name:'mex_user'};
+      if (this.$.isUsaUser.getChecked()) {
+        var role = {role_name:'usa_user'};
+        newUser.groups.push(role);
+      }
+      
+      if (this.$.isAgency.getChecked()) {
+        var role = {role_name:'agency'};
+        newUser.groups.push(role);
+      }
+      
+      if (this.$.isDealer.getChecked()) {
+        var role = {role_name:'dealer'};
+        newUser.groups.push(role);
+      }
+      
+      if (this.$.isAccountant.getChecked()) {
+        var role = {role_name:'accountant'};
+        newUser.groups.push(role);
+      }
+      
+      if (this.$.isAdmin.getChecked()) {
+        var role = {role_name:'admin'};
         newUser.groups.push(role);
       }
       

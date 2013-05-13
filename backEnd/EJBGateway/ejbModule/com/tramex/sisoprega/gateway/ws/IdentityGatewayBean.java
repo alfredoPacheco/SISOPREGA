@@ -6,14 +6,13 @@ import java.util.logging.Logger;
 import javax.annotation.Resource;
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
+import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
-import javax.naming.Context;
-import javax.naming.InitialContext;
 
 import com.tramex.sisoprega.identity.IdentityManagerException;
 import com.tramex.sisoprega.identity.RemoteIdentity;
@@ -25,13 +24,16 @@ import com.tramex.sisoprega.identity.dto.User;
 @Stateless
 @LocalBean
 @WebService(name = "IdentityGateway")
-@RolesAllowed({"sisoprega_admin", "mx_usr", "us_usr", "rancher"})
+@RolesAllowed({"sisoprega_admin", "mx_usr", "us_usr", "rancher", "agency"})
 public class IdentityGatewayBean {
 
   private Logger log = Logger.getLogger(IdentityGatewayBean.class.getCanonicalName());
 
   @Resource
   private SessionContext ejbContext;
+  
+  @EJB(lookup="java:global/Proxy/IdentityManager")
+  private RemoteIdentity identityManager;
 
   @WebMethod
   @PermitAll
@@ -50,7 +52,7 @@ public class IdentityGatewayBean {
   @RolesAllowed("sisoprega_admin")
   @WebMethod(operationName = "CreateUser")
   public String CreateUser(@WebParam(name = "user") User user) throws IdentityManagerException {
-    getIdentityManager().createUser(user);
+    identityManager.createUser(user);
     return "OK";
   }
 
@@ -66,7 +68,7 @@ public class IdentityGatewayBean {
   public String ResetPassword(@WebParam(name = "user_name") String userName, @WebParam(name = "password") String newPassword)
       throws IdentityManagerException {
 
-    getIdentityManager().resetPassword(userName, newPassword);
+    identityManager.resetPassword(userName, newPassword);
     return "OK";
   }
 
@@ -85,7 +87,7 @@ public class IdentityGatewayBean {
       @WebParam(name = "previous_password") String previousPassword, @WebParam(name = "new_password") String newPassword)
       throws IdentityManagerException {
 
-    if (getIdentityManager().validateCurrentPassword(userName, previousPassword)) {
+    if (identityManager.validateCurrentPassword(userName, previousPassword)) {
       return ResetPassword(userName, newPassword);
     } else {
       return "La contraseña actual no coincide.";
@@ -105,7 +107,7 @@ public class IdentityGatewayBean {
   public String addGroup(@WebParam(name = "user_name") String userName, @WebParam(name = "group_name") String groupName)
       throws IdentityManagerException {
 
-    getIdentityManager().addGroup(userName, groupName);
+    identityManager.addGroup(userName, groupName);
     return "OK";
   }
 
@@ -122,7 +124,7 @@ public class IdentityGatewayBean {
   public String removeGroup(@WebParam(name = "user_name") String userName, @WebParam(name = "group_name") String groupName)
       throws IdentityManagerException {
 
-    getIdentityManager().removeGroup(userName, groupName);
+    identityManager.removeGroup(userName, groupName);
     return "OK";
   }
 
@@ -136,7 +138,7 @@ public class IdentityGatewayBean {
   @RolesAllowed("sisoprega_admin")
   @WebMethod(operationName = "RemoveUser")
   public String removeUser(@WebParam(name = "user_name") String userName) throws IdentityManagerException {
-    getIdentityManager().removeUser(userName);
+    identityManager.removeUser(userName);
     return "OK";
   }
 
@@ -151,7 +153,7 @@ public class IdentityGatewayBean {
 
     log.info("Retrieving list of users.");
 
-    return getIdentityManager().allUsers();
+    return identityManager.allUsers();
   }
 
   /**
@@ -165,19 +167,6 @@ public class IdentityGatewayBean {
   public List<String> readUserRoles(@WebParam(name = "userName") String userName) throws IdentityManagerException {
     log.info("Retrieving list of users.");
 
-    return getIdentityManager().readUserRoles(userName);
-  }
-
-  private RemoteIdentity getIdentityManager() {
-    Context jndiContext = null;
-    RemoteIdentity im = null;
-    try {
-      jndiContext = new InitialContext();
-      im = (RemoteIdentity) jndiContext.lookup("java:global/Proxy/IdentityManager");
-    } catch (java.lang.Exception e) {
-      log.severe("Unable to load jndi context component");
-      log.throwing(this.getClass().getName(), "getCruddable", e);
-    }
-    return im;
+    return identityManager.readUserRoles(userName);
   }
 }

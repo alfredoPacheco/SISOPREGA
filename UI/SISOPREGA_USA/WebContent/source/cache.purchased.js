@@ -18,6 +18,9 @@ enyo.kind(
       }
 
       this.objPurchased.purchased.push(objPurchase);
+      // TODO: Found record to add purchase based on type and class
+      // TODO: Add heads and weight
+      
     },
     setInventory : function(objInventory) {
       this.objPurchased.inventory = objInventory;
