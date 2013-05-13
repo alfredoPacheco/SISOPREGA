@@ -542,6 +542,8 @@ enyo.kind({
 		this.$[by].applyStyle("background-color",this.sColorFree);
 		this.$[by].removeClass("selectCell");
 	    }
+	    this.arrBYbyRancherSelected = {};
+	    
 	    this.clearFilter();
 	    
 	},
@@ -662,7 +664,7 @@ enyo.kind({
 			var activeBY = "" + this.arrBYbyRancherSelected[i].zone_id + this.arrBYbyRancherSelected[i].barnyard_code;
 			this.$[activeBY].applyStyle("background-color",this.sColorOccupied);
 		}
-		this.arrBYbyRancherSelected = [];
+		this.arrBYbyRancherSelected = {};
 		
 	},
 	clearFilter:function(){		
