@@ -535,6 +535,7 @@ enyo.kind({
 			}
 		}
 		this.$.rancherFilter.setItems(cacheReceptions.getRanchersByReceptions());
+		this.clearDesc();
 	},
 	releaseReception:function(){
 	    for(by in this.arrByMOver){
@@ -670,5 +671,6 @@ enyo.kind({
 	clearFilter:function(){		
 		this.$.rancherFilter.clear();
 		this.rancherFilterChanged();
+		this.clearDesc();
 	}
 });		
