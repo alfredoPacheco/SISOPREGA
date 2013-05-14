@@ -496,3 +496,5 @@ INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('Rod
 INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('Rodeos de 3', 201, 300);
 INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('Rodeos de 4', 301, 400);
 INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('Rodeos de 5', 401, 500);
+
+INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('Horses', 0, 0);

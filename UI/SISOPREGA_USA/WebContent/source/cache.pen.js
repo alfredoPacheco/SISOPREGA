@@ -174,7 +174,7 @@ enyo.kind(
       var arr4 = this.barnyardListByZone(4);
       
       for(var i = 0; i < arr4.length; i++){
-        arr4[i].caption = 'E' + arr4[i].caption;
+        arr4[i].caption = arr4[i].caption;
         result.push(arr4[i]);
       }
       
