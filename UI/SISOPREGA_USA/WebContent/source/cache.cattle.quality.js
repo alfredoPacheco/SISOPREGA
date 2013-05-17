@@ -16,63 +16,73 @@ enyo.kind(
         };
       return result;
     },
+    toInternal : function(objCattleQuality) {
+      var result =
+        {
+          id : objCattleQuality.qualityId,
+          name : objCattleQuality.qualityName,
+          min_weight : objCattleQuality.minWeight,
+          max_weight : objCattleQuality.maxWeight,
+          is_for_horses : objCattleQuality.forHorses == 'true'
+        };
+      return result;
+    },
     get : function() {
-      // TODO: Retrieve from database
       this.arrClasses = [];
-      var cattle_types =
-        [ 1, 2 ];
-      this.arrClasses.push(this.internalMock(1, "Swiss 200's", cattle_types, 0.0, 270));
-      this.arrClasses.push(this.internalMock(2, "Swiss 300's", cattle_types, 271, 370));
-      this.arrClasses.push(this.internalMock(3, "Swiss 400's", cattle_types, 371, 470));
-      this.arrClasses.push(this.internalMock(4, "Swiss 500's", cattle_types, 471, 570));
-      this.arrClasses.push(this.internalMock(5, "Swiss 600's", cattle_types, 571, 670));
-      this.arrClasses.push(this.internalMock(6, "Swiss 700's", cattle_types, 671, 770));
-      this.arrClasses.push(this.internalMock(7, "Swiss 800's", cattle_types, 771, 870));
-      this.arrClasses.push(this.internalMock(8, "Swiss 900's", cattle_types, 871, 0));
-      this.arrClasses.push(this.internalMock(9, "Sinaloas 100's", cattle_types, 0.0, 170));
-      this.arrClasses.push(this.internalMock(10, "Sinaloas 200's", cattle_types, 171, 270));
-      this.arrClasses.push(this.internalMock(11, "Sinaloas 300's", cattle_types, 271, 0));
-      this.arrClasses.push(this.internalMock(12, "Plain 100's", cattle_types, 0.0, 0.0));
-      this.arrClasses.push(this.internalMock(13, "Horses", [3], 0.0, 0.0));
+      var readGateway = consumingGateway.Read("CattleQuality", {});
+      var self = this;
+
+      if (readGateway.exceptionId == 0) {
+        jQuery.each(readGateway.records, function() {
+          var objTmp = {};
+          var objAux = {};
+          jQuery.each(this, function(key, value) {
+            objAux[key] = value;
+          });
+          objTmp = self.toInternal(objAux);
+          self.arrClasses.push(objTmp);
+        });
+      } else {
+        if (readGateway.exceptionId != "DB02" && readGateway.exceptionId != "VAL02") {
+          cacheMan.setMessage("", "[Exception ID: " + readGateway.exceptionId + "] Descripción: " + readGateway.exceptionDescription);
+        }
+      }
+
       return this.arrClasses;
     },
-    getByID:function(id){
-	var arrAux = this.get();
-	var len = arrAux.length;
-	for(var i=0; i<len;i++){
-	    if (parseInt(id)==parseInt(arrAux[i].id)){
-		return arrAux[i];
-	    }
-	}
-	return null;
+    getByID : function(id) {
+      this.get();
+      var len = this.arrClasses.length;
+      for ( var i = 0; i < len; i++) {
+        if (parseInt(id) == parseInt(this.arrClasses[i].id)) {
+          return this.arrClasses[i];
+        }
+      }
+      return null;
     },
     getList : function(cattleType) {
       var result = [];
       this.get();
+      var horsesValue = 3;
       for ( var cattleIndex = 0; cattleIndex < this.arrClasses.length; cattleIndex++) {
         // Add to list if compatible.
-        if (this.inClass(cattleType, this.arrClasses[cattleIndex])) {
-          var record =
-            {
-              caption : this.arrClasses[cattleIndex].name,
-              value : this.arrClasses[cattleIndex].id
-            };
+        var record =
+          {
+            caption : this.arrClasses[cattleIndex].name,
+            value : this.arrClasses[cattleIndex].id
+          };
+        
+        if(cattleType == horsesValue){
+          if(this.arrClasses[cattleIndex].is_for_horses)
+            result.push(record);
+        } else {
           result.push(record);
         }
       }
       return result;
     },
-    inClass : function(cattleType, cattleClass) {
-      if (!cattleType)
-        return true;
-
-      for ( var i = 0; i < cattleClass.cattle_types.length; i++) {
-        if (cattleClass.cattle_types[i] == cattleType)
-          return true; // cattle type found as compatible in cattleClass
-      }
-      return false; // cattle type not found as compatible in cattleClass
-    },
-    add : function(aClass){
+    add : function(aClass) {
+      // TODO: Add to database
       this.arrClasses.push(aClass);
     }
   });

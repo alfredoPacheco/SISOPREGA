@@ -130,6 +130,10 @@
 			<ejb-name>SellerProxy</ejb-name>
 			<ejb-class>com.tramex.sisoprega.proxy.bean.SellerBean</ejb-class>
 		</session>
+		<session>
+			<ejb-name>CattleQualityProxy</ejb-name>
+			<ejb-class>com.tramex.sisoprega.proxy.bean.CattleQualityBean</ejb-class>
+		</session>
 	</enterprise-beans>
 	<assembly-descriptor>
 		<security-role>
@@ -434,6 +438,10 @@
 				<ejb-name>EnterpriseRancherProxy</ejb-name>
 				<method-name>Read</method-name>
 			</method>
+			<method>
+				<ejb-name>CattleQualityProxy</ejb-name>
+				<method-name>Read</method-name>
+			</method>
 		</method-permission>
 		<method-permission>
 			<role-name>us_usr</role-name>
@@ -455,6 +463,10 @@
 			</method>			
 			<method>
 				<ejb-name>CattleTypeProxy</ejb-name>
+				<method-name>Read</method-name>
+			</method>
+			<method>
+				<ejb-name>CattleQualityProxy</ejb-name>
 				<method-name>Read</method-name>
 			</method>
 		</method-permission>
