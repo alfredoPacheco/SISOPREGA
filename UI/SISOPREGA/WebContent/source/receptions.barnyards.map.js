@@ -31,9 +31,9 @@ enyo.kind({
 			components:[
 				{name: "cells", kind: "VFlexBox",align:"center",pack:"center", onclick: "cellsClick"},
 			]},
-			{kind: "Popup",name: "popMan", dismissWithClick:false,showHideMode: "transition", openClassName: "zoomFadeIn",
-			 className: "transitioner2", layoutKind: "VFlexLayout",
-			 style: "overflow: hidden", width: "95%", height: "95%",scrim: true},
+			{kind: "Popup",name: "popMan",modal:true, dismissWithClick:false,
+			 layoutKind: "VFlexLayout", style: "overflow: hidden;max-height:400px;background-color:#DABD8B;font-size:15px;", 
+			 height:"95%",width: "95%", scrim: true},
 			 
 			 {kind: "Toolbar",style:"height:20px;",components: [
 						{kind: "controls.autocomplete",width:"60%;", height:"45px;", name:"rancherFilter",
@@ -396,7 +396,7 @@ enyo.kind({
 				}					
 				this.$.popMan.createComponent({kind: "receptions.create",
 										       onAddReception:"updateBY",onCancel:"closePopUp", 
-										       name:'dynocon',flex: 1},{owner:this});			
+										       name:'dynocon'},{owner:this});			
 				this.$.dynocon.setReception(null,this.arrSelected);
 				this.$.dynocon.toggleAdd();
 				this.$.popMan.render();

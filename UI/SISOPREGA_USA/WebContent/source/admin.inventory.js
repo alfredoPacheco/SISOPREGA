@@ -114,10 +114,6 @@ enyo.kind({
 					]}
 				]},
 	],
-	updateInventory:function(){
-	},
-	calcSummary:function(){
-	},
 	loadInventory:function(inSender, inIndex){
 		var objData;
 		if(objData=this.arrData[inIndex]){
@@ -203,5 +199,69 @@ enyo.kind({
 	updateView:function(){
 	    this.$.listInventory.render();
 	    this.updateSummary();
-	}
+	},
+	setListContent:function(arrInventory){
+	    var groupByType = {};
+	    var groupByClass = {};
+	    for(var i =0;i<arrInventory.length;i++){
+		
+	    }
+	    this.arrData = arrViewData;
+	    
+	},
+	saveShip:function(arrInventory){
+		//Ordering data by buyer
+		
+		var groupByType={};
+		
+		for(var i=0;i<arrInventory.length;i++){
+		    if(!(arrInventory[i].cattleType in groupByType)){
+			groupByType[arrInventory[i].cattleType] = [];
+		    }
+		    groupByType[arrInventory[i].cattleType].push(arrInventory[i]);
+		}
+		
+		//Ordering data by cattle
+		var objShip = {};
+		var arrDetail = {};
+		for(i in groupByType){
+		    if (groupByType.hasOwnProperty(i)){
+			for(var j=0;j<groupByType[i].length;j++){
+			    if(!(groupByType[i][j].cattleName in arrDetail)){
+				arrDetail[groupByType[i][j].cattleName]=[];
+				arrDetail[groupByType[i][j].cattleName].totalHeads =0;
+				arrDetail[groupByType[i][j].cattleName].totalWeight =0;
+			    }
+			    arrDetail[groupByType[i][j].cattleName].push(groupByType[i][j]);
+			    arrDetail[groupByType[i][j].cattleName].totalHeads += groupByType[i][j].totalHeads;
+			    arrDetail[groupByType[i][j].cattleName].totalWeight += groupByType[i][j].totalWeight;
+			}
+			objShip[i] = arrDetail;
+			arrDetail={};
+		    }
+		}
+		console.debug(objShip);
+		
+		for(client in objShip){
+		    if(objShip.hasOwnProperty(client)){
+			for(cattle in objShip[client]){
+			    if(objShip[client].hasOwnProperty(cattle)){
+				if(!cacheShip.createData(objShip[client][cattle])){
+				    return;
+				}
+				for(var y =0;y<objShip[client][cattle].length;y++){
+				    var obj=null;
+				    if(obj=this.getItemByItemNumber(objShip[client][cattle][y].itemNumber)){
+					obj.shipment_id = objShip[client][cattle].shipment_id;
+				    }else{
+					return;
+				    }
+				}
+			    }
+			}
+		    }
+		}
+		
+		this.doProgram();
+	    },
 });

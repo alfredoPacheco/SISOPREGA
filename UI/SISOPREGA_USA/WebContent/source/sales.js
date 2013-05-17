@@ -277,7 +277,8 @@ enyo
 	    reset:function(){
 		this.$.saleDate.setValue(utils.dateOut(new Date()));
 		this.$.customer.setItems(cacheCustomers.getAllForList());
-		this.$.clase.setItems(cachePen.getClassesInPensForList());
+//		this.$.clase.setItems(cachePen.getClassesInPensForList());
+		this.$.clase.setItems(cacheClasses.getList());
 		this.$.corrales.setItems(cachePen.getBarnyardsOccupiedForList());
 		this.objMaster = {};
 		this.arrDetail= [];
