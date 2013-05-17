@@ -52,7 +52,7 @@ enyo.kind({
 	    align : "center",
 	    height : "50px;",
 	    components : [ {
-		content : "Corrales",
+		content : "Corrales:",
 		width : "160px;",
 		style : "text-align: right;margin-right:5px;"
 	    }, {
@@ -61,7 +61,7 @@ enyo.kind({
 		style : "color:black",
 		flex : 1
 	    }, {
-		content : "Fecha de Llegada",
+		content : "Fecha de Llegada:",
 		width : "160px;",
 		style : "text-align: right;margin-right:5px;"
 	    }, {
@@ -183,7 +183,7 @@ enyo.kind({
 	name : "draAdd",
 	components : [ {
 	    layoutKind : "HFlexLayout",
-	    style : "padding:20px;",
+	    style : "padding:0px 20px;",
 	    align : "center",
 	    pack : "center",
 	    components : [ {
@@ -193,10 +193,7 @@ enyo.kind({
 		flex : 1,
 		caption : "Crear",
 		onclick : "addReception"
-	    }, {
-		kind : enyo.Spacer,
-		style : "max-width:20px;"
-	    }, {
+	    },{
 		kind : "Button",
 		name : "btnCancelCreate",
 		className : "enyo-button-negative",
@@ -210,7 +207,9 @@ enyo.kind({
 	name : "draUpdate",
 	components : [ {
 	    layoutKind : "HFlexLayout",
+	    style : "padding:0px 20px;",
 	    align : "center",
+	    pack : "center",
 	    components : [ {
 		kind : "Button",
 		name : "btnUpdate",

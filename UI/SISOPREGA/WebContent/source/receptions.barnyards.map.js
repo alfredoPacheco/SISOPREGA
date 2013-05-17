@@ -32,14 +32,14 @@ enyo.kind({
 				{name: "cells", kind: "VFlexBox",align:"center",pack:"center", onclick: "cellsClick"},
 			]},
 			{kind: "Popup",name: "popMan",modal:true, dismissWithClick:false,
-			 layoutKind: "VFlexLayout", style: "overflow: hidden;max-height:400px;background-color:#DABD8B;font-size:15px;", 
+			 layoutKind: "VFlexLayout", style: "overflow: hidden;max-height:360px;max-width:1000px;background-color:#DABD8B;font-size:15px;", 
 			 height:"95%",width: "95%", scrim: true},
 			 
 			 {kind: "Toolbar",style:"height:20px;",components: [
-						{kind: "controls.autocomplete",width:"60%;", height:"45px;", name:"rancherFilter",
+						{kind: "controls.autocomplete",flex:1, height:"36px;", name:"rancherFilter",
 							  hint:"Filtro por Ganadero", onSelectItem:"rancherFilterChanged"},
 						{kind: "Button",name:"btnClearFilter", className: "enyo-button-negative",
-							   caption: "Remover Filtro", onclick: "clearFilter"}	             
+							   caption: "Remover Filtro / Selección", onclick: "clearFilter"}	             
 						
 			]}
 	],
@@ -135,6 +135,8 @@ enyo.kind({
 		this.createCells("2R",-8,4,"50px","50px");
 		this.splitRow();
 		this.addCustomCell("spacertwo","","813px","50px");
+		
+		this.$.rancherFilter.$.textField.applyStyle("border-width","7px");
 				
 	},
 	last:null,
@@ -417,13 +419,13 @@ enyo.kind({
 				this.$.popMan.createComponent({kind: "Toolbar",name:"tbHeaderRec",style:"height:10px", 
 											 components: [
 												{kind: "VFlexBox", name:'lblBYselected', allowHtml:true,
-													 style:"color:#FFF;border:none;font-size:12px", content: "algo",flex:1},
-													 {kind: "Spacer",flex:1},
+													 style:"color:#FFF;border:none;font-size:12px", content: ""},
+													 {kind: "Spacer"},
 												{kind: "VFlexBox", name:'lblInfo', allowHtml:true,
-													 style:"color:#FFF;border:none;font-size:12px;text-align:center;", content: "",flex:1},
-													 {kind: "Spacer",flex:1},
+													 style:"color:#FFF;border:none;font-size:12px;text-align:center;", content: ""},
+													 {kind: "Spacer"},
 												{name:'btnLogOut', onclick:"closePopUp",
-												 icon:"images/command-menu/icon-context.png",flex:1}]},{owner:this});						
+												 icon:"images/command-menu/icon-context.png"}]},{owner:this});						
 				this.$.popMan.createComponent({kind: "receptions.feed",
 										       onAddFeed:"closePopUp",onCancel:"closePopUp", 
 										       name:'dynocon',flex: 1},{owner:this});			
