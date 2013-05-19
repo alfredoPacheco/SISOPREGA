@@ -395,10 +395,12 @@ enyo.kind({
 				}
 				if(this.$.tbHeaderRec){
 					this.$.tbHeaderRec.destroy();
-				}					
+				}
+				
 				this.$.popMan.createComponent({kind: "receptions.create",
-										       onAddReception:"updateBY",onCancel:"closePopUp", 
-										       name:'dynocon'},{owner:this});			
+				    onAddReception:"updateBY",onCancel:"closePopUp", 
+				    name:'dynocon',flex:1},{owner:this});		
+				
 				this.$.dynocon.setReception(null,this.arrSelected);
 				this.$.dynocon.toggleAdd();
 				this.$.popMan.render();

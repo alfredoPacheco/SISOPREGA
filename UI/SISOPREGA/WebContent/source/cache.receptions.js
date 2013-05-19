@@ -431,7 +431,16 @@ enyo.kind(
           }
         }
 
-        this.createWeight(objRec.reception_id, objRec.weights[0]);
+        if(this.createWeight(objRec.reception_id, objRec.weights[0])){
+            if(objRec.weights[0].hc>0){
+        	// Send communication to customer
+                var today = new Date();
+                var month = today.getMonth() + 1;
+                var today_sf = month + '/' + today.getDate() + '/' + today.getFullYear();
+                var report_name = 'GanadoRecibido?rancherId=' + objRec.rancher_id + '&amp;fromDate=' + today_sf + '&amp;toDate=' + today_sf;
+                consumingGateway.SendReport(objRec.rancher_id, report_name);	
+            }
+        }
 
         this.arrObj.push(objRec);
         _arrReceptionList = this.arrObj;
@@ -440,12 +449,7 @@ enyo.kind(
           cbObj[cbMethod]();
         }
 
-        // Send communication to customer
-        var today = new Date();
-        var month = today.getMonth() + 1;
-        var today_sf = month + '/' + today.getDate() + '/' + today.getFullYear();
-        var report_name = 'GanadoRecibido?rancherId=' + objRec.rancher_id + '&amp;fromDate=' + today_sf + '&amp;toDate=' + today_sf;
-        consumingGateway.SendReport(objRec.rancher_id, report_name);
+        
 
         return true;
       } else { // Error
@@ -458,11 +462,18 @@ enyo.kind(
       var objToSend = this.receptionAdapterToOut(objNew);
       var cgUpdate = consumingGateway.Update("Reception", objToSend);
       if (cgUpdate.exceptionId == 0) { // Updated successfully
-
-        // TODO UPDATE WEIGHT
-        if (this.updateWeight(objOld.weights[0], objNew.weights[0], cbObj) == true) {
-
-        }
+	  // TODO UPDATE WEIGHT
+	  if (this.updateWeight(objOld.weights[0], objNew.weights[0], cbObj) == true) {
+    		var resultPrompt = confirm("Ha editado la cantidad o peso, ¿Desea enviar un aviso al ganadero");
+    		if(resultPrompt){
+    		    // Send communication to customer
+    		    var today = new Date();
+    		    var month = today.getMonth() + 1;
+    		    var today_sf = month + '/' + today.getDate() + '/' + today.getFullYear();
+    		    var report_name = 'GanadoRecibido?rancherId=' + objNew.rancher_id + '&amp;fromDate=' + today_sf + '&amp;toDate=' + today_sf;
+    		    consumingGateway.SendReport(objNew.rancher_id, report_name);	
+    		}
+	  }
         for (prop in objNew) {
           objOld[prop] = objNew[prop];
         }
@@ -557,21 +568,27 @@ enyo.kind(
       }
     },
     updateWeight : function(objOld, objNew, cbObj) {
-
-      objNew.hcw_id = objOld.hcw_id;
-
-      var objToSend = this.receptionHeadcountAdapterToOut(objNew);
-      objToSend.receptionId = cbObj.objRec.reception_id;
-      var cgUpdate = consumingGateway.Update("ReceptionHeadcount", objToSend);
-      if (cgUpdate.exceptionId == 0) { // Updated successfully
-        for (prop in objNew) {
-          objOld[prop] = objNew[prop];
-        }
-        return true;
-      } else { // Error
-        cacheMan.setMessage("", "[Exception ID: " + cgUpdate.exceptionId + "] Descripcion: " + cgUpdate.exceptionDescription);
-        return false;
-      }
+	
+	
+	
+	objNew.hcw_id = objOld.hcw_id;
+	if(Number(objNew.hc)==Number(objOld.hc)){
+	    if(Number(objOld.weight)==Number(objNew.weight)) {
+		return false;
+	    }
+	}
+	var objToSend = this.receptionHeadcountAdapterToOut(objNew);
+	objToSend.receptionId = cbObj.objRec.reception_id;
+	var cgUpdate = consumingGateway.Update("ReceptionHeadcount", objToSend);
+	if (cgUpdate.exceptionId == 0) { // Updated successfully
+	    for (prop in objNew) {
+		objOld[prop] = objNew[prop];
+	    }
+	    return true;
+	} else { // Error
+	    cacheMan.setMessage("", "[Exception ID: " + cgUpdate.exceptionId + "] Descripcion: " + cgUpdate.exceptionDescription);
+	    return false;
+	}
     },
     deleteWeight : function(objRec, delObj, cbObj, cbMethod) {
       // AJAX

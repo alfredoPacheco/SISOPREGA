@@ -44,139 +44,143 @@ enyo.kind({
 
 	]
     }, {
-	kind : enyo.VFlexBox, // defaultKind: "HFlexBox",
-	style : "padding:20px;",
-	pack : "center",
+	kind : enyo.Scroller,
+	flex:1,
 	components : [ {
-	    layoutKind : enyo.HFlexLayout,
-	    align : "center",
-	    height : "50px;",
+	    kind : enyo.VFlexBox, // defaultKind: "HFlexBox",
+	    style : "padding:20px;",
+	    pack : "center",
 	    components : [ {
-		content : "Corrales:",
-		width : "160px;",
-		style : "text-align: right;margin-right:5px;"
-	    }, {
-		name : 'sBYs',
-		content : "",
-		style : "color:black",
-		flex : 1
-	    }, {
-		content : "Fecha de Llegada:",
-		width : "160px;",
-		style : "text-align: right;margin-right:5px;"
-	    }, {
-		kind : "DatePicker",
-		name : "arrival_date",
-		label : "",
-		inputClassName : "blankInput",
-		focusClassName : "darkFocus",
-		changeOnInput : true
-	    } ]
+		layoutKind : enyo.HFlexLayout,
+		align : "center",
+		height : "50px;",
+		components : [ {
+		    content : "Corrales:",
+		    width : "120px;",
+		    style : "text-align: right;margin-right:5px;"
+		}, {
+		    name : 'sBYs',
+		    content : "",
+		    style : "color:black",
+		    flex : 1
+		}, {
+		    content : "Fecha de Llegada:",
+		    width : "160px;",
+		    style : "text-align: right;margin-right:5px;"
+		}, {
+		    kind : "DatePicker",
+		    name : "arrival_date",
+		    label : "",
+		    inputClassName : "blankInput",
+		    focusClassName : "darkFocus",
+		    changeOnInput : true
+		} ]
 
-	}, {
-	    kind : enyo.HFlexBox,
-	    align : "center",
-	    height : "50px;",
-	    components : [ {
-		content : "Sr. Ganadero:",
-		width : "160px;",
-		style : "text-align: right;margin-right:5px;"
 	    }, {
-		kind : "controls.autocomplete",
-		inputKind : "ToolInput",
-		name : "rancher_id",
-		hint : '',
-		width : "500px;",
-		height : "35px;",
-		flex : 1,
-		onEnter : "emularTabulacionConEnter"
+		kind : enyo.HFlexBox,
+		align : "center",
+		height : "50px;",
+		components : [ {
+		    content : "Sr. Ganadero:",
+		    width : "120px;",
+		    style : "text-align: right;margin-right:5px;"
+		}, {
+		    kind : "controls.autocomplete",
+		    inputKind : "ToolInput",
+		    name : "rancher_id",
+		    hint : '',
+		    width : "500px;",
+		    height : "35px;",
+		    flex : 1,
+		    onEnter : "emularTabulacionConEnter"
+		}, {
+		    kind : enyo.IconButton,
+		    icon : "images/menu-icon-new.png",
+		    onclick : "contextMenuClicked"
+		} ]
 	    }, {
-		kind : enyo.IconButton,
-		icon : "images/menu-icon-new.png",
-		onclick : "contextMenuClicked"
-	    } ]
-	}, {
-	    kind : enyo.HFlexBox,
-	    align : "center",
-	    height : "50px;",
-	    components : [ {
-		content : "Tipo de Ganado:",
-		width : "160px;",
-		style : "text-align: right;margin-right:5px;"
-	    }, {
-		kind : "controls.autocomplete",
-		inputKind : "ToolInput",
-		name : "cattype_id",
-		hint : '',
-		width : "200px;",
-		height : "35px;",
-		flex : 1,
-		onEnter : "emularTabulacionConEnter"
-	    }, ]
-	},
+		kind : enyo.HFlexBox,
+		align : "center",
+		height : "50px;",
+		components : [ {
+		    content : "Tipo de Ganado:",
+		    width : "120px;",
+		    style : "text-align: right;margin-right:5px;"
+		}, {
+		    kind : "controls.autocomplete",
+		    inputKind : "ToolInput",
+		    name : "cattype_id",
+		    hint : '',
+		    width : "200px;",
+		    height : "35px;",
+		    flex : 1,
+		    onEnter : "emularTabulacionConEnter"
+		}, ]
+	    },
 
-	{
-	    kind : enyo.HFlexBox,
-	    align : "center",
-	    height : "50px;",
-	    components : [ {
-		content : "Procedencia:",
-		width : "160px;",
-		style : "text-align: right;margin-right:5px;"
+	    {
+		kind : enyo.HFlexBox,
+		align : "center",
+		height : "50px;",
+		components : [ {
+		    content : "Procedencia:",
+		    width : "120px;",
+		    style : "text-align: right;margin-right:5px;"
+		}, {
+		    kind : "controls.autocomplete",
+		    inputKind : "ToolInput",
+		    name : "location_id",
+		    hint : '',
+		    width : "200px;",
+		    height : "35px;",
+		    flex : 1,
+		    onEnter : "emularTabulacionConEnter"
+		}, {
+		    content : "Zona en Corrales:",
+		    width : "160px;",
+		    style : "text-align: right;margin-right:5px;"
+		}, {
+		    kind : "controls.autocomplete",
+		    inputKind : "ToolInput",
+		    name : "zone_id",
+		    hint : '',
+		    width : "200px;",
+		    height : "35px;",
+		    flex : 1,
+		    onEnter : "emularTabulacionConEnter"
+		}, ]
 	    }, {
-		kind : "controls.autocomplete",
-		inputKind : "ToolInput",
-		name : "location_id",
-		hint : '',
-		width : "200px;",
-		height : "35px;",
-		flex : 1,
-		onEnter : "emularTabulacionConEnter"
-	    }, {
-		content : "Zona en Corrales:",
-		width : "160px;",
-		style : "text-align: right;margin-right:5px;"
-	    }, {
-		kind : "controls.autocomplete",
-		inputKind : "ToolInput",
-		name : "zone_id",
-		hint : '',
-		width : "200px;",
-		height : "35px;",
-		flex : 1,
-		onEnter : "emularTabulacionConEnter"
-	    }, ]
-	}, {
-	    kind : enyo.HFlexBox,
-	    align : "center",
-	    height : "50px;",
-	    components : [ {
-		content : "No. Cabezas:",
-		width : "160px;",
-		style : "text-align: right;margin-right:5px;"
-	    }, {
-		kind : "ToolInput",
-		name : "hc_aprox",
-		hint : "",
-		flex : 1,
-		height : "35px;",
-		changeOnInput : true,
-		inputType : "number",
-		onkeydown : "key_down"
-	    }, {
-		content : "Peso:",
-		width : "160px;",
-		style : "text-align: right;margin-right:5px;"
-	    }, {
-		kind : "ToolInput",
-		name : "weight",
-		hint : "",
-		flex : 1,
-		height : "35px;",
-		changeOnInput : true,
-		inputType : "number",
-		onkeydown : "key_down"
-	    }, ]
+		kind : enyo.HFlexBox,
+		align : "center",
+		height : "50px;",
+		components : [ {
+		    content : "No. Cabezas:",
+		    width : "120px;",
+		    style : "text-align: right;margin-right:5px;"
+		}, {
+		    kind : "ToolInput",
+		    name : "hc_aprox",
+		    hint : "",
+		    flex : 1,
+		    height : "35px;",
+		    changeOnInput : true,
+		    inputType : "number",
+		    onkeydown : "key_down"
+		}, {
+		    content : "Peso:",
+		    width : "160px;",
+		    style : "text-align: right;margin-right:5px;"
+		}, {
+		    kind : "ToolInput",
+		    name : "weight",
+		    hint : "",
+		    flex : 1,
+		    height : "35px;",
+		    changeOnInput : true,
+		    inputType : "number",
+		    onkeydown : "key_down"
+		}, ]
+	    } ]
 	} ]
     }, {
 	kind : "Drawer",
@@ -193,7 +197,7 @@ enyo.kind({
 		flex : 1,
 		caption : "Crear",
 		onclick : "addReception"
-	    },{
+	    }, {
 		kind : "Button",
 		name : "btnCancelCreate",
 		className : "enyo-button-negative",
@@ -272,7 +276,10 @@ enyo.kind({
 	}
     },
     addReception : function() {
-	cacheReceptions.Create(this.getReception(), this, "doAddReception");
+	var newReception = null;
+	if (newReception = this.getReception()) {
+	    cacheReceptions.Create(newReception, this, "doAddReception");
+	}
     },
     getReception : function() {
 	var receptionDef;
@@ -317,11 +324,28 @@ enyo.kind({
 	});
 	receptionDef.hc_aprox = this.$.hc_aprox.getValue();
 	receptionDef.barnyards = this.arrBY;
-	return receptionDef;
+	return this.validateFields(receptionDef);
+    },
+    validateFields:function(reception){//return null if something is wrong, return the object if it is correct
+	var strError = "";
+	if(Number(reception.weights[0].weight) < 0) strError = 'Verifique el campo "Peso"';
+	if(Number(reception.weights[0].hc) < 0) strError = 'Verifique el campo "No. Cabezas"';
+	if(reception.zone_id < 0) strError = 'Verifique el campo "Zona en Corrales"';
+	if(reception.location_id < 0) strError = 'Verifique el campo "Procedencia".';
+	if(reception.cattype_id < 0) strError = 'Verifique el campo "Tipo de Ganado".';
+	if(reception.rancher_id < 0) strError = 'Verifique el campo "Sr. Ganadero".';
+	if(strError.length>0){
+	    cacheMan.setMessage("", "[Exception ID: local] Descripción: " + strError);
+	    return null;
+	}
+	return reception;
     },
     updateReception : function() {
-	cacheReceptions.upd(this.objRec, this.getReception(), this,
+	var reception = null;
+	if (reception = this.getReception()) {
+	    cacheReceptions.upd(this.objRec, reception, this,
 		"doUpdateReception");
+	}
     },
     resetValues : function() {
 	this.$.rancher_id.setIndex(-1);
