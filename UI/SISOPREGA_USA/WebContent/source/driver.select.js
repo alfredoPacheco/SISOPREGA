@@ -23,7 +23,7 @@ enyo
 		    name : "carrier",
 		    flex : 1,
 		    height : "35px;",
-		    hint : "Transportista",
+		    hint : "",
 		    width:"500px"
 		} ]
 	    }, {
@@ -38,7 +38,7 @@ enyo
 		}, {
 		    kind : "ToolInput",
 		    name : "plate",
-		    hint : 'Placas',
+		    hint : '',
 		    flex : 1,
 		// style:"max-width: 500px;"
 		}, ]
@@ -54,7 +54,7 @@ enyo
 		}, {
 		    kind : "ToolInput",
 		    name : "driver",
-		    hint : 'Chofer',
+		    hint : '',
 		    flex : 1,
 		// style:"max-width: 500px;"
 		}, ]
@@ -125,7 +125,7 @@ enyo
 	    setObj:function(obj){
 		this.obj = obj;
 		this.reset();
-		this.$.carrier.setValue(obj.shipCarrier);
+		this.$.carrier.setValue(obj[0].shipCarrier);
 	    },
 	    save_release:function(){
 		cacheShip.releaseShip(this.getObj(), this, "afterSaveRelease");		

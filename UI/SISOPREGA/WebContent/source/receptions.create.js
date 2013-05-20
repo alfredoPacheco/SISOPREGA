@@ -9,7 +9,6 @@ enyo.kind({
 	"onCancel" : ""
     },
     objRec : null,
-    objList : [],
     arrBY : null,
     create : function() {
 	this.inherited(arguments);

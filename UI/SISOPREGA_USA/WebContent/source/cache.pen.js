@@ -228,8 +228,8 @@ enyo.kind(
       for ( var index = 0; index < items.length; index++) {
         var item =
           {
-            caption : items[index].cattleName,
-            value : index
+            caption : cacheClasses.getByID(items[index].cattleType).name,
+            value : items[index].cattleType
           // items[index].id TODO: work with id
           };
         if (!setAux.hasOwnProperty(item.caption)) {

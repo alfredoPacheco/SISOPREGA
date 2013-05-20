@@ -464,7 +464,7 @@ enyo.kind(
       if (cgUpdate.exceptionId == 0) { // Updated successfully
 	  // TODO UPDATE WEIGHT
 	  if (this.updateWeight(objOld.weights[0], objNew.weights[0], cbObj) == true) {
-    		var resultPrompt = confirm("Ha editado la cantidad o peso, ¿Desea enviar un aviso al ganadero");
+    		var resultPrompt = confirm("Ha editado la cantidad o peso, ¿Desea enviar un aviso al ganadero?");
     		if(resultPrompt){
     		    // Send communication to customer
     		    var today = new Date();

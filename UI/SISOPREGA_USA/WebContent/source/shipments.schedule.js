@@ -384,7 +384,6 @@ enyo.kind({
 		arrDetail={};
 	    }
 	}
-	console.debug(objShip);
 	
 	for(client in objShip){
 	    if(objShip.hasOwnProperty(client)){
