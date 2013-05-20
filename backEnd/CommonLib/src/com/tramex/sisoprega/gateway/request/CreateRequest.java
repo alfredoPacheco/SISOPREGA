@@ -13,10 +13,12 @@
  * 
  * &copy; COPYRIGHT 2012 TRAMEX. ALL RIGHTS RESERVED.
  */
-package com.tramex.sisoprega.dto;
+package com.tramex.sisoprega.gateway.request;
+
+import com.tramex.sisoprega.gateway.GatewayRecord;
 
 /**
- * Defines the model for the Rancher Contact entity.<BR/>
+ * Defines the model to be implemented by the Create Gateway Requests.<BR/>
  * 
  * <B>Revision History:</B>
  * 
@@ -25,50 +27,41 @@ package com.tramex.sisoprega.dto;
  * Date        By                           Description
  * MM/DD/YYYY
  * ----------  ---------------------------  -------------------------------------------
- * 11/11/2012  Diego Torres                 Initial Version.
+ * May 19, 2013     Diego Torres                 Initial Version.
  * ====================================================================================
  * </PRE>
  * 
  * @author Diego Torres
  * 
+ * 
  */
-
-public class CattleClass {
-  private long cattleClassId;
-  private String catclassName;
+public class CreateRequest {
+  private GatewayRecord parentRecord;
 
   /**
-   * @return the catclassId
+   * @return the parentRecord
    */
-  public long getCattleClassId() {
-    return cattleClassId;
+  public GatewayRecord getParentRecord() {
+    return parentRecord;
   }
 
   /**
-   * @param catclassId
-   *          the catclassId to set
+   * @param parentRecord
+   *          the parentRecord to set
    */
-  public void setCattleClassId(long cattleClassId) {
-    this.cattleClassId = cattleClassId;
+  public void setParentRecord(GatewayRecord parentRecord) {
+    this.parentRecord = parentRecord;
   }
-
-  /**
-   * @return the catclassName
-   */
-  public String getCatclassName() {
-    return catclassName;
-  }
-
-  /**
-   * @param catclassName
-   *          the catclassName to set
-   */
-  public void setCatclassName(String catclassName) {
-    this.catclassName = catclassName;
-  }
-
+  
   @Override
   public String toString() {
-    return "catclassId:" + cattleClassId + ";catclassName:" + catclassName + ";";
+    String stringed = "";
+
+    stringed += "createRequest:{";
+    stringed += parentRecord + ";";
+    stringed += "}";
+
+    return stringed;
   }
+
 }

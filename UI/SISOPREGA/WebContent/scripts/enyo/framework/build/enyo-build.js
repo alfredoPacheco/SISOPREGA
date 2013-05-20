@@ -6230,7 +6230,7 @@ return;
 },
 executePendingWindowParams: function(a) {
 var b = this.getWindowName(a), c = this.getRootWindow().enyo.windows.manager, d = c._pendingWindowParams[b];
-delete c._pendingWindowParams[b], d || console.warn("WARNING: Executing pending window params, but no params list found.");
+delete c._pendingWindowParams[b], d; // || console.warn("WARNING: Executing pending window params, but no params list found.");
 while (d && d.length) enyo.windows.setWindowParams(a, d.shift());
 },
 isValidWindow: function(a) {

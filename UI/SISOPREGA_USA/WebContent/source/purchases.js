@@ -38,6 +38,47 @@ enyo.kind(
                     } ]
               },
               {
+                kind : "Toolbar",
+                name : "PurchaseToolBar",
+                align : "left",
+                pack : "left",
+                flex : 1,
+                style : "background:#333;min-height:10px;height:45px",
+                components :
+                  [
+                    {
+                      name : 'btnPrint',
+                      onclick : "printPurchase",
+                      icon : "images/print.png"
+                    },
+                    {
+                      name : 'btnSave',
+                      onclick : "savePurchase",
+                      icon : "images/save.png"
+                    },
+                    {
+                      name : 'btnClear',
+                      onclick : "resetPurchase",
+                      icon : "images/clear.png"
+                    },
+                    {
+                      fit : true
+                    },
+                    {
+                      name : 'btnOpen',
+                      onclick : "open",
+                      icon : "images/search.png"
+                    },
+                    {
+                      fit : true
+                    },
+                    {
+                      name : 'btnClose',
+                      onclick : "open",
+                      icon : "images/search.png"
+                    }]
+              },
+              {
                 kind : enyo.HFlexBox,
                 align : "center",
                 height : "40px;",
@@ -103,6 +144,10 @@ enyo.kind(
               } ]
         },
         {
+          kind : enyo.Divider,
+          caption : ""
+        },
+        {
           kind : "HFlexBox",
           className : "listFirst",
           style : "padding-left:100px;",
@@ -113,14 +158,6 @@ enyo.kind(
               {
                 kind : "controls.autocomplete",
                 inputKind : "ToolInput",
-                name : "corral",
-                hint : "corral",
-                width : "100px;",
-                style : "margin-right: 15px;"
-              },
-              {
-                kind : "controls.autocomplete",
-                inputKind : "ToolInput",
                 height : "35px;",
                 name : "clase",
                 hint : 'Clase',
@@ -128,25 +165,41 @@ enyo.kind(
                 style : "margin-right: 15px;"
               },
               {
+                kind : "controls.autocomplete",
+                inputKind : "ToolInput",
+                height : "35px;",
+                name : "corral",
+                hint : "corral",
+                width : "150px;",
+                style : "margin-right: 15px;"
+              },
+              {
                 kind : "ToolInput",
                 name : "cabezas",
                 hint : 'Cabezas',
-                width : "150px;",
+                width : "125px;",
                 style : "margin-right: 15px;"
               },
               {
                 kind : "ToolInput",
                 name : "peso",
                 hint : 'Peso Promedio',
-                width : "150px;",
+                width : "125px;",
                 style : "margin-right: 15px;"
               },
               {
-                kind : enyo.Button,
-                caption : "Agregar",
+                kind : enyo.IconButton,
+                icon : "../SISOPREGA/images/menu-icon-new.png",
+                className : "enyo-button-affirmative",
                 onclick : "agregar_click",
-                style : "background-color: #DABD8B;"
-              }, ]
+                height : "23px",
+                width : "23px",
+                style : "padding: 2px;margin-top: 0px;"
+              } ]
+        },
+        {
+          kind : enyo.Divider,
+          caption : ""
         },
         {
           kind : "HFlexBox",
@@ -276,9 +329,13 @@ enyo.kind(
                       caption : "Efectuar Compra",
                       onclick : "purchase_click",
                       style : "background-color: #DABD8B;"
-                    }
-
-                  ]
+                    },
+                    {
+                      kind : enyo.Button,
+                      caption : "Cancelar",
+                      onclick : "cancel_click",
+                      style : "background-color: #DABD8B;"
+                    } ]
               } ]
         } ],
     ready : function() {
@@ -345,7 +402,7 @@ enyo.kind(
       this.$.list.render();
       this.$.totalHC.setContent(utils.formatNumberThousands(this.totalHC));
       this.$.totalWeight.setContent(utils.formatNumberThousands(this.totalWeight));
-      
+
       this.$.provider.setItems(cacheProviders.getAllForList());
     },
     dropPurchase : function(inSender, inIndex) {
@@ -364,6 +421,10 @@ enyo.kind(
 
       this.arrDetail = [];
       this.doPurchaseCompleted();
+    },
+    cancel_click : function() {
+      // TODO: Clear data entry
+      this.closePopUp();
     },
     purchaseFromRecord : function(recordIndex) {
 
@@ -401,15 +462,15 @@ enyo.kind(
         j(document.getElementById(_id)).mask('99/99/9999');
       });
     },
-    doAddSupplier : function(){
+    doAddSupplier : function() {
       this.$.popup.validateComponents();
       this.$.providersCreate_kind.toggleAdd();
       this.$.popup.openAtCenter();
     },
-    closePopUp : function(){
+    closePopUp : function() {
       this.$.popup.close();
     },
-    supplierCreated : function(){
+    supplierCreated : function() {
       this.$.popup.close();
       this.$.provider.clear();
       this.$.provider.setItems(cacheProviders.getAllForList());

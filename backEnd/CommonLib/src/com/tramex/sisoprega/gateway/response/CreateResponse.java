@@ -13,11 +13,11 @@
  * 
  * &copy; COPYRIGHT 2012 TRAMEX. ALL RIGHTS RESERVED.
  */
-package com.tramex.sisoprega.dto;
+package com.tramex.sisoprega.gateway.response;
 
 /**
- * Defines the model for the Rancher Contact entity.<BR/>
- * 
+ * Response model for create requests.
+ *  
  * <B>Revision History:</B>
  * 
  * <PRE>
@@ -25,50 +25,40 @@ package com.tramex.sisoprega.dto;
  * Date        By                           Description
  * MM/DD/YYYY
  * ----------  ---------------------------  -------------------------------------------
- * 11/11/2012  Diego Torres                 Initial Version.
+ * May 19, 2013     Diego Torres                 Initial Version.
  * ====================================================================================
  * </PRE>
  * 
  * @author Diego Torres
+ *
  * 
  */
-
-public class CattleClass {
-  private long cattleClassId;
-  private String catclassName;
+public class CreateResponse extends BaseResponse {
+  private long generatedId;
 
   /**
-   * @return the catclassId
+   * @return the generatedId
    */
-  public long getCattleClassId() {
-    return cattleClassId;
+  public long getGeneratedId() {
+    return generatedId;
   }
 
   /**
-   * @param catclassId
-   *          the catclassId to set
+   * @param generatedId the generatedId to set
    */
-  public void setCattleClassId(long cattleClassId) {
-    this.cattleClassId = cattleClassId;
+  public void setGeneratedId(long generatedId) {
+    this.generatedId = generatedId;
   }
-
-  /**
-   * @return the catclassName
-   */
-  public String getCatclassName() {
-    return catclassName;
-  }
-
-  /**
-   * @param catclassName
-   *          the catclassName to set
-   */
-  public void setCatclassName(String catclassName) {
-    this.catclassName = catclassName;
-  }
-
+  
   @Override
   public String toString() {
-    return "catclassId:" + cattleClassId + ";catclassName:" + catclassName + ";";
+String stringed = "";
+    
+    stringed += "response:{";
+    stringed += this.getError() + ";";
+    stringed += "generatedId: " + generatedId + ";";
+    stringed += "}";
+    
+    return stringed;
   }
 }

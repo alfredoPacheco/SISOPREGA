@@ -277,14 +277,14 @@
 		<table name="cat_cattle_class" />
 		<named-query name="CATTLE_CLASS_BY_ID">
 			<description>Retrieves a single cattle class record by it's ID</description>
-			<query>SELECT cattle FROM CattleClass cattle WHERE cattle.catclassId = :catclassId</query>
+			<query>SELECT cattle FROM CattleClass cattle WHERE cattle.cattleClassId = :Id</query>
 		</named-query>
-		<named-query name="ALL_CATTLE_CLASSES">
+		<named-query name="ALL_CATTLECLASSS">
 			<description>Retrieves all cattle class records from database</description>
 			<query>SELECT cattle FROM CattleClass cattle ORDER BY cattle.catclassName</query>
 		</named-query>
 		<attributes>
-			<id name="catclassId">
+			<id name="cattleClassId">
 				<column name="catclass_id" />
 				<generated-value strategy="IDENTITY" />
 			</id>
@@ -340,22 +340,22 @@
 			</basic>
 		</attributes>
 	</entity>
-	<entity class="com.tramex.sisoprega.dto.Barnyard">
+	<entity class="com.tramex.sisoprega.dto.Pen">
 		<table name="cat_barnyard" />
-		<named-query name="BARNYARD_BY_ID">
+		<named-query name="PEN_BY_ID">
 			<description>Retrieves a single catBarnyard record by ID</description>
-			<query>SELECT bar FROM Barnyard bar WHERE bar.barnyardId = :barnyardId</query>
+			<query>SELECT bar FROM Pen bar WHERE bar.penId = :penId</query>
 		</named-query>
-		<named-query name="BARNYARD_BY_LOCATION">
+		<named-query name="PEN_BY_LOCATION">
 			<description>Retrieves a list of barnyards given its location id</description>
-			<query>SELECT barn FROM Barnyard barn WHERE barn.locationId = :locationId ORDER BY barn.barnyardCode</query>
+			<query>SELECT barn FROM Pen barn WHERE barn.locationId = :locationId ORDER BY barn.barnyardCode</query>
 		</named-query>
-		<named-query name="ALL_BARNYARDS">
+		<named-query name="ALL_PENS">
 			<description>Retrieves all barnyard records from database.</description>
-			<query>SELECT barn FROM Barnyard barn ORDER BY barn.barnyardCode</query>
+			<query>SELECT barn FROM Pen barn ORDER BY barn.barnyardCode</query>
 		</named-query>
 		<attributes>
-			<id name="barnyardId">
+			<id name="penId">
 				<column name="barnyard_id" />
 				<generated-value strategy="IDENTITY" />
 			</id>

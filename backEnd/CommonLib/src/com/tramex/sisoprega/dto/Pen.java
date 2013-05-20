@@ -33,8 +33,8 @@ package com.tramex.sisoprega.dto;
  * @author Jaime Figueroa
  * 
  */
-public class Barnyard {
-  private long barnyardId;
+public class Pen {
+  private long penId;
   private String barnyardCode;
   private boolean available;
   private long locationId;
@@ -42,16 +42,16 @@ public class Barnyard {
   /**
    * @return the barnyardId
    */
-  public long getBarnyardId() {
-    return barnyardId;
+  public long getPenId() {
+    return penId;
   }
 
   /**
    * @param barnyardId
    *          the barnyardId to set
    */
-  public void setBarnyardId(long barnyardId) {
-    this.barnyardId = barnyardId;
+  public void setPenId(long penId) {
+    this.penId = penId;
   }
 
   /**
@@ -101,7 +101,7 @@ public class Barnyard {
 
   @Override
   public String toString() {
-    return "available:" + available + ";barnyardCode:" + barnyardCode + ";barnyardId:" + barnyardId + ";locationId:" + locationId
+    return "available:" + available + ";barnyardCode:" + barnyardCode + ";barnyardId:" + penId + ";locationId:" + locationId
         + ";";
   }
 }

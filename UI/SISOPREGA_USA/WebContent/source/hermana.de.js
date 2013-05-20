@@ -44,9 +44,9 @@ enyo.kind(
                 icon : "images/save.png"
               },
               {
-                name : 'btnCancel',
+                name : 'btnClear',
                 onclick : "resetForm",
-                icon : "images/cancel.png"
+                icon : "images/clear.png"
               },
               {
                 fit : true

@@ -13,11 +13,13 @@
  * 
  * &copy; COPYRIGHT 2012 TRAMEX. ALL RIGHTS RESERVED.
  */
-package com.tramex.sisoprega.dto;
+package com.tramex.sisoprega.gateway.request;
+
+import com.tramex.sisoprega.gateway.GatewayRecord;
 
 /**
- * Defines the model for the Rancher Contact entity.<BR/>
- * 
+ * Defines the model to be implemented by the Read Gateway Requests.<BR/>
+ *  
  * <B>Revision History:</B>
  * 
  * <PRE>
@@ -25,50 +27,43 @@ package com.tramex.sisoprega.dto;
  * Date        By                           Description
  * MM/DD/YYYY
  * ----------  ---------------------------  -------------------------------------------
- * 11/11/2012  Diego Torres                 Initial Version.
+ * May 19, 2013     Diego Torres                 Initial Version.
  * ====================================================================================
  * </PRE>
  * 
  * @author Diego Torres
+ *
  * 
  */
-
-public class CattleClass {
-  private long cattleClassId;
-  private String catclassName;
+public class ReadRequest {
+  private GatewayRecord filter;
 
   /**
-   * @return the catclassId
+   * @return the filterDef
    */
-  public long getCattleClassId() {
-    return cattleClassId;
+  public GatewayRecord getFilter() {
+    return filter;
   }
 
   /**
-   * @param catclassId
-   *          the catclassId to set
+   * @param filterDef the filterDef to set
    */
-  public void setCattleClassId(long cattleClassId) {
-    this.cattleClassId = cattleClassId;
+  public void setFilter(GatewayRecord filter) {
+    this.filter = filter;
   }
-
-  /**
-   * @return the catclassName
-   */
-  public String getCatclassName() {
-    return catclassName;
-  }
-
-  /**
-   * @param catclassName
-   *          the catclassName to set
-   */
-  public void setCatclassName(String catclassName) {
-    this.catclassName = catclassName;
-  }
-
+  
   @Override
   public String toString() {
-    return "catclassId:" + cattleClassId + ";catclassName:" + catclassName + ";";
+    return "read:{" + filter + "}";
   }
+  
+  public static void main(String[] args){
+    ReadRequest read = new ReadRequest();
+    GatewayRecord readRecord = new GatewayRecord();
+    readRecord.setEntity("Rancher");
+    readRecord.addField("rancherId", "1");
+    read.setFilter(readRecord);
+    System.out.println(read.toString());
+  }
+  
 }

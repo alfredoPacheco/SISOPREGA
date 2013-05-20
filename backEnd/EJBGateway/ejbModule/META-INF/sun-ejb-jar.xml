@@ -23,7 +23,7 @@
 		<group-name>agency</group-name>
 	</security-role-mapping>
 	<enterprise-beans>
-		<ejb>
+		<!-- <ejb>
 			<ejb-name>GatewayBean</ejb-name>
 			<webservice-endpoint>
 				<port-component-name>Gateway</port-component-name>
@@ -32,7 +32,7 @@
 					<realm>security</realm>
 				</login-config>
 			</webservice-endpoint>
-		</ejb>
+		</ejb>  -->
 		<ejb>
 			<ejb-name>IdentityGatewayBean</ejb-name>
 			<webservice-endpoint>
@@ -57,11 +57,21 @@
 			<ejb-name>DMZGatewayBean</ejb-name>
 			<ior-security-config>
 				<as-context>
-					<auth-method>BASIC</auth-method>
+					<auth-method>USERNAME_PASSWORD</auth-method>
 					<realm>security</realm>
 					<required>false</required>
 				</as-context>
 			</ior-security-config>
+		</ejb>
+		<ejb>
+			<ejb-name>PresentorBean</ejb-name>
+			<webservice-endpoint>
+				<port-component-name>Presentor</port-component-name>
+				<login-config>
+					<auth-method>BASIC</auth-method>
+					<realm>security</realm>
+				</login-config>
+			</webservice-endpoint>
 		</ejb>
 	</enterprise-beans>
 </sun-ejb-jar>

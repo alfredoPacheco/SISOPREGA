@@ -7,7 +7,6 @@ import javax.annotation.Resource;
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
-import javax.ejb.LocalBean;
 import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
 import javax.jws.WebMethod;
@@ -22,7 +21,6 @@ import com.tramex.sisoprega.identity.dto.User;
  * Session Bean implementation class IdentityGatewayBean
  */
 @Stateless
-@LocalBean
 @WebService(name = "IdentityGateway")
 @RolesAllowed({"sisoprega_admin", "mx_usr", "us_usr", "rancher", "agency"})
 public class IdentityGatewayBean {

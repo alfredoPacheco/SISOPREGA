@@ -14,13 +14,12 @@
  * &copy; COPYRIGHT 2012 TRAMEX. ALL RIGHTS RESERVED.
  */
 
-package com.tramex.sisoprega.common.crud;
+package com.tramex.sisoprega.proxy;
 
-import com.tramex.sisoprega.common.BaseResponse;
-import com.tramex.sisoprega.common.CreateGatewayResponse;
-import com.tramex.sisoprega.common.GatewayRequest;
-import com.tramex.sisoprega.common.ReadGatewayResponse;
-import com.tramex.sisoprega.common.UpdateGatewayResponse;
+import com.tramex.sisoprega.gateway.request.CreateRequest;
+import com.tramex.sisoprega.gateway.request.ReadRequest;
+import com.tramex.sisoprega.gateway.response.CreateResponse;
+import com.tramex.sisoprega.gateway.response.ReadResponse;
 
 /**
  * The interface presents the contract that each EJB should agree in order to
@@ -41,38 +40,23 @@ import com.tramex.sisoprega.common.UpdateGatewayResponse;
  * 
  */
 public interface Cruddable {
-    /**
-     * Create operation, will execute the INSERT through the JPA.
-     * 
-     * @param request
-     * @return
-     */
-    CreateGatewayResponse Create(GatewayRequest request);
 
-    /**
-     * Read operation, will execute SELECTS through the JPA. Be aware of 2
-     * possible results: single result (when using entity ID) and multiple
-     * result (when using a filter definition).
-     * 
-     * @param request
-     * @return
-     */
-    ReadGatewayResponse Read(GatewayRequest request);
+  /**
+   * Create operation, will execute INSERTS through the JPA. In the response,
+   * the generated id will be included.
+   * 
+   * @param request
+   * @return
+   */
+  public CreateResponse Create(CreateRequest request);
 
-    /**
-     * Update operation, will execute the UPDATE through the JPA.
-     * 
-     * @param request
-     * @return
-     */
-    UpdateGatewayResponse Update(GatewayRequest request);
-
-    /**
-     * Delete operation, will execute the DELETE through the JPA using the
-     * entity ID.
-     * 
-     * @param request
-     * @return
-     */
-    BaseResponse Delete(GatewayRequest request);
+  /**
+   * Read operation, will execute SELECTS through the JPA. Be aware of 2
+   * possible results: single result (when using entity ID) and multiple result
+   * (when using a filter definition).
+   * 
+   * @param request
+   * @return
+   */
+  ReadResponse Read(ReadRequest request);
 }

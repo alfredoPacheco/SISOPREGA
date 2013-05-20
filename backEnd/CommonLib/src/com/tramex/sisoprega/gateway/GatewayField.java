@@ -13,10 +13,10 @@
  * 
  * &copy; COPYRIGHT 2012 TRAMEX. ALL RIGHTS RESERVED.
  */
-package com.tramex.sisoprega.dto;
+package com.tramex.sisoprega.gateway;
 
 /**
- * Defines the model for the Rancher Contact entity.<BR/>
+ * used to store atomic name and value data
  * 
  * <B>Revision History:</B>
  * 
@@ -25,50 +25,71 @@ package com.tramex.sisoprega.dto;
  * Date        By                           Description
  * MM/DD/YYYY
  * ----------  ---------------------------  -------------------------------------------
- * 11/11/2012  Diego Torres                 Initial Version.
+ * May 19, 2013     Diego Torres                 Initial Version.
  * ====================================================================================
  * </PRE>
  * 
  * @author Diego Torres
  * 
+ * 
  */
-
-public class CattleClass {
-  private long cattleClassId;
-  private String catclassName;
+public class GatewayField {
+  private String name;
+  private String value;
 
   /**
-   * @return the catclassId
+   * Empty constructor for JAXB
    */
-  public long getCattleClassId() {
-    return cattleClassId;
+  public GatewayField(){}
+  
+  public GatewayField(String fieldName, String fieldValue){
+    this.name = fieldName;
+    this.value = fieldValue;
+  }
+  
+  /**
+   * @return the name
+   */
+  public String getName() {
+    return name;
   }
 
   /**
-   * @param catclassId
-   *          the catclassId to set
+   * @param name
+   *          the name to set
    */
-  public void setCattleClassId(long cattleClassId) {
-    this.cattleClassId = cattleClassId;
+  public void setName(String name) {
+    this.name = name;
   }
 
   /**
-   * @return the catclassName
+   * @return the value
    */
-  public String getCatclassName() {
-    return catclassName;
+  public String getValue() {
+    return value;
   }
 
   /**
-   * @param catclassName
-   *          the catclassName to set
+   * @param value
+   *          the value to set
    */
-  public void setCatclassName(String catclassName) {
-    this.catclassName = catclassName;
+  public void setValue(String value) {
+    this.value = value;
   }
 
   @Override
   public String toString() {
-    return "catclassId:" + cattleClassId + ";catclassName:" + catclassName + ";";
+    return "field : { name:" + name + ";value:" + value + "; }";
   }
+  
+  @Override
+  public boolean equals(Object obj) {
+    // Compare field names to know equality
+    if(obj instanceof GatewayField){
+      GatewayField inbound = (GatewayField) obj;
+      return inbound.name.equalsIgnoreCase(this.name);
+    } else
+      return false;
+  }
+  
 }

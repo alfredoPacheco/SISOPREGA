@@ -13,11 +13,13 @@
  * 
  * &copy; COPYRIGHT 2012 TRAMEX. ALL RIGHTS RESERVED.
  */
-package com.tramex.sisoprega.dto;
+package com.tramex.sisoprega.gateway.response;
+
+import com.tramex.sisoprega.gateway.GatewayError;
 
 /**
- * Defines the model for the Rancher Contact entity.<BR/>
- * 
+ * common model for all gateway responses.
+ *  
  * <B>Revision History:</B>
  * 
  * <PRE>
@@ -25,50 +27,43 @@ package com.tramex.sisoprega.dto;
  * Date        By                           Description
  * MM/DD/YYYY
  * ----------  ---------------------------  -------------------------------------------
- * 11/11/2012  Diego Torres                 Initial Version.
+ * May 19, 2013     Diego Torres                 Initial Version.
  * ====================================================================================
  * </PRE>
  * 
  * @author Diego Torres
+ *
  * 
  */
+public class BaseResponse {
 
-public class CattleClass {
-  private long cattleClassId;
-  private String catclassName;
-
+  private GatewayError error;
+  
+  
   /**
-   * @return the catclassId
+   * @return the error
    */
-  public long getCattleClassId() {
-    return cattleClassId;
+  public GatewayError getError() {
+    return error;
   }
 
   /**
-   * @param catclassId
-   *          the catclassId to set
+   * @param error
+   *          the error to set
    */
-  public void setCattleClassId(long cattleClassId) {
-    this.cattleClassId = cattleClassId;
+  public void setError(GatewayError error) {
+    this.error = error;
   }
-
-  /**
-   * @return the catclassName
-   */
-  public String getCatclassName() {
-    return catclassName;
-  }
-
-  /**
-   * @param catclassName
-   *          the catclassName to set
-   */
-  public void setCatclassName(String catclassName) {
-    this.catclassName = catclassName;
-  }
-
+  
   @Override
   public String toString() {
-    return "catclassId:" + cattleClassId + ";catclassName:" + catclassName + ";";
+    String stringed = "";
+    
+    stringed += "response:{";
+    stringed += error + ";";
+    stringed += "}";
+    
+    return stringed;
   }
+  
 }
