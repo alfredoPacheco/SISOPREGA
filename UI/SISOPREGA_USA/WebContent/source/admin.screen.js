@@ -150,7 +150,7 @@ enyo.kind(
                       kind : "admin.inventory",
                       flex : 1,
                       maxState : false,
-                      arrData : cachePen.get(),
+                      arrData : [],
                       onSale : "showSale",
                       onSelect : "inventory_select"
                     } ]
@@ -193,6 +193,10 @@ enyo.kind(
                     } ]
               }, ]
         } ],
+        ready:function(){
+          this.$.inventory.setListContent(cachePen.get());
+          this.$.inventory.updateView();
+        },
     showSale : function() {
       this.$.popup_sales.openAtCenter();
     },

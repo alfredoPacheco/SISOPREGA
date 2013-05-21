@@ -26,7 +26,7 @@ enyo.kind(
     },
     get : function() {
       if (this.readFromGateway) {
-        this.arrObj = this.getTest(3);
+        this.arrObj = this.getTest(4);
         this.readFromGateway = false;
       }
       return this.arrObj;

@@ -115,54 +115,52 @@ enyo.kind({
 				]},
 	],
 	loadInventory:function(inSender, inIndex){
-		var objData;
-		if(objData=this.arrData[inIndex]){
-		    	var cattle_name = cacheClasses.getByID(objData.cattleType);
-		    	if(cattle_name){
-		    	cattle_name = cattle_name.name;
-		    	}
-		    	else{
-		    	cattle_name = "";   
-		    	}
-		    	
-			this.$.lblInvType.setContent(cattle_name);
-			this.$.lblInvClass.setContent(objData.cattleName);		 
-			this.$.lblInvHeads.setContent(gblUtils.numCD(objData.heads));
-			this.$.lblInvWeight.setContent(gblUtils.numCD(objData.weight));
-			this.$.lblInvInvAverage.setContent(objData.avgweight);
-			this.$.lblInvFeed.setContent(objData.feed.quantity);
-//			var sTrucks="";
-//			for (var j=0;j<objData.trucks.length;j++){
-//				sTrucks+=objData.trucks[j]+", ";
-//			}
-//			if(sTrucks!=""){sTrucks=sTrucks.slice(0,-2);}
-			var sBuyer="";			
-			for (var i=0;i<objData.buyers.length;i++){
-				sBuyer+=objData.buyers[i].name+" ("+objData.buyers[i].heads+"/"+
-						(objData.avgweight*objData.buyers[i].heads).toFixed(2)+")<br />";
-			}		
-			if(sBuyer!=""){sBuyer=sBuyer.slice(0,-6);}
-//			var sBY="";			
-//			for (var i in objData.barnyard){
-//				sBY+=objData.barnyard[i]+", ";
-//			}					
-//			if(sBY!=""){sBY=sBY.slice(0,-2);}
-			
-			
-			
-			//var sDesc;
-			//sDesc=sBuyer;
-			//if(sTrucks!=""){sDesc+=" - "+sTrucks}
-			this.$.lblInvBarnyards.setContent(objData.barnyard.substring(1));			
-			this.$.lblInvDescBuyer.setContent(sBuyer);
-//			this.$.lblInvDescTruck.setContent(sTrucks);
-			
-			if(inIndex % 2 == 0)inSender.$.client.$.client.applyStyle("background-color","#DFC699");
-//			if(inIndex % 2 == 0)inSender.$.client.$.client.applyStyle("background-color","#DCC190");
-			return true;
-		}else{
-			return false;			
+	    var objData;
+	    if(objData=this.arrData[inIndex]){
+		var len = objData.length;
+		var strBarnyards = "";
+		var totalHeads = 0;
+		var totalWeight = 0;
+		var totalFeed = 0;
+		var summaryBuyer = "";
+		for(var i=0;i<len;i++){
+		    strBarnyards += "" + objData[i].barnyard + ", ";
+		    totalHeads += objData[i].heads;
+		    totalWeight += objData[i].weight;
+		    totalFeed += objData[i].feed.quantity;
+		    var sBuyer="";			
+		    for (var j=0;j<objData[i].buyers.length;j++){
+			sBuyer+=objData[i].buyers[j].name+" ("+objData[i].buyers[j].heads+"/"+
+			(objData[i].avgweight*objData[i].buyers[j].heads).toFixed(2)+")<br />";
+		    }		
+		    summaryBuyer += sBuyer;
 		}
+		    
+		if(strBarnyards!=""){strBarnyards=strBarnyards.slice(0,-2);}
+		if(summaryBuyer!=""){summaryBuyer=summaryBuyer.slice(0,-6);}
+		var cattle_name = cacheClasses.getByID(objData[0].cattleType);
+		if(cattle_name){
+		    cattle_name = cattle_name.name;
+		}
+		else{
+		    cattle_name = "";   
+		}
+		    	
+		this.$.lblInvType.setContent(cattle_name);
+		this.$.lblInvClass.setContent(objData[0].cattleName);		 
+		this.$.lblInvHeads.setContent(utils.formatNumberThousands(totalHeads));
+		this.$.lblInvWeight.setContent(utils.formatNumberThousands(totalWeight));
+		this.$.lblInvInvAverage.setContent(utils.formatNumberThousands(totalWeight/totalHeads));
+		this.$.lblInvFeed.setContent(totalFeed);
+		this.$.lblInvBarnyards.setContent(strBarnyards);			
+		this.$.lblInvDescBuyer.setContent(summaryBuyer);
+		
+		if(inIndex % 2 == 0)inSender.$.client.$.client.applyStyle("background-color","#DFC699");
+//		    if(inIndex % 2 == 0)inSender.$.client.$.client.applyStyle("background-color","#DCC190");
+			return true;
+	    }else{
+		return false;			
+	    }
 	},
 	updateSummary:function(){
 		var iHeads=0;
@@ -171,97 +169,78 @@ enyo.kind({
 		var iSumFeed=0;
 		var iSold=0;
 		var iSoldAve=0;
+		var iCount = 0;
 		for (var j=0;j<this.arrData.length;j++){
-			iHeads+=this.arrData[j].heads;
-			iSumWeight+=this.arrData[j].weight;
-			iSumAve+=this.arrData[j].avgweight;
-			iSumFeed+=this.arrData[j].feed.quantity;
-			for (var i=0;i<this.arrData[j].buyers.length;i++){
-				iSold+=this.arrData[j].buyers[i].heads;				
-				iSoldAve+=this.arrData[j].buyers[i].heads*this.arrData[j].avgweight;
-			//alert((this.arrData[j].buyers[i].heads
-			//		+"+"+this.arrData[j].avgweight)+"="+this.arrData[j].buyers[i].heads*this.arrData[j].avgweight);				
-			}					
+		    for(var i = 0;i<this.arrData[j].length;i++){
+			iCount ++;
+			iHeads+=this.arrData[j][i].heads;
+			iSumWeight+=this.arrData[j][i].weight;
+			iSumAve+=this.arrData[j][i].avgweight;
+			iSumFeed+=this.arrData[j][i].feed.quantity;
+			for (var b=0;b<this.arrData[j][i].buyers.length;b++){
+			    iSold+=this.arrData[j][i].buyers[b].heads;				
+			    iSoldAve+=this.arrData[j][i].buyers[b].heads*this.arrData[j][i].avgweight;
+			}
+		    }
 		}
-		iSumAve=iSumAve/this.arrData.length;
-		this.$.lblInvSumHeadClass.setContent("Cabezas<br />" + gblUtils.numCD(iHeads));
-		this.$.lblInvSumWeight.setContent("Peso<br />" + gblUtils.numCD(iSumWeight));
-		this.$.lblInvSumAvgWeight.setContent("Peso Prom.<br />" + gblUtils.numCD(iSumAve.toFixed(2)));
-		this.$.lblInvSumFeed.setContent("Alimento<br />" + gblUtils.numCD(iSumFeed.toFixed(2)));		
+		iSumAve=iSumAve/iCount;
+		this.$.lblInvSumHeadClass.setContent("Cabezas<br />" + utils.formatNumberThousands(iHeads));
+		this.$.lblInvSumWeight.setContent("Peso<br />" + utils.formatNumberThousands(iSumWeight));
+		this.$.lblInvSumAvgWeight.setContent("Peso Prom.<br />" + utils.formatNumberThousands(iSumAve.toFixed(2)));
+		this.$.lblInvSumFeed.setContent("Alimento<br />" + utils.formatNumberThousands(iSumFeed.toFixed(2)));		
 		
-		this.$.lblPurSumInvHeads.setContent("Cabezas<br />" + gblUtils.numCD(iHeads-iSold));
-		this.$.lblPurSumInvWeight.setContent("Peso<br />" + gblUtils.numCD((iSumWeight-iSoldAve).toFixed(2)));
+		this.$.lblPurSumInvHeads.setContent("Cabezas<br />" + utils.formatNumberThousands(iHeads-iSold));
+		this.$.lblPurSumInvWeight.setContent("Peso<br />" + utils.formatNumberThousands((iSumWeight-iSoldAve).toFixed(2)));
 		this.$.lblSumInvAveWight.setContent("Peso Prom.<br />" + ((iSumWeight-iSoldAve)/(iHeads-iSold)).toFixed(2));
 	},
 	ready:function(){
-		this.updateSummary();
+	
 	},
 	updateView:function(){
 	    this.$.listInventory.render();
 	    this.updateSummary();
 	},
 	setListContent:function(arrInventory){
+	    var result = [];
+
+	    // grouping data by cattle class
+		
 	    var groupByType = {};
-	    var groupByClass = {};
-	    for(var i =0;i<arrInventory.length;i++){
-		
+
+	    for ( var i = 0; i < arrInventory.length; i++) {
+		if (!(arrInventory[i].cattleType in groupByType)) {
+		    groupByType[arrInventory[i].cattleType] = [];
+		}
+		groupByType[arrInventory[i].cattleType].push(arrInventory[i]);
 	    }
-	    this.arrData = arrViewData;
-	    
-	},
-	saveShip:function(arrInventory){
-		//Ordering data by buyer
-		
-		var groupByType={};
-		
-		for(var i=0;i<arrInventory.length;i++){
-		    if(!(arrInventory[i].cattleType in groupByType)){
-			groupByType[arrInventory[i].cattleType] = [];
-		    }
-		    groupByType[arrInventory[i].cattleType].push(arrInventory[i]);
-		}
-		
-		//Ordering data by cattle
-		var objShip = {};
-		var arrDetail = {};
-		for(i in groupByType){
-		    if (groupByType.hasOwnProperty(i)){
-			for(var j=0;j<groupByType[i].length;j++){
-			    if(!(groupByType[i][j].cattleName in arrDetail)){
-				arrDetail[groupByType[i][j].cattleName]=[];
-				arrDetail[groupByType[i][j].cattleName].totalHeads =0;
-				arrDetail[groupByType[i][j].cattleName].totalWeight =0;
-			    }
-			    arrDetail[groupByType[i][j].cattleName].push(groupByType[i][j]);
-			    arrDetail[groupByType[i][j].cattleName].totalHeads += groupByType[i][j].totalHeads;
-			    arrDetail[groupByType[i][j].cattleName].totalWeight += groupByType[i][j].totalWeight;
+
+	    // grouping data by cattle type
+	    var objInventory = {};
+	    var arrDetail = {};
+	    for (i in groupByType) {
+		if (groupByType.hasOwnProperty(i)) {
+		    for ( var j = 0; j < groupByType[i].length; j++) {
+			if (!(groupByType[i][j].cattleName in arrDetail)) {
+			    arrDetail[groupByType[i][j].cattleName] = [];
 			}
-			objShip[i] = arrDetail;
-			arrDetail={};
+			arrDetail[groupByType[i][j].cattleName].push(groupByType[i][j]);
 		    }
+		    objInventory[i] = arrDetail;
+		    arrDetail = {};
 		}
-		console.debug(objShip);
-		
-		for(client in objShip){
-		    if(objShip.hasOwnProperty(client)){
-			for(cattle in objShip[client]){
-			    if(objShip[client].hasOwnProperty(cattle)){
-				if(!cacheShip.createData(objShip[client][cattle])){
-				    return;
-				}
-				for(var y =0;y<objShip[client][cattle].length;y++){
-				    var obj=null;
-				    if(obj=this.getItemByItemNumber(objShip[client][cattle][y].itemNumber)){
-					obj.shipment_id = objShip[client][cattle].shipment_id;
-				    }else{
-					return;
-				    }
-				}
-			    }
+	    }
+
+	    for (obj in objInventory) {
+		if (objInventory.hasOwnProperty(obj)) {
+		    for (cattle in objInventory[obj]) {
+			if (objInventory[obj].hasOwnProperty(cattle)) {
+			    result.push(objInventory[obj][cattle]);
 			}
 		    }
 		}
-		
-		this.doProgram();
-	    },
+	    }
+
+	    this.arrData = result;
+
+	}
 });
