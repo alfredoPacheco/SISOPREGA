@@ -482,7 +482,6 @@ enyo.kind({
 			    firstFound = i;
 			}
 		    }
-		    
 		}
 	}
 	this.updateList();

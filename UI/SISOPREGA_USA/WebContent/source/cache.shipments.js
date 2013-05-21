@@ -47,10 +47,26 @@ enyo.kind({
 	    cbObj[cbMethod]();
 	}
     },
-    removeShipBySale:function(sale_id){
+    removeShipProgrammed:function(shipment){
+	var sales = cacheSales.cacheData;
+	for(var i = 0;i<sales.length;i++){
+	    if(sales[i].arrToShipDetailed){
+		for(var j = 0;j<sales[i].arrToShipDetailed.length;j++){
+		    if(sales[i].arrToShipDetailed[j].shipment_id == shipment.shipment_id){
+			delete sales[i].arrToShipDetailed[j].checked;
+			delete sales[i].arrToShipDetailed[j].shipCarrier;
+			delete sales[i].arrToShipDetailed[j].shipProgramDateTime;
+			delete sales[i].arrToShipDetailed[j].shipment_id;
+		    }
+		}
+	    }
+	}
+	this.removeShipByID(shipment.shipment_id);
+    },
+    removeShipByID:function(ship_id){
 	var len = this.cacheData.length;
 	for(var i=0;i<len;i++){
-	    if(this.cacheData[i].sale_id == sale_id){
+	    if(this.cacheData[i].shipment_id == ship_id){
 		this.cacheData.splice(i,1);
 		len--;
 	    }

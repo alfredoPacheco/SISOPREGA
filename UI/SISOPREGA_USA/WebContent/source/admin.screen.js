@@ -188,7 +188,8 @@ enyo.kind(
                       flex : 1,
                       maxState : false,
                       arrData : cacheShip.readData(),
-                      onSelectedShipment : "showSelectShipment"
+                      onSelectedShipment : "showSelectShipment",
+                      onDeleteShipProgrammed: "deleteShipProgrammed"
                     } ]
               }, ]
         } ],
@@ -265,5 +266,10 @@ enyo.kind(
     },
     on_popup_map_close : function() {
       this.$.inventory.updateView();
+    },
+    deleteShipProgrammed:function(inSender, shipment){
+	cacheShip.removeShipProgrammed(shipment);
+	this.$.shipment.updateList();
+	this.$.sales.updateView();
     }
   });
