@@ -356,10 +356,53 @@ public abstract class BaseBean {
    * @return
    * @throws InstantiationException
    * @throws IllegalAccessException
+   * @throws SecurityException 
+   * @throws NoSuchFieldException 
+   * @throws ClassNotFoundException 
+   * @throws NoSuchMethodException 
+   * @throws InvocationTargetException 
+   * @throws IllegalArgumentException 
    */
-  protected <T> T getEntityFromRecord(GatewayRecord record, Class<T> type) throws InstantiationException, IllegalAccessException {
+  protected <T> T getEntityFromRecord(GatewayRecord record, Class<T> type) throws InstantiationException, IllegalAccessException, NoSuchFieldException, SecurityException, ClassNotFoundException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException {
     T entity = type.newInstance();
     Field[] clsField = type.getDeclaredFields();
+    
+    List<GatewayField> recordFields = record.getField();
+
+    for(GatewayField gField : recordFields){
+      Field field = type.getField(gField.getName());
+      field.setAccessible(true);
+      
+      if (field.getType() == String.class) {
+        this.log.finest("found String field, setting direct value from request");
+        field.set(entity, gField.getValue());
+      } else {
+        this.log.finest("The field is a [" + field.getType().getCanonicalName() + "], will cast it's value in the request");
+
+        String sValue = gField.getValue();
+
+        if (sValue != null && !sValue.trim().equals(""))
+          field.set(entity, castValueFromString(sValue, field.getType()));
+      }
+    }
+    
+    List<GatewayRecord> childRecords = record.getChildRecord();
+    if(childRecords != null && !childRecords.isEmpty()){
+      for(GatewayRecord childRecord : childRecords){
+        Class<?> childType = Class.forName(DTO_PACKAGE + childRecord.getEntity());
+
+        Object childEntity = getEntityFromRecord(childRecord, childType);
+        
+        Class<?>[] params = new Class<?>[1];
+        params[0] = childType;
+        Object[] invokeParams = new Object[1];
+        invokeParams[0] = childEntity;
+        
+        String methodName = "add" + childRecord.getEntity();
+
+        childType.getMethod(methodName, params).invoke(entity, invokeParams);
+      }
+    }
 
     for (Field field : clsField) {
       field.setAccessible(true);
