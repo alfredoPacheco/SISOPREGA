@@ -11,6 +11,7 @@ import javax.ejb.Stateless;
 import com.tramex.sisoprega.gateway.GatewayError;
 import com.tramex.sisoprega.gateway.request.CreateRequest;
 import com.tramex.sisoprega.gateway.request.ReadRequest;
+import com.tramex.sisoprega.gateway.response.BaseResponse;
 import com.tramex.sisoprega.gateway.response.CreateResponse;
 import com.tramex.sisoprega.gateway.response.ReadResponse;
 import com.tramex.sisoprega.proxy.Cruddable;
@@ -77,4 +78,19 @@ public class PenBean extends BaseBean implements Cruddable {
     return response;
   }
   
+  @DenyAll
+  @Override
+  public ReadResponse Update(CreateRequest request) {
+    ReadResponse response = new ReadResponse();
+    response.setError(new GatewayError("999", "Not allowed to create Pens this way", "Create"));
+    return response;
+  }
+  
+  @DenyAll
+  @Override
+  public BaseResponse Delete(ReadRequest request) {
+    BaseResponse response = new BaseResponse();
+    response.setError(new GatewayError("999", "Not allowed to create Pens this way", "Create"));
+    return response;
+  }
 }

@@ -275,7 +275,7 @@
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.CattleClass">
 		<table name="cat_cattle_class" />
-		<named-query name="CATTLE_CLASS_BY_ID">
+		<named-query name="CATTLECLASS_BY_ID">
 			<description>Retrieves a single cattle class record by it's ID</description>
 			<query>SELECT cattle FROM CattleClass cattle WHERE cattle.cattleClassId = :Id</query>
 		</named-query>
@@ -368,36 +368,37 @@
 			<basic name="locationId">
 				<column name="zone_id" />
 			</basic>
+			<one-to-many name="penCapacity" mapped-by="pen" />
 		</attributes>
 	</entity>
-	<entity class="com.tramex.sisoprega.dto.BarnyardCapacity">
+	<entity class="com.tramex.sisoprega.dto.PenCapacity">
 		<table name="cat_barnyard_capacity" />
 		<named-query name="BARNYARD_CAPACITY_BY_ID">
 			<description>Retrieves a single catBarnyardCapacity record by ID</description>
-			<query>SELECT barCa FROM BarnyardCapacity barCa WHERE barCa.capacityId = :capacityId</query>
+			<query>SELECT barCa FROM PenCapacity barCa WHERE barCa.capacityId = :capacityId</query>
 		</named-query>
 		<named-query name="BARNYARD_CAPACITY_BY_BARNYARD_AND_CATTLE">
 			<description>Retrieves a single barnyard capacity record using the barnyard and the cattle</description>
-			<query>SELECT capacity FROM BarnyardCapacity capacity WHERE capacity.barnyardId = :barnyardId AND capacity.catclassId = :cattleClassId</query>
+			<query>SELECT capacity FROM PenCapacity capacity WHERE capacity.pen.penId = :barnyardId AND capacity.catclassId = :cattleClassId</query>
 		</named-query>
 		<named-query name="ALL_BARNYARD_CAPACITIES">
 			<description>Get all records of barnyard capacities in database</description>
-			<query>SELECT barCa FROM BarnyardCapacity barCa ORDER BY barCa.barnyardId</query>
+			<query>SELECT barCa FROM PenCapacity barCa</query>
 		</named-query>
 		<attributes>
 			<id name="capacityId">
 				<column name="capacity_id" />
 				<generated-value strategy="IDENTITY" />
 			</id>
-			<basic name="barnyardId">
-				<column name="barnyard_id" />
-			</basic>
 			<basic name="catclassId">
 				<column name="catclass_id" />
 			</basic>
 			<basic name="headCount">
 				<column name="head_count" />
 			</basic>
+			<many-to-one name="pen">
+				<join-column name="barnyard_id" />
+			</many-to-one>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.MeasurementUnit">

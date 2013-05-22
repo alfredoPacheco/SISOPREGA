@@ -33,11 +33,26 @@ package com.tramex.sisoprega.dto;
  * @author Jaime Figueroa
  * 
  */
-public class BarnyardCapacity {
+public class PenCapacity {
   private long capacityId;
-  private long barnyardId;
   private long catclassId;
   private long headCount;
+  private Pen pen;
+
+  /**
+   * @return the pen
+   */
+  public Pen getPen() {
+    return pen;
+  }
+
+  /**
+   * @param pen
+   *          the pen to set
+   */
+  public void setPen(Pen pen) {
+    this.pen = pen;
+  }
 
   /**
    * @return the capacityId
@@ -52,21 +67,6 @@ public class BarnyardCapacity {
    */
   public void setCapacityId(long capacityId) {
     this.capacityId = capacityId;
-  }
-
-  /**
-   * @return the barnyardId
-   */
-  public long getBarnyardId() {
-    return barnyardId;
-  }
-
-  /**
-   * @param barnyardId
-   *          the barnyardId to set
-   */
-  public void setBarnyardId(long barnyardId) {
-    this.barnyardId = barnyardId;
   }
 
   /**
@@ -101,7 +101,6 @@ public class BarnyardCapacity {
 
   @Override
   public String toString() {
-    return "barnyardId:" + barnyardId + ";capacityId:" + capacityId + ";catclassId:" + catclassId + ";headCount:" + headCount
-        + ";";
+    return "capacityId:" + capacityId + ";catclassId:" + catclassId + ";headCount:" + headCount + ";";
   }
 }

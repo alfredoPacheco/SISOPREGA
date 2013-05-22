@@ -29,7 +29,7 @@ import com.tramex.sisoprega.common.GatewayRequest;
 import com.tramex.sisoprega.common.ReadGatewayResponse;
 import com.tramex.sisoprega.common.UpdateGatewayResponse;
 import com.tramex.sisoprega.common.crud.Cruddable;
-import com.tramex.sisoprega.dto.BarnyardCapacity;
+import com.tramex.sisoprega.dto.PenCapacity;
 
 /**
  * This proxy knows the logic to evaluate Barnyards' capacity information and
@@ -71,9 +71,9 @@ public class BarnyardCapacityBean extends BaseBean implements Cruddable {
     this.log.entering(this.getClass().getCanonicalName(), "Create");
 
     CreateGatewayResponse response = new CreateGatewayResponse();
-    BarnyardCapacity barnyardCa = null;
+    PenCapacity barnyardCa = null;
     try {
-      barnyardCa = entityFromRequest(request, BarnyardCapacity.class);
+      barnyardCa = entityFromRequest(request, PenCapacity.class);
 
       this.log.fine("Received BarnyardCapacity in request: " + barnyardCa);
 
@@ -123,9 +123,9 @@ public class BarnyardCapacityBean extends BaseBean implements Cruddable {
     ReadGatewayResponse response = new ReadGatewayResponse();
     response.setEntityName(request.getEntityName());
 
-    BarnyardCapacity capacity = null;
+    PenCapacity capacity = null;
     try {
-      capacity = entityFromRequest(request, BarnyardCapacity.class);
+      capacity = entityFromRequest(request, PenCapacity.class);
       this.log.fine("Got barnyard capacity from request: " + capacity);
 
       String qryLogger = "";
@@ -146,11 +146,11 @@ public class BarnyardCapacityBean extends BaseBean implements Cruddable {
         qryLogger = "By ALL BARNYARD CAPACITIES";
       }
 
-      List<BarnyardCapacity> result = dataModel.readDataModelList(queryName, parameters, BarnyardCapacity.class);
+      List<PenCapacity> result = dataModel.readDataModelList(queryName, parameters, PenCapacity.class);
       if (result.isEmpty()) {
         response.setError(new Error("VAL02", "No se encontraron datos para el filtro seleccionado", "proxy.BarnyardBean.Read"));
       } else {
-        List<GatewayContent> records = contentFromList(result, BarnyardCapacity.class);
+        List<GatewayContent> records = contentFromList(result, PenCapacity.class);
         response.getRecord().addAll(records);
 
         response.setError(new Error("0", "SUCCESS", "proxy.BarnyardBean.Read"));
@@ -180,9 +180,9 @@ public class BarnyardCapacityBean extends BaseBean implements Cruddable {
   public UpdateGatewayResponse Update(GatewayRequest request) {
     this.log.entering(this.getClass().getCanonicalName(), "Update");
     UpdateGatewayResponse response = new UpdateGatewayResponse();
-    BarnyardCapacity barnyardCa = null;
+    PenCapacity barnyardCa = null;
     try {
-      barnyardCa = entityFromRequest(request, BarnyardCapacity.class);
+      barnyardCa = entityFromRequest(request, PenCapacity.class);
 
       if (barnyardCa.getCapacityId() == 0) {
         this.log.warning("VAL04 - Entity ID Omission.");
@@ -192,7 +192,7 @@ public class BarnyardCapacityBean extends BaseBean implements Cruddable {
         if (validateEntity(barnyardCa)) {
           dataModel.updateDataModel(barnyardCa);
 
-          GatewayContent content = getContentFromEntity(barnyardCa, BarnyardCapacity.class);
+          GatewayContent content = getContentFromEntity(barnyardCa, PenCapacity.class);
           response.setUpdatedRecord(content);
 
           response.setError(new Error("0", "SUCCESS", "proxy.BarnyardCapacity.Update"));
@@ -235,7 +235,7 @@ public class BarnyardCapacityBean extends BaseBean implements Cruddable {
     BaseResponse response = new BaseResponse();
 
     try {
-      BarnyardCapacity barnyardCa = entityFromRequest(request, BarnyardCapacity.class);
+      PenCapacity barnyardCa = entityFromRequest(request, PenCapacity.class);
       if (barnyardCa.getCapacityId() == 0) {
         this.log.warning("VAL04 - Entity ID Omission.");
         response.setError(new Error("VAL04", "Se ha omitido el id de la capacidad del corral al intentar eliminar el registro.",
@@ -243,7 +243,7 @@ public class BarnyardCapacityBean extends BaseBean implements Cruddable {
       } else {
         
         
-        barnyardCa = dataModel.readSingleDataModel("BARNYARD_CAPACITY_BY_ID", "capacityId", barnyardCa.getCapacityId(), BarnyardCapacity.class);
+        barnyardCa = dataModel.readSingleDataModel("BARNYARD_CAPACITY_BY_ID", "capacityId", barnyardCa.getCapacityId(), PenCapacity.class);
         this.log.info("Deleting BarnyardCapacity[" + barnyardCa.toString() + "] by principal[" + getLoggedUser() + "]");
         dataModel.deleteDataModel(barnyardCa, getLoggedUser());
 

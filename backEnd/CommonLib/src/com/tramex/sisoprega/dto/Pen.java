@@ -15,6 +15,9 @@
  */
 package com.tramex.sisoprega.dto;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Defines the model for the Barnyard entity.<BR/>
  * 
@@ -27,6 +30,7 @@ package com.tramex.sisoprega.dto;
  * ----------  ---------------------------  -------------------------------------------
  * 11/25/2012  Jaime Figueroa                 Initial Version.
  * 12/16/2012  Diego Torres                   Enable toString override functionality.
+ * 05/21/2013  Diego Torres                   Rename from barnyard and handle capacity inside.
  * ====================================================================================
  * </PRE>
  * 
@@ -38,6 +42,27 @@ public class Pen {
   private String barnyardCode;
   private boolean available;
   private long locationId;
+  private List<PenCapacity> penCapacity = new ArrayList<PenCapacity>();
+
+  /**
+   * @return the penCapacity
+   */
+  public List<PenCapacity> getPenCapacity() {
+    return penCapacity;
+  }
+
+  /**
+   * @param penCapacity
+   *          the penCapacity to set
+   */
+  public void setPenCapacity(List<PenCapacity> penCapacity) {
+    this.penCapacity = penCapacity;
+  }
+
+  public void addPenCapacity(PenCapacity capacity) {
+    if (!penCapacity.contains(capacity))
+      penCapacity.add(capacity);
+  }
 
   /**
    * @return the barnyardId

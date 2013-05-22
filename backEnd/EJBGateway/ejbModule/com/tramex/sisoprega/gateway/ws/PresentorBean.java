@@ -31,6 +31,7 @@ import javax.xml.bind.annotation.XmlElement;
 
 import com.tramex.sisoprega.gateway.request.CreateRequest;
 import com.tramex.sisoprega.gateway.request.ReadRequest;
+import com.tramex.sisoprega.gateway.response.BaseResponse;
 import com.tramex.sisoprega.gateway.response.CreateResponse;
 import com.tramex.sisoprega.gateway.response.ReadResponse;
 import com.tramex.sisoprega.proxy.Cruddable;
@@ -94,6 +95,26 @@ public class PresentorBean {
     log.exiting(this.getClass().getCanonicalName(), "Read");
 
     return entityProxy.Read(request);
+  }
+  
+  @WebMethod
+  public ReadResponse Update(@XmlElement(required = true, nillable = false) @WebParam(name = "request") CreateRequest request){
+    log.entering(this.getClass().getCanonicalName(), "Update");
+
+    Cruddable entityProxy = getCruddable(request.getParentRecord().getEntity());
+    log.exiting(this.getClass().getCanonicalName(), "Update");
+
+    return entityProxy.Update(request);
+  }
+  
+  @WebMethod
+  public BaseResponse Delete(@XmlElement(required = true, nillable = false) @WebParam(name = "request") ReadRequest request){
+    log.entering(this.getClass().getCanonicalName(), "Delete");
+
+    Cruddable entityProxy = getCruddable(request.getFilter().getEntity());
+    log.exiting(this.getClass().getCanonicalName(), "Delete");
+
+    return entityProxy.Delete(request);
   }
 
   private Cruddable getCruddable(String cruddableName) {

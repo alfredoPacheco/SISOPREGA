@@ -16,6 +16,8 @@
 package com.tramex.sisoprega.proxy.common;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.ParameterizedType;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -34,6 +36,7 @@ import com.tramex.sisoprega.gateway.GatewayField;
 import com.tramex.sisoprega.gateway.GatewayRecord;
 import com.tramex.sisoprega.gateway.request.CreateRequest;
 import com.tramex.sisoprega.gateway.request.ReadRequest;
+import com.tramex.sisoprega.gateway.response.BaseResponse;
 import com.tramex.sisoprega.gateway.response.CreateResponse;
 import com.tramex.sisoprega.gateway.response.ReadResponse;
 
@@ -72,6 +75,11 @@ public abstract class BaseBean {
     this.log = Logger.getLogger(this.getClass().getCanonicalName());
   }
 
+  /**
+   * Default functionality
+   * @param request
+   * @return
+   */
   public CreateResponse Create(CreateRequest request) {
     this.log.entering(this.getClass().getCanonicalName(), "CreateResponse Create(CreateRequest)");
 
@@ -103,7 +111,7 @@ public abstract class BaseBean {
       }
 
     } catch (Exception e) {
-      this.log.severe("Exception found while creating cattle class");
+      this.log.severe("Exception found while creating entity");
       this.log.throwing(this.getClass().getName(), "Create", e);
 
       if (e instanceof javax.persistence.PersistenceException)
@@ -168,8 +176,97 @@ public abstract class BaseBean {
     return response;
   }
 
+  public ReadResponse Update(CreateRequest request) {
+    this.log.entering(this.getClass().getCanonicalName(), "ReadResponse Create(CreateRequest)");
+
+    ReadResponse response = new ReadResponse();
+    try {
+      GatewayRecord record = request.getParentRecord();
+      Class<?> type = Class.forName(DTO_PACKAGE + record.getEntity());
+      Object entity = getEntityFromRecord(record, type);
+      this.log.fine("Found entity from Record [" + entity + "]");
+
+      if (this.validateEntity(entity)) {
+        this.log.fine("Valid entity found");
+
+        Class<?>[] params = null;
+        Object[] invokeParams = null;
+        String entityCamelCaseName = "get" + record.getEntity() + "Id";
+
+        log.fine("Executing method [" + entityCamelCaseName + "]");
+        
+        long idToUpdate = (Long) type.getMethod(entityCamelCaseName, params).invoke(entity, invokeParams);
+
+        if (idToUpdate == 0) {
+          this.log.warning("VAL04 - Entity ID Omission.");
+          response.setError(new GatewayError("VAL04", "Se ha omitido el id en la entidad [" + record.getEntity()
+              + "] al intentar actualizar sus datos.", "Update"));
+        } else {
+          dataModel.updateDataModel(entity);
+
+          response.addParentRecord(request.getParentRecord());
+          response.setError(new GatewayError("0", "SUCCESS", "Create"));
+        }
+      } else {
+        this.log.warning("Error de validación: " + error_description);
+        response.setError(new GatewayError("VAL01", "Error de validación: " + error_description, "Update"));
+        return response;
+      }
+
+    } catch (Exception e) {
+      this.log.severe("Exception found while updating entity");
+      this.log.throwing(this.getClass().getName(), "Update", e);
+
+      if (e instanceof javax.persistence.PersistenceException)
+        response.setError(new GatewayError("DB01",
+            "Los datos que usted ha intentado ingresar, no son permitidos por la base de datos, "
+                + "muy probablemente el registro que usted quiere agregar ya existe en la base de datos.", "Update"));
+      else {
+        response.setError(new GatewayError("DB02", "Update exception: " + e.getMessage(), "Update"));
+      }
+    }
+
+    this.log.exiting(this.getClass().getCanonicalName(), "ReadResponse Update(CreateRequest)");
+    return response;
+  }
+
+  public BaseResponse Delete(ReadRequest request) {
+    log.entering(this.getClass().getCanonicalName(), "ReadResponse Delete(ReadRequest)");
+
+    ReadResponse response = new ReadResponse();
+    try {
+      String id = request.getFilter().getFieldValue("id");
+      String queryName = request.getFilter().getEntity().toUpperCase();
+
+      if (id == null) {
+        this.log.warning("VAL04 - Entity ID Omission.");
+        response.setError(new GatewayError("VAL04", "Se ha omitido el id en la entidad [" + request.getFilter().getEntity()
+            + "] al intentar eliminar sus datos.", "Delete"));
+      } else {
+        // Read single record and remove
+        String idName = "Id";
+        queryName += "_BY_ID";
+
+        Class<?> type = Class.forName(DTO_PACKAGE + request.getFilter().getEntity());
+        // Remove record from database
+        dataModel.deleteDataModel(dataModel.readSingleDataModel(queryName, idName, Long.parseLong(id), type), getLoggedUser());
+
+        response.setError(new GatewayError("0", "SUCCESS", "Read"));
+      }
+    } catch (Exception e) {
+      this.log.severe("Exception found while deleting [" + request + "]");
+      this.log.throwing(this.getClass().getCanonicalName(), "ReadResponse Delete(ReadRequest)", e);
+
+      response.setError(new GatewayError("DB02", "Delete exception: " + e.getMessage(), "entity: ["
+          + request.getFilter().getEntity() + "]"));
+    }
+
+    log.exiting(this.getClass().getCanonicalName(), "ReadResponse Delete(ReadRequest)");
+    return response;
+  }
+
   protected GatewayRecord getRecordFromContent(Object content, Class<?> type) throws IllegalArgumentException,
-      IllegalAccessException {
+      IllegalAccessException, InvocationTargetException, NoSuchMethodException, SecurityException {
     GatewayRecord record = new GatewayRecord();
     record.setEntity(type.getSimpleName());
 
@@ -180,17 +277,46 @@ public abstract class BaseBean {
       String fieldTypeName = field.getType().getName();
 
       this.log.finest("Identified field in entity:{" + fieldName + "} of type {" + fieldTypeName + "}");
+      
+      if(fieldTypeName.equals("java.util.List")){
+        
+        ParameterizedType listType = (ParameterizedType) field.getGenericType();
+        Class<?> genericType = (Class<?>) listType.getActualTypeArguments()[0];
+        
+        this.log.fine("Found list type [" + genericType.getName() + "]");
+        
+        String methodName = "get" + fieldName.substring(0,1).toUpperCase() + fieldName.substring(1,fieldName.length());
+        this.log.finer("Method to be executed in order to obtain one to many : [" + methodName + "]");
+        
+        if(genericType.getName().contains("com.tramex.sisoprega")){
+          Class<?>[] params = null;
+          Object[] invokeParams = null;
 
-      if (field.get(content) != null)
-        record.getField().add(new GatewayField(fieldName, field.get(content).toString()));
-
+          List<?> memberList = (List<?>) type.getMethod(methodName, params).invoke(content, invokeParams);
+          this.log.fine("memberList: [" + memberList + "]");
+          if(memberList != null && !memberList.isEmpty()){
+            for(Object member : memberList){
+              log.fine("found list member of type: " + member.getClass());
+              record.addChildRecord(getRecordFromContent(member, member.getClass()));
+            }
+          }else{
+            log.fine("Empty child records list");
+          }
+        } else {
+          log.warning("Unsuported list type found: [" + genericType + "] in entity [" + type.getSimpleName() + "]");
+        }
+        
+      } else if( !fieldTypeName.contains("com.tramex.sisoprega")) {
+        if (field.get(content) != null)
+          record.getField().add(new GatewayField(fieldName, field.get(content).toString()));
+      }
     }
 
     return record;
   }
 
   protected List<GatewayRecord> getRecordsFromList(List<?> results, Class<?> type) throws IllegalArgumentException,
-      IllegalAccessException {
+      IllegalAccessException, InvocationTargetException, NoSuchMethodException, SecurityException {
     List<GatewayRecord> records = new ArrayList<GatewayRecord>();
 
     for (Object record : results) {
