@@ -150,7 +150,7 @@ enyo.kind(
                       kind : "admin.inventory",
                       flex : 1,
                       maxState : false,
-                      arrData : cachePen.get(),
+                      arrData : [],
                       onSale : "showSale",
                       onSelect : "inventory_select"
                     } ]
@@ -188,10 +188,15 @@ enyo.kind(
                       flex : 1,
                       maxState : false,
                       arrData : cacheShip.readData(),
-                      onSelectedShipment : "showSelectShipment"
+                      onSelectedShipment : "showSelectShipment",
+                      onDeleteShipProgrammed: "deleteShipProgrammed"
                     } ]
               }, ]
         } ],
+        ready:function(){
+          this.$.inventory.setListContent(cachePen.get());
+          this.$.inventory.updateView();
+        },
     showSale : function() {
       this.$.popup_sales.openAtCenter();
     },
@@ -265,5 +270,10 @@ enyo.kind(
     },
     on_popup_map_close : function() {
       this.$.inventory.updateView();
+    },
+    deleteShipProgrammed:function(inSender, shipment){
+	cacheShip.removeShipProgrammed(shipment);
+	this.$.shipment.updateList();
+	this.$.sales.updateView();
     }
   });

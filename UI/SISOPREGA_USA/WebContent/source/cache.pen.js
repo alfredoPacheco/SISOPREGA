@@ -26,7 +26,7 @@ enyo.kind(
     },
     get : function() {
       if (this.readFromGateway) {
-        this.arrObj = this.getTest(3);
+        this.arrObj = this.getTest(4);
         this.readFromGateway = false;
       }
       return this.arrObj;
@@ -228,8 +228,8 @@ enyo.kind(
       for ( var index = 0; index < items.length; index++) {
         var item =
           {
-            caption : items[index].cattleName,
-            value : index
+            caption : cacheClasses.getByID(items[index].cattleType).name,
+            value : items[index].cattleType
           // items[index].id TODO: work with id
           };
         if (!setAux.hasOwnProperty(item.caption)) {

@@ -149,12 +149,13 @@ enyo
 			    name : "list",
 			    onSetupRow : "setupRow",
 			    components : [ {
-				kind : enyo.Item,
+				kind : enyo.SwipeableItem,
 				layoutKind : enyo.HFlexLayout,
 				align : "center",
 				pack : "start",
 				height : "40px",
 				className : "listBG",
+				onConfirm: "deleteItem",
 				components : [
 					{
 					    name : 'detail_number',
@@ -255,6 +256,10 @@ enyo
 			.getBoundaries().bottom, 0);
 		
 	    },
+	    deleteItem:function(inSender, inIndex){
+		this.arrDetail.splice(inIndex,1);
+		this.updateList();
+	    },
 	    setupRow : function(inSender, inIndex) {
 		if (this.arrDetail[inIndex]) {
 		    this.$.detail_number.setContent(inIndex + 1);
@@ -278,6 +283,7 @@ enyo
 		this.$.saleDate.setValue(utils.dateOut(new Date()));
 		this.$.customer.setItems(cacheCustomers.getAllForList());
 		this.$.clase.setItems(cachePen.getClassesInPensForList());
+//		this.$.clase.setItems(cacheClasses.getList());
 		this.$.corrales.setItems(cachePen.getBarnyardsOccupiedForList());
 		this.objMaster = {};
 		this.arrDetail= [];
@@ -308,10 +314,27 @@ enyo
 		this.objMaster.totalHeads=this.totalHC;
 		this.objMaster.totalWeight=this.totalWeight;
 		this.objMaster.aveWeight=Number(this.totalWeight) / Number(this.totalHC);
-		return this.objMaster;
+		return this.validateSale(this.objMaster);
+	    },
+	    validateSale:function(sale){
+		var strError = "";
+		if(sale.detail.length<1){
+		    strError = "Error. Lista vacia.";
+		}
+		if(!sale.buyer || sale.buyer.trim() == ""){
+		    strError = 'Error. Verifique campo "Cliente"';
+		}
+		if(strError.length>0){
+		    cacheMan.setMessage("", strError);
+		    return null;
+		}
+		return sale;
 	    },
 	    sell_click : function() {
-		cacheSales.sell(this.getSale(), this, "after_sell");
+		var sale = this.getSale();
+		if(sale){
+		    cacheSales.sell(this.getSale(), this, "after_sell");    
+		}
 	    },
 	    after_sell : function() {
 		this.doSale();
@@ -319,13 +342,15 @@ enyo
 	    },
 	    clase_select : function(inSender) {
 		var filter = [];
-		var items = this.$.corrales.getItems();
+		var items = cachePen.getBarnyardsOccupiedForList();
 		for ( var i = 0; i < items.length; i++) {
-		    if (items[i].object.cattleName == this.$.clase.getValue()) {
+		    if (items[i].object.cattleType == this.$.clase.getIndex()) {
 			filter.push(items[i]);
 		    }
 		}
 		this.$.corrales.setFilter(filter);
+		this.$.corrales.clear();
+		this.$.corrales.useFilter();
 	    },
 	    cancel_click:function(){
 		this.reset();

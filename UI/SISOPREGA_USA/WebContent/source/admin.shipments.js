@@ -5,7 +5,8 @@ enyo.kind({
 	arrData:null,
 	objSelectedShipment:null,
 	events: {		
-		onSelectedShipment: ""
+		onSelectedShipment: "",
+		onDeleteShipProgrammed: ""
 	},			
 	components: [
 		{kind: "Toolbar",
@@ -150,12 +151,13 @@ enyo.kind({
 		this.arrData.push(items[i]);
 	    }
 	    this.$.listShipments.render();
+	    this.updateSummary();
 	},
 	moveToBottom:function(){
 	    this.$.scroller.scrollTo(this.$.scroller
 			.getBoundaries().bottom, 0);
 	},
 	onDeleteShip:function(inSender, inIndex){
-	    alert("eliminado ship");
+	    this.doDeleteShipProgrammed(this.arrData[inIndex]);
 	}
 });

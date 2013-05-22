@@ -13,7 +13,18 @@ enyo.kind(
     objList : [],
     allItems:[],
     components :
-      [
+      [{
+		name : "options",
+		kind : enyo.PopupSelect,
+		onSelect : "addNewRancher",
+		items : [ {
+		    caption : "Empresa/Sociedad",
+		    value : 1
+		}, {
+		    caption : "Persona Fisica",
+		    value : 2
+		}, ]
+	    },
         {
           kind : enyo.Scroller,
           flex : 1,
@@ -58,17 +69,29 @@ enyo.kind(
              {kind:enyo.VFlexBox,
               flex:1,
               components:[{kind:enyo.HFlexBox,
-					              components:[{
-					                kind : "enyo.IconButton",
-					                style:"",
-					                label : "Nuevo Ganadero",
-					                onclick : "doPerson"
-					              },
-					              {
-					                kind : "enyo.IconButton",
-					                label : "Nueva Empresa",
-					                onclick : "doEnterprise"
-					              },
+					              components:[
+					                          
+					                          {
+					          		    kind : enyo.IconButton,
+					          		    icon : "images/menu-icon-new.png",
+					          		    onclick : "contextMenuClicked"
+					          		},   
+//					                          
+//					                          {
+//					                kind : "enyo.IconButton",
+//					                style:"",
+//					                label : "Nuevo Ganadero",
+//					                onclick : "doPerson"
+//					              },
+//					              {
+//					                kind : "enyo.IconButton",
+//					                label : "Nueva Empresa",
+//					                onclick : "doEnterprise"
+//					              },
+//					              
+					              {kind:enyo.Spacer},
+					              
+					              
 					              {
 					                kind : "ListSelector",
 					                name : 'filter_id',
@@ -89,7 +112,6 @@ enyo.kind(
 					                      caption : "Todo",
 					                      value : 3
 					                    } ],
-					                flex : 1,
 					                contentPack : "end"
 					              }]},
 					              {kind:enyo.HFlexBox,
@@ -108,6 +130,22 @@ enyo.kind(
               
              ]}, 
     ],
+    contextMenuClicked : function(inSender, inEvent) {
+	this.$.options.openAtEvent(inEvent);
+	// inSender.stopPropagation();
+	return false;
+    },
+    addNewRancher : function(inSender, inSelected) {
+	
+	switch (inSelected.value) {
+	case 1: //Crear nueva empresa
+	    this.doEnterprise();
+	    break;
+	case 2://Crear nuevo ganadero 
+	    this.doPerson();
+	    break;
+	}
+    },
     selectRancher : function(inSender, inEvent) {
       if (this.objList[inEvent.rowIndex]) {
         this.iSelected = inEvent.rowIndex;

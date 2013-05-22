@@ -54,6 +54,9 @@ enyo.kind({
 //	    weight: 18330
 //	}]	
 //                 Finish correct model
+                 
+                 
+                 
 //    }, {
 //	sale_id : 2,
 //	buyer:"segundo cliente",
@@ -105,6 +108,15 @@ enyo.kind({
     },
     readData : function() {
 	return this.cacheData;
+    },
+    getByID:function(id){
+	var len = this.cacheData.length;
+	for(var i=0;i<len;i++){
+	    if(id==this.cacheData[i].sale_id){
+		return this.cacheData[i];
+	    }
+	}
+	return null;
     },
     sell : function(objSale, cbObj, cbMethod) {
 	objSale.sale_id = ++this.lastID;

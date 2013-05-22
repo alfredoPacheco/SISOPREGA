@@ -131,33 +131,7 @@ enyo
 		onSelect : "select_item",
 		onSetupItem : "setupItem",
 		items : []
-	    },
-	    // {
-	    // kind : enyo.HFlexBox,
-	    // name:"HFBoxContainer",
-	    // flex:1,
-	    // components : [ {
-	    // kind : inputKind,
-	    // name : "textField",
-	    // hint : "",
-	    // onkeyup : "key_up",
-	    // onkeydown : "key_down",
-	    // onblur : "lostFocus",
-	    // onchange : "on_change",
-	    // flex : 1
-	    // },
-	    // {
-	    // style : "background-color:#DABD8B;margin:0px;",
-	    // kind : "IconButton",
-	    // icon : "images/icon-arrows-down.png",
-	    // onclick : "click_button",
-	    // onmousehold : "hold_button",
-	    // name:"btnIcon"
-	    //
-	    // } ]
-	    // }
-
-	    ],
+	    } ],
 	    lostFocus : function(inSender, inEvent) {
 		// if (!this.navigatingOnList && this.$.drop_down.isOpen &&
 		// this.$.drop_down.selected > -1 && this.$.drop_down.selected
@@ -192,6 +166,12 @@ enyo
 	    select_item : function(inSender, inSelected) {
 		this.setIndex(inSender.items[inSelected].value);
 		this.$.textField.forceFocus();
+	    },
+	    useFilter:function(){
+		this.$.drop_down.setItems(this.filter);
+	    },
+	    useAllItems:function(){
+		this.$.drop_down.setItems(this.allItems);
 	    },
 	    click_button : function(inSender, inEvent) {
 		if (this.$.drop_down.isOpen)

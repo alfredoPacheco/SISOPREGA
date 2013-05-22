@@ -1066,7 +1066,7 @@ html, body, input, button {
 	left: 0px;
 	top: 0px;
 	-webkit-box-sizing: border-box;
-	border-width: 24px;
+	border-width: 0px;
 	/*background-color:#CCCCCC;*/
 	-webkit-border-image: url(palm/themes/Onyx/images/popup.png) 24 24 24 24 stretch stretch;
 }
@@ -2223,7 +2223,7 @@ FIXME: we almost always want some padding on a enyo-item, except when it's surro
 }
 
 .enyo-input.enyo-tool-input .enyo-input-input {
-	color: #e5e5e5;
+	/*color: #e5e5e5;*/
 	font-size: 16px;
 	padding: 2px 0 1px 0;
 }
