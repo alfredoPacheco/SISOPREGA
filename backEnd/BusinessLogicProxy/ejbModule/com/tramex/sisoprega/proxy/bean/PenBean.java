@@ -4,15 +4,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.security.DenyAll;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 
 import com.tramex.sisoprega.gateway.GatewayError;
-import com.tramex.sisoprega.gateway.request.CreateRequest;
 import com.tramex.sisoprega.gateway.request.ReadRequest;
-import com.tramex.sisoprega.gateway.response.BaseResponse;
-import com.tramex.sisoprega.gateway.response.CreateResponse;
 import com.tramex.sisoprega.gateway.response.ReadResponse;
 import com.tramex.sisoprega.proxy.Cruddable;
 import com.tramex.sisoprega.proxy.common.BaseBean;
@@ -24,13 +20,13 @@ import com.tramex.sisoprega.proxy.common.BaseBean;
 @RolesAllowed({"sisoprega_admin", "mx_usr", "us_usr", "rancher", "agency"})
 public class PenBean extends BaseBean implements Cruddable {
 
-  @DenyAll
+  /*@DenyAll
   @Override
   public CreateResponse Create(CreateRequest request) {
     CreateResponse response = new CreateResponse();
     response.setError(new GatewayError("999", "Not allowed to create Pens this way", "Create"));
     return response;
-  }
+  }*/
   
   /**
    * Default Read Operation, reads by Id or returns all.
@@ -74,23 +70,23 @@ public class PenBean extends BaseBean implements Cruddable {
       response.setError(new GatewayError("DB02", "Read exception: " + e.getMessage(), "entity: [" + request.getFilter().getEntity() + "]"));
     }
     
-    log.exiting(this.getClass().getCanonicalName(), "ReadGateway");
+    log.exiting(this.getClass().getCanonicalName(), "ReadResponse Read(ReadRequest)");
     return response;
   }
   
-  @DenyAll
+  /*@DenyAll
   @Override
   public ReadResponse Update(CreateRequest request) {
     ReadResponse response = new ReadResponse();
     response.setError(new GatewayError("999", "Not allowed to create Pens this way", "Create"));
     return response;
-  }
+  }*/
   
-  @DenyAll
+  /*@DenyAll
   @Override
   public BaseResponse Delete(ReadRequest request) {
     BaseResponse response = new BaseResponse();
     response.setError(new GatewayError("999", "Not allowed to create Pens this way", "Create"));
     return response;
-  }
+  }*/
 }

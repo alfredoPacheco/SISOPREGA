@@ -103,4 +103,18 @@ public class PenCapacity {
   public String toString() {
     return "capacityId:" + capacityId + ";catclassId:" + catclassId + ";headCount:" + headCount + ";";
   }
+
+  @Override
+  public boolean equals(Object obj) {
+    System.out.println("Comparing current [" + this + "] against: " + obj);
+    if (obj instanceof PenCapacity) {
+      PenCapacity pcObj = (PenCapacity) obj;
+      if (pcObj.getPen() != null && pen != null)
+        return pcObj.getCatclassId() == catclassId;
+      else
+        return false;
+    } else
+      return false;
+
+  }
 }

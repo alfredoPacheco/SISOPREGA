@@ -24,6 +24,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import javax.annotation.Resource;
@@ -145,7 +146,7 @@ public abstract class BaseBean {
       Map<String, Object> parameters = new HashMap<String, Object>();
 
       if (id != null) {
-        parameters.put(queryName.toLowerCase() + "Id", Long.parseLong(id));
+        parameters.put("Id", Long.parseLong(id));
         queryName += "_BY_ID";
       } else {
         queryName = "ALL_" + queryName + "S";
@@ -172,7 +173,7 @@ public abstract class BaseBean {
           + request.getFilter().getEntity() + "]"));
     }
 
-    log.exiting(this.getClass().getCanonicalName(), "ReadGateway");
+    log.exiting(this.getClass().getCanonicalName(), "ReadResponse Read(ReadRequest)");
     return response;
   }
 
@@ -251,7 +252,7 @@ public abstract class BaseBean {
         // Remove record from database
         dataModel.deleteDataModel(dataModel.readSingleDataModel(queryName, idName, Long.parseLong(id), type), getLoggedUser());
 
-        response.setError(new GatewayError("0", "SUCCESS", "Read"));
+        response.setError(new GatewayError("0", "SUCCESS", "Delete"));
       }
     } catch (Exception e) {
       this.log.severe("Exception found while deleting [" + request + "]");
@@ -278,7 +279,7 @@ public abstract class BaseBean {
 
       this.log.finest("Identified field in entity:{" + fieldName + "} of type {" + fieldTypeName + "}");
       
-      if(fieldTypeName.equals("java.util.List")){
+      if(fieldTypeName.equals("java.util.Set")){
         
         ParameterizedType listType = (ParameterizedType) field.getGenericType();
         Class<?> genericType = (Class<?>) listType.getActualTypeArguments()[0];
@@ -292,7 +293,7 @@ public abstract class BaseBean {
           Class<?>[] params = null;
           Object[] invokeParams = null;
 
-          List<?> memberList = (List<?>) type.getMethod(methodName, params).invoke(content, invokeParams);
+          Set<?> memberList = (Set<?>) type.getMethod(methodName, params).invoke(content, invokeParams);
           this.log.fine("memberList: [" + memberList + "]");
           if(memberList != null && !memberList.isEmpty()){
             for(Object member : memberList){
@@ -309,6 +310,8 @@ public abstract class BaseBean {
       } else if( !fieldTypeName.contains("com.tramex.sisoprega")) {
         if (field.get(content) != null)
           record.getField().add(new GatewayField(fieldName, field.get(content).toString()));
+      } else {
+        log.fine("voided content of type [" + fieldTypeName + "]");
       }
     }
 
@@ -364,13 +367,13 @@ public abstract class BaseBean {
    * @throws IllegalArgumentException 
    */
   protected <T> T getEntityFromRecord(GatewayRecord record, Class<T> type) throws InstantiationException, IllegalAccessException, NoSuchFieldException, SecurityException, ClassNotFoundException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException {
+    log.fine("Casting " + type + " from " + record);
     T entity = type.newInstance();
-    Field[] clsField = type.getDeclaredFields();
     
     List<GatewayField> recordFields = record.getField();
 
     for(GatewayField gField : recordFields){
-      Field field = type.getField(gField.getName());
+      Field field = type.getDeclaredField(gField.getName());
       field.setAccessible(true);
       
       if (field.getType() == String.class) {
@@ -388,7 +391,10 @@ public abstract class BaseBean {
     
     List<GatewayRecord> childRecords = record.getChildRecord();
     if(childRecords != null && !childRecords.isEmpty()){
+      log.fine("found [" + childRecords.size() + "] child records in the request");
+      
       for(GatewayRecord childRecord : childRecords){
+        log.finest("----------  CASTING CHILD RECORD  --------------");
         Class<?> childType = Class.forName(DTO_PACKAGE + childRecord.getEntity());
 
         Object childEntity = getEntityFromRecord(childRecord, childType);
@@ -399,12 +405,14 @@ public abstract class BaseBean {
         invokeParams[0] = childEntity;
         
         String methodName = "add" + childRecord.getEntity();
-
-        childType.getMethod(methodName, params).invoke(entity, invokeParams);
+        type.getMethod(methodName, params).invoke(entity, invokeParams);
+        log.finest("----------  END OF CHILD RECORD CASTING --------------");
       }
+    } else {
+      log.finer("No child records found in the request.");
     }
 
-    for (Field field : clsField) {
+    /*for (Field field : clsField) {
       field.setAccessible(true);
       String fieldName = field.getName();
       this.log.finer("Field found in entity: [" + fieldName + "]");
@@ -416,11 +424,10 @@ public abstract class BaseBean {
         this.log.finest("The field is a [" + field.getType().getCanonicalName() + "], will cast it's value in the request");
 
         String sValue = record.getFieldValue(fieldName);
-
         if (sValue != null && !sValue.trim().equals(""))
           field.set(entity, castValueFromString(sValue, field.getType()));
       }
-    }
+    }*/
     return entity;
   }
 

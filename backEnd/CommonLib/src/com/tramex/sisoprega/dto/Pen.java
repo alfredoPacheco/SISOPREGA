@@ -15,8 +15,8 @@
  */
 package com.tramex.sisoprega.dto;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Defines the model for the Barnyard entity.<BR/>
@@ -42,12 +42,12 @@ public class Pen {
   private String barnyardCode;
   private boolean available;
   private long locationId;
-  private List<PenCapacity> penCapacity = new ArrayList<PenCapacity>();
+  private Set<PenCapacity> penCapacity;
 
   /**
    * @return the penCapacity
    */
-  public List<PenCapacity> getPenCapacity() {
+  public Set<PenCapacity> getPenCapacity() {
     return penCapacity;
   }
 
@@ -55,13 +55,17 @@ public class Pen {
    * @param penCapacity
    *          the penCapacity to set
    */
-  public void setPenCapacity(List<PenCapacity> penCapacity) {
+  public void setPenCapacity(Set<PenCapacity> penCapacity) {
     this.penCapacity = penCapacity;
   }
 
   public void addPenCapacity(PenCapacity capacity) {
-    if (!penCapacity.contains(capacity))
-      penCapacity.add(capacity);
+    if(penCapacity == null)
+      penCapacity = new HashSet<PenCapacity>();
+    
+    penCapacity.add(capacity);
+    if (capacity.getPen() != this)
+      capacity.setPen(this);
   }
 
   /**
@@ -128,5 +132,14 @@ public class Pen {
   public String toString() {
     return "available:" + available + ";barnyardCode:" + barnyardCode + ";barnyardId:" + penId + ";locationId:" + locationId
         + ";";
+  }
+  
+  @Override
+  public boolean equals(Object obj) {
+    if(obj instanceof Pen){
+      Pen objPen = (Pen) obj;
+      return objPen.barnyardCode.equals(barnyardCode) && objPen.locationId == locationId;
+    } else
+      return false;
   }
 }

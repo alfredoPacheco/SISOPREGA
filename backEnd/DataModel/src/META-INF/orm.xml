@@ -344,7 +344,7 @@
 		<table name="cat_barnyard" />
 		<named-query name="PEN_BY_ID">
 			<description>Retrieves a single catBarnyard record by ID</description>
-			<query>SELECT bar FROM Pen bar WHERE bar.penId = :penId</query>
+			<query>SELECT bar FROM Pen bar WHERE bar.penId = :Id</query>
 		</named-query>
 		<named-query name="PEN_BY_LOCATION">
 			<description>Retrieves a list of barnyards given its location id</description>
@@ -368,14 +368,18 @@
 			<basic name="locationId">
 				<column name="zone_id" />
 			</basic>
-			<one-to-many name="penCapacity" mapped-by="pen" />
+			<one-to-many name="penCapacity" mapped-by="pen" target-entity="com.tramex.sisoprega.dto.PenCapacity" fetch="EAGER">
+				<cascade>
+					<cascade-all/>
+				</cascade>
+			</one-to-many>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.PenCapacity">
 		<table name="cat_barnyard_capacity" />
 		<named-query name="BARNYARD_CAPACITY_BY_ID">
 			<description>Retrieves a single catBarnyardCapacity record by ID</description>
-			<query>SELECT barCa FROM PenCapacity barCa WHERE barCa.capacityId = :capacityId</query>
+			<query>SELECT barCa FROM PenCapacity barCa WHERE barCa.capacityId = :Id</query>
 		</named-query>
 		<named-query name="BARNYARD_CAPACITY_BY_BARNYARD_AND_CATTLE">
 			<description>Retrieves a single barnyard capacity record using the barnyard and the cattle</description>
@@ -396,8 +400,8 @@
 			<basic name="headCount">
 				<column name="head_count" />
 			</basic>
-			<many-to-one name="pen">
-				<join-column name="barnyard_id" />
+			<many-to-one name="pen" optional="false">
+				<join-column name="barnyard_id" referenced-column-name="barnyard_id" nullable="false" />
 			</many-to-one>
 		</attributes>
 	</entity>
@@ -967,7 +971,7 @@
 				<column name="hermana_id" />
 			</basic>
 			<basic name="qualityId">
-				<column name="qualtiy_id" />
+				<column name="quality_id" />
 			</basic>
 			<basic name="purchasePrice">
 				<column name="purchase_price" />
@@ -988,7 +992,7 @@
 				<column name="barnyard_id" />
 			</basic>
 			<basic name="qualityId">
-				<column name="qualtiy_id" />
+				<column name="quality_id" />
 			</basic>
 			<basic name="corteExpo">
 				<column name="corte_expo" />

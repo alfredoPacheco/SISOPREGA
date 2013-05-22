@@ -46,71 +46,82 @@ import com.tramex.sisoprega.datamodel.RemoteModelable;
  */
 @Stateless
 public class BaseDataModel implements RemoteModelable {
-  
+
   protected Logger log = Logger.getLogger(BaseDataModel.class.getCanonicalName());
-  
+
   @PersistenceContext
   protected EntityManager em;
-  
-  public void createDataModel(Object dataModel){
+
+  public void createDataModel(Object dataModel) {
     em.persist(dataModel);
     em.flush();
     this.log.finer("Persisted data model in database.");
   }
-  
-  public <T> List<T> readDataModelList(String queryName, Map<String, Object> parameters, Class<T> type){
+
+  public <T> List<T> readDataModelList(String queryName, Map<String, Object> parameters, Class<T> type) {
+    log.fine("JPA EntityManager Flushed away");
     TypedQuery<T> readQuery = em.createNamedQuery(queryName, type);
-    
-    if(parameters != null){
-      for(Map.Entry<String, Object> entry : parameters.entrySet()){
+
+    if (parameters != null) {
+      for (Map.Entry<String, Object> entry : parameters.entrySet()) {
         readQuery.setParameter(entry.getKey(), entry.getValue());
         this.log.finer("Set query parameter [" + entry.getKey() + "] with value [" + entry.getValue() + "]");
       }
     }
     
-    return readQuery.getResultList();
-  }
-  
-  public <T> T readSingleDataModel(String queryName, String idName,  long modelId, Class<T> type){
-    TypedQuery<T> readQuery = em.createNamedQuery(queryName, type);
-    
-    readQuery.setParameter(idName, modelId);
-    T result = null;
-    try{
-      result = readQuery.getSingleResult();
-    }catch(Exception e){
-      log.fine("Could not find single data model: " + e.getMessage());
+    List<T> result = readQuery.getResultList();
+    for(Object obj : result){
+      em.refresh(obj);
     }
+    
+    log.fine("Read query executed, retrieved [" + result.size() + "] objects");
     
     return result;
   }
-  
-  public void updateDataModel(Object dataModel){
+
+  public <T> T readSingleDataModel(String queryName, String idName, long modelId, Class<T> type) {
+    log.fine("JPA EntityManager Flushed away");
+    TypedQuery<T> readQuery = em.createNamedQuery(queryName, type);
+
+    readQuery.setParameter(idName, modelId);
+    T result = null;
+    try {
+      result = readQuery.getSingleResult();
+      em.refresh(result);
+    } catch (Exception e) {
+      log.fine("Could not find single data model: " + e.getMessage());
+    }
+
+    log.fine("Single Object retrieved from database: [" + result + "]");
+    return result;
+  }
+
+  public void updateDataModel(Object dataModel) {
     em.merge(dataModel);
     em.flush();
     this.log.finer("Reception update persisted on database");
   }
-  
-  public void deleteDataModel(Object dataModel, String principal){
+
+  public void deleteDataModel(Object dataModel, String principal) {
     em.merge(dataModel);
-    log.info("Deleting " + dataModel.getClass().getCanonicalName() + " [" + dataModel.toString() + "] by principal[" + principal + "]");
+    log.info("Deleting " + dataModel.getClass().getCanonicalName() + " [" + dataModel.toString() + "] by principal[" + principal
+        + "]");
     em.remove(dataModel);
     em.flush();
   }
 
-@Override
-public boolean deleteBatch(String query, Map<Integer, Object> parameters,
-		String principal) {
-	Query deleteQuery = em.createNativeQuery(query);
-    
-    if(parameters != null){
-      for(Map.Entry<Integer, Object> entry : parameters.entrySet()){
-    	  deleteQuery.setParameter(entry.getKey(), entry.getValue());
+  @Override
+  public boolean deleteBatch(String query, Map<Integer, Object> parameters, String principal) {
+    Query deleteQuery = em.createNativeQuery(query);
+
+    if (parameters != null) {
+      for (Map.Entry<Integer, Object> entry : parameters.entrySet()) {
+        deleteQuery.setParameter(entry.getKey(), entry.getValue());
         this.log.finer("Set query parameter [" + entry.getKey() + "] with value [" + entry.getValue() + "]");
       }
     }
-    
+
     return deleteQuery.executeUpdate() >= 0;
-}
-  
+  }
+
 }
