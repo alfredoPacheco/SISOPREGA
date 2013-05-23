@@ -30,7 +30,7 @@ public class IdentityGatewayBean {
   @Resource
   private SessionContext ejbContext;
   
-  @EJB(lookup="java:global/Proxy/IdentityManager")
+  @EJB(lookup="java:global/BusinessLogicProxy/IdentityManagerBean")
   private RemoteIdentity identityManager;
 
   @WebMethod
