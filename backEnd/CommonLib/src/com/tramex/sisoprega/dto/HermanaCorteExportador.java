@@ -34,23 +34,23 @@ package com.tramex.sisoprega.dto;
  * 
  */
 public class HermanaCorteExportador {
-  private long corteExpo;
+  private long hermanaCorteExportadorId;
   private long hermanaId;
   private long qualityId;
   private double purchasePrice = 0.0d;
   
   /**
-   * @return the corteExpo
+   * @return the hermanaCorteExportadorId
    */
-  public long getCorteExpo() {
-    return corteExpo;
+  public long getHermanaCorteExportadorId() {
+    return hermanaCorteExportadorId;
   }
   
   /**
-   * @param corteExpo the corteExpo to set
+   * @param hermanaCorteExportadorId the corteExpo to set
    */
-  public void setCorteExpo(long corteExpo) {
-    this.corteExpo = corteExpo;
+  public void setHermanaCorteExportadorId(long hermanaCorteExportadorId) {
+    this.hermanaCorteExportadorId = hermanaCorteExportadorId;
   }
   
   /**
@@ -97,7 +97,7 @@ public class HermanaCorteExportador {
 
   @Override
   public String toString() {
-    return "corteExpo:" + corteExpo + ";hermanaId:" + hermanaId + ";qualityId:" + qualityId + ";";
+    return "corteExpo:" + hermanaCorteExportadorId + ";hermanaId:" + hermanaId + ";qualityId:" + qualityId + ";";
   }
   
 }

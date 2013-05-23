@@ -34,20 +34,20 @@ package com.tramex.sisoprega.dto;
  *
  */
 public class FeedOrderBarnyard {
-  private long feedOrdBarnId;
+  private long feedOrderBarnyardId;
   private long barnyardId;
   private long orderId;
   /**
    * @return the feedOrdBarnId
    */
-  public long getFeedOrdBarnId() {
-    return feedOrdBarnId;
+  public long getFeedOrderBarnyardId() {
+    return feedOrderBarnyardId;
   }
   /**
-   * @param feedOrdBarnId the feedOrdBarnId to set
+   * @param feedOrderBarnyardId the feedOrdBarnId to set
    */
-  public void setFeedOrdBarnId(long feedOrdBarnId) {
-    this.feedOrdBarnId = feedOrdBarnId;
+  public void setFeedOrderBarnyardId(long feedOrderBarnyardId) {
+    this.feedOrderBarnyardId = feedOrderBarnyardId;
   }
   /**
    * @return the barnyardId
@@ -76,6 +76,6 @@ public class FeedOrderBarnyard {
   
   @Override
   public String toString(){
-    return "barnyardId:" + barnyardId + ";feedOrdBarnId:" + feedOrdBarnId + ";orderId:" + orderId + ";";
+    return "barnyardId:" + barnyardId + ";feedOrdBarnId:" + feedOrderBarnyardId + ";orderId:" + orderId + ";";
   }
 }

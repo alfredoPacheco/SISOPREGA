@@ -34,7 +34,7 @@ package com.tramex.sisoprega.dto;
  * 
  */
 public class EnterpriseRancher {
-    private long enterpriseId;
+    private long enterpriseRancherId;
     private String legalName;
     private String addressOne;
     private String addressTwo;
@@ -49,18 +49,18 @@ public class EnterpriseRancher {
     private String email;
 
     /**
-     * @return the enterpriseId
+     * @return the enterpriseRancherId
      */
-    public long getEnterpriseId() {
-	return enterpriseId;
+    public long getEnterpriseRancherId() {
+	return enterpriseRancherId;
     }
 
     /**
-     * @param enterpriseId
+     * @param enterpriseRancherId
      *            the enterpriseId to set
      */
-    public void setEnterpriseId(long enterpriseId) {
-	this.enterpriseId = enterpriseId;
+    public void setEnterpriseRancherId(long enterpriseRancherId) {
+	this.enterpriseRancherId = enterpriseRancherId;
     }
 
     /**
@@ -260,7 +260,7 @@ public class EnterpriseRancher {
 	
 	 @Override
 	    public String toString() {
-		return "enterpriseId:" + enterpriseId + ";legalName:" + legalName
+		return "enterpriseId:" + enterpriseRancherId + ";legalName:" + legalName
 			+ ";addressOne:" + addressOne + ";addressTwo:" + addressTwo
 			+ ";city:" + city + ";state:" + state + ";zipCode:" + zipCode
 			+ ";legalId:" + legalId + ";telephone:" + telephone + ";"

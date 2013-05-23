@@ -34,7 +34,7 @@ package com.tramex.sisoprega.dto;
  * 
  */
 public class InspectionForecastDetail {
-  private long fdId;
+  private long inspectionForecastDetailId;
   private long forecastId;
   private long rancherId;
   private long zoneId;
@@ -43,16 +43,16 @@ public class InspectionForecastDetail {
   private long cattleType;
   private long quantity;
   /**
-   * @return the fdId
+   * @return the inspectionForecastDetailId
    */
-  public long getFdId() {
-    return fdId;
+  public long getInspectionForecastDetailId() {
+    return inspectionForecastDetailId;
   }
   /**
-   * @param fdId the fdId to set
+   * @param inspectionForecastDetailId the fdId to set
    */
-  public void setFdId(long fdId) {
-    this.fdId = fdId;
+  public void setInspectionForecastDetailId(long inspectionForecastDetailId) {
+    this.inspectionForecastDetailId = inspectionForecastDetailId;
   }
   /**
    * @return the forecastId

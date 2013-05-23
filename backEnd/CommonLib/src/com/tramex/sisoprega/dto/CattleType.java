@@ -35,23 +35,23 @@ package com.tramex.sisoprega.dto;
  */
 
 public class CattleType {
-  private long cattypeId;
+  private long cattleTypeId;
   private long catclassId;
   private String cattypeName;
 
   /**
-   * @return the cattypeId
+   * @return the cattleTypeId
    */
-  public long getCattypeId() {
-    return cattypeId;
+  public long getCattleTypeId() {
+    return cattleTypeId;
   }
 
   /**
-   * @param cattypeId
+   * @param cattleTypeId
    *          the cattypeId to set
    */
-  public void setCattypeId(long cattypeId) {
-    this.cattypeId = cattypeId;
+  public void setCattleTypeId(long cattleTypeId) {
+    this.cattleTypeId = cattleTypeId;
   }
 
   /**
@@ -86,6 +86,6 @@ public class CattleType {
 
   @Override
   public String toString() {
-    return "catclassId:" + catclassId + ";cattypeId:" + cattypeId + ";cattypeName:" + cattypeName + ";";
+    return "catclassId:" + catclassId + ";cattypeId:" + cattleTypeId + ";cattypeName:" + cattypeName + ";";
   }
 }

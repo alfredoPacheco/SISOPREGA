@@ -34,7 +34,7 @@ package com.tramex.sisoprega.dto;
  * 
  */
 public class PenCapacity {
-  private long capacityId;
+  private long penCapacityId;
   private long catclassId;
   private long headCount;
   private Pen pen;
@@ -55,18 +55,18 @@ public class PenCapacity {
   }
 
   /**
-   * @return the capacityId
+   * @return the penCapacityId
    */
-  public long getCapacityId() {
-    return capacityId;
+  public long getPenCapacityId() {
+    return penCapacityId;
   }
 
   /**
-   * @param capacityId
-   *          the capacityId to set
+   * @param penCapacityId
+   *          the penCapacityId to set
    */
-  public void setCapacityId(long capacityId) {
-    this.capacityId = capacityId;
+  public void setCapacityId(long penCapacityId) {
+    this.penCapacityId = penCapacityId;
   }
 
   /**
@@ -101,7 +101,7 @@ public class PenCapacity {
 
   @Override
   public String toString() {
-    return "capacityId:" + capacityId + ";catclassId:" + catclassId + ";headCount:" + headCount + ";";
+    return "capacityId:" + penCapacityId + ";catclassId:" + catclassId + ";headCount:" + headCount + ";";
   }
 
   @Override

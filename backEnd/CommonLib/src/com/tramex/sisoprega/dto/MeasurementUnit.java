@@ -34,23 +34,23 @@ package com.tramex.sisoprega.dto;
  * 
  */
 public class MeasurementUnit {
-  private long unitId;
+  private long measurementUnitId;
   private String unitName;
   private String unitAbreviation;
 
   /**
-   * @return the unitId
+   * @return the measurementUnitId
    */
-  public long getUnitId() {
-    return unitId;
+  public long getMeasurementUnitId() {
+    return measurementUnitId;
   }
 
   /**
-   * @param unitId
+   * @param measurementUnitId
    *          the unitId to set
    */
-  public void setUnitId(long unitId) {
-    this.unitId = unitId;
+  public void setMeasurementUnitId(long measurementUnitId) {
+    this.measurementUnitId = measurementUnitId;
   }
 
   /**
@@ -85,6 +85,6 @@ public class MeasurementUnit {
   
   @Override
   public String toString(){
-    return "unitAbrebiation:" + unitAbreviation + ";unitId:" + unitId + ";unitName:" + unitName + ";";
+    return "unitAbrebiation:" + unitAbreviation + ";unitId:" + measurementUnitId + ";unitName:" + unitName + ";";
   }
 }

@@ -36,20 +36,20 @@ package com.tramex.sisoprega.dto;
  * 
  */
 public class InspectionForecastBarnyard {
-  private long ifbId;
+  private long inspectionForecastBarnyardId;
   private long fdId;
   private long barnyardId;
   /**
-   * @return the ifbId
+   * @return the inspectionForecastBarnyardId
    */
-  public long getIfbId() {
-    return ifbId;
+  public long getInspectionForecastBarnyardId() {
+    return inspectionForecastBarnyardId;
   }
   /**
-   * @param ifbId the ifbId to set
+   * @param inspectionForecastBarnyardId the inspectionForecastBarnyardId to set
    */
-  public void setIfbId(long ifbId) {
-    this.ifbId = ifbId;
+  public void setInspectionForecastBarnyardId(long inspectionForecastBarnyardId) {
+    this.inspectionForecastBarnyardId = inspectionForecastBarnyardId;
   }
   /**
    * @return the fdId

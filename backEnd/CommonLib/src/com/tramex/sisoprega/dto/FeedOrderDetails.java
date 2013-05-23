@@ -34,24 +34,24 @@ package com.tramex.sisoprega.dto;
  * 
  */
 public class FeedOrderDetails {
-  private long fodId;
+  private long feedOrderDetailsId;
   private long orderId;
   private long foodId;
   private double quantity;
 
   /**
-   * @return the id
+   * @return the feedOrderDetailsid
    */
-  public long getFodId() {
-    return fodId;
+  public long getFeedOrderDetailsId() {
+    return feedOrderDetailsId;
   }
 
   /**
-   * @param id
+   * @param feedOrderDetailsid
    *          the id to set
    */
-  public void setFodId(long fodId) {
-    this.fodId = fodId;
+  public void setFeedOrderDetailsId(long feedOrderDetailsId) {
+    this.feedOrderDetailsId = feedOrderDetailsId;
   }
 
   /**
@@ -101,6 +101,6 @@ public class FeedOrderDetails {
 
   @Override
   public String toString(){
-    return "fodId:" + fodId + ";foodId:" + foodId + ";orderId:" + orderId + ";quantity:" + quantity + ";";
+    return "fodId:" + feedOrderDetailsId + ";foodId:" + foodId + ";orderId:" + orderId + ";quantity:" + quantity + ";";
   }
 }

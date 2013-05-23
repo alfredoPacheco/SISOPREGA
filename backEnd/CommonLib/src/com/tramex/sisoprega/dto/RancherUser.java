@@ -38,22 +38,22 @@ import java.util.List;
  */
 public class RancherUser {
 
-  private long recordId;
+  private long rancherUserId;
   private long rancherId;
   private String user_name;
   private List<Reception> receptions;
   
   /**
-   * @return the recordId
+   * @return the rancherUserId
    */
   public long getRecordId() {
-    return recordId;
+    return rancherUserId;
   }
   /**
-   * @param recordId the recordId to set
+   * @param rancherUserId the rancherUserId to set
    */
-  public void setRecordId(long recordId) {
-    this.recordId = recordId;
+  public void setRecordId(long rancherUserId) {
+    this.rancherUserId = rancherUserId;
   }
   /**
    * @return the rancherId

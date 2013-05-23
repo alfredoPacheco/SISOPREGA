@@ -34,23 +34,23 @@ package com.tramex.sisoprega.dto;
  * 
  */
 public class ReceptionBarnyard {
-  private long recBarnyardId;
+  private long receptionBarnyardId;
   private long receptionId;
   private long barnyardId;
 
   /**
-   * @return the recBarnyardId
+   * @return the receptionBarnyardId
    */
-  public long getRecBarnyardId() {
-    return recBarnyardId;
+  public long getReceptionBarnyardId() {
+    return receptionBarnyardId;
   }
 
   /**
-   * @param recBarnyardId
-   *          the recBarnyardId to set
+   * @param receptionBarnyardId
+   *          the receptionBarnyard to set
    */
-  public void setRecBarnyardId(long recBarnyardId) {
-    this.recBarnyardId = recBarnyardId;
+  public void setReceptionBarnyardId(long receptionBarnyardId) {
+    this.receptionBarnyardId = receptionBarnyardId;
   }
 
   /**
@@ -85,7 +85,7 @@ public class ReceptionBarnyard {
 
   @Override
   public String toString() {
-    return "barnyardId:" + barnyardId + ";recBarnyardId:" + recBarnyardId + ";receptionId:" + receptionId + ";";
+    return "barnyardId:" + barnyardId + ";recBarnyardId:" + receptionBarnyardId + ";receptionId:" + receptionId + ";";
   }
 
 }
