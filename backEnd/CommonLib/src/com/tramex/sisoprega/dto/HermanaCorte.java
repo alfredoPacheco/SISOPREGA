@@ -34,7 +34,7 @@ package com.tramex.sisoprega.dto;
  * 
  */
 public class HermanaCorte {
-  private long corte;
+  private long hermanaCorteId;
   private long hermanaId;
   private long barnyardId;
   private long qualityId;
@@ -42,16 +42,16 @@ public class HermanaCorte {
   private long heads;
   private double weight;
   /**
-   * @return the corte
+   * @return the hermanaCorteId
    */
-  public long getCorte() {
-    return corte;
+  public long getHermanaCorteId() {
+    return hermanaCorteId;
   }
   /**
-   * @param corte the corte to set
+   * @param hermanaCorteId the hermanaCorteId to set
    */
-  public void setCorte(long corte) {
-    this.corte = corte;
+  public void setHermanaCorteId(long hermanaCorteId) {
+    this.hermanaCorteId = hermanaCorteId;
   }
   /**
    * @return the hermanaId
@@ -128,7 +128,7 @@ public class HermanaCorte {
   
   @Override
   public String toString() {
-    return "corte:" + corte + ";hermanaId:" + hermanaId + ";barnyardId:" + barnyardId + ";qualityId:" + qualityId + ";corteExpo:" + corteExpo + ";heads:" + heads + ";weight:" + weight + ";";
+    return "corte:" + hermanaCorteId + ";hermanaId:" + hermanaId + ";barnyardId:" + barnyardId + ";qualityId:" + qualityId + ";corteExpo:" + corteExpo + ";heads:" + heads + ";weight:" + weight + ";";
   }
   
 }

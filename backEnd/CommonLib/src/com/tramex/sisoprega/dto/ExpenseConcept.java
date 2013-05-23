@@ -35,20 +35,20 @@ package com.tramex.sisoprega.dto;
  * 
  */
 public class ExpenseConcept {
-  private long conceptId;
+  private long expenseConceptId;
   private String conceptName;
   private String expenseFormula;
   /**
-   * @return the conceptId
+   * @return the expenseConceptId
    */
-  public long getConceptId() {
-    return conceptId;
+  public long getExpenseConceptId() {
+    return expenseConceptId;
   }
   /**
-   * @param conceptId the conceptId to set
+   * @param expenseConceptId the conceptId to set
    */
-  public void setConceptId(long conceptId) {
-    this.conceptId = conceptId;
+  public void setExpenseConceptId(long expenseConceptId) {
+    this.expenseConceptId = expenseConceptId;
   }
   /**
    * @return the conceptName
@@ -77,7 +77,7 @@ public class ExpenseConcept {
   
   @Override
   public String toString() {
-    return "conceptId:" + conceptId + ";conceptName:" + conceptName + ";expenseFormula:" + expenseFormula + ";";
+    return "conceptId:" + expenseConceptId + ";conceptName:" + conceptName + ";expenseFormula:" + expenseFormula + ";";
   }
   
 }

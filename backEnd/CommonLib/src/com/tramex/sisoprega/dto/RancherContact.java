@@ -36,7 +36,7 @@ import java.util.Date;
  * 
  */
 public class RancherContact {
-    private long rancherId;
+    private long rancherContactId;
     private long contactId;
     private String aka;
     private String firstName;
@@ -68,18 +68,18 @@ public class RancherContact {
     }
 
     /**
-     * @return the rancherId
+     * @return the rancherContactId
      */
-    public long getRancherId() {
-	return rancherId;
+    public long getRancherContactId() {
+	return rancherContactId;
     }
 
     /**
-     * @param rancherId
-     *            the rancherId to set
+     * @param rancherContactId
+     *            the rancherContactId to set
      */
-    public void setRancherId(long rancherId) {
-	this.rancherId = rancherId;
+    public void setRancherContactId(long rancherContactId) {
+	this.rancherContactId = rancherContactId;
     }
 
     /**
@@ -279,7 +279,7 @@ public class RancherContact {
 
     @Override
     public String toString() {
-	return "rancherId:" + rancherId + ";" + "contactId:" + contactId
+	return "rancherId:" + rancherContactId + ";" + "contactId:" + contactId
 		+ ";aka:" + aka + ";firstName:" + firstName + ";lastName:"
 		+ lastName + ";motherName:" + motherName + ";birthDate:"
 		+ birthDate + ";emailAddress:" + emailAddress + ";telephone:"

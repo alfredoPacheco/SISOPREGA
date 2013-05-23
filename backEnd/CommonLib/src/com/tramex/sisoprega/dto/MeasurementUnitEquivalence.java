@@ -34,24 +34,24 @@ package com.tramex.sisoprega.dto;
  * 
  */
 public class MeasurementUnitEquivalence {
-  private long equivalenceId;
+  private long measurementUnitEquivalenceId;
   private long unitSrc;
   private long unitDest;
   private double equivalence;
 
   /**
-   * @return the equivalenceId
+   * @return the measurementUnitEquivalenceId
    */
-  public long getEquivalenceId() {
-    return equivalenceId;
+  public long getMeasurementUnitEquivalenceId() {
+    return measurementUnitEquivalenceId;
   }
 
   /**
-   * @param equivalenceId
-   *          the equivalenceId to set
+   * @param measurementUnitEquivalenceId
+   *          the measurementUnitEquivalenceId to set
    */
-  public void setEquivalenceId(long equivalenceId) {
-    this.equivalenceId = equivalenceId;
+  public void setMeasurementUnitEquivalenceId(long measurementUnitEquivalenceId) {
+    this.measurementUnitEquivalenceId = measurementUnitEquivalenceId;
   }
 
   /**
@@ -101,7 +101,7 @@ public class MeasurementUnitEquivalence {
 
   @Override
   public String toString() {
-    return "equivalence:" + equivalence + ";equivalenceId:" + equivalenceId + ";unitDest:" + unitDest + ";unitSrc:" + unitSrc
+    return "equivalence:" + equivalence + ";equivalenceId:" + measurementUnitEquivalenceId + ";unitDest:" + unitDest + ";unitSrc:" + unitSrc
         + ";";
   }
 }

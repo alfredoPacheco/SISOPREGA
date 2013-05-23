@@ -1,21 +1,21 @@
 package com.tramex.sisoprega.dto;
 
 public class HermanaExpense {
-  private long expenseId;
+  private long hermanaExpenseId;
   private long conceptId;
   private long hermanaId;
   private double amount;
   /**
-   * @return the expenseId
+   * @return the hermanaExpenseId
    */
-  public long getExpenseId() {
-    return expenseId;
+  public long getHermanaExpenseId() {
+    return hermanaExpenseId;
   }
   /**
-   * @param expenseId the expenseId to set
+   * @param hermanaExpenseId the expenseId to set
    */
-  public void setExpenseId(long expenseId) {
-    this.expenseId = expenseId;
+  public void setHermanaExpenseId(long hermanaExpenseId) {
+    this.hermanaExpenseId = hermanaExpenseId;
   }
   /**
    * @return the hermanaId
@@ -57,6 +57,6 @@ public class HermanaExpense {
   
   @Override
   public String toString() {
-    return "expenseId:" + expenseId + ";hermanaId:" + hermanaId + ";amount:" + amount + ";";
+    return "expenseId:" + hermanaExpenseId + ";hermanaId:" + hermanaId + ";amount:" + amount + ";";
   }
 }

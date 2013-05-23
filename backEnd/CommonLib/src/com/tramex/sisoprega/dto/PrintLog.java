@@ -2,22 +2,22 @@ package com.tramex.sisoprega.dto;
 
 public class PrintLog {
   
-  private long recordId;
+  private long printLogId;
   private String reportName;
   private String destinationName;
 
   /**
-   * @return the id
+   * @return the printLogId
    */
-  public long getRecordId() {
-    return recordId;
+  public long getPrintLogId() {
+    return printLogId;
   }
 
   /**
-   * @param id the id to set
+   * @param printLog the printLog to set
    */
-  public void setRecordId(long recordId) {
-    this.recordId = recordId;
+  public void setPrintLogId(long printLogId) {
+    this.printLogId = printLogId;
   }
 
   /**
@@ -50,7 +50,7 @@ public class PrintLog {
 
   @Override
   public String toString() {
-    return "id:" + this.recordId + ";reportName:" + this.reportName + ";destinationName:" + this.destinationName + ";";
+    return "id:" + this.printLogId + ";reportName:" + this.reportName + ";destinationName:" + this.destinationName + ";";
   }
 
 }

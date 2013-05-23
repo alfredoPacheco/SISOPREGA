@@ -35,7 +35,7 @@ import java.util.Date;
  * 
  */
 public class InspectionForecast {
-  private long forecastId;
+  private long inspectionForecastId;
   private Date forecastDate;
   
   /**
@@ -51,16 +51,16 @@ public class InspectionForecast {
     this.forecastDate = forecastDate;
   }
   /**
-   * @return the forecastId
+   * @return the inspectionForecastId
    */
-  public long getForecastId() {
-    return forecastId;
+  public long getInspectionForecastId() {
+    return inspectionForecastId;
   }
   /**
-   * @param forecastId the forecastId to set
+   * @param inspectionForecastId the forecastId to set
    */
-  public void setForecastId(long forecastId) {
-    this.forecastId = forecastId;
+  public void setInspectionForecastId(long inspectionForecastId) {
+    this.inspectionForecastId = inspectionForecastId;
   }
   
 }

@@ -55,15 +55,15 @@ public class PenCapacity {
   }
 
   /**
-   * @return the capacityId
+   * @return the penCapacityId
    */
   public long getPenCapacityId() {
     return penCapacityId;
   }
 
   /**
-   * @param capacityId
-   *          the capacityId to set
+   * @param penCapacityId
+   *          the penCapacityId to set
    */
   public void setPenCapacityId(long penCapacityId) {
     this.penCapacityId = penCapacityId;

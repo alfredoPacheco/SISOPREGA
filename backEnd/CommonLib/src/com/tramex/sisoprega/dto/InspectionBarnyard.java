@@ -34,23 +34,23 @@ package com.tramex.sisoprega.dto;
  * 
  */
 public class InspectionBarnyard {
-  private long ibId;
+  private long inspectionBarnyardId;
   private long inspectionId;
   private long barnyardId;
 
   /**
-   * @return the ibId
+   * @return the inspectionBarnyardId
    */
-  public long getIbId() {
-    return ibId;
+  public long getInspectionBarnyardId() {
+    return inspectionBarnyardId;
   }
 
   /**
-   * @param ibId
-   *          the ibId to set
+   * @param inspectionBarnyardId
+   *          the inspectionBarnyardId to set
    */
-  public void setIbId(long ibId) {
-    this.ibId = ibId;
+  public void setInspectionBarnyardId(long inspectionBarnyardId) {
+    this.inspectionBarnyardId = inspectionBarnyardId;
   }
 
   /**
@@ -85,7 +85,7 @@ public class InspectionBarnyard {
   
   @Override
   public String toString(){
-    return "barnyardId:" + barnyardId + ";ibId:" + ibId + ";inspectionId:" + inspectionId + ";";
+    return "barnyardId:" + barnyardId + ";ibId:" + inspectionBarnyardId + ";inspectionId:" + inspectionId + ";";
   }
   
 }

@@ -36,25 +36,25 @@ import java.util.Date;
  * 
  */
 public class FeedOrder {
-  private long orderId;
+  private long feedOrderId;
   private long receptionId;
   private Date feedDate;
   private String feedOriginator;
   private String handling;
 
   /**
-   * @return the orderId
+   * @return the feedOrderId
    */
-  public long getOrderId() {
-    return orderId;
+  public long getFeedOrderId() {
+    return feedOrderId;
   }
 
   /**
-   * @param orderId
+   * @param feedOrderId
    *          the orderId to set
    */
-  public void setOrderId(long orderId) {
-    this.orderId = orderId;
+  public void setFeedOrderId(long feedOrderId) {
+    this.feedOrderId = feedOrderId;
   }
 
   /**
@@ -119,7 +119,7 @@ public class FeedOrder {
 
   @Override
   public String toString() {
-    return "feedDate:" + feedDate + ";feedOriginator:" + feedOriginator + ";handling:" + handling + ";orderId:" + orderId
+    return "feedDate:" + feedDate + ";feedOriginator:" + feedOriginator + ";handling:" + handling + ";orderId:" + feedOrderId
         + ";receptionId:" + receptionId + ";";
   }
 }

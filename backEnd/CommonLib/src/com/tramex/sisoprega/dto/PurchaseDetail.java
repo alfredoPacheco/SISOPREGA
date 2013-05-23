@@ -34,22 +34,22 @@ package com.tramex.sisoprega.dto;
  * 
  */
 public class PurchaseDetail {
-  private long recordId;
+  private long purchaseDetailId;
   private long barnyardId;
   private long qualityId;
   private long heads;
   private double weight;
   /**
-   * @return the recordId
+   * @return the purchaseDetailId
    */
-  public long getRecordId() {
-    return recordId;
+  public long getPurchaseDetailId() {
+    return purchaseDetailId;
   }
   /**
-   * @param recordId the recordId to set
+   * @param purchaseDetailId the purchaseDetailId to set
    */
-  public void setRecordId(long recordId) {
-    this.recordId = recordId;
+  public void setPurchaseDetailId(long purchaseDetailId) {
+    this.purchaseDetailId = purchaseDetailId;
   }
   /**
    * @return the barnyardId
@@ -102,7 +102,7 @@ public class PurchaseDetail {
 
   @Override
   public String toString() {
-    return "recordId:" + recordId + ";barnyardId:" + barnyardId + ";qualityId:" + qualityId + ";heads:" + heads + ";weight:" + weight + ";";
+    return "recordId:" + purchaseDetailId + ";barnyardId:" + barnyardId + ";qualityId:" + qualityId + ";heads:" + heads + ";weight:" + weight + ";";
   }
   
 }

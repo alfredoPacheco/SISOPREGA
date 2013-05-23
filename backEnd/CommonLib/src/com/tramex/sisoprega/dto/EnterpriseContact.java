@@ -36,7 +36,7 @@ import java.util.Date;
  * 
  */
 public class EnterpriseContact {
-    private long enterpriseId;
+    private long enterpriseContactId;
     private long contactId;
     private String aka;
     private String firstName;
@@ -70,8 +70,8 @@ public class EnterpriseContact {
     /**
      * @return the enterpriseId
      */
-    public long getEnterpriseId() {
-	return enterpriseId;
+    public long getEnterpriseContactId() {
+	return enterpriseContactId;
     }
 
     /**
@@ -274,12 +274,12 @@ public class EnterpriseContact {
      *            the enterpriseId to set
      */
     public void setEnterpriseId(long enterpriseId) {
-	this.enterpriseId = enterpriseId;
+	this.enterpriseContactId = enterpriseId;
     }
 
     @Override
     public String toString() {
-	return "enterpriseId:" + enterpriseId + ";" + "contactId:" + contactId
+	return "enterpriseId:" + enterpriseContactId + ";" + "contactId:" + contactId
 		+ ";aka:" + aka + ";firstName:" + firstName + ";lastName:"
 		+ lastName + ";motherName:" + motherName + ";birthDate:"
 		+ birthDate + ";emailAddress:" + emailAddress + ";telephone:"
