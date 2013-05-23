@@ -42,6 +42,22 @@ public class RancherUser {
   private long rancherId;
   private String user_name;
   private List<Reception> receptions;
+  private Rancher rancher;
+
+  
+  /**
+   * @return the rancher
+   */
+  public Rancher getRancher() {
+    return rancher;
+  }
+
+  /**
+   * @param rancher the rancher to set
+   */
+  public void setRancher(Rancher rancher) {
+    this.rancher = rancher;
+  }
   
   /**
    * @return the recordId

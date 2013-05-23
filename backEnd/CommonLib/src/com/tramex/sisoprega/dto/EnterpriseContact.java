@@ -50,6 +50,22 @@ public class EnterpriseContact {
     private String city;
     private String addressState;
     private String zipCode;
+    private EnterpriseRancher enterpriseRancher;
+    
+
+    /**
+     * @return the enterpriseRancher
+     */
+    public EnterpriseRancher getEnterpriseRancher() {
+      return enterpriseRancher;
+    }
+
+    /**
+     * @param enterpriseRancher the enterpriseRancher to set
+     */
+    public void setEnterpriseRancher(EnterpriseRancher enterpriseRancher) {
+      this.enterpriseRancher = enterpriseRancher;
+    }
 
     /**
      * @return the enterpriseId

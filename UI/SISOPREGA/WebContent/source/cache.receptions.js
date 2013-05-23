@@ -457,6 +457,45 @@ enyo.kind(
         return false;
       }
     },
+    createTransaction:function(objRec, cbObj, cbMethod){
+	var objToSend = this.receptionAdapterToOut(objRec);
+	delete objToSend.receptionId;
+	var cgCreate = consumingGateway.Create("Reception", objToSend);
+	if (cgCreate.exceptionId == 0) { // Created successfully
+	    objRec.reception_id = cgCreate.generatedId;
+	    objRec.color = utils.colorStack.pop();
+	    for ( var sKey in objRec.barnyards) {
+		if (!cacheBY.setOccupied(sKey, objRec.reception_id)) {
+		    cbObj["doCancel"]();
+		    return;
+		}
+	    }
+
+	    if(this.createWeight(objRec.reception_id, objRec.weights[0])){
+		if(objRec.weights[0].hc>0){
+		    // Send communication to customer
+		    var today = new Date();
+		    var month = today.getMonth() + 1;
+		    var today_sf = month + '/' + today.getDate() + '/' + today.getFullYear();
+		    var report_name = 'GanadoRecibido?rancherId=' + objRec.rancher_id + '&amp;fromDate=' + today_sf + '&amp;toDate=' + today_sf;
+		    consumingGateway.SendReport(objRec.rancher_id, report_name);	
+		}
+	    }
+
+	    this.arrObj.push(objRec);
+	    _arrReceptionList = this.arrObj;
+
+	    if (cbMethod) {
+		cbObj[cbMethod]();
+	    }
+
+	    return true;
+	
+	} else { // Error
+	    cacheMan.setMessage("", "[Exception ID: " + cgCreate.exceptionId + "] Descripcion: " + cgCreate.exceptionDescription);
+	    return false;
+	}
+    },
     upd : function(objOld, objNew, cbObj, cbMethod) {
       objNew.reception_id = objOld.reception_id;
       var objToSend = this.receptionAdapterToOut(objNew);

@@ -77,7 +77,7 @@ public class ReceptionHeadcountBean extends BaseBean implements Cruddable {
         this.log.finer("ReceptionHeadcount succesfully validated");
         dataModel.createDataModel(headCount);
 
-        String sId = String.valueOf(headCount.getHeadcountId());
+        String sId = String.valueOf(headCount.getReceptionHeadcountId());
         this.log.finer("Setting ReceptionHeadcount id in response: " + sId);
         response.setGeneratedId(sId);
         response.setError(new Error("0", "SUCCESS", "proxy.ReceptionHeadcountBean.Create"));
@@ -127,10 +127,10 @@ public class ReceptionHeadcountBean extends BaseBean implements Cruddable {
       String qryLogger = "";
       String queryName = "";
       Map<String, Object> parameters = new HashMap<String, Object>();
-      if (recHc.getHeadcountId() != 0) {
+      if (recHc.getReceptionHeadcountId() != 0) {
         queryName = "CRT_RECEPTIONHEADCOUNT_BY_ID";
-        parameters.put("headcountId", recHc.getHeadcountId());
-        qryLogger = "By headcountId [" + recHc.getHeadcountId() + "]";
+        parameters.put("headcountId", recHc.getReceptionHeadcountId());
+        qryLogger = "By headcountId [" + recHc.getReceptionHeadcountId() + "]";
       } else if(recHc.getReceptionId() != 0 ){
         queryName = "RECEPTION_HEADCOUNT_BY_RECEPTION_ID";
         parameters.put("receptionId", recHc.getReceptionId());
@@ -177,7 +177,7 @@ public class ReceptionHeadcountBean extends BaseBean implements Cruddable {
     try {
       headCount = entityFromRequest(request, ReceptionHeadcount.class);
 
-      if (headCount.getHeadcountId() == 0) {
+      if (headCount.getReceptionHeadcountId() == 0) {
         this.log.warning("VAL04 - Entity ID Omission.");
         response.setError(new Error("VAL04", "Se ha omitido el id del corral al intentar actualizar sus datos.",
             "proxy.ReceptionHeadcount.Update"));
@@ -226,12 +226,12 @@ public class ReceptionHeadcountBean extends BaseBean implements Cruddable {
 
     try {
       ReceptionHeadcount headCount = entityFromRequest(request, ReceptionHeadcount.class);
-      if (headCount.getHeadcountId() == 0) {
+      if (headCount.getReceptionHeadcountId() == 0) {
         this.log.warning("VAL04 - Entity ID Omission.");
         response.setError(new Error("VAL04", "Se ha omitido el id del corral al intentar eliminar el registro.", "proxy.ReceptionHeadcount.Delete"));
       } else {
         
-        headCount = dataModel.readSingleDataModel("CRT_RECEPTIONHEADCOUNT_BY_ID", "headcountId", headCount.getHeadcountId(), ReceptionHeadcount.class);
+        headCount = dataModel.readSingleDataModel("CRT_RECEPTIONHEADCOUNT_BY_ID", "headcountId", headCount.getReceptionHeadcountId(), ReceptionHeadcount.class);
         this.log.info("Deleting Reception Headcount [" + headCount.toString() + "] by principal[" + getLoggedUser() + "]");
         dataModel.deleteDataModel(headCount, getLoggedUser());
 

@@ -16,6 +16,8 @@
 package com.tramex.sisoprega.dto;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Defines the model for the Rancher entity.<BR/>
@@ -46,7 +48,32 @@ public class Rancher {
     private String phone2;
     private String phone3;
     private int smsPhoneChosen;
+    private Set<RancherContact> rancherContact;
 
+    
+    /**
+     * @return the rancherContact
+     */
+    public Set<RancherContact> getRancherContact() {
+      return rancherContact;
+    }
+
+    /**
+     * @param rancherContact the rancherContact to set
+     */
+    public void setRancherContact(Set<RancherContact> rancherContact) {
+      this.rancherContact = rancherContact;
+    }
+
+    public void addRancherContact(RancherContact contact) {
+      if(rancherContact == null)
+        rancherContact = new HashSet<RancherContact>();
+      
+      rancherContact.add(contact);
+      if (contact.getRancher() != this)
+        contact.setRancher(this);
+    }
+    
     /**
      * @return the rancher_id
      */

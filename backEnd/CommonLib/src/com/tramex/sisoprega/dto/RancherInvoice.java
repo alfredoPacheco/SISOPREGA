@@ -42,6 +42,22 @@ public class RancherInvoice {
     private String addressState;
     private String zipCode;
     private String legalId;
+    private Rancher rancher;
+
+    
+    /**
+     * @return the rancher
+     */
+    public Rancher getRancher() {
+      return rancher;
+    }
+
+    /**
+     * @param rancher the rancher to set
+     */
+    public void setRancher(Rancher rancher) {
+      this.rancher = rancher;
+    }
 
     /**
      * @return the rancherInvoiceId

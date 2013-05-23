@@ -15,6 +15,9 @@
  */
 package com.tramex.sisoprega.dto;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Defines the model for the Enterprise Rancher entity.<BR/>
  * 
@@ -47,7 +50,31 @@ public class EnterpriseRancher {
     private String telephone3;
     private int smsPhoneChosen;
     private String email;
+    private Set<EnterpriseContact> enterpriseContact;
 
+    /**
+     * @return the enterpriseContact
+     */
+    public Set<EnterpriseContact> getEnterpriseContact() {
+      return enterpriseContact;
+    }
+
+    /**
+     * @param enterpriseContact the enterpriseContact to set
+     */
+    public void setEnterpriseContact(Set<EnterpriseContact> enterpriseContact) {
+      this.enterpriseContact = enterpriseContact;
+    }
+
+    public void addEnterpriseContact(EnterpriseContact contact) {
+      if(enterpriseContact == null)
+        enterpriseContact = new HashSet<EnterpriseContact>();
+      
+      enterpriseContact.add(contact);
+      if (contact.getEnterpriseRancher() != this)
+        contact.setEnterpriseRancher(this);
+    }
+    
     /**
      * @return the enterpriseId
      */
