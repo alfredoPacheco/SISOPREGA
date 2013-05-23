@@ -20,6 +20,7 @@ import com.tramex.sisoprega.proxy.common.BaseBean;
 @RolesAllowed({"sisoprega_admin", "mx_usr", "us_usr", "rancher", "agency"})
 public class PenBean extends BaseBean implements Cruddable {
 
+ 
   /*@DenyAll
   @Override
   public CreateResponse Create(CreateRequest request) {

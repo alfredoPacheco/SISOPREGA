@@ -394,25 +394,6 @@ GRANT ALL ON cat_measurement_unit_unit_id_seq TO sisoprega;
 INSERT INTO cat_measurement_unit(unit_name, unit_abreviation) VALUES('Kilos', 'kg.');
 INSERT INTO cat_measurement_unit(unit_name, unit_abreviation) VALUES('Libras', 'lbs.');
 
-/*
- * Equivalence table will transform units
- */
-
-DROP TABLE cat_measurement_unit_equivalence CASCADE;
-
-CREATE TABLE cat_measurement_unit_equivalence(
-	equivalence_id SERIAL PRIMARY KEY,
-	unit_src integer NOT NULL,
-	unit_dest integer NOT NULL,
-	equivalence DECIMAL(6,4)
-);
-
-GRANT ALL ON cat_measurement_unit_equivalence TO sisoprega;
-GRANT ALL ON cat_measurement_unit_equivalence_equivalence_id_seq TO sisoprega;
-
-INSERT INTO cat_measurement_unit_equivalence VALUES(1, 2, 2.2);
-INSERT INTO cat_measurement_unit_equivalence VALUES(2, 1, 0.4546);
-
 /*Table structure for table ctrl_receptions */
 
 DROP TABLE IF EXISTS ctrl_reception CASCADE;
@@ -720,3 +701,5 @@ CREATE TABLE ctrl_purchase_detail(
 	heads        integer not null,
 	weight       decimal(12,4) not null
 );
+
+DROP TABLE IF EXISTS ctrl_print_queue CASCADE;
