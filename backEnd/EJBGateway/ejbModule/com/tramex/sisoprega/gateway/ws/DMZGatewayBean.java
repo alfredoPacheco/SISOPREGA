@@ -23,7 +23,7 @@ public class DMZGatewayBean {
 
   private Logger log = Logger.getLogger(DMZGatewayBean.class.getCanonicalName());
 
-  @EJB(lookup="java:global/Proxy/IdentityManager")
+  @EJB(lookup="java:global/BusinessLogicProxy/IdentityManagerBean")
   private RemoteIdentity iden;
   
   @WebMethod

@@ -30,7 +30,7 @@ import com.tramex.sisoprega.identity.IdentityManagerException;
 import com.tramex.sisoprega.identity.RemoteIdentity;
 import com.tramex.sisoprega.identity.dto.Role;
 import com.tramex.sisoprega.identity.dto.User;
-import com.tramex.sisoprega.proxy.bean.BaseBean;
+import com.tramex.sisoprega.proxy.common.BaseBean;
 
 /**
  * IdentityGateway provides the web service and the web methods that will be
