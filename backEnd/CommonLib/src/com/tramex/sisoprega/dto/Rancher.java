@@ -49,8 +49,57 @@ public class Rancher {
     private String phone3;
     private int smsPhoneChosen;
     private Set<RancherContact> rancherContact;
+    private Set<RancherUser> rancherUser;
+    private Set<RancherInvoice> rancherInvoice;
 
     
+    /**
+     * @return the rancherInvoice
+     */
+    public Set<RancherInvoice> getRancherInvoice() {
+      return rancherInvoice;
+    }
+
+    /**
+     * @param rancherInvoice the rancherInvoice to set
+     */
+    public void setRancherInvoice(Set<RancherInvoice> rancherInvoice) {
+      this.rancherInvoice = rancherInvoice;
+    }
+    
+    public void addRancherInvoice(RancherInvoice invoice){
+      if(rancherInvoice == null)
+        rancherInvoice = new HashSet<RancherInvoice>();
+      
+      rancherInvoice.add(invoice);
+      if(invoice.getRancher() != this){
+        invoice.setRancher(this);
+      }
+    }
+
+    /**
+     * @return the rancherUser
+     */
+    public Set<RancherUser> getRancherUser() {
+      return rancherUser;
+    }
+
+    /**
+     * @param rancherUser the rancherUser to set
+     */
+    public void setRancherUser(Set<RancherUser> rancherUser) {
+      this.rancherUser = rancherUser;
+    }
+    
+    public void addRancherUser(RancherUser rUser){
+      if(rancherUser == null)
+        rancherUser = new HashSet<RancherUser>();
+      
+      rancherUser.add(rUser);
+      if (rUser.getRancher() != this)
+        rUser.setRancher(this);
+    }
+
     /**
      * @return the rancherContact
      */

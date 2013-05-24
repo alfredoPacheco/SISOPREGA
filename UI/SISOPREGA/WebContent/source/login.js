@@ -117,11 +117,6 @@ enyo.kind(
       if (loginResult.exceptionId == 0) {
         objRef.$.user.setValue("");
         objRef.$.password.setValue("");
-        cacheRanchers.get();
-        cacheCattle.getCattleClass();
-        cacheCattle.getCattleType();
-        cacheBY.get();
-        cacheReceptions.get();
         cacheMan.hideScrim();
         objRef.doSucess();
       } else {

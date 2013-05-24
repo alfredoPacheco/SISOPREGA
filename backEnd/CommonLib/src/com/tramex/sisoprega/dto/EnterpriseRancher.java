@@ -51,6 +51,56 @@ public class EnterpriseRancher {
     private int smsPhoneChosen;
     private String email;
     private Set<EnterpriseContact> enterpriseContact;
+    private Set<EnterpriseUser> enterpriseUser;
+    private Set<EnterpriseInvoice> rancherInvoice;
+
+    
+    /**
+     * @return the rancherInvoice
+     */
+    public Set<EnterpriseInvoice> getRancherInvoice() {
+      return rancherInvoice;
+    }
+
+    /**
+     * @param rancherInvoice the rancherInvoice to set
+     */
+    public void setRancherInvoice(Set<EnterpriseInvoice> rancherInvoice) {
+      this.rancherInvoice = rancherInvoice;
+    }
+    
+    public void addRancherInvoice(EnterpriseInvoice invoice){
+      if(rancherInvoice == null)
+        rancherInvoice = new HashSet<EnterpriseInvoice>();
+      
+      rancherInvoice.add(invoice);
+      if(invoice.getRancher() != this){
+        invoice.setRancher(this);
+      }
+    }
+
+    /**
+     * @return the rancherUser
+     */
+    public Set<EnterpriseUser> getEnterpriseUser() {
+      return enterpriseUser;
+    }
+
+    /**
+     * @param rancherUser the rancherUser to set
+     */
+    public void setEnterpriseUser(Set<EnterpriseUser> rancherUser) {
+      this.enterpriseUser = rancherUser;
+    }
+    
+    public void addEnterpriseUser(EnterpriseUser rUser){
+      if(enterpriseUser == null)
+        enterpriseUser = new HashSet<EnterpriseUser>();
+      
+      enterpriseUser.add(rUser);
+      if (rUser.getRancher() != this)
+        rUser.setRancher(this);
+    }
 
     /**
      * @return the enterpriseContact

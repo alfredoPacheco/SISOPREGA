@@ -128,12 +128,12 @@
 					<cascade-all/>
 				</cascade>
 			</one-to-many>
-			<one-to-many name="rancherContact" mapped-by="enterpriseRancher" target-entity="com.tramex.sisoprega.dto.RancherContact" fetch="EAGER">
+			<one-to-many name="enterpriseContact" mapped-by="enterpriseRancher" target-entity="com.tramex.sisoprega.dto.EnterpriseContact" fetch="EAGER">
 				<cascade>
 					<cascade-all/>
 				</cascade>
 			</one-to-many>
-			<one-to-many name="rancherUser" mapped-by="rancher" target-entity="com.tramex.sisoprega.dto.RancherUser" fetch="EAGER">
+			<one-to-many name="enterpriseUser" mapped-by="rancher" target-entity="com.tramex.sisoprega.dto.EnterpriseUser" fetch="EAGER">
 				<cascade>
 					<cascade-all/>
 				</cascade>
@@ -198,6 +198,52 @@
 			</many-to-one>
 		</attributes>
 	</entity>
+	<entity class="com.tramex.sisoprega.dto.EnterpriseInvoice">
+		<table name="cat_rancher_invoice" />
+		<named-query name="ENTERPRISEINVOICE_BY_ID">
+			<description>Get a single rancher invoice record using it's id</description>
+			<query>SELECT invoice FROM EnterpriseInvoice invoice WHERE invoice.enterpriseInvoiceId = :Id</query>
+		</named-query>
+		<named-query name="ALL_ENTERPRISEINVOICES">
+			<description>Get a single rancher invoice record using it's id</description>
+			<query>SELECT invoice FROM EnterpriseInvoice invoice ORDER BY invoice.enterpriseInvoiceId</query>
+		</named-query>
+		<attributes>
+			<id name="enterpriseInvoiceId">
+				<column name="rancher_invoice_id" />
+				<generated-value strategy="IDENTITY" />
+			</id>
+			<basic name="rancherId">
+				<column name="rancher_id" nullable="false" unique="true"
+					updatable="false" />
+			</basic>
+			<basic name="addressOne">
+				<column name="address_one" length="100" nullable="false" />
+			</basic>
+			<basic name="addressState">
+				<column name="address_state" length="80" nullable="false" />
+			</basic>
+			<basic name="addressTwo">
+				<column name="address_two" length="100" />
+			</basic>
+			<basic name="city">
+				<column name="city" length="80" nullable="false" />
+			</basic>
+			<basic name="legalId">
+				<column name="legal_id" length="13" nullable="false" unique="true" />
+			</basic>
+			<basic name="legalName">
+				<column name="legal_name" length="100" nullable="false"
+					unique="true" />
+			</basic>
+			<basic name="zipCode">
+				<column name="zip_code" nullable="false" />
+			</basic>
+			<many-to-one name="rancher" optional="false">
+				<join-column name="rancher_id" referenced-column-name="enterprise_id" nullable="false" />
+			</many-to-one>
+		</attributes>
+	</entity>
 	<entity class="com.tramex.sisoprega.dto.RancherContact">
 		<table name="cat_rancher_contact" />
 		<named-query name="RANCHERCONTACT_BY_ID">
@@ -206,14 +252,6 @@
 			SELECT contact 
 			FROM RancherContact contact 
 			WHERE contact.rancherContactId = :Id</query>
-		</named-query>
-		<named-query name="RANCHERCONTACT_BY_RANCHER_ID">
-			<description>Get all rancher contacts by rancher id</description>
-			<query>
-			SELECT contact 
-			FROM RancherContact contact 
-			WHERE contact.rancherId = :rancherId 
-			ORDER BY contact.firstName, contact.lastName, contact.motherName</query>
 		</named-query>
 		<named-query name="ALL_RANCHERCONTACTS">
 			<description>Get all rancher contacts</description>
@@ -227,9 +265,6 @@
 				<column name="contact_id" />
 				<generated-value strategy="IDENTITY" />
 			</id>
-			<basic name="rancherId">
-				<column name="rancher_id" nullable="false" />
-			</basic>
 			<basic name="firstName">
 				<column name="first_name" nullable="false" length="50" />
 			</basic>
@@ -273,15 +308,6 @@
 			WHERE contact.enterpriseContactId = :Id
 			</query>
 		</named-query>
-		<named-query name="ENTERPRISECONTACT_BY_ENTERPRISE_ID">
-			<description> Get all enterprise contact by enterprise id</description>
-			<query>
-				SELECT contact
-				FROM EnterpriseContact contact
-				WHERE contact.enterpriseId = :enterpriseId
-				ORDER BY contact.firstName, contact.lastName, contact.motherName
-			</query>
-		</named-query>
 		<named-query name="ALL_ENTERPRISECONTACTS">
 			<description>Get all enterprise contacts</description>
 			<query>
@@ -295,9 +321,6 @@
 				<column name="contact_id" />
 				<generated-value strategy="IDENTITY" />
 			</id>
-			<basic name="enterpriseId">
-				<column name="rancher_id" nullable="false" />
-			</basic>
 			<basic name="firstName">
 				<column name="first_name" nullable="false" length="50" />
 			</basic>
@@ -326,8 +349,8 @@
 			<basic name="zipCode">
 				<column name="zip_code" />
 			</basic>
-			<many-to-one name="rancher" optional="false">
-				<join-column name="rancher_id" referenced-column-name="rancher_id" nullable="false" />
+			<many-to-one name="enterpriseRancher" optional="false">
+				<join-column name="rancher_id" referenced-column-name="enterprise_id" nullable="false" />
 			</many-to-one>
 		</attributes>
 	</entity>
@@ -360,12 +383,41 @@
 			<basic name="user_name">
 				<column name="user_name" />
 			</basic>
-			<one-to-many name="receptions" fetch="LAZY">
-				<join-column name="rancher_id" referenced-column-name="rancher_id" />
-			</one-to-many>
 			<many-to-one name="rancher" optional="false">
 				<join-column name="rancher_id" referenced-column-name="rancher_id" nullable="false" />
 			</many-to-one>
+			<one-to-many name="receptions" fetch="LAZY">
+				<join-column name="rancher_id" referenced-column-name="rancher_id" />
+			</one-to-many>
+		</attributes>
+	</entity>
+	<entity class="com.tramex.sisoprega.dto.EnterpriseUser">
+		<table name="cat_rancher_user" />
+		<named-query name="ENTERPRISEUSER_BY_ID">
+			<description>Retrieve a single record of rancher user by its record id</description>
+			<query>SELECT rUser FROM RancherUser rUser WHERE rUser.rancherUserId = :Id</query>
+		</named-query>
+		<named-query name="ALL_ENTERPRISEUSERS">
+			<description>Retrieve all records of rancher users</description>
+			<query>SELECT rUser FROM RancherUser rUser ORDER BY rUser.rancherUserId</query>
+		</named-query>
+		<attributes>
+			<id name="enterpriseUserId">
+				<column name="record_id" />
+				<generated-value strategy="IDENTITY" />
+			</id>
+			<basic name="rancherId">
+				<column name="rancher_id" />
+			</basic>
+			<basic name="user_name">
+				<column name="user_name" />
+			</basic>
+			<many-to-one name="rancher" optional="false">
+				<join-column name="rancher_id" referenced-column-name="enterprise_id" nullable="false" />
+			</many-to-one>
+			<one-to-many name="receptions" fetch="LAZY">
+				<join-column name="rancher_id" referenced-column-name="rancher_id" />
+			</one-to-many>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.CattleClass">
@@ -390,20 +442,20 @@
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.CattleType">
 		<table name="cat_cattle_type" />
-		<named-query name="ALL_CATTLE_TYPE">
+		<named-query name="ALL_CATTLETYPES">
 			<description>Retrieves all cattle type records from database </description>
 			<query>SELECT Cattle FROM CattleType Cattle ORDER BY Cattle.cattypeName</query>
 		</named-query>
-		<named-query name="CATTLE_TYPE_BY_ID">
+		<named-query name="CATTLETYPE_BY_ID">
 			<description>Retrieve a single cattle type record using the type id</description>
-			<query>SELECT Cattle FROM CattleType Cattle WHERE Cattle.cattypeId= :Id</query>
+			<query>SELECT Cattle FROM CattleType Cattle WHERE Cattle.cattleTypeId= :Id</query>
 		</named-query>
 		<named-query name="CATTLE_TYPE_BY_CLASS_ID">
 			<description>Retrieve the cattle types associated with a cattle class</description>
 			<query>SELECT Cattle FROM CattleType Cattle WHERE Cattle.catclassId = :catClassId</query>
 		</named-query>
 		<attributes>
-			<id name="cattypeId">
+			<id name="cattleTypeId">
 				<column name="cattype_id" />
 				<generated-value strategy="IDENTITY" />
 			</id>
@@ -504,14 +556,14 @@
 		<table name="cat_measurement_unit" />
 		<named-query name="CAT_MEASUREMENTUNIT_BY_ID">
 			<description>Retrieves a single catMeasurementUnit record by ID</description>
-			<query>SELECT MeaUni FROM MeasurementUnit MeaUni WHERE MeaUni.unitId = :Id</query>
+			<query>SELECT MeaUni FROM MeasurementUnit MeaUni WHERE MeaUni.measurementUnitId = :Id</query>
 		</named-query>
 		<named-query name="ALL_MEASUREMENT_UNITS">
 			<description>Retrieves all measurement units from database.</description>
 			<query>SELECT mu FROM MeasurementUnit mu ORDER BY mu.unitAbreviation</query>
 		</named-query>
 		<attributes>
-			<id name="unitId">
+			<id name="measurementUnitId">
 				<column name="unit_id" />
 				<generated-value strategy="IDENTITY" />
 			</id>
@@ -527,14 +579,14 @@
 		<table name="cat_measurement_unit_equivalence" />
 		<named-query name="CAT_MEASUREMENTUNITEQUIVALENCE_BY_ID">
 			<description>Retrieves a single catMeasurementUnitEquivalence record by ID</description>
-			<query>SELECT MeaUnEq FROM MeasurementUnitEquivalence MeaUnEq WHERE MeaUnEq.equivalenceId = :Id</query>
+			<query>SELECT MeaUnEq FROM MeasurementUnitEquivalence MeaUnEq WHERE MeaUnEq.measurementUnitEquivalenceId = :Id</query>
 		</named-query>
 		<named-query name="EQUIVALENCE_BY_UNIT_ID">
 			<description>Retrieves the equivalence of a given unit id</description>
 			<query>SELECT equivalence FROM MeasurementUnitEquivalence equivalence WHERE equivalence.unitSrc = :unitId</query>
 		</named-query>
 		<attributes>
-			<id name="equivalenceId">
+			<id name="measurementUnitEquivalenceId">
 				<column name="equivalence_id" />
 				<generated-value strategy="IDENTITY" />
 			</id>
@@ -590,7 +642,7 @@
 		<table name="ctrl_reception_barnyard" />
 		<named-query name="CRT_RECEPTIONBARNYARD_BY_ID">
 			<description>Retrieves a single crtReceptionBarnyard record by ID</description>
-			<query>SELECT RecepYard FROM ReceptionBarnyard RecepYard WHERE RecepYard.recBarnyardId = :Id</query>
+			<query>SELECT RecepYard FROM ReceptionBarnyard RecepYard WHERE RecepYard.receptionBarnyardId = :Id</query>
 		</named-query>
 		<named-query name="RECEPTION_BARNYARD_BY_RECEPTION_ID">
 			<description>Retrieves a list of barnyards for a given reception id</description>
@@ -605,7 +657,7 @@
 			<query>SELECT rec FROM ReceptionBarnyard rec WHERE rec.barnyardId = :barnyard_id and rec.receptionId = :reception_id</query>
 		</named-query>
 		<attributes>
-			<id name="recBarnyardId">
+			<id name="receptionBarnyardId">
 				<column name="rec_barnyard_id" />
 				<generated-value strategy="IDENTITY" />
 			</id>
@@ -621,14 +673,14 @@
 		<table name="ctrl_reception_headcount" />
 		<named-query name="CRT_RECEPTIONHEADCOUNT_BY_ID">
 			<description>Retrieves a single crtReceptionHeadcount record by ID</description>
-			<query>SELECT RecepHcount FROM ReceptionHeadcount RecepHcount WHERE RecepHcount.headcountId = :Id</query>
+			<query>SELECT RecepHcount FROM ReceptionHeadcount RecepHcount WHERE RecepHcount.receptionHeadcountId = :Id</query>
 		</named-query>
 		<named-query name="RECEPTION_HEADCOUNT_BY_RECEPTION_ID">
 			<description>Retrieves a list of reception headcounts by ReceptionID</description>
 			<query>SELECT RecepHcount FROM ReceptionHeadcount RecepHcount WHERE RecepHcount.receptionId = :receptionId</query>
 		</named-query>
 		<attributes>
-			<id name="headcountId">
+			<id name="receptionHeadcountId">
 				<column name="headcount_id" />
 				<generated-value strategy="IDENTITY" />
 			</id>
@@ -650,14 +702,14 @@
 		<table name="ctrl_feed_order" />
 		<named-query name="CRT_FEEDORDER_BY_ID">
 			<description>Retrieves a single Feed Order record by its ID</description>
-			<query>SELECT FeedOrd FROM FeedOrder FeedOrd WHERE FeedOrd.orderId = :Id</query>
+			<query>SELECT FeedOrd FROM FeedOrder FeedOrd WHERE FeedOrd.feedOrderId = :Id</query>
 		</named-query>
 		<named-query name="FEEDORDER_BY_RECEPTION_ID">
 			<description>Retrieves a list of feed orders using the reception id.</description>
 			<query>SELECT feed FROM FeedOrder feed WHERE feed.receptionId = :receptionId</query>
 		</named-query>
 		<attributes>
-			<id name="orderId">
+			<id name="feedOrderId">
 				<column name="order_id" />
 				<generated-value strategy="IDENTITY" />
 			</id>
@@ -700,7 +752,7 @@
 		<table name="ctrl_feed_order_details" />
 		<named-query name="CRT_FEEDORDERDETAILS_BY_ID">
 			<description>Retrieves a single crtFood record by ID</description>
-			<query>SELECT FeOrDls FROM FeedOrderDetails FeOrDls WHERE FeOrDls.fodId = :Id</query>
+			<query>SELECT FeOrDls FROM FeedOrderDetails FeOrDls WHERE FeOrDls.feedOrderDetailsId = :Id</query>
 		</named-query>
 		<named-query name="FOD_BY_ORDER_ID">
 			<description>Retrieves a list of feed order details based in the feed orderId</description>
@@ -711,7 +763,7 @@
 			<query>SELECT fod FROM FeedOrderDetails fod WHERE fod.orderId = :order_id and fod.foodId = :food_id</query>
 		</named-query>
 		<attributes>
-			<id name="fodId">
+			<id name="feedOrderDetailsId">
 				<column name="id" />
 				<generated-value strategy="IDENTITY" />
 			</id>
@@ -763,14 +815,14 @@
 		<table name="ctrl_inspection_barnyard" />
 		<named-query name="CRT_INSPECTIONBARNYARD_BY_ID">
 			<description>Retrieves a single crtFood record by ID</description>
-			<query>SELECT InspBar FROM InspectionBarnyard InspBar WHERE InspBar.ibId = :Id</query>
+			<query>SELECT InspBar FROM InspectionBarnyard InspBar WHERE InspBar.inspectionBarnyardId = :Id</query>
 		</named-query>
 		<named-query name="IB_BY_INSPECTION_ID">
 			<description>Retrieves all barnyards for a given inspection id</description>
 			<query>SELECT ins FROM InspectionBarnyard ins WHERE ins.inspectionId = :inspectionId ORDER BY ins.barnyardId</query>
 		</named-query>
 		<attributes>
-			<id name="ibId">
+			<id name="inspectionBarnyardId">
 				<column name="id" />
 				<generated-value strategy="IDENTITY" />
 			</id>
@@ -841,7 +893,7 @@
 		<table name="ctrl_feed_order_barnyard" />
 		<named-query name="CAT_FEEDORDERBARNYARD_BY_ID">
 			<description>Retrieves a single crtFood record by ID</description>
-			<query>SELECT FedOrBar FROM FeedOrderBarnyard FedOrBar WHERE FedOrBar.feedOrdBarnId = :Id</query>
+			<query>SELECT FedOrBar FROM FeedOrderBarnyard FedOrBar WHERE FedOrBar.feedOrderBarnyardId = :Id</query>
 		</named-query>
 		<named-query name="FEED_ORDER_FOR_BARNYARD_BY_ORDER_ID">
 			<description>Retrieves a list with the feed orders for a given order</description>
@@ -849,7 +901,7 @@
 			WHERE fob.orderId = :orderId</query>
 		</named-query>
 		<attributes>
-			<id name="feedOrdBarnId">
+			<id name="feedOrderBarnyardId">
 				<column name="feed_ord_barn_id" />
 				<generated-value strategy="IDENTITY" />
 			</id>
@@ -868,7 +920,7 @@
 			<query>SELECT forecast FROM InspectionForecast forecast ORDER BY forecast.forecastDate</query>
 		</named-query>
 		<attributes>
-			<id name="forecastId">
+			<id name="inspectionForecastId">
 				<column name="id" />
 				<generated-value strategy="IDENTITY" />
 			</id>
@@ -886,10 +938,10 @@
 		</named-query>
 		<named-query name="FORECAST_DETAIL_BY_ID">
 			<description>Retrieves a single record of forecast details by its given id.</description>
-			<query>SELECT forecastDetail FROM InspectionForecastDetail forecastDetail WHERE forecastDetail.fdId = :fdId</query>
+			<query>SELECT forecastDetail FROM InspectionForecastDetail forecastDetail WHERE forecastDetail.inspectionForecastDetailId = :fdId</query>
 		</named-query>
 		<attributes>
-			<id name="fdId">
+			<id name="inspectionForecastDetailId">
 				<column name="id" />
 				<generated-value strategy="IDENTITY" />
 			</id>
@@ -911,14 +963,14 @@
 		<table name="ctrl_inspection_forecast_barnyard" />
 		<named-query name="FORECAST_BARNAYARD_BY_ID">
 			<description>Retrieve a single record of forecast barnyard by its given id</description>
-			<query>SELECT forecastBarnyard FROM InspectionForecastBarnyard forecastBarnyard WHERE forecastBarnyard.ifbId = :Id</query>
+			<query>SELECT forecastBarnyard FROM InspectionForecastBarnyard forecastBarnyard WHERE forecastBarnyard.inspectionForecastBarnyardId = :Id</query>
 		</named-query>
 		<named-query name="FORECAST_BARNYARD_BY_FORECAST_DETAIL_ID">
 			<description>Retrieve all barnyard records of a given forecast id</description>
 			<query>SELECT forecastBarnyard FROM InspectionForecastBarnyard forecastBarnyard WHERE forecastBarnyard.fdId = :fdId</query>
 		</named-query>
 		<attributes>
-			<id name="ifbId">
+			<id name="inspectionForecastBarnyardId">
 				<column name="id" />
 				<generated-value strategy="IDENTITY" />
 			</id>
@@ -1028,7 +1080,7 @@
 	<entity class="com.tramex.sisoprega.dto.HermanaCorteExportador">
 		<table name="ctrl_hermana_corte_exportador" />
 		<attributes>
-			<id name="corteExpo">
+			<id name="hermanaCorteExportadorId">
 				<column name="corte_expo" />
 				<generated-value strategy="IDENTITY" />
 			</id>
@@ -1046,7 +1098,7 @@
 	<entity class="com.tramex.sisoprega.dto.HermanaCorte">
 		<table name="ctrl_hermana_corte" />
 		<attributes>
-			<id name="corte">
+			<id name="hermanaCorteId">
 				<column name="corte" />
 				<generated-value strategy="IDENTITY" />
 			</id>
@@ -1073,7 +1125,7 @@
 	<entity class="com.tramex.sisoprega.dto.ExpenseConcept">
 		<table name="cat_expense_concept" />
 		<attributes>
-			<id name="conceptId">
+			<id name="expenseConceptId">
 				<column name="concept_id" />
 				<generated-value strategy="IDENTITY" />
 			</id>
@@ -1088,7 +1140,7 @@
 	<entity class="com.tramex.sisoprega.dto.HermanaExpense">
 		<table name="ctrl_hermana_expense" />
 		<attributes>
-			<id name="expenseId">
+			<id name="hermanaExpenseId">
 				<column name="expense_id" />
 				<generated-value strategy="IDENTITY" />
 			</id>
@@ -1150,7 +1202,7 @@
 	<entity class="com.tramex.sisoprega.dto.PurchaseDetail">
 		<table name="ctrl_purchase_detail" />
 		<attributes>
-			<id name="recordId">
+			<id name="purchaseDetailId">
 				<column name="record_id" />
 				<generated-value strategy="IDENTITY" />
 			</id>

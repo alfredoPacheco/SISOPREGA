@@ -36,255 +36,244 @@ import java.util.Date;
  * 
  */
 public class EnterpriseContact {
-    private long enterpriseContactId;
-    private long contactId;
-    private String aka;
-    private String firstName;
-    private String lastName;
-    private String motherName;
-    private Date birthDate;
-    private String emailAddress;
-    private String telephone;
-    private String addressOne;
-    private String addressTwo;
-    private String city;
-    private String addressState;
-    private String zipCode;
-    private EnterpriseRancher enterpriseRancher;
-    
+  private long enterpriseContactId;
+  private String aka;
+  private String firstName;
+  private String lastName;
+  private String motherName;
+  private Date birthDate;
+  private String emailAddress;
+  private String telephone;
+  private String addressOne;
+  private String addressTwo;
+  private String city;
+  private String addressState;
+  private String zipCode;
+  private EnterpriseRancher enterpriseRancher;
 
-    /**
-     * @return the enterpriseRancher
-     */
-    public EnterpriseRancher getEnterpriseRancher() {
-      return enterpriseRancher;
-    }
+  /**
+   * @return the enterpriseRancher
+   */
+  public EnterpriseRancher getEnterpriseRancher() {
+    return enterpriseRancher;
+  }
 
-    /**
-     * @param enterpriseRancher the enterpriseRancher to set
-     */
-    public void setEnterpriseRancher(EnterpriseRancher enterpriseRancher) {
-      this.enterpriseRancher = enterpriseRancher;
-    }
+  /**
+   * @param enterpriseRancher
+   *          the enterpriseRancher to set
+   */
+  public void setEnterpriseRancher(EnterpriseRancher enterpriseRancher) {
+    this.enterpriseRancher = enterpriseRancher;
+  }
 
-    /**
-     * @return the enterpriseId
-     */
-    public long getEnterpriseContactId() {
-	return enterpriseContactId;
-    }
+  /**
+   * @return the enterpriseId
+   */
+  public long getEnterpriseContactId() {
+    return enterpriseContactId;
+  }
 
-    /**
-     * @return the contactId
-     */
-    public long getContactId() {
-	return contactId;
-    }
+  /**
+   * 
+   * @param contactId
+   */
+  public void setEnterpriseContactId(long contactId) {
+    enterpriseContactId = contactId;
+  }
 
-    /**
-     * @param contactId
-     *            the contactId to set
-     */
-    public void setContactId(long contactId) {
-	this.contactId = contactId;
-    }
+  /**
+   * @return the aka
+   */
+  public String getAka() {
+    return aka;
+  }
 
-    /**
-     * @return the aka
-     */
-    public String getAka() {
-	return aka;
-    }
+  /**
+   * @param aka
+   *          the aka to set
+   */
+  public void setAka(String aka) {
+    this.aka = aka;
+  }
 
-    /**
-     * @param aka
-     *            the aka to set
-     */
-    public void setAka(String aka) {
-	this.aka = aka;
-    }
+  /**
+   * @return the firstName
+   */
+  public String getFirstName() {
+    return firstName;
+  }
 
-    /**
-     * @return the firstName
-     */
-    public String getFirstName() {
-	return firstName;
-    }
+  /**
+   * @param firstName
+   *          the firstName to set
+   */
+  public void setFirstName(String firstName) {
+    this.firstName = firstName;
+  }
 
-    /**
-     * @param firstName
-     *            the firstName to set
-     */
-    public void setFirstName(String firstName) {
-	this.firstName = firstName;
-    }
+  /**
+   * @return the lastName
+   */
+  public String getLastName() {
+    return lastName;
+  }
 
-    /**
-     * @return the lastName
-     */
-    public String getLastName() {
-	return lastName;
-    }
+  /**
+   * @param lastName
+   *          the lastName to set
+   */
+  public void setLastName(String lastName) {
+    this.lastName = lastName;
+  }
 
-    /**
-     * @param lastName
-     *            the lastName to set
-     */
-    public void setLastName(String lastName) {
-	this.lastName = lastName;
-    }
+  /**
+   * @return the motherName
+   */
+  public String getMotherName() {
+    return motherName;
+  }
 
-    /**
-     * @return the motherName
-     */
-    public String getMotherName() {
-	return motherName;
-    }
+  /**
+   * @param motherName
+   *          the motherName to set
+   */
+  public void setMotherName(String motherName) {
+    this.motherName = motherName;
+  }
 
-    /**
-     * @param motherName
-     *            the motherName to set
-     */
-    public void setMotherName(String motherName) {
-	this.motherName = motherName;
-    }
+  /**
+   * @return the birthDate
+   */
+  public Date getBirthDate() {
+    return birthDate;
+  }
 
-    /**
-     * @return the birthDate
-     */
-    public Date getBirthDate() {
-	return birthDate;
-    }
+  /**
+   * @param birthDate
+   *          the birthDate to set
+   */
+  public void setBirthDate(Date birthDate) {
+    this.birthDate = birthDate;
+  }
 
-    /**
-     * @param birthDate
-     *            the birthDate to set
-     */
-    public void setBirthDate(Date birthDate) {
-	this.birthDate = birthDate;
-    }
+  /**
+   * @return the emailAdd
+   */
+  public String getEmailAddress() {
+    return emailAddress;
+  }
 
-    /**
-     * @return the emailAdd
-     */
-    public String getEmailAddress() {
-	return emailAddress;
-    }
+  /**
+   * @param emailAdd
+   *          the emailAdd to set
+   */
+  public void setEmailAddress(String emailAdd) {
+    this.emailAddress = emailAdd;
+  }
 
-    /**
-     * @param emailAdd
-     *            the emailAdd to set
-     */
-    public void setEmailAddress(String emailAdd) {
-	this.emailAddress = emailAdd;
-    }
+  /**
+   * @return the telephone
+   */
+  public String getTelephone() {
+    return telephone;
+  }
 
-    /**
-     * @return the telephone
-     */
-    public String getTelephone() {
-	return telephone;
-    }
+  /**
+   * @param telephone
+   *          the telephone to set
+   */
+  public void setTelephone(String telephone) {
+    this.telephone = telephone;
+  }
 
-    /**
-     * @param telephone
-     *            the telephone to set
-     */
-    public void setTelephone(String telephone) {
-	this.telephone = telephone;
-    }
+  /**
+   * @return the addressOne
+   */
+  public String getAddressOne() {
+    return addressOne;
+  }
 
-    /**
-     * @return the addressOne
-     */
-    public String getAddressOne() {
-	return addressOne;
-    }
+  /**
+   * @param addressOne
+   *          the addressOne to set
+   */
+  public void setAddressOne(String addressOne) {
+    this.addressOne = addressOne;
+  }
 
-    /**
-     * @param addressOne
-     *            the addressOne to set
-     */
-    public void setAddressOne(String addressOne) {
-	this.addressOne = addressOne;
-    }
+  /**
+   * @return the addressTwo
+   */
+  public String getAddressTwo() {
+    return addressTwo;
+  }
 
-    /**
-     * @return the addressTwo
-     */
-    public String getAddressTwo() {
-	return addressTwo;
-    }
+  /**
+   * @param addressTwo
+   *          the addressTwo to set
+   */
+  public void setAddressTwo(String addressTwo) {
+    this.addressTwo = addressTwo;
+  }
 
-    /**
-     * @param addressTwo
-     *            the addressTwo to set
-     */
-    public void setAddressTwo(String addressTwo) {
-	this.addressTwo = addressTwo;
-    }
+  /**
+   * @return the city
+   */
+  public String getCity() {
+    return city;
+  }
 
-    /**
-     * @return the city
-     */
-    public String getCity() {
-	return city;
-    }
+  /**
+   * @param city
+   *          the city to set
+   */
+  public void setCity(String city) {
+    this.city = city;
+  }
 
-    /**
-     * @param city
-     *            the city to set
-     */
-    public void setCity(String city) {
-	this.city = city;
-    }
+  /**
+   * @return the addressState
+   */
+  public String getAddressState() {
+    return addressState;
+  }
 
-    /**
-     * @return the addressState
-     */
-    public String getAddressState() {
-	return addressState;
-    }
+  /**
+   * @param addressState
+   *          the addressState to set
+   */
+  public void setAddressState(String addressState) {
+    this.addressState = addressState;
+  }
 
-    /**
-     * @param addressState
-     *            the addressState to set
-     */
-    public void setAddressState(String addressState) {
-	this.addressState = addressState;
-    }
+  /**
+   * @return the zipCode
+   */
+  public String getZipCode() {
+    return zipCode;
+  }
 
-    /**
-     * @return the zipCode
-     */
-    public String getZipCode() {
-	return zipCode;
-    }
+  /**
+   * @param zipCode
+   *          the zipCode to set
+   */
+  public void setZipCode(String zipCode) {
+    this.zipCode = zipCode;
+  }
 
-    /**
-     * @param zipCode
-     *            the zipCode to set
-     */
-    public void setZipCode(String zipCode) {
-	this.zipCode = zipCode;
-    }
-    
-    /**
-     * @param enterpriseId
-     *            the enterpriseId to set
-     */
-    public void setEnterpriseId(long enterpriseId) {
-	this.enterpriseContactId = enterpriseId;
-    }
+  /**
+   * @param enterpriseId
+   *          the enterpriseId to set
+   */
+  public void setEnterpriseId(long enterpriseId) {
+    this.enterpriseContactId = enterpriseId;
+  }
 
-    @Override
-    public String toString() {
-	return "enterpriseId:" + enterpriseContactId + ";" + "contactId:" + contactId
-		+ ";aka:" + aka + ";firstName:" + firstName + ";lastName:"
-		+ lastName + ";motherName:" + motherName + ";birthDate:"
-		+ birthDate + ";emailAddress:" + emailAddress + ";telephone:"
-		+ telephone + ";addressOne:" + addressOne + ";addressTwo:"
-		+ addressTwo + ";city:" + city + ";state:" + addressState
-		+ ";zip:" + zipCode + ";";
-    }
+  @Override
+  public String toString() {
+    return "contactId:" + enterpriseContactId + ";aka:" + aka + ";firstName:" + firstName + ";lastName:" + lastName
+        + ";motherName:" + motherName + ";birthDate:" + birthDate + ";emailAddress:" + emailAddress + ";telephone:" + telephone
+        + ";addressOne:" + addressOne + ";addressTwo:" + addressTwo + ";city:" + city + ";state:" + addressState + ";zip:"
+        + zipCode + ";";
+  }
 }

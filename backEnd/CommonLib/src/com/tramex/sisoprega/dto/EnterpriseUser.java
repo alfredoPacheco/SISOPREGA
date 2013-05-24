@@ -36,40 +36,40 @@ import java.util.List;
  * 
  * 
  */
-public class RancherUser {
+public class EnterpriseUser {
 
-  private long rancherUserId;
+  private long enterpriseUserId;
   private long rancherId;
   private String user_name;
   private List<Reception> receptions;
-  private Rancher rancher;
+  private EnterpriseRancher rancher;
 
   
   /**
    * @return the rancher
    */
-  public Rancher getRancher() {
+  public EnterpriseRancher getRancher() {
     return rancher;
   }
 
   /**
    * @param rancher the rancher to set
    */
-  public void setRancher(Rancher rancher) {
+  public void setRancher(EnterpriseRancher rancher) {
     this.rancher = rancher;
   }
   
   /**
    * @return the rancherUserId
    */
-  public long getRancherUserId() {
-    return rancherUserId;
+  public long getEnterpriseUserId() {
+    return enterpriseUserId;
   }
   /**
    * @param rancherUserId the rancherUserId to set
    */
-  public void setRancherUserId(long rancherUserId) {
-    this.rancherUserId = rancherUserId;
+  public void setEnterpriseUserId(long rancherUserId) {
+    this.enterpriseUserId = rancherUserId;
   }
   /**
    * @return the rancherId
