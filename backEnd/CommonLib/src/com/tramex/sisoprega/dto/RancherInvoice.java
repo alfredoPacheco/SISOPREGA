@@ -34,7 +34,6 @@ package com.tramex.sisoprega.dto;
  */
 public class RancherInvoice {
     private long rancherInvoiceId;
-    private long rancherId;
     private String legalName;
     private String addressOne;
     private String addressTwo;
@@ -73,20 +72,6 @@ public class RancherInvoice {
 	this.rancherInvoiceId = rancherInvoiceId;
     }
 
-    /**
-     * @return the rancherId
-     */
-    public long getRancherId() {
-	return rancherId;
-    }
-
-    /**
-     * @param rancherId
-     *            the rancherId to set
-     */
-    public void setRancherId(long rancherId) {
-	this.rancherId = rancherId;
-    }
 
     /**
      * @return the legalName
@@ -195,7 +180,7 @@ public class RancherInvoice {
 
     @Override
     public String toString() {
-	return "rancherId:" + rancherId + ";addressOne:" + addressOne
+	return "rancherInvoiceId:" + rancherInvoiceId + ";addressOne:" + addressOne
 		+ ";addressTwo:" + addressTwo + ";city:" + city
 		+ ";legalId:" + legalId + ";legalName:" + legalName + ";zipCode:" + zipCode + ";";
     }

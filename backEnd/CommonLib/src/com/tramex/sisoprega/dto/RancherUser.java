@@ -15,7 +15,7 @@
  */
 package com.tramex.sisoprega.dto;
 
-import java.util.List;
+
 
 /**
  * Defines the model for the Rancher invoice information.
@@ -39,12 +39,9 @@ import java.util.List;
 public class RancherUser {
 
   private long rancherUserId;
-  private long rancherId;
   private String user_name;
-  private List<Reception> receptions;
   private Rancher rancher;
 
-  
   /**
    * @return the rancher
    */
@@ -53,67 +50,40 @@ public class RancherUser {
   }
 
   /**
-   * @param rancher the rancher to set
+   * @param rancher
+   *          the rancher to set
    */
   public void setRancher(Rancher rancher) {
     this.rancher = rancher;
   }
-  
+
   /**
    * @return the rancherUserId
    */
   public long getRancherUserId() {
     return rancherUserId;
   }
+
   /**
-   * @param rancherUserId the rancherUserId to set
+   * @param rancherUserId
+   *          the rancherUserId to set
    */
   public void setRancherUserId(long rancherUserId) {
     this.rancherUserId = rancherUserId;
   }
-  /**
-   * @return the rancherId
-   */
-  public long getRancherId() {
-    return rancherId;
-  }
-  /**
-   * @param rancherId the rancherId to set
-   */
-  public void setRancherId(long rancherId) {
-    this.rancherId = rancherId;
-  }
+
   /**
    * @return the user_name
    */
   public String getUser_name() {
     return user_name;
   }
+
   /**
-   * @param user_name the user_name to set
+   * @param user_name
+   *          the user_name to set
    */
   public void setUser_name(String user_name) {
     this.user_name = user_name;
   }
-  /**
-   * @return the receptions
-   */
-  public List<Reception> getReceptions() {
-    return receptions;
-  }
-  /**
-   * @param receptions the receptions to set
-   */
-  public void setReceptions(List<Reception> receptions) {
-    this.receptions = receptions;
-  }
-  
-  public void addReception(Reception reception){
-    this.receptions.add(reception);
-  }
-  
-  public void remoreReception(Reception reception){
-    this.receptions.remove(reception);
-  }
-  
 }

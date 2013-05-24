@@ -37,312 +37,313 @@ import java.util.Set;
  * 
  */
 public class EnterpriseRancher {
-    private long enterpriseRancherId;
-    private String legalName;
-    private String addressOne;
-    private String addressTwo;
-    private String city;
-    private String state;
-    private String zipCode;
-    private String legalId;
-    private String telephone;
-    private String telephone2;
-    private String telephone3;
-    private int smsPhoneChosen;
-    private String email;
-    private Set<EnterpriseContact> enterpriseContact;
-    private Set<EnterpriseUser> enterpriseUser;
-    private Set<EnterpriseInvoice> rancherInvoice;
+  private long enterpriseRancherId;
+  private String legalName;
+  private String addressOne;
+  private String addressTwo;
+  private String city;
+  private String state;
+  private String zipCode;
+  private String legalId;
+  private String telephone;
+  private String telephone2;
+  private String telephone3;
+  private int smsPhoneChosen;
+  private String email;
+  private Set<EnterpriseContact> enterpriseContact;
+  private Set<EnterpriseUser> enterpriseUser;
+  private Set<EnterpriseInvoice> rancherInvoice;
 
-    
-    /**
-     * @return the rancherInvoice
-     */
-    public Set<EnterpriseInvoice> getRancherInvoice() {
-      return rancherInvoice;
-    }
+  /**
+   * @return the rancherInvoice
+   */
+  public Set<EnterpriseInvoice> getRancherInvoice() {
+    return rancherInvoice;
+  }
 
-    /**
-     * @param rancherInvoice the rancherInvoice to set
-     */
-    public void setRancherInvoice(Set<EnterpriseInvoice> rancherInvoice) {
-      this.rancherInvoice = rancherInvoice;
-    }
-    
-    public void addRancherInvoice(EnterpriseInvoice invoice){
-      if(rancherInvoice == null)
-        rancherInvoice = new HashSet<EnterpriseInvoice>();
-      
-      rancherInvoice.add(invoice);
-      if(invoice.getRancher() != this){
-        invoice.setRancher(this);
-      }
-    }
+  /**
+   * @param rancherInvoice
+   *          the rancherInvoice to set
+   */
+  public void setRancherInvoice(Set<EnterpriseInvoice> rancherInvoice) {
+    this.rancherInvoice = rancherInvoice;
+  }
 
-    /**
-     * @return the rancherUser
-     */
-    public Set<EnterpriseUser> getEnterpriseUser() {
-      return enterpriseUser;
-    }
+  public void addRancherInvoice(EnterpriseInvoice invoice) {
+    if (rancherInvoice == null)
+      rancherInvoice = new HashSet<EnterpriseInvoice>();
 
-    /**
-     * @param rancherUser the rancherUser to set
-     */
-    public void setEnterpriseUser(Set<EnterpriseUser> rancherUser) {
-      this.enterpriseUser = rancherUser;
+    rancherInvoice.add(invoice);
+    if (invoice.getRancher() != this) {
+      invoice.setRancher(this);
     }
-    
-    public void addEnterpriseUser(EnterpriseUser rUser){
-      if(enterpriseUser == null)
-        enterpriseUser = new HashSet<EnterpriseUser>();
-      
-      enterpriseUser.add(rUser);
-      if (rUser.getRancher() != this)
-        rUser.setRancher(this);
-    }
+  }
 
-    /**
-     * @return the enterpriseContact
-     */
-    public Set<EnterpriseContact> getEnterpriseContact() {
-      return enterpriseContact;
-    }
+  /**
+   * @return the rancherUser
+   */
+  public Set<EnterpriseUser> getEnterpriseUser() {
+    return enterpriseUser;
+  }
 
-    /**
-     * @param enterpriseContact the enterpriseContact to set
-     */
-    public void setEnterpriseContact(Set<EnterpriseContact> enterpriseContact) {
-      this.enterpriseContact = enterpriseContact;
-    }
+  /**
+   * @param rancherUser
+   *          the rancherUser to set
+   */
+  public void setEnterpriseUser(Set<EnterpriseUser> rancherUser) {
+    this.enterpriseUser = rancherUser;
+  }
 
-    public void addEnterpriseContact(EnterpriseContact contact) {
-      if(enterpriseContact == null)
-        enterpriseContact = new HashSet<EnterpriseContact>();
-      
-      enterpriseContact.add(contact);
-      if (contact.getEnterpriseRancher() != this)
-        contact.setEnterpriseRancher(this);
-    }
-    
-    /**
-     * @return the enterpriseRancherId
-     */
-    public long getEnterpriseRancherId() {
-	return enterpriseRancherId;
-    }
+  public void addEnterpriseUser(EnterpriseUser rUser) {
+    if (enterpriseUser == null)
+      enterpriseUser = new HashSet<EnterpriseUser>();
 
-    /**
-     * @param enterpriseRancherId
-     *            the enterpriseId to set
-     */
-    public void setEnterpriseRancherId(long enterpriseRancherId) {
-	this.enterpriseRancherId = enterpriseRancherId;
-    }
+    enterpriseUser.add(rUser);
+    if (rUser.getRancher() != this)
+      rUser.setRancher(this);
+  }
 
-    /**
-     * @return the legalName
-     */
-    public String getLegalName() {
-	return legalName;
-    }
+  /**
+   * @return the enterpriseContact
+   */
+  public Set<EnterpriseContact> getEnterpriseContact() {
+    return enterpriseContact;
+  }
 
-    /**
-     * @param legalName
-     *            the legalName to set
-     */
-    public void setLegalName(String legalName) {
-	this.legalName = legalName;
-    }
+  /**
+   * @param enterpriseContact
+   *          the enterpriseContact to set
+   */
+  public void setEnterpriseContact(Set<EnterpriseContact> enterpriseContact) {
+    this.enterpriseContact = enterpriseContact;
+  }
 
-    /**
-     * @return the addressOne
-     */
-    public String getAddressOne() {
-	return addressOne;
-    }
+  public void addEnterpriseContact(EnterpriseContact contact) {
+    if (enterpriseContact == null)
+      enterpriseContact = new HashSet<EnterpriseContact>();
 
-    /**
-     * @param addressOne
-     *            the addressOne to set
-     */
-    public void setAddressOne(String addressOne) {
-	this.addressOne = addressOne;
-    }
+    enterpriseContact.add(contact);
+    if (contact.getEnterpriseRancher() != this)
+      contact.setEnterpriseRancher(this);
+  }
 
-    /**
-     * @return the addressTwo
-     */
-    public String getAddressTwo() {
-	return addressTwo;
-    }
+  /**
+   * @return the enterpriseRancherId
+   */
+  public long getEnterpriseRancherId() {
+    return enterpriseRancherId;
+  }
 
-    /**
-     * @param addressTwo
-     *            the addressTwo to set
-     */
-    public void setAddressTwo(String addressTwo) {
-	this.addressTwo = addressTwo;
-    }
+  /**
+   * @param enterpriseRancherId
+   *          the enterpriseId to set
+   */
+  public void setEnterpriseRancherId(long enterpriseRancherId) {
+    this.enterpriseRancherId = enterpriseRancherId;
+  }
 
-    /**
-     * @return the city
-     */
-    public String getCity() {
-	return city;
-    }
+  /**
+   * @return the legalName
+   */
+  public String getLegalName() {
+    return legalName;
+  }
 
-    /**
-     * @param city
-     *            the city to set
-     */
-    public void setCity(String city) {
-	this.city = city;
-    }
+  /**
+   * @param legalName
+   *          the legalName to set
+   */
+  public void setLegalName(String legalName) {
+    this.legalName = legalName;
+  }
 
-    /**
-     * @return the state
-     */
-    public String getState() {
-	return state;
-    }
+  /**
+   * @return the addressOne
+   */
+  public String getAddressOne() {
+    return addressOne;
+  }
 
-    /**
-     * @param state
-     *            the state to set
-     */
-    public void setState(String state) {
-	this.state = state;
-    }
+  /**
+   * @param addressOne
+   *          the addressOne to set
+   */
+  public void setAddressOne(String addressOne) {
+    this.addressOne = addressOne;
+  }
 
-    /**
-     * @return the zipCode
-     */
-    public String getZipCode() {
-	return zipCode;
-    }
+  /**
+   * @return the addressTwo
+   */
+  public String getAddressTwo() {
+    return addressTwo;
+  }
 
-    /**
-     * @param zipCode
-     *            the zipCode to set
-     */
-    public void setZipCode(String zipCode) {
-	this.zipCode = zipCode;
-    }
+  /**
+   * @param addressTwo
+   *          the addressTwo to set
+   */
+  public void setAddressTwo(String addressTwo) {
+    this.addressTwo = addressTwo;
+  }
 
-    /**
-     * @return the legalId
-     */
-    public String getLegalId() {
-	return legalId;
-    }
+  /**
+   * @return the city
+   */
+  public String getCity() {
+    return city;
+  }
 
-    /**
-     * @param legalId
-     *            the legalId to set
-     */
-    public void setLegalId(String legalId) {
-	this.legalId = legalId;
-    }
+  /**
+   * @param city
+   *          the city to set
+   */
+  public void setCity(String city) {
+    this.city = city;
+  }
 
-    /**
-     * @return the telephone
-     */
-    public String getTelephone() {
-	return telephone;
-    }
+  /**
+   * @return the state
+   */
+  public String getState() {
+    return state;
+  }
 
-    /**
-     * @param telephone
-     *            the telephone to set
-     */
-    public void setTelephone(String telephone) {
-	this.telephone = telephone;
-    }
-    
-    /**
-     * @return the telephone2
-     */
-    public String getTelephone2() {
-	return telephone2;
-    }
+  /**
+   * @param state
+   *          the state to set
+   */
+  public void setState(String state) {
+    this.state = state;
+  }
 
-    /**
-     * @param telephone2
-     *            the telephone2 to set
-     */
-    public void setTelephone2(String telephone2) {
-	this.telephone2 = telephone2;
-    }
-    
-    /**
-     * @return the telephone3
-     */
-    public String getTelephone3() {
-	return telephone3;
-    }
+  /**
+   * @return the zipCode
+   */
+  public String getZipCode() {
+    return zipCode;
+  }
 
-    /**
-     * @param telephone3
-     *            the telephone3 to set
-     */
-    public void setTelephone3(String telephone3) {
-	this.telephone3 = telephone3;
+  /**
+   * @param zipCode
+   *          the zipCode to set
+   */
+  public void setZipCode(String zipCode) {
+    this.zipCode = zipCode;
+  }
+
+  /**
+   * @return the legalId
+   */
+  public String getLegalId() {
+    return legalId;
+  }
+
+  /**
+   * @param legalId
+   *          the legalId to set
+   */
+  public void setLegalId(String legalId) {
+    this.legalId = legalId;
+  }
+
+  /**
+   * @return the telephone
+   */
+  public String getTelephone() {
+    return telephone;
+  }
+
+  /**
+   * @param telephone
+   *          the telephone to set
+   */
+  public void setTelephone(String telephone) {
+    this.telephone = telephone;
+  }
+
+  /**
+   * @return the telephone2
+   */
+  public String getTelephone2() {
+    return telephone2;
+  }
+
+  /**
+   * @param telephone2
+   *          the telephone2 to set
+   */
+  public void setTelephone2(String telephone2) {
+    this.telephone2 = telephone2;
+  }
+
+  /**
+   * @return the telephone3
+   */
+  public String getTelephone3() {
+    return telephone3;
+  }
+
+  /**
+   * @param telephone3
+   *          the telephone3 to set
+   */
+  public void setTelephone3(String telephone3) {
+    this.telephone3 = telephone3;
+  }
+
+  /**
+   * @return the email
+   */
+  public String getEmail() {
+    return email;
+  }
+
+  /**
+   * @param email
+   *          the email to set
+   */
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
+  /**
+   * @return the smsPhoneChosen
+   */
+  public int getSmsPhoneChosen() {
+    return smsPhoneChosen;
+  }
+
+  /**
+   * @param smsPhoneChosen
+   *          the smsPhoneChosen to set
+   */
+  public void setSmsPhoneChosen(int smsPhoneChosen) {
+    this.smsPhoneChosen = smsPhoneChosen;
+  }
+
+  /**
+   * @return the phone for sms usage
+   */
+  public String getSmsPhone() {
+    switch (smsPhoneChosen) {
+    case 1:
+      return telephone;
+    case 2:
+      return telephone2;
+    case 3:
+      return telephone3;
+    default:
+      return "";
     }
+  }
 
-   
-    /**
-     * @return the email
-     */
-    public String getEmail() {
-      return email;
-    }
+  @Override
+  public String toString() {
+    return "enterpriseId:" + enterpriseRancherId + ";legalName:" + legalName + ";addressOne:" + addressOne + ";addressTwo:"
+        + addressTwo + ";city:" + city + ";state:" + state + ";zipCode:" + zipCode + ";legalId:" + legalId + ";telephone:"
+        + telephone + ";" + ";telephone 2:" + telephone2 + ";" + ";telephone 3:" + telephone3 + ";" + ";SMS phone chosen:"
+        + smsPhoneChosen + ";";
+  }
 
-    /**
-     * @param email the email to set
-     */
-    public void setEmail(String email) {
-      this.email = email;
-    }
-
-	/**
-	 * @return the smsPhoneChosen
-	 */
-	public int getSmsPhoneChosen() {
-		return smsPhoneChosen;
-	}
-
-	/**
-	 * @param smsPhoneChosen the smsPhoneChosen to set
-	 */
-	public void setSmsPhoneChosen(int smsPhoneChosen) {
-		this.smsPhoneChosen = smsPhoneChosen;
-	}
-    
-	/**
-	 * @return the phone for sms usage
-	 */
-	public String getSmsPhone() {
-		switch(smsPhoneChosen){
-		case 1:
-			return telephone;
-		case 2:
-			return telephone2;
-		case 3:
-			return telephone3;
-		default:
-			return "";
-		}
-	}
-	
-	 @Override
-	    public String toString() {
-		return "enterpriseId:" + enterpriseRancherId + ";legalName:" + legalName
-			+ ";addressOne:" + addressOne + ";addressTwo:" + addressTwo
-			+ ";city:" + city + ";state:" + state + ";zipCode:" + zipCode
-			+ ";legalId:" + legalId + ";telephone:" + telephone + ";"
-			+ ";telephone 2:" + telephone2 + ";" + ";telephone 3:" + telephone3 + ";"
-			+ ";SMS phone chosen:" + smsPhoneChosen + ";";
-	    }
-    
 }

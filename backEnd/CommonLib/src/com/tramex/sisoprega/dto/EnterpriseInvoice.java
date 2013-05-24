@@ -33,170 +33,154 @@ package com.tramex.sisoprega.dto;
  * 
  */
 public class EnterpriseInvoice {
-    private long enterpriseInvoiceId;
-    private long rancherId;
-    private String legalName;
-    private String addressOne;
-    private String addressTwo;
-    private String city;
-    private String addressState;
-    private String zipCode;
-    private String legalId;
-    private EnterpriseRancher rancher;
+  private long enterpriseInvoiceId;
+  private String legalName;
+  private String addressOne;
+  private String addressTwo;
+  private String city;
+  private String addressState;
+  private String zipCode;
+  private String legalId;
+  private EnterpriseRancher rancher;
 
-    
-    /**
-     * @return the rancher
-     */
-    public EnterpriseRancher getRancher() {
-      return rancher;
-    }
+  /**
+   * @return the rancher
+   */
+  public EnterpriseRancher getRancher() {
+    return rancher;
+  }
 
-    /**
-     * @param rancher the rancher to set
-     */
-    public void setRancher(EnterpriseRancher rancher) {
-      this.rancher = rancher;
-    }
+  /**
+   * @param rancher
+   *          the rancher to set
+   */
+  public void setRancher(EnterpriseRancher rancher) {
+    this.rancher = rancher;
+  }
 
-    /**
-     * @return the rancherInvoiceId
-     */
-    public long getEnterpriseInvoiceId() {
-	return enterpriseInvoiceId;
-    }
+  /**
+   * @return the rancherInvoiceId
+   */
+  public long getEnterpriseInvoiceId() {
+    return enterpriseInvoiceId;
+  }
 
-    /**
-     * @param enterpriseInvoiceId the rancherInvoiceId to set
-     */
-    public void setEnterpriseInvoiceId(long enterpriseInvoiceId) {
-      this.enterpriseInvoiceId = enterpriseInvoiceId;
-    }
+  /**
+   * @param enterpriseInvoiceId
+   *          the rancherInvoiceId to set
+   */
+  public void setEnterpriseInvoiceId(long enterpriseInvoiceId) {
+    this.enterpriseInvoiceId = enterpriseInvoiceId;
+  }
 
-    /**
-     * @return the rancherId
-     */
-    public long getRancherId() {
-	return rancherId;
-    }
+  /**
+   * @return the legalName
+   */
+  public String getLegalName() {
+    return legalName;
+  }
 
-    /**
-     * @param rancherId
-     *            the rancherId to set
-     */
-    public void setRancherId(long rancherId) {
-	this.rancherId = rancherId;
-    }
+  /**
+   * @param legalName
+   *          the legalName to set
+   */
+  public void setLegalName(String legalName) {
+    this.legalName = legalName;
+  }
 
-    /**
-     * @return the legalName
-     */
-    public String getLegalName() {
-	return legalName;
-    }
+  /**
+   * @return the addressOne
+   */
+  public String getAddressOne() {
+    return addressOne;
+  }
 
-    /**
-     * @param legalName
-     *            the legalName to set
-     */
-    public void setLegalName(String legalName) {
-	this.legalName = legalName;
-    }
+  /**
+   * @param addressOne
+   *          the addressOne to set
+   */
+  public void setAddressOne(String addressOne) {
+    this.addressOne = addressOne;
+  }
 
-    /**
-     * @return the addressOne
-     */
-    public String getAddressOne() {
-	return addressOne;
-    }
+  /**
+   * @return the addressTwo
+   */
+  public String getAddressTwo() {
+    return addressTwo;
+  }
 
-    /**
-     * @param addressOne
-     *            the addressOne to set
-     */
-    public void setAddressOne(String addressOne) {
-	this.addressOne = addressOne;
-    }
+  /**
+   * @param addressTwo
+   *          the addressTwo to set
+   */
+  public void setAddressTwo(String addressTwo) {
+    this.addressTwo = addressTwo;
+  }
 
-    /**
-     * @return the addressTwo
-     */
-    public String getAddressTwo() {
-	return addressTwo;
-    }
+  /**
+   * @return the city
+   */
+  public String getCity() {
+    return city;
+  }
 
-    /**
-     * @param addressTwo
-     *            the addressTwo to set
-     */
-    public void setAddressTwo(String addressTwo) {
-	this.addressTwo = addressTwo;
-    }
+  /**
+   * @param city
+   *          the city to set
+   */
+  public void setCity(String city) {
+    this.city = city;
+  }
 
-    /**
-     * @return the city
-     */
-    public String getCity() {
-	return city;
-    }
+  /**
+   * @return the addressState
+   */
+  public String getAddressState() {
+    return addressState;
+  }
 
-    /**
-     * @param city
-     *            the city to set
-     */
-    public void setCity(String city) {
-	this.city = city;
-    }
+  /**
+   * @param addressState
+   *          the addressState to set
+   */
+  public void setAddressState(String addressState) {
+    this.addressState = addressState;
+  }
 
-    /**
-     * @return the addressState
-     */
-    public String getAddressState() {
-	return addressState;
-    }
+  /**
+   * @return the zipCode
+   */
+  public String getZipCode() {
+    return zipCode;
+  }
 
-    /**
-     * @param addressState
-     *            the addressState to set
-     */
-    public void setAddressState(String addressState) {
-	this.addressState = addressState;
-    }
+  /**
+   * @param zipCode
+   *          the zipCode to set
+   */
+  public void setZipCode(String zipCode) {
+    this.zipCode = zipCode;
+  }
 
-    /**
-     * @return the zipCode
-     */
-    public String getZipCode() {
-	return zipCode;
-    }
+  /**
+   * @return the legalId
+   */
+  public String getLegalId() {
+    return legalId;
+  }
 
-    /**
-     * @param zipCode
-     *            the zipCode to set
-     */
-    public void setZipCode(String zipCode) {
-	this.zipCode = zipCode;
-    }
+  /**
+   * @param legalId
+   *          the legalId to set
+   */
+  public void setLegalId(String legalId) {
+    this.legalId = legalId;
+  }
 
-    /**
-     * @return the legalId
-     */
-    public String getLegalId() {
-	return legalId;
-    }
-
-    /**
-     * @param legalId
-     *            the legalId to set
-     */
-    public void setLegalId(String legalId) {
-	this.legalId = legalId;
-    }
-
-    @Override
-    public String toString() {
-	return "rancherId:" + rancherId + ";addressOne:" + addressOne
-		+ ";addressTwo:" + addressTwo + ";city:" + city
-		+ ";legalId:" + legalId + ";legalName:" + legalName + ";zipCode:" + zipCode + ";";
-    }
+  @Override
+  public String toString() {
+    return "enterpriseInvoiceId:" + enterpriseInvoiceId + ";addressOne:" + addressOne + ";addressTwo:" + addressTwo + ";city:" + city + ";legalId:"
+        + legalId + ";legalName:" + legalName + ";zipCode:" + zipCode + ";";
+  }
 }

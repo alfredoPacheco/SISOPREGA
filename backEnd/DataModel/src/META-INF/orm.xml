@@ -71,7 +71,7 @@
 		<table name="cat_enterprise_rancher" />
 		<named-query name="ENTERPRISERANCHER_BY_ID">
 			<description>Get a single enterprise rancher by enterpriseId</description>
-			<query>SELECT enterprise FROM EnterpriseRancher enterprise WHERE enterprise.enterpriseRancherId = :Id</query>
+			<query>SELECT enterprise FROM EnterpriseRancher enterprise WHERE enterprise.enterpriseRancherId=:Id</query>
 		</named-query>
 		<named-query name="ALL_ENTERPRISERANCHERS">
 			<description>Get all enterprise ranchers in database</description>
@@ -123,7 +123,7 @@
 			<basic name="zipCode">
 				<column name="zip_code" length="9" />
 			</basic>
-			<one-to-many name="rancherInvoice" mapped-by="rancher" target-entity="com.tramex.sisoprega.dto.RancherInvoice" fetch="EAGER">
+			<one-to-many name="rancherInvoice" mapped-by="rancher" target-entity="com.tramex.sisoprega.dto.EnterpriseInvoice" fetch="EAGER">
 				<cascade>
 					<cascade-all/>
 				</cascade>
@@ -146,10 +146,6 @@
 			<description>Get a single rancher invoice record using it's id</description>
 			<query>SELECT invoice FROM RancherInvoice invoice WHERE invoice.rancherInvoiceId = :Id</query>
 		</named-query>
-		<named-query name="RANCHERINVOICE_BY_RANCHER_ID">
-			<description>Get a single rancher invoice record using the rancherId</description>
-			<query>SELECT invoice FROM RancherInvoice invoice WHERE invoice.rancherId = :rancherId</query>
-		</named-query>
 		<named-query name="RANCHERINVOICE_BY_RFC">
 			<description>Get a single rancher invoicing record by legal_id</description>
 			<query>SELECT invoice FROM RancherInvoice invoice WHERE invoice.legalId = :rfc</query>
@@ -167,10 +163,6 @@
 				<column name="rancher_invoice_id" />
 				<generated-value strategy="IDENTITY" />
 			</id>
-			<basic name="rancherId">
-				<column name="rancher_id" nullable="false" unique="true"
-					updatable="false" />
-			</basic>
 			<basic name="addressOne">
 				<column name="address_one" length="100" nullable="false" />
 			</basic>
@@ -213,10 +205,6 @@
 				<column name="rancher_invoice_id" />
 				<generated-value strategy="IDENTITY" />
 			</id>
-			<basic name="rancherId">
-				<column name="rancher_id" nullable="false" unique="true"
-					updatable="false" />
-			</basic>
 			<basic name="addressOne">
 				<column name="address_one" length="100" nullable="false" />
 			</basic>
@@ -360,10 +348,6 @@
 			<description>Retrieve a single record of rancher user by its record id</description>
 			<query>SELECT rUser FROM RancherUser rUser WHERE rUser.rancherUserId = :Id</query>
 		</named-query>
-		<named-query name="RANCHERUSER_BY_RANCHER_ID">
-			<description>Retrieves all users belonging to a given rancher id</description>
-			<query>SELECT rUser FROM RancherUser rUser WHERE rUser.rancherId = :rancherId</query>
-		</named-query>
 		<named-query name="RANCHERUSER_BY_USER_NAME">
 			<description>Retrieves a single record of rancher user by its user id</description>
 			<query>SELECT rUser FROM RancherUser rUser WHERE rUser.user_name = :userName</query>
@@ -377,18 +361,12 @@
 				<column name="record_id" />
 				<generated-value strategy="IDENTITY" />
 			</id>
-			<basic name="rancherId">
-				<column name="rancher_id" />
-			</basic>
 			<basic name="user_name">
 				<column name="user_name" />
 			</basic>
 			<many-to-one name="rancher" optional="false">
 				<join-column name="rancher_id" referenced-column-name="rancher_id" nullable="false" />
 			</many-to-one>
-			<one-to-many name="receptions" fetch="LAZY">
-				<join-column name="rancher_id" referenced-column-name="rancher_id" />
-			</one-to-many>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.EnterpriseUser">
@@ -406,18 +384,12 @@
 				<column name="record_id" />
 				<generated-value strategy="IDENTITY" />
 			</id>
-			<basic name="rancherId">
-				<column name="rancher_id" />
-			</basic>
 			<basic name="user_name">
 				<column name="user_name" />
 			</basic>
 			<many-to-one name="rancher" optional="false">
 				<join-column name="rancher_id" referenced-column-name="enterprise_id" nullable="false" />
 			</many-to-one>
-			<one-to-many name="receptions" fetch="LAZY">
-				<join-column name="rancher_id" referenced-column-name="rancher_id" />
-			</one-to-many>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.CattleClass">
