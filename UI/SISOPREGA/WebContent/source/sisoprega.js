@@ -96,7 +96,7 @@ enyo.kind(
                 onFail : "noAccess"
               },
               {
-                kind : "main.menu",
+                kind : "catalogs.ranchers.person.create",
                 name : "mainMenu"
               },
               

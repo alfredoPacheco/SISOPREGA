@@ -196,7 +196,7 @@ var consumingGateway =
     },
     createTransaction : function(entityName, entity) {
 	
-//	Example of object that could receive this function
+//	Example of an object that could receive this function
 	/*var objReceptionExample = {
 		//fields of master object:		
 		field1:1,

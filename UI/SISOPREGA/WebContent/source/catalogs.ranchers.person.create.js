@@ -1,5 +1,6 @@
 enyo.kind({
 	name : "catalogs.ranchers.person.create",
+	bindEntity:"Rancher",
 	kind : "Control",
 	layoutKind : "VFlexLayout",
 	iCreated : null,
@@ -22,25 +23,29 @@ enyo.kind({
 				name : "aka",
 				hint : "Alias",
 				inputClassName : "blankInput",
-				focusClassName : "darkFocus"
+				focusClassName : "darkFocus",
+				bindTo:"aka"
 			}, {
 				kind : "Input",
 				name : "first_name",
 				hint : "Nombres",
 				inputClassName : "blankInput",
-				focusClassName : "darkFocus"
+				focusClassName : "darkFocus",
+				bindTo:"first_name"
 			}, {
 				kind : "Input",
 				name : "last_name",
 				hint : "Apellido Paterno",
 				inputClassName : "blankInput",
-				focusClassName : "darkFocus"
+				focusClassName : "darkFocus",
+				bindTo:"last_name"
 			}, {
 				kind : "Input",
 				name : "mother_name",
 				hint : "Apellido Materno",
 				inputClassName : "blankInput",
-				focusClassName : "darkFocus"
+				focusClassName : "darkFocus",
+				bindTo:"mother_name"
 			}, {
 				kind : "VFlexBox",
 				style : "",
@@ -52,7 +57,8 @@ enyo.kind({
 					minYear : 1940,
 					maxYear : new Date().getFullYear(),
 					label : "",
-					className : "picker-hbox"
+					className : "picker-hbox",
+					bindTo:"birth_date"
 				} ]
 			}, {
 				kind : "Input",
@@ -60,7 +66,8 @@ enyo.kind({
 				hint : "Email",
 				inputType : "email",
 				inputClassName : "blankInput",
-				focusClassName : "darkFocus"
+				focusClassName : "darkFocus",
+				bindTo:"email_add"
 			}, 
 			{
 				kind:enyo.Item,
@@ -72,7 +79,8 @@ enyo.kind({
 					inputClassName : "blankInput",
 					focusClassName : "darkFocus",
 					onfocus : "applyMask",
-					flex:1
+					flex:1,
+					bindTo:"phone_number"
 				},
 				{content:"Para envio de SMS", style:"padding-right: 5px;"},
 				{kind: enyo.CheckBox, name:"checkBox1", onChange:"checkboxChanged"}				
@@ -109,43 +117,13 @@ enyo.kind({
 			]},
 			
 		]},
-		{
-			kind : "Drawer",
-			name : "draAdd",
-			components : [ {
-				kind : "Button",
-				name : "btnAdd",
-				className : "enyo-button-affirmative",
-				caption : "Crear",
-				onclick : "addRancher"
-			}, ]
-		}, {
-			kind : "Drawer",
-			name : "draUpdate",
-			components : [ {
-				layoutKind : "HFlexLayout",
-				align : "center",
-				components : [ {
-					kind : "Button",
-					name : "btnUpdate",
-					className : "enyo-button-affirmative",
-					flex : 1,
-					caption : "Actualizar",
-					onclick : "updateRancher"
-				}, {
-					kind : "Button",
-					name : "btnCancel",
-					className : "enyo-button-negative",
-					flex : 1,
-					caption : "Cancelar",
-					onclick : "doCancel"
-				} ]
-			} ]
-		} ]
-	}],
+		
+		 ]
+	},
+	{kind:"catalogs.CommonCU"}],
 	ready : function() {
-		this.$.draAdd.setOpen(true);
-		this.$.draUpdate.setOpen(false);
+//		this.$.draAdd.setOpen(true);
+//		this.$.draUpdate.setOpen(false);
 	},
 	resetValues : function() {
 		this.objRan = null;
