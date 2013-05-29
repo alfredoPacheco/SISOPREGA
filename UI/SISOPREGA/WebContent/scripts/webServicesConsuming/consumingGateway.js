@@ -200,7 +200,6 @@ var consumingGateway =
         });
       return output;
     },
-
     Read : function(entityName, entity, cbObj, cbMethod) {
       // Se crea objeto que devolvera la funcion:
       output =
@@ -365,6 +364,90 @@ var consumingGateway =
         });
       return output;
     },
+    updateTransaction : function(entityName, entity) {
+      // Se crea objeto que devolvera la funcion:
+      output =
+        {
+          exceptionDescription : "Success",
+          exceptionId : 0,
+          origin : "",
+          generatedId : ""
+        };
+
+      // SOAP Message:
+      var soapMessage = soapHeader + '<ws:Create>';
+      soapMessage += '<request><parentRecord><entity>' + entityName + '</entity>';
+
+      for (field in entity) {
+        if (entity.hasOwnProperty(field)) {
+          if (field != "children") {
+            soapMessage += '<field>';
+            soapMessage += '<name>' + field + '</name>';
+            soapMessage += '<value>' + entity[field] + '</value>';
+            soapMessage += '</field>';
+          }
+        }
+      }
+
+      if (entity.hasOwnProperty("children")) {
+        for ( var i = 0; i < entity.children.length; i++) {
+          var strChildrenEntity = "";
+          var strChildrenFields = "";
+          var strChildRecord = "";
+          for (field in entity.children[i]) {
+            if (entity.children[i].hasOwnProperty(field)) {
+              if (field == "entity") {
+                strChildrenEntity = '<entity>' + entity.children[i][field] + '</entity>';
+              } else {
+                strChildrenFields += '<field>';
+                strChildrenFields += '<name>' + field + '</name>';
+                strChildrenFields += '<value>' + entity.children[i][field] + '</value>';
+                strChildrenFields += '</field>';
+              }
+
+            }
+          }
+          strChildRecord = '<childRecord>' + strChildrenEntity + strChildrenFields + '</childRecord>';
+          soapMessage += strChildRecord;
+        }
+      }
+
+      soapMessage += '</parentRecord></request>';
+      soapMessage += '</ws:Create>' + soapFooter;
+
+      // Ajax request:
+      jQuery.ajax(
+        {
+          url : gatewayWsURL,
+          type : "POST",
+          dataType : "xml",
+          data : soapMessage,
+          processData : false,
+          contentType : "text/xml;charset=UTF-8",
+          username : utils.getCookie("username"),
+          password : utils.getCookie("pass"),
+          async : false,
+          success : function OnSuccess(data) {
+            output.exceptionDescription = jQuery(data).find("exceptionDescription").text();
+            output.exceptionId = jQuery(data).find("exceptionId").text();
+            if (output.exceptionId == "GW01") {
+              alert(output.exceptionDescription);
+              consumingGateway.LogOut();
+            }
+            output.origin = jQuery(data).find("origin").text();
+            if (output.exceptionId == 0) {
+              output.generatedId = jQuery(data).find("generatedId").text();
+            }
+          },
+          error : function OnError(request, status, error) {
+            output.exceptionId = 1;
+            output.exceptionDescription = error + ' :' + status;
+            alert(output.exceptionDescription);
+            consumingGateway.LogOut();
+          }
+        });
+      return output;
+    },
 
     Delete : function(entityName, entity) {
       // Se crea objeto que devolvera la funcion:
@@ -418,7 +501,60 @@ var consumingGateway =
         });
       return output;
     },
+    deleteTransaction : function(entityName, entity) {
+      // Se crea objeto que devolvera la funcion:
+      output =
+        {
+          exceptionDescription : "Success",
+          exceptionId : 0,
+          origin : "",
+        };
 
+      // SOAP Message:
+      var soapMessage = soapHeader + '<ws:Delete>';
+      soapMessage += '<request><filter><entity>' + entityName + '</entity>';
+
+      for (field in entity) {
+        if (entity.hasOwnProperty(field)) {
+          soapMessage += '<field>';
+          soapMessage += '<name>' + field + '</name>';
+          soapMessage += '<value>' + entity[field] + '</value>';
+          soapMessage += '</field>';
+        }
+      }
+      soapMessage += '</filter></request>';
+      soapMessage += '</ws:Delete>' + soapFooter;
+
+      // Ajax request:
+      jQuery.ajax(
+        {
+          url : gatewayWsURL,
+          type : "POST",
+          dataType : "xml",
+          data : soapMessage,
+          processData : false,
+          contentType : "text/xml;charset=UTF-8",
+          username : utils.getCookie("username"),
+          password : utils.getCookie("pass"),
+          async : false,
+          success : function OnSuccess(data) {
+            output.exceptionDescription = jQuery(data).find("exceptionDescription").text();
+            output.exceptionId = jQuery(data).find("exceptionId").text();
+            if (output.exceptionId == "GW01") {
+              alert(output.exceptionDescription);
+              consumingGateway.LogOut();
+            }
+            output.origin = jQuery(data).find("origin").text();
+          },
+          error : function OnError(request, status, error) {
+            output.exceptionId = 1;
+            output.exceptionDescription = error;
+            alert(output.exceptionDescription);
+            consumingGateway.LogOut();
+          }
+        });
+      return output;
+    },
     LogOut : function() {
       // Se crea objeto que devolvera la funcion:
       output =
