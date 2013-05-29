@@ -1,11 +1,15 @@
 enyo.kind({
-    name : "catalogs.CommonCU",
+    name : "catalogs.commonButtons",
     kind : "Control",
     layoutKind : "VFlexLayout",
     events : {
 	"onAddEntity" : "",
 	"onUpdateEntity" : "",
-	"onCancel" : ""
+	"onCancel" : "",
+	"onResetValues": "resetValues"
+    },
+    published:{
+	entityType:""
     },
     components : [ {
 	kind : "Drawer",
@@ -60,6 +64,15 @@ enyo.kind({
 	this.$.draAdd.setOpen(true);
 	this.$.draUpdate.setOpen(false);
     },
+    resetValues:function(){
+	var controls = this.parent.$;
+	for(var i in controls){
+	    if (controls[i].bindTo){
+		controls[i].setValue("");
+	    }
+	}
+	this.doResetValues();
+    },
     addEntity : function() {
 //	cache.create(this.getEntity(), this, "afterAddEntity");
 	this.getEntity();
@@ -88,6 +101,7 @@ enyo.kind({
 		objEntity[controls[i].bindTo] = controls[i].getValue();
 	    }
 	}
+	this.resetValues();
 	return objEntity;
     },
     setEntity : function(entity) {
@@ -105,6 +119,6 @@ enyo.kind({
     toggleAdd : function() {
 	this.$.draAdd.setOpen(true);
 	this.$.draUpdate.setOpen(false);
-	// this.resetValues();
+	 this.resetValues();
     }
 });
