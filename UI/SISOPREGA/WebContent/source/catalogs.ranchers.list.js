@@ -3,6 +3,8 @@ enyo.kind(
     name : "catalogs.ranchers.list",
     kind : enyo.SlidingView,
     layoutKind : enyo.VFlexLayout,
+    cacheRanchers : new cache.ranchers(),
+    enterpriseRanchers : new cache.enterpriseRanchers(),
     events :
       {
         "onPerson" : "",
@@ -11,25 +13,29 @@ enyo.kind(
       },
     iSelected : null,
     objList : [],
-    allItems:[],
+    allItems : [],
     components :
-      [{
-		name : "options",
-		kind : enyo.PopupSelect,
-		onSelect : "addNewRancher",
-		items : [ {
-		    caption : "Empresa/Sociedad",
-		    value : 1
-		}, {
-		    caption : "Persona Fisica",
-		    value : 2
-		}, ]
-	    },
+      [
+        {
+          name : "options",
+          kind : enyo.PopupSelect,
+          onSelect : "addNewRancher",
+          items :
+            [
+              {
+                caption : "Empresa/Sociedad",
+                value : 1
+              },
+              {
+                caption : "Persona Fisica",
+                value : 2
+              } ]
+        },
         {
           kind : enyo.Scroller,
           flex : 1,
           className : "listBG",
-          name:"scroller",
+          name : "scroller",
           components :
             [
               {
@@ -63,88 +69,131 @@ enyo.kind(
         },
         {
           kind : "Toolbar",
-          height:'100px;',
+          height : '100px;',
           components :
             [
-             {kind:enyo.VFlexBox,
-              flex:1,
-              components:[{kind:enyo.HFlexBox,
-					              components:[
-					                          
-					                          {
-					          		    kind : enyo.IconButton,
-					          		    icon : "images/menu-icon-new.png",
-					          		    onclick : "contextMenuClicked"
-					          		},   
-//					                          
-//					                          {
-//					                kind : "enyo.IconButton",
-//					                style:"",
-//					                label : "Nuevo Ganadero",
-//					                onclick : "doPerson"
-//					              },
-//					              {
-//					                kind : "enyo.IconButton",
-//					                label : "Nueva Empresa",
-//					                onclick : "doEnterprise"
-//					              },
-//					              
-					              {kind:enyo.Spacer},
-					              
-					              
-					              {
-					                kind : "ListSelector",
-					                name : 'filter_id',
-					                label : "Filtro",
-					                hideItem : true,
-					                onChange : "filterRanchers",
-					                items :
-					                  [
-					                    {
-					                      caption : "Persona Fisica",
-					                      value : 1
-					                    },
-					                    {
-					                      caption : "Empresa/Sociedad",
-					                      value : 2
-					                    },
-					                    {
-					                      caption : "Todo",
-					                      value : 3
-					                    } ],
-					                contentPack : "end"
-					              }]},
-					              {kind:enyo.HFlexBox,
-					            	  align:"center",
-						              components:[
-						                          {		kind: "ToolInput", name:"rancherFilter", align:"left", onkeyup:"key_up",
-						                        	  	flex:1,  hint:"Filtro de ganadero",changeOnInput: true
-						                          },
-						                          {
-						                        	  	kind: "Button",name:"btnClearFilter", className: "enyo-button-negative",
-						                        	  	caption: "Remover Filtro", onclick: "clearFilter", width:"115px;"
-						                          }]
-					              }
-              
-					  ]}
-              
-             ]}, 
-    ],
+              {
+                kind : enyo.VFlexBox,
+                flex : 1,
+                components :
+                  [
+                    {
+                      kind : enyo.HFlexBox,
+                      components :
+                        [
+
+                          {
+                            kind : enyo.IconButton,
+                            icon : "images/menu-icon-new.png",
+                            onclick : "contextMenuClicked"
+                          },
+                          {
+                            kind : enyo.Spacer
+                          },
+                          {
+                            kind : "ListSelector",
+                            name : 'filter_id',
+                            label : "Filtro",
+                            hideItem : true,
+                            onChange : "filterRanchers",
+                            items :
+                              [
+                                {
+                                  caption : "Persona Fisica",
+                                  value : 1
+                                },
+                                {
+                                  caption : "Empresa/Sociedad",
+                                  value : 2
+                                },
+                                {
+                                  caption : "Todo",
+                                  value : 3
+                                } ],
+                            contentPack : "end"
+                          } ]
+                    },
+                    {
+                      kind : enyo.HFlexBox,
+                      align : "center",
+                      components :
+                        [
+                          {
+                            kind : "ToolInput",
+                            name : "rancherFilter",
+                            align : "left",
+                            onkeyup : "key_up",
+                            flex : 1,
+                            hint : "Filtro de ganadero",
+                            changeOnInput : true
+                          },
+                          {
+                            kind : "Button",
+                            name : "btnClearFilter",
+                            className : "enyo-button-negative",
+                            caption : "Remover Filtro",
+                            onclick : "clearFilter",
+                            width : "115px;"
+                          } ]
+                    }
+
+                  ]
+              } ]
+        }, ],
+    ready : function() {
+      // Reset filter
+      this.$.rancherFilter.setValue("");
+      this.$.filter_id.setValue(3);
+
+      this.retrieveLists();
+    },
+    retrieveLists : function() {
+      // Retrieve ranchers
+      cacheMan.showScrim();
+      this.cacheRanchers.get(this, 'readCallback');
+      // Retrieve enterprise ranchers
+      this.enterpriseRanchers.get(this, 'readCallback');
+    },
+    readsReceived : 0,
+    readCallback : function() {
+      this.readsReceived++;
+
+      if (this.readsReceived == 2) {
+        this.readsReceived = 0;
+        this.loadList();
+        cacheMan.hideScrim();
+      }
+
+    },
+    loadList : function() {
+      this.allItems = [];
+
+      // Manually concat rancher array
+      for ( var i = 0; i < this.cacheRanchers.arrObj.length; i++) {
+        this.allItems.push(this.cacheRanchers.arrObj[i]);
+      }
+
+      // Manually concat enterprise array
+      for ( var i = 0; i < this.enterpriseRanchers.arrObj.length; i++) {
+        this.allItems.push(this.enterpriseRanchers.arrObj[i]);
+      }
+
+      this.filterRanchers();
+    },
     contextMenuClicked : function(inSender, inEvent) {
-	this.$.options.openAtEvent(inEvent);
-	// inSender.stopPropagation();
-	return false;
+      this.$.options.openAtEvent(inEvent);
+      return false;
     },
     addNewRancher : function(inSender, inSelected) {
-	
-	switch (inSelected.value) {
-	case 1: //Crear nueva empresa
-	    this.doEnterprise();
-	    break;
-	case 2://Crear nuevo ganadero 
-	    this.doPerson();
-	    break;
-	}
+
+      switch (inSelected.value) {
+      case 1: //Crear nueva empresa
+        this.doEnterprise();
+        break;
+      case 2://Crear nuevo ganadero 
+        this.doPerson();
+        break;
+      }
     },
     selectRancher : function(inSender, inEvent) {
       if (this.objList[inEvent.rowIndex]) {
@@ -186,19 +235,18 @@ enyo.kind(
       var objRan;
       if (objRan = this.objList[inIndex]) {
         this.setupDivider(inIndex);
-        if (objRan.rancher_type == 1) {
+        if (objRan.entityName == 'Rancher') {
           // Diego: Change label to sort order (lastname, name/alias).
-          var mother_name = objRan.mother_name ? ' ' + objRan.mother_name : '';
+          var mother_name = objRan.motherName ? ' ' + objRan.motherName : '';
           if (objRan.aka != "") {
-            this.$.name.setContent(objRan.last_name + mother_name + ', ' + objRan.first_name + ' / '
-                + objRan.aka);
+            this.$.name.setContent(objRan.lastName + mother_name + ', ' + objRan.firstName + ' / ' + objRan.aka);
           } else {
-            this.$.name.setContent(objRan.last_name + mother_name + ', ' + objRan.first_name);
+            this.$.name.setContent(objRan.lastName + mother_name + ', ' + objRan.firstName);
           }
         } else {
-          this.$.name.setContent(objRan.company_name);
+          this.$.name.setContent(objRan.legalName);
         }
-        this.$.info.setContent(objRan.phone_number);
+        this.$.info.setContent(objRan.phoneNumber);
         return true;
       }
     },
@@ -209,31 +257,20 @@ enyo.kind(
         return false;
       }
     },
-    ready : function() {
-    	this.$.rancherFilter.setValue("");
-      this.$.filter_id.setValue(3);      
-      this.allItems = cacheRanchers.get();
-      this.filterRanchers();
-      
-      
-    },
     updateList : function() {
-    	
       this.objList = this.objList.sort(function(inA, inB) {
-        if (inA.rancher_type == 1) {
-          var mother_name = inA.mother_name ? ' ' + inA.mother_name : ' ';
-          inA['sortStr'] = inA.last_name.toLowerCase() + mother_name.toLowerCase() + ', '
-              + inA.first_name.toLowerCase();
-        } else {
-          inA['sortStr'] = inA.company_name.toLowerCase();
+        if (inA.entityName == 'Rancher') {
+          var mother_name = inA.motherName ? ' ' + inA.motherName : ' ';
+          inA['sortStr'] = inA.lastName.toLowerCase() + mother_name.toLowerCase() + ', ' + inA.firstName.toLowerCase();
+        } else if (inA.entityName == 'EnterpriseRancher') {
+          inA['sortStr'] = inA.legalName.toLowerCase();
         }
 
-        if (inB.rancher_type == 1) {
-          var mother_name = inB.mother_name ? ' ' + inB.mother_name : ' ';
-          inB['sortStr'] = inB.last_name.toLowerCase() + mother_name.toLowerCase() + ', '
-              + inB.first_name.toLowerCase();
-        } else {
-          inB['sortStr'] = inB.company_name.toLowerCase();
+        if (inB.entityName == 'Rancher') {
+          var mother_name = inB.motherName ? ' ' + inB.motherName : ' ';
+          inB['sortStr'] = inB.lastName.toLowerCase() + mother_name.toLowerCase() + ', ' + inB.firstName.toLowerCase();
+        } else if (inB.entityName == 'EnterpriseRancher') {
+          inB['sortStr'] = inB.legalName.toLowerCase();
         }
 
         return inA['sortStr'] < inB['sortStr'] ? -1 : 1;
@@ -244,7 +281,7 @@ enyo.kind(
     filterRanchers : function() {
       this.objList = [];
       var objRan;
-      
+
       var arrRanchersAux = this.allItems;
       for ( var i = 0; i < arrRanchersAux.length; i++) {
         objRan = arrRanchersAux[i];
@@ -252,58 +289,57 @@ enyo.kind(
           this.objList.push(arrRanchersAux[i]);
         }
       }
-      
+
       this.updateList();
     },
     key_up : function(inSender, inEvent) {
-		
-		var value = "";
-		var x = inEvent.keyCode;
-		switch (true) {
-		case (x == 8): // backspace
-		case (x == 32): // space
-		case (x >= 46 && x <= 90): // letters and numbers and delete
-			break;
-		case (x == 16): //Shift
-		case (x == 9): // tab
-		case (x == 38): // up
-		case (x == 40): // down
-		case (x == 37): // left
-		case (x == 39): // right
-		case (x == 13): // enter
-			return true;
-		}
-		
-		value = inSender.value;
-		if(value.trim() != ""){
-			this.objList = this.findItem(value);
-		}
-		else{
-			this.objList = this.allItems;
-		}
-		this.updateList();
-	},
+
+      var value = "";
+      var x = inEvent.keyCode;
+      switch (true) {
+      case (x == 8): // backspace
+      case (x == 32): // space
+      case (x >= 46 && x <= 90): // letters and numbers and delete
+        break;
+      case (x == 16): //Shift
+      case (x == 9): // tab
+      case (x == 38): // up
+      case (x == 40): // down
+      case (x == 37): // left
+      case (x == 39): // right
+      case (x == 13): // enter
+        return true;
+      }
+
+      value = inSender.value;
+      if (value.trim() != "") {
+        this.objList = this.findItem(value);
+      } else {
+        this.objList = this.allItems;
+      }
+      this.updateList();
+    },
     findItem : function(criteria) {
-		var result = [];
-		if (criteria != "") {
-			var items = this.allItems;
-			var pattern = new RegExp(criteria.trim(), "ig");
-			for (index in items) {
-				for (prop in items[index]) {
-					pattern.lastIndex = 0;
-					if (pattern.test(items[index][prop])) {
-						var elemento = items[index];
-						result.push(elemento);
-						break;
-					}
-				}
-			}
-		}
-		return result;
-	},
-	clearFilter:function(){
-		this.$.rancherFilter.setValue("");
-		this.objList = this.allItems;
-		this.updateList();
-	}
+      var result = [];
+      if (criteria != "") {
+        var items = this.allItems;
+        var pattern = new RegExp(criteria.trim(), "ig");
+        for (index in items) {
+          for (prop in items[index]) {
+            pattern.lastIndex = 0;
+            if (pattern.test(items[index][prop])) {
+              var elemento = items[index];
+              result.push(elemento);
+              break;
+            }
+          }
+        }
+      }
+      return result;
+    },
+    clearFilter : function() {
+      this.$.rancherFilter.setValue("");
+      this.objList = this.allItems;
+      this.updateList();
+    }
   });

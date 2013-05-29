@@ -34,87 +34,33 @@ enyo.kind({
 		 ]}
 	],
 	showReceptionsMap:function(){
-//		doReceptionsMap();
-//		enyo.$.sisoprega_btnGoBack.setShowing(1);
-//		_objMainHeader.setContent('Corrales');
-//		this.addGoBackAction("receptionsMap");	
 		this.$.mainPane.selectViewByName("receptionsMap");		
 	},	
 	showCatalogs:function(){
-//		enyo.$.sisoprega_btnGoBack.setShowing(1);
-//		enyo.$.sisoprega_spacerSecond.setShowing(!1);
-//		_objMainHeader.setContent('Catalogos');
-//		this.addGoBackAction("catalogs");
 		this.$.mainPane.validateView("catalogs");
 		this.$.catalogs.$.catalogsPane.selectViewByIndex(0);
 		this.$.mainPane.selectViewByName("catalogs");	
-		
 	},
 	showReports:function(){
-//		enyo.$.sisoprega_btnGoBack.setShowing(1);
-//		enyo.$.sisoprega_spacerSecond.setShowing(!1);
-//		_objMainHeader.setContent('Reportes');		
-//		this.addGoBackAction("reports");
 		this.$.mainPane.selectViewByName("reports");
 	},
 	showInspectionForecast:function(){
-//		enyo.$.sisoprega_btnGoBack.setShowing(1);
-//		enyo.$.sisoprega_spacerSecond.setShowing(!1);
-//		_objMainHeader.setContent('Lista de Inspección');
-//		this.addGoBackAction("inspectionForecast");
 		this.$.mainPane.selectViewByName("inspectionForecast");
 	},
 	showUsersList : function(){
-//	  enyo.$.sisoprega_btnGoBack.setShowing(1);
-//      enyo.$.sisoprega_spacerSecond.setShowing(!1);
-//      _objMainHeader.setContent('Lista de Usuarios');
-//      this.addGoBackAction("usersList");
       this.$.mainPane.selectViewByName("usersList");
 	},
 	showExpRequest: function(){
-//		  enyo.$.sisoprega_btnGoBack.setShowing(1);
-//	      enyo.$.sisoprega_spacerSecond.setShowing(!1);
-//	      _objMainHeader.setContent('Cargar Pedimento');
-//	      this.addGoBackAction("fileUploader");
 	      this.$.mainPane.selectViewByName("fileUploader");
 	},	
 	showAddUser : function(){
-//	  enyo.$.sisoprega_btnGoBack.setShowing(1);
-//      enyo.$.sisoprega_spacerSecond.setShowing(!1);
-      
-//      _gobackStack.push(
-//          {
-////            caption : _objMainHeader.getContent(),
-//        	  caption : "Menu Principal",
-//            paneMan : this.$.mainPane,
-//            paneName : "usersList"
-//          });
       this.$.mainPane.selectViewByName("addUser");
       _objMainHeader.setContent('Agregar Usuario');
 	},
 	showEditUser : function(){
-//	  enyo.$.sisoprega_btnGoBack.setShowing(1);
-//      enyo.$.sisoprega_spacerSecond.setShowing(!1);
-      
-//      _gobackStack.push(
-//          {
-////            caption : _objMainHeader.getContent(),
-//        	  caption : "Menu Principal",
-//            paneMan : this.$.mainPane,
-//            paneName : "usersList"
-//          });
       this.$.mainPane.selectViewByName("addUser");
       _objMainHeader.setContent('Editar Usuario');
 	},
-//	addGoBackAction:function(nextView){		
-//		if(_gobackStack.length > 0){
-//			if(this.$.mainPane.getViewName()==nextView){
-//				return;
-//			}
-//		}
-//		_gobackStack.push({caption:"Menu Principal",paneMan:this.$.mainPane,paneName:"mainMenu"});	
-//		
-//	},
 	selectView:function(inSender, inView, inPreviousView) {
 		
 		if(inView.name == inPreviousView.name){

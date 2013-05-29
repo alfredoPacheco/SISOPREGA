@@ -219,21 +219,21 @@ enyo.kind({
 		this.$.aka.setValue(this.objRan.aka);
 
 		// Diego: Validate if retrieved value from database is not empty.
-		if (this.objRan.birth_date != '') {
-			this.$.birth_date.setValue(new Date(this.objRan.birth_date
+		if (this.objRan.birthDate != undefined && this.objRan.birthDate != '') {
+			this.$.birthDate.setValue(new Date(this.objRan.birthDate
 					.substring(0, 4),
-					this.objRan.birth_date.substring(5, 7) - 1,
-					this.objRan.birth_date.substring(8, 10)));
+					this.objRan.birthDate.substring(5, 7) - 1,
+					this.objRan.birthDate.substring(8, 10)));
 		}
 
-		this.$.email_add.setValue(this.objRan.email_add);
-		this.$.first_name.setValue(this.objRan.first_name);
-		this.$.last_name.setValue(this.objRan.last_name);
-		this.$.mother_name.setValue(this.objRan.mother_name);
-		this.$.phone_number.setValue(this.objRan.phone_number);
-		this.$.phone_number2.setValue(this.objRan.phone_number2);
-		this.$.phone_number3.setValue(this.objRan.phone_number3);
-		this.setPhoneSMS(this.objRan.sms_phone_chosen);
+		this.$.email_add.setValue(this.objRan.emailAdd);
+		this.$.first_name.setValue(this.objRan.firstName);
+		this.$.last_name.setValue(this.objRan.lastName);
+		this.$.mother_name.setValue(this.objRan.motherName);
+		this.$.phone_number.setValue(this.objRan.phoneNumber);
+		this.$.phone_number2.setValue(this.objRan.phoneNumber2);
+		this.$.phone_number3.setValue(this.objRan.phoneNumber3);
+		this.setPhoneSMS(this.objRan.smsPhoneChosen);
 		this.toggleUpdate();
 	},
 	setPhoneSMS : function (intPhone){
