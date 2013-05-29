@@ -6,7 +6,8 @@ enyo.kind({
 	"onAddEntity" : "",
 	"onUpdateEntity" : "",
 	"onCancel" : "",
-	"onResetValues": "resetValues"
+	"onResetValues": "resetValues",
+	"onBeforeSave":""
     },
     published:{
 	entityType:""
@@ -74,9 +75,9 @@ enyo.kind({
 	this.doResetValues();
     },
     addEntity : function() {
+	var obj = this.getEntity();
+	this.doBeforeSave(obj);
 //	cache.create(this.getEntity(), this, "afterAddEntity");
-	this.getEntity();
-	alert("add Entity");
     },
     updateEntity : function() {
 //	cache.update(this.getEntity(), this, "afterUpdateEntity");

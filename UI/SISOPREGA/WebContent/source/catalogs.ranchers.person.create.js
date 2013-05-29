@@ -120,7 +120,8 @@ enyo.kind({
 	} ]
     }, {
 	kind : "catalogs.commonButtons",
-	entityType : "Rancher"
+	entityType : "Rancher",
+	onBeforeSave: "before_save"
     } ],
     resetValues : function() {
 	this.objRan = null;
@@ -141,6 +142,9 @@ enyo.kind({
 	    this.$.checkBox3.setChecked(true);
 	    break;
 	}
+    },
+    before_save:function(inSender, obj){
+	obj.sms_phone_chosen = this.getCheckBoxSelected();
     },
     checkboxChanged : function(inSender, inEvent) {
 	switch (inSender.name) {
