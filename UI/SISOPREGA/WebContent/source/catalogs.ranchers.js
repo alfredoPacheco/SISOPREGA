@@ -126,8 +126,7 @@ enyo.kind(
             paneMan : this.$.ranchersPane,
             paneName : "ranOptions"
           });
-        this.$.ranPerCreate.setRancher(objRan);
-        this.$.ranPerCreate.toggleUpdate();
+        this.$.ranPerCreate.setEntity(objRan);
         _objMainHeader.setContent('Editar Ganadero - Persona Fisica');
         this.$.ranchersPane.selectViewByName("ranPerCreate");
       } else {

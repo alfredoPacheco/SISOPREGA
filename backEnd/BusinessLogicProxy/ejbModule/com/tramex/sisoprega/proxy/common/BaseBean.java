@@ -308,8 +308,15 @@ public abstract class BaseBean {
         }
         
       } else if( !fieldTypeName.contains("com.tramex.sisoprega")) {
-        if (field.get(content) != null)
-          record.getField().add(new GatewayField(fieldName, field.get(content).toString()));
+        if(fieldTypeName.contains("Date")){
+          if (field.get(content) != null){
+            Date dValue = (Date)field.get(content);
+            record.getField().add(new GatewayField(fieldName, String.valueOf(dValue.getTime())));
+          }
+        }else{
+          if (field.get(content) != null)
+            record.getField().add(new GatewayField(fieldName, field.get(content).toString()));
+        }
       } else {
         log.fine("voided content of type [" + fieldTypeName + "]");
       }
@@ -412,22 +419,6 @@ public abstract class BaseBean {
       log.finer("No child records found in the request.");
     }
 
-    /*for (Field field : clsField) {
-      field.setAccessible(true);
-      String fieldName = field.getName();
-      this.log.finer("Field found in entity: [" + fieldName + "]");
-      if (field.getType() == String.class) {
-        this.log.finest("found String field, setting direct value from request");
-
-        field.set(entity, record.getFieldValue(fieldName));
-      } else {
-        this.log.finest("The field is a [" + field.getType().getCanonicalName() + "], will cast it's value in the request");
-
-        String sValue = record.getFieldValue(fieldName);
-        if (sValue != null && !sValue.trim().equals(""))
-          field.set(entity, castValueFromString(sValue, field.getType()));
-      }
-    }*/
     return entity;
   }
 
