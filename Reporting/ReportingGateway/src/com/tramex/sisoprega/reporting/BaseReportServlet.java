@@ -35,10 +35,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
-import com.tramex.sisoprega.datamodel.RemoteModelable;
-import com.tramex.sisoprega.dto.Rancher;
-import com.tramex.sisoprega.dto.RancherUser;
-
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExporter;
 import net.sf.jasperreports.engine.JRExporterParameter;
@@ -47,6 +43,9 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.export.JRPdfExporter;
 import net.sf.jasperreports.engine.util.JRLoader;
+
+import com.tramex.sisoprega.datamodel.RemoteModelable;
+import com.tramex.sisoprega.dto.RancherUser;
 
 /**
  * All reporting servlets are based on this class.
@@ -73,8 +72,8 @@ public class BaseReportServlet extends HttpServlet {
 
   @Resource(name = "jdbc/sisoprega")
   protected DataSource ds;
-  
-  @EJB(lookup="java:global/DataModel/BaseDataModel")
+
+  @EJB(lookup = "java:global/DataModel/BaseDataModel")
   protected RemoteModelable dataModel;
 
   protected Connection conn = null;
@@ -106,8 +105,8 @@ public class BaseReportServlet extends HttpServlet {
       throws IOException, JRException {
     log.fine("loading report: " + relativeReportURL);
     response.setContentType("application/pdf");
-    
-    //response.setHeader("Content-disposition","attachment; filename=sisoprega.pdf");
+
+    // response.setHeader("Content-disposition","attachment; filename=sisoprega.pdf");
     ServletOutputStream out = response.getOutputStream();
     InputStream is = new FileInputStream(getServletContext().getRealPath(relativeReportURL));
     JasperReport reporte = (JasperReport) JRLoader.loadObject(is);
@@ -151,8 +150,8 @@ public class BaseReportServlet extends HttpServlet {
   protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     doGet(request, response);
   }
-  
-  protected String rancherFromLoggedUser(HttpServletRequest request){
+
+  protected String rancherFromLoggedUser(HttpServletRequest request) {
     log.entering(this.getClass().getCanonicalName(), "getLoggedRancherId");
 
     long result = 0;
@@ -164,12 +163,8 @@ public class BaseReportServlet extends HttpServlet {
 
     if (!ranchers.isEmpty()) {
       RancherUser loggedRancher = ranchers.get(0);
-
-      Rancher rancher = dataModel.readSingleDataModel("RANCHER_BY_ID", "rancherId", loggedRancher.getRancherId(), Rancher.class);
-
-      if (rancher != null) {
-        result = rancher.getRancherId();
-      }
+      if (loggedRancher.getRancher() != null)
+        result = loggedRancher.getRancher().getRancherId();
     }
 
     log.fine("Retrieved rancherId[" + result + "] from userName[" + request.getUserPrincipal().getName() + "]");

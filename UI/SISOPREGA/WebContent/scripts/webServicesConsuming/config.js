@@ -30,7 +30,7 @@
  */
 
 var serverHost = '';
-var gatewayApp_path = '/GatewayBeanService/Gateway';
+var gatewayApp_path = '/PresentorBeanService/Presentor';
 var gatewayWsURL = serverHost + gatewayApp_path;
 
 var identityApp_path = '/IdentityGatewayBeanService/IdentityGateway';

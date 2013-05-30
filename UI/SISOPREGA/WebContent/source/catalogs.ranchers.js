@@ -118,7 +118,7 @@ enyo.kind(
     },
     showEdit : function() {
       var objRan = this.$.ranchersList.getSelected();
-      objRan.first_name = objRan.first_name;
+      //objRan.first_name = objRan.first_name;
       if (objRan.rancher_type == 1) {
         _gobackStack.push(
           {
@@ -171,10 +171,11 @@ enyo.kind(
         });
       var objRan = this.$.ranchersList.getSelected();
       if (objRan.rancher_type == 2) {
-        _objMainHeader.setContent(objRan.company_name);
+        _objMainHeader.setContent(objRan.legalName);
 
       } else {
-        _objMainHeader.setContent(objRan.last_name + ' ' + objRan.mother_name + ' ' + objRan.first_name);
+        var motherName = objRan.motherName != undefined ? objRan.motherName + ' ' : ''; 
+        _objMainHeader.setContent(objRan.lastName + ' ' + motherName + objRan.firstName);
       }
       this.$.ranchersPane.selectViewByName("ranOptions");
     },
@@ -393,11 +394,6 @@ enyo.kind(
         });
     },
     goBack : function() {
-      this.$.ranchersList.filterRanchers();      
-      this.$.contactList.updateList();
-      this.$.billingList.updateList();
-      this.$.usersList.updateList();
-      this.$.pedimentosList.updateList();
       cacheMan.goBack();
     }
   });

@@ -4,7 +4,6 @@ enyo.kind(
     kind : enyo.VFlexBox,
     components :
       [
-       		
         //SCRIM
         {
           kind : enyo.Scrim,
@@ -16,24 +15,55 @@ enyo.kind(
             [
               {
                 kind : "SpinnerLarge"
-              }, {
-                kind:"LabeledContainer",
+              },
+              {
+                kind : "Image",
+                src : "images/ajax-loader.gif",
+                style : "width:250px;"
+              },
+              {
+                kind : "LabeledContainer",
                 label : "Cargando ...",
                 style : "font-family:'Courier New', monospace;font-size:xx-large;color:white;"
-              } ]
+              }, ]
         },
-        {kind: "AppMenu", name:"menu", width:"300px", components: [
-                                                                   {caption: "Operaciones", onclick: "open_view"},
-                                                                   {caption: "Catálogos", components: [
-                                                                       {caption: "Ganaderos", onclick: "open_view"},
-                                                                       {caption: "Ganado", onclick: "open_view"}
-                                                                   ]},
-                                                                   {caption: "Reportes", onclick: "open_view"},
-                                                                   {caption: "Lista de Inspección", onclick: "open_view"},
-                                                                   {caption: "Usuarios", onclick: "open_view"},
-                                                                   {caption: "Carga de Pedimento", onclick: "open_view"},
-                                                                   //{caption: "Auxiliar depurador", onclick: "open_view"}
-                                                               ]},
+        {
+          kind : "AppMenu",
+          name : "menu",
+          width : "300px",
+          components :
+            [
+              {
+                caption : "Operaciones",
+                onclick : "open_view"
+              },
+              {
+                caption : "Catálogos",
+                components :
+                  [
+                    {
+                      caption : "Ganaderos",
+                      onclick : "open_view"
+                    }]
+              },
+              {
+                caption : "Reportes",
+                onclick : "open_view"
+              },
+              {
+                caption : "Lista de Inspección",
+                onclick : "open_view"
+              },
+              {
+                caption : "Usuarios",
+                onclick : "open_view"
+              },
+              {
+                caption : "Carga de Pedimento",
+                onclick : "open_view"
+              },
+            ]
+        },
         {
           kind : "Toolbar",
           name : "tbHeader",
@@ -41,25 +71,18 @@ enyo.kind(
           className : "headerMain",
           components :
             [
-             
+
               {
                 name : 'btnGoBack',
                 icon : "images/command-menu/menu-icon-back.png",
                 onclick : "goBack",
-//                flex : 2
               },
               {
-                  name : 'btnMenu',
-                  kind:"ButtonHeader",
-                  content:"Menu",
-                  onclick : "open_menu",
-//                  flex : 2
-                },
-//              {
-//                kind : "Spacer",
-////                flex : 1,
-//                name : "spacerSecond"
-//              },
+                name : 'btnMenu',
+                kind : "ButtonHeader",
+                content : "Menu",
+                onclick : "open_menu",
+              },
               {
                 kind : "VFlexBox",
                 name : 'lblMainCap',
@@ -68,16 +91,9 @@ enyo.kind(
                 style : "color:#FFF;border:none;font-size:15px; text-align:center;min-width:150px;",
                 content : "Menu Principal"
               },
-//              {
-//                kind : "Spacer",
-////                flex : 1,
-//                name : "spacerThird"
-//              },
               {
                 name : 'btnLogOut',
-//                flex : 1,
                 onclick : "logOut",
-//                icon : "images/command-menu/icon-context.png"
                 icon : "images/command-menu/menu-icon-logout.png"
               } ]
         },
@@ -85,7 +101,7 @@ enyo.kind(
           kind : enyo.Pane,
           flex : 1,
           name : "accessPane",
-          onSelectView:"selectView",
+          onSelectView : "selectView",
           transitionKind : "enyo.transitions.LeftRightFlyin",
           components :
             [
@@ -96,11 +112,11 @@ enyo.kind(
                 onFail : "noAccess"
               },
               {
-                kind : "catalogs.ranchers.person.create",
+                kind : "main.menu",
                 name : "mainMenu"
               },
-              
-  			]
+
+            ]
         },
         {
           kind : enyo.Dialog,
@@ -142,43 +158,35 @@ enyo.kind(
     logOut : function() {
       consumingGateway.LogOut();
     },
-    open_menu : function(){
-    	this.$.menu.openAroundControl(this.$.btnMenu,"", "left");
+    open_menu : function() {
+      this.$.menu.openAroundControl(this.$.btnMenu, "", "left");
     },
-    open_view : function(InSender, InEvent){
-    	var view = "";
-    	if(InSender.caption){
-    		view = InSender.caption;
-    	}
-    	switch(view){
-    	case 'Operaciones':
-    		this.$.mainMenu.$.mainPane.selectViewByName("receptionsMap");
-    		break;
-    	case 'Reportes':
-    		this.$.mainMenu.$.mainPane.selectViewByName("reports");
-    		break;
-    	case 'Ganaderos':
-    		this.$.mainMenu.$.mainPane.validateView("catalogs");
-    		this.$.mainMenu.$.catalogs.showRanchers();
-    		this.$.mainMenu.$.mainPane.selectViewByName("catalogs");
-    		break;
-    	case 'Ganado':
-    		this.$.mainMenu.$.mainPane.validateView("catalogs");
-    		this.$.mainMenu.$.catalogs.showCattle();
-    		this.$.mainMenu.$.mainPane.selectViewByName("catalogs");
-    		break;
-    	case 'Lista de Inspección':
-    		this.$.mainMenu.$.mainPane.selectViewByName("inspectionForecast");
-    		break;
-    	case 'Usuarios':    		
-    		this.$.mainMenu.$.mainPane.selectViewByName("usersList");
-    		break;
-    	case 'Carga de Pedimento':
-    		this.$.mainMenu.$.mainPane.selectViewByName("fileUploader");
-  	      	break;
-    	
-    	//case 'Auxiliar depurador':
-    	//	this.$.accessPane.selectViewByName("weights");
-    	}
+    open_view : function(InSender, InEvent) {
+      var view = "";
+      if (InSender.caption) {
+        view = InSender.caption;
+      }
+      switch (view) {
+      case 'Operaciones':
+        this.$.mainMenu.$.mainPane.selectViewByName("receptionsMap");
+        break;
+      case 'Reportes':
+        this.$.mainMenu.$.mainPane.selectViewByName("reports");
+        break;
+      case 'Ganaderos':
+        this.$.mainMenu.$.mainPane.validateView("catalogs");
+        this.$.mainMenu.$.catalogs.showRanchers();
+        this.$.mainMenu.$.mainPane.selectViewByName("catalogs");
+        break;
+      case 'Lista de Inspección':
+        this.$.mainMenu.$.mainPane.selectViewByName("inspectionForecast");
+        break;
+      case 'Usuarios':
+        this.$.mainMenu.$.mainPane.selectViewByName("usersList");
+        break;
+      case 'Carga de Pedimento':
+        this.$.mainMenu.$.mainPane.selectViewByName("fileUploader");
+        break;
+      }
     },
   });

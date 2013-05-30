@@ -5,30 +5,22 @@ enyo.kind({
 	events:{
 	},
 	components: [
-		{ kind: enyo.Pane, flex: 1, name: "catalogsPane",transitionKind: "enyo.transitions.LeftRightFlyin",
-//			onSelectView:"selectView",
+		{ kind: enyo.Pane, flex: 1, 
+		  name: "catalogsPane",
+		  transitionKind: "enyo.transitions.LeftRightFlyin",
 		 components:[
 			{kind:"catalogs.menu",name:"catMenu",onRanchers:"showRanchers",
-			 onReports:"showReports",onCattle:"showCattle",label:"Catálogos"},			
-			{kind:"catalogs.cattle",name:"catCattle",label:"Ganado"},
+			 label:"Catálogos"},			
 			{kind:"catalogs.ranchers",name:"catRanchers",label:"Ganaderos"},			
 		 ]},		 
 	],
 	showRanchers:function(){
 		this.addGoBackAction();
 		_objMainHeader.setContent('Ganaderos');
+		this.$.catalogsPane.validateView("catRanchers");
+		this.$.catRanchers.$.ranchersList.retrieveLists();
 		this.$.catalogsPane.selectViewByName("catRanchers");		
 	},	
-	showReports:function(){
-		this.addGoBackAction();		
-		_objMainHeader.setContent('Reportes');
-		this.$.catalogsPane.selectViewByName("reports.menu");		
-	},
-	showCattle:function(){
-		this.addGoBackAction();		
-		_objMainHeader.setContent('Ganado');		
-		this.$.catalogsPane.selectViewByName("catCattle");				
-	},
 	addGoBackAction:function(){
 		_gobackStack.push({caption:_objMainHeader.getContent(),paneMan:this.$.catalogsPane,paneName:this.$.catalogsPane.getViewName()});		
 	},
@@ -43,7 +35,6 @@ enyo.kind({
 								paneName: inPreviousView.name     });
 			
 		}
-//		_navigatingBack = false;
 		_objMainHeader.setContent(inView.label);
 		if(_gobackStack.length == 0){
 			_goBackButton.setShowing(!1);
