@@ -40,7 +40,7 @@ enyo.kind(
                       hint : "Nombres",
                       inputClassName : "blankInput",
                       focusClassName : "darkFocus",
-                      bindTo : "first_name"
+                      bindTo : "firstName"
                     },
                     {
                       kind : "Input",
@@ -48,7 +48,7 @@ enyo.kind(
                       hint : "Apellido Paterno",
                       inputClassName : "blankInput",
                       focusClassName : "darkFocus",
-                      bindTo : "last_name"
+                      bindTo : "lastName"
                     },
                     {
                       kind : "Input",
@@ -56,7 +56,7 @@ enyo.kind(
                       hint : "Apellido Materno",
                       inputClassName : "blankInput",
                       focusClassName : "darkFocus",
-                      bindTo : "mother_name"
+                      bindTo : "motherName"
                     },
                     {
                       kind : "VFlexBox",
@@ -73,7 +73,7 @@ enyo.kind(
                             maxYear : new Date().getFullYear(),
                             label : "",
                             className : "picker-hbox",
-                            bindTo : "birth_date"
+                            bindTo : "birthDate"
                           } ]
                     },
                     {
@@ -83,7 +83,7 @@ enyo.kind(
                       inputType : "email",
                       inputClassName : "blankInput",
                       focusClassName : "darkFocus",
-                      bindTo : "email_add"
+                      bindTo : "emailAddress"
                     },
                     {
                       kind : enyo.Item,
@@ -94,7 +94,7 @@ enyo.kind(
                             kind : "controls.phoneBox",
                             name : "phone_number",
                             hint : "Telefono",
-                            bindTo : "phone_number"
+                            bindTo : "phone"
                           },
                           {
                             content : "Para envio de SMS",
@@ -115,7 +115,7 @@ enyo.kind(
                             kind : "controls.phoneBox",
                             name : "phone_number2",
                             hint : "Telefono 2",
-                            bindTo : "phone_number2"
+                            bindTo : "phone2"
                           },
                           {
                             content : "Para envio de SMS",
@@ -136,7 +136,7 @@ enyo.kind(
                             kind : "controls.phoneBox",
                             name : "phone_number3",
                             hint : "Telefono 3",
-                            bindTo : "phone_number3"
+                            bindTo : "phone3"
                           },
                           {
                             content : "Para envio de SMS",
@@ -153,8 +153,15 @@ enyo.kind(
         {
           kind : "catalogs.commonButtons",
           entityType : "Rancher",
+          name : "commonButtons",
           onBeforeSave : "before_save"
         } ],
+    setEntity : function(obj) {
+      this.$.commonButtons.setEntity(obj);
+    },
+    toggleAdd : function(){
+      this.$.commonButtons.toggleAdd();
+    },
     resetValues : function() {
       this.objRan = null;
       this.setPhoneSMS(0);

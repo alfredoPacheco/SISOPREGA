@@ -17,12 +17,17 @@ enyo.kind(
 
       if(entityObj.entityName == "Rancher"){
         entityObj.rancher_type = 1;
-        entityObj.aka = entityObj.aka != undefined ? entityObj.aka + '' : '';
-        entityObj.motherName = entityObj.motherName != undefined ? entityObj.motherName : '';
-        entityObj.emailAdd = entityObj.emailAdd != undefined ? entityObj.emailAdd : '';
-        entityObj.phoneNumber = entityObj.phoneNumber != undefined ? entityObj.phoneNumber : '';
-        entityObj.phoneNumber2 = entityObj.phoneNumber2 != undefined ? entityObj.phoneNumber2 : '';        
-        entityObj.phoneNumber3 = entityObj.phoneNumber3 != undefined ? entityObj.phoneNumber3 : '';
+        
+        if(entityObj.birthDate){
+          var numberBDate = Number(entityObj.birthDate);
+          var vDate = new Date(numberBDate);
+          console.debug('setting date from number: [' + numberBDate + ']');
+          entityObj.birthDate = vDate;
+          console.debug('BirthDate set: [' + vDate + ']');
+        } else {
+          entityObj.birthDate = null;
+        }
+        
       }else{
         entityObj = null;
       }
