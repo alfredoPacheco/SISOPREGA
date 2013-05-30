@@ -64,11 +64,13 @@ enyo.kind({
     ready : function() {
 	this.$.draAdd.setOpen(true);
 	this.$.draUpdate.setOpen(false);
+	this.resetValues();
     },
     resetValues:function(){
 	var controls = this.parent.$;
 	for(var i in controls){
 	    if (controls[i].bindTo){
+		
 		controls[i].setValue("");
 	    }
 	}
