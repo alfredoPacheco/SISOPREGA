@@ -173,7 +173,7 @@ enyo.kind(
         _objMainHeader.setContent(objRan.legalName);
 
       } else {
-        var motherName = objRan.motherName != undefined ? objRan.motherName + ' ' : ''; 
+        var motherName = objRan.motherName !== undefined ? objRan.motherName + ' ' : ''; 
         _objMainHeader.setContent(objRan.lastName + ' ' + motherName + objRan.firstName);
       }
       this.$.ranchersPane.selectViewByName("ranOptions");
@@ -188,7 +188,7 @@ enyo.kind(
             paneMan : this.$.ranchersPane,
             paneName : "ranOptions"
           });
-        _objMainHeader.setContent("Contactos - " + objRan.company_name);
+        _objMainHeader.setContent("Contactos - " + objRan.legalName);
       } else {
         _gobackStack.push(
           {
@@ -196,7 +196,8 @@ enyo.kind(
             paneMan : this.$.ranchersPane,
             paneName : "ranOptions"
           });
-        _objMainHeader.setContent("Contactos - " + objRan.last_name + ' ' + objRan.mother_name + ' ' + objRan.first_name);
+        var motherName = objRan.motherName !== undefined ? objRan.motherName + ' ' : '';
+        _objMainHeader.setContent("Contactos - " + objRan.lastName + ' ' + motherName + objRan.firstName);
       }
       this.$.contactList.setList(this.$.ranchersList.getSelected());
       this.$.contactList.updateList();

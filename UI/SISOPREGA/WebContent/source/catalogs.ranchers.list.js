@@ -145,7 +145,7 @@ enyo.kind(
       this.$.rancherFilter.setValue("");
       this.$.filter_id.setValue(3);
 
-      this.retrieveLists();
+      //this.retrieveLists();
     },
     retrieveLists : function() {
       // Retrieve ranchers

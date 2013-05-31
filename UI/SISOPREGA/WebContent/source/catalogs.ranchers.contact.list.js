@@ -93,11 +93,11 @@ enyo.kind(
     },
     setupRow : function(inSender, inIndex) {
       var objRan;
-      if (this.objRancher != null) {
-        if (objRan = this.objRancher.contacts[inIndex]) {
+      if (this.objRancher != null && this.objRancher.RancherContact) {
+        if (objRan = this.objRancher.RancherContact[inIndex]) {
           this.setupDivider(inIndex);
-          this.$.contact_name.setContent(objRan.last_name + ', ' + objRan.first_name);
-          this.$.contact_info.setContent(objRan.phone_number);
+          this.$.contact_name.setContent(objRan.lastName + ', ' + objRan.firstName);
+          this.$.contact_info.setContent(objRan.phone);
           return true;
         }
       }
@@ -106,13 +106,13 @@ enyo.kind(
       return cacheRanchers.deleteContact(this.objRancher, this.objRancher.contacts[inIndex], this, "updateList");
     },
     updateList : function() {
-      if (this.objRancher != null) {
-        var arrContactsAux = cacheRanchers.getContacts(this.objRancher);
+      if (this.objRancher != null && this.objRancher.RancherContact) {
+        var arrContactsAux = this.objRancher.RancherContact;
         if (arrContactsAux.length > 0) {
-          this.objRancher.contacts.sort(function(inA, inB) {
+          this.objRancher.RancherContact.sort(function(inA, inB) {
             return
-              [ inA.last_name.toLowerCase() ] <
-              [ inB.last_name.toLowerCase() ] ? -1 : 1;
+              [ inA.lastName.toLowerCase() ] <
+              [ inB.lastName.toLowerCase() ] ? -1 : 1;
           });
         }
       }

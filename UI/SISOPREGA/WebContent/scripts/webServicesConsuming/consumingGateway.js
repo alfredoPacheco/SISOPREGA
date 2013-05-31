@@ -268,12 +268,15 @@ var consumingGateway =
                 // child records
                 jQuery(this).find("childRecord").each(function() {
                   var childName = jQuery(this).find("entity").text();
-                  record[childName] = {};
+                  if(!record[childName])
+                    record[childName] = [];
+                  var objChild = {};
                   jQuery(this).find("field").each(function() {
                     var vName = jQuery(this).find('name').text();
                     var vValue = jQuery(this).find('value').text();
-                    record[childName][vName] = vValue;
+                    objChild[vName] = vValue;
                   });
+                  record[childName].push(objChild);
                 });
 
                 output.records.push(record);

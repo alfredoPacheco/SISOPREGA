@@ -100,8 +100,8 @@ enyo.kind(
       alert("update Entity");
     },
     cancel : function() {
-      //	this.doCancel();
-      alert("cancel");
+      this.doResetValues();
+      this.doCancel();
     },
     afterAddEntity : function() {
       this.doAddEntity();
