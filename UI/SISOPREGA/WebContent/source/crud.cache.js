@@ -8,6 +8,7 @@ enyo.kind(
     arrObj : [],
     callbackObject: null,
     callbackMethod: '',
+    alreadyLoaded:false,
     adapterToOut : function(entityObj) {
       return entityObj;
     },
@@ -25,7 +26,17 @@ enyo.kind(
         this.callbackMethod = '';
       }
       
-      consumingGateway.Read(this.entityName, filterDef, this, "getCallBack");
+      if(this.alreadyLoaded){
+	if(this.callbackObject != null){
+	    var milis = ((Math.random()*1000)+500);
+	    setTimeout(this.callbackObject[this.callbackMethod](), milis);
+	}else{
+	    cacheMan.hideScrim();
+	}
+      } else{
+	  consumingGateway.Read(this.entityName, filterDef, this, "getCallBack");  
+      }
+      
     },
     getCallBack : function(resultArray) {
 
@@ -36,6 +47,7 @@ enyo.kind(
         if(innerModelObj != null)
           this.arrObj.push(innerModelObj);
       }
+      this.alreadyLoaded = true;
       
       if(this.callbackObject != null){
         var milis = ((Math.random()*1000)+500);

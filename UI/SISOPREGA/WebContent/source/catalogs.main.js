@@ -11,15 +11,59 @@ enyo.kind({
 		 components:[
 			{kind:"catalogs.menu",name:"catMenu",onRanchers:"showRanchers",
 			 label:"Catálogos"},			
-			{kind:"catalogs.ranchers",name:"catRanchers",label:"Ganaderos"},			
+			{kind:"catalogs.ranchers",name:"catRanchers",label:"Ganaderos"},
+			{	kind:"catalogs.list",
+			    	name:"listRanchers",
+			    	label:"Ganaderos"
+			},
 		 ]},		 
 	],
+	ready:function(){
+	    cacheMan.showScrim();
+	    // Retrieve ranchers
+	    cacheRanchers.get(this, 'readCallback');
+	    //Retrieve enterprise ranchers
+	    cacheEnterpriseRanchers.get(this, 'readCallback');
+	},
+	readsReceived : 0,
+	readCallback : function() {
+	    this.readsReceived++;
+	    if (this.readsReceived == 2) {
+		this.readsReceived = 0;
+		this.loadList();
+		cacheMan.hideScrim();
+	    }
+	},
+	loadList : function() {
+	    var allItems = [];
+	    
+	    // Manually concat rancher array
+	    for ( var i = 0; i < cacheRanchers.arrObj.length; i++) {
+		var rancher = cacheRanchers.arrObj[i];
+		rancher.importantInfo = "" + rancher.name;
+		rancher.secundaryInfo = "" + rancher.phone_number || "";
+		allItems.push(rancher);
+	    }
+
+	    // Manually concat enterprise array
+	    for ( var i = 0; i < cacheEnterpriseRanchers.arrObj.length; i++) {
+		var rancher = cacheEnterpriseRanchers.arrObj[i];
+		rancher.importantInfo = "" + rancher.legalName;
+		rancher.secundaryInfo = "" + rancher.phone_number + "";
+		allItems.push(rancher);
+	    }
+
+	    this.$.listRanchers.setItems(allItems);
+	},
 	showRanchers:function(){
 		this.addGoBackAction();
 		_objMainHeader.setContent('Ganaderos');
-		this.$.catalogsPane.validateView("catRanchers");
-		this.$.catRanchers.$.ranchersList.retrieveLists();
-		this.$.catalogsPane.selectViewByName("catRanchers");		
+//		this.$.catalogsPane.validateView("catRanchers");
+//		this.$.catRanchers.$.ranchersList.retrieveLists();
+//		this.$.catalogsPane.selectViewByName("catRanchers");		
+		this.$.catalogsPane.validateView("listRanchers");
+//		this.$.catRanchers.$.ranchersList.retrieveLists();
+		this.$.catalogsPane.selectViewByName("listRanchers");
 	},	
 	addGoBackAction:function(){
 		_gobackStack.push({caption:_objMainHeader.getContent(),paneMan:this.$.catalogsPane,paneName:this.$.catalogsPane.getViewName()});		

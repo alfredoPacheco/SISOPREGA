@@ -34,3 +34,4 @@ enyo.kind(
       return listObj;
     }
   });
+var cacheEnterpriseRanchers = new cache.enterpriseRanchers();

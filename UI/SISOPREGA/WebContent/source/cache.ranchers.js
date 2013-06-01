@@ -28,6 +28,8 @@ enyo.kind(
           entityObj.birthDate = null;
         }
         
+        entityObj.name = entityObj.lastName + " " + entityObj.motherName + ", " + entityObj.firstName + " " + entityObj.middleName;
+        
       }else{
         entityObj = null;
       }
@@ -42,8 +44,9 @@ enyo.kind(
         };
       
       listObj.value = entityObj.rancherId;
-      listObj.caption = entityObj.lastName + " " + entityObj.motherName + ", " + entityObj.firstName + " " + entityObj.middleName;
+      listObj.caption = entityObj.name;
       
       return listObj;
     }
   });
+var cacheRanchers = new cache.ranchers();

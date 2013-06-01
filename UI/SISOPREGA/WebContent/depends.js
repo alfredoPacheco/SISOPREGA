@@ -53,5 +53,6 @@ enyo.depends(
 	"source/cache.users.js",
 	"source/file.uploader.js",
 	"source/utils.js",
-	"source/catalogs.commonButtons.js"
+	"source/catalogs.commonButtons.js",
+	"source/catalogs.list.js"
 );
