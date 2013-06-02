@@ -195,6 +195,9 @@ enyo.kind(
     },
     before_save : function(inSender, obj) {
       obj.smsPhoneChosen = this.getCheckBoxSelected();
+      var birthDateMonth = this.$.birth_date.getValue().getMonth() + 1;
+      var shortDateString = birthDateMonth + '/' + this.$.birth_date.getValue().getDate() + '/' + this.$.birth_date.getValue().getFullYear();
+      obj.birthDate = shortDateString;
     },
     checkboxChanged : function(inSender, inEvent) {
       switch (inSender.name) {
