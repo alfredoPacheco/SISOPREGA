@@ -57,12 +57,6 @@ enyo.kind(
                 onclick : "doRegister"
               },
               {
-                kind : "Button",
-                className : "enyo-button-cat",
-                caption : "Pedimentos",
-                onclick : "doPedimentos"
-              },
-              {
                 kind : "Spacer"
               } ]
         } ]

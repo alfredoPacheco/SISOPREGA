@@ -78,19 +78,20 @@ enyo.kind(
               } ]
         } ],
     ready : function() {
-	this.$.draAdd.setOpen(true);
-	this.$.draUpdate.setOpen(false);
-	this.resetValues();
+      this.$.draAdd.setOpen(true);
+      this.$.draUpdate.setOpen(false);
+      this.resetValues();
     },
-    resetValues:function(){
-	var controls = this.parent.$;
-	for(var i in controls){
-	    if (controls[i].bindTo){
-		
-		controls[i].setValue("");
-	    }
-	}
-	this.doResetValues();
+    resetValues : function() {
+      var controls = this.parent.$;
+
+      for ( var i in controls) {
+        if (controls[i].bindTo) {
+
+          controls[i].setValue("");
+        }
+      }
+      this.doResetValues();
     },
     addEntity : function() {
       var obj = this.getEntity();
@@ -113,7 +114,9 @@ enyo.kind(
     },
     getEntity : function() {
       var objEntity = {};
+
       var controls = this.parent.$;
+
       for ( var i in controls) {
         if (controls[i].bindTo) {
           console.debug(i);
@@ -126,11 +129,12 @@ enyo.kind(
     setEntity : function(entity) {
       var controls = this.parent.$;
 
-      for ( var i in controls) {
+      for ( var i in controls ) {
         if (controls[i].hasOwnProperty("bindTo")) {
           var val = entity[controls[i].bindTo];
-          if(val !== undefined)
+          if (val !== undefined){
             controls[i].setValue(val);
+          }
         }
       }
       this.toggleUpdate();

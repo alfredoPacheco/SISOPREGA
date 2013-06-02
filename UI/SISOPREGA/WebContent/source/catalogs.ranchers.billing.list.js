@@ -63,9 +63,17 @@ enyo.kind(
       this.updateList();
     },
     setupRow : function(inSender, inIndex) {
-      var objRan;
       if (this.objRancher != null) {
-        if (objRan = this.objRancher.billings[inIndex]) {
+        var objRan = false;
+        if(this.objRancher.rancher_type == 1){
+          if(this.objRancher.RancherInvoice)
+            objRan = this.objRancher.RancherInvoice[inIndex];
+        }else{
+          if(this.objRancher.EnterpriseInvoice)
+            objRan = this.objRancher.EnterpriseInvoice[inIndex];
+        }
+        
+        if (objRan) {
           this.$.billing_name.setContent(objRan.company_name);
           this.$.billing_info.setContent("RFC: " + objRan.rfc);
           return true;
@@ -76,13 +84,13 @@ enyo.kind(
       return cacheRanchers.deleteBilling(this.objRancher, this.objRancher.billings[inIndex], this, "updateList");
     },
     updateList : function() {
-      if (this.objRancher != null) {
-        var arrBillingsAux = cacheRanchers.getBillings(this.objRancher);
+      if (this.objRancher != null && this.objRancher.RancherInvoice) {
+        var arrBillingsAux = this.objRancher.RancherInvoice;
         if (arrBillingsAux.length > 0) {
           this.objRancher.billings.sort(function(inA, inB) {
             return
-              [ inA.company_name.toLowerCase() ] <=
-              [ inB.company_name.toLowerCase() ] ? -1 : 1;
+              [ inA.companyName.toLowerCase() ] <=
+              [ inB.companyName.toLowerCase() ] ? -1 : 1;
           });
         }
       }
