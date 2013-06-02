@@ -287,7 +287,6 @@ var consumingGateway =
               var milis = ((Math.random() * 1000) + 500);
               setTimeout(cbObj[cbMethod](output), milis);
             }
-            //cbObj[cbMethod](output);
 
             return false;
           },
@@ -298,76 +297,10 @@ var consumingGateway =
             consumingGateway.LogOut();
           }
         });
-      return output;
+      return false;
     },
-    Update : function(entityName, entity) {
-      // Se crea objeto que devolvera la funcion:
-      output =
-        {
-          exceptionDescription : "Success",
-          exceptionId : 0,
-          origin : "",
-          entityName : "",
-          record : {}
-        };
-
-      // SOAP Message:
-      var soapMessage = soapHeader + '<ws:Update>';
-      soapMessage += '<entityName>' + entityName + '</entityName>';
-
-      jQuery.each(entity, function(key, value) {
-        soapMessage += '<field>';
-        soapMessage += '<name>' + key + '</name>';
-        soapMessage += '<value>' + value + '</value>';
-        soapMessage += '</field>';
-      });
-
-      soapMessage += '</ws:Update>' + soapFooter;
-
-      // Ajax request:
-      jQuery.ajax(
-        {
-          url : gatewayWsURL,
-          type : "POST",
-          dataType : "xml",
-          data : soapMessage,
-          processData : false,
-          contentType : "text/xml;charset=UTF-8",
-          username : utils.getCookie("username"),
-          password : utils.getCookie("pass"),
-          async : false,
-          success : function OnSuccess(data) {
-            output.exceptionDescription = jQuery(data).find("exceptionDescription").text();
-            output.exceptionId = jQuery(data).find("exceptionId").text();
-            if (output.exceptionId == "GW01") {
-              alert(output.exceptionDescription);
-              consumingGateway.LogOut();
-            }
-            output.origin = jQuery(data).find("origin").text();
-
-            if (output.exceptionId == 0) {
-              output.entityName = jQuery(data).find("entityName").text();
-
-              var vRecord = new Object();
-              jQuery(data).find("fields").each(function() {
-                var vName = jQuery(this).find('name').text();
-                var vValue = jQuery(this).find('value').text();
-                vRecord[vName] = vValue;
-              });
-              output.record = vRecord;
-            }
-
-          },
-          error : function OnError(request, status, error) {
-            output.exceptionId = 1;
-            output.exceptionDescription = error;
-            alert(output.exceptionDescription);
-            consumingGateway.LogOut();
-          }
-        });
-      return output;
-    },
-    updateTransaction : function(entityName, entity) {
+    Update : function(entityName, entity, cbObj, cbMethod, updatedId) {
+      var self = this;
       // Se crea objeto que devolvera la funcion:
       output =
         {
@@ -378,7 +311,7 @@ var consumingGateway =
         };
 
       // SOAP Message:
-      var soapMessage = soapHeader + '<ws:Create>';
+      var soapMessage = soapHeader + '<ws:Update>';
       soapMessage += '<request><parentRecord><entity>' + entityName + '</entity>';
 
       for (field in entity) {
@@ -416,7 +349,7 @@ var consumingGateway =
       }
 
       soapMessage += '</parentRecord></request>';
-      soapMessage += '</ws:Create>' + soapFooter;
+      soapMessage += '</ws:Update>' + soapFooter;
 
       // Ajax request:
       jQuery.ajax(
@@ -439,8 +372,14 @@ var consumingGateway =
             }
             output.origin = jQuery(data).find("origin").text();
             if (output.exceptionId == 0) {
-              output.generatedId = jQuery(data).find("generatedId").text();
+              self.Read(entityName, {id:updatedId}, cbObj, cbMethod);
+            } else {
+              if (cbObj) {
+                var milis = ((Math.random() * 1000) + 500);
+                setTimeout(cbObj[cbMethod](output), milis);
+              }
             }
+            return false;
           },
           error : function OnError(request, status, error) {
             output.exceptionId = 1;
@@ -449,7 +388,7 @@ var consumingGateway =
             consumingGateway.LogOut();
           }
         });
-      return output;
+      return false;
     },
 
     Delete : function(entityName, entity) {

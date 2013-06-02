@@ -33,14 +33,14 @@ enyo.kind(
                 kind : "catalogs.ranchers.person.create",
                 name : "ranPerCreate",
                 onAddRancher : "goBack",
-                onUpdateRancher : "goBack",
+                onUpdateRancher : "refreshNGoBack",
                 onCancel : "goBack"
               },
               {
                 kind : "catalogs.ranchers.enterprise.create",
                 name : "ranEPCreate",
                 onAddRancher : "goBack",
-                onUpdateRancher : "goBack",
+                onUpdateRancher : "refreshNGoBack",
                 onCancel : "goBack"
               },
               {
@@ -64,7 +64,7 @@ enyo.kind(
                 name : "acontact",
                 onGoback : "goBack",
                 onAddRancher : "goBack",
-                onUpdateRancher : "goBack",
+                onUpdateRancher : "refreshNGoBack",
                 onCancel : "goBack"
               },
               {
@@ -381,5 +381,9 @@ enyo.kind(
     },
     goBack : function() {
       cacheMan.goBack();
+    },
+    refreshNGoBack: function(){
+      this.$.ranchersList.retrieveLists();
+      this.goBack();
     }
   });

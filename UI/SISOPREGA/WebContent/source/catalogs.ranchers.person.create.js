@@ -155,15 +155,19 @@ enyo.kind(
           entityType : "Rancher",
           name : "commonButtons",
           onBeforeSave : "before_save",
+          onUpdateEntity : "updated",
           onCancel : "cancelSave"
         } ],
+    updated : function() {
+      this.doUpdateRancher();
+    },
     setEntity : function(obj) {
       this.$.commonButtons.setEntity(obj);
     },
-    toggleAdd : function(){
+    toggleAdd : function() {
       this.$.commonButtons.toggleAdd();
     },
-    cancelSave : function(){
+    cancelSave : function() {
       this.doCancel();
     },
     resetValues : function() {

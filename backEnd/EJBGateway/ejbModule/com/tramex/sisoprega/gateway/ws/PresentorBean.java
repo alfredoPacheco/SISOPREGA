@@ -71,50 +71,63 @@ public class PresentorBean {
    */
   @WebMethod
   public String Ping() {
-    log.info("Ping service executed by [" + ejbContext.getCallerPrincipal().getName() + "]");
+    log.info("Ping service executed by [" + getLoggedUser() + "]");
     return "OK";
   }
 
   @WebMethod
   public CreateResponse Create(@XmlElement(required = true, nillable = false) @WebParam(name = "request") CreateRequest request) {
     log.entering(this.getClass().getCanonicalName(), "Create");
+    log.info("Create gateway invoked with the following content: [" + request + "]");
 
     String entity = request.getParentRecord().getEntity();
     
     Cruddable entityProxy = getCruddable(entity);
     log.exiting(this.getClass().getCanonicalName(), "Create");
-
-    return entityProxy.Create(request);
+    
+    CreateResponse response = entityProxy.Create(request);
+    log.info("Create gateway completed by " + getLoggedUser() + " as: [" + response.getError() + "]");
+    return response;
   }
 
   @WebMethod
   public ReadResponse Read(@XmlElement(required = true, nillable = false) @WebParam(name = "request") ReadRequest request) {
     log.entering(this.getClass().getCanonicalName(), "Read");
+    log.info("Read gateway invoked with the following content: [" + request + "]");
 
     Cruddable entityProxy = getCruddable(request.getFilter().getEntity());
     log.exiting(this.getClass().getCanonicalName(), "Read");
 
-    return entityProxy.Read(request);
+    ReadResponse response = entityProxy.Read(request);
+    log.info("Read gateway completed by " + getLoggedUser() + " as: [" + response.getError() + "]");
+    return response;
   }
   
   @WebMethod
   public ReadResponse Update(@XmlElement(required = true, nillable = false) @WebParam(name = "request") CreateRequest request){
     log.entering(this.getClass().getCanonicalName(), "Update");
+    log.info("Update gateway invoked with the following content: [" + request + "]");
 
     Cruddable entityProxy = getCruddable(request.getParentRecord().getEntity());
     log.exiting(this.getClass().getCanonicalName(), "Update");
 
-    return entityProxy.Update(request);
+    ReadResponse response = entityProxy.Update(request);
+    log.info("Update gateway completed by " + getLoggedUser() + " as: [" + response.getError() + "]");
+    
+    return response;
   }
   
   @WebMethod
   public BaseResponse Delete(@XmlElement(required = true, nillable = false) @WebParam(name = "request") ReadRequest request){
     log.entering(this.getClass().getCanonicalName(), "Delete");
+    log.info("Delete gateway invoked with the following content: [" + request + "]");
 
     Cruddable entityProxy = getCruddable(request.getFilter().getEntity());
     log.exiting(this.getClass().getCanonicalName(), "Delete");
 
-    return entityProxy.Delete(request);
+    BaseResponse response = entityProxy.Delete(request);
+    log.info("Update gateway completed by " + getLoggedUser() + " as: [" + response.getError() + "]");
+    return response;
   }
 
   private Cruddable getCruddable(String cruddableName) {
@@ -131,6 +144,10 @@ public class PresentorBean {
       log.throwing(this.getClass().getName(), "getCruddable", e);
     }
     return crud;
+  }
+  
+  private String getLoggedUser(){
+    return ejbContext.getCallerPrincipal().getName();
   }
 
 }
