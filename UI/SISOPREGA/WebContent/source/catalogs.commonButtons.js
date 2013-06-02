@@ -102,6 +102,7 @@ enyo.kind(
     updateEntity : function() {
       cacheMan.showScrim();
       var updateObject = this.getEntity();
+      this.doBeforeSave(updateObject);
       consumingGateway.Update(this.entityType, updateObject, this, "afterUpdateEntity", this.updatingEntityId);
     },
     cancel : function() {

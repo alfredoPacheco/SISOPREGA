@@ -163,6 +163,9 @@ enyo.kind(
     },
     setEntity : function(obj) {
       this.$.commonButtons.setEntity(obj);
+      if(obj.smsPhoneChosen !== undefined){
+        this.setPhoneSMS(obj.smsPhoneChosen);
+      }
     },
     toggleAdd : function() {
       this.$.commonButtons.toggleAdd();
@@ -191,7 +194,7 @@ enyo.kind(
       }
     },
     before_save : function(inSender, obj) {
-      obj.sms_phone_chosen = this.getCheckBoxSelected();
+      obj.smsPhoneChosen = this.getCheckBoxSelected();
     },
     checkboxChanged : function(inSender, inEvent) {
       switch (inSender.name) {
