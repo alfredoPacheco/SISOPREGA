@@ -207,7 +207,7 @@ enyo.kind(
             paneMan : this.$.ranchersPane,
             paneName : "contactList"
           });
-        _objMainHeader.setContent("Nuevo Contacto - " + objRan.company_name);
+        _objMainHeader.setContent("Nuevo Contacto - " + objRan.legalName);
       } else {
         _gobackStack.push(
           {
@@ -215,7 +215,8 @@ enyo.kind(
             paneMan : this.$.ranchersPane,
             paneName : "contactList"
           });
-        _objMainHeader.setContent("Nuevo Contacto - " + objRan.last_name + ' ' + objRan.mother_name + ' ' + objRan.first_name);
+        var motherName = objRan.motherName !== undefined ? objRan.motherName + ' ' : '';
+        _objMainHeader.setContent("Nuevo Contacto - " + objRan.lastName + ' ' + motherName + objRan.firstName);
       }
       this.$.acontact.objList = _arrRancherList[this.$.ranchersList.iSelected].contacts;
       this.$.acontact.setRancher(this.$.ranchersList.getSelected());
@@ -239,7 +240,7 @@ enyo.kind(
             paneName : "contactList"
           });
       }
-      this.$.acontact.setContact(this.$.ranchersList.getSelected(), this.$.contactList.getContact());
+      this.$.acontact.setEntity(this.$.ranchersList.getSelected(), this.$.contactList.getContact());
       _objMainHeader.setContent('Editar Contacto');
       this.$.ranchersPane.selectViewByName("acontact");
     },

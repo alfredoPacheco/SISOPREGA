@@ -71,15 +71,15 @@ enyo.kind(
     },
     getGroupName : function(inIndex) {
       // get previous record
-      var r0 = this.objRancher.contacts[inIndex - 1];
+      var r0 = this.objRancher.RancherContact[inIndex - 1];
       // get (and memoized) first letter of last name
       if (r0) {
         r0.letter = r0.last_name.substr(0, 1).toUpperCase();
       }
       var a = r0 && r0.letter;
       // get record
-      var r1 = this.objRancher.contacts[inIndex];
-      r1.letter = r1.last_name.substr(0, 1).toUpperCase();
+      var r1 = this.objRancher.RancherContact[inIndex];
+      r1.letter = r1.lastName.substr(0, 1).toUpperCase();
       var b = r1.letter;
       // new group if first letter of last name has changed
       return a != b ? b : null;
@@ -123,6 +123,6 @@ enyo.kind(
       this.doSelect();
     },
     getContact : function() {
-      return this.objRancher.contacts[this.iSelected];
+      return this.objRancher.RancherContact[this.iSelected];
     }
   });

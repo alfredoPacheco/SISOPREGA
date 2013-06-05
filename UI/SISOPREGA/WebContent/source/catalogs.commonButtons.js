@@ -12,6 +12,7 @@ enyo.kind(
         "onBeforeSave" : ""
       },
     updatingEntityId : 0,
+    parentObject : null,
     published :
       {
         entityType : ""
@@ -97,7 +98,18 @@ enyo.kind(
     addEntity : function() {
       var obj = this.getEntity();
       this.doBeforeSave(obj);
-      //	cache.create(this.getEntity(), this, "afterAddEntity");
+
+      if (this.parentObject != null) {
+        if (this.parentObject[this.entityType] === undefined) {
+          this.parentObject[this.entityType] = [];
+        }
+
+        this.parentObject[this.entityType].push(obj);
+        
+        consumingGateway.Update(this.parentObject.entityName, this.parentObject, this, "afterAddEntity", this.updatingEntityId);
+      } else {
+        consumingGateway.Create(this.entityType, obj, this, "afterAddEntity");
+      }
     },
     updateEntity : function() {
       cacheMan.showScrim();

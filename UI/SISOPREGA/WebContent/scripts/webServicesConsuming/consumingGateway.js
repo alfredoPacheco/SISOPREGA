@@ -156,14 +156,35 @@ var consumingGateway =
 
       // SOAP Message:
       var soapMessage = soapHeader + '<ws:Create>';
-      soapMessage += '<entityName>' + entityName + '</entityName>';
+      soapMessage += '<request><parentRecord><entity>' + entityName + '</entity>';
 
-      jQuery.each(entity, function(key, value) {
-        soapMessage += '<field>';
-        soapMessage += '<name>' + key + '</name>';
-        soapMessage += '<value>' + value + '</value>';
-        soapMessage += '</field>';
-      });
+      for (field in entity) {
+        if (entity.hasOwnProperty(field)) {
+          if (!Array.isArray(entity[field])) {
+            soapMessage += '<field>';
+            soapMessage += '<name>' + field + '</name>';
+            soapMessage += '<value>' + entity[field] + '</value>';
+            soapMessage += '</field>';
+          } else {
+            for(childIndex in entity[field]){
+              var child = entity[field][childIndex];
+              soapMessage += '<childRecord>';
+              soapMessage += '<entity>' + field + '</entity>';
+              for(childField in child){
+                if(child.hasOwnProperty(childField)){
+                  soapMessage += '<field>';
+                  soapMessage += '<name>' + childField + '</name>';
+                  soapMessage += '<value>' + child[childField] + '</value>';
+                  soapMessage += '</field>';
+                }
+              }
+              soapMessage += '</childRecord>';
+            }
+          }
+        }
+      }
+
+      soapMessage += '</parentRecord></request>';
 
       soapMessage += '</ws:Create>' + soapFooter;
 
@@ -316,35 +337,27 @@ var consumingGateway =
 
       for (field in entity) {
         if (entity.hasOwnProperty(field)) {
-          if (field != "children") {
+          if (!Array.isArray(entity[field])) {
             soapMessage += '<field>';
             soapMessage += '<name>' + field + '</name>';
             soapMessage += '<value>' + entity[field] + '</value>';
             soapMessage += '</field>';
-          }
-        }
-      }
-
-      if (entity.hasOwnProperty("children")) {
-        for ( var i = 0; i < entity.children.length; i++) {
-          var strChildrenEntity = "";
-          var strChildrenFields = "";
-          var strChildRecord = "";
-          for (field in entity.children[i]) {
-            if (entity.children[i].hasOwnProperty(field)) {
-              if (field == "entity") {
-                strChildrenEntity = '<entity>' + entity.children[i][field] + '</entity>';
-              } else {
-                strChildrenFields += '<field>';
-                strChildrenFields += '<name>' + field + '</name>';
-                strChildrenFields += '<value>' + entity.children[i][field] + '</value>';
-                strChildrenFields += '</field>';
+          } else {
+            for(childIndex in entity[field]){
+              var child = entity[field][childIndex];
+              soapMessage += '<childRecord>';
+              soapMessage += '<entity>' + field + '</entity>';
+              for(childField in child){
+                if(child.hasOwnProperty(childField)){
+                  soapMessage += '<field>';
+                  soapMessage += '<name>' + childField + '</name>';
+                  soapMessage += '<value>' + child[childField] + '</value>';
+                  soapMessage += '</field>';
+                }
               }
-
+              soapMessage += '</childRecord>';
             }
           }
-          strChildRecord = '<childRecord>' + strChildrenEntity + strChildrenFields + '</childRecord>';
-          soapMessage += strChildRecord;
         }
       }
 
