@@ -71,5 +71,14 @@ enyo.depends(
   "source/cache.charges.js",
   "source/shipments.schedule.js",
   "source/corte.js",
-  "source/shipments.popup.split.js"
+  "source/shipments.popup.split.js",
+  "source/cache.finance.js",	
+  "source/cache.sales.price.js",		
+  "source/finance.screen.js",
+  "source/finance.charges.payments.list.js",
+  "source/finance.charges.list.js",
+  "source/finance.payments.form.js",
+  "source/sales.screen.js",
+  "source/sales.purchase.list.js",
+  "source/sales.price.assignment.js"
 );

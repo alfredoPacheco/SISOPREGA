@@ -33,14 +33,14 @@ enyo.kind(
                 kind : "catalogs.ranchers.person.create",
                 name : "ranPerCreate",
                 onAddRancher : "goBack",
-                onUpdateRancher : "goBack",
+                onUpdateRancher : "refreshNGoBack",
                 onCancel : "goBack"
               },
               {
                 kind : "catalogs.ranchers.enterprise.create",
                 name : "ranEPCreate",
                 onAddRancher : "goBack",
-                onUpdateRancher : "goBack",
+                onUpdateRancher : "refreshNGoBack",
                 onCancel : "goBack"
               },
               {
@@ -50,8 +50,7 @@ enyo.kind(
                 onEdit : "showEdit",
                 onContacts : "showContacts",
                 onBilling : "showBillings",
-                onRegister : "showRegister",
-                onPedimentos : "showPedimentos"
+                onRegister : "showRegister"
               },
               {
                 kind : "catalogs.ranchers.contact.list",
@@ -65,7 +64,7 @@ enyo.kind(
                 name : "acontact",
                 onGoback : "goBack",
                 onAddRancher : "goBack",
-                onUpdateRancher : "goBack",
+                onUpdateRancher : "refreshNGoBack",
                 onCancel : "goBack"
               },
               {
@@ -98,11 +97,7 @@ enyo.kind(
                 onResetPassword : "goBack",
                 onCancel : "goBack"
               },
-              {
-                kind : "catalogs.ranchers.pedimentos.list",
-                name : "pedimentosList",
-                onGoback : "goBack"
-              }, ]
+               ]
         } ],
     showPerson : function() {
       _gobackStack.push(
@@ -136,8 +131,7 @@ enyo.kind(
             paneMan : this.$.ranchersPane,
             paneName : "ranOptions"
           });
-        this.$.ranEPCreate.setRancher(objRan);
-        this.$.ranEPCreate.toggleUpdate();
+        this.$.ranEPCreate.setEntity(objRan);
         _objMainHeader.setContent('Editar Ganadero - Empresa / Sociedad');
         this.$.ranchersPane.selectViewByName("ranEPCreate");
       }
@@ -213,7 +207,7 @@ enyo.kind(
             paneMan : this.$.ranchersPane,
             paneName : "contactList"
           });
-        _objMainHeader.setContent("Nuevo Contacto - " + objRan.company_name);
+        _objMainHeader.setContent("Nuevo Contacto - " + objRan.legalName);
       } else {
         _gobackStack.push(
           {
@@ -221,7 +215,8 @@ enyo.kind(
             paneMan : this.$.ranchersPane,
             paneName : "contactList"
           });
-        _objMainHeader.setContent("Nuevo Contacto - " + objRan.last_name + ' ' + objRan.mother_name + ' ' + objRan.first_name);
+        var motherName = objRan.motherName !== undefined ? objRan.motherName + ' ' : '';
+        _objMainHeader.setContent("Nuevo Contacto - " + objRan.lastName + ' ' + motherName + objRan.firstName);
       }
       this.$.acontact.objList = _arrRancherList[this.$.ranchersList.iSelected].contacts;
       this.$.acontact.setRancher(this.$.ranchersList.getSelected());
@@ -245,7 +240,7 @@ enyo.kind(
             paneName : "contactList"
           });
       }
-      this.$.acontact.setContact(this.$.ranchersList.getSelected(), this.$.contactList.getContact());
+      this.$.acontact.setEntity(this.$.ranchersList.getSelected(), this.$.contactList.getContact());
       _objMainHeader.setContent('Editar Contacto');
       this.$.ranchersPane.selectViewByName("acontact");
     },
@@ -259,7 +254,7 @@ enyo.kind(
             paneMan : this.$.ranchersPane,
             paneName : "ranOptions"
           });
-        _objMainHeader.setContent("Datos de Facturación - " + objRan.company_name);
+        _objMainHeader.setContent("Datos de Facturación - " + objRan.legalName);
 
       } else {
         _gobackStack.push(
@@ -268,7 +263,9 @@ enyo.kind(
             paneMan : this.$.ranchersPane,
             paneName : "ranOptions"
           });
-        _objMainHeader.setContent("Datos de Facturación - " + objRan.last_name + ' ' + objRan.mother_name + ' ' + objRan.first_name);
+        
+        var motherName = objRan.motherName !== undefined ? objRan.motherName + ' ' : '';
+        _objMainHeader.setContent("Datos de Facturación - " + objRan.lastName + ' ' + motherName + objRan.firstName);
 
       }
       this.$.billingList.setList(this.$.ranchersList.getSelected());
@@ -333,9 +330,11 @@ enyo.kind(
         });
 
       if (objRan.rancher_type == 2) {
-        _objMainHeader.setContent("Lista de Usuarios - " + objRan.company_name);
+        _objMainHeader.setContent("Lista de Usuarios - " + objRan.legalName);
       } else {
-        _objMainHeader.setContent("Lista de Usuarios - " + objRan.last_name + ' ' + objRan.mother_name + ' ' + objRan.first_name);
+        
+        var motherName = objRan.motherName !== undefined ? objRan.motherName + ' ' : '';
+        _objMainHeader.setContent("Lista de Usuarios - " + objRan.lastName + ' ' + motherName + objRan.firstName);
       }
 
       this.$.usersList.setList(objRan);
@@ -373,18 +372,6 @@ enyo.kind(
       _objMainHeader.setContent('Asignar contraseña');
       this.$.ranchersPane.selectViewByName("aRancherUsers");
     },
-    showPedimentos : function() {
-      _gobackStack.push(
-        {
-          caption : _objMainHeader.getContent(),
-          paneMan : this.$.ranchersPane,
-          paneName : "ranOptions"
-        });
-
-      this.$.pedimentosList.setList(this.$.ranchersList.getSelected());
-      _objMainHeader.setContent('Lista de pedimentos');
-      this.$.ranchersPane.selectViewByName("pedimentosList");
-    },
     addGoBackAction : function() {
       _gobackStack.push(
         {
@@ -395,5 +382,9 @@ enyo.kind(
     },
     goBack : function() {
       cacheMan.goBack();
+    },
+    refreshNGoBack: function(){
+      this.$.ranchersList.retrieveLists();
+      this.goBack();
     }
   });

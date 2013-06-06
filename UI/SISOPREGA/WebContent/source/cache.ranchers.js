@@ -21,9 +21,7 @@ var cacheRanchers = new enyo.kind(
         if(entityObj.birthDate){
           var numberBDate = Number(entityObj.birthDate);
           var vDate = new Date(numberBDate);
-          console.debug('setting date from number: [' + numberBDate + ']');
           entityObj.birthDate = vDate;
-          console.debug('BirthDate set: [' + vDate + ']');
         } else {
           entityObj.birthDate = null;
         }

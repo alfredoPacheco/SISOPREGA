@@ -54,8 +54,8 @@ enyo.kind(
     },
     setupRow : function(inSender, inIndex) {
       var objUser;
-      if (this.objRancher != null) {
-        if (objUser = this.objRancher.users[inIndex]) {
+      if (this.objRancher != null && this.objRancher.RancherUser) {
+        if (objUser = this.objRancher.RancherUser[inIndex]) {
           this.$.user_title.setContent(objUser.user_name);
           return true;
         }
@@ -66,9 +66,9 @@ enyo.kind(
     },
     updateList : function() {
       if (this.objRancher != null) {
-        var arUsersAux = cacheRanchers.getRancherUsers(this.objRancher);
-        if (arUsersAux.length > 0) {
-          this.objRancher.users.sort(function(inA, inB) {
+        var arUsersAux = this.objRancher.RancherUser;
+        if (arUsersAux && arUsersAux.length > 0) {
+          this.objRancher.RancherUser.sort(function(inA, inB) {
             return
               [ inA.user_name.toLowerCase() ] <=
               [ inB.user_name.toLowerCase() ] ? -1 : 1;
@@ -79,12 +79,9 @@ enyo.kind(
     },
     selectUser : function(inSender, inEvent) {
       this.iSelected = inEvent.rowIndex;
-      if(this.iSelected){
-    	  this.doSelect();  
-      }
-      
+  	  this.doSelect();
     },
     getUser : function() {
-      return this.objRancher.users[this.iSelected];
+      return this.objRancher.RancherUser[this.iSelected];
     }
   });

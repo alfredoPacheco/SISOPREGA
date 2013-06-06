@@ -155,15 +155,22 @@ enyo.kind(
           entityType : "Rancher",
           name : "commonButtons",
           onBeforeSave : "before_save",
+          onUpdateEntity : "updated",
           onCancel : "cancelSave"
         } ],
+    updated : function() {
+      this.doUpdateRancher();
+    },
     setEntity : function(obj) {
       this.$.commonButtons.setEntity(obj);
+      if(obj.smsPhoneChosen !== undefined){
+        this.setPhoneSMS(obj.smsPhoneChosen);
+      }
     },
-    toggleAdd : function(){
+    toggleAdd : function() {
       this.$.commonButtons.toggleAdd();
     },
-    cancelSave : function(){
+    cancelSave : function() {
       this.doCancel();
     },
     resetValues : function() {
@@ -187,7 +194,10 @@ enyo.kind(
       }
     },
     before_save : function(inSender, obj) {
-      obj.sms_phone_chosen = this.getCheckBoxSelected();
+      obj.smsPhoneChosen = this.getCheckBoxSelected();
+      var birthDateMonth = this.$.birth_date.getValue().getMonth() + 1;
+      var shortDateString = birthDateMonth + '/' + this.$.birth_date.getValue().getDate() + '/' + this.$.birth_date.getValue().getFullYear();
+      obj.birthDate = shortDateString;
     },
     checkboxChanged : function(inSender, inEvent) {
       switch (inSender.name) {

@@ -156,14 +156,35 @@ var consumingGateway =
 
       // SOAP Message:
       var soapMessage = soapHeader + '<ws:Create>';
-      soapMessage += '<entityName>' + entityName + '</entityName>';
+      soapMessage += '<request><parentRecord><entity>' + entityName + '</entity>';
 
-      jQuery.each(entity, function(key, value) {
-        soapMessage += '<field>';
-        soapMessage += '<name>' + key + '</name>';
-        soapMessage += '<value>' + value + '</value>';
-        soapMessage += '</field>';
-      });
+      for (field in entity) {
+        if (entity.hasOwnProperty(field)) {
+          if (!Array.isArray(entity[field])) {
+            soapMessage += '<field>';
+            soapMessage += '<name>' + field + '</name>';
+            soapMessage += '<value>' + entity[field] + '</value>';
+            soapMessage += '</field>';
+          } else {
+            for(childIndex in entity[field]){
+              var child = entity[field][childIndex];
+              soapMessage += '<childRecord>';
+              soapMessage += '<entity>' + field + '</entity>';
+              for(childField in child){
+                if(child.hasOwnProperty(childField)){
+                  soapMessage += '<field>';
+                  soapMessage += '<name>' + childField + '</name>';
+                  soapMessage += '<value>' + child[childField] + '</value>';
+                  soapMessage += '</field>';
+                }
+              }
+              soapMessage += '</childRecord>';
+            }
+          }
+        }
+      }
+
+      soapMessage += '</parentRecord></request>';
 
       soapMessage += '</ws:Create>' + soapFooter;
 
@@ -287,7 +308,6 @@ var consumingGateway =
               var milis = ((Math.random() * 1000) + 500);
               setTimeout(cbObj[cbMethod](output), milis);
             }
-            //cbObj[cbMethod](output);
 
             return false;
           },
@@ -298,30 +318,50 @@ var consumingGateway =
             consumingGateway.LogOut();
           }
         });
-      return output;
+      return false;
     },
-    Update : function(entityName, entity) {
+    Update : function(entityName, entity, cbObj, cbMethod, updatedId) {
+      var self = this;
       // Se crea objeto que devolvera la funcion:
       output =
         {
           exceptionDescription : "Success",
           exceptionId : 0,
           origin : "",
-          entityName : "",
-          record : {}
+          generatedId : ""
         };
 
       // SOAP Message:
       var soapMessage = soapHeader + '<ws:Update>';
-      soapMessage += '<entityName>' + entityName + '</entityName>';
+      soapMessage += '<request><parentRecord><entity>' + entityName + '</entity>';
 
-      jQuery.each(entity, function(key, value) {
-        soapMessage += '<field>';
-        soapMessage += '<name>' + key + '</name>';
-        soapMessage += '<value>' + value + '</value>';
-        soapMessage += '</field>';
-      });
+      for (field in entity) {
+        if (entity.hasOwnProperty(field)) {
+          if (!Array.isArray(entity[field])) {
+            soapMessage += '<field>';
+            soapMessage += '<name>' + field + '</name>';
+            soapMessage += '<value>' + entity[field] + '</value>';
+            soapMessage += '</field>';
+          } else {
+            for(childIndex in entity[field]){
+              var child = entity[field][childIndex];
+              soapMessage += '<childRecord>';
+              soapMessage += '<entity>' + field + '</entity>';
+              for(childField in child){
+                if(child.hasOwnProperty(childField)){
+                  soapMessage += '<field>';
+                  soapMessage += '<name>' + childField + '</name>';
+                  soapMessage += '<value>' + child[childField] + '</value>';
+                  soapMessage += '</field>';
+                }
+              }
+              soapMessage += '</childRecord>';
+            }
+          }
+        }
+      }
 
+      soapMessage += '</parentRecord></request>';
       soapMessage += '</ws:Update>' + soapFooter;
 
       // Ajax request:
@@ -344,103 +384,15 @@ var consumingGateway =
               consumingGateway.LogOut();
             }
             output.origin = jQuery(data).find("origin").text();
-
             if (output.exceptionId == 0) {
-              output.entityName = jQuery(data).find("entityName").text();
-
-              var vRecord = new Object();
-              jQuery(data).find("fields").each(function() {
-                var vName = jQuery(this).find('name').text();
-                var vValue = jQuery(this).find('value').text();
-                vRecord[vName] = vValue;
-              });
-              output.record = vRecord;
-            }
-
-          },
-          error : function OnError(request, status, error) {
-            output.exceptionId = 1;
-            output.exceptionDescription = error;
-            alert(output.exceptionDescription);
-            consumingGateway.LogOut();
-          }
-        });
-      return output;
-    },
-    updateTransaction : function(entityName, entity) {
-      // Se crea objeto que devolvera la funcion:
-      output =
-        {
-          exceptionDescription : "Success",
-          exceptionId : 0,
-          origin : "",
-          generatedId : ""
-        };
-
-      // SOAP Message:
-      var soapMessage = soapHeader + '<ws:Create>';
-      soapMessage += '<request><parentRecord><entity>' + entityName + '</entity>';
-
-      for (field in entity) {
-        if (entity.hasOwnProperty(field)) {
-          if (field != "children") {
-            soapMessage += '<field>';
-            soapMessage += '<name>' + field + '</name>';
-            soapMessage += '<value>' + entity[field] + '</value>';
-            soapMessage += '</field>';
-          }
-        }
-      }
-
-      if (entity.hasOwnProperty("children")) {
-        for ( var i = 0; i < entity.children.length; i++) {
-          var strChildrenEntity = "";
-          var strChildrenFields = "";
-          var strChildRecord = "";
-          for (field in entity.children[i]) {
-            if (entity.children[i].hasOwnProperty(field)) {
-              if (field == "entity") {
-                strChildrenEntity = '<entity>' + entity.children[i][field] + '</entity>';
-              } else {
-                strChildrenFields += '<field>';
-                strChildrenFields += '<name>' + field + '</name>';
-                strChildrenFields += '<value>' + entity.children[i][field] + '</value>';
-                strChildrenFields += '</field>';
+              self.Read(entityName, {id:updatedId}, cbObj, cbMethod);
+            } else {
+              if (cbObj) {
+                var milis = ((Math.random() * 1000) + 500);
+                setTimeout(cbObj[cbMethod](output), milis);
               }
-
             }
-          }
-          strChildRecord = '<childRecord>' + strChildrenEntity + strChildrenFields + '</childRecord>';
-          soapMessage += strChildRecord;
-        }
-      }
-
-      soapMessage += '</parentRecord></request>';
-      soapMessage += '</ws:Create>' + soapFooter;
-
-      // Ajax request:
-      jQuery.ajax(
-        {
-          url : gatewayWsURL,
-          type : "POST",
-          dataType : "xml",
-          data : soapMessage,
-          processData : false,
-          contentType : "text/xml;charset=UTF-8",
-          username : utils.getCookie("username"),
-          password : utils.getCookie("pass"),
-          async : false,
-          success : function OnSuccess(data) {
-            output.exceptionDescription = jQuery(data).find("exceptionDescription").text();
-            output.exceptionId = jQuery(data).find("exceptionId").text();
-            if (output.exceptionId == "GW01") {
-              alert(output.exceptionDescription);
-              consumingGateway.LogOut();
-            }
-            output.origin = jQuery(data).find("origin").text();
-            if (output.exceptionId == 0) {
-              output.generatedId = jQuery(data).find("generatedId").text();
-            }
+            return false;
           },
           error : function OnError(request, status, error) {
             output.exceptionId = 1;
@@ -449,7 +401,7 @@ var consumingGateway =
             consumingGateway.LogOut();
           }
         });
-      return output;
+      return false;
     },
 
     Delete : function(entityName, entity) {

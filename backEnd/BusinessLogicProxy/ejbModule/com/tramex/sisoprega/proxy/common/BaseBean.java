@@ -78,6 +78,7 @@ public abstract class BaseBean {
 
   /**
    * Default functionality
+   * 
    * @param request
    * @return
    */
@@ -195,7 +196,7 @@ public abstract class BaseBean {
         String entityCamelCaseName = "get" + record.getEntity() + "Id";
 
         log.fine("Executing method [" + entityCamelCaseName + "]");
-        
+
         long idToUpdate = (Long) type.getMethod(entityCamelCaseName, params).invoke(entity, invokeParams);
 
         if (idToUpdate == 0) {
@@ -278,42 +279,42 @@ public abstract class BaseBean {
       String fieldTypeName = field.getType().getName();
 
       this.log.finest("Identified field in entity:{" + fieldName + "} of type {" + fieldTypeName + "}");
-      
-      if(fieldTypeName.equals("java.util.Set")){
-        
+
+      if (fieldTypeName.equals("java.util.Set")) {
+
         ParameterizedType listType = (ParameterizedType) field.getGenericType();
         Class<?> genericType = (Class<?>) listType.getActualTypeArguments()[0];
-        
+
         this.log.fine("Found list type [" + genericType.getName() + "]");
-        
-        String methodName = "get" + fieldName.substring(0,1).toUpperCase() + fieldName.substring(1,fieldName.length());
+
+        String methodName = "get" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1, fieldName.length());
         this.log.finer("Method to be executed in order to obtain one to many : [" + methodName + "]");
-        
-        if(genericType.getName().contains("com.tramex.sisoprega")){
+
+        if (genericType.getName().contains("com.tramex.sisoprega")) {
           Class<?>[] params = null;
           Object[] invokeParams = null;
 
           Set<?> memberList = (Set<?>) type.getMethod(methodName, params).invoke(content, invokeParams);
           this.log.fine("memberList: [" + memberList + "]");
-          if(memberList != null && !memberList.isEmpty()){
-            for(Object member : memberList){
+          if (memberList != null && !memberList.isEmpty()) {
+            for (Object member : memberList) {
               log.fine("found list member of type: " + member.getClass());
               record.addChildRecord(getRecordFromContent(member, member.getClass()));
             }
-          }else{
+          } else {
             log.fine("Empty child records list");
           }
         } else {
           log.warning("Unsuported list type found: [" + genericType + "] in entity [" + type.getSimpleName() + "]");
         }
-        
-      } else if( !fieldTypeName.contains("com.tramex.sisoprega")) {
-        if(fieldTypeName.contains("Date")){
-          if (field.get(content) != null){
-            Date dValue = (Date)field.get(content);
+
+      } else if (!fieldTypeName.contains("com.tramex.sisoprega")) {
+        if (fieldTypeName.contains("Date")) {
+          if (field.get(content) != null) {
+            Date dValue = (Date) field.get(content);
             record.getField().add(new GatewayField(fieldName, String.valueOf(dValue.getTime())));
           }
-        }else{
+        } else {
           if (field.get(content) != null)
             record.getField().add(new GatewayField(fieldName, field.get(content).toString()));
         }
@@ -366,51 +367,58 @@ public abstract class BaseBean {
    * @return
    * @throws InstantiationException
    * @throws IllegalAccessException
-   * @throws SecurityException 
-   * @throws NoSuchFieldException 
-   * @throws ClassNotFoundException 
-   * @throws NoSuchMethodException 
-   * @throws InvocationTargetException 
-   * @throws IllegalArgumentException 
+   * @throws SecurityException
+   * @throws NoSuchFieldException
+   * @throws ClassNotFoundException
+   * @throws NoSuchMethodException
+   * @throws InvocationTargetException
+   * @throws IllegalArgumentException
    */
-  protected <T> T getEntityFromRecord(GatewayRecord record, Class<T> type) throws InstantiationException, IllegalAccessException, NoSuchFieldException, SecurityException, ClassNotFoundException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException {
+  protected <T> T getEntityFromRecord(GatewayRecord record, Class<T> type) throws InstantiationException, IllegalAccessException,
+      SecurityException, ClassNotFoundException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException {
     log.fine("Casting " + type + " from " + record);
     T entity = type.newInstance();
-    
+
     List<GatewayField> recordFields = record.getField();
 
-    for(GatewayField gField : recordFields){
-      Field field = type.getDeclaredField(gField.getName());
-      field.setAccessible(true);
-      
-      if (field.getType() == String.class) {
-        this.log.finest("found String field, setting direct value from request");
-        field.set(entity, gField.getValue());
-      } else {
-        this.log.finest("The field is a [" + field.getType().getCanonicalName() + "], will cast it's value in the request");
+    for (GatewayField gField : recordFields) {
+      try {
+        Field field = type.getDeclaredField(gField.getName());
+        field.setAccessible(true);
 
-        String sValue = gField.getValue();
+        if (field.getType() == String.class) {
+          this.log.finest("found String field, setting direct value from request");
+          field.set(entity, gField.getValue());
+        } else {
+          this.log.finest("The field is a [" + field.getType().getCanonicalName() + "], will cast it's value in the request");
 
-        if (sValue != null && !sValue.trim().equals(""))
-          field.set(entity, castValueFromString(sValue, field.getType()));
+          String sValue = gField.getValue();
+
+          if (sValue != null && !sValue.trim().equals(""))
+            field.set(entity, castValueFromString(sValue, field.getType()));
+        }
+
+      } catch (NoSuchFieldException e) {
+        log.finer("field not found and will be voided: [" + gField.getName() + "]");
+        log.throwing(this.getClass().getCanonicalName(), "getEntityFromRecord", e);
       }
     }
-    
+
     List<GatewayRecord> childRecords = record.getChildRecord();
-    if(childRecords != null && !childRecords.isEmpty()){
+    if (childRecords != null && !childRecords.isEmpty()) {
       log.fine("found [" + childRecords.size() + "] child records in the request");
-      
-      for(GatewayRecord childRecord : childRecords){
+
+      for (GatewayRecord childRecord : childRecords) {
         log.finest("----------  CASTING CHILD RECORD  --------------");
         Class<?> childType = Class.forName(DTO_PACKAGE + childRecord.getEntity());
 
         Object childEntity = getEntityFromRecord(childRecord, childType);
-        
+
         Class<?>[] params = new Class<?>[1];
         params[0] = childType;
         Object[] invokeParams = new Object[1];
         invokeParams[0] = childEntity;
-        
+
         String methodName = "add" + childRecord.getEntity();
         type.getMethod(methodName, params).invoke(entity, invokeParams);
         log.finest("----------  END OF CHILD RECORD CASTING --------------");
