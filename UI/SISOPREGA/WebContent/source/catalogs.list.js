@@ -4,38 +4,38 @@ enyo.kind({
     iSelected : null,
     arrList : [],
     allItems : [],
-    published:{
-	items:[]
+    published : {
+	entity : null,
     },
-    setItems:function(items){
+    setItems : function(items) {
 	this.allItems = items;
 	this.arrList = this.allItems;
 	this.updateList();
     },
-    events:{
-	onSelectItem:"",
-	onClickAdd:"",
-	onDeleteItem:""
-    },
-    components : [
-    // {
-    // kind : enyo.Popup,
-    // width : "80%;",
-    // height : "80%;",
-    // dismissWithClick : false,
-    // layoutKind : "VFlexLayout",
-    // style : "overflow: hidden; border-width: 8px;",
-    // scrim : true,
-    // components : [ {
-    // kind : "catalogs.providers.create",
-    // name : "providersCreate_kind",
-    // lazy : "true",
-    // onAdd : "on_add",
-    // onUpdate : "on_upd",
-    // onCancel: "on_cancel",
-    // flex : 1
-    // } ]
+    // events:{
+    // onSelectItem:"on_select_item",
+    // onClickAdd:"on_click_add",
+    // onDeleteItem:"on_delete_item"
     // },
+    components : [ {
+	kind : enyo.Popup,
+	width : "80%",
+	height : "80%",
+	dismissWithClick : false,
+	layoutKind : "VFlexLayout",
+	modal : true,
+	style : "overflow: hidden; border-width: 8px;",
+	scrim : true,
+	components : [ {
+	    kind : "catalogs." + this.entity.name + ".create",
+	    name : "create_kind",
+	    lazy : "true",
+	    onAdd : "on_add",
+	    onUpdate : "on_upd",
+	    onCancel : "on_cancel",
+	    flex : 1
+	} ]
+    },
 
     {
 	kind : enyo.Scroller,
@@ -51,6 +51,7 @@ enyo.kind({
 		kind : "Divider"
 	    }, {
 		kind : enyo.SwipeableItem,
+		name : "item",
 		onConfirm : "deleteItem",
 		tapHighlight : true,
 		components : [ {
@@ -100,16 +101,6 @@ enyo.kind({
 	    } ]
 	} ]
     } ],
-    selectItem : function(inSender, inEvent) {
-	if (this.arrList[inEvent.rowIndex]) {
-	    this.iSelected = inEvent.rowIndex;
-	    this.doSelectItem(this.arrList[this.iSelected]);
-	    
-//	    this.$.popup.validateComponents();
-//	    this.$.providersCreate_kind.setObj(this.arrList[this.iSelected]);
-//	    this.$.popup.openAtCenter();
-	}
-    },
     getSelected : function() {
 	return this.arrList[this.iSelected];
     },
@@ -197,17 +188,8 @@ enyo.kind({
 	this.updateList();
     },
     reset : function() {
-	this.$.filter.setValue("");	
-	this.allItems = [];
-	
-//	var arrAdapterList = cacheProviders.get();
-//	
-//	for ( var i = 0; i < arrAdapterList.length; i++) {
-//	    var obj = arrAdapterList[i];
-//	    obj.importantInfo = "" + arrAdapterList[i].name;
-//	    obj.secundaryInfo = "" + arrAdapterList[i].phone_number;
-//	    this.allItems.push(obj);
-//	}
+	this.$.filter.setValue("");
+	this.allItems = this.entity.getCatalogsList();
 	this.arrList = this.allItems;
 	this.updateList();
     },
@@ -221,41 +203,44 @@ enyo.kind({
 	}
     },
     deleteItem : function(inSender, inIndex) {
-	if(this.doDeleteItem(this.arrList[inIndex], this, "reset" )){
+	// if (this.doDeleteItem(this.arrList[inIndex], this, "reset")) {
+	// return true;
+	// } else {
+	// return false;
+	// }
+
+	if (this.entity.del(this.arrList[inIndex], this, "reset")) {
 	    return true;
-	}else{
+	} else {
 	    return false;
 	}
-	
-//	if (cacheProviders.del(this.arrList[inIndex], this, "reset")) {
-//	    return true;
-//	} else {
-//	    return false;
-//	}
-	
+
     },
     add_click : function(inSender, inEvent) {
-	this.doClickAdd();
-//	this.$.popup.validateComponents();
-//	this.$.providersCreate_kind.toggleAdd();
-//	this.$.popup.openAtCenter();
-	
+	// this.doClickAdd();
+	this.$.popup.validateComponents();
+	this.$.create_kind.toggleAdd();
+	this.$.popup.openAtCenter();
+
     },
-//    on_add : function() {
-//	
-////	this.$.popup.close();
-//	this.reset();
-//	
-//    },
-//    on_upd : function() {
-//	
-////	this.$.popup.close();
-//	
-//	this.reset();
-//    },
-//    on_cancel : function() {
-//	
-////	this.$.popup.close();
-//	
-//    },
+    on_add : function() {
+	this.$.popup.close();
+	this.reset();
+    },
+    on_upd : function() {
+	this.$.popup.close();
+	this.reset();
+    },
+    on_cancel : function() {
+	this.$.popup.close();
+    },
+    selectItem : function(inSender, inEvent) {
+	if (this.arrList[inEvent.rowIndex]) {
+	    this.iSelected = inEvent.rowIndex;
+	    // this.doSelectItem(this.arrList[this.iSelected]);
+	    this.$.popup.validateComponents();
+	    this.$.create_kind.setObj(this.arrList[this.iSelected]);
+	    this.$.popup.openAtCenter();
+	}
+    },
 });

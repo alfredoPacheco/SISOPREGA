@@ -8,7 +8,7 @@
  * - 05/27/2013 By Diego Torres: Adapt to crud.cache.
  * 
  */
-enyo.kind(
+var cacheRanchers = new enyo.kind(
   {
     name : "cache.ranchers",
     kind : "crud.cache",
@@ -47,6 +47,16 @@ enyo.kind(
       listObj.caption = entityObj.name;
       
       return listObj;
+    },
+    getCatalogsList:function(){
+	
+	 var arrAdapterList = enyo.clone(this.arrObj);
+		
+	 for ( var i = 0; i < arrAdapterList.length; i++) {
+	 var obj = arrAdapterList[i];
+	 obj.importantInfo = "" + arrAdapterList[i].name;
+	 obj.secundaryInfo = "" + arrAdapterList[i].phone_number;
+	 this.allItems.push(obj);
+	 }
     }
   });
-var cacheRanchers = new cache.ranchers();
