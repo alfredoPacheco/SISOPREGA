@@ -141,53 +141,9 @@ enyo.kind(
           entityType : "RancherContact",
           name : "commonButtons",
           onBeforeSave : "before_save",
-          onUpdateEntity : "updated",
+          onUpdateEntity : "doUpdateRancher",
           onCancel : "doCancel"
         } ],
-    updateRancher : function() {
-      cacheRanchers.updateContact(this.objRancher, this.objContact, this.getContact(), this, "doUpdateRancher");
-    },
-    getContact : function() {
-      var fmt = new enyo.g11n.DateFmt(
-        {
-          format : "yyyy/MM/dd",
-          locale : new enyo.g11n.Locale("es_es")
-        });
-
-      var objContact =
-        {
-          contact_id : "",
-          rancher_id : "",
-          aka : "",
-          first_name : "",
-          last_name : "",
-          mother_name : "",
-          birth_date : "",
-          email_add : "",
-          phone_number : "",
-          address_one : "",
-          address_two : "",
-          city : "",
-          address_state : "",
-          zip_code : ""
-        };
-
-      objContact.aka = this.$.aka.getValue();
-      objContact.first_name = this.$.first_name.getValue();
-      objContact.last_name = this.$.last_name.getValue();
-      objContact.mother_name = this.$.mother_name.getValue();
-      if (this.$.birth_date.getValue() != null) {
-        objContact.birth_date = fmt.format(this.$.birth_date.getValue());
-      }
-      objContact.email_add = this.$.email_add.getValue();
-      objContact.phone_number = this.$.phone_number.getValue();
-      objContact.address_one = this.$.address_one.getValue();
-      objContact.address_two = this.$.address_two.getValue();
-      objContact.city = this.$.city.getValue();
-      objContact.address_state = this.$.address_state.getValue();
-      objContact.zip_code = this.$.zip_code.getValue();
-      return objContact;
-    },
     addContact : function() {
       cacheRanchers.addContact(this.objRancher, this.getContact(), this, "doAddRancher");
     },
@@ -195,8 +151,10 @@ enyo.kind(
       this.objRancher = objRancher;
     },
     setEntity : function(objRancher, objContact) {
+      this.objRancher = objRancher;
       this.$.commonButtons.parentObject = objRancher;
       this.$.commonButtons.setEntity(objContact);
+    //this.$.commonButtons.updatingEntityId = this.objRancher.rancherId;
     },
     toggleAdd : function() {
       this.$.commonButtons.parentObject = this.objRancher;
@@ -207,9 +165,12 @@ enyo.kind(
         this.$.commonButtons.entityType = "EnterpriseContact";
       }
       
-      this.$.commonButtons.updatingEntityId = this.objRancher.rancherId;
-      
       this.$.commonButtons.toggleAdd();
+    },
+    before_save : function(inSender, obj) {
+      var birthDateMonth = this.$.birth_date.getValue().getMonth() + 1;
+      var shortDateString = birthDateMonth + '/' + this.$.birth_date.getValue().getDate() + '/' + this.$.birth_date.getValue().getFullYear();
+      obj.birthDate = shortDateString;
     },
     applyMask : function(inSender) {
       var _id = inSender.$.input.getId();

@@ -74,7 +74,7 @@ enyo.kind(
       var r0 = this.objRancher.RancherContact[inIndex - 1];
       // get (and memoized) first letter of last name
       if (r0) {
-        r0.letter = r0.last_name.substr(0, 1).toUpperCase();
+        r0.letter = r0.lastName.substr(0, 1).toUpperCase();
       }
       var a = r0 && r0.letter;
       // get record

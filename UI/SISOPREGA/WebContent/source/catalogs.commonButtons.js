@@ -106,7 +106,9 @@ enyo.kind(
 
         this.parentObject[this.entityType].push(obj);
         
-        consumingGateway.Update(this.parentObject.entityName, this.parentObject, this, "afterAddEntity", this.updatingEntityId);
+        var parentId = this.parentObject[this.entityIdName(this.parentObject.entityName)];
+
+        consumingGateway.Update(this.parentObject.entityName, this.parentObject, this, "afterAddEntity", parentId);
       } else {
         consumingGateway.Create(this.entityType, obj, this, "afterAddEntity");
       }
@@ -115,7 +117,20 @@ enyo.kind(
       cacheMan.showScrim();
       var updateObject = this.getEntity();
       this.doBeforeSave(updateObject);
-      consumingGateway.Update(this.entityType, updateObject, this, "afterUpdateEntity", this.updatingEntityId);
+
+      if (this.parentObject != null) {
+        if (this.parentObject[this.entityType] === undefined) {
+          this.parentObject[this.entityType] = [];
+        }
+
+        this.parentObject[this.entityType].push(updateObject);
+        
+        var parentId = this.parentObject[this.entityIdName(this.parentObject.entityName)];
+        
+        consumingGateway.Update(this.parentObject.entityName, this.parentObject, this, "afterUpdateEntity", parentId);
+      } else {
+        consumingGateway.Update(this.entityType, updateObject, this, "afterUpdateEntity", this.updatingEntityId);
+      }
     },
     cancel : function() {
       this.doResetValues();
@@ -137,7 +152,7 @@ enyo.kind(
     getEntity : function() {
       var objEntity = {};
 
-      objEntity[this.entityIdName()] = this.updatingEntityId;
+      objEntity[this.entityIdName(this.entityType)] = this.updatingEntityId;
 
       var controls = this.parent.$;
 
@@ -161,7 +176,7 @@ enyo.kind(
         }
       }
 
-      this.updatingEntityId = entity[this.entityIdName()];
+      this.updatingEntityId = entity[this.entityIdName(this.entityType)];
 
       this.toggleUpdate();
     },
@@ -174,9 +189,9 @@ enyo.kind(
       this.$.draUpdate.setOpen(false);
       this.resetValues();
     },
-    entityIdName : function() {
-      var lowerCaseFirstChar = this.entityType.substring(0, 1).toLowerCase();
-      var entityNameCamelCase = this.entityType.substring(1, this.entityType.length);
+    entityIdName : function(entityName) {
+      var lowerCaseFirstChar = entityName.substring(0, 1).toLowerCase();
+      var entityNameCamelCase = entityName.substring(1, entityName.length);
       var idSuffix = "Id";
       var entityIdName = lowerCaseFirstChar + entityNameCamelCase + idSuffix;
       return entityIdName;

@@ -26,6 +26,17 @@ enyo.kind(
           entityObj.birthDate = null;
         }
         
+        if(entityObj.RancherContact !== undefined){
+          for(var idx = 0; idx < entityObj.RancherContact.length; idx++){
+            if(entityObj.RancherContact[idx].birthDate){
+              var numberBDate = Number(entityObj.RancherContact[idx].birthDate);
+              var vDate = new Date(numberBDate);
+              entityObj.RancherContact[idx].birthDate = vDate;
+            }
+          }
+        }
+        
+        
       }else{
         entityObj = null;
       }
