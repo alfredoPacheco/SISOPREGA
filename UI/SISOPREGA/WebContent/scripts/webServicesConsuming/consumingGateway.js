@@ -144,7 +144,7 @@ var consumingGateway =
           }
         });
     },
-    Create : function(entityName, entity) {
+    Create : function(entityName, entity, cbObj, cbMethod) {
       // Se crea objeto que devolvera la funcion:
       output =
         {
@@ -211,6 +211,12 @@ var consumingGateway =
             if (output.exceptionId == 0) {
               output.generatedId = jQuery(data).find("generatedId").text();
             }
+            
+            if (cbObj) {
+                var milis = ((Math.random() * 1000) + 500);
+                setTimeout(cbObj[cbMethod](output), milis);
+              }
+            return output;
           },
           error : function OnError(request, status, error) {
             output.exceptionId = 1;

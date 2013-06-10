@@ -32,6 +32,19 @@ enyo.kind(
       listObj.caption =  entityObj.legalName;;
 
       return listObj;
-    }
+    },
+    getCatalogsList:function(){
+	
+	 var arrAdapterList = enyo.clone(this.arrObj);
+	 var result = [];
+		
+	 for ( var i = 0; i < arrAdapterList.length; i++) {
+	 var obj = arrAdapterList[i];
+	 obj.importantInfo = "" + arrAdapterList[i].legalName;
+	 obj.secundaryInfo = "" + arrAdapterList[i].telephone;
+	 result.push(obj);
+	 }
+	 return result;
+   }
   });
 var cacheEnterpriseRanchers = new cache.enterpriseRanchers();

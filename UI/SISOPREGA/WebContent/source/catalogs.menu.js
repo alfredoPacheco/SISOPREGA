@@ -4,7 +4,9 @@ enyo.kind({
 	layoutKind: enyo.VFlexLayout,
 	events: {
 		onRanchers:"",		
-		onCattle:""
+		onCattle:"",
+		onContacts:""
+		    
 	},	
 	components: [
 		{kind: enyo.VFlexBox,
@@ -14,6 +16,10 @@ enyo.kind({
 		 components: [		
 			{kind: "Spacer"},
 			{kind: "Button", className: "enyo-button-cat", caption: "Ganaderos",onclick:"doRanchers"},
-			{kind: "Spacer"}]}
+			{kind: "Spacer"},
+			{kind: "Button", className: "enyo-button-cat", caption: "Contactos",onclick:"doContacts"},
+			{kind: "Spacer"},
+			]},
+			
 	]
 });

@@ -10,27 +10,27 @@
  */
 enyo.kind(
   {
-    name : "cache.ranchers",
+    name : "cache.rancherContacts",
     kind : "crud.cache",
-    entityName : "Rancher",
+    entityName : "RancherContact",
     adapterToIn : function(entityObj) {
 
-      if(entityObj.entityName == "Rancher"){
-        entityObj.rancher_type = 1;
-        
-        if(entityObj.birthDate){
-          var numberBDate = Number(entityObj.birthDate);
-          var vDate = new Date(numberBDate);
-          entityObj.birthDate = vDate;
-        } else {
-          entityObj.birthDate = null;
-        }
-        
-        entityObj.name = entityObj.lastName + " " + entityObj.motherName + ", " + entityObj.firstName + " " + entityObj.middleName;
-        
-      }else{
-        entityObj = null;
-      }
+//      if(entityObj.entityName == "RancherContact"){
+//        entityObj.rancher_type = 1;
+//        
+//        if(entityObj.birthDate){
+//          var numberBDate = Number(entityObj.birthDate);
+//          var vDate = new Date(numberBDate);
+//          entityObj.birthDate = vDate;
+//        } else {
+//          entityObj.birthDate = null;
+//        }
+//        
+//        entityObj.name = entityObj.lastName + " " + entityObj.motherName + ", " + entityObj.firstName + " " + entityObj.middleName;
+//        
+//      }else{
+//        entityObj = null;
+//      }
       
       return entityObj;
     },
@@ -60,4 +60,4 @@ enyo.kind(
 	 return result;
     }
   });
-var cacheRanchers = new cache.ranchers();
+var cacheRancherContacts = new cache.rancherContacts();

@@ -6,7 +6,10 @@ enyo.depends(
 	"source/main.menu.options.js",
 	"source/cache.js",
 	"source/crud.cache.js",
+	"source/catalogs.list.js",
+	"source/catalogs.create.js",
 	"source/cache.ranchers.js",
+	"source/cache.rancherContacts.js",
 	"source/cache.enterpriseRanchers.js",
 	"source/cache.cattle.js",	
 	"source/cache.barnyards.js",		
@@ -51,7 +54,6 @@ enyo.depends(
 	"source/users.create.js",
 	"source/cache.users.js",
 	"source/utils.js",
-	"source/catalogs.commonButtons.js",
-	"source/catalogs.list.js",
+	"source/catalogs.commonButtons.js",	
 	"source/catalogs.ranchersList.js"
 );

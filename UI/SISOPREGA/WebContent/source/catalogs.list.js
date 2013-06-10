@@ -6,7 +6,33 @@ enyo.kind({
     allItems : [],
     published : {
 	entity : null,
+	createKindName:""
     },
+    create : function() {
+	this.inherited(arguments);
+	this.createComponent({
+	    kind : enyo.Popup,
+	    width : "80%",
+	    height : "80%",
+	    dismissWithClick : true,
+	    layoutKind : "VFlexLayout",
+	    modal : true,
+	    style : "overflow: hidden; border-width: 8px;",
+	    scrim : true,
+	    components : [ {
+		kind : this.getCreateKindName(),
+		name : "create_kind",
+		lazy : "true",
+		onAdd : "on_add",
+		onUpdate : "on_upd",
+		onCancel : "on_cancel",
+		flex : 1
+	    } ]
+	});
+    },
+    // entityChanged:function(){
+    //	
+    // },
     setItems : function(items) {
 	this.allItems = items;
 	this.arrList = this.allItems;
@@ -18,26 +44,6 @@ enyo.kind({
     // onDeleteItem:"on_delete_item"
     // },
     components : [ {
-	kind : enyo.Popup,
-	width : "80%",
-	height : "80%",
-	dismissWithClick : false,
-	layoutKind : "VFlexLayout",
-	modal : true,
-	style : "overflow: hidden; border-width: 8px;",
-	scrim : true,
-	components : [ {
-	    kind : "catalogs." + this.entity.name + ".create",
-	    name : "create_kind",
-	    lazy : "true",
-	    onAdd : "on_add",
-	    onUpdate : "on_upd",
-	    onCancel : "on_cancel",
-	    flex : 1
-	} ]
-    },
-
-    {
 	kind : enyo.Scroller,
 	flex : 1,
 	className : "listBG",
@@ -130,13 +136,6 @@ enyo.kind({
 	this.$.divider.setCaption(group);
 	this.$.divider.canGenerate = Boolean(group);
     },
-    updateList : function() {
-	this.arrList = this.arrList.sort(function(a, b) {
-	    return (a.importantInfo < b.importantInfo) ? -1 : 1;
-	});
-	this.$.list.render();
-	this.$.scroller.scrollIntoView();
-    },
     key_up : function(inSender, inEvent) {
 
 	var value = "";
@@ -187,11 +186,24 @@ enyo.kind({
 	this.arrList = this.allItems;
 	this.updateList();
     },
+//    ready:function(){
+//	this.reset();
+//    },
     reset : function() {
 	this.$.filter.setValue("");
+	this.entity.get(this,"loadData");
+    },
+    loadData:function(){
 	this.allItems = this.entity.getCatalogsList();
 	this.arrList = this.allItems;
 	this.updateList();
+    },
+    updateList : function() {
+	this.arrList = this.arrList.sort(function(a, b) {
+	    return (a.importantInfo < b.importantInfo) ? -1 : 1;
+	});
+	this.$.list.render();
+	this.$.scroller.scrollIntoView();
     },
     setupProductRow : function(inSender, inIndex) {
 	var objItem;
@@ -214,14 +226,12 @@ enyo.kind({
 	} else {
 	    return false;
 	}
-
     },
     add_click : function(inSender, inEvent) {
 	// this.doClickAdd();
 	this.$.popup.validateComponents();
 	this.$.create_kind.toggleAdd();
 	this.$.popup.openAtCenter();
-
     },
     on_add : function() {
 	this.$.popup.close();
@@ -242,5 +252,5 @@ enyo.kind({
 	    this.$.create_kind.setObj(this.arrList[this.iSelected]);
 	    this.$.popup.openAtCenter();
 	}
-    },
+    }
 });

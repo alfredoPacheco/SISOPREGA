@@ -65,10 +65,10 @@ enyo.kind(
       }
       return arrResult;
     },
-    create : function(objEntity){
+    create : function(objEntity,callbackObject, callbackMethod){
       cacheMan.showScrim();
       var outerObj = this.adapterToOut(objEntity);
-      consumingGateway.Create(this.entityName, outerObj, this, "createCallBack");
+      consumingGateway.Create(this.entityName, outerObj, callbackObject, callbackMethod);
     },
     update : function(objEntity){
       cacheMan.showScrim();
