@@ -18,7 +18,8 @@ enyo.kind(
       }else{
         entityObj = null;
       }
-
+      
+      entityObj.telephone = entityObj.telephone || ""; 
       return entityObj;
     },
     adapterToList : function(entityObj) {

@@ -26,7 +26,8 @@ enyo.kind(
           entityObj.birthDate = null;
         }
         
-        entityObj.name = entityObj.lastName + " " + entityObj.motherName + ", " + entityObj.firstName + " " + entityObj.middleName;
+        entityObj.phone = entityObj.phone || ""; 
+        entityObj.name = "" + (entityObj.lastName || "") + " " + (entityObj.motherName || "") + ", " + (entityObj.firstName || "") + " " + (entityObj.middleName || "");
         
       }else{
         entityObj = null;
@@ -54,7 +55,7 @@ enyo.kind(
 	 for ( var i = 0; i < arrAdapterList.length; i++) {
 	 var obj = arrAdapterList[i];
 	 obj.importantInfo = "" + arrAdapterList[i].name;
-	 obj.secundaryInfo = "" + arrAdapterList[i].phone_number;
+	 obj.secundaryInfo = "" + arrAdapterList[i].phone;
 	 result.push(obj);
 	 }
 	 return result;

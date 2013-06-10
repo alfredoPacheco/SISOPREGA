@@ -216,7 +216,6 @@ var consumingGateway =
                 var milis = ((Math.random() * 1000) + 500);
                 setTimeout(cbObj[cbMethod](output), milis);
               }
-            return output;
           },
           error : function OnError(request, status, error) {
             output.exceptionId = 1;

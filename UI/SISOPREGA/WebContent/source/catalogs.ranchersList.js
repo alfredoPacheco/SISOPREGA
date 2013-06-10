@@ -1,28 +1,28 @@
 enyo.kind({
     name : "catalogs.ranchersList",
     kind : "catalogs.list",
-    create:function(){
+    create : function() {
 	this.inherited(arguments);
 	this.createComponent({
-		name : "options",
-		kind : enyo.PopupSelect,
-		onSelect : "addNewRancher",
-		items : [ {
-		    caption : "Empresa/Sociedad",
-		    value : 1
-		}, {
-		    caption : "Persona Fisica",
-		    value : 2
-		} ]
-	    });
+	    name : "options",
+	    kind : enyo.PopupSelect,
+	    onSelect : "addNewRancher",
+	    items : [ {
+		caption : "Empresa/Sociedad",
+		value : 1
+	    }, {
+		caption : "Persona Fisica",
+		value : 2
+	    } ]
+	});
     },
     addNewRancher : function(inSender, inSelected) {
-	
+
 	this.$.popup.validateComponents();
 	var entityKind = "";
 	switch (inSelected.value) {
 	case 1: // Crear nueva empresa
-	    this.setCreateKindName("catalogs.ranchers.contact.create");
+	    this.setCreateKindName("catalogs.ranchers.enterprise.create");
 	    entityKind = cacheEnterpriseRanchers;
 	    break;
 	case 2:// Crear nuevo ganadero
@@ -30,31 +30,53 @@ enyo.kind({
 	    entityKind = cacheRanchers;
 	    break;
 	}
-	
-	this.$.create_kind.destroy();
-	
-	this.$.popup.createComponent({
-		kind : this.getCreateKindName(),
-		name : "create_kind",
-		lazy : "true",
-		entityKind: entityKind,
-		onAdd : "on_add",
-		onUpdate : "on_upd",
-		onCancel : "on_cancel",
-		flex : 1
-	},{owner:this});
-	
+
+	this.resetCreateKind(entityKind);
+
 	this.$.create_kind.toggleAdd();
 	this.$.popup.render();
 	this.$.popup.openAtCenter();
+    },
+    resetCreateKind : function(entityKind) {
+	this.$.create_kind.destroy();
+
+	this.$.popup.createComponent({
+	    kind : this.getCreateKindName(),
+	    name : "create_kind",
+	    lazy : "true",
+	    entityKind : entityKind,
+	    onAddEntity : "on_add",
+	    onUpdateEntity : "on_upd",
+	    onCancel : "on_cancel",
+	    flex : 1
+	}, {
+	    owner : this
+	});
     },
     add_click : function(inSender, inEvent) {
 	this.$.options.openAtEvent(inEvent);
 	return false;
     },
     selectItem : function(inSender, inEvent) {
-	console.debug(inSender);
-	console.debug(inEvent);
+	var obj = null;
+	if (obj = this.arrList[inEvent.rowIndex]) {
+	    this.iSelected = inEvent.rowIndex;
+
+	    this.$.popup.validateComponents();
+	    var entityKind = "";
+	    if (obj.rancher_type == 1) {
+		this.setCreateKindName("catalogs.ranchers.person.create");
+		entityKind = cacheRanchers;
+	    } else if (obj.rancher_type == 2) {
+		this.setCreateKindName("catalogs.ranchers.enterprise.create");
+		entityKind = cacheEnterpriseRanchers;
+	    }
+
+	    this.resetCreateKind(entityKind);
+	    this.$.create_kind.setEntity(obj);
+	    this.$.popup.render();
+	    this.$.popup.openAtCenter();
+	}
     },
     reset : function() {
 	this.$.filter.setValue("");

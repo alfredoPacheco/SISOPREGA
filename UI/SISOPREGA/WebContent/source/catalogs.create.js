@@ -5,9 +5,9 @@ enyo.kind({
     iCreated : null,
     events :
     {
-      "onAddEntity" : "",
-      "onUpdateEntity" : "",
-      "onCancel" : "",
+      onAddEntity : "",
+      onUpdateEntity : "",
+      onCancel : "",
     },
     updatingEntityId : 0,
     parentObject : null,

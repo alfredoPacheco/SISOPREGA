@@ -17,7 +17,7 @@ enyo.kind({
 	    dismissWithClick : true,
 	    layoutKind : "VFlexLayout",
 	    modal : true,
-	    style : "overflow: hidden; border-width: 8px;",
+	    style : "overflow: hidden; border-width: 0px;",
 	    scrim : true,
 	    components : [ {
 		kind : this.getCreateKindName(),
@@ -59,7 +59,7 @@ enyo.kind({
 		kind : enyo.SwipeableItem,
 		name : "item",
 		onConfirm : "deleteItem",
-		tapHighlight : true,
+		tapHighlight : false,
 		components : [ {
 		    name : "importantInfo",
 		    className : "listFirst",
