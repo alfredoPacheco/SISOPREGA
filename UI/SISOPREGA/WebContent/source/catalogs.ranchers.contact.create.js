@@ -100,33 +100,36 @@ enyo.kind({
 	} ], {
 	    owner : this
 	});
-    },
-    // {
-    // kind : "catalogs.commonButtons",
-    // entityType : "RancherContact",
-    // name : "commonButtons",
-    // onBeforeSave : "before_save",
-    // onUpdateEntity : "updated",
-    // onCancel : "doCancel"
-    // }
-//    setRancher : function(objRancher) {
-//	this.objRancher = objRancher;
-//    },
-//    setEntity : function(objRancher, objContact) {
-//	this.$.commonButtons.parentObject = objRancher;
-//	this.$.commonButtons.setEntity(objContact);
-//    },
-//    toggleAdd : function() {
-//	this.$.commonButtons.parentObject = this.objRancher;
-//
-//	if (this.objRancher.rancher_type == 1) {
-//	    this.$.commonButtons.entityType = "RancherContact";
-//	} else {
-//	    this.$.commonButtons.entityType = "EnterpriseContact";
-//	}
-//
-//	this.$.commonButtons.updatingEntityId = this.objRancher.rancherId;
-//
-//	this.$.commonButtons.toggleAdd();
-//    }
+    }
 });
+
+    addContact : function() {
+      cacheRanchers.addContact(this.objRancher, this.getContact(), this, "doAddRancher");
+    },
+    setRancher : function(objRancher) {
+      this.objRancher = objRancher;
+    },
+    setEntity : function(objRancher, objContact) {
+      this.objRancher = objRancher;
+      this.$.commonButtons.parentObject = objRancher;
+      this.$.commonButtons.setEntity(objContact);
+    //this.$.commonButtons.updatingEntityId = this.objRancher.rancherId;
+    },
+    toggleAdd : function() {
+      this.$.commonButtons.parentObject = this.objRancher;
+      
+      if(this.objRancher.rancher_type == 1){
+        this.$.commonButtons.entityType = "RancherContact";
+      }else{
+        this.$.commonButtons.entityType = "EnterpriseContact";
+      }
+      
+      this.$.commonButtons.toggleAdd();
+    },
+    before_save : function(inSender, obj) {
+      var birthDateMonth = this.$.birth_date.getValue().getMonth() + 1;
+      var shortDateString = birthDateMonth + '/' + this.$.birth_date.getValue().getDate() + '/' + this.$.birth_date.getValue().getFullYear();
+      obj.birthDate = shortDateString;
+    },
+   
+  });
