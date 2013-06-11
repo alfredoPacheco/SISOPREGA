@@ -137,6 +137,7 @@ enyo.kind({
 		+ this.$.birth_date.getValue().getDate() + '/'
 		+ this.$.birth_date.getValue().getFullYear();
 	obj.birthDate = shortDateString;
+	return true;
     },
     checkboxChanged : function(inSender, inEvent) {
 	switch (inSender.name) {

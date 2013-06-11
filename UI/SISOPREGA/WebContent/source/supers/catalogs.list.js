@@ -30,19 +30,11 @@ enyo.kind({
 	    } ]
 	});
     },
-    // entityChanged:function(){
-    //	
-    // },
     setItems : function(items) {
 	this.allItems = items;
 	this.arrList = this.allItems;
 	this.updateList();
     },
-    // events:{
-    // onSelectItem:"on_select_item",
-    // onClickAdd:"on_click_add",
-    // onDeleteItem:"on_delete_item"
-    // },
     components : [ {
 	kind : enyo.Scroller,
 	flex : 1,
@@ -186,10 +178,8 @@ enyo.kind({
 	this.arrList = this.allItems;
 	this.updateList();
     },
-//    ready:function(){
-//	this.reset();
-//    },
     reset : function() {
+	cacheMan.showScrim();
 	this.$.filter.setValue("");
 	this.entity.get(this,"loadData");
     },
@@ -197,6 +187,7 @@ enyo.kind({
 	this.allItems = this.entity.getCatalogsList();
 	this.arrList = this.allItems;
 	this.updateList();
+	cacheMan.hideScrim();
     },
     updateList : function() {
 	this.arrList = this.arrList.sort(function(a, b) {

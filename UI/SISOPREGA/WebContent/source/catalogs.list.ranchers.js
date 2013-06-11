@@ -1,5 +1,5 @@
 enyo.kind({
-    name : "catalogs.ranchersList",
+    name : "catalogs.list.ranchers",
     kind : "catalogs.list",
     create : function() {
 	this.inherited(arguments);
@@ -80,6 +80,7 @@ enyo.kind({
     },
     reset : function() {
 	this.$.filter.setValue("");
+	cacheMan.showScrim();
 	// Retrieve ranchers
 	cacheRanchers.get(this, 'readCallback');
 	// Retrieve enterprise ranchers
@@ -99,5 +100,27 @@ enyo.kind({
 		cacheEnterpriseRanchers.getCatalogsList());
 	this.arrList = this.allItems;
 	this.updateList();
+	cacheMan.hideScrim();
     },
+    deleteItem : function(inSender, inIndex) {
+	cacheMan.showScrim();
+	var obj = null;
+	if (obj = this.arrList[inIndex]) {
+	    var entityKind = "";
+	    var removeId = 0;
+	    if (obj.rancher_type == 1) {
+		entityKind = cacheRanchers;
+		removeId = obj.rancherId;
+	    } else if (obj.rancher_type == 2) {
+		entityKind = cacheEnterpriseRanchers;
+		removeId = obj.enterpriseId;
+	    }
+
+	    if (entityKind.remove(removeId, this, "reset")) {
+		return true;
+	    } else {
+		return false;
+	    }
+	}
+    }
 });

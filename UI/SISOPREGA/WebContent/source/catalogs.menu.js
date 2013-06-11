@@ -16,9 +16,7 @@ enyo.kind({
 		 components: [		
 			{kind: "Spacer"},
 			{kind: "Button", className: "enyo-button-cat", caption: "Ganaderos",onclick:"doRanchers"},
-			{kind: "Spacer"},
-			{kind: "Button", className: "enyo-button-cat", caption: "Contactos",onclick:"doContacts"},
-			{kind: "Spacer"},
+			{kind: "Spacer"}
 			]},
 			
 	]

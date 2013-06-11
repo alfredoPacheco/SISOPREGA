@@ -126,7 +126,7 @@ public class PresentorBean {
     log.exiting(this.getClass().getCanonicalName(), "Delete");
 
     BaseResponse response = entityProxy.Delete(request);
-    log.info("Update gateway completed by " + getLoggedUser() + " as: [" + response.getError() + "]");
+    log.info("Delete gateway completed by " + getLoggedUser() + " as: [" + response.getError() + "]");
     return response;
   }
 

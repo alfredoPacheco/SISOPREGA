@@ -1,6 +1,6 @@
 enyo.kind(
   {
-    name : "Utils",
+    name : "global.utils",
     kind : enyo.Component,
     formatNumberThousands : function(numberStr) {
       numberStr += '';
@@ -196,4 +196,4 @@ enyo.kind(
     }
   });
 
-var utils = new Utils();
+var utils = new global.utils();

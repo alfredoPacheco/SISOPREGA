@@ -7,7 +7,6 @@ enyo.kind({
     arrObj : [],
     callbackObject : null,
     callbackMethod : '',
-    alreadyLoaded : false,
     adapterToOut : function(entityObj) {
 	return entityObj;
     },
@@ -25,17 +24,7 @@ enyo.kind({
 	    this.callbackMethod = '';
 	}
 
-	if (this.alreadyLoaded) {
-	    if (this.callbackObject != null) {
-		var milis = ((Math.random() * 1000) + 500);
-		setTimeout(this.callbackObject[this.callbackMethod](), milis);
-	    } else {
-		cacheMan.hideScrim();
-	    }
-	} else {
-	    consumingGateway.Read(this.entityName, filterDef, this,
-		    "getCallBack");
-	}
+	consumingGateway.Read(this.entityName, filterDef, this, "getCallBack");
 
     },
     getCallBack : function(resultArray) {
@@ -47,15 +36,12 @@ enyo.kind({
 	    if (innerModelObj != null)
 		this.arrObj.push(innerModelObj);
 	}
-	this.alreadyLoaded = true;
 
 	if (this.callbackObject != null) {
 	    var milis = ((Math.random() * 1000) + 500);
-	    setTimeout(this.callbackObject[this.callbackMethod](), milis);
-	} else {
-	    cacheMan.hideScrim();
+	    setTimeout(this.callbackObject[this.callbackMethod](resultArray),
+		    milis);
 	}
-
     },
     getList : function(captionFieldName, valueFieldName) {
 	var arrResult = [];
@@ -66,33 +52,36 @@ enyo.kind({
 	return arrResult;
     },
     create : function(objEntity, callbackObject, callbackMethod) {
-	// cacheMan.showScrim();
 	var outerObj = this.adapterToOut(objEntity);
 	this.callbackObject = callbackObject;
 	this.callbackMethod = callbackMethod;
 	consumingGateway
 		.Create(this.entityName, outerObj, this, "saveCallBack");
     },
-    update : function(objEntity) {
-	cacheMan.showScrim();
+    update : function(objEntity, callbackObject, callbackMethod) {
 	var outerObj = this.adapterToOut(objEntity);
+	this.callbackObject = callbackObject;
+	this.callbackMethod = callbackMethod;
 	consumingGateway
 		.Update(this.entityName, outerObj, this, "saveCallBack");
     },
-    remove : function(entityId) {
-	cacheMan.showScrim();
+    remove : function(entityId, callbackObject, callbackMethod) {
 	var filterDef = {
 	    id : entityId
 	};
-	conumingGateway
-		.Delete(this.entityName, filterDef, this, "saveCallBack");
+	this.callbackObject = callbackObject;
+	this.callbackMethod = callbackMethod;
+	consumingGateway.Delete(this.entityName, filterDef, this,
+		"saveCallBack");
     },
     saveCallBack : function(resultObj) {
 	if (resultObj.exceptionId == 0) { // Created successfully
-	    this.alreadyLoaded = false;
 	    this.get(this.callbackObject, this.callbackMethod);
-	}else{
-	    cacheMan.setMessage("", "[Exception ID: " + resultObj.exceptionId + "] Descripcion: " + resultObj.exceptionDescription);
+	} else {
+	    // Hide scrim if open to see exception message.
+	    cacheMan.hideScrim();
+	    cacheMan.setMessage("", "[Exception ID: " + resultObj.exceptionId
+		    + "] Descripcion: " + resultObj.exceptionDescription);
 	}
     }
 });

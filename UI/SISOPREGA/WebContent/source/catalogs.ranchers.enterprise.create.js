@@ -124,6 +124,7 @@ enyo.kind({
     },
     beforeSave : function(obj) {
 	obj.smsPhoneChosen = this.getCheckBoxSelected();
+	return true;
     },
     checkboxChanged : function(inSender, inEvent) {
 	switch (inSender.name) {
