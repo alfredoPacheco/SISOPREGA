@@ -1,64 +1,94 @@
-enyo.kind({
-	name: "catalogs.main",
-	kind: enyo.VFlexBox,	
-	iProduct:"",
-	events:{
-	},
-	components: [
-		{ kind: enyo.Pane, flex: 1, 
-		  name: "catalogsPane",
-		  transitionKind: "enyo.transitions.LeftRightFlyin",
-		 components:[
-			{	kind:"catalogs.menu",
-			    	name:"catMenu",
-			    	onRanchers:"showRanchers",
-			    	label:"Catálogos"
-			},
-			{	kind:"catalogs.list.ranchers",
-			    	name:"listRanchers",
-			    	label:"Ganaderos"
-			}
-		 ]},		 
-	],
-	showRanchers:function(){
+enyo
+	.kind({
+	    name : "catalogs.main",
+	    kind : enyo.VFlexBox,
+	    iProduct : "",
+	    events : {},
+	    components : [ {
+		kind : enyo.Pane,
+		flex : 1,
+		name : "catalogsPane",
+		transitionKind : "enyo.transitions.LeftRightFlyin",
+		components : [ {
+		    kind : "catalogs.menu",
+		    name : "catMenu",
+		    onRanchers : "showRanchers",
+		    label : "Catálogos"
+		}, {
+		    kind : "catalogs.list.ranchers",
+		    name : "listRanchers",
+		    label : "Ganaderos",
+		    onSelectRancher : "showOptions"
+		}, {
+		    kind : "catalogs.ranchers.options",
+		    name : "rancherOptions"
+		} ]
+	    }, ],
+	    showOptions : function() {
+		this.addGoBackAction();
+
+		var rancherName = '';
+		if (this.$.listRanchers.selectedRancher) {
+		    if (this.$.listRanchers.selectedRancher.rancher_type == 1) {
+			var mother_name = this.$.listRanchers.selectedRancher.motherName ? ' ' + this.$.listRanchers.selectedRancher.motherName : '';
+			rancherName = this.$.listRanchers.selectedRancher.lastName + mother_name + ', ' +  this.$.listRanchers.selectedRancher.firstName;
+		    }
+		    if (this.$.listRanchers.selectedRancher.rancher_type == 2) {
+			rancherName = this.$.listRanchers.selectedRancher.legalName;
+		    }
+
+		    _objMainHeader.setContent(rancherName);
+		    this.$.catalogsPane.validateView("rancherOptions");
+		    this.$.catalogsPane.selectViewByName("rancherOptions");
+		}
+	    },
+	    showRanchers : function() {
 		this.addGoBackAction();
 		_objMainHeader.setContent('Ganaderos');
 		this.$.catalogsPane.validateView("listRanchers");
 		this.$.catalogsPane.selectViewByName("listRanchers");
 		this.$.listRanchers.reset();
-	},	
-	addGoBackAction:function(){
-		_gobackStack.push({caption:_objMainHeader.getContent(),paneMan:this.$.catalogsPane,paneName:this.$.catalogsPane.getViewName()});		
-	},
-	selectView:function(inSender, inView, inPreviousView) {
-		
-		if(inView.name == inPreviousView.name){
-			return;
+	    },
+	    addGoBackAction : function() {
+		_gobackStack.push({
+		    caption : _objMainHeader.getContent(),
+		    paneMan : this.$.catalogsPane,
+		    paneName : this.$.catalogsPane.getViewName()
+		});
+	    },
+	    selectView : function(inSender, inView, inPreviousView) {
+
+		if (inView.name == inPreviousView.name) {
+		    return;
 		}
-		if(_navigatingBack==false){
-			_gobackStack.push({	caption: inPreviousView.label,
-								paneMan:  inPreviousView.parent,
-								paneName: inPreviousView.name     });
-			
+		if (_navigatingBack == false) {
+		    _gobackStack.push({
+			caption : inPreviousView.label,
+			paneMan : inPreviousView.parent,
+			paneName : inPreviousView.name
+		    });
+
 		}
 		_objMainHeader.setContent(inView.label);
-		if(_gobackStack.length == 0){
-			_goBackButton.setShowing(!1);
-			_objMainHeader.setStyle("color:#FFF;border:none;font-size:15px; text-align:center;min-width:150px;");
-		}else{
-			_goBackButton.setShowing(1);
+		if (_gobackStack.length == 0) {
+		    _goBackButton.setShowing(!1);
+		    _objMainHeader
+			    .setStyle("color:#FFF;border:none;font-size:15px; text-align:center;min-width:150px;");
+		} else {
+		    _goBackButton.setShowing(1);
 		}
-		if(inView.name=="usersList"){
-		  inView.updateList();
+		if (inView.name == "usersList") {
+		    inView.updateList();
 		}
-		if(inPreviousView){
-			if(inPreviousView.name == "usersList" && inView.name != "menuOptions"){
-			  var selectedUser = inPreviousView.getSelectedUser();
-			  if(selectedUser)
+		if (inPreviousView) {
+		    if (inPreviousView.name == "usersList"
+			    && inView.name != "menuOptions") {
+			var selectedUser = inPreviousView.getSelectedUser();
+			if (selectedUser)
 			    inView.setUser(selectedUser);
-			  else
+			else
 			    inView.toggleAdd();
-			}
+		    }
 		}
-	}
-});
+	    }
+	});

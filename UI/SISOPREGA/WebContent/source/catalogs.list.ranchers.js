@@ -1,6 +1,8 @@
 enyo.kind({
     name : "catalogs.list.ranchers",
     kind : "catalogs.list",
+    events : {"onSelectRancher":""},
+    selectedRancher : null,
     create : function() {
 	this.inherited(arguments);
 	this.createComponent({
@@ -58,7 +60,10 @@ enyo.kind({
 	return false;
     },
     selectItem : function(inSender, inEvent) {
-	var obj = null;
+	this.iSelected = inEvent.rowIndex;
+	this.selectedRancher = this.arrList[inEvent.rowIndex];
+	this.doSelectRancher();
+	/*var obj = null;
 	if (obj = this.arrList[inEvent.rowIndex]) {
 	    this.iSelected = inEvent.rowIndex;
 
@@ -76,7 +81,7 @@ enyo.kind({
 	    this.$.create_kind.setEntity(obj);
 	    this.$.popup.render();
 	    this.$.popup.openAtCenter();
-	}
+	}*/
     },
     reset : function() {
 	this.$.filter.setValue("");
