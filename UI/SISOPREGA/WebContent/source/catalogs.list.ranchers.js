@@ -1,7 +1,7 @@
 enyo.kind({
     name : "catalogs.list.ranchers",
     kind : "catalogs.list",
-    events : {"onSelectRancher":""},
+    events : {onSelectRancher:""},
     selectedRancher : null,
     create : function() {
 	this.inherited(arguments);
@@ -21,34 +21,30 @@ enyo.kind({
     addNewRancher : function(inSender, inSelected) {
 
 	this.$.popup.validateComponents();
-	var entityKind = "";
 	switch (inSelected.value) {
 	case 1: // Crear nueva empresa
 	    this.setCreateKindName("catalogs.ranchers.enterprise.create");
-	    entityKind = cacheEnterpriseRanchers;
 	    break;
 	case 2:// Crear nuevo ganadero
 	    this.setCreateKindName("catalogs.ranchers.person.create");
-	    entityKind = cacheRanchers;
 	    break;
 	}
 
-	this.resetCreateKind(entityKind);
+	this.resetCreateKind();
 
 	this.$.create_kind.toggleAdd();
 	this.$.popup.render();
 	this.$.popup.openAtCenter();
     },
-    resetCreateKind : function(entityKind) {
+    resetCreateKind : function() {
 	this.$.create_kind.destroy();
 
 	this.$.popup.createComponent({
 	    kind : this.getCreateKindName(),
 	    name : "create_kind",
 	    lazy : "true",
-	    entityKind : entityKind,
-	    onAddEntity : "on_add",
-	    onUpdateEntity : "on_upd",
+	    onAdd : "on_add",
+	    onUpdate : "on_upd",
 	    onCancel : "on_cancel",
 	    flex : 1
 	}, {
@@ -60,8 +56,7 @@ enyo.kind({
 	return false;
     },
     selectItem : function(inSender, inEvent) {
-	this.iSelected = inEvent.rowIndex;
-	this.selectedRancher = this.arrList[inEvent.rowIndex];
+	this.selectedItem = this.arrList[inEvent.rowIndex];
 	this.doSelectRancher();
 	/*var obj = null;
 	if (obj = this.arrList[inEvent.rowIndex]) {

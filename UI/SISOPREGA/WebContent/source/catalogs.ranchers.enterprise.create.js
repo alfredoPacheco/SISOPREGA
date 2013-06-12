@@ -1,6 +1,7 @@
 enyo.kind({
     name : "catalogs.ranchers.enterprise.create",
     kind : "catalogs.create",
+    entityKind : cacheEnterpriseRanchers,
     create : function() {
 	this.inherited(arguments);
 	this.$.rowGroup.createComponents([ {

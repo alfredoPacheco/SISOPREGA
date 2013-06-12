@@ -4,8 +4,8 @@ enyo.kind({
     layoutKind : enyo.VFlexLayout,
     iCreated : null,
     events : {
-	onAddEntity : "",
-	onUpdateEntity : "",
+	onAdd : "",
+	onUpdate : "",
 	onCancel : "",
     },
     updatingEntityId : 0,
@@ -130,11 +130,11 @@ enyo.kind({
 	this.doCancel();
     },
     afterAddEntity : function() {
-	this.doAddEntity();
+	this.doAdd();
 	cacheMan.hideScrim();
     },
     afterUpdateEntity : function(updateResult) {
-	this.doUpdateEntity();
+	this.doUpdate();
 	cacheMan.hideScrim();
     },
     getEntity : function() {
@@ -153,6 +153,7 @@ enyo.kind({
 	return objEntity;
     },
     setEntity : function(entity) {
+	this.resetValues();
 	var controls = this.$;
 
 	for ( var i in controls) {

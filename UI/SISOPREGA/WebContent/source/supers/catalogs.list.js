@@ -1,7 +1,7 @@
 enyo.kind({
     name : "catalogs.list",
     kind : enyo.VFlexBox,
-    iSelected : null,
+    selectedItem : null,
     arrList : [],
     allItems : [],
     published : {
@@ -100,7 +100,7 @@ enyo.kind({
 	} ]
     } ],
     getSelected : function() {
-	return this.arrList[this.iSelected];
+	return this.selectedItem;
     },
     getGroupName : function(inIndex) {
 	try {
@@ -237,10 +237,10 @@ enyo.kind({
     },
     selectItem : function(inSender, inEvent) {
 	if (this.arrList[inEvent.rowIndex]) {
-	    this.iSelected = inEvent.rowIndex;
+	    this.selectedItem = inEvent.rowIndex;
 	    // this.doSelectItem(this.arrList[this.iSelected]);
 	    this.$.popup.validateComponents();
-	    this.$.create_kind.setObj(this.arrList[this.iSelected]);
+	    this.$.create_kind.setObj(this.selectedItem);
 	    this.$.popup.openAtCenter();
 	}
     }

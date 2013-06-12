@@ -21,20 +21,42 @@ enyo
 		    onSelectRancher : "showOptions"
 		}, {
 		    kind : "catalogs.ranchers.options",
-		    name : "rancherOptions"
+		    name : "rancherOptions",
+		    onEdit : "showEdit",
+		    onContacts : "showContacts",
+		    onBilling : "",
+		    onRegister : ""
+		}, {
+		    kind : "catalogs.ranchers.enterprise.create",
+		    name : "enterpriseRancherEdit",
+		    onUpdate : "on_update_rancher",
+		    onCancel : "on_cancel_edit",
+		}, {
+		    kind : "catalogs.ranchers.person.create",
+		    name : "personRancherEdit",
+		    onUpdate : "on_update_rancher",
+		    onCancel : "on_cancel_edit",
+		}, {
+		    kind : "catalogs.list",
+		    name : "contacts",
+		    entity : cacheRancherContacts,
+		    createKindName : "catalogs.ranchers.contact.create",
 		} ]
 	    }, ],
 	    showOptions : function() {
 		this.addGoBackAction();
 
 		var rancherName = '';
-		if (this.$.listRanchers.selectedRancher) {
-		    if (this.$.listRanchers.selectedRancher.rancher_type == 1) {
-			var mother_name = this.$.listRanchers.selectedRancher.motherName ? ' ' + this.$.listRanchers.selectedRancher.motherName : '';
-			rancherName = this.$.listRanchers.selectedRancher.lastName + mother_name + ', ' +  this.$.listRanchers.selectedRancher.firstName;
+		var rancher = null;
+		if (rancher = this.$.listRanchers.getSelected()) {
+		    if (rancher.rancher_type == 1) {
+			var mother_name = rancher.motherName ? ' '
+				+ rancher.motherName : '';
+			rancherName = rancher.lastName + mother_name + ', '
+				+ rancher.firstName;
 		    }
-		    if (this.$.listRanchers.selectedRancher.rancher_type == 2) {
-			rancherName = this.$.listRanchers.selectedRancher.legalName;
+		    if (rancher.rancher_type == 2) {
+			rancherName = rancher.legalName;
 		    }
 
 		    _objMainHeader.setContent(rancherName);
@@ -48,6 +70,39 @@ enyo
 		this.$.catalogsPane.validateView("listRanchers");
 		this.$.catalogsPane.selectViewByName("listRanchers");
 		this.$.listRanchers.reset();
+	    },
+	    showEdit : function() {
+		this.addGoBackAction();
+
+		var view = null;
+		var rancher = null;
+		if (rancher = this.$.listRanchers.getSelected()) {
+		    if (rancher.rancher_type == 1) {
+			view = "personRancherEdit";
+		    }
+		    if (rancher.rancher_type == 2) {
+			view = "enterpriseRancherEdit";
+		    }
+		    this.$.catalogsPane.validateView(view);
+		    this.$.catalogsPane.selectViewByName(view);
+		    this.$[view].setEntity(rancher);
+		    _objMainHeader.setContent(rancher.importantInfo);
+		}
+	    },
+	    on_update_rancher : function() {
+		this.$.listRanchers.reset();
+		this.goBack();
+	    },
+	    on_cancel_edit : function() {
+		this.goBack();
+	    },
+	    showContacts:function(){
+		this.$.catalogsPane.validateView("contacts");
+		this.$.catalogsPane.selectViewByName("contacts");
+		this.$.contacts.reset();
+	    },
+	    goBack : function() {
+		cacheMan.goBack();
 	    },
 	    addGoBackAction : function() {
 		_gobackStack.push({
@@ -67,7 +122,6 @@ enyo
 			paneMan : inPreviousView.parent,
 			paneName : inPreviousView.name
 		    });
-
 		}
 		_objMainHeader.setContent(inView.label);
 		if (_gobackStack.length == 0) {

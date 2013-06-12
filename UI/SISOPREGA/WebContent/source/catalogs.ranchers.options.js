@@ -14,11 +14,11 @@ enyo.kind(
     layoutKind : enyo.VFlexLayout,
     events :
       {
-        "onEdit" : "",
-        "onContacts" : "",
-        "onBilling" : "",
-        "onRegister" : "",
-        "onPedimentos" : ""
+        onEdit : "",
+        onContacts : "",
+        onBilling : "",
+        onRegister : "",
+        onPedimentos : ""
       },
     components :
       [
