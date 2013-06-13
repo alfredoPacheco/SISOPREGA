@@ -243,5 +243,13 @@ enyo.kind({
 	    this.$.create_kind.setObj(this.selectedItem);
 	    this.$.popup.openAtCenter();
 	}
+    },
+    getItemById : function(id) {
+	for ( var i = 0; i < this.allItems.length; i++) {
+	    var idName = this.allItems[i].idName;
+	    var idOnItem = this.allItems[i][idName];
+	    if(idOnItem == id)
+		return this.allItems[i];
+	}
     }
 });

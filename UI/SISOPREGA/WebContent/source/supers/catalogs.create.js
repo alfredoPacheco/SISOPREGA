@@ -93,7 +93,7 @@ enyo.kind({
 	cacheMan.showScrim();
 	var obj = this.getEntity();
 	if (this.beforeSave(obj)) {
-	    delete obj[this.entityIdName()];
+	    delete obj[this.entityKind.entityIdName()];
 	    this.entityKind.create(obj, this, "afterAddEntity");
 	}
 
@@ -131,16 +131,14 @@ enyo.kind({
     },
     afterAddEntity : function() {
 	this.doAdd();
-	cacheMan.hideScrim();
     },
     afterUpdateEntity : function(updateResult) {
 	this.doUpdate();
-	cacheMan.hideScrim();
     },
     getEntity : function() {
 	var objEntity = {};
 
-	objEntity[this.entityIdName()] = this.updatingEntityId;
+	objEntity[this.entityKind.entityIdName()] = this.updatingEntityId;
 
 	var controls = this.$;
 
@@ -165,7 +163,7 @@ enyo.kind({
 	    }
 	}
 
-	this.updatingEntityId = entity[this.entityIdName()];
+	this.updatingEntityId = entity[this.entityKind.entityIdName()];
 
 	this.toggleUpdate();
     },
@@ -177,14 +175,5 @@ enyo.kind({
 	this.$.draAdd.setOpen(true);
 	this.$.draUpdate.setOpen(false);
 	this.resetValues();
-    },
-    entityIdName : function() {
-	var lowerCaseFirstChar = this.entityKind.entityName.substring(0, 1)
-		.toLowerCase();
-	var entityNameCamelCase = this.entityKind.entityName.substring(1,
-		this.entityKind.entityName.length);
-	var idSuffix = "Id";
-	var entityIdName = lowerCaseFirstChar + entityNameCamelCase + idSuffix;
-	return entityIdName;
     }
 });

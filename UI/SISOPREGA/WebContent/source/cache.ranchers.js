@@ -38,12 +38,10 @@ enyo.kind(
             }
           }
         }
-        
+        return this.inherited(arguments);
       }else{
-        entityObj = null;
+        return null;
       }
-      
-      return entityObj;
     },
     adapterToList : function(entityObj) {
       var listObj =

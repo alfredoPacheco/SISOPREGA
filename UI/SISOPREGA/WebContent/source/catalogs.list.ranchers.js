@@ -1,7 +1,9 @@
 enyo.kind({
     name : "catalogs.list.ranchers",
     kind : "catalogs.list",
-    events : {onSelectRancher:""},
+    events : {
+	onSelectRancher : ""
+    },
     selectedRancher : null,
     create : function() {
 	this.inherited(arguments);
@@ -58,25 +60,6 @@ enyo.kind({
     selectItem : function(inSender, inEvent) {
 	this.selectedItem = this.arrList[inEvent.rowIndex];
 	this.doSelectRancher();
-	/*var obj = null;
-	if (obj = this.arrList[inEvent.rowIndex]) {
-	    this.iSelected = inEvent.rowIndex;
-
-	    this.$.popup.validateComponents();
-	    var entityKind = "";
-	    if (obj.rancher_type == 1) {
-		this.setCreateKindName("catalogs.ranchers.person.create");
-		entityKind = cacheRanchers;
-	    } else if (obj.rancher_type == 2) {
-		this.setCreateKindName("catalogs.ranchers.enterprise.create");
-		entityKind = cacheEnterpriseRanchers;
-	    }
-
-	    this.resetCreateKind(entityKind);
-	    this.$.create_kind.setEntity(obj);
-	    this.$.popup.render();
-	    this.$.popup.openAtCenter();
-	}*/
     },
     reset : function() {
 	this.$.filter.setValue("");
@@ -92,6 +75,16 @@ enyo.kind({
 	if (this.readsReceived == 2) {
 	    this.readsReceived = 0;
 	    this.loadList();
+
+	    if (this.selectedItem != null) {
+		var idName = this.selectedItem.idName;
+		this.selectedItem = this.getItemById(this.selectedItem[idName]);
+		
+		// Update main screen title
+		_objMainHeader.setContent(this.selectedItem.importantInfo);
+	    }
+	    
+	    cacheMan.hideScrim();
 	}
     },
     loadList : function() {
@@ -100,13 +93,12 @@ enyo.kind({
 		cacheEnterpriseRanchers.getCatalogsList());
 	this.arrList = this.allItems;
 	this.updateList();
-	cacheMan.hideScrim();
     },
     deleteItem : function(inSender, inIndex) {
 	cacheMan.showScrim();
 	var obj = null;
 	if (obj = this.arrList[inIndex]) {
-	    var entityKind = "";
+	    var entityKind = null;
 	    var removeId = 0;
 	    if (obj.rancher_type == 1) {
 		entityKind = cacheRanchers;

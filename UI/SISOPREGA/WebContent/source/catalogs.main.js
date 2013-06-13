@@ -46,20 +46,9 @@ enyo
 	    showOptions : function() {
 		this.addGoBackAction();
 
-		var rancherName = '';
-		var rancher = null;
-		if (rancher = this.$.listRanchers.getSelected()) {
-		    if (rancher.rancher_type == 1) {
-			var mother_name = rancher.motherName ? ' '
-				+ rancher.motherName : '';
-			rancherName = rancher.lastName + mother_name + ', '
-				+ rancher.firstName;
-		    }
-		    if (rancher.rancher_type == 2) {
-			rancherName = rancher.legalName;
-		    }
-
-		    _objMainHeader.setContent(rancherName);
+		var rancher = this.$.listRanchers.getSelected();
+		if (rancher) {
+		    _objMainHeader.setContent(rancher.importantInfo);
 		    this.$.catalogsPane.validateView("rancherOptions");
 		    this.$.catalogsPane.selectViewByName("rancherOptions");
 		}

@@ -15,12 +15,11 @@ enyo.kind(
         entityObj.rancher_type = 2;
         entityObj.rancherId = entityObj.enterpriseRancherId;
         entityObj.legalName += '';
+        entityObj.telephone = entityObj.telephone || ""; 
+        return this.inherited(arguments);
       }else{
-        entityObj = null;
+        return null;
       }
-      
-      entityObj.telephone = entityObj.telephone || ""; 
-      return entityObj;
     },
     adapterToList : function(entityObj) {
       var listObj =

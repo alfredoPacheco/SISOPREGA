@@ -7,6 +7,11 @@ enyo.kind({
     arrObj : [],
     callbackObject : null,
     callbackMethod : '',
+    adapterToIn : function(entityObj){
+	if(entityObj)
+	    entityObj.idName = this.entityIdName();
+	return entityObj;
+    },
     adapterToOut : function(entityObj) {
 	return entityObj;
     },
@@ -83,5 +88,12 @@ enyo.kind({
 	    cacheMan.setMessage("", "[Exception ID: " + resultObj.exceptionId
 		    + "] Descripcion: " + resultObj.exceptionDescription);
 	}
+    },
+    entityIdName : function() {
+	var lowerCaseFirstChar = this.entityName.substring(0, 1).toLowerCase();
+	var entityNameCamelCase = this.entityName.substring(1, this.entityName.length);
+	var idSuffix = "Id";
+	var entityIdName = lowerCaseFirstChar + entityNameCamelCase + idSuffix;
+	return entityIdName;
     }
 });
