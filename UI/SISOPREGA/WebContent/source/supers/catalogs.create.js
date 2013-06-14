@@ -9,9 +9,9 @@ enyo.kind({
 	onCancel : "",
     },
     updatingEntityId : 0,
-    parentObject : null,
     published : {
-	entityKind : null
+	entityKind : null,
+	parentObject : null
     },
     components : [ {
 	kind : enyo.Scroller,
@@ -93,27 +93,24 @@ enyo.kind({
 	cacheMan.showScrim();
 	var obj = this.getEntity();
 	if (this.beforeSave(obj)) {
-	    delete obj[this.entityKind.entityIdName()];
-	    this.entityKind.create(obj, this, "afterAddEntity");
-	}
+	    delete obj[this.entityKind.entityIdName()]; // Delete id for create operation
 
-	// if (this.parentObject != null) {
-	// if (this.parentObject[this.entityKind] === undefined) {
-	// this.parentObject[this.entityKind] = [];
-	// }
-	//
-	// this.parentObject[this.entityKind].push(obj);
-	// consumingGateway.Update(this.parentObject.entityName,
-	// this.parentObject, this, "afterAddEntity",
-	// this.updatingEntityId);
-	// } else {
-	// entityKind.create(obj,this, "afterAddEntity");
-	// }
+	    if (this.parentObject != null) {
+		if (this.parentObject[this.entityKind.entityName] === undefined) {
+		    this.parentObject[this.entityKind.entityName] = [];
+		}
+		this.parentObject[this.entityKind.entityName].push(obj);
+		this.entityKind.update(this.parentObject, this, "afterAddEntity");
+	    } else {
+		this.entityKind.create(obj, this, "afterAddEntity");
+	    }
+	}
     },
     updateEntity : function() {
 	cacheMan.showScrim();
 	var updateObject = this.getEntity();
 	if (this.beforeSave(updateObject)) {
+	    
 	    this.entityKind.update(updateObject, this, "afterUpdateEntity");
 	}
 

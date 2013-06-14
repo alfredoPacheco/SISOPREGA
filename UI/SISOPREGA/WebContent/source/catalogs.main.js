@@ -38,9 +38,14 @@ enyo
 		    onCancel : "on_cancel_edit",
 		}, {
 		    kind : "catalogs.list",
-		    name : "contacts",
+		    name : "rancherContactsList",
 		    entity : cacheRancherContacts,
-		    createKindName : "catalogs.ranchers.contact.create",
+		    createKindName : "catalogs.ranchers.contact.create"
+		}, {
+		    kind : "catalogs.list",
+		    name : "enterpriseContactsList",
+		    entity : cacheEnterpriseContacts,
+		    createKindName : "catalogs.enterprise.contact.create"
 		} ]
 	    }, ],
 	    showOptions : function() {
@@ -85,10 +90,24 @@ enyo
 	    on_cancel_edit : function() {
 		this.goBack();
 	    },
-	    showContacts:function(){
-		this.$.catalogsPane.validateView("contacts");
-		this.$.catalogsPane.selectViewByName("contacts");
-		this.$.contacts.reset();
+	    showContacts : function() {
+		this.addGoBackAction();
+
+		var view = null;
+		var rancher = null;
+		if (rancher = this.$.listRanchers.getSelected()) {
+		    if (rancher.rancher_type == 1) {
+			view = "rancherContactsList";
+		    }
+		    if (rancher.rancher_type == 2) {
+			view = "enterpriseContactsList";
+		    }
+		    this.$.catalogsPane.validateView(view);
+		    this.$.catalogsPane.selectViewByName(view);
+		    this.$[view].setParentObject(rancher);
+		    _objMainHeader.setContent(rancher.importantInfo);
+		    this.$[view].reset();
+		}
 	    },
 	    goBack : function() {
 		cacheMan.goBack();

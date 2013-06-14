@@ -6,7 +6,13 @@ enyo.kind({
     allItems : [],
     published : {
 	entity : null,
-	createKindName:""
+	createKindName:"",
+	parentObject : null
+    },
+    parentObjectChanged:function(inOldValue){
+	this.$.popup.validateComponents();
+	if(this.$.create_kind)
+	    this.$.create_kind.setParentObject(this.getParentObject());
     },
     create : function() {
 	this.inherited(arguments);

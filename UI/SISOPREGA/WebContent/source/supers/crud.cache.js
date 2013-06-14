@@ -60,15 +60,13 @@ enyo.kind({
 	var outerObj = this.adapterToOut(objEntity);
 	this.callbackObject = callbackObject;
 	this.callbackMethod = callbackMethod;
-	consumingGateway
-		.Create(this.entityName, outerObj, this, "saveCallBack");
+	consumingGateway.Create(this.entityName, outerObj, this, "saveCallBack");
     },
     update : function(objEntity, callbackObject, callbackMethod) {
 	var outerObj = this.adapterToOut(objEntity);
 	this.callbackObject = callbackObject;
 	this.callbackMethod = callbackMethod;
-	consumingGateway
-		.Update(this.entityName, outerObj, this, "saveCallBack");
+	consumingGateway.Update(objEntity.entityName || this.entityName, outerObj, this, "saveCallBack");
     },
     remove : function(entityId, callbackObject, callbackMethod) {
 	var filterDef = {
