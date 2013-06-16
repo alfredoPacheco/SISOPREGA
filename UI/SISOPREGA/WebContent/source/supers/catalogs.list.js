@@ -187,7 +187,17 @@ enyo.kind({
     reset : function() {
 	cacheMan.showScrim();
 	this.$.filter.setValue("");
-	this.entity.get(this,"loadData");
+	if(this.parentObject != null){
+	    if(this.parentObject[this.entity.entityName] === undefined){
+		this.entity.arrObj = [];
+	    }else{
+		this.entity.arrObj = this.parentObject[this.entity.entityName];
+	    }
+	    this.loadData();
+	}else{
+	    this.entity.get(this,"loadData");
+	}
+	
     },
     loadData:function(){
 	this.allItems = this.entity.getCatalogsList();
@@ -243,10 +253,9 @@ enyo.kind({
     },
     selectItem : function(inSender, inEvent) {
 	if (this.arrList[inEvent.rowIndex]) {
-	    this.selectedItem = inEvent.rowIndex;
-	    // this.doSelectItem(this.arrList[this.iSelected]);
+	    this.selectedItem = this.arrList[inEvent.rowIndex];
 	    this.$.popup.validateComponents();
-	    this.$.create_kind.setObj(this.selectedItem);
+	    this.$.create_kind.setEntity(this.selectedItem);
 	    this.$.popup.openAtCenter();
 	}
     },

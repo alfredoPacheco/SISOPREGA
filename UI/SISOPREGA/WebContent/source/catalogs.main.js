@@ -105,7 +105,7 @@ enyo
 		    this.$.catalogsPane.validateView(view);
 		    this.$.catalogsPane.selectViewByName(view);
 		    this.$[view].setParentObject(rancher);
-		    _objMainHeader.setContent(rancher.importantInfo);
+		    _objMainHeader.setContent(rancher.importantInfo + ' - Contactos');
 		    this.$[view].reset();
 		}
 	    },
