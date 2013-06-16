@@ -110,12 +110,28 @@ enyo.kind({
 	cacheMan.showScrim();
 	var updateObject = this.getEntity();
 	if (this.beforeSave(updateObject)) {
+	    if(this.parentObject != null){
+		if(this.parentObject[this.entityKind.entityName] === undefined){
+		    this.parentObject[this.entityKind.entityName] = [];
+		}
+		var itemIndex = this.findEntityIndexInParentById(updateObject[this.entityKind.entityIdName()]);
+		if(itemIndex != null)
+		    this.parentObject[this.entityKind.entityName][itemIndex] = updateObject;
+		
+		this.entityKind.update(this.parentObject, this, "afterUpdateEntity");
+	    }else{
+		this.entityKind.update(updateObject, this, "afterUpdateEntity");
+	    }
 	    
-	    this.entityKind.update(updateObject, this, "afterUpdateEntity");
 	}
-
-	// consumingGateway.Update(this.entityKind, updateObject, this,
-	// "afterUpdateEntity", this.updatingEntityId);
+    },
+    findEntityIndexInParentById : function(id){
+	for(var i = 0; i < this.parentObject[this.entityKind.entityName].length; i++){
+	    if(this.parentObject[this.entityKind.entityName][i][this.entityKind.entityIdName()]==id)
+		return i;
+	}
+	
+	return null;
     },
     beforeSave : function(obj) {
 	// this function can be overriden in order to do something with obj
