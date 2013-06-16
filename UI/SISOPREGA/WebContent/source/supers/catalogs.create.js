@@ -142,7 +142,9 @@ enyo.kind({
 	this.resetValues();
 	this.doCancel();
     },
-    afterAddEntity : function() {
+    afterAddEntity : function(result) {
+	// TODO: Update array based on parentObject
+	console.debug('should update parent object array');
 	this.doAdd();
     },
     afterUpdateEntity : function(updateResult) {

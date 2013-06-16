@@ -99,20 +99,13 @@ enyo.kind({
 	var obj = null;
 	if (obj = this.arrList[inIndex]) {
 	    var entityKind = null;
-	    var removeId = 0;
 	    if (obj.rancher_type == 1) {
 		entityKind = cacheRanchers;
-		removeId = obj.rancherId;
 	    } else if (obj.rancher_type == 2) {
 		entityKind = cacheEnterpriseRanchers;
-		removeId = obj.enterpriseId;
 	    }
 
-	    if (entityKind.remove(removeId, this, "reset")) {
-		return true;
-	    } else {
-		return false;
-	    }
+	    entityKind.remove(obj, this, "reset");
 	}
     }
 });

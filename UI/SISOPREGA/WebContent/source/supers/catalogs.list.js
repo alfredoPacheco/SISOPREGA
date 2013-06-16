@@ -222,16 +222,28 @@ enyo.kind({
 	}
     },
     deleteItem : function(inSender, inIndex) {
-	// if (this.doDeleteItem(this.arrList[inIndex], this, "reset")) {
-	// return true;
-	// } else {
-	// return false;
-	// }
-
-	if (this.entity.del(this.arrList[inIndex], this, "reset")) {
-	    return true;
-	} else {
-	    return false;
+	this.selectedItem = this.arrList[inIndex];
+	this.entity.remove(this.selectedItem, this, "deleteItemCallBack");
+    },
+    deleteItemCallBack: function(result){
+	if(result.exceptionId == 0){
+	    if(this.parentObject != null){
+		// Locate the one to be removed from parent
+		var parentArrayRemovedIndex = -1;
+		for(var i = 0; i< this.parentObject[this.entity.entityName].length; i++){
+		    var entityIdName = this.entity.entityIdName();
+		    if(this.parentObject[this.entity.entityName][i][entityIdName] == this.selectedItem[entityIdName]){
+			parentArrayRemovedIndex = i;
+			break;
+		    }
+		}
+		
+		// remove from parent.
+		if(parentArrayRemovedIndex > -1)
+		    this.parentObject[this.entity.entityName].splice(parentArrayRemovedIndex, 1);
+	    }
+	    
+	    this.reset();
 	}
     },
     add_click : function(inSender, inEvent) {
