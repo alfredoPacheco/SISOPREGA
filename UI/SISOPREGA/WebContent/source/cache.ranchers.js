@@ -28,16 +28,7 @@ enyo.kind(
         
         entityObj.phone = entityObj.phone || ""; 
         entityObj.name = "" + (entityObj.lastName || "") + " " + (entityObj.motherName || "") + ", " + (entityObj.firstName || "") + " " + (entityObj.middleName || "");
-
-        if(entityObj.RancherContact !== undefined){
-          for(var idx = 0; idx < entityObj.RancherContact.length; idx++){
-            if(entityObj.RancherContact[idx].birthDate){
-              var numberBDate = Number(entityObj.RancherContact[idx].birthDate);
-              var vDate = new Date(numberBDate);
-              entityObj.RancherContact[idx].birthDate = vDate;
-            }
-          }
-        }
+        
         return this.inherited(arguments);
       }else{
         return null;
