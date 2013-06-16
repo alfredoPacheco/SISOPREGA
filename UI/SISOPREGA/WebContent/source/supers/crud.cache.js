@@ -79,7 +79,7 @@ enyo.kind({
 		"saveCallBack");
     },
     saveCallBack : function(resultObj) {
-	if (resultObj.exceptionId == 0) { // Created successfully
+	if (Number(resultObj.exceptionId) == 0) { // Created successfully
 	    this.get(this.callbackObject, this.callbackMethod);
 	} else {
 	    // Hide scrim if open to see exception message.

@@ -69,7 +69,7 @@ public class EnterpriseRancher {
     this.rancherInvoice = rancherInvoice;
   }
 
-  public void addRancherInvoice(EnterpriseInvoice invoice) {
+  public void addEnterpriseInvoice(EnterpriseInvoice invoice) {
     if (rancherInvoice == null)
       rancherInvoice = new HashSet<EnterpriseInvoice>();
 

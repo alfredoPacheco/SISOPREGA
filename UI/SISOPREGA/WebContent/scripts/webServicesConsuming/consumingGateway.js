@@ -388,11 +388,9 @@ var consumingGateway = {
 		    consumingGateway.LogOut();
 		}
 		output.origin = jQuery(data).find("origin").text();
-		if (output.exceptionId == 0) {
-		    if (cbObj) {
-			var milis = ((Math.random() * 1000) + 500);
-			setTimeout(cbObj[cbMethod](output), milis);
-		    }
+		if (cbObj) {
+		    var milis = ((Math.random() * 1000) + 500);
+		    setTimeout(cbObj[cbMethod](output), milis);
 		}
 		return false;
 	    },
@@ -444,11 +442,9 @@ var consumingGateway = {
 		    consumingGateway.LogOut();
 		}
 		output.origin = jQuery(data).find("origin").text();
-		if (output.exceptionId == 0) {
-		    if (cbObj) {
-			var milis = ((Math.random() * 1000) + 500);
-			setTimeout(cbObj[cbMethod](output), milis);
-		    }
+		if (cbObj) {
+		    var milis = ((Math.random() * 1000) + 500);
+		    setTimeout(cbObj[cbMethod](output), milis);
 		}
 		return false;
 	    },

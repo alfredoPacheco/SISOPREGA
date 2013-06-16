@@ -24,7 +24,7 @@ enyo
 		    name : "rancherOptions",
 		    onEdit : "showEdit",
 		    onContacts : "showContacts",
-		    onBilling : "",
+		    onBilling : "showBillings",
 		    onRegister : ""
 		}, {
 		    kind : "catalogs.ranchers.enterprise.create",
@@ -46,7 +46,17 @@ enyo
 		    name : "enterpriseContactsList",
 		    entity : cacheEnterpriseContacts,
 		    createKindName : "catalogs.enterprise.contact.create"
-		} ]
+		},{
+		    kind : "catalogs.list",
+		    name : "rancherBillingList",
+		    entity : cacheRancherBilling,
+		    createKindName : "catalogs.ranchers.billing.create"
+		},{
+		    kind : "catalogs.list",
+		    name : "enterpriseBillingList",
+		    entity : cacheEnterpriseBilling,
+		    createKindName : "catalogs.enterprise.billing.create"
+		}  ]
 	    }, ],
 	    showOptions : function() {
 		this.addGoBackAction();
@@ -106,6 +116,25 @@ enyo
 		    this.$.catalogsPane.selectViewByName(view);
 		    this.$[view].setParentObject(rancher);
 		    _objMainHeader.setContent(rancher.importantInfo + ' - Contactos');
+		    this.$[view].reset();
+		}
+	    },
+	    showBillings:function(){
+		this.addGoBackAction();
+
+		var view = null;
+		var rancher = null;
+		if (rancher = this.$.listRanchers.getSelected()) {
+		    if (rancher.rancher_type == 1) {
+			view = "rancherBillingList";
+		    }
+		    if (rancher.rancher_type == 2) {
+			view = "enterpriseBillingList";
+		    }
+		    this.$.catalogsPane.validateView(view);
+		    this.$.catalogsPane.selectViewByName(view);
+		    this.$[view].setParentObject(rancher);
+		    _objMainHeader.setContent(rancher.importantInfo + ' - Facturación');
 		    this.$[view].reset();
 		}
 	    },
