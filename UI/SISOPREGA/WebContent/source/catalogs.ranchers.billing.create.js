@@ -2,7 +2,6 @@ enyo.kind({
     name : "catalogs.ranchers.billing.create",
     kind : "catalogs.create",
     objRancher : null,
-    objBilling : {},
     entityKind : cacheRancherBilling,
     create : function() {
 	this.inherited(arguments);
