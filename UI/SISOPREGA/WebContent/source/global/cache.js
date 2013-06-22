@@ -265,6 +265,9 @@ var _arrBarnyardsListCatalog =
           } ]
     } ];
 
+
+
+
 var _objMainHeader;
 var _objPopupHeader;
 var _gobackStack = [];
@@ -284,9 +287,12 @@ enyo.kind(
       this.gblScrim = objVar;
     },
     showScrim : function() {
-      this.gblScrim.show();
+//	var highestZIndex = this.getHighestZIndex();
+//	highestZIndex++;
+	this.gblScrim.showAtZIndex(32000);
     },
     hideScrim : function() {
+//	globalScrim.hide();
       this.gblScrim.hide();
     },
     setGlobalToaster : function(objVar) {
@@ -420,6 +426,17 @@ enyo.kind(
       }
       return result;
     },
+    getHighestZIndex:function(){
+	var elements = document.getElementsByTagName("*");
+	var highest_index = 0;
+
+	for (var i = 0; i < elements.length - 1; i++) {
+	    if (parseInt(elements[i].style.zIndex) > highest_index) {
+	        highest_index = parseInt(elements[i].style.zIndex);
+	    }
+	}
+	return highest_index;
+    }
   });
 
 var cacheMan = new cache();

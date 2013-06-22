@@ -68,7 +68,7 @@ enyo.kind(
             bindTo : "emailAddress"
           },
           {
-            kind : "Input",
+            kind : "controls.phoneBox",
             name : "phone_number",
             hint : "Telefono",
             inputClassName : "blankInput",
