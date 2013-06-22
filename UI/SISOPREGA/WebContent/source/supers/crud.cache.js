@@ -29,7 +29,13 @@ enyo.kind({
 	    this.callbackMethod = '';
 	}
 
-	consumingGateway.Read(this.entityName, filterDef, this, "getCallBack");
+	if(callbackObject.parentObject != null){
+	    consumingGateway.Read(callbackObject.parentObject.entityName, filterDef, this, "getCallBack");
+	}else{
+	    consumingGateway.Read(this.entityName, filterDef, this, "getCallBack");
+	}
+	
+	
 
     },
     getCallBack : function(resultArray) {
@@ -88,10 +94,16 @@ enyo.kind({
 		    + "] Descripcion: " + resultObj.exceptionDescription);
 	}
     },
-    entityIdName : function() {
+    entityIdName : function(entityObj) {
 	var lowerCaseFirstChar = this.entityName.substring(0, 1).toLowerCase();
 	var entityNameCamelCase = this.entityName.substring(1, this.entityName.length);
 	var idSuffix = "Id";
+	
+	if(entityObj){
+	    lowerCaseFirstChar = entityObj.entityName.substring(0, 1).toLowerCase();
+	    entityNameCamelCase = entityObj.entityName.substring(1, this.entityName.length);
+	}
+	
 	var entityIdName = lowerCaseFirstChar + entityNameCamelCase + idSuffix;
 	return entityIdName;
     }

@@ -144,8 +144,25 @@ enyo.kind({
     },
     afterAddEntity : function(result) {
 	// TODO: Update array based on parentObject
-	console.debug('should update parent object array');
+	if(this.parentObject!=null){
+	    // TODO: Locate parent record in result array by id
+	    var record = this.getRecordEntityById(result, this.parentObject[this.entityKind.entityIdName(this.parentObject)]);
+	    // TODO: Change array
+	    if(record != null){
+		console.debug('should update parent object array');
+		this.parentObject[this.entityKind.entityName] = record[this.entityKind.entityName];
+	    }
+	}
 	this.doAdd();
+    },
+    getRecordEntityById: function(result, id){
+	for(var i = 0; i < result.records.length; i++){
+	    var recordId = result.records[i][this.entityKind.entityIdName(this.parentObject)];
+	    if(recordId == id){
+		return result.records[i];
+	    }
+	}
+	return null;
     },
     afterUpdateEntity : function(updateResult) {
 	this.doUpdate();
