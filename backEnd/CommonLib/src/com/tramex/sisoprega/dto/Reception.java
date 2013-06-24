@@ -45,6 +45,7 @@ public class Reception {
   private long locationId;
   private long zoneId;
   private Set<Pen> pen;
+  private Set<ReceptionHeadcount> receptionHeadcount;
 
   /**
    * @return the pen
@@ -160,6 +161,31 @@ public class Reception {
     this.zoneId = zoneId;
   }
   
+  /**
+   * @return the receptionHeadcount
+   */
+  public Set<ReceptionHeadcount> getReceptionHeadcount() {
+    return receptionHeadcount;
+  }
+
+  /**
+   * @param receptionHeadcount the receptionHeadcount to set
+   */
+  public void setReceptionHeadcount(Set<ReceptionHeadcount> receptionHeadcount) {
+    this.receptionHeadcount = receptionHeadcount;
+  }
+  
+  public void addReceptionHeadcount(ReceptionHeadcount headcount){
+    if(receptionHeadcount == null)
+      receptionHeadcount = new HashSet<ReceptionHeadcount>();
+    
+    receptionHeadcount.add(headcount);
+    
+    if(!headcount.getReception().equals(this))
+      headcount.setReception(this);
+    
+  }
+  
 
   @Override
   public String toString() {
@@ -174,4 +200,5 @@ public class Reception {
     }
     return false;
   }
+  
 }

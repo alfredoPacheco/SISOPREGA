@@ -614,6 +614,11 @@
 			<basic name="cattleType">
 				<column name="cattle_type" />
 			</basic>
+			<one-to-many name="receptionHeadcount" fetch="EAGER" mapped-by="reception" target-entity="com.tramex.sisoprega.dto.ReceptionHeadcount" >
+				<cascade>
+					<cascade-all/>
+				</cascade>
+			</one-to-many>
 			<many-to-many name="pen" fetch="EAGER">
 				<join-table name="ctrl_reception_barnyard">
 					<join-column name="reception_id" referenced-column-name="reception_id" />
@@ -624,22 +629,11 @@
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.ReceptionHeadcount">
 		<table name="ctrl_reception_headcount" />
-		<named-query name="CRT_RECEPTIONHEADCOUNT_BY_ID">
-			<description>Retrieves a single crtReceptionHeadcount record by ID</description>
-			<query>SELECT RecepHcount FROM ReceptionHeadcount RecepHcount WHERE RecepHcount.receptionHeadcountId = :Id</query>
-		</named-query>
-		<named-query name="RECEPTION_HEADCOUNT_BY_RECEPTION_ID">
-			<description>Retrieves a list of reception headcounts by ReceptionID</description>
-			<query>SELECT RecepHcount FROM ReceptionHeadcount RecepHcount WHERE RecepHcount.receptionId = :receptionId</query>
-		</named-query>
 		<attributes>
 			<id name="receptionHeadcountId">
 				<column name="headcount_id" />
 				<generated-value strategy="IDENTITY" />
 			</id>
-			<basic name="receptionId">
-				<column name="reception_id" />
-			</basic>
 			<basic name="hc">
 				<column name="hc" />
 			</basic>
@@ -649,6 +643,9 @@
 			<basic name="weightUom">
 				<column name="weight_uom" />
 			</basic>
+			<many-to-one name="reception" fetch="LAZY" optional="false" >
+				<join-column name="reception_id" referenced-column-name="reception_id" nullable="false"/>
+			</many-to-one>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.FeedOrder">

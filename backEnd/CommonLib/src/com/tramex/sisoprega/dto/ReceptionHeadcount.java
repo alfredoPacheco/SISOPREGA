@@ -35,10 +35,10 @@ package com.tramex.sisoprega.dto;
  */
 public class ReceptionHeadcount {
   private long receptionHeadcountId;
-  private long receptionId;
   private long hc;
   private double weight;
   private long weightUom;
+  private Reception reception;
 
   /**
    * @return the hc
@@ -71,21 +71,6 @@ public class ReceptionHeadcount {
   }
 
   /**
-   * @return the receptionId
-   */
-  public long getReceptionId() {
-    return receptionId;
-  }
-
-  /**
-   * @param receptionId
-   *          the receptionId to set
-   */
-  public void setReceptionId(long receptionId) {
-    this.receptionId = receptionId;
-  }
-
-  /**
    * @return the weight
    */
   public double getWeight() {
@@ -114,10 +99,24 @@ public class ReceptionHeadcount {
   public void setWeightUom(long weightUom) {
     this.weightUom = weightUom;
   }
+  
+  /**
+   * @return the reception
+   */
+  public Reception getReception() {
+    return reception;
+  }
+
+  /**
+   * @param reception the reception to set
+   */
+  public void setReception(Reception reception) {
+    this.reception = reception;
+  }
 
   @Override
   public String toString() {
-    return "hc:" + hc + ";receptionHeadcountId:" + receptionHeadcountId + ";receptionId:" + receptionId + ";weight:" + weight + ";weightUom:"
+    return "hc:" + hc + ";receptionHeadcountId:" + receptionHeadcountId + ";weight:" + weight + ";weightUom:"
         + weightUom + ";";
   }
 }

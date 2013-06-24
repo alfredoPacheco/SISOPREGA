@@ -62,6 +62,8 @@ public class BaseDataModel implements RemoteModelable {
     log.fine("JPA EntityManager Flushed away");
     TypedQuery<T> readQuery = em.createNamedQuery(queryName, type);
 
+    log.finer("Setting up parameters for readQuery [" + readQuery + "]");
+    
     if (parameters != null) {
       for (Map.Entry<String, Object> entry : parameters.entrySet()) {
         readQuery.setParameter(entry.getKey(), entry.getValue());
@@ -70,6 +72,7 @@ public class BaseDataModel implements RemoteModelable {
     }
     
     List<T> result = readQuery.getResultList();
+    log.finest("read query successfully executed.!");
     for(Object obj : result){
       em.refresh(obj);
     }
