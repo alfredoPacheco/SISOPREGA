@@ -43,6 +43,8 @@ public class Pen {
   private boolean available;
   private long locationId;
   private Set<PenCapacity> penCapacity;
+  private Set<Reception> reception;
+
 
   /**
    * @return the penCapacity
@@ -127,6 +129,27 @@ public class Pen {
   public void setLocationId(long locationId) {
     this.locationId = locationId;
   }
+  
+  /**
+   * @return the reception
+   */
+  public Set<Reception> getReception() {
+    return reception;
+  }
+
+  /**
+   * @param reception the reception to set
+   */
+  public void setReception(Set<Reception> reception) {
+    this.reception = reception;
+  }
+  
+  public void addReception(Reception inReception){
+    if(reception == null)
+      reception = new HashSet<Reception>();
+    
+    this.reception.add(inReception);
+  }
 
   @Override
   public String toString() {
@@ -142,4 +165,6 @@ public class Pen {
     } else
       return false;
   }
+
+  
 }

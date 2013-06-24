@@ -143,11 +143,11 @@ enyo.kind({
 	this.doCancel();
     },
     afterAddEntity : function(result) {
-	// TODO: Update array based on parentObject
+	// Update array based on parentObject
 	if(this.parentObject!=null){
-	    // TODO: Locate parent record in result array by id
+	    // Locate parent record in result array by id
 	    var record = this.getRecordEntityById(result, this.parentObject[this.entityKind.entityIdName(this.parentObject)]);
-	    // TODO: Change array
+	    // Change array
 	    if(record != null){
 		console.debug('should update parent object array');
 		this.parentObject[this.entityKind.entityName] = record[this.entityKind.entityName];

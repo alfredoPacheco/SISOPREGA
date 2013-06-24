@@ -16,6 +16,8 @@
 package com.tramex.sisoprega.dto;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Defines the model for the Cattle Type entity.<BR/>
@@ -42,6 +44,31 @@ public class Reception {
   private long cattleType;
   private long locationId;
   private long zoneId;
+  private Set<Pen> pen;
+
+  /**
+   * @return the pen
+   */
+  public Set<Pen> getPen() {
+    return pen;
+  }
+
+  /**
+   * @param pen the pen to set
+   */
+  public void setPen(Set<Pen> pen) {
+    this.pen = pen;
+  }
+  
+  public void addPen(Pen inPen){
+    if(pen == null)
+      pen = new HashSet<Pen>();
+    
+    pen.add(inPen);
+    
+    if(!inPen.getReception().contains(this))
+      inPen.addReception(this);
+  }
 
   /**
    * @return the receptionId
