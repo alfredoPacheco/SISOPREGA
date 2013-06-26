@@ -38,11 +38,11 @@ import java.util.Date;
  */
 public class Inspection {
   private long inspectionId;
-  private long receptionId;
   private Date inspectionDate;
   private String comments;
   private double weight;
   private long weightUom = 1;
+  private Reception reception;
 
   /**
    * @return the inspectionId
@@ -60,21 +60,6 @@ public class Inspection {
   }
 
   /**
-   * @return the receptionId
-   */
-  public long getReceptionId() {
-    return receptionId;
-  }
-
-  /**
-   * @param receptionId
-   *          the receptionId to set
-   */
-  public void setReceptionId(long receptionId) {
-    this.receptionId = receptionId;
-  }
-
-  /**
    * @return the inspectionDate
    */
   public Date getInspectionDate() {
@@ -88,7 +73,7 @@ public class Inspection {
   public void setInspectionDate(Date inspectionDate) {
     this.inspectionDate = inspectionDate;
   }
-  
+
   /**
    * @param comment
    *          the inspection comment to set
@@ -104,39 +89,54 @@ public class Inspection {
     return comments;
   }
 
-  
   /**
- * @return the weight
- */
-public double getWeight() {
-	return weight;
-}
+   * @return the weight
+   */
+  public double getWeight() {
+    return weight;
+  }
 
-/**
- * @param weight the weight to set
- */
-public void setWeight(double weight) {
-	this.weight = weight;
-}
+  /**
+   * @param weight
+   *          the weight to set
+   */
+  public void setWeight(double weight) {
+    this.weight = weight;
+  }
 
-/**
- * @return the weightUom
- */
-public long getWeightUom() {
-	return weightUom;
-}
+  /**
+   * @return the weightUom
+   */
+  public long getWeightUom() {
+    return weightUom;
+  }
 
-/**
- * @param weightUom the weightUom to set
- */
-public void setWeightUom(long weightUom) {
-	this.weightUom = weightUom;
-}
+  /**
+   * @param weightUom
+   *          the weightUom to set
+   */
+  public void setWeightUom(long weightUom) {
+    this.weightUom = weightUom;
+  }
 
-@Override
+  /**
+   * @return the reception
+   */
+  public Reception getReception() {
+    return reception;
+  }
+
+  /**
+   * @param reception
+   *          the reception to set
+   */
+  public void setReception(Reception reception) {
+    this.reception = reception;
+  }
+
+  @Override
   public String toString() {
-    return "inspectionDate:" + inspectionDate + ";inspectionId:" + inspectionId + 
-    		";receptionId:" + receptionId + comments + "; weight=" + weight
-				+ "; weightUom=" + weightUom;
+    return "inspectionDate:" + inspectionDate + ";inspectionId:" + inspectionId + "; weight=" + weight + "; weightUom="
+        + weightUom;
   }
 }

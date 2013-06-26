@@ -498,6 +498,12 @@
 					<inverse-join-column name="reception_id" referenced-column-name="reception_id"/>
 				</join-table>
 			</many-to-many>
+			<many-to-many name="feedOrder" fetch="LAZY">
+				<join-table name="ctrl_feed_order_barnyard">
+					<join-column name="barnyard_id" referenced-column-name="barnyard_id" />
+					<inverse-join-column name="order_id" referenced-column-name="order_id" />
+				</join-table>
+			</many-to-many>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.PenCapacity">
@@ -581,7 +587,7 @@
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.Reception">
 		<table name="ctrl_reception" />
-		<named-query name="CRT_RECEPTION_BY_ID">
+		<named-query name="RECEPTION_BY_ID">
 			<description>Retrieves a single crtReception record by ID</description>
 			<query>SELECT Recep FROM Reception Recep WHERE Recep.receptionId = :Id</query>
 		</named-query>
@@ -619,6 +625,16 @@
 					<cascade-all/>
 				</cascade>
 			</one-to-many>
+			<one-to-many name="feedOrder" fetch="EAGER" mapped-by="reception" target-entity="com.tramex.sisoprega.dto.FeedOrder">
+				<cascade>
+					<cascade-all/>
+				</cascade>
+			</one-to-many>
+			<one-to-many name="inspection" fetch="EAGER" mapped-by="reception" target-entity="com.tramex.sisoprega.dto.Inspection">
+				<cascade>
+					<cascade-all/>
+				</cascade>
+			</one-to-many>
 			<many-to-many name="pen" fetch="EAGER">
 				<join-table name="ctrl_reception_barnyard">
 					<join-column name="reception_id" referenced-column-name="reception_id" />
@@ -648,36 +664,6 @@
 			</many-to-one>
 		</attributes>
 	</entity>
-	<entity class="com.tramex.sisoprega.dto.FeedOrder">
-		<table name="ctrl_feed_order" />
-		<named-query name="CRT_FEEDORDER_BY_ID">
-			<description>Retrieves a single Feed Order record by its ID</description>
-			<query>SELECT FeedOrd FROM FeedOrder FeedOrd WHERE FeedOrd.feedOrderId = :Id</query>
-		</named-query>
-		<named-query name="FEEDORDER_BY_RECEPTION_ID">
-			<description>Retrieves a list of feed orders using the reception id.</description>
-			<query>SELECT feed FROM FeedOrder feed WHERE feed.receptionId = :receptionId</query>
-		</named-query>
-		<attributes>
-			<id name="feedOrderId">
-				<column name="order_id" />
-				<generated-value strategy="IDENTITY" />
-			</id>
-			<basic name="feedDate">
-				<column name="feed_date" />
-				<temporal>TIMESTAMP</temporal>
-			</basic>
-			<basic name="receptionId">
-				<column name="reception_id" />
-			</basic>
-			<basic name="feedOriginator">
-				<column name="feed_originator" />
-			</basic>
-			<basic name="handling">
-				<column name="handling" />
-			</basic>
-		</attributes>
-	</entity>
 	<entity class="com.tramex.sisoprega.dto.Food">
 		<table name="cat_food" />
 		<named-query name="CAT_FOOD_BY_ID">
@@ -698,20 +684,41 @@
 			</basic>
 		</attributes>
 	</entity>
+	<entity class="com.tramex.sisoprega.dto.FeedOrder">
+		<table name="ctrl_feed_order" />
+		<attributes>
+			<id name="feedOrderId">
+				<column name="order_id" />
+				<generated-value strategy="IDENTITY" />
+			</id>
+			<basic name="feedDate">
+				<column name="feed_date" />
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="feedOriginator">
+				<column name="feed_originator" />
+			</basic>
+			<basic name="handling">
+				<column name="handling" />
+			</basic>
+			<many-to-one name="reception" fetch="LAZY" optional="false">
+				<join-column name="reception_id" referenced-column-name="reception_id" nullable="false" />
+			</many-to-one>
+			<one-to-many name="feedOrderDetails" fetch="EAGER" mapped-by="feedOrder" target-entity="com.tramex.sisoprega.dto.FeedOrderDetails">
+				<cascade>
+					<cascade-all/>
+				</cascade>
+			</one-to-many>
+			<many-to-many name="pen" fetch="EAGER">
+				<join-table name="ctrl_feed_order_barnyard">
+					<join-column name="order_id" referenced-column-name="order_id" />
+					<inverse-join-column name="barnyard_id" referenced-column-name="barnyard_id" />
+				</join-table>
+			</many-to-many>
+		</attributes>
+	</entity>
 	<entity class="com.tramex.sisoprega.dto.FeedOrderDetails">
 		<table name="ctrl_feed_order_details" />
-		<named-query name="CRT_FEEDORDERDETAILS_BY_ID">
-			<description>Retrieves a single crtFood record by ID</description>
-			<query>SELECT FeOrDls FROM FeedOrderDetails FeOrDls WHERE FeOrDls.feedOrderDetailsId = :Id</query>
-		</named-query>
-		<named-query name="FOD_BY_ORDER_ID">
-			<description>Retrieves a list of feed order details based in the feed orderId</description>
-			<query>SELECT fod FROM FeedOrderDetails fod WHERE fod.orderId = :orderId ORDER BY fod.foodId</query>
-		</named-query>
-		<named-query name="FEED_ORDER_DETAILS_BY_ORDER_ID_AND_FOOD_ID">
-			<description>Retrieves a list of feed order details based in the feed orderId and foodId</description>
-			<query>SELECT fod FROM FeedOrderDetails fod WHERE fod.orderId = :order_id and fod.foodId = :food_id</query>
-		</named-query>
 		<attributes>
 			<id name="feedOrderDetailsId">
 				<column name="id" />
@@ -720,24 +727,16 @@
 			<basic name="foodId">
 				<column name="food_id" />
 			</basic>
-			<basic name="orderId">
-				<column name="order_id" />
-			</basic>
 			<basic name="quantity">
 				<column name="quantity" />
 			</basic>
+			<many-to-one name="feedOrder" fetch="LAZY" optional="false">
+				<join-column name="order_id" referenced-column-name="order_id" nullable="false" />
+			</many-to-one>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.Inspection">
 		<table name="ctrl_inspection" />
-		<named-query name="CRT_INSPECTION_BY_ID">
-			<description>Retrieves a single crtFood record by ID</description>
-			<query>SELECT Insp FROM Inspection Insp WHERE Insp.inspectionId = :Id</query>
-		</named-query>
-		<named-query name="INSPECTION_BY_RECEPTION_ID">
-			<description>Retrieves all inspection records from a given reception</description>
-			<query>SELECT insp FROM Inspection insp WHERE insp.receptionId = :receptionId ORDER BY insp.inspectionDate desc</query>
-		</named-query>
 		<attributes>
 			<id name="inspectionId">
 				<column name="inspection_id" />
@@ -746,9 +745,6 @@
 			<basic name="inspectionDate">
 				<column name="inspection_date" />
 				<temporal>TIMESTAMP</temporal>
-			</basic>
-			<basic name="receptionId">
-				<column name="reception_id" />
 			</basic>
 			<basic name="comments">
 				<column name="comments" />
@@ -759,6 +755,9 @@
 			<basic name="weightUom">
 				<column name="weight_uom" />
 			</basic>
+			<many-to-one name="reception" fetch="LAZY" optional="false" >
+				<join-column name="reception_id" referenced-column-name="reception_id" nullable="true" />
+			</many-to-one>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.InspectionBarnyard">

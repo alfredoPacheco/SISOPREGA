@@ -44,6 +44,7 @@ public class Pen {
   private long locationId;
   private Set<PenCapacity> penCapacity;
   private Set<Reception> reception;
+  private Set<FeedOrder> feedOrder;
 
 
   /**
@@ -149,6 +150,27 @@ public class Pen {
       reception = new HashSet<Reception>();
     
     this.reception.add(inReception);
+  }
+
+  /**
+   * @return the feedOrder
+   */
+  public Set<FeedOrder> getFeedOrder() {
+    return feedOrder;
+  }
+
+  /**
+   * @param feedOrder the feedOrder to set
+   */
+  public void setFeedOrder(Set<FeedOrder> feedOrder) {
+    this.feedOrder = feedOrder;
+  }
+  
+  public void addFeedOrder(FeedOrder order){
+    if(feedOrder==null)
+      feedOrder = new HashSet<FeedOrder>();
+    
+    feedOrder.add(order);
   }
 
   @Override

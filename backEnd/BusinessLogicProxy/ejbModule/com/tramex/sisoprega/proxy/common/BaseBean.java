@@ -267,7 +267,7 @@ public abstract class BaseBean {
     return response;
   }
 
-  protected GatewayRecord getRecordFromContent(Object content, Class<?> type, String parentType) throws IllegalArgumentException,
+  protected GatewayRecord getRecordFromContent(Object content, Class<?> type, List<String> parentType) throws IllegalArgumentException,
       IllegalAccessException, InvocationTargetException, NoSuchMethodException, SecurityException {
     GatewayRecord record = new GatewayRecord();
     record.setEntity(type.getSimpleName());
@@ -289,8 +289,11 @@ public abstract class BaseBean {
 
         String methodName = "get" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1, fieldName.length());
         this.log.finer("Method to be executed in order to obtain one to many : [" + methodName + "]");
+        
+        if(parentType == null)
+          parentType = new ArrayList<String>();
 
-        if (genericType.getName().contains("com.tramex.sisoprega") && !genericType.getName().equals(parentType)) {
+        if (genericType.getName().contains("com.tramex.sisoprega") && !parentType.contains(genericType.getName())) {
           this.log.fine(genericType.getName() + " is not as parent [" + parentType + "]");
           Class<?>[] params = null;
           Object[] invokeParams = null;
@@ -300,7 +303,9 @@ public abstract class BaseBean {
           if (memberList != null && !memberList.isEmpty()) {
             for (Object member : memberList) {
               log.fine("found list member of type: " + member.getClass());
-              record.addChildRecord(getRecordFromContent(member, member.getClass(), type.getName()));
+              
+              parentType.add(type.getName());
+              record.addChildRecord(getRecordFromContent(member, member.getClass(), parentType));
             }
           } else {
             log.fine("Empty child records list");

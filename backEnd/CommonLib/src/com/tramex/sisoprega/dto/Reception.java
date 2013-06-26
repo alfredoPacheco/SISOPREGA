@@ -46,6 +46,8 @@ public class Reception {
   private long zoneId;
   private Set<Pen> pen;
   private Set<ReceptionHeadcount> receptionHeadcount;
+  private Set<FeedOrder> feedOrder;
+  private Set<Inspection> inspection;
 
   /**
    * @return the pen
@@ -186,6 +188,56 @@ public class Reception {
     
   }
   
+
+  /**
+   * @return the feedOrder
+   */
+  public Set<FeedOrder> getFeedOrder() {
+    return feedOrder;
+  }
+
+  /**
+   * @param feedOrder the feedOrder to set
+   */
+  public void setFeedOrder(Set<FeedOrder> feedOrder) {
+    this.feedOrder = feedOrder;
+  }
+  
+  public void addFeedOrder(FeedOrder order){
+    if(feedOrder == null)
+      feedOrder = new HashSet<FeedOrder>();
+    
+    feedOrder.add(order);
+    
+    if(!order.getReception().equals(this))
+      order.setReception(this);
+    
+  }
+
+  /**
+   * @return the inspection
+   */
+  public Set<Inspection> getInspection() {
+    return inspection;
+  }
+
+  /**
+   * @param inspection the inspection to set
+   */
+  public void setInspection(Set<Inspection> inspection) {
+    this.inspection = inspection;
+  }
+  
+  public void addInspection(Inspection inInspection){
+    if(inspection == null)
+      inspection = new HashSet<Inspection>();
+    
+    inspection.add(inInspection);
+    
+    if(!inInspection.getReception().equals(this))
+      inInspection.setReception(this);
+    
+  }
 
   @Override
   public String toString() {

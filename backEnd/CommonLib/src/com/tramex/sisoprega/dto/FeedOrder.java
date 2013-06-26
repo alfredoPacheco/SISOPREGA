@@ -16,6 +16,8 @@
 package com.tramex.sisoprega.dto;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Defines the model for the Feed Order Type entity.<BR/>
@@ -37,10 +39,12 @@ import java.util.Date;
  */
 public class FeedOrder {
   private long feedOrderId;
-  private long receptionId;
   private Date feedDate;
   private String feedOriginator;
   private String handling;
+  private Reception reception;
+  private Set<FeedOrderDetails> feedOrderDetails;
+  private Set<Pen> pen;
 
   /**
    * @return the feedOrderId
@@ -55,21 +59,6 @@ public class FeedOrder {
    */
   public void setFeedOrderId(long feedOrderId) {
     this.feedOrderId = feedOrderId;
-  }
-
-  /**
-   * @return the receptionId
-   */
-  public long getReceptionId() {
-    return receptionId;
-  }
-
-  /**
-   * @param receptionId
-   *          the receptionId to set
-   */
-  public void setReceptionId(long receptionId) {
-    this.receptionId = receptionId;
   }
 
   /**
@@ -117,9 +106,77 @@ public class FeedOrder {
     this.handling = handling;
   }
 
+  /**
+   * @return the reception
+   */
+  public Reception getReception() {
+    return reception;
+  }
+
+  /**
+   * @param reception the reception to set
+   */
+  public void setReception(Reception reception) {
+    this.reception = reception;
+  }
+
+  /**
+   * @return the feedOrderDetails
+   */
+  public Set<FeedOrderDetails> getFeedOrderDetails() {
+    return feedOrderDetails;
+  }
+
+  /**
+   * @param feedOrderDetails the feedOrderDetails to set
+   */
+  public void setFeedOrderDetails(Set<FeedOrderDetails> feedOrderDetails) {
+    this.feedOrderDetails = feedOrderDetails;
+  }
+  
+  public void addFeedOrderDetails(FeedOrderDetails orderDetails){
+    if(feedOrderDetails == null)
+      feedOrderDetails = new HashSet<FeedOrderDetails>();
+    
+    feedOrderDetails.add(orderDetails);
+    
+    if(!orderDetails.getFeedOrder().equals(this))
+      orderDetails.setFeedOrder(this);
+  }
+
+  /**
+   * @return the pen
+   */
+  public Set<Pen> getPen() {
+    return pen;
+  }
+
+  /**
+   * @param pen the pen to set
+   */
+  public void setPen(Set<Pen> pen) {
+    this.pen = pen;
+  }
+  
+  public void addPen(Pen inPen){
+    if(pen==null)
+      pen = new HashSet<Pen>();
+    
+    if(!inPen.getFeedOrder().contains(this))
+      inPen.getFeedOrder().add(this);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if(obj instanceof FeedOrder){
+      return this.getFeedOrderId() == ((FeedOrder) obj).getFeedOrderId();
+    }
+    return false;
+  }
+  
   @Override
   public String toString() {
     return "feedDate:" + feedDate + ";feedOriginator:" + feedOriginator + ";handling:" + handling + ";orderId:" + feedOrderId
-        + ";receptionId:" + receptionId + ";";
+        + ";";
   }
 }
