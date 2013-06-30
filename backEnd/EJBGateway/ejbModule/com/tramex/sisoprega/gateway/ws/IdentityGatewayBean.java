@@ -55,6 +55,26 @@ public class IdentityGatewayBean {
   }
 
   /**
+   * Creates a new rancherUser in database.
+   * 
+   * @param rancherId
+   * @param userName
+   * @param password
+   * 
+   * @return
+   * @throws IdentityManagerException
+   */
+  @RolesAllowed("sisoprega_admin")
+  @WebMethod(operationName = "CreateRancherUser")
+  public String CreateRancherUser(@WebParam(name = "rancherId") Long rancherId,@WebParam(name = "userName") String userName, @WebParam(name = "password") String password) throws IdentityManagerException {
+    log.info("Creating rancherUser: " + userName + " for Rancher with ID:" + rancherId);
+    identityManager.createRancherUser(rancherId, userName, password);
+    return "OK";
+  }
+  
+  
+  
+  /**
    * Resets the password of an existing user
    * 
    * @param userName
