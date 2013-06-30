@@ -99,6 +99,7 @@ enyo.kind({
 		if (this.parentObject[this.entityKind.entityName] === undefined) {
 		    this.parentObject[this.entityKind.entityName] = [];
 		}
+//		TODO: Remove every idless elements
 		this.parentObject[this.entityKind.entityName].push(obj);
 		this.entityKind.update(this.parentObject, this, "afterAddEntity");
 	    } else {

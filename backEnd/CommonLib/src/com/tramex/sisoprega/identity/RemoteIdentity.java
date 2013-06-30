@@ -44,9 +44,18 @@ public interface RemoteIdentity {
    * @throws IdentityManagerException
    */
   void createUser(User user) throws IdentityManagerException;
+  
+  /**
+   * Create a rancher. Encrypts password.
+   * @param rancherId
+   * @param userName
+   * @param password
+   * @throws IdentityManagerException
+   */
+  void createRancherUser(Long rancherId, String userName, String password) throws IdentityManagerException;
 
   /**
-   * Reset user password. Encripts password.
+   * Reset user password. Encrypts password.
    * @param userName
    * @param newPassword
    * @throws IdentityManagerException

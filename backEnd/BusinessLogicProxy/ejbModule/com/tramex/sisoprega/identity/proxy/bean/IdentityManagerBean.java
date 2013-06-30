@@ -26,6 +26,8 @@ import java.util.Map;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 
+import com.tramex.sisoprega.dto.Rancher;
+import com.tramex.sisoprega.dto.RancherUser;
 import com.tramex.sisoprega.identity.IdentityManagerException;
 import com.tramex.sisoprega.identity.RemoteIdentity;
 import com.tramex.sisoprega.identity.dto.Role;
@@ -70,6 +72,43 @@ public class IdentityManagerBean extends BaseBean implements RemoteIdentity {
       dataModel.createDataModel(user);
     }
   }
+
+  
+  /* (non-Javadoc)
+   * @see com.tramex.sisoprega.identity.RemoteIdentity#createRancherUser(com.tramex.sisoprega.dto.RancherUser, java.lang.String)
+   */
+  @Override
+  public void createRancherUser(Long rancherId, String userName, String password) throws IdentityManagerException {
+    log.info("Entering to IdentityBean");
+    Rancher rancher = dataModel.readSingleDataModel("RANCHER_BY_ID", "Id", rancherId, Rancher.class);
+    log.info("Retrieving rancher successfull");
+    if(rancher != null){
+      User user = new User();
+      
+      user.setUserName(userName);
+      user.setPassword(password);
+      
+      Role role = new Role();
+      role.setRole_name("rancher");
+      role.setUser_name(userName);
+      user.addGroup(role);
+      
+      createUser(user);
+      RancherUser rancherUser = new RancherUser();
+      rancherUser.setUser_name(userName);
+      
+      rancher.addRancherUser(rancherUser);
+      dataModel.updateDataModel(rancher);
+      
+      }else{
+        throw new IdentityManagerException("Ganadero no encontrado.");
+      }
+    }
+  //enterpriseRancher = dataModel.readSingleDataModel("ENTERPRISERANCHER_BY_ID", "Id", rancherId, EnterpriseRancher.class);
+    
+   
+  
+
 
   /*
    * (non-Javadoc)
@@ -235,4 +274,5 @@ public class IdentityManagerBean extends BaseBean implements RemoteIdentity {
     }
     return sb.toString();
   }
+  
 }
