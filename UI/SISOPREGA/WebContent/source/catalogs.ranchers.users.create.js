@@ -27,7 +27,7 @@ enyo.kind({
 	    kind : "PasswordInput",
 	    name : "confirm_password",
 	    hint : "Confirmar",
-	    bindTo:"confirm_password"
+	    bindTo:"password"
 	} ], {
 	    owner : this
 	});
@@ -39,61 +39,26 @@ enyo.kind({
 	    delete obj[this.entityKind.entityIdName()]; // Delete id for create operation
 
 	    this.entityKind.create(this.parentObject.rancherId, obj.user_name, obj.password, this, "afterAddEntity");
+	} else {
+	    cacheMan.hideScrim();
+	    cacheMan.setMessage('', this.errorMessage);
 	}
+    },
+    updateEntity : function(){
+	cacheMan.showScrim();
+	var updateObject = this.getEntity();
+	if (this.beforeSave(updateObject)) {
+	    this.entityKind.update(updateObject.user_name, updateObject.password, this, "afterUpdateEntity");
+	} else {
+	    cacheMan.hideScrim();
+	    cacheMan.setMessage('', this.errorMessage);
+	}
+    },
+    beforeSave : function(){
+	if(this.$.password.value != this.$.confirm_password.value){
+	    this.errorMessage = 'La contraseña y su confirmación no coinciden.';
+	    return false;
+	}
+	return true;
     }
 });
-// resetValues : function() {
-// this.objUser = null;
-// this.$.user_name.setValue("");
-// this.$.password.setValue("");
-// this.$.confirm_password.setValue("");
-// },
-// resetPassword : function() {
-// if(this.$.password.getValue() != this.NO_CHANGED){
-// cacheRanchers.resetRancherPassword(this.$.user_name.getValue(),
-// this.$.password.getValue(), this.$.confirm_password.getValue(), this,
-// "doResetPassword");
-// }
-// },
-// setRancher : function(objRancher) {
-// this.objRan = objRancher;
-// },
-// toggleAdd : function() {
-// this.$.draAdd.setOpen(true);
-// this.$.draUpdate.setOpen(false);
-// this.resetValues();
-// // TODO: Enable or show user_name field
-// this.$.user_name.disabled = false;
-// },
-// getRancherUserDetails : function(){
-// var userDetails = {
-// user_name : "",
-// password : "",
-// confirm_password: ""
-// };
-//      
-// userDetails.user_name = this.$.user_name.getValue();
-// userDetails.password = this.$.password.getValue();
-// userDetails.confirm_password = this.$.confirm_password.getValue();
-//      
-// return userDetails;
-// },
-// addRancherUser : function() {
-// var userDetails = this.getRancherUserDetails();
-// if(userDetails.password == userDetails.confirm_password){
-// cacheRanchers.addRancherUser(this.objRan, userDetails, this,
-// "doAddRancherUser");
-// }else{
-// cacheMan.setMessage("", "La contraseña y su confirmación no coinciden.");
-// }
-// },
-// setUser : function(objRancher, pObjUser){
-// this.objRan = objRancher;
-// this.objUser = pObjUser;
-// this.$.user_name.setValue(pObjUser.user_name);
-// this.$.password.setValue(this.NO_CHANGED);
-// this.$.confirm_password.setValue(this.NO_CHANGED);
-//      
-// this.toggleUpdate();
-// },
-

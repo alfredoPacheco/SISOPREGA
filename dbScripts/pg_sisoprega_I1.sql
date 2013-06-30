@@ -28,6 +28,7 @@
  * 03/13/2013  Alfredo Pacheco               Three phones by rancher, and sms_phone_chosen fields added.
  * 04/06/2013  Diego Torres                  Adding tables for I2
  * 05/08/2013  Diego Torres                  Adding zones for I2: 3 = West; 4 = East
+ * 06/30/2013  Diego Torres                  Cascade and trigger for rancher users.
  * ====================================================================================
  * 
  * Author: Diego Torres
@@ -55,7 +56,7 @@ GRANT ALL ON sys_sisoprega_user TO sisoprega;
 DROP TABLE IF EXISTS sys_sisoprega_role CASCADE;
 CREATE TABLE sys_sisoprega_role(
     record_id SERIAL PRIMARY KEY,
-	user_name varchar(30) NOT NULL REFERENCES sys_sisoprega_user(user_name) ON UPDATE CASCADE,
+	user_name varchar(30) NOT NULL REFERENCES sys_sisoprega_user(user_name) ON DELETE CASCADE ON UPDATE CASCADE,
 	role_name varchar(20) NOT NULL
 );
 
@@ -206,6 +207,22 @@ CREATE TABLE cat_rancher_user(
   rancher_id integer NOT NULL REFERENCES cat_rancher(rancher_id) ON DELETE CASCADE,
   user_name VARCHAR(30) NOT NULL REFERENCES sys_sisoprega_user(user_name) ON DELETE CASCADE
 );
+
+DROP TRIGGER rancher_user_delete_trigger ON cat_rancher_user;
+CREATE OR REPLACE FUNCTION proc_rancher_user_delete() RETURNS TRIGGER AS
+$proc$
+BEGIN
+	DELETE FROM sys_sisoprega_user
+	WHERE user_name = Old.user_name;
+	
+	Return NULL;
+END;
+$proc$ LANGUAGE 'plpgsql';
+
+CREATE TRIGGER rancher_user_delete_trigger
+AFTER DELETE ON cat_rancher_user
+FOR EACH ROW
+EXECUTE PROCEDURE proc_rancher_user_delete();
 
 CREATE UNIQUE INDEX U_rancher_user ON cat_rancher_user(rancher_id, user_name);
 
@@ -499,7 +516,6 @@ CREATE TABLE ctrl_inspection (
   weight_uom integer default 1 REFERENCES cat_measurement_unit(unit_id)
 );
 
-CREATE UNIQUE INDEX U_ctrl_inspection(reception_id);
 GRANT ALL ON ctrl_inspection TO sisoprega;
 GRANT ALL ON ctrl_inspection_inspection_id_seq TO sisoprega;
 

@@ -9,6 +9,7 @@ enyo.kind({
 	onCancel : "",
     },
     updatingEntityId : 0,
+    errorMessage : "Error al validar datos",
     published : {
 	entityKind : null,
 	parentObject : null
@@ -105,6 +106,9 @@ enyo.kind({
 	    } else {
 		this.entityKind.create(obj, this, "afterAddEntity");
 	    }
+	} else {
+	    cacheMan.hideScrim();
+	    cacheMan.setMessage('', this.errorMessage);
 	}
     },
     updateEntity : function() {
@@ -124,6 +128,9 @@ enyo.kind({
 		this.entityKind.update(updateObject, this, "afterUpdateEntity");
 	    }
 	    
+	} else {
+	    cacheMan.hideScrim();
+	    cacheMan.setMessage('', this.errorMessage);
 	}
     },
     findEntityIndexInParentById : function(id){

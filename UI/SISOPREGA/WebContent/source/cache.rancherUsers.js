@@ -10,6 +10,13 @@ enyo.kind({
     name : "cache.rancherUsers",
     kind : "crud.cache",
     entityName : "RancherUser",
+    NO_CHANGED : '!$NoChanged$!',
+    adapterToIn : function(entityObj) {
+	if (entityObj)
+	    entityObj.idName = this.entityIdName();
+	entityObj.password = this.NO_CHANGED;
+	return entityObj;
+    },
     getCatalogsList : function() {
 
 	var arrAdapterList = enyo.clone(this.arrObj);
@@ -23,10 +30,19 @@ enyo.kind({
 	}
 	return result;
     },
-    create : function(rancherId, user_name, password, callbackObject, callbackMethod) {
+    create : function(rancherId, user_name, password, callbackObject,
+	    callbackMethod) {
 	this.callbackObject = callbackObject;
 	this.callbackMethod = callbackMethod;
-	consumingGateway.CreateRancherUser(rancherId,  user_name, password, this, "saveCallBack");
+	consumingGateway.CreateRancherUser(rancherId, user_name, password,
+		this, "saveCallBack");
     },
+    update : function(user_name, password, callbackObject, callbackMethod) {
+	if (password != this.NO_CHANGED && password != '') {
+	    this.callbackObject = callbackObject;
+	    this.callbackMethod = callbackMethod;
+	    consumingGateway.ResetPassword(user_name, password, this, "saveCallBack");
+	}
+    }
 });
 var cacheRancherUsers = new cache.rancherUsers();

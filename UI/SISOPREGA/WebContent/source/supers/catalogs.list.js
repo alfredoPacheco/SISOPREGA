@@ -222,6 +222,7 @@ enyo.kind({
 	}
     },
     deleteItem : function(inSender, inIndex) {
+	cacheMan.showScrim();
 	this.selectedItem = this.arrList[inIndex];
 	this.entity.remove(this.selectedItem, this, "deleteItemCallBack");
     },

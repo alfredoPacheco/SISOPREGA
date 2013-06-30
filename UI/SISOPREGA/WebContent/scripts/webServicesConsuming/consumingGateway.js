@@ -457,7 +457,7 @@ var consumingGateway = {
 	});
 	return output;
     },
-    CreateRancherUser : function(rancherId, userName, password, cbObj, cbMethod){
+    CreateRancherUser : function(rancherId, userName, password, cbObj, cbMethod) {
 	var soapMessage = soapHeader + '<ws:CreateRancherUser>';
 	soapMessage += '<rancherId>' + rancherId + '</rancherId>';
 	soapMessage += '<userName>' + userName + '</userName>';
@@ -494,6 +494,54 @@ var consumingGateway = {
 	    }
 	});
     },
+    ResetPassword : function(userName, password, cbObj, cbMethod) {
+	output = {
+	    exceptionId : 0,
+	    exceptionDescription : 'SUCCESS'
+	};
+
+	var soapMessage = soapHeader + '<ws:ResetPassword>';
+	soapMessage += '<user_name>' + userName + '</user_name>';
+	soapMessage += '<password>' + password + '</password>';
+	soapMessage += '</ws:ResetPassword>';
+	soapMessage += soapFooter;
+
+	jQuery
+		.ajax({
+		    url : identityWsURL,
+		    type : "POST",
+		    dataType : "xml",
+		    data : soapMessage,
+		    processData : false,
+		    contentType : "text/xml;charset=UTF-8",
+		    username : utils.getCookie("username"),
+		    password : utils.getCookie("pass"),
+		    success : function OnSuccess(data) {
+			var result = jQuery(data).find("return").text();
+			if (result != "OK") {
+			    output.exceptionId = 1;
+			    output.exceptionDescription = result;
+			}
+
+			if (cbObj) {
+			    var milis = ((Math.random() * 1000) + 500);
+			    setTimeout(cbObj[cbMethod](output), milis);
+			}
+			return false;
+		    },
+		    error : function OnError(request, status, error) {
+			output.exceptionId = 1;
+			output.exceptionDescription = 'No fue posible volver a asignar contraseña para el usuario '
+				+ userName + ' ERROR: ' + status;
+			if (cbObj) {
+			    var milis = ((Math.random() * 1000) + 500);
+			    setTimeout(cbObj[cbMethod](output), milis);
+			}
+			return false;
+		    }
+		});
+	return output;
+    },
     LogOut : function() {
 	// Se crea objeto que devolvera la funcion:
 	output = {
@@ -513,37 +561,6 @@ var consumingGateway = {
 	} catch (e) {
 	}
 	window.location = './';
-	return output;
-    },
-
-    ResetPassword : function(userName, password) {
-	output = "OK";
-
-	var soapMessage = soapHeader + '<ws:ResetPassword>';
-	soapMessage += '<user_name>' + userName + '</user_name>';
-	soapMessage += '<password>' + password + '</password>';
-	soapMessage += '</ws:ResetPassword>';
-	soapMessage += soapFooter;
-
-	jQuery
-		.ajax({
-		    url : identityWsURL,
-		    type : "POST",
-		    dataType : "xml",
-		    data : soapMessage,
-		    processData : false,
-		    contentType : "text/xml;charset=UTF-8",
-		    username : utils.getCookie("username"),
-		    password : utils.getCookie("pass"),
-		    async : false,
-		    success : function OnSuccess(data) {
-			output = jQuery(data).find("return").text();
-		    },
-		    error : function OnError(request, status, error) {
-			alert('No fue posible volver a asignar contraseña para el usuario '
-				+ userName);
-		    }
-		});
 	return output;
     },
     AddUser : function(objUser) {
