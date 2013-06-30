@@ -457,6 +457,43 @@ var consumingGateway = {
 	});
 	return output;
     },
+    CreateRancherUser : function(rancherId, userName, password, cbObj, cbMethod){
+	var soapMessage = soapHeader + '<ws:CreateRancherUser>';
+	soapMessage += '<rancherId>' + rancherId + '</rancherId>';
+	soapMessage += '<userName>' + userName + '</userName>';
+	soapMessage += '<password>' + password + '</password>';
+	soapMessage += '</ws:CreateRancherUser>';
+	soapMessage += soapFooter;
+
+	jQuery.ajax({
+	    url : identityWsURL,
+	    type : "POST",
+	    dataType : "xml",
+	    data : soapMessage,
+	    processData : false,
+	    contentType : "text/xml;charset=UTF-8",
+	    username : utils.getCookie("username"),
+	    password : utils.getCookie("pass"),
+	    success : function OnSuccess(data) {
+		if (output.exceptionId == "GW01") {
+		    alert(output.exceptionDescription);
+		    consumingGateway.LogOut();
+		}
+		output.origin = jQuery(data).find("origin").text();
+		if (cbObj) {
+		    var milis = ((Math.random() * 1000) + 500);
+		    setTimeout(cbObj[cbMethod](output), milis);
+		}
+		return false;
+	    },
+	    error : function OnError(request, status, error) {
+		output.exceptionId = 1;
+		output.exceptionDescription = error + ' :' + status;
+		alert(output.exceptionDescription);
+		consumingGateway.LogOut();
+	    }
+	});
+    },
     LogOut : function() {
 	// Se crea objeto que devolvera la funcion:
 	output = {

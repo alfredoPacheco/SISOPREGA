@@ -22,6 +22,11 @@ enyo.kind({
 	    result.push(obj);
 	}
 	return result;
-    }
+    },
+    create : function(rancherId, user_name, password, callbackObject, callbackMethod) {
+	this.callbackObject = callbackObject;
+	this.callbackMethod = callbackMethod;
+	consumingGateway.CreateRancherUser(rancherId,  user_name, password, this, "saveCallBack");
+    },
 });
 var cacheRancherUsers = new cache.rancherUsers();

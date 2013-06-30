@@ -73,42 +73,40 @@ public class IdentityManagerBean extends BaseBean implements RemoteIdentity {
     }
   }
 
-  
-  /* (non-Javadoc)
-   * @see com.tramex.sisoprega.identity.RemoteIdentity#createRancherUser(com.tramex.sisoprega.dto.RancherUser, java.lang.String)
+  /*
+   * (non-Javadoc)
+   * 
+   * @see
+   * com.tramex.sisoprega.identity.RemoteIdentity#createRancherUser(com.tramex
+   * .sisoprega.dto.RancherUser, java.lang.String)
    */
   @Override
   public void createRancherUser(Long rancherId, String userName, String password) throws IdentityManagerException {
     log.info("Entering to IdentityBean");
     Rancher rancher = dataModel.readSingleDataModel("RANCHER_BY_ID", "Id", rancherId, Rancher.class);
     log.info("Retrieving rancher successfull");
-    if(rancher != null){
+    if (rancher != null) {
       User user = new User();
-      
+
       user.setUserName(userName);
       user.setPassword(password);
-      
+
       Role role = new Role();
       role.setRole_name("rancher");
       role.setUser_name(userName);
       user.addGroup(role);
-      
+
       createUser(user);
       RancherUser rancherUser = new RancherUser();
       rancherUser.setUser_name(userName);
-      
+
       rancher.addRancherUser(rancherUser);
       dataModel.updateDataModel(rancher);
-      
-      }else{
-        throw new IdentityManagerException("Ganadero no encontrado.");
-      }
-    }
-  //enterpriseRancher = dataModel.readSingleDataModel("ENTERPRISERANCHER_BY_ID", "Id", rancherId, EnterpriseRancher.class);
-    
-   
-  
 
+    } else {
+      throw new IdentityManagerException("Ganadero no encontrado.");
+    }
+  }
 
   /*
    * (non-Javadoc)
@@ -137,12 +135,12 @@ public class IdentityManagerBean extends BaseBean implements RemoteIdentity {
   @Override
   public void addGroup(String userName, String groupName) throws IdentityManagerException {
     User user = getUserFromName(userName);
-    if(!user.getGroups().contains(groupName)){
+    if (!user.getGroups().contains(groupName)) {
       log.fine("group not found in user to be added:" + groupName);
       Role newGroup = new Role();
       newGroup.setRole_name(groupName);
       newGroup.setUser_name(userName);
-      
+
       user.getGroups().add(newGroup);
       log.fine("Updating records on database");
       dataModel.updateDataModel(user);
@@ -160,49 +158,48 @@ public class IdentityManagerBean extends BaseBean implements RemoteIdentity {
   public void removeGroup(String userName, String groupName) throws IdentityManagerException {
     log.entering(this.getClass().getCanonicalName(), "removeGroup");
     User user = getUserFromName(userName);
-    
+
     log.fine("checking if group [" + groupName + "] is contained in user");
     Role groupToRemove = null;
-    
-    for(Role group : user.getGroups()){
-      if(group.getRole_name().equalsIgnoreCase(groupName)){
+
+    for (Role group : user.getGroups()) {
+      if (group.getRole_name().equalsIgnoreCase(groupName)) {
         groupToRemove = group;
         log.fine("Deleting group record on database");
         dataModel.deleteDataModel(group, "");
         break;
       }
     }
-    
+
     log.fine("group found in user to be removed:" + groupName);
     user.getGroups().remove(groupToRemove);
-    
+
     dataModel.updateDataModel(user);
     log.fine("Updating user record with new set of groups");
     return;
   }
-  
+
   @Override
   public void removeUser(String userName) throws IdentityManagerException {
     log.entering(this.getClass().getCanonicalName(), "removeGroup");
 
     User user = getUserFromName(userName);
     dataModel.deleteDataModel(user, "");
-    
+
     log.fine("User record removed");
     return;
   }
-  
+
   /*
    * (non-Javadoc)
    * 
-   * @see
-   * com.tramex.sisoprega.identity.RemoteIdentity#allUsers()
+   * @see com.tramex.sisoprega.identity.RemoteIdentity#allUsers()
    */
   @Override
   public List<User> allUsers() throws IdentityManagerException {
     List<User> users = dataModel.readDataModelList("ALL_NO_RANCHER_USERS", null, User.class);
     List<User> result = new ArrayList<User>();
-    for(User user : users){
+    for (User user : users) {
       User uCopy = new User();
       uCopy.setUserName(user.getUserName());
       uCopy.setPassword("!$NoChanged$!");
@@ -210,7 +207,7 @@ public class IdentityManagerBean extends BaseBean implements RemoteIdentity {
       uCopy.getGroups().addAll(user.getGroups());
       result.add(uCopy);
     }
-    
+
     return result;
   }
 
@@ -228,19 +225,19 @@ public class IdentityManagerBean extends BaseBean implements RemoteIdentity {
     log.fine("[" + user.getPassword() + "] == [" + hashPassword(password) + "] ?");
     return user.getPassword().equals(hashPassword(password));
   }
-  
-  @RolesAllowed({"sisoprega_admin", "agency", "us_usr"})
+
+  @RolesAllowed({ "sisoprega_admin", "agency", "us_usr" })
   @Override
   public List<String> readUserRoles(String userName) throws IdentityManagerException {
     User user = getUserFromName(userName);
     List<String> result = new LinkedList<String>();
-    for(Role role : user.getGroups()){
+    for (Role role : user.getGroups()) {
       result.add(role.getRole_name());
     }
-    
+
     return result;
   }
- 
+
   private User getUserFromName(String userName) throws IdentityManagerException {
     Map<String, Object> parameters = new HashMap<String, Object>();
     parameters.put("userName", userName);
@@ -252,16 +249,16 @@ public class IdentityManagerBean extends BaseBean implements RemoteIdentity {
       throw new IdentityManagerException("Unable to find given user.");
     }
   }
-  
+
   private String hashPassword(String password) throws IdentityManagerException {
     char[] HEXADECIMAL = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
     MessageDigest md;
-    try{
+    try {
       md = MessageDigest.getInstance("MD5");
-    }catch(NoSuchAlgorithmException e){
+    } catch (NoSuchAlgorithmException e) {
       throw new IdentityManagerException(e);
     }
-    
+
     md.reset();
 
     byte[] bytes = md.digest(password.getBytes());
@@ -274,5 +271,5 @@ public class IdentityManagerBean extends BaseBean implements RemoteIdentity {
     }
     return sb.toString();
   }
-  
+
 }

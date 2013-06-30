@@ -31,6 +31,15 @@ enyo.kind({
 	} ], {
 	    owner : this
 	});
+    },
+    addEntity : function(){
+	cacheMan.showScrim();
+	var obj = this.getEntity();
+	if (this.beforeSave(obj)) {
+	    delete obj[this.entityKind.entityIdName()]; // Delete id for create operation
+
+	    this.entityKind.create(this.parentObject.rancherId, obj.user_name, obj.password, this, "afterAddEntity");
+	}
     }
 });
 // resetValues : function() {
