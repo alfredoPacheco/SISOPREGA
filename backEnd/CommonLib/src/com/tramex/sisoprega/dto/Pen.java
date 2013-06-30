@@ -45,6 +45,7 @@ public class Pen {
   private Set<PenCapacity> penCapacity;
   private Set<Reception> reception;
   private Set<FeedOrder> feedOrder;
+  private Set<Inspection> inspection;
 
 
   /**
@@ -173,10 +174,31 @@ public class Pen {
     feedOrder.add(order);
   }
 
+  /**
+   * @return the inspection
+   */
+  public Set<Inspection> getInspection() {
+    return inspection;
+  }
+
+  /**
+   * @param inspection the inspection to set
+   */
+  public void setInspection(Set<Inspection> inspection) {
+    this.inspection = inspection;
+  }
+
   @Override
   public String toString() {
     return "available:" + available + ";barnyardCode:" + barnyardCode + ";barnyardId:" + penId + ";locationId:" + locationId
         + ";";
+  }
+  
+  public void addInspection(Inspection inInspection){
+    if(inspection == null)
+      inspection = new HashSet<Inspection>();
+    
+    inspection.add(inInspection);
   }
   
   @Override

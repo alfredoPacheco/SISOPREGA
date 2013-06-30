@@ -16,6 +16,8 @@
 package com.tramex.sisoprega.dto;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Defines the model for the Cattle Type entity.<BR/>
@@ -43,6 +45,7 @@ public class Inspection {
   private double weight;
   private long weightUom = 1;
   private Reception reception;
+  private Set<Pen> pen;
 
   /**
    * @return the inspectionId
@@ -134,6 +137,37 @@ public class Inspection {
     this.reception = reception;
   }
 
+  /**
+   * @return the pen
+   */
+  public Set<Pen> getPen() {
+    return pen;
+  }
+
+  /**
+   * @param pen the pen to set
+   */
+  public void setPen(Set<Pen> pen) {
+    this.pen = pen;
+  }
+  
+  public void addPen(Pen inPen){
+    if(pen == null)
+      pen = new HashSet<Pen>();
+    
+    pen.add(inPen);
+    
+    if(!inPen.getInspection().contains(this))
+      inPen.getInspection().add(this);
+    
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    // TODO Auto-generated method stub
+    return super.equals(obj);
+  }
+  
   @Override
   public String toString() {
     return "inspectionDate:" + inspectionDate + ";inspectionId:" + inspectionId + "; weight=" + weight + "; weightUom="
