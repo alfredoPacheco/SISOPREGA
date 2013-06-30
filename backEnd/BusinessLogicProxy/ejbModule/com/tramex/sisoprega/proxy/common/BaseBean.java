@@ -113,7 +113,7 @@ public abstract class BaseBean {
       }
 
     } catch (Exception e) {
-      this.log.severe("Exception found while creating entity");
+      this.log.severe("Exception found while creating entity: " + e.getMessage());
       this.log.throwing(this.getClass().getName(), "Create", e);
 
       if (e instanceof javax.persistence.PersistenceException)
@@ -207,7 +207,7 @@ public abstract class BaseBean {
           dataModel.updateDataModel(entity);
 
           response.addParentRecord(request.getParentRecord());
-          response.setError(new GatewayError("0", "SUCCESS", "Create"));
+          response.setError(new GatewayError("0", "SUCCESS", "Update"));
         }
       } else {
         this.log.warning("Error de validación: " + error_description);
@@ -216,7 +216,7 @@ public abstract class BaseBean {
       }
 
     } catch (Exception e) {
-      this.log.severe("Exception found while updating entity");
+      this.log.severe("Exception found while updating entity: " + e.getMessage());
       this.log.throwing(this.getClass().getName(), "Update", e);
 
       if (e instanceof javax.persistence.PersistenceException)
@@ -419,6 +419,7 @@ public abstract class BaseBean {
         Class<?> childType = Class.forName(DTO_PACKAGE + childRecord.getEntity());
 
         Object childEntity = getEntityFromRecord(childRecord, childType);
+        log.fine("Got childRecord [" + childEntity + "] from type [" + childType.getName() + "]");
 
         Class<?>[] params = new Class<?>[1];
         params[0] = childType;
@@ -426,6 +427,7 @@ public abstract class BaseBean {
         invokeParams[0] = childEntity;
 
         String methodName = "add" + childRecord.getEntity();
+        log.fine("Looking for method [" + methodName + "]");
         type.getMethod(methodName, params).invoke(entity, invokeParams);
         log.finest("----------  END OF CHILD RECORD CASTING --------------");
       }

@@ -32,6 +32,7 @@ import java.util.Set;
  * 12/12/2012  Jaime Figueroa                 Initial Version.
  * 12/16/2012  Diego Torres                   Adding toString implementation.
  * 02/11/2013  Alan del Rio                   Added comments field
+ * 06/30/2013  Diego Torres                   Handle inspection details by obj ref.
  * ====================================================================================
  * </PRE>
  * 
@@ -46,6 +47,7 @@ public class Inspection {
   private long weightUom = 1;
   private Reception reception;
   private Set<Pen> pen;
+  private Set<InspectionDetails> inspectionDetails;
 
   /**
    * @return the inspectionId
@@ -156,16 +158,36 @@ public class Inspection {
       pen = new HashSet<Pen>();
     
     pen.add(inPen);
+  }
+
+  /**
+   * @return the inspectionDetails
+   */
+  public Set<InspectionDetails> getInspectionDetails() {
+    return inspectionDetails;
+  }
+
+  /**
+   * @param inspectionDetails the inspectionDetails to set
+   */
+  public void setInspectionDetails(Set<InspectionDetails> inspectionDetails) {
+    this.inspectionDetails = inspectionDetails;
+  }
+  
+  public void addInspectionDetails(InspectionDetails childDetail){
+    if(inspectionDetails == null)
+      inspectionDetails = new HashSet<InspectionDetails>();
     
-    if(!inPen.getInspection().contains(this))
-      inPen.getInspection().add(this);
-    
+    if(childDetail.getInspection()!=this)
+      childDetail.setInspection(this);
   }
 
   @Override
   public boolean equals(Object obj) {
-    // TODO Auto-generated method stub
-    return super.equals(obj);
+    if(obj instanceof Inspection){
+      return this.getInspectionId() == ((Inspection) obj).getInspectionId();
+    }
+    return false;
   }
   
   @Override

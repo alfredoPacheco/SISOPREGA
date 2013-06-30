@@ -492,24 +492,6 @@
 					<cascade-all/>
 				</cascade>
 			</one-to-many>
-			<many-to-many name="reception" fetch="LAZY">
-				<join-table name="ctrl_reception_barnyard">
-					<join-column name="barnyard_id" referenced-column-name="barnyard_id"/>
-					<inverse-join-column name="reception_id" referenced-column-name="reception_id"/>
-				</join-table>
-			</many-to-many>
-			<many-to-many name="feedOrder" fetch="LAZY">
-				<join-table name="ctrl_feed_order_barnyard">
-					<join-column name="barnyard_id" referenced-column-name="barnyard_id" />
-					<inverse-join-column name="order_id" referenced-column-name="order_id" />
-				</join-table>
-			</many-to-many>
-			<many-to-many name="inspection" fetch="LAZY">
-				<join-table name="ctrl_inspection_barnyard">
-					<join-column name="barnyard_id" referenced-column-name="barnyard_id" />
-					<inverse-join-column name="inspection_id" referenced-column-name="inspection_id"/>
-				</join-table>
-			</many-to-many>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.PenCapacity">
@@ -641,12 +623,12 @@
 					<cascade-all/>
 				</cascade>
 			</one-to-many>
-			<many-to-many name="pen" fetch="EAGER">
+			<one-to-many name="pen" fetch="LAZY">
 				<join-table name="ctrl_reception_barnyard">
 					<join-column name="reception_id" referenced-column-name="reception_id" />
 					<inverse-join-column name="barnyard_id" referenced-column-name="barnyard_id" />
 				</join-table>
-			</many-to-many>
+			</one-to-many>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.ReceptionHeadcount">
@@ -715,12 +697,12 @@
 					<cascade-all/>
 				</cascade>
 			</one-to-many>
-			<many-to-many name="pen" fetch="EAGER">
+			<one-to-many name="pen" fetch="EAGER">
 				<join-table name="ctrl_feed_order_barnyard">
 					<join-column name="order_id" referenced-column-name="order_id" />
 					<inverse-join-column name="barnyard_id" referenced-column-name="barnyard_id" />
 				</join-table>
-			</many-to-many>
+			</one-to-many>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.FeedOrderDetails">
@@ -764,55 +746,26 @@
 			<many-to-one name="reception" fetch="LAZY" optional="false" >
 				<join-column name="reception_id" referenced-column-name="reception_id" nullable="true" />
 			</many-to-one>
-			<many-to-many name="pen" fetch="EAGER">
+			<one-to-many name="pen" fetch="EAGER">
 				<join-table name="ctrl_inspection_barnyard">
 					<join-column name="inspection_id" referenced-column-name="inspection_id" />
 					<inverse-join-column name="barnyard_id" referenced-column-name="barnyard_id" />
 				</join-table>
-			</many-to-many>
-		</attributes>
-	</entity>
-	<entity class="com.tramex.sisoprega.dto.InspectionBarnyard">
-		<table name="ctrl_inspection_barnyard" />
-		<named-query name="CRT_INSPECTIONBARNYARD_BY_ID">
-			<description>Retrieves a single crtFood record by ID</description>
-			<query>SELECT InspBar FROM InspectionBarnyard InspBar WHERE InspBar.inspectionBarnyardId = :Id</query>
-		</named-query>
-		<named-query name="IB_BY_INSPECTION_ID">
-			<description>Retrieves all barnyards for a given inspection id</description>
-			<query>SELECT ins FROM InspectionBarnyard ins WHERE ins.inspectionId = :inspectionId ORDER BY ins.barnyardId</query>
-		</named-query>
-		<attributes>
-			<id name="inspectionBarnyardId">
-				<column name="id" />
-				<generated-value strategy="IDENTITY" />
-			</id>
-			<basic name="inspectionId">
-				<column name="inspection_id" />
-			</basic>
-			<basic name="barnyardId">
-				<column name="barnyard_Id" />
-			</basic>
+			</one-to-many>
+			<one-to-many name="inspectionDetails" fetch="EAGER" mapped-by="inspection" target-entity="com.tramex.sisoprega.dto.InspectionDetails">
+				<cascade>
+					<cascade-all/>
+				</cascade>
+			</one-to-many>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.InspectionDetails">
 		<table name="ctrl_inspection_result" />
-		<named-query name="CRT_INSPECTION_DETAILS_BY_ID">
-			<description>Retrieves a single inspection details record by ID</description>
-			<query>SELECT InspDet FROM InspectionDetails InspDet WHERE InspDet.inspectionDetailsId = :Id</query>
-		</named-query>
-		<named-query name="INSPECTION_DETAILS_BY_INSPECTION_ID">
-			<description>Retrieves all inspection details for a given inspection id</description>
-			<query>SELECT ins FROM InspectionDetails ins WHERE ins.inspectionId = :inspId ORDER BY ins.inspectionCodeId</query>
-		</named-query>
 		<attributes>
 			<id name="inspectionDetailsId">
 				<column name="id" />
 				<generated-value strategy="IDENTITY" />
 			</id>
-			<basic name="inspectionId">
-				<column name="inspection_id" />
-			</basic>
 			<basic name="inspectionCodeId">
 				<column name="inspection_code_id" />
 			</basic>
@@ -828,6 +781,9 @@
 			<basic name="note">
 				<column name="note" />
 			</basic>
+			<many-to-one name="inspection" fetch="LAZY" optional="false">
+				<join-column name="inspection_id" referenced-column-name="inspection_id" nullable="false" />				
+			</many-to-one>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.InspectionCode">
@@ -847,30 +803,6 @@
 			</id>
 			<basic name="inspectionCodeDescription">
 				<column name="inspection_code_description" />
-			</basic>
-		</attributes>
-	</entity>
-	<entity class="com.tramex.sisoprega.dto.FeedOrderBarnyard">
-		<table name="ctrl_feed_order_barnyard" />
-		<named-query name="CAT_FEEDORDERBARNYARD_BY_ID">
-			<description>Retrieves a single crtFood record by ID</description>
-			<query>SELECT FedOrBar FROM FeedOrderBarnyard FedOrBar WHERE FedOrBar.feedOrderBarnyardId = :Id</query>
-		</named-query>
-		<named-query name="FEED_ORDER_FOR_BARNYARD_BY_ORDER_ID">
-			<description>Retrieves a list with the feed orders for a given order</description>
-			<query>SELECT fob FROM FeedOrderBarnyard fob  
-			WHERE fob.orderId = :orderId</query>
-		</named-query>
-		<attributes>
-			<id name="feedOrderBarnyardId">
-				<column name="feed_ord_barn_id" />
-				<generated-value strategy="IDENTITY" />
-			</id>
-			<basic name="barnyardId">
-				<column name="barnyard_id" />
-			</basic>
-			<basic name="orderId">
-				<column name="order_id" />
 			</basic>
 		</attributes>
 	</entity>

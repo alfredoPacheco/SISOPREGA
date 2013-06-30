@@ -104,6 +104,7 @@ public class ReceptionHeadcount {
    * @return the reception
    */
   public Reception getReception() {
+    System.out.println("current reception in headcount [" + reception + "]");
     return reception;
   }
 

@@ -44,34 +44,10 @@ public class Reception {
   private long cattleType;
   private long locationId;
   private long zoneId;
-  private Set<Pen> pen;
   private Set<ReceptionHeadcount> receptionHeadcount;
   private Set<FeedOrder> feedOrder;
   private Set<Inspection> inspection;
-
-  /**
-   * @return the pen
-   */
-  public Set<Pen> getPen() {
-    return pen;
-  }
-
-  /**
-   * @param pen the pen to set
-   */
-  public void setPen(Set<Pen> pen) {
-    this.pen = pen;
-  }
-  
-  public void addPen(Pen inPen){
-    if(pen == null)
-      pen = new HashSet<Pen>();
-    
-    pen.add(inPen);
-    
-    if(!inPen.getReception().contains(this))
-      inPen.addReception(this);
-  }
+  private Set<Pen> pen;
 
   /**
    * @return the receptionId
@@ -147,7 +123,7 @@ public class Reception {
   public void setLocationId(long locationId) {
     this.locationId = locationId;
   }
-  
+
   /**
    * @return the zoneId
    */
@@ -162,7 +138,7 @@ public class Reception {
   public void setZoneId(long zoneId) {
     this.zoneId = zoneId;
   }
-  
+
   /**
    * @return the receptionHeadcount
    */
@@ -171,23 +147,27 @@ public class Reception {
   }
 
   /**
-   * @param receptionHeadcount the receptionHeadcount to set
+   * @param receptionHeadcount
+   *          the receptionHeadcount to set
    */
   public void setReceptionHeadcount(Set<ReceptionHeadcount> receptionHeadcount) {
     this.receptionHeadcount = receptionHeadcount;
   }
-  
-  public void addReceptionHeadcount(ReceptionHeadcount headcount){
-    if(receptionHeadcount == null)
+
+  public void addReceptionHeadcount(ReceptionHeadcount headcount) {
+    System.out.println("Adding headcount [" + headcount + "].");
+    if (receptionHeadcount == null)
       receptionHeadcount = new HashSet<ReceptionHeadcount>();
-    
+
     receptionHeadcount.add(headcount);
-    
-    if(!headcount.getReception().equals(this))
+    System.out.println("Headcount added to receptionHeadcount list");
+
+    if (headcount.getReception() != this)
       headcount.setReception(this);
     
+    System.out.println("inverse relationship accomplished by add parent.");
+
   }
-  
 
   /**
    * @return the feedOrder
@@ -197,21 +177,22 @@ public class Reception {
   }
 
   /**
-   * @param feedOrder the feedOrder to set
+   * @param feedOrder
+   *          the feedOrder to set
    */
   public void setFeedOrder(Set<FeedOrder> feedOrder) {
     this.feedOrder = feedOrder;
   }
-  
-  public void addFeedOrder(FeedOrder order){
-    if(feedOrder == null)
+
+  public void addFeedOrder(FeedOrder order) {
+    if (feedOrder == null)
       feedOrder = new HashSet<FeedOrder>();
-    
+
     feedOrder.add(order);
-    
-    if(!order.getReception().equals(this))
+
+    if (order.getReception() != this)
       order.setReception(this);
-    
+
   }
 
   /**
@@ -222,35 +203,60 @@ public class Reception {
   }
 
   /**
-   * @param inspection the inspection to set
+   * @param inspection
+   *          the inspection to set
    */
   public void setInspection(Set<Inspection> inspection) {
     this.inspection = inspection;
   }
-  
-  public void addInspection(Inspection inInspection){
-    if(inspection == null)
+
+  public void addInspection(Inspection inInspection) {
+    if (inspection == null)
       inspection = new HashSet<Inspection>();
-    
+
     inspection.add(inInspection);
-    
-    if(!inInspection.getReception().equals(this))
+
+    if (inInspection.getReception() != this)
       inInspection.setReception(this);
-    
+
+  }
+
+  /**
+   * @return the pen
+   */
+  public Set<Pen> getPen() {
+    return pen;
+  }
+
+  /**
+   * @param pen
+   *          the pen to set
+   */
+  public void setPen(Set<Pen> pen) {
+    this.pen = pen;
+  }
+
+  public void addPen(Pen inPen) {
+    if (pen == null)
+      pen = new HashSet<Pen>();
+
+    pen.add(inPen);
   }
 
   @Override
   public String toString() {
-    return "cattleType:" + cattleType + ";dateAllotted:" + dateAllotted + ";locationId:" + locationId + ";zoneId:" + zoneId + ";rancherId:" + rancherId
-        + ";receptionId:" + receptionId + ";";
+    return "cattleType:" + cattleType + ";dateAllotted:" + dateAllotted + ";locationId:" + locationId + ";zoneId:" + zoneId
+        + ";rancherId:" + rancherId + ";receptionId:" + receptionId + ";";
   }
-  
+
   @Override
   public boolean equals(Object obj) {
-    if(obj instanceof Reception){
+    System.out.println("comparing this:[" + this + "] with obj[" + obj + "]");
+    if (obj instanceof Reception) {
+      System.out.println("comparing id[" + this.getReceptionId() + "] with id[" + ((Reception) obj).getReceptionId() + "]");
       return this.getReceptionId() == ((Reception) obj).getReceptionId();
     }
     return false;
   }
-  
+
 }

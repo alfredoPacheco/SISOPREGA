@@ -14,6 +14,7 @@
  * &copy; COPYRIGHT 2012 TRAMEX. ALL RIGHTS RESERVED.
  */
 package com.tramex.sisoprega.dto;
+
 /**
  * Defines the model for the Inspection Details entity.<BR/>
  * 
@@ -25,6 +26,7 @@ package com.tramex.sisoprega.dto;
  * MM/DD/YYYY
  * ----------  ---------------------------  -------------------------------------------
  * 12/23/2012  Alfredo Pacheco              Initial Version.
+ * 06/30/2013  Diego Torres                 Inspection correlation by obj.
  * ====================================================================================
  * </PRE>
  * 
@@ -32,107 +34,128 @@ package com.tramex.sisoprega.dto;
  * 
  */
 public class InspectionDetails {
-	private long inspectionDetailsId;
-	private long inspectionId;
-	private long inspectionCodeId;
-	private long hc;
-	private double weight;
-	private long weightUom;
-	private String note;
-	/**
-	 * @return the inspectionDetailsId
-	 */
-	public long getInspectionDetailsId() {
-		return inspectionDetailsId;
-	}
-	/**
-	 * @param inspectionDetailsId the inspectionDetailsId to set
-	 */
-	public void setInspectionDetailsId(long inspectionDetailsId) {
-		this.inspectionDetailsId = inspectionDetailsId;
-	}
-	/**
-	 * @return the inspectionId
-	 */
-	public long getInspectionId() {
-		return inspectionId;
-	}
-	/**
-	 * @param inspectionId the inspectionId to set
-	 */
-	public void setInspectionId(long inspectionId) {
-		this.inspectionId = inspectionId;
-	}
-	/**
-	 * @return the inspectionCodeId
-	 */
-	public long getInspectionCodeId() {
-		return inspectionCodeId;
-	}
-	/**
-	 * @param inspectionCodeId the inspectionCodeId to set
-	 */
-	public void setInspectionCodeId(long inspectionCodeId) {
-		this.inspectionCodeId = inspectionCodeId;
-	}
-	/**
-	 * @return the hc
-	 */
-	public long getHc() {
-		return hc;
-	}
-	/**
-	 * @param hc the hc to set
-	 */
-	public void setHc(long hc) {
-		this.hc = hc;
-	}
-	/**
-	 * @return the weight
-	 */
-	public double getWeight() {
-		return weight;
-	}
-	/**
-	 * @param weight the weight to set
-	 */
-	public void setWeight(double weight) {
-		this.weight = weight;
-	}
-	/**
-	 * @return the weightUom
-	 */
-	public long getWeightUom() {
-		return weightUom;
-	}
-	/**
-	 * @param weightUom the weightUom to set
-	 */
-	public void setWeightUom(long weightUom) {
-		this.weightUom = weightUom;
-	}
-	/**
-	 * @return the note
-	 */
-	public String getNote() {
-		return note;
-	}
-	/**
-	 * @param note the note to set
-	 */
-	public void setNote(String note) {
-		this.note = note;
-	}
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return "InspectionDetails [inspectionDetailsId=" + inspectionDetailsId
-				+ ", inspectionId=" + inspectionId + ", inspectionCodeId="
-				+ inspectionCodeId + ", hc=" + hc + ", weight=" + weight
-				+ ", weightUom=" + weightUom + ", note=" + note + "]";
-	}
-	
-	
+  private long inspectionDetailsId;
+  private long inspectionCodeId;
+  private long hc;
+  private double weight;
+  private long weightUom;
+  private String note;
+  private Inspection inspection;
+
+  /**
+   * @return the inspectionDetailsId
+   */
+  public long getInspectionDetailsId() {
+    return inspectionDetailsId;
+  }
+
+  /**
+   * @param inspectionDetailsId
+   *          the inspectionDetailsId to set
+   */
+  public void setInspectionDetailsId(long inspectionDetailsId) {
+    this.inspectionDetailsId = inspectionDetailsId;
+  }
+
+  /**
+   * @return the inspectionCodeId
+   */
+  public long getInspectionCodeId() {
+    return inspectionCodeId;
+  }
+
+  /**
+   * @param inspectionCodeId
+   *          the inspectionCodeId to set
+   */
+  public void setInspectionCodeId(long inspectionCodeId) {
+    this.inspectionCodeId = inspectionCodeId;
+  }
+
+  /**
+   * @return the hc
+   */
+  public long getHc() {
+    return hc;
+  }
+
+  /**
+   * @param hc
+   *          the hc to set
+   */
+  public void setHc(long hc) {
+    this.hc = hc;
+  }
+
+  /**
+   * @return the weight
+   */
+  public double getWeight() {
+    return weight;
+  }
+
+  /**
+   * @param weight
+   *          the weight to set
+   */
+  public void setWeight(double weight) {
+    this.weight = weight;
+  }
+
+  /**
+   * @return the weightUom
+   */
+  public long getWeightUom() {
+    return weightUom;
+  }
+
+  /**
+   * @param weightUom
+   *          the weightUom to set
+   */
+  public void setWeightUom(long weightUom) {
+    this.weightUom = weightUom;
+  }
+
+  /**
+   * @return the note
+   */
+  public String getNote() {
+    return note;
+  }
+
+  /**
+   * @param note
+   *          the note to set
+   */
+  public void setNote(String note) {
+    this.note = note;
+  }
+
+  /**
+   * @return the inspection
+   */
+  public Inspection getInspection() {
+    return inspection;
+  }
+
+  /**
+   * @param inspection
+   *          the inspection to set
+   */
+  public void setInspection(Inspection inspection) {
+    this.inspection = inspection;
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see java.lang.Object#toString()
+   */
+  @Override
+  public String toString() {
+    return "InspectionDetails [inspectionDetailsId=" + inspectionDetailsId + ", inspectionCodeId=" + inspectionCodeId + ", hc="
+        + hc + ", weight=" + weight + ", weightUom=" + weightUom + ", note=" + note + "]";
+  }
+
 }
