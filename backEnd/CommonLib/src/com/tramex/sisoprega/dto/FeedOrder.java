@@ -140,7 +140,7 @@ public class FeedOrder {
     
     feedOrderDetails.add(orderDetails);
     
-    if(!orderDetails.getFeedOrder().equals(this))
+    if(orderDetails.getFeedOrder() != this)
       orderDetails.setFeedOrder(this);
   }
 
