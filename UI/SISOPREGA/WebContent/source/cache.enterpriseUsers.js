@@ -8,7 +8,7 @@
  */
 enyo.kind({
     name : "cache.enterpriseUsers",
-    kind : "crud.cache",
+    kind : "cache.rancherUsers",
     entityName : "EnterpriseUser",
 });
 var cacheEnterpriseUsers = new cache.enterpriseUsers();

@@ -26,6 +26,8 @@ import java.util.Map;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 
+import com.tramex.sisoprega.dto.EnterpriseRancher;
+import com.tramex.sisoprega.dto.EnterpriseUser;
 import com.tramex.sisoprega.dto.Rancher;
 import com.tramex.sisoprega.dto.RancherUser;
 import com.tramex.sisoprega.identity.IdentityManagerException;
@@ -84,28 +86,58 @@ public class IdentityManagerBean extends BaseBean implements RemoteIdentity {
   public void createRancherUser(Long rancherId, String userName, String password) throws IdentityManagerException {
     log.info("Entering to IdentityBean");
     Rancher rancher = dataModel.readSingleDataModel("RANCHER_BY_ID", "Id", rancherId, Rancher.class);
-    log.info("Retrieving rancher successfull");
     if (rancher != null) {
-      User user = new User();
-
-      user.setUserName(userName);
-      user.setPassword(password);
-
-      Role role = new Role();
-      role.setRole_name("rancher");
-      role.setUser_name(userName);
-      user.addGroup(role);
-
-      createUser(user);
-      RancherUser rancherUser = new RancherUser();
-      rancherUser.setUser_name(userName);
+      log.info("Retrieving rancher successfull");
+      RancherUser rancherUser = getRancherUser(userName, password);
 
       rancher.addRancherUser(rancherUser);
       dataModel.updateDataModel(rancher);
 
     } else {
-      throw new IdentityManagerException("Ganadero no encontrado.");
+      EnterpriseRancher er = dataModel.readSingleDataModel("ENTERPRISERANCHER_BY_ID", "Id", rancherId, EnterpriseRancher.class);
+      if(er != null){
+        log.info("Retrieving enterprise rancher successfull");
+        EnterpriseUser enterpriseUser = getEnterpriseUser(userName, password);
+        
+        er.addEnterpriseUser(enterpriseUser);
+        dataModel.updateDataModel(er);
+      }else{
+        throw new IdentityManagerException("Ganadero no encontrado.");
+      }
     }
+  }
+  
+  private RancherUser getRancherUser(String userName, String password) throws IdentityManagerException{
+    saveUserForRancher(userName, password);
+
+    RancherUser rancherUser = new RancherUser();
+    rancherUser.setUser_name(userName);
+    
+    return rancherUser;
+  }
+
+  private EnterpriseUser getEnterpriseUser(String userName, String password) throws IdentityManagerException{
+    saveUserForRancher(userName, password);
+    
+    EnterpriseUser rancherUser = new EnterpriseUser();
+    rancherUser.setUser_name(userName);
+    
+    return rancherUser;
+
+  }
+  
+  private void saveUserForRancher(String userName, String password) throws IdentityManagerException {
+    User user = new User();
+
+    user.setUserName(userName);
+    user.setPassword(password);
+
+    Role role = new Role();
+    role.setRole_name("rancher");
+    role.setUser_name(userName);
+    user.addGroup(role);
+    
+    createUser(user);
   }
 
   /*
