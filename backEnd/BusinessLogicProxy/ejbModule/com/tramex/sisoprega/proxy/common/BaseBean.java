@@ -311,7 +311,7 @@ public abstract class BaseBean {
             log.fine("Empty child records list");
           }
         } else {
-          log.warning("Unsuported list type found: [" + genericType + "] in entity [" + type.getSimpleName() + "]");
+          log.fine("Unsuported list type found: [" + genericType + "] in entity [" + type.getSimpleName() + "]");
         }
 
       } else if (!fieldTypeName.contains("com.tramex.sisoprega")) {
