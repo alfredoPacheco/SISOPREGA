@@ -16,6 +16,8 @@
 package com.tramex.sisoprega.dto;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Defines the model for the Inspection Forecast entity.<BR/>
@@ -37,6 +39,7 @@ import java.util.Date;
 public class InspectionForecast {
   private long inspectionForecastId;
   private Date forecastDate;
+  private Set<InspectionForecastDetail> inspectionForecastDetail;
   
   /**
    * @return the forecastDate
@@ -61,6 +64,41 @@ public class InspectionForecast {
    */
   public void setInspectionForecastId(long inspectionForecastId) {
     this.inspectionForecastId = inspectionForecastId;
+  }
+  /**
+   * @return the inspectionForecastDetail
+   */
+  public Set<InspectionForecastDetail> getInspectionForecastDetail() {
+    return inspectionForecastDetail;
+  }
+  /**
+   * @param inspectionForecastDetail the inspectionForecastDetail to set
+   */
+  public void setInspectionForecastDetail(Set<InspectionForecastDetail> inspectionForecastDetail) {
+    this.inspectionForecastDetail = inspectionForecastDetail;
+  }
+  
+  public void addInspectionForecastDetail(InspectionForecastDetail detail){
+    if(inspectionForecastDetail == null)
+      inspectionForecastDetail = new HashSet<InspectionForecastDetail>();
+    
+    inspectionForecastDetail.add(detail);
+    
+    if(detail.getInspectionForecast() != this)
+      detail.setInspectionForecast(this);
+  }
+  
+  @Override
+  public String toString() {
+    return "inspectionForecastId:" + inspectionForecastId + ";forecastDate:" + forecastDate + ";";
+  }
+  
+  @Override
+  public boolean equals(Object obj) {
+    if(obj instanceof InspectionForecast)
+      return inspectionForecastId == ((InspectionForecast) obj).getInspectionForecastId();
+    
+    return false;
   }
   
 }

@@ -155,17 +155,14 @@ public class Reception {
   }
 
   public void addReceptionHeadcount(ReceptionHeadcount headcount) {
-    System.out.println("Adding headcount [" + headcount + "].");
     if (receptionHeadcount == null)
       receptionHeadcount = new HashSet<ReceptionHeadcount>();
 
     receptionHeadcount.add(headcount);
-    System.out.println("Headcount added to receptionHeadcount list");
 
     if (headcount.getReception() != this)
       headcount.setReception(this);
     
-    System.out.println("inverse relationship accomplished by add parent.");
 
   }
 
@@ -251,9 +248,7 @@ public class Reception {
 
   @Override
   public boolean equals(Object obj) {
-    System.out.println("comparing this:[" + this + "] with obj[" + obj + "]");
     if (obj instanceof Reception) {
-      System.out.println("comparing id[" + this.getReceptionId() + "] with id[" + ((Reception) obj).getReceptionId() + "]");
       return this.getReceptionId() == ((Reception) obj).getReceptionId();
     }
     return false;
