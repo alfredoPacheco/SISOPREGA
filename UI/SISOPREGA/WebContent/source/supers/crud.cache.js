@@ -29,7 +29,7 @@ enyo.kind({
 	    this.callbackMethod = '';
 	}
 
-	if(callbackObject.parentObject != null){
+	if(callbackObject !== undefined && callbackObject.parentObject != null){
 	    consumingGateway.Read(callbackObject.parentObject.entityName, filterDef, this, "getCallBack");
 	}else{
 	    consumingGateway.Read(this.entityName, filterDef, this, "getCallBack");

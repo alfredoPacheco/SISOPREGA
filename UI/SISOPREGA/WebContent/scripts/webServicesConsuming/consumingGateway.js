@@ -253,6 +253,8 @@ var consumingGateway = {
 	    alert('Usuario no identificado');
 	    consumingGateway.LogOut();
 	}
+	
+	var self = this;
 
 	// Ajax request:
 	jQuery.ajax({
@@ -278,32 +280,7 @@ var consumingGateway = {
 		    output.entityName = entityName;
 
 		    jQuery(data).find("parentRecord").each(function() {
-			var record = new Object();
-
-			// entity name
-			record.entityName = entityName;
-
-			// fields and values
-			jQuery(this).children("field").each(function() {
-			    var vName = jQuery(this).find('name').text();
-			    var vValue = jQuery(this).find('value').text();
-			    record[vName] = vValue;
-			});
-
-			// child records
-			jQuery(this).find("childRecord").each(function() {
-			    var childName = jQuery(this).find("entity").text();
-			    if (!record[childName])
-				record[childName] = [];
-			    var objChild = {};
-			    jQuery(this).find("field").each(function() {
-				var vName = jQuery(this).find('name').text();
-				var vValue = jQuery(this).find('value').text();
-				objChild[vName] = vValue;
-			    });
-			    record[childName].push(objChild);
-			});
-
+			var record = self.childrenFromParent(jQuery(this), self);
 			output.records.push(record);
 		    });
 		}
@@ -759,4 +736,24 @@ var consumingGateway = {
 	});
 	return output;
     },
+    childrenFromParent:function(xml, self){
+	// child records
+	var parentRecord = {};
+	parentRecord.entityName = xml.children("entity").text();
+	xml.children("field").each(function() {
+		var vName = jQuery(this).find('name').text();
+		var vValue = jQuery(this).find('value').text();
+		parentRecord[vName] = vValue;
+	    });
+	
+	xml.children("childRecord").each(function() {
+	    var objChild = self.childrenFromParent(jQuery(this), self);
+	    if(!parentRecord[objChild.entityName]){
+		parentRecord[objChild.entityName] = [];		
+	    }
+	    parentRecord[objChild.entityName].push(objChild);
+	});
+	
+	return parentRecord;
+    }
 };

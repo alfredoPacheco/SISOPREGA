@@ -23,7 +23,6 @@ enyo.kind({
 			onFileUpload:"showExpRequest"},
 	 		
 			{kind:"catalogs.main", name:"catalogs", label:"Catálogos",lazy:true},
-	 		{kind:"receptions.main", name:"receptions", label:"Recepciones",lazy:true},				
 	 		{kind:"receptions.barnyards.map", name:"receptionsMap",label:"Corrales",lazy:true, flex:1},	 		
 	 		{kind:"reports.main", name:"reports", label:"Reportes", lazy:true},
 	 		{kind:"inspections.list", name:"inspections", label:"Inspecciones", },
