@@ -33,8 +33,15 @@ enyo.kind({
 		 ]}
 	],
 	showReceptionsMap:function(){
-		this.$.mainPane.selectViewByName("receptionsMap");		
+	    cacheReceptions.get(this, "openMap");
+	    cacheBY.fillArrayPens(this, "finishFillPens");
 	},	
+	finishFillPens:function(){
+	  console.debug("finishFillPens");  
+	},
+	openMap:function(){
+	    this.$.mainPane.selectViewByName("receptionsMap");
+	},
 	showCatalogs:function(){
 		this.$.mainPane.validateView("catalogs");
 		this.$.catalogs.$.catalogsPane.selectViewByIndex(0);

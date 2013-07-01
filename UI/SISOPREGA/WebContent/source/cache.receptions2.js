@@ -543,16 +543,7 @@ enyo.kind(
       }
       return _arrCattleLS;
     },
-    getByID : function(iID) {
-      var arrTemp = [];
-      arrTemp = this.get();
-      for ( var i = 0; i < arrTemp.length; i++) {
-        if (arrTemp[i].reception_id == iID) {
-          return arrTemp[i];
-        }
-      }
-      return null;
-    },
+    
     deleteByID : function(iID) {
       for ( var i = 0; i < this.get().length; i++) {
         if (this.get()[i].reception_id == iID) {
@@ -687,18 +678,7 @@ enyo.kind(
         cbObj[cbMethod]();
       }
     },
-    appendBY : function(objReception, objBY, cbObj, cbMethod) {
-
-      for ( var sKey in objBY) {
-        cacheBY.setOccupied(sKey, objReception.reception_id);
-        objReception.barnyards[sKey] = objBY[sKey];
-      }
-
-      // cacheObj
-      if (cbMethod) {
-        cbObj[cbMethod]();
-      }
-    },
+    
     createFeedOrder : function(objRec, objFeed) {
       var objToSend = {};
       objToSend.receptionId = objRec.reception_id;
@@ -978,30 +958,6 @@ enyo.kind(
           result.push(receptions[i]);
         }
       }
-      return result;
-    },
-    getRanchersByReceptions : function() {
-      var arrResult = [];
-      var result = [];
-      var arrReceptions = this.get();
-
-      for (var i =0;i<arrReceptions.length;i++) {
-        for (j in arrReceptions[i].barnyards) {
-          var obj =
-            {
-              value : arrReceptions[i].rancher_id,
-              caption : arrReceptions[i].rancher_name
-            };
-          if (!(arrResult[obj.value] in arrResult)) {
-            arrResult[obj.value] = obj;
-          }
-        }
-      }
-
-      for (var i = 0;i<arrResult.length;i++) {
-        result.push(arrResult[i]);
-      }
-
       return result;
     },
     refreshData : function() {

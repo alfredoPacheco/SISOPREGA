@@ -511,20 +511,22 @@ enyo.kind({
 		this.deselect();
 		this.$.popMan.close();
 	},
-	updateBY:function(){		
-		this.$.popMan.close();	
-		this.cellOut();
-		for (var sKey in this.arrSelected){
-			this.setDesc(sKey);
-			this.highLightReception(cacheBY.inUse()[sKey].reception_id);			
-			break;
-		}
-		for (var sKey in this.arrSelected){
-			this.$[sKey].occupied=1;
-		}
-		this.colorBYbyRancherSelected(cacheReceptions.getByID(cacheBY.getRecIDbyBY(sKey)).rancher_id);
-		this.arrSelected={};
-		this.$.rancherFilter.setItems(cacheReceptions.getRanchersByReceptions());
+	updateBY:function(){
+	    this.refreshMap();
+//	    
+//		this.$.popMan.close();	
+//		this.cellOut();
+//		for (var sKey in this.arrSelected){
+//			this.setDesc(sKey);
+//			this.highLightReception(cacheBY.inUse()[sKey].reception_id);			
+//			break;
+//		}
+//		for (var sKey in this.arrSelected){
+//			this.$[sKey].occupied=1;
+//		}
+//		this.colorBYbyRancherSelected(cacheReceptions.getByID(cacheBY.getRecIDbyBY(sKey)).rancher_id);
+//		this.arrSelected={};
+//		this.$.rancherFilter.setItems(cacheReceptions.getRanchersByReceptions());
 	},
 	releaseBY:function(){
 		this.objSelected.occupied=0;
@@ -564,37 +566,7 @@ enyo.kind({
 			this.$[sKey].applyStyle("background-color",cacheReceptions.getByID(cacheBY.getRecIDbyBY(sKey)).color);							
 		}
 	},
-	refreshMap:function(){
-		cacheMan.showScrim();
-		consumingGateway.ReadAsync("Rancher", {}, this, "refreshMapCallBack");
-	},
-	refreshMapCallBack : function(result){
-	  cacheRanchers.refreshPersonCallBack(result);
-	  cacheCattle.refreshData();
-      cacheBY.refreshData();
-      cacheReceptions.refreshData();
-      this.$.rancherFilter.setItems(cacheReceptions.getRanchersByReceptions());
-      cacheMan.hideScrim();
-      for (var i = 0, a; (a=this.$.cells.children[i]); i++) {         
-          for (var j = 0, b; (b =a.children[j]); j++) {               
-              if(b.bBY==true){
-                  this.$[b.name].removeClass("selectCell");
-                  if(cacheBY.isOccupied(b.name)){
-                      //alert(b.name)
-                      this.$[b.name].occupied=1;                      
-                      this.$[b.name].applyStyle("background-color",this.sColorOccupied);                      
-                  }else{
-                      this.$[b.name].occupied=0;                              
-                      this.$[b.name].applyStyle("background-color",this.sColorFree);                                                                  
-                  }
-              }
-          }
-      }
-      this.arrByMOver={};
-      this.objSelected=null;
-      this.arrSelected={};
-      this.arrSelectedOccupied={};
-	},
+	
 	rancherFilterChanged:function(inSender){
 		if(this.$.rancherFilter.getIndex()>-1){
 			var receptions = cacheReceptions.getActiveBYForListByRancherID(this.$.rancherFilter.getIndex());
@@ -676,5 +648,41 @@ enyo.kind({
 		this.$.rancherFilter.clear();
 		this.rancherFilterChanged();
 		this.clearDesc();
-	}
+	},
+	refreshMap:function(){
+		cacheMan.showScrim();
+		cacheReceptions.get(this, "refreshMapCallBack");
+	},
+	
+	refreshMapCallBack : function() {
+//		cacheRanchers.refreshPersonCallBack(result);
+//		cacheCattle.refreshData();
+//		cacheBY.refreshData();
+//		cacheReceptions.refreshData();
+		this.$.rancherFilter.setItems(cacheReceptions
+			.getRanchersByReceptions());
+		
+		for ( var i = 0, a; (a = this.$.cells.children[i]); i++) {
+		    for ( var j = 0, b; (b = a.children[j]); j++) {
+			if (b.bBY == true) {
+			    this.$[b.name].removeClass("selectCell");
+			    if (cacheBY.isOccupied(b.name)) {
+				// alert(b.name)
+				this.$[b.name].occupied = 1;
+				this.$[b.name].applyStyle("background-color",
+					this.sColorOccupied);
+			    } else {
+				this.$[b.name].occupied = 0;
+				this.$[b.name].applyStyle("background-color",
+					this.sColorFree);
+			    }
+			}
+		    }
+		}
+		this.arrByMOver = {};
+		this.objSelected = null;
+		this.arrSelected = {};
+		this.arrSelectedOccupied = {};
+		cacheMan.hideScrim();
+	    }
 });		

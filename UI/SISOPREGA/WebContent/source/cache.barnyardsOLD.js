@@ -188,16 +188,7 @@ enyo.kind({
 			}
 		}
 	},
-	getByBarnyard:function(barnyard){
-		var arrAux = this.get();
-		for(var i=0; i<arrAux.length;i++){
-			if (arrAux[i].barnyard_code==barnyard.substr(1)){
-				if (arrAux[i].zone_id==barnyard.charAt(0)){
-					return arrAux[i];
-				}
-			}
-		}
-	},
+	
 	addCapacity:function(objBY,objCap,cbObj,cbMethod){		
 		//AJAX
 		//Update Local
@@ -266,26 +257,7 @@ enyo.kind({
 			cbObj[cbMethod]();
 		}		
 	},
-	setOccupied:function(sID,iReceptionID){ //example: setOccupied("1E2","79")
-		
-		objAux = {};
-		objAux.sID = this.getByBarnyard(sID).barnyard_id;
-		objAux.iReceptionID = iReceptionID;
-		var objToSend = this.rec_barnAdapterToOut(objAux);
-		delete objToSend.recBarnyardId;
-		var cgCreate = consumingGateway.Create("ReceptionBarnyard", objToSend);
-		if (cgCreate.exceptionId == 0){ //Created successfully			
-			objAux.recBarnyardId = cgCreate.generatedId;
-			this.arrObjInUse[sID]={reception_id:parseInt(iReceptionID),accepted_count:"",inspections:[],feed:[]};
-			return true;
-		}
-		else{ //Error			
-			alert( cgCreate.exceptionDescription);
-			//cacheMan.setMessage("", "[Exception ID: " + cgCreate.exceptionId + "] Descripcion: " + cgCreate.exceptionDescription);
-			return false;
-		}
-		
-	},
+	
 	releaseBY:function(objRec,sID,cbObj,cbMethod){
 		var objToSend = {};
 		objToSend.receptionId = objRec.reception_id;
@@ -320,18 +292,8 @@ enyo.kind({
 		cbObj[cbMethod]();
 	    }
 	},
-	inUse:function(){
-		return this.arrObjInUse;
-	},	
-	getBYbyRecID:function(sID){
-		var arrBY={};
-		for(var sKey in this.arrObjInUse){
-			if(this.arrObjInUse[sKey].reception_id==sID){
-				arrBY[sKey]=this.arrObjInUse[sKey];
-			}
-		}
-		return arrBY;
-	},
+		
+	
 	getRecIDbyBY:function(by){
 		if(by in this.arrObjInUse){
 			return this.arrObjInUse[by].reception_id;
