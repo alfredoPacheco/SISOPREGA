@@ -808,7 +808,7 @@
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.InspectionForecast">
 		<table name="ctrl_inspection_forecast" />
-		<named-query name="TODAY_INSPECTION_FORECAST">
+		<named-query name="ALL_INSPECTIONFORECASTS">
 			<description>Retrieves a single record that represents todays forecast list</description>
 			<query>SELECT forecast FROM InspectionForecast forecast ORDER BY forecast.forecastDate</query>
 		</named-query>
@@ -821,26 +821,20 @@
 				<column name="forecast_date" />
 				<temporal>DATE</temporal>
 			</basic>
+			<one-to-many name="inspectionForecastDetail" fetch="EAGER" target-entity="com.tramex.sisoprega.dto.InspectionForecastDetail" mapped-by="inspectionForecast">
+				<cascade>
+					<cascade-all/>
+				</cascade>
+			</one-to-many>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.InspectionForecastDetail">
 		<table name="ctrl_inspection_forecast_detail" />
-		<named-query name="FORECAST_DETAIL_BY_FORECAST_ID">
-			<description>Retrieves all records from a given forecast id</description>
-			<query>SELECT forecastDetail FROM InspectionForecastDetail forecastDetail WHERE forecastDetail.forecastId = :Id</query>
-		</named-query>
-		<named-query name="FORECAST_DETAIL_BY_ID">
-			<description>Retrieves a single record of forecast details by its given id.</description>
-			<query>SELECT forecastDetail FROM InspectionForecastDetail forecastDetail WHERE forecastDetail.inspectionForecastDetailId = :fdId</query>
-		</named-query>
 		<attributes>
 			<id name="inspectionForecastDetailId">
 				<column name="id" />
 				<generated-value strategy="IDENTITY" />
 			</id>
-			<basic name="forecastId">
-				<column name="forecast_id" />
-			</basic>
 			<basic name="rancherId">
 				<column name="rancher_id" />
 			</basic>
@@ -850,29 +844,15 @@
 			<basic name="cattleType">
 				<column name="cattle_type" />
 			</basic>
-		</attributes>
-	</entity>
-	<entity class="com.tramex.sisoprega.dto.InspectionForecastBarnyard">
-		<table name="ctrl_inspection_forecast_barnyard" />
-		<named-query name="FORECAST_BARNAYARD_BY_ID">
-			<description>Retrieve a single record of forecast barnyard by its given id</description>
-			<query>SELECT forecastBarnyard FROM InspectionForecastBarnyard forecastBarnyard WHERE forecastBarnyard.inspectionForecastBarnyardId = :Id</query>
-		</named-query>
-		<named-query name="FORECAST_BARNYARD_BY_FORECAST_DETAIL_ID">
-			<description>Retrieve all barnyard records of a given forecast id</description>
-			<query>SELECT forecastBarnyard FROM InspectionForecastBarnyard forecastBarnyard WHERE forecastBarnyard.fdId = :fdId</query>
-		</named-query>
-		<attributes>
-			<id name="inspectionForecastBarnyardId">
-				<column name="id" />
-				<generated-value strategy="IDENTITY" />
-			</id>
-			<basic name="barnyardId">
-				<column name="barnyard_id" />
-			</basic>
-			<basic name="fdId">
-				<column name="detail_id" />
-			</basic>
+			<many-to-one name="inspectionForecast" optional="false" fetch="LAZY">
+				<join-column name="forecast_id" referenced-column-name="id" nullable="false" />
+			</many-to-one>
+			<one-to-many name="pen" fetch="EAGER" >
+				<join-table name="ctrl_inspection_forecast_barnyard">
+					<join-column name="id" referenced-column-name="id" />
+					<inverse-join-column name="barnyard_id" referenced-column-name="barnyard_id" />
+				</join-table>
+			</one-to-many>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.identity.dto.User">

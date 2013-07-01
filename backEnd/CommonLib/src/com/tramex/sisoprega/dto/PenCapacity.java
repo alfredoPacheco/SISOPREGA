@@ -106,7 +106,6 @@ public class PenCapacity {
 
   @Override
   public boolean equals(Object obj) {
-    System.out.println("Comparing current [" + this + "] against: " + obj);
     if (obj instanceof PenCapacity) {
       PenCapacity pcObj = (PenCapacity) obj;
       if (pcObj.getPen() != null && pen != null)
