@@ -148,7 +148,7 @@ var consumingGateway = {
 	    exceptionDescription : "Success",
 	    exceptionId : 0,
 	    origin : "",
-	    generatedId : ""
+	    records : []
 	};
 
 	// SOAP Message:
@@ -185,8 +185,9 @@ var consumingGateway = {
 	}
 
 	soapMessage += '</parentRecord></request>';
-
 	soapMessage += '</ws:Create>' + soapFooter;
+	
+	var self = this;
 
 	// Ajax request:
 	jQuery.ajax({
@@ -208,8 +209,14 @@ var consumingGateway = {
 		}
 		output.origin = jQuery(data).find("origin").text();
 		if (output.exceptionId == 0) {
-		    output.generatedId = jQuery(data).find("generatedId")
-			    .text();
+		    output.entityName = entityName;
+
+		    jQuery(data).find("parentRecord").each(
+			    function() {
+				var record = self.childrenFromParent(
+					jQuery(this), self);
+				output.records.push(record);
+			    });
 		}
 
 		if (cbObj) {
@@ -253,7 +260,7 @@ var consumingGateway = {
 	    alert('Usuario no identificado');
 	    consumingGateway.LogOut();
 	}
-	
+
 	var self = this;
 
 	// Ajax request:
@@ -279,10 +286,12 @@ var consumingGateway = {
 		if (output.exceptionId == 0) {
 		    output.entityName = entityName;
 
-		    jQuery(data).find("parentRecord").each(function() {
-			var record = self.childrenFromParent(jQuery(this), self);
-			output.records.push(record);
-		    });
+		    jQuery(data).find("parentRecord").each(
+			    function() {
+				var record = self.childrenFromParent(
+					jQuery(this), self);
+				output.records.push(record);
+			    });
 		}
 
 		if (cbObj) {
@@ -307,7 +316,7 @@ var consumingGateway = {
 	    exceptionDescription : "Success",
 	    exceptionId : 0,
 	    origin : "",
-	    generatedId : ""
+	    records : []
 	};
 
 	// SOAP Message:
@@ -345,6 +354,8 @@ var consumingGateway = {
 
 	soapMessage += '</parentRecord></request>';
 	soapMessage += '</ws:Update>' + soapFooter;
+	
+	var self = this;
 
 	// Ajax request:
 	jQuery.ajax({
@@ -365,6 +376,18 @@ var consumingGateway = {
 		    consumingGateway.LogOut();
 		}
 		output.origin = jQuery(data).find("origin").text();
+
+		if (output.exceptionId == 0) {
+		    output.entityName = entityName;
+
+		    jQuery(data).find("parentRecord").each(
+			    function() {
+				var record = self.childrenFromParent(
+					jQuery(this), self);
+				output.records.push(record);
+			    });
+		}
+
 		if (cbObj) {
 		    var milis = ((Math.random() * 1000) + 500);
 		    setTimeout(cbObj[cbMethod](output), milis);
@@ -736,24 +759,24 @@ var consumingGateway = {
 	});
 	return output;
     },
-    childrenFromParent:function(xml, self){
+    childrenFromParent : function(xml, self) {
 	// child records
 	var parentRecord = {};
 	parentRecord.entityName = xml.children("entity").text();
 	xml.children("field").each(function() {
-		var vName = jQuery(this).find('name').text();
-		var vValue = jQuery(this).find('value').text();
-		parentRecord[vName] = vValue;
-	    });
-	
+	    var vName = jQuery(this).find('name').text();
+	    var vValue = jQuery(this).find('value').text();
+	    parentRecord[vName] = vValue;
+	});
+
 	xml.children("childRecord").each(function() {
 	    var objChild = self.childrenFromParent(jQuery(this), self);
-	    if(!parentRecord[objChild.entityName]){
-		parentRecord[objChild.entityName] = [];		
+	    if (!parentRecord[objChild.entityName]) {
+		parentRecord[objChild.entityName] = [];
 	    }
 	    parentRecord[objChild.entityName].push(objChild);
 	});
-	
+
 	return parentRecord;
     }
 };

@@ -100,7 +100,8 @@ enyo.kind({
 		if (this.parentObject[this.entityKind.entityName] === undefined) {
 		    this.parentObject[this.entityKind.entityName] = [];
 		}
-//		TODO: Remove every idless elements
+		// Remove IdLess elements
+		this.parentObject[this.entityKind.entityName] = this.removeIdLessArray(this.parentObject[this.entityKind.entityName], this.entityKind.entityIdName());
 		this.parentObject[this.entityKind.entityName].push(obj);
 		this.entityKind.update(this.parentObject, this, "afterAddEntity");
 	    } else {
@@ -110,6 +111,16 @@ enyo.kind({
 	    cacheMan.hideScrim();
 	    cacheMan.setMessage('', this.errorMessage);
 	}
+    },
+    removeIdLessArray : function(inArray, idName){
+	var result = [];
+	for(var i = 0; i<inArray.length; i++){
+	    var idxObj = inArray[i];
+	    if(idxObj[idName] && idxObj[idName]!=''){
+		result.push(idxObj);
+	    }
+	}
+	return result;
     },
     updateEntity : function() {
 	cacheMan.showScrim();
@@ -157,7 +168,6 @@ enyo.kind({
 	    var record = this.getRecordEntityById(result, this.parentObject[this.entityKind.entityIdName(this.parentObject)]);
 	    // Change array
 	    if(record != null){
-		console.debug('should update parent object array');
 		this.parentObject[this.entityKind.entityName] = record[this.entityKind.entityName];
 	    }
 	}
