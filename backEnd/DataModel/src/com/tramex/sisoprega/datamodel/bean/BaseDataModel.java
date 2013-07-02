@@ -102,7 +102,7 @@ public class BaseDataModel implements RemoteModelable {
   public void updateDataModel(Object dataModel) {
     em.merge(dataModel);
     em.flush();
-    this.log.finer("Reception update persisted on database");
+    this.log.finer("Reception update persisted on database for object {" + dataModel + "}");
   }
 
   public void deleteDataModel(Object dataModel, String principal) {

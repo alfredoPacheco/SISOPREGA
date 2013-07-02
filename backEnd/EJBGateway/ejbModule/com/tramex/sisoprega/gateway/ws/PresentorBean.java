@@ -32,7 +32,6 @@ import javax.xml.bind.annotation.XmlElement;
 import com.tramex.sisoprega.gateway.request.CreateRequest;
 import com.tramex.sisoprega.gateway.request.ReadRequest;
 import com.tramex.sisoprega.gateway.response.BaseResponse;
-import com.tramex.sisoprega.gateway.response.CreateResponse;
 import com.tramex.sisoprega.gateway.response.ReadResponse;
 import com.tramex.sisoprega.proxy.Cruddable;
 
@@ -76,7 +75,7 @@ public class PresentorBean {
   }
 
   @WebMethod
-  public CreateResponse Create(@XmlElement(required = true, nillable = false) @WebParam(name = "request") CreateRequest request) {
+  public ReadResponse Create(@XmlElement(required = true, nillable = false) @WebParam(name = "request") CreateRequest request) {
     log.entering(this.getClass().getCanonicalName(), "Create");
     log.info("Create gateway invoked with the following content: [" + request + "]");
 
@@ -85,7 +84,7 @@ public class PresentorBean {
     Cruddable entityProxy = getCruddable(entity);
     log.exiting(this.getClass().getCanonicalName(), "Create");
     
-    CreateResponse response = entityProxy.Create(request);
+    ReadResponse response = entityProxy.Create(request);
     log.info("Create gateway completed by " + getLoggedUser() + " as: [" + response.getError() + "]");
     return response;
   }

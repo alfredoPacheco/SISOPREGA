@@ -16,10 +16,9 @@
 
 package com.tramex.sisoprega.proxy;
 
-import com.tramex.sisoprega.gateway.response.BaseResponse;
 import com.tramex.sisoprega.gateway.request.CreateRequest;
 import com.tramex.sisoprega.gateway.request.ReadRequest;
-import com.tramex.sisoprega.gateway.response.CreateResponse;
+import com.tramex.sisoprega.gateway.response.BaseResponse;
 import com.tramex.sisoprega.gateway.response.ReadResponse;
 
 /**
@@ -49,7 +48,7 @@ public interface Cruddable {
    * @param request
    * @return
    */
-  CreateResponse Create(CreateRequest request);
+  ReadResponse Create(CreateRequest request);
 
   /**
    * Read operation, will execute SELECTS through the JPA. Be aware of 2

@@ -38,7 +38,6 @@ import com.tramex.sisoprega.gateway.GatewayRecord;
 import com.tramex.sisoprega.gateway.request.CreateRequest;
 import com.tramex.sisoprega.gateway.request.ReadRequest;
 import com.tramex.sisoprega.gateway.response.BaseResponse;
-import com.tramex.sisoprega.gateway.response.CreateResponse;
 import com.tramex.sisoprega.gateway.response.ReadResponse;
 
 /**
@@ -82,10 +81,10 @@ public abstract class BaseBean {
    * @param request
    * @return
    */
-  public CreateResponse Create(CreateRequest request) {
+  public ReadResponse Create(CreateRequest request) {
     this.log.entering(this.getClass().getCanonicalName(), "CreateResponse Create(CreateRequest)");
 
-    CreateResponse response = new CreateResponse();
+    ReadResponse response = new ReadResponse();
     try {
 
       GatewayRecord record = request.getParentRecord();
@@ -98,13 +97,12 @@ public abstract class BaseBean {
 
         dataModel.createDataModel(entity);
 
-        // Retrieve generated id value.
-        Class<?>[] params = null;
-        Object[] invokeParams = null;
-        long generatedId = (Long) type.getMethod("get" + record.getEntity() + "Id", params).invoke(entity, invokeParams);
-        response.setGeneratedId(generatedId);
-
-        response.setError(new GatewayError("0", "SUCCESS", "Create"));
+        List<Object> updatedRecordList = new ArrayList<Object>();
+        log.fine("Setting as response object: {" + entity + "}");
+        updatedRecordList.add(entity);
+        
+        response.setParentRecord(getRecordsFromList(updatedRecordList, type));
+        response.setError(new GatewayError("0", "SUCCESS", "Update"));
 
       } else {
         this.log.warning("Error de validación: " + error_description);
@@ -206,7 +204,16 @@ public abstract class BaseBean {
         } else {
           dataModel.updateDataModel(entity);
 
-          response.addParentRecord(request.getParentRecord());
+          String queryName = record.getEntity().toUpperCase() + "_BY_ID";
+          log.fine("Retrieving updated object with Query: " + queryName);
+          
+          entity = dataModel.readSingleDataModel(queryName, "Id", idToUpdate, type);
+          log.fine("got updated record: [" + entity + "]");
+          
+          List<Object> updatedRecordList = new ArrayList<Object>();
+          updatedRecordList.add(entity);
+          
+          response.setParentRecord(getRecordsFromList(updatedRecordList, type));
           response.setError(new GatewayError("0", "SUCCESS", "Update"));
         }
       } else {
@@ -337,7 +344,10 @@ public abstract class BaseBean {
     List<GatewayRecord> records = new ArrayList<GatewayRecord>();
 
     for (Object record : results) {
+      log.finer("===========  Extracting record - BEGIN  ==============");
+      log.finer("record: {" + record + "}");
       records.add(getRecordFromContent(record, type, null));
+      log.finer("===========  Extracting record - END  ==============");
     }
 
     return records;
@@ -393,12 +403,11 @@ public abstract class BaseBean {
         field.setAccessible(true);
 
         if (field.getType() == String.class) {
-          this.log.finest("found String field, setting direct value from request");
+          this.log.finest("found String field [" + gField.getName() + "], setting direct value from request [" + gField.getValue() + "]");
           field.set(entity, gField.getValue());
         } else {
-          this.log.finest("The field is a [" + field.getType().getCanonicalName() + "], will cast it's value in the request");
-
           String sValue = gField.getValue();
+          this.log.finest("The field [" + gField.getName() + "] is a [" + field.getType().getCanonicalName() + "], will cast it's value [" + sValue + "] in the request");
 
           if (sValue != null && !sValue.trim().equals(""))
             field.set(entity, castValueFromString(sValue, field.getType()));
@@ -449,6 +458,7 @@ public abstract class BaseBean {
    */
   protected Object castValueFromString(String value, Class<?> type) {
     Object result = null;
+    log.fine("casting value to [" + type.getName() + "]");
     if (type.getName().equals("int")) {
       result = Integer.parseInt(value);
     }
@@ -460,15 +470,17 @@ public abstract class BaseBean {
       try {
         Date dValue = new SimpleDateFormat(f).parse(value);
         result = dValue;
+        log.fine("parsed date value using format " + f);
       } catch (Exception e) {
-        log.severe("unable parse [" + value + "] to format: " + f);
+        log.fine("unable parse [" + value + "] to format: " + f);
         f = "MM/dd/yyyy";
-        log.severe("trying to parse [" + value + "] to format: " + f);
+        log.finer("trying to parse [" + value + "] to format: " + f);
         try {
           Date dValue = new SimpleDateFormat(f).parse(value);
           result = dValue;
+          log.fine("parsed date value using format " + f);
         } catch (Exception ex) {
-          log.severe("unable parse [" + value + "] to format: " + f);
+          log.finer("unable parse [" + value + "] to format: " + f);
         }
       }
     }
