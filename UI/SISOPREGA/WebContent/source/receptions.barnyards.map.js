@@ -279,7 +279,7 @@ enyo.kind({
 					//cacheBY.get
 					inSender.occupied=3;					
 					this.arrSelectedOccupied[inSender.name]=inSender.name;					
-					this.colorBYbyRancherSelected(cacheReceptions.getByID(cacheBY.getRecIDbyBY(inSender.name)).rancher_id);
+					this.colorBYbyRancherSelected(cacheReceptions.getByID(cacheBY.getRecIDbyBY(inSender.name)).rancherId);
 										
 				}
 				break;							
@@ -341,7 +341,7 @@ enyo.kind({
 					//cacheBY.get
 					inSender.occupied=3;					
 					this.arrSelectedOccupied[inSender.name]=inSender.name;
-					this.colorBYbyRancherSelected(cacheReceptions.getByID(cacheBY.getRecIDbyBY(inSender.name)).rancher_id);
+					this.colorBYbyRancherSelected(cacheReceptions.getByID(cacheBY.getRecIDbyBY(inSender.name)).rancherId);
 					this.cellHold(inSender, inEvent);
 				}				
 				break;							
@@ -524,7 +524,7 @@ enyo.kind({
 //		for (var sKey in this.arrSelected){
 //			this.$[sKey].occupied=1;
 //		}
-//		this.colorBYbyRancherSelected(cacheReceptions.getByID(cacheBY.getRecIDbyBY(sKey)).rancher_id);
+//		this.colorBYbyRancherSelected(cacheReceptions.getByID(cacheBY.getRecIDbyBY(sKey)).rancherId);
 //		this.arrSelected={};
 //		this.$.rancherFilter.setItems(cacheReceptions.getRanchersByReceptions());
 	},

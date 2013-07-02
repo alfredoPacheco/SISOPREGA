@@ -292,14 +292,6 @@ enyo.kind({
 		cbObj[cbMethod]();
 	    }
 	},
-		
-	
-	getRecIDbyBY:function(by){
-		if(by in this.arrObjInUse){
-			return this.arrObjInUse[by].reception_id;
-		}
-		return null;
-	},
 	getAllForList:function(){
 		var result = [];
 		var barnyards = this.get();

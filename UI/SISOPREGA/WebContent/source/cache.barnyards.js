@@ -21,9 +21,7 @@ enyo.kind({
 		for ( var j = 0; j < arrActiveReceptions[i].Pen.length; j++) {
 		    this.arrObjInUse[""
 			    + arrActiveReceptions[i].Pen[j].locationId
-			    + arrActiveReceptions[i].Pen[j].barnyardCode] = ""
-			    + arrActiveReceptions[i].Pen[j].locationId
-			    + arrActiveReceptions[i].Pen[j].barnyardCode;
+			    + arrActiveReceptions[i].Pen[j].barnyardCode] = arrActiveReceptions[i];
 		}
 	    }
 	}
@@ -120,7 +118,12 @@ enyo.kind({
 		//cacheMan.setMessage("", "[Exception ID: " + cgCreate.exceptionId + "] Descripcion: " + cgCreate.exceptionDescription);
 		return false;
 	}
-	
-},
+    },
+    getRecIDbyBY:function(by){
+	if(by in this.arrObjInUse){
+	    return this.arrObjInUse[by].receptionId;
+	}
+	return null;
+    },
 });
 var cacheBY = new cache.barnyards();

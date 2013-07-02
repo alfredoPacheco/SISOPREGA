@@ -27,7 +27,7 @@ enyo.kind({
 
 	for ( var i = 0; i < arrReceptions.length; i++) {
 	    var obj = {
-		value : arrReceptions[i].rancher_id,
+		value : arrReceptions[i].rancherId,
 		caption : "getRancherByID"
 	    };
 	    if (!(arrResult[obj.value] in arrResult)) {
@@ -43,7 +43,7 @@ enyo.kind({
 	var arrTemp = [];
 	arrTemp = enyo.clone(this.arrObj);
 	for ( var i = 0; i < arrTemp.length; i++) {
-	    if (arrTemp[i].reception_id == iID) {
+	    if (arrTemp[i].receptionId == iID) {
 		return arrTemp[i];
 	    }
 	}
@@ -82,5 +82,29 @@ enyo.kind({
 	}
 	return this.inherited(arguments);
     },
+    getActiveBYForListByRancherID : function(rancher_id) {
+	      var result = [];
+	      var receptions = this.arrObj;
+	      for (var i= 0; i<receptions.length;i++) {
+	        if (receptions[i].rancherId == rancher_id) {
+	          var barnyards = receptions[i].Pen;
+	          for (var j = 0; j<barnyards.length;j++){
+	            var barnyard =
+	              {
+	                caption : "",
+	                value : ""
+	              };
+	            
+	            barnyard.caption = "" + barnyards[j].barnyardCode + (Number(barnyards[j].locationId) == 1 ? " [Chihuahua]" : " [Zona Sur]");
+	              barnyard.value = barnyards[j].penId;
+	              barnyard.barnyard_code = barnyards[j].barnyardCode;
+//	              barnyard.zone = "Chihuahua";
+	              barnyard.zone_id = barnyards[j].locationId;
+	              result.push(barnyard);
+	          }
+	        }
+	      }
+	      return result;
+	    }
 });
 var cacheReceptions = new cache.receptions();

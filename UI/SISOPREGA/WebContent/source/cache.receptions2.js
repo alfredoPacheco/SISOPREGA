@@ -913,39 +913,6 @@ enyo.kind(
         cacheMan.setMessage("", "[Exception ID: " + cgDelete.exceptionId + "] Descripcion: " + cgDelete.exceptionDescription);
       }
     },
-    getActiveBYForListByRancherID : function(rancher_id) {
-      var result = [];
-      var receptions = this.get();
-      for (var i= 0; i<receptions.length;i++) {
-        if (receptions[i].rancher_id == rancher_id) {
-          var barnyards = receptions[i].barnyards;
-          for (property in barnyards) {
-            var barnyard =
-              {
-                caption : "",
-                value : ""
-              };
-            barnyard_id = cacheBY.getByBarnyard(barnyards[property]).barnyard_id;
-            if (barnyards[property].charAt(0) == 1) {
-              barnyard.caption = barnyards[property].substr(1) + " [Chihuahua]";
-              barnyard.value = barnyard_id;
-              barnyard.barnyard_code = barnyards[property].substr(1);
-              barnyard.zone = "Chihuahua";
-              barnyard.zone_id = barnyards[property].charAt(0);
-              result.push(barnyard);
-            } else {
-              barnyard.caption = barnyards[property].substr(1) + " [Zona Sur]";
-              barnyard.value = barnyard_id;
-              barnyard.barnyard_code = barnyards[property].substr(1);
-              barnyard.zone = "Zona Sur";
-              barnyard.zone_id = barnyards[property].charAt(0);
-              result.push(barnyard);
-            }
-          }
-        }
-      }
-      return result;
-    },
     getAllOriginForList : function() {
       var result = [];
       return result;

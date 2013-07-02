@@ -35,3 +35,4 @@ enyo.kind(
       }
     }
   });
+var cacheCattle = new cache.cattle();
