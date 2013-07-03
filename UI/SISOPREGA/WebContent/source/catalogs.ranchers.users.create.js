@@ -12,22 +12,28 @@ enyo.kind({
     NO_CHANGED : '!$NoChanged$!',
     create : function() {
 	this.inherited(arguments);
-	this.$.rowGroup.createComponents([ {
-	    kind : "Input",
-	    name : "user_name",
-	    hint : "Usuario",
-	    maxlength : "30",
-	    bindTo:"user_name"
-	}, {
-	    kind : "PasswordInput",
-	    name : "password",
-	    hint : "Contraseña",
-	    bindTo:"password"
-	}, {
-	    kind : "PasswordInput",
-	    name : "confirm_password",
-	    hint : "Confirmar",
-	    bindTo:"password"
+	this.$.mainScroller.createComponents([{
+	    kind : "RowGroup",
+    	    name : "rowGroup",
+    	    defaultKind : "HFlexBox",
+    	    caption : "",
+    	    components : [ {
+    		kind : "Input",
+    		name : "user_name",
+    		hint : "Usuario",
+    		maxlength : "30",
+    		bindTo : "user_name"
+    	    }, {
+    		kind : "PasswordInput",
+    		name : "password",
+    		hint : "Contraseña",
+    		bindTo : "password"
+    	    }, {
+    		kind : "PasswordInput",
+    		name : "confirm_password",
+    		hint : "Confirmar",
+    		bindTo : "password"
+    	    } ]
 	} ], {
 	    owner : this
 	});

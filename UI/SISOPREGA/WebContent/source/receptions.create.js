@@ -1,150 +1,162 @@
-enyo.kind(
-  {
+enyo.kind({
     name : "receptions.create",
     kind : "catalogs.create",
-    objRancher : null,
-    objContact : {},
     entityKind : cacheRancherContacts,
     create : function() {
-      this.inherited(arguments);
-      this.$.rowGroup.createComponents(
-        [
-          {
-            kind : "Input",
-            name : "aka",
-            hint : "Alias",
-            inputClassName : "blankInput",
-            focusClassName : "darkFocus",
-            bindTo : "aka"
-          },
-          {
-            kind : "Input",
-            name : "first_name",
-            hint : "Nombres",
-            inputClassName : "blankInput",
-            focusClassName : "darkFocus",
-            bindTo : "firstName"
-          },
-          {
-            kind : "Input",
-            name : "last_name",
-            hint : "Apellido Paterno",
-            inputClassName : "blankInput",
-            focusClassName : "darkFocus",
-            bindTo : "lastName"
-          },
-          {
-            kind : "Input",
-            name : "mother_name",
-            hint : "Apellido Materno",
-            inputClassName : "blankInput",
-            focusClassName : "darkFocus",
-            bindTo : "motherName"
-          },
-          {
-            kind : "VFlexBox",
-            style : "",
-            components :
-              [
-                {
-                  content : "Fecha de Nacimiento",
-                },
-                {
-                  kind : "DatePicker",
-                  name : "birth_date",
-                  label : "",
-                  minYear : 1940,
-                  maxYear : new Date().getFullYear(),
-                  className : "picker-hbox",
-                  bindTo : "birthDate"
-                } ]
-          },
-          {
-            kind : "Input",
-            name : "email_add",
-            hint : "Email",
-            inputClassName : "blankInput",
-            focusClassName : "darkFocus",
-            bindTo : "emailAddress"
-          },
-          {
-            kind : "controls.phoneBox",
-            name : "phone_number",
-            hint : "Telefono",
-            inputClassName : "blankInput",
-            focusClassName : "darkFocus",
-            onfocus : "applyMask",
-            bindTo : "telephone"
-          },
-          {
-            kind : "Input",
-            name : "address_one",
-            hint : "Domicilio",
-            inputClassName : "blankInput",
-            focusClassName : "darkFocus",
-            bindTo : "addressOne"
-          },
-          {
-            kind : "Input",
-            name : "address_two",
-            hint : "Colonia",
-            inputClassName : "blankInput",
-            focusClassName : "darkFocus",
-            bindTo : "addressTwo"
-          },
-          {
-            kind : "Input",
-            name : "city",
-            hint : "Ciudad",
-            inputClassName : "blankInput",
-            focusClassName : "darkFocus",
-            bindTo : "city"
-          },
-          {
-            kind : "Input",
-            name : "address_state",
-            hint : "Estado",
-            inputClassName : "blankInput",
-            focusClassName : "darkFocus",
-            bindTo : "addressState"
-          },
-          {
-            kind : "Input",
-            name : "zip_code",
-            hint : "Codigo Postal",
-            inputClassName : "blankInput",
-            focusClassName : "darkFocus",
-            bindTo : "zipCode"
-          } ],
-        {
-          owner : this
-        });
+	this.inherited(arguments);
+	this.$.mainScroller.createComponents([ {
+	    kind : "RowGroup",
+	    name : "rowGroup",
+	    defaultKind : "HFlexBox",
+	    caption : "",
+	    components : [ {
+		kind : enyo.VFlexBox, // defaultKind: "HFlexBox",
+		style : "padding:20px;",
+		pack : "center",
+		components : [ {
+		    layoutKind : enyo.HFlexLayout,
+		    align : "center",
+		    height : "50px;",
+		    components : [ {
+			content : "Corrales:",
+			width : "120px;",
+			style : "text-align: right;margin-right:5px;"
+		    }, {
+			name : 'sBYs',
+			content : "",
+			style : "color:black",
+			flex : 1
+		    }, {
+			content : "Fecha de Llegada:",
+			width : "160px;",
+			style : "text-align: right;margin-right:5px;"
+		    }, {
+			kind : "DatePicker",
+			name : "arrival_date",
+			label : "",
+			inputClassName : "blankInput",
+			focusClassName : "darkFocus",
+			changeOnInput : true,
+	    		bindTo : "dateAllotted"
+		    } ]
+
+		}, {
+		    kind : enyo.HFlexBox,
+		    align : "center",
+		    height : "50px;",
+		    components : [ {
+			content : "Sr. Ganadero:",
+			width : "120px;",
+			style : "text-align: right;margin-right:5px;"
+		    }, {
+			kind : "controls.autocomplete",
+			inputKind : "ToolInput",
+			name : "rancher_id",
+			hint : '',
+			width : "500px;",
+			height : "35px;",
+			flex : 1,
+			onEnter : "emularTabulacionConEnter",
+	    		bindTo : "rancherId"
+		    }, {
+			kind : enyo.IconButton,
+			icon : "images/menu-icon-new.png",
+			onclick : "contextMenuClicked"
+		    } ]
+		}, {
+		    kind : enyo.HFlexBox,
+		    align : "center",
+		    height : "50px;",
+		    components : [ {
+			content : "Tipo de Ganado:",
+			width : "120px;",
+			style : "text-align: right;margin-right:5px;"
+		    }, {
+			kind : "controls.autocomplete",
+			inputKind : "ToolInput",
+			name : "cattype_id",
+			hint : '',
+			width : "200px;",
+			height : "35px;",
+			flex : 1,
+			onEnter : "emularTabulacionConEnter",
+	    		bindTo : "cattleType"
+		    }, ]
+		},
+
+		{
+		    kind : enyo.HFlexBox,
+		    align : "center",
+		    height : "50px;",
+		    components : [ {
+			content : "Procedencia:",
+			width : "120px;",
+			style : "text-align: right;margin-right:5px;"
+		    }, {
+			kind : "controls.autocomplete",
+			inputKind : "ToolInput",
+			name : "location_id",
+			hint : '',
+			width : "200px;",
+			height : "35px;",
+			flex : 1,
+			onEnter : "emularTabulacionConEnter",
+	    		bindTo : "locationId"
+		    }, {
+			content : "Zona en Corrales:",
+			width : "160px;",
+			style : "text-align: right;margin-right:5px;"
+		    }, {
+			kind : "controls.autocomplete",
+			inputKind : "ToolInput",
+			name : "zone_id",
+			hint : '',
+			width : "200px;",
+			height : "35px;",
+			flex : 1,
+			onEnter : "emularTabulacionConEnter",
+	    		bindTo : "zoneId"
+		    }, ]
+		}, 
+		{
+		    kind : enyo.HFlexBox,
+		    align : "center",
+		    height : "50px;",
+		    entityName:"ReceptionHeadcount",
+		    components : [ {
+			content : "No. Cabezas:",
+			width : "120px;",
+			style : "text-align: right;margin-right:5px;"
+		    }, {
+			kind : "ToolInput",
+			name : "hc_aprox",
+			hint : "",
+			flex : 1,
+			height : "35px;",
+			changeOnInput : true,
+			inputType : "number",
+			onkeydown : "key_down",
+	    		bindTo : "hc"
+		    }, {
+			content : "Peso:",
+			width : "160px;",
+			style : "text-align: right;margin-right:5px;"
+		    }, {
+			kind : "ToolInput",
+			name : "weight",
+			hint : "",
+			flex : 1,
+			height : "35px;",
+			changeOnInput : true,
+			inputType : "number",
+			onkeydown : "key_down",
+	    		bindTo : "weight"
+		    } ]
+		} ]
+	    } ]
+	} ], {
+	    owner : this
+	});
     },
-//    addContact : function() {
-//      cacheRanchers.addContact(this.objRancher, this.getContact(), this, "doAddRancher");
-//    },
-//    setRancher : function(objRancher) {
-//      this.objRancher = objRancher;
-//    },
-//    setEntity : function(objRancher, objContact) {
-//      this.objRancher = objRancher;
-//      this.$.commonButtons.parentObject = objRancher;
-//      this.$.commonButtons.setEntity(objContact);
-//      //this.$.commonButtons.updatingEntityId = this.objRancher.rancherId;
-//    },
-//    toggleAdd : function() {
-//      this.$.commonButtons.parentObject = this.objRancher;
-//
-//      if (this.objRancher.rancher_type == 1) {
-//        this.$.commonButtons.entityType = "RancherContact";
-//      } else {
-//        this.$.commonButtons.entityType = "EnterpriseContact";
-//      }
-//
-//      this.$.commonButtons.toggleAdd();
-//    },
-    beforeSave : function(obj) {
-	obj.birthDate = utils.dateOut(obj.birthDate);
-	return true;
-    },
-  });
+    setReception:function(){}
+});

@@ -4,94 +4,100 @@ enyo.kind({
     entityKind : cacheEnterpriseRanchers,
     create : function() {
 	this.inherited(arguments);
-	this.$.rowGroup.createComponents([ {
-	    kind : "Input",
-	    name : "company_name",
-	    hint : "Razon Social",
-	    bindTo : "legalName"
-	}, {
-	    kind : "Input",
-	    name : "address_one",
-	    hint : "Calle y Numero",
-	    bindTo : "addressOne"
-	}, {
-	    kind : "Input",
-	    name : "address_two",
-	    hint : "Colonia",
-	    bindTo : "addressTwo"
-	}, {
-	    kind : "Input",
-	    name : "state_id",
-	    hint : "Entidad",
-	    bindTo : "state"
-	}, {
-	    kind : "Input",
-	    name : "city_id",
-	    hint : "Poblacion",
-	    bindTo : "city"
-	}, {
-	    kind : "Input",
-	    name : "zip_code",
-	    hint : "Codigo Postal",
-	    bindto : "zipCode"
-	}, {
-	    kind : "Input",
-	    name : "rfc",
-	    hint : "RFC",
-	    bindTo : "legalId"
-	}, {
-	    kind : enyo.Item,
-	    layoutKind : "HFlexLayout",
+	this.$.mainScroller.createComponents([ {
+	    kind : "RowGroup",
+	    name : "rowGroup",
+	    defaultKind : "HFlexBox",
+	    caption : "",
 	    components : [ {
-		kind : "controls.phoneBox",
-		name : "phone_number",
-		hint : "Telefono",
-		bindTo : "telephone"
+		kind : "Input",
+		name : "company_name",
+		hint : "Razon Social",
+		bindTo : "legalName"
 	    }, {
-		content : "Para envio de SMS",
-		style : "padding-right: 5px;"
+		kind : "Input",
+		name : "address_one",
+		hint : "Calle y Numero",
+		bindTo : "addressOne"
 	    }, {
-		kind : enyo.CheckBox,
-		name : "checkBox1",
-		onChange : "checkboxChanged"
+		kind : "Input",
+		name : "address_two",
+		hint : "Colonia",
+		bindTo : "addressTwo"
+	    }, {
+		kind : "Input",
+		name : "state_id",
+		hint : "Entidad",
+		bindTo : "state"
+	    }, {
+		kind : "Input",
+		name : "city_id",
+		hint : "Poblacion",
+		bindTo : "city"
+	    }, {
+		kind : "Input",
+		name : "zip_code",
+		hint : "Codigo Postal",
+		bindto : "zipCode"
+	    }, {
+		kind : "Input",
+		name : "rfc",
+		hint : "RFC",
+		bindTo : "legalId"
+	    }, {
+		kind : enyo.Item,
+		layoutKind : "HFlexLayout",
+		components : [ {
+		    kind : "controls.phoneBox",
+		    name : "phone_number",
+		    hint : "Telefono",
+		    bindTo : "telephone"
+		}, {
+		    content : "Para envio de SMS",
+		    style : "padding-right: 5px;"
+		}, {
+		    kind : enyo.CheckBox,
+		    name : "checkBox1",
+		    onChange : "checkboxChanged"
+		} ]
+	    }, {
+		kind : enyo.Item,
+		layoutKind : "HFlexLayout",
+		components : [ {
+		    kind : "controls.phoneBox",
+		    name : "phone_number2",
+		    hint : "Telefono 2",
+		    bindTo : "telephone2"
+		}, {
+		    content : "Para envio de SMS",
+		    style : "padding-right: 5px;"
+		}, {
+		    kind : enyo.CheckBox,
+		    name : "checkBox2",
+		    onChange : "checkboxChanged"
+		} ]
+	    }, {
+		kind : enyo.Item,
+		layoutKind : "HFlexLayout",
+		components : [ {
+		    kind : "controls.phoneBox",
+		    name : "phone_number3",
+		    hint : "Telefono 3",
+		    bindTo : "telephone3"
+		}, {
+		    content : "Para envio de SMS",
+		    style : "padding-right: 5px;"
+		}, {
+		    kind : enyo.CheckBox,
+		    name : "checkBox3",
+		    onChange : "checkboxChanged"
+		} ]
+	    }, {
+		kind : "Input",
+		name : "email",
+		hint : "E Mail",
+		bindTo : "email"
 	    } ]
-	}, {
-	    kind : enyo.Item,
-	    layoutKind : "HFlexLayout",
-	    components : [ {
-		kind : "controls.phoneBox",
-		name : "phone_number2",
-		hint : "Telefono 2",
-		bindTo : "telephone2"
-	    }, {
-		content : "Para envio de SMS",
-		style : "padding-right: 5px;"
-	    }, {
-		kind : enyo.CheckBox,
-		name : "checkBox2",
-		onChange : "checkboxChanged"
-	    } ]
-	}, {
-	    kind : enyo.Item,
-	    layoutKind : "HFlexLayout",
-	    components : [ {
-		kind : "controls.phoneBox",
-		name : "phone_number3",
-		hint : "Telefono 3",
-		bindTo : "telephone3"
-	    }, {
-		content : "Para envio de SMS",
-		style : "padding-right: 5px;"
-	    }, {
-		kind : enyo.CheckBox,
-		name : "checkBox3",
-		onChange : "checkboxChanged"
-	    } ]
-	}, {
-	    kind : "Input",
-	    name : "email",
-	    hint : "E Mail",
-	    bindTo : "email"
 	} ], {
 	    owner : this
 	});

@@ -16,17 +16,12 @@ enyo.kind({
     },
     components : [ {
 	kind : enyo.Scroller,
+	name:"mainScroller",
 	autoHorizontal : false,
 	horizontal : false,
 	className : "listBG",
 	flex : 1,
-	components : [ {
-	    kind : "RowGroup",
-	    name : "rowGroup",
-	    defaultKind : "HFlexBox",
-	    caption : "",
-	    components : []
-	} ]
+	components : []
     }, {
 	kind : "Drawer",
 	name : "draAdd",

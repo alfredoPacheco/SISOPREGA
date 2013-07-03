@@ -4,105 +4,114 @@ enyo.kind({
     entityKind : cacheRanchers,
     create : function() {
 	this.inherited(arguments);
-	this.$.rowGroup.createComponents([ {
-	    kind : "Input",
-	    name : "aka",
-	    hint : "Alias",
-	    inputClassName : "blankInput",
-	    focusClassName : "darkFocus",
-	    bindTo : "aka"
-	}, {
-	    kind : "Input",
-	    name : "first_name",
-	    hint : "Nombres",
-	    inputClassName : "blankInput",
-	    focusClassName : "darkFocus",
-	    bindTo : "firstName"
-	}, {
-	    kind : "Input",
-	    name : "last_name",
-	    hint : "Apellido Paterno",
-	    inputClassName : "blankInput",
-	    focusClassName : "darkFocus",
-	    bindTo : "lastName"
-	}, {
-	    kind : "Input",
-	    name : "mother_name",
-	    hint : "Apellido Materno",
-	    inputClassName : "blankInput",
-	    focusClassName : "darkFocus",
-	    bindTo : "motherName"
-	}, {
-	    kind : "VFlexBox",
-	    style : "",
+
+	this.$.mainScroller.createComponents([ {
+	    kind : "RowGroup",
+	    name : "rowGroup",
+	    defaultKind : "HFlexBox",
+	    caption : "",
 	    components : [ {
-		content : "Fecha de Nacimiento"
+		kind : "Input",
+		name : "aka",
+		hint : "Alias",
+		inputClassName : "blankInput",
+		focusClassName : "darkFocus",
+		bindTo : "aka"
 	    }, {
-		kind : "DatePicker",
-		name : "birth_date",
-		minYear : 1940,
-		maxYear : new Date().getFullYear(),
-		label : "",
-		className : "picker-hbox",
-		bindTo : "birthDate"
+		kind : "Input",
+		name : "first_name",
+		hint : "Nombres",
+		inputClassName : "blankInput",
+		focusClassName : "darkFocus",
+		bindTo : "firstName"
+	    }, {
+		kind : "Input",
+		name : "last_name",
+		hint : "Apellido Paterno",
+		inputClassName : "blankInput",
+		focusClassName : "darkFocus",
+		bindTo : "lastName"
+	    }, {
+		kind : "Input",
+		name : "mother_name",
+		hint : "Apellido Materno",
+		inputClassName : "blankInput",
+		focusClassName : "darkFocus",
+		bindTo : "motherName"
+	    }, {
+		kind : "VFlexBox",
+		style : "",
+		components : [ {
+		    content : "Fecha de Nacimiento"
+		}, {
+		    kind : "DatePicker",
+		    name : "birth_date",
+		    minYear : 1940,
+		    maxYear : new Date().getFullYear(),
+		    label : "",
+		    className : "picker-hbox",
+		    bindTo : "birthDate"
+		} ]
+	    }, {
+		kind : "Input",
+		name : "email_add",
+		hint : "Email",
+		inputType : "email",
+		inputClassName : "blankInput",
+		focusClassName : "darkFocus",
+		bindTo : "emailAddress"
+	    }, {
+		kind : enyo.Item,
+		layoutKind : "HFlexLayout",
+		components : [ {
+		    kind : "controls.phoneBox",
+		    name : "phone_number",
+		    hint : "Telefono",
+		    bindTo : "phone"
+		}, {
+		    content : "Para envio de SMS",
+		    style : "padding-right: 5px;"
+		}, {
+		    kind : enyo.CheckBox,
+		    name : "checkBox1",
+		    onChange : "checkboxChanged"
+		} ]
+	    }, {
+		kind : enyo.Item,
+		layoutKind : "HFlexLayout",
+		components : [ {
+		    kind : "controls.phoneBox",
+		    name : "phone_number2",
+		    hint : "Telefono 2",
+		    bindTo : "phone2"
+		}, {
+		    content : "Para envio de SMS",
+		    style : "padding-right: 5px;"
+		}, {
+		    kind : enyo.CheckBox,
+		    name : "checkBox2",
+		    onChange : "checkboxChanged"
+		} ]
+	    }, {
+		kind : enyo.Item,
+		layoutKind : "HFlexLayout",
+		components : [ {
+		    kind : "controls.phoneBox",
+		    name : "phone_number3",
+		    hint : "Telefono 3",
+		    bindTo : "phone3"
+		}, {
+		    content : "Para envio de SMS",
+		    style : "padding-right: 5px;"
+		}, {
+		    kind : enyo.CheckBox,
+		    name : "checkBox3",
+		    onChange : "checkboxChanged"
+		} ]
 	    } ]
-	}, {
-	    kind : "Input",
-	    name : "email_add",
-	    hint : "Email",
-	    inputType : "email",
-	    inputClassName : "blankInput",
-	    focusClassName : "darkFocus",
-	    bindTo : "emailAddress"
-	}, {
-	    kind : enyo.Item,
-	    layoutKind : "HFlexLayout",
-	    components : [ {
-		kind : "controls.phoneBox",
-		name : "phone_number",
-		hint : "Telefono",
-		bindTo : "phone"
-	    }, {
-		content : "Para envio de SMS",
-		style : "padding-right: 5px;"
-	    }, {
-		kind : enyo.CheckBox,
-		name : "checkBox1",
-		onChange : "checkboxChanged"
-	    } ]
-	}, {
-	    kind : enyo.Item,
-	    layoutKind : "HFlexLayout",
-	    components : [ {
-		kind : "controls.phoneBox",
-		name : "phone_number2",
-		hint : "Telefono 2",
-		bindTo : "phone2"
-	    }, {
-		content : "Para envio de SMS",
-		style : "padding-right: 5px;"
-	    }, {
-		kind : enyo.CheckBox,
-		name : "checkBox2",
-		onChange : "checkboxChanged"
-	    } ]
-	}, {
-	    kind : enyo.Item,
-	    layoutKind : "HFlexLayout",
-	    components : [ {
-		kind : "controls.phoneBox",
-		name : "phone_number3",
-		hint : "Telefono 3",
-		bindTo : "phone3"
-	    }, {
-		content : "Para envio de SMS",
-		style : "padding-right: 5px;"
-	    }, {
-		kind : enyo.CheckBox,
-		name : "checkBox3",
-		onChange : "checkboxChanged"
-	    } ]
-	} ], {owner: this});
+	} ], {
+	    owner : this
+	});
     },
     setEntity : function(obj) {
 	this.inherited(arguments);
