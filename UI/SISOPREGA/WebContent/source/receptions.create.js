@@ -2,6 +2,7 @@ enyo.kind({
     name : "receptions.create",
     kind : "catalogs.create",
     entityKind : cacheRancherContacts,
+    bindTo:"receptionId",
     create : function() {
 	this.inherited(arguments);
 	this.$.mainScroller.createComponents([ {
