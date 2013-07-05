@@ -1,8 +1,7 @@
 enyo.kind({
     name : "receptions.create",
     kind : "catalogs.create",
-    entityKind : cacheRancherContacts,
-    bindTo:"receptionId",
+    entityKind : cacheReceptions,
     create : function() {
 	this.inherited(arguments);
 	this.$.mainScroller.createComponents([ {
@@ -84,7 +83,6 @@ enyo.kind({
 	    		bindTo : "cattleType"
 		    }, ]
 		},
-
 		{
 		    kind : enyo.HFlexBox,
 		    align : "center",
@@ -137,7 +135,8 @@ enyo.kind({
 			changeOnInput : true,
 			inputType : "number",
 			onkeydown : "key_down",
-	    		bindTo : "hc"
+	    		bindTo : "hc",
+	    		belongsTo : "ReceptionHeadcount"
 		    }, {
 			content : "Peso:",
 			width : "160px;",
@@ -151,7 +150,8 @@ enyo.kind({
 			changeOnInput : true,
 			inputType : "number",
 			onkeydown : "key_down",
-	    		bindTo : "weight"
+	    		bindTo : "weight",
+	    		belongsTo : "ReceptionHeadcount"
 		    } ]
 		} ]
 	    } ]

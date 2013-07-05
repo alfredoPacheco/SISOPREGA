@@ -180,59 +180,31 @@ enyo.kind({
     afterUpdateEntity : function(updateResult) {
 	this.doUpdate();
     },
-//    getEntity : function() {
-//	var objEntity = {};
-//
-//	objEntity[this.entityKind.entityIdName()] = this.updatingEntityId;
-//
-//	var controls = this.$;
-//
-//	for ( var i in controls) {
-//	    if (controls[i].bindTo) {
-//		objEntity[controls[i].bindTo] = controls[i].getValue();
-//	    }
-//	}
-//
-//	return objEntity;
-//    },
-    getEntity : function(control,self){
-	self = self || this;
-	control = control || this;
-	var parentRecord = {};
-	parentRecord.entityName = control.entityName || control.entityKind.entityName;
-	var controls = control.children;
-	for(var i = 0; i<controls.length;i++){
-	    for (var prop in controls[i]){
-		console.debug(controls[i][prop]);
-		if (controls[i][prop].bindTo) {
-			parentRecord[controls[i][prop].bindTo] = controls[i][prop].getValue();
-		    }else if (controls[i][prop].entityName){
-			parentRecord[controls[i][prop].entityName] = self.getEntity(controls[i][prop],self);
+    getEntity : function() {
+	var objEntity = {};
+	
+	objEntity[this.entityKind.entityIdName()] = this.updatingEntityId;
+
+	var controls = this.$;
+
+	for ( var i = 0 in controls) {
+	    if(controls.hasOwnProperty(i)){
+		if (controls[i].belongsTo && controls[i].bindTo ) {
+			
+			if(!objEntity.hasOwnProperty(controls[i].belongsTo)){
+			    objEntity[controls[i].belongsTo] = []; //Reception.ReceptionHeadcount = []
+			    objEntity[controls[i].belongsTo][0] = {}; 
+			}
+			objEntity[controls[i].belongsTo][0][controls[i].bindTo] = controls[i].getValue();
+
+		    }else if (controls[i].bindTo){
+			objEntity[controls[i].bindTo] = controls[i].getValue();
 		    }
 	    }
 	}
-	return parentRecord;
+
+	return objEntity;
     },
-//    childrenFromParent : function(xml, self) {
-//	// child records
-//	var parentRecord = {};
-//	parentRecord.entityName = xml.children("entity").text();
-//	xml.children("field").each(function() {
-//	    var vName = jQuery(this).find('name').text();
-//	    var vValue = jQuery(this).find('value').text();
-//	    parentRecord[vName] = vValue;
-//	});
-//
-//	xml.children("childRecord").each(function() {
-//	    var objChild = self.childrenFromParent(jQuery(this), self);
-//	    if (!parentRecord[objChild.entityName]) {
-//		parentRecord[objChild.entityName] = [];
-//	    }
-//	    parentRecord[objChild.entityName].push(objChild);
-//	});
-//
-//	return parentRecord;
-//    },
     setEntity : function(entity) {
 	this.resetValues();
 	var controls = this.$;
