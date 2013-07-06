@@ -1,5 +1,6 @@
 package com.tramex.sisoprega.gateway.ws;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -13,6 +14,11 @@ import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
 
+import com.tramex.sisoprega.gateway.GatewayError;
+import com.tramex.sisoprega.gateway.GatewayField;
+import com.tramex.sisoprega.gateway.GatewayRecord;
+import com.tramex.sisoprega.gateway.request.ReadRequest;
+import com.tramex.sisoprega.gateway.response.ReadResponse;
 import com.tramex.sisoprega.identity.IdentityManagerException;
 import com.tramex.sisoprega.identity.RemoteIdentity;
 import com.tramex.sisoprega.identity.dto.User;
@@ -32,6 +38,9 @@ public class IdentityGatewayBean {
   
   @EJB(lookup="java:global/BusinessLogicProxy/IdentityManagerBean")
   private RemoteIdentity identityManager;
+  
+  @EJB(name="PresentorBean")
+  private PresentorBean presentor;
 
   @WebMethod
   @PermitAll
@@ -66,10 +75,26 @@ public class IdentityGatewayBean {
    */
   @RolesAllowed("sisoprega_admin")
   @WebMethod(operationName = "CreateRancherUser")
-  public String CreateRancherUser(@WebParam(name = "rancherId") Long rancherId,@WebParam(name = "userName") String userName, @WebParam(name = "password") String password) throws IdentityManagerException {
+  public ReadResponse CreateRancherUser(@WebParam(name = "rancherId") Long rancherId,@WebParam(name = "userName") String userName, @WebParam(name = "password") String password) throws IdentityManagerException {
     log.info("Creating rancherUser: " + userName + " for Rancher with ID:" + rancherId);
     identityManager.createRancherUser(rancherId, userName, password);
-    return "OK";
+    
+    ReadRequest request = new ReadRequest();
+    GatewayRecord filter = new GatewayRecord();
+    filter.setEntity("Rancher");
+    List<GatewayField> fields = new ArrayList<GatewayField>();
+    fields.add(new GatewayField("id", String.valueOf(rancherId)));
+    filter.setField(fields);
+    request.setFilter(filter);
+    
+    ReadResponse response = presentor.Read(request);
+    
+    if(response.getError().getExceptionId().equals("VAL02")){
+      filter.setEntity("EnterpriseRancher");
+      response = presentor.Read(request);
+    }
+    log.info("CreateRancherUser executed with result [" + response + "]");
+    return response;
   }
   
   
@@ -83,11 +108,33 @@ public class IdentityGatewayBean {
    * @throws IdentityManagerException
    */
   @WebMethod(operationName = "ResetPassword")
-  public String ResetPassword(@WebParam(name = "user_name") String userName, @WebParam(name = "password") String newPassword)
+  public ReadResponse ResetPassword(@WebParam(name = "user_name") String userName, @WebParam(name = "password") String newPassword)
       throws IdentityManagerException {
 
     identityManager.resetPassword(userName, newPassword);
-    return "OK";
+    
+    ReadRequest request = new ReadRequest();
+    GatewayRecord filter = new GatewayRecord();
+    filter.setEntity("RancherUser");
+    List<GatewayField> fields = new ArrayList<GatewayField>();
+    fields.add(new GatewayField("userName", userName));
+    filter.setField(fields);
+    request.setFilter(filter);
+    
+    ReadResponse response = presentor.Read(request);
+    if(response.getError().getExceptionId().equals("VAL02")){
+      // reset requested for rancherUser
+      filter.setEntity("Rancher");
+      response = presentor.Read(request);
+      if(response.getError().getExceptionId().equals("VAL02")){
+        filter.setEntity("EnterpriseRancher");
+        response = presentor.Read(request);
+      }
+    }else{
+      response.setError(new GatewayError("0", "SUCCESS", "ResetPassword"));
+    }
+    
+    return response;
   }
 
   /**
@@ -101,14 +148,16 @@ public class IdentityGatewayBean {
    * @throws IdentityManagerException
    */
   @WebMethod(operationName = "ChangePassword")
-  public String ChangePassword(@WebParam(name = "user_name") String userName,
+  public ReadResponse ChangePassword(@WebParam(name = "user_name") String userName,
       @WebParam(name = "previous_password") String previousPassword, @WebParam(name = "new_password") String newPassword)
       throws IdentityManagerException {
 
     if (identityManager.validateCurrentPassword(userName, previousPassword)) {
       return ResetPassword(userName, newPassword);
     } else {
-      return "La contraseña actual no coincide.";
+      ReadResponse response = new ReadResponse();
+      response.setError(new GatewayError("PWD01", "La contraseña actual no coincide", "ChangePassowrd"));
+      return response;
     }
   }
 

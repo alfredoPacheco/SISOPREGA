@@ -14,14 +14,6 @@
  * 
  * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
  * This javascript provides interfaces to consume gateway web services.
- * 
- * Revision History:
- * ====================================================================================
- * Date By Description MM/DD/YYYY ---------- ---------------------------
- * ------------------------------------------- Alfredo Pacheco Initial Version
- * 11/28/2012 Diego Torres Adding login & logout, setting sessionToken.
- * 02/03/2013 Diego Torres Adding operations for password reset.
- * ====================================================================================
  */
 
 var consumingGateway = {
@@ -90,7 +82,7 @@ var consumingGateway = {
     },
     Login : function(userId, password, callBackMethod, objRef) {
 	// Se crea objeto que devolvera la funcion:
-	output = {
+	var output = {
 	    exceptionDescription : "Success",
 	    exceptionId : 0
 	};
@@ -144,7 +136,7 @@ var consumingGateway = {
     },
     Create : function(entityName, entity, cbObj, cbMethod) {
 	// Se crea objeto que devolvera la funcion:
-	output = {
+	var output = {
 	    exceptionDescription : "Success",
 	    exceptionId : 0,
 	    origin : "",
@@ -235,7 +227,7 @@ var consumingGateway = {
     },
     Read : function(entityName, entity, cbObj, cbMethod) {
 	// Se crea objeto que devolvera la funcion:
-	output = {
+	var output = {
 	    exceptionDescription : "Success",
 	    exceptionId : 0,
 	    origin : "",
@@ -312,7 +304,7 @@ var consumingGateway = {
     },
     Update : function(entityName, entity, cbObj, cbMethod) {
 	// Se crea objeto que devolvera la funcion:
-	output = {
+	var output = {
 	    exceptionDescription : "Success",
 	    exceptionId : 0,
 	    origin : "",
@@ -458,12 +450,23 @@ var consumingGateway = {
 	return output;
     },
     CreateRancherUser : function(rancherId, userName, password, cbObj, cbMethod) {
+	
+	// Se crea objeto que devolvera la funcion:
+	var output = {
+	    exceptionDescription : "Success",
+	    exceptionId : 0,
+	    origin : "",
+	    records : []
+	};
+	
 	var soapMessage = soapHeader + '<ws:CreateRancherUser>';
 	soapMessage += '<rancherId>' + rancherId + '</rancherId>';
 	soapMessage += '<userName>' + userName + '</userName>';
 	soapMessage += '<password>' + password + '</password>';
 	soapMessage += '</ws:CreateRancherUser>';
 	soapMessage += soapFooter;
+	
+	var self = this;
 
 	jQuery.ajax({
 	    url : identityWsURL,
@@ -480,6 +483,18 @@ var consumingGateway = {
 		    consumingGateway.LogOut();
 		}
 		output.origin = jQuery(data).find("origin").text();
+		
+		if (output.exceptionId == 0) {
+		    jQuery(data).find("parentRecord").each(
+			    function() {
+				var record = self.childrenFromParent(
+					jQuery(this), self);
+				output.records.push(record);
+				output.entityName = record.entityName;
+			    });
+		}
+		
+		
 		if (cbObj) {
 		    var milis = ((Math.random() * 1000) + 500);
 		    setTimeout(cbObj[cbMethod](output), milis);
@@ -495,9 +510,12 @@ var consumingGateway = {
 	});
     },
     ResetPassword : function(userName, password, cbObj, cbMethod) {
-	output = {
+	// Se crea objeto que devolvera la funcion:
+	var output = {
+	    exceptionDescription : "Success",
 	    exceptionId : 0,
-	    exceptionDescription : 'SUCCESS'
+	    origin : "",
+	    records : []
 	};
 
 	var soapMessage = soapHeader + '<ws:ResetPassword>';
@@ -505,6 +523,8 @@ var consumingGateway = {
 	soapMessage += '<password>' + password + '</password>';
 	soapMessage += '</ws:ResetPassword>';
 	soapMessage += soapFooter;
+	
+	var self = this;
 
 	jQuery
 		.ajax({
@@ -517,12 +537,28 @@ var consumingGateway = {
 		    username : utils.getCookie("username"),
 		    password : utils.getCookie("pass"),
 		    success : function OnSuccess(data) {
-			var result = jQuery(data).find("return").text();
-			if (result != "OK") {
-			    output.exceptionId = 1;
-			    output.exceptionDescription = result;
+			if (output.exceptionId == "GW01") {
+			    alert(output.exceptionDescription);
+			    consumingGateway.LogOut();
 			}
+			output.origin = jQuery(data).find("origin").text();
+			
+			if (output.exceptionId == 0) {
 
+			    jQuery(data).find("parentRecord").each(
+				    function() {
+					var record = self.childrenFromParent(
+						jQuery(this), self);
+					output.records.push(record);
+					output.entityName = record.entityName;
+				    });
+			    
+			    if(!output.entityName)
+				output.entityName = "User";
+			    
+			}
+			
+			
 			if (cbObj) {
 			    var milis = ((Math.random() * 1000) + 500);
 			    setTimeout(cbObj[cbMethod](output), milis);

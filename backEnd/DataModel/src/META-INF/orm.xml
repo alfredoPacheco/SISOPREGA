@@ -7,6 +7,33 @@
 			<access>PROPERTY</access>
 		</persistence-unit-defaults>
 	</persistence-unit-metadata>
+	<entity class="com.tramex.sisoprega.dto.RancherUser">
+		<table name="cat_rancher_user" />
+		<named-query name="RANCHERUSER_BY_ID">
+			<description>Retrieve a single record of rancher user by its record id</description>
+			<query>SELECT rUser FROM RancherUser rUser WHERE rUser.rancherUserId = :Id</query>
+		</named-query>
+		<named-query name="RANCHERUSER_BY_USER_NAME">
+			<description>Retrieves a single record of rancher user by its user id</description>
+			<query>SELECT rUser FROM RancherUser rUser WHERE rUser.user_name = :userName</query>
+		</named-query>
+		<named-query name="ALL_RANCHERUSERS">
+			<description>Retrieve all records of rancher users</description>
+			<query>SELECT rUser FROM RancherUser rUser ORDER BY rUser.rancherUserId</query>
+		</named-query>
+		<attributes>
+			<id name="rancherUserId">
+				<column name="record_id" />
+				<generated-value strategy="IDENTITY" />
+			</id>
+			<basic name="user_name">
+				<column name="user_name" />
+			</basic>
+			<many-to-one name="rancher" optional="false">
+				<join-column name="rancher_id" referenced-column-name="rancher_id" nullable="false" />
+			</many-to-one>
+		</attributes>
+	</entity>
 	<entity class="com.tramex.sisoprega.dto.Rancher">
 		<table name="cat_person_rancher" />
 		<named-query name="RANCHER_BY_ID">
@@ -16,6 +43,10 @@
 		<named-query name="ALL_RANCHERS">
 			<description>Get all ranchers in database</description>
 			<query>SELECT r FROM Rancher r ORDER BY r.lastName, r.motherName, r.firstName, r.rancherId</query>
+		</named-query>
+		<named-query name="RANCHER_BY_USER_NAME">
+			<description>Get the rancher in database that belongs to the given user name</description>
+			<query>SELECT r FROM Rancher r inner join r.rancherUser rUser WHERE rUser.user_name = :userName</query>
 		</named-query>
 		<attributes>
 			<id name="rancherId">
@@ -84,6 +115,10 @@
 		<named-query name="ENTERPRISERANCHER_BY_LEGAL_NAME">
 			<description>Get a single enterprise rancher record by legal_name</description>
 			<query>SELECT enterprise FROM EnterpriseRancher enterprise WHERE enterprise.legalName = :legalName</query>
+		</named-query>
+		<named-query name="ENTERPRISE_BY_USER_NAME">
+			<description>Get the rancher in database that belongs to the given user name</description>
+			<query>SELECT r FROM EnterpriseRancher r inner join r.enterpriseUser rUser WHERE rUser.user_name = :userName</query>
 		</named-query>
 		<attributes>
 			<id name="enterpriseRancherId">
@@ -339,33 +374,6 @@
 			</basic>
 			<many-to-one name="enterpriseRancher" optional="false">
 				<join-column name="rancher_id" referenced-column-name="enterprise_id" nullable="false" />
-			</many-to-one>
-		</attributes>
-	</entity>
-	<entity class="com.tramex.sisoprega.dto.RancherUser">
-		<table name="cat_rancher_user" />
-		<named-query name="RANCHERUSER_BY_ID">
-			<description>Retrieve a single record of rancher user by its record id</description>
-			<query>SELECT rUser FROM RancherUser rUser WHERE rUser.rancherUserId = :Id</query>
-		</named-query>
-		<named-query name="RANCHERUSER_BY_USER_NAME">
-			<description>Retrieves a single record of rancher user by its user id</description>
-			<query>SELECT rUser FROM RancherUser rUser WHERE rUser.user_name = :userName</query>
-		</named-query>
-		<named-query name="ALL_RANCHERUSERS">
-			<description>Retrieve all records of rancher users</description>
-			<query>SELECT rUser FROM RancherUser rUser ORDER BY rUser.rancherUserId</query>
-		</named-query>
-		<attributes>
-			<id name="rancherUserId">
-				<column name="record_id" />
-				<generated-value strategy="IDENTITY" />
-			</id>
-			<basic name="user_name">
-				<column name="user_name" />
-			</basic>
-			<many-to-one name="rancher" optional="false">
-				<join-column name="rancher_id" referenced-column-name="rancher_id" nullable="false" />
 			</many-to-one>
 		</attributes>
 	</entity>
