@@ -80,11 +80,13 @@ enyo
 		return entityObj;
 	    },
 	    adapterToIn : function(entityObj) {
-		entityObj.penString = "";
-		for(var i = 0; i<entityObj.Pen.length;i++){
-		    entityObj.penString += "" + entityObj.Pen[i].locationId +entityObj.Pen[i].barnyardCode + ", "; 
+		if(entityObj.Pen){
+		    entityObj.penString = "";
+			for(var i = 0; i<entityObj.Pen.length;i++){
+			    entityObj.penString += "" + entityObj.Pen[i].locationId +entityObj.Pen[i].barnyardCode + ", "; 
+			}
+			if(entityObj.penString != "") entityObj.penString = entityObj.penString.slice(0,-2);    
 		}
-		entityObj.penString = entityObj.penString.slice(0,-2);
 		entityObj.dateAllotted = utils.dateIn(entityObj.dateAllotted);
 		
 		if (entityObj.FeedOrder) {
@@ -101,20 +103,24 @@ enyo
 		for ( var i = 0; i < receptions.length; i++) {
 		    if (receptions[i].rancherId == rancher_id) {
 			var barnyards = receptions[i].Pen;
-			for ( var j = 0; j < barnyards.length; j++) {
-			    var barnyard = {
-				caption : "",
-				value : ""
-			    };
+			if(barnyards){
+			    for ( var j = 0; j < barnyards.length; j++) {
+				    var barnyard = {
+					caption : "",
+					value : ""
+				    };
 
-			    barnyard.caption = ""
-				    + barnyards[j].barnyardCode
-				    + (Number(barnyards[j].locationId) == 1 ? " [Chihuahua]"
-					    : " [Zona Sur]");
-			    barnyard.value = barnyards[j].penId;
-			    barnyard.barnyard_code = barnyards[j].barnyardCode;
-			    barnyard.zone_id = barnyards[j].locationId;
-			    result.push(barnyard);
+				    barnyard.caption = ""
+					    + barnyards[j].barnyardCode
+					    + (Number(barnyards[j].locationId) == 1 ? " [Chihuahua]"
+						    : " [Zona Sur]");
+				    barnyard.value = barnyards[j].penId;
+				    barnyard.barnyard_code = barnyards[j].barnyardCode;
+				    barnyard.zone_id = barnyards[j].locationId;
+				    result.push(barnyard);
+				}    
+			}else{
+			    console.error("Error. No existe arreglo Pen en objeto Reception. {receptionId: " + receptions[i].receptionId + "}");
 			}
 		    }
 		}

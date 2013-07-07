@@ -13,16 +13,17 @@ enyo.kind(
 	createKindName : "catalogs.rancher.enterprise.form",
     },
     adapterToIn : function(entityObj) {
-
-      if(entityObj.entityName == "EnterpriseRancher"){
-        entityObj.rancher_type = 2;
-        entityObj.rancherId = entityObj.enterpriseRancherId;
-        entityObj.legalName += '';
-        entityObj.telephone = entityObj.telephone || ""; 
-        return this.inherited(arguments);
-      }else{
-        return null;
-      }
+	if (entityObj) {
+	    if (entityObj.entityName == "EnterpriseRancher") {
+		entityObj.rancher_type = 2;
+		entityObj.rancherId = entityObj.enterpriseRancherId;
+		entityObj.legalName += '';
+		entityObj.telephone = entityObj.telephone || "";
+		entityObj.idName = this.entityIdName();
+		return entityObj;
+	    }
+	}
+	return null;
     },
     adapterToList : function(entityObj) {
       var listObj =
@@ -31,7 +32,7 @@ enyo.kind(
           caption : ""
         };
 
-      listObj.value = entityObj.rancherId;
+      listObj.value = Number(entityObj.rancherId);
       listObj.caption =  entityObj.legalName;;
 
       return listObj;

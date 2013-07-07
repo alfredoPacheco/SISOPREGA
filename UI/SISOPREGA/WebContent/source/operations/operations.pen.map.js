@@ -388,7 +388,7 @@ enyo.kind({
 	},
 	actionSelected:function(inSender, inSelected){		
 		switch(inSelected.value){
-			case 1: //Recepcion
+			case 1: //Crear Recepcion
 				if(this.$.dynocon){
 					this.$.dynocon.destroy();
 				}
@@ -397,10 +397,22 @@ enyo.kind({
 				}
 				
 				this.$.popMan.createComponent({kind: "operations.reception.form",
-				    onAddReception:"updateBY",onCancel:"closePopUp", 
+				    onAdd:"updateBY",onCancel:"closePopUp", 
 				    name:'dynocon',flex:1},{owner:this});		
 				
-				this.$.dynocon.setEntity(null,this.arrSelected);
+				var objReception = {};
+				objReception.penString = "";
+				objReception.Pen = [];
+				for(pen in this.arrSelected){
+				    if(this.arrSelected.hasOwnProperty(pen)){
+					objReception.penString += this.arrSelected[pen] + ", ";
+					var objPen = crudPen.getByBarnyard(pen);
+					objReception.Pen.push(objPen);
+				    }
+				}
+				if(objReception.penString != "") objReception.penString = objReception.penString.slice(0,-2);
+				
+				this.$.dynocon.setEntity(objReception);
 				this.$.dynocon.toggleAdd();
 				this.$.popMan.render();
 				this.$.popMan.openAtCenter();												
@@ -466,13 +478,12 @@ enyo.kind({
 				}
 				if(this.$.tbHeaderRec){
 					this.$.tbHeaderRec.destroy();
-				}										
+				}
+				var objRec=crudReception.getByID(crudPen.inUse()[this.objSelected.name].receptionId);
 				this.$.popMan.createComponent({kind: "operations.reception.form",
 										       onUpdateReception:"closePopUp", onCancel:"closePopUp",
-											   name:'dynocon',flex: 1},{owner:this});			
-				var objRec=crudReception.getByID(crudPen.inUse()[this.objSelected.name].receptionId);
-				this.$.dynocon.setEntity(objRec,objRec.barnyards);
-				this.$.dynocon.toggleUpdate();
+											   name:'dynocon',flex: 1, objReception:objRec},{owner:this});			
+				
 				this.$.popMan.render();
 				this.$.popMan.openAtCenter();		
 				break;
@@ -510,23 +521,26 @@ enyo.kind({
 		this.deselect();
 		this.$.popMan.close();
 	},
-	updateBY:function(){
-	    this.refreshMap();
-//	    
-//		this.$.popMan.close();	
-//		this.cellOut();
-//		for (var sKey in this.arrSelected){
-//			this.setDesc(sKey);
-//			this.highLightReception(crudPen.inUse()[sKey].receptionId);			
-//			break;
-//		}
-//		for (var sKey in this.arrSelected){
-//			this.$[sKey].occupied=1;
-//		}
-//		this.colorBYbyRancherSelected(crudReception.getByID(crudPen.getRecIDbyBY(sKey)).rancherId);
-//		this.arrSelected={};
-//		this.$.rancherFilter.setItems(crudReception.getRanchersByReceptions());
-	},
+    	updateBY : function(result) {
+
+		crudPen.updateOccupiedBarnyards();
+
+		this.$.popMan.close();
+		this.cellOut();
+
+		for ( var sKey in this.arrSelected) {
+		    this.setDesc(sKey);
+		    this.highLightReception(crudPen.inUse()[sKey].receptionId);
+		    break;
+		}
+		for ( var sKey in this.arrSelected) {
+		    this.$[sKey].occupied = 1;
+		}
+		this.colorBYbyRancherSelected(crudReception.getByID(crudPen.getRecIDbyBY(sKey)).rancherId);
+		this.arrSelected = {};
+		this.$.rancherFilter.setItems(crudReception.getRanchersByReceptions());
+		cacheMan.hideScrim();
+	    },
 	releaseBY:function(){
 		this.objSelected.occupied=0;
 		this.objSelected.applyStyle("background-color",this.sColorFree);

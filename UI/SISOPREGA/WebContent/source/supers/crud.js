@@ -105,8 +105,7 @@ enyo.kind({
     },
     entityIdName : function(entityObj) {
 	var lowerCaseFirstChar = this.entityName.substring(0, 1).toLowerCase();
-	var entityNameCamelCase = this.entityName.substring(1,
-		this.entityName.length);
+	var entityNameCamelCase = this.entityName.substring(1,this.entityName.length);
 	var idSuffix = "Id";
 
 	if (entityObj) {

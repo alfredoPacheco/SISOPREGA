@@ -32,7 +32,7 @@ enyo.kind({
 	],
 	showReceptionsMap:function(){
 	    crudReception.get(this, "openMap");
-	    crudPen.fillArrayPens(this, "finishFillPens");
+	    crudPen.get(this, "finishFillPens");
 	},	
 	finishFillPens:function(){
 	  console.debug("finishFillPens");  

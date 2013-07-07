@@ -8,12 +8,14 @@ enyo.depends(
 	"source/controls/controls.multiselect.js",
 	"source/controls/controls.phoneBox.js",
 	"source/controls/controls.reportViewer.js",
+	"source/controls/controls.bindedField.js",
 	
 	"source/global/global.scrim.js",
 	"source/global/cache.js",
 	"source/global/global.utils.js",
 	
 	"source/cruds/crud.cattle.js",
+	"source/cruds/crud.location.js",
 	"source/cruds/crud.pen.js",
 	"source/cruds/crud.rancher.js",
 	"source/cruds/crud.rancherBilling.js",

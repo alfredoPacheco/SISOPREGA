@@ -80,8 +80,8 @@ enyo.kind({
 	var controls = this.$;
 
 	for ( var i in controls) {
-	    if (controls[i].bindTo) {
-		controls[i].setValue("");
+	    if (controls[i].bindTo && !controls[i].fixedValue) {
+		this.setValueForControl(controls[i], "");
 	    }
 	}
     },
@@ -166,7 +166,9 @@ enyo.kind({
 		this.parentObject[this.entityKind.entityName] = record[this.entityKind.entityName];
 	    }
 	}
-	this.doAdd();
+	this.entityKind.arrObj.push(result.records[0]);
+	
+	this.doAdd(result);
     },
     getRecordEntityById: function(result, id){
 	for(var i = 0; i < result.records.length; i++){
@@ -195,37 +197,57 @@ enyo.kind({
 			    objEntity[controls[i].belongsTo] = []; //Reception.ReceptionHeadcount = []
 			    objEntity[controls[i].belongsTo][0] = {}; 
 			}
-			objEntity[controls[i].belongsTo][0][controls[i].bindTo] = controls[i].getValue();
+			objEntity[controls[i].belongsTo][0][controls[i].bindTo] = this.getValueFromControl(controls[i]);
 
 		    }else if (controls[i].bindTo){
-			objEntity[controls[i].bindTo] = controls[i].getValue();
+			objEntity[controls[i].bindTo] = this.getValueFromControl(controls[i]);
 		    }
 	    }
 	}
 
 	return objEntity;
     },
+    getValueFromControl:function(control){
+	if(control){
+	    switch(control.kind){
+	    case "controls.autocomplete":
+		return control.getIndex();
+	    case "Control":
+		return control.getContent();
+	    case "controls.bindedField":
+	    default:
+		return control.getValue();
+	    }    
+	}
+    },
+    setValueForControl:function(control, value){
+	if(control && value !== undefined && value !== null){
+	    switch(control.kind){
+	    case "controls.autocomplete":
+		control.setIndex(value);
+		break;
+	    case "Control":
+		control.setContent(value);
+		break;
+	    case "controls.bindedField":
+	    default:
+		control.setValue(value);
+	    }    
+	}
+    },
     setEntity : function(entity) {
 	this.resetValues();
-	var controls = this.$;
-
-	for ( var i in controls) {
-	    if (controls[i].hasOwnProperty("bindTo")) {
-		var val = entity[controls[i].bindTo];
-		if (val !== undefined) {
-		    switch(controls[i].kind){
-		    case "controls.autocomplete":
-			controls[i].setIndex(val);
-			break;
-		    default:
-			controls[i].setValue(val);
+	if(entity){
+	    var controls = this.$;
+		for ( var i in controls) {
+		    if (controls[i].hasOwnProperty("belongsTo")) {
+			this.setValueForControl(controls[i], entity[controls[i].belongsTo][0][controls[i].bindTo]);
+		    }else if (controls[i].hasOwnProperty("bindTo")){
+			this.setValueForControl(controls[i], entity[controls[i].bindTo]);
 		    }
 		}
-	    }
+		this.updatingEntityId = entity[this.entityKind.entityIdName()];
 	}
-
-	this.updatingEntityId = entity[this.entityKind.entityIdName()];
-
 	this.toggleUpdate();
     },
     toggleUpdate : function() {
@@ -235,6 +257,5 @@ enyo.kind({
     toggleAdd : function() {
 	this.$.draAdd.setOpen(true);
 	this.$.draUpdate.setOpen(false);
-	this.resetValues();
     }
 });
