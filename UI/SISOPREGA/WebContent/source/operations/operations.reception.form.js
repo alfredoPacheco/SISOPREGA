@@ -23,9 +23,11 @@ enyo.kind({
 			style : "text-align: right;margin-right:5px;"
 		    }, {
 			name : 'sBYs',
-			content : "",
+			kind : "ToolInput",
 			style : "color:black",
-			flex : 1
+			hint:"",
+			flex : 1,
+			bindTo:"penString"
 		    }, {
 			content : "Fecha de Llegada:",
 			width : "160px;",
@@ -159,5 +161,28 @@ enyo.kind({
 	    owner : this
 	});
     },
-    setReception:function(){}
+    resetValues:function(){
+	cacheMan.showScrim();
+	this.inherited(arguments);
+	
+	crudRancher.get(this, "readCallBack");
+	crudEnterpriseRancher.get(this, "readCallBack");
+	crudCattle.get(this, "readCallBack");
+    },
+    readCounter:0,
+    readCallBack:function(){
+	this.readCounter++;
+	if(this.readCounter ==3){
+	    this.loadAutocompletes();
+	    this.readCounter=0;
+	}
+    },
+    loadAutocompletes:function(){
+	var arrAllRanchers = crudRancher.getList().join(crudEnterpriseRancher.getList());
+	this.$.rancher_id.setItems(arrAllRanchers);	
+	this.$.cattype_id.setItems(crudCattle.getList());
+	this.$.location_id.setItems(cacheMan.getAllLocationsForList());
+	this.$.zone_id.setItems(cacheMan.getAllZonesForList());
+	cacheMan.hideScrim();
+    }
 });

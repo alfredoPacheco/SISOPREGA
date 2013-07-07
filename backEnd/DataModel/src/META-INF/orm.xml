@@ -445,7 +445,7 @@
 			<description>Retrieves a single catLocation record by ID</description>
 			<query>SELECT loc FROM Location loc WHERE loc.locationId = :Id</query>
 		</named-query>
-		<named-query name="ALL_CAT_LOCATION">
+		<named-query name="ALL_LOCATIONS">
 			<description>Retrieves all catalog location records from database</description>
 			<query>SELECT loc FROM Location loc ORDER BY loc.locationName</query>
 		</named-query>
