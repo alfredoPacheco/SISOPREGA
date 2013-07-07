@@ -213,7 +213,13 @@ enyo.kind({
 	    if (controls[i].hasOwnProperty("bindTo")) {
 		var val = entity[controls[i].bindTo];
 		if (val !== undefined) {
-		    controls[i].setValue(val);
+		    switch(controls[i].kind){
+		    case "controls.autocomplete":
+			controls[i].setIndex(val);
+			break;
+		    default:
+			controls[i].setValue(val);
+		    }
 		}
 	    }
 	}

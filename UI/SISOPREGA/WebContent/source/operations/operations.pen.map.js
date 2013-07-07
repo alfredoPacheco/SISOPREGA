@@ -400,7 +400,7 @@ enyo.kind({
 				    onAddReception:"updateBY",onCancel:"closePopUp", 
 				    name:'dynocon',flex:1},{owner:this});		
 				
-				this.$.dynocon.setReception(null,this.arrSelected);
+				this.$.dynocon.setEntity(null,this.arrSelected);
 				this.$.dynocon.toggleAdd();
 				this.$.popMan.render();
 				this.$.popMan.openAtCenter();												
@@ -471,7 +471,7 @@ enyo.kind({
 										       onUpdateReception:"closePopUp", onCancel:"closePopUp",
 											   name:'dynocon',flex: 1},{owner:this});			
 				var objRec=crudReception.getByID(crudPen.inUse()[this.objSelected.name].receptionId);
-				this.$.dynocon.setReception(objRec,objRec.barnyards);
+				this.$.dynocon.setEntity(objRec,objRec.barnyards);
 				this.$.dynocon.toggleUpdate();
 				this.$.popMan.render();
 				this.$.popMan.openAtCenter();		

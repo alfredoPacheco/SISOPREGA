@@ -80,7 +80,13 @@ enyo
 		return entityObj;
 	    },
 	    adapterToIn : function(entityObj) {
+		entityObj.penString = "";
+		for(var i = 0; i<entityObj.Pen.length;i++){
+		    entityObj.penString += "" + entityObj.Pen[i].locationId +entityObj.Pen[i].barnyardCode + ", "; 
+		}
+		entityObj.penString = entityObj.penString.slice(0,-2);
 		entityObj.dateAllotted = utils.dateIn(entityObj.dateAllotted);
+		
 		if (entityObj.FeedOrder) {
 		    for ( var i = 0; i < entityObj.FeedOrder.length; i++) {
 			entityObj.FeedOrder[i].feedDate = utils
