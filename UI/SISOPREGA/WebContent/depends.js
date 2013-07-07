@@ -54,10 +54,10 @@ enyo.depends(
 	"source/receptions.inspections.js",
 	"source/receptions.feed.js",	
 	
-	"source/reports.main.js",
-	"source/reports.select.js",					
-	"source/reports.filter.js",	
-	"source/reports.filter.by_date.js",
+	"source/reports/reports.main.js",
+	"source/reports/reports.select.js",					
+	"source/reports/reports.filter.js",	
+	"source/reports/reports.filter.by_date.js",
 	
 	"source/inspections.main.fs.js",
 	"source/inspection.forecast.js",
