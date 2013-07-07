@@ -13,7 +13,9 @@ enyo.kind({
 		kind : enyo.VFlexBox, // defaultKind: "HFlexBox",
 		style : "padding:20px;",
 		pack : "center",
-		components : [ {
+		components : [ {kind:"controls.bindedField", value:null,
+			bindTo:"color",
+		},{
 		    layoutKind : enyo.HFlexLayout,
 		    align : "center",
 		    height : "50px;",

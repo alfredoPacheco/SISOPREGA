@@ -405,7 +405,7 @@ enyo.kind({
 				objReception.Pen = [];
 				for(pen in this.arrSelected){
 				    if(this.arrSelected.hasOwnProperty(pen)){
-					objReception.penString += this.arrSelected[pen] + ", ";
+					objReception.penString += pen.substr(1) + ", ";
 					var objPen = crudPen.getByBarnyard(pen);
 					objReception.Pen.push(objPen);
 				    }
@@ -481,8 +481,8 @@ enyo.kind({
 				}
 				var objRec=crudReception.getByID(crudPen.inUse()[this.objSelected.name].receptionId);
 				this.$.popMan.createComponent({kind: "operations.reception.form",
-										       onUpdateReception:"closePopUp", onCancel:"closePopUp",
-											   name:'dynocon',flex: 1, objReception:objRec},{owner:this});			
+				    					onUpdate:"onReceptionUpdate", onCancel:"closePopUp",
+									name:'dynocon',flex: 1, objReception:objRec},{owner:this});
 				
 				this.$.popMan.render();
 				this.$.popMan.openAtCenter();		
@@ -513,13 +513,18 @@ enyo.kind({
 				break;
 		}
 	},
+	onReceptionUpdate:function(inSender, objOld,objNew){
+	    objNew.color = objOld.color;
+	    this.closePopUp();
+	},
 	closePopUp:function(){	
 		for (var sKey in this.arrSelectedOccupied){
-			this.setDesc(sKey);
-			break;
+		    this.setDesc(sKey);
+		    break;
 		}	
 		this.deselect();
 		this.$.popMan.close();
+		cacheMan.hideScrim();
 	},
     	updateBY : function(result) {
 
@@ -540,7 +545,7 @@ enyo.kind({
 		this.arrSelected = {};
 		this.$.rancherFilter.setItems(crudReception.getRanchersByReceptions());
 		cacheMan.hideScrim();
-	    },
+    	},
 	releaseBY:function(){
 		this.objSelected.occupied=0;
 		this.objSelected.applyStyle("background-color",this.sColorFree);

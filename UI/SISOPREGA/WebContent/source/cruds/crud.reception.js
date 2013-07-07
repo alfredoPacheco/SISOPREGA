@@ -83,7 +83,7 @@ enyo
 		if(entityObj.Pen){
 		    entityObj.penString = "";
 			for(var i = 0; i<entityObj.Pen.length;i++){
-			    entityObj.penString += "" + entityObj.Pen[i].locationId +entityObj.Pen[i].barnyardCode + ", "; 
+			    entityObj.penString += ""+ entityObj.Pen[i].barnyardCode + ", "; 
 			}
 			if(entityObj.penString != "") entityObj.penString = entityObj.penString.slice(0,-2);    
 		}
@@ -95,6 +95,7 @@ enyo
 				.dateIn(entityObj.FeedOrder[i].feedDate);
 		    }
 		}
+		entityObj.color = entityObj.color || utils.colorStack.pop();
 		return this.inherited(arguments);
 	    },
 	    getActiveBYForListByRancherID : function(rancher_id) {

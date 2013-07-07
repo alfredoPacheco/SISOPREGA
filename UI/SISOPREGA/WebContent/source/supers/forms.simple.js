@@ -147,15 +147,6 @@ enyo.kind({
 	
 	return null;
     },
-    beforeSave : function(obj) {
-	// this function can be overriden in order to do something with obj
-	// can do validations, if false, will cancel save operation.
-	return true;
-    },
-    cancel : function() {
-	this.resetValues();
-	this.doCancel();
-    },
     afterAddEntity : function(result) {
 	// Update array based on parentObject
 	if(this.parentObject!=null){
@@ -166,9 +157,33 @@ enyo.kind({
 		this.parentObject[this.entityKind.entityName] = record[this.entityKind.entityName];
 	    }
 	}
-	this.entityKind.arrObj.push(result.records[0]);
+	this.entityKind.arrObj.push(this.entityKind.adapterToIn(result.records[0]));
 	
 	this.doAdd(result);
+    },
+    afterUpdateEntity : function(updateResult) {
+	var objOld =null; 
+	var objNew = updateResult.records[0];
+	
+	if(!this.parentObject){
+	    var idName = this.entityKind.entityIdName();
+	    for(var i = 0; i<this.entityKind.arrObj.length;i++){
+		if(this.entityKind.arrObj[i][idName] == objNew[idName]){
+		    objOld = this.entityKind.arrObj[i];
+		    this.entityKind.arrObj[i] = this.entityKind.adapterToIn(objNew);
+		}
+	    }
+	}
+	this.doUpdate(objOld,objNew);
+    },
+    beforeSave : function(obj) {
+	// this function can be overriden in order to do something with obj
+	// can do validations, if false, will cancel save operation.
+	return true;
+    },
+    cancel : function() {
+	this.resetValues();
+	this.doCancel();
     },
     getRecordEntityById: function(result, id){
 	for(var i = 0; i < result.records.length; i++){
@@ -178,9 +193,6 @@ enyo.kind({
 	    }
 	}
 	return null;
-    },
-    afterUpdateEntity : function(updateResult) {
-	this.doUpdate();
     },
     getEntity : function() {
 	var objEntity = {};
@@ -241,7 +253,8 @@ enyo.kind({
 	    var controls = this.$;
 		for ( var i in controls) {
 		    if (controls[i].hasOwnProperty("belongsTo")) {
-			this.setValueForControl(controls[i], entity[controls[i].belongsTo][0][controls[i].bindTo]);
+			if(entity[controls[i].belongsTo])
+			    this.setValueForControl(controls[i], entity[controls[i].belongsTo][0][controls[i].bindTo]);
 		    }else if (controls[i].hasOwnProperty("bindTo")){
 			this.setValueForControl(controls[i], entity[controls[i].bindTo]);
 		    }
