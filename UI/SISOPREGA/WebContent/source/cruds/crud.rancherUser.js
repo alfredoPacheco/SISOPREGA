@@ -11,7 +11,7 @@ enyo.kind({
     kind : "crud",
     published : {
 	entityName : "RancherUser",
-	createKindName : "catalogs.rancher.user.form",
+	createKindName : "catalogs.rancher.user.form"
     },
     NO_CHANGED : '!$NoChanged$!',
     adapterToIn : function(entityObj) {

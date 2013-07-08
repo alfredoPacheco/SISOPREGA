@@ -178,7 +178,7 @@ var consumingGateway = {
 
 	soapMessage += '</parentRecord></request>';
 	soapMessage += '</ws:Create>' + soapFooter;
-	
+
 	var self = this;
 
 	// Ajax request:
@@ -346,7 +346,7 @@ var consumingGateway = {
 
 	soapMessage += '</parentRecord></request>';
 	soapMessage += '</ws:Update>' + soapFooter;
-	
+
 	var self = this;
 
 	// Ajax request:
@@ -450,7 +450,7 @@ var consumingGateway = {
 	return output;
     },
     CreateRancherUser : function(rancherId, userName, password, cbObj, cbMethod) {
-	
+
 	// Se crea objeto que devolvera la funcion:
 	var output = {
 	    exceptionDescription : "Success",
@@ -458,14 +458,14 @@ var consumingGateway = {
 	    origin : "",
 	    records : []
 	};
-	
+
 	var soapMessage = soapHeader + '<ws:CreateRancherUser>';
 	soapMessage += '<rancherId>' + rancherId + '</rancherId>';
 	soapMessage += '<userName>' + userName + '</userName>';
 	soapMessage += '<password>' + password + '</password>';
 	soapMessage += '</ws:CreateRancherUser>';
 	soapMessage += soapFooter;
-	
+
 	var self = this;
 
 	jQuery.ajax({
@@ -478,12 +478,15 @@ var consumingGateway = {
 	    username : utils.getCookie("username"),
 	    password : utils.getCookie("pass"),
 	    success : function OnSuccess(data) {
+		output.exceptionDescription = jQuery(data).find(
+			"exceptionDescription").text();
+		output.exceptionId = jQuery(data).find("exceptionId").text();
 		if (output.exceptionId == "GW01") {
 		    alert(output.exceptionDescription);
 		    consumingGateway.LogOut();
 		}
 		output.origin = jQuery(data).find("origin").text();
-		
+
 		if (output.exceptionId == 0) {
 		    jQuery(data).find("parentRecord").each(
 			    function() {
@@ -493,8 +496,7 @@ var consumingGateway = {
 				output.entityName = record.entityName;
 			    });
 		}
-		
-		
+
 		if (cbObj) {
 		    var milis = ((Math.random() * 1000) + 500);
 		    setTimeout(cbObj[cbMethod](output), milis);
@@ -523,7 +525,7 @@ var consumingGateway = {
 	soapMessage += '<password>' + password + '</password>';
 	soapMessage += '</ws:ResetPassword>';
 	soapMessage += soapFooter;
-	
+
 	var self = this;
 
 	jQuery
@@ -537,12 +539,16 @@ var consumingGateway = {
 		    username : utils.getCookie("username"),
 		    password : utils.getCookie("pass"),
 		    success : function OnSuccess(data) {
+			output.exceptionDescription = jQuery(data).find(
+				"exceptionDescription").text();
+			output.exceptionId = jQuery(data).find("exceptionId")
+				.text();
 			if (output.exceptionId == "GW01") {
 			    alert(output.exceptionDescription);
 			    consumingGateway.LogOut();
 			}
 			output.origin = jQuery(data).find("origin").text();
-			
+
 			if (output.exceptionId == 0) {
 
 			    jQuery(data).find("parentRecord").each(
@@ -552,13 +558,12 @@ var consumingGateway = {
 					output.records.push(record);
 					output.entityName = record.entityName;
 				    });
-			    
-			    if(!output.entityName)
+
+			    if (!output.entityName)
 				output.entityName = "User";
-			    
+
 			}
-			
-			
+
 			if (cbObj) {
 			    var milis = ((Math.random() * 1000) + 500);
 			    setTimeout(cbObj[cbMethod](output), milis);
@@ -577,6 +582,60 @@ var consumingGateway = {
 		    }
 		});
 	return output;
+    },
+    ReadAllUsers : function(cbObj, cbMethod) {
+	// Se crea objeto que devolvera la funcion:
+	users = [];
+
+	// SOAP Message:
+	var soapMessage = soapHeader + '<ws:ReadAllUsers/>' + soapFooter;
+
+	// Ajax request:
+	jQuery
+		.ajax({
+		    url : identityWsURL,
+		    type : "POST",
+		    dataType : "xml",
+		    data : soapMessage,
+		    processData : false,
+		    contentType : "text/xml;charset=UTF-8",
+		    username : utils.getCookie("username"),
+		    password : utils.getCookie("pass"),
+		    success : function OnSuccess(data) {
+			jQuery(data).find("return").each(
+				function() {
+				    var user = {
+					userName : jQuery(this)
+						.find("userName").text(),
+					password : jQuery(this)
+						.find("password").text(),
+					groups : []
+				    };
+
+				    jQuery(this).find("groups").each(
+					    function() {
+						var group = jQuery(this).find(
+							'role_name').text();
+						user.groups.push(group);
+					    });
+
+				    users.push(user);
+				});
+
+			var milis = ((Math.random() * 1000) + 500);
+			setTimeout(cbObj[cbMethod](users), milis);
+			return false;
+		    },
+		    error : function OnError(request, status, error) {
+			alert('No fue posible leer la lista de usuarios en la base de datos. ERROR: ' + status);
+
+			if (cbObj) {
+			    var milis = ((Math.random() * 1000) + 500);
+			    setTimeout(cbObj[cbMethod](output), milis);
+			}
+			return false;
+		    }
+		});
     },
     LogOut : function() {
 	// Se crea objeto que devolvera la funcion:
@@ -600,7 +659,13 @@ var consumingGateway = {
 	return output;
     },
     AddUser : function(objUser) {
-	output = "OK";
+	// Se crea objeto que devolvera la funcion:
+	var output = {
+	    exceptionDescription : "Success",
+	    exceptionId : 0,
+	    origin : "",
+	    records : []
+	};
 
 	var soapMessage = soapHeader + '<ws:CreateUser>';
 	soapMessage += '<user>';
@@ -620,65 +685,64 @@ var consumingGateway = {
 	soapMessage += '</ws:CreateUser>';
 	soapMessage += soapFooter;
 
-	jQuery.ajax({
-	    url : identityWsURL,
-	    type : "POST",
-	    dataType : "xml",
-	    data : soapMessage,
-	    processData : false,
-	    contentType : "text/xml;charset=UTF-8",
-	    username : utils.getCookie("username"),
-	    password : utils.getCookie("pass"),
-	    async : false,
-	    success : function OnSuccess(data) {
-		output = jQuery(data).find("return").text();
-	    },
-	    error : function OnError(request, status, error) {
-		alert('No fue posible crear el usuario ' + objUser.user_name);
-	    }
-	});
+	var self = this;
+
+	jQuery
+		.ajax({
+		    url : identityWsURL,
+		    type : "POST",
+		    dataType : "xml",
+		    data : soapMessage,
+		    processData : false,
+		    contentType : "text/xml;charset=UTF-8",
+		    username : utils.getCookie("username"),
+		    password : utils.getCookie("pass"),
+		    success : function OnSuccess(data) {
+			output.exceptionDescription = jQuery(data).find(
+				"exceptionDescription").text();
+			output.exceptionId = jQuery(data).find("exceptionId")
+				.text();
+			if (output.exceptionId == "GW01") {
+			    alert(output.exceptionDescription);
+			    consumingGateway.LogOut();
+			}
+			output.origin = jQuery(data).find("origin").text();
+
+			if (output.exceptionId == 0) {
+
+			    jQuery(data).find("parentRecord").each(
+				    function() {
+					var record = self.childrenFromParent(
+						jQuery(this), self);
+					output.records.push(record);
+					output.entityName = record.entityName;
+				    });
+
+			    if (!output.entityName)
+				output.entityName = "User";
+
+			}
+
+			if (cbObj) {
+			    var milis = ((Math.random() * 1000) + 500);
+			    setTimeout(cbObj[cbMethod](output), milis);
+			}
+			return false;
+		    },
+		    error : function OnError(request, status, error) {
+			output.exceptionId = 1;
+			output.exceptionDescription = 'No fue posible volver a asignar contraseña para el usuario '
+				+ userName + ' ERROR: ' + status;
+			if (cbObj) {
+			    var milis = ((Math.random() * 1000) + 500);
+			    setTimeout(cbObj[cbMethod](output), milis);
+			}
+			return false;
+		    }
+		});
 	return output;
     },
-    ReadAllUsers : function() {
-	// Se crea objeto que devolvera la funcion:
-	users = [];
 
-	// SOAP Message:
-	var soapMessage = soapHeader + '<ws:ReadAllUsers/>' + soapFooter;
-
-	// Ajax request:
-	jQuery.ajax({
-	    url : identityWsURL,
-	    type : "POST",
-	    dataType : "xml",
-	    data : soapMessage,
-	    processData : false,
-	    contentType : "text/xml;charset=UTF-8",
-	    username : utils.getCookie("username"),
-	    password : utils.getCookie("pass"),
-	    async : false,
-	    success : function OnSuccess(data) {
-		jQuery(data).find("return").each(function() {
-		    var user = {
-			userName : jQuery(this).find("userName").text(),
-			password : jQuery(this).find("password").text(),
-			groups : []
-		    };
-
-		    jQuery(this).find("groups").each(function() {
-			var group = jQuery(this).find('role_name').text();
-			user.groups.push(group);
-		    });
-
-		    users.push(user);
-		});
-	    },
-	    error : function OnError(request, status, error) {
-		alert(request.getResponse.text());
-	    }
-	});
-	return users;
-    },
     AddGroup : function(userName, groupName) {
 	output = "OK";
 

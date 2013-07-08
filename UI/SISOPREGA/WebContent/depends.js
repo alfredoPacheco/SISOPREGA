@@ -24,8 +24,8 @@ enyo.depends(
 	"source/cruds/crud.enterpriseContact.js",
 	"source/cruds/crud.enterpriseRancher.js",
 	"source/cruds/crud.enterpriseUser.js",
+	"source/cruds/crud.user.js",
 	
-	"source/cache.users.js",
 	"source/cache.rejects.js",
 	"source/cache.feed.js",
 	
@@ -43,11 +43,10 @@ enyo.depends(
 	"source/catalogs/catalogs.enterprise.contact.form.js",
 	"source/catalogs/catalogs.enterprise.user.form.js",
 	
-	"source/users.create.js",
-	"source/users.list.js",
-	
 	"source/operations/operations.reception.form.js",
 	"source/operations/operations.pen.map.js",
+	
+	"source/userAdmin/useradmin.user.form.js",
 
 	"source/receptions.inspections.js",
 	"source/receptions.feed.js",	
