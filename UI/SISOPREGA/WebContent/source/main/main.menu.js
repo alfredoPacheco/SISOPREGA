@@ -1,80 +1,60 @@
-enyo
-	.kind({
-	    name : "main.menu",
-	    kind : enyo.VFlexBox,
-	    className : "buttonsBG",
-	    pack : "center",
-	    tempFixCom : null,
-	    isEditing : false,
-	    events : {
-		onUpdateLabel : "",
-		onReceptionsMap : ""
-	    },
-	    components : [ {
-		kind : enyo.Pane,
-		className : "buttonsBG",
-		flex : 1,
-		name : "mainPane",
-		onSelectView : "selectView",
-		transitionKind : "enyo.transitions.LeftRightFlyin",
-		style : "background-size: cover;",
-		components : [
-			{
-			    kind : "main.menu.options",
-			    name : "menuOptions",
-			    label : "Menu Principal",
-			    className : "buttonsBG",
-			    style : "width:1030px;margin-left: auto;margin-right: auto;",
-			    flex : 1,
-			    onReceptions : "showReceptionsMap",
-			    onCatalogs : "showCatalogs",
-			    onReports : "showReports",
-			    onInspectionForecast : "showInspectionForecast",
-			    onUsers : "showUsersList"
-			},
-
-			{
-			    kind : "catalogs.main",
-			    name : "catalogs",
-			    label : "Catálogos",
-			    lazy : true
-			}, {
-			    kind : "operations.pen.map",
-			    name : "receptionsMap",
-			    label : "Corrales",
-			    lazy : true,
-			    flex : 1
-			}, {
-			    kind : "reports.main",
-			    name : "reports",
-			    label : "Reportes",
-			    lazy : true
-			}, {
-			    kind : "inspections.main.fs",
-			    name : "inspectionForecast",
-			    label : "Lista de Inspección",
-			    lazy : true
-			},
-
-			{
+enyo.kind({
+	name: "main.menu",
+	kind: enyo.VFlexBox,
+	className:"buttonsBG",
+	pack:"center",
+	tempFixCom:null,
+	isEditing : false,
+	events:{
+		onUpdateLabel:"",
+		onReceptionsMap:""
+	},	
+	components:[
+		{kind: enyo.Pane,className:"buttonsBG", flex: 1, name: "mainPane", onSelectView:"selectView", transitionKind: "enyo.transitions.LeftRightFlyin", 
+	     style:"background-size: cover;",				 		
+		 components:[	
+			{kind:"main.menu.options", name:"menuOptions", label:"Menu Principal", className:"buttonsBG",style:"width:1030px;margin-left: auto;margin-right: auto;",
+			flex: 1,
+			onReceptions:"showReceptionsMap",
+			onCatalogs:"showCatalogs", 
+			onReports:"showReports",
+			onInspectionForecast:"showInspectionForecast",
+			onUsers:"showUsersList"},
+	 		
+			{kind:"catalogs.main", name:"catalogs", label:"Catálogos",lazy:true},
+	 		{kind:"operations.pen.map", name:"receptionsMap",label:"Corrales",lazy:true, flex:1},	 		
+	 		{kind:"reports.main", name:"reports", label:"Reportes", lazy:true},
+	 		{kind:"inspections.main.fs", name:"inspectionForecast", label:"Lista de Inspección", lazy:true},
+	 		{
 			    kind : "forms.list",
 			    name : "usersList",
 			    label : "Lista de Usuarios",
 			    entity : crudUser
 			}
-		]
-	    } ],
-	    showReceptionsMap : function() {
-		crudReception.get(this, "openMap");
-		crudPen.fillArrayPens(this, "finishFillPens");
+	 			
+		 ]}
+	],
+	showReceptionsMap:function(){
+	    cacheMan.showScrim();
+	    crudReception.get(this, "readCallBack");
+	    crudLocation.get(this, "readCallBack");
+	    crudRancher.get(this, "readCallBack");
+	    crudCattle.get(this, "readCallBack");
+	    crudPen.get(this, "readCallBack");
+	},	
+	readCounter:0,
+	readCallBack:function(){
+		this.readCounter++;
+		if(this.readCounter ==5){
+		    this.readCounter=0;
+		    this.openMap();
+		    cacheMan.hideScrim();
+		}
 	    },
-	    finishFillPens : function() {
-		console.debug("finishFillPens");
-	    },
-	    openMap : function() {
-		this.$.mainPane.selectViewByName("receptionsMap");
-	    },
-	    showCatalogs : function() {
+	openMap:function(){
+	    this.$.mainPane.selectViewByName("receptionsMap");
+	},
+	showCatalogs:function(){
 		this.$.mainPane.validateView("catalogs");
 		this.$.catalogs.$.catalogsPane.selectViewByIndex(0);
 		this.$.mainPane.selectViewByName("catalogs");

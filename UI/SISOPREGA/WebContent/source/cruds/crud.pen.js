@@ -34,56 +34,29 @@ enyo.kind({
     getBYbyRecID : function(sID) {
 	var arrBY = {};
 	for ( var sKey in this.arrObjInUse) {
-	    if (this.arrObjInUse[sKey].reception_id == sID) {
+	    if (this.arrObjInUse[sKey].receptionId == sID) {
 		arrBY[sKey] = this.arrObjInUse[sKey];
 	    }
 	}
 	return arrBY;
     },
-    fillArrayPens : function(callbackObject, callbackMethod) {
-	if (callbackObject) {
-	    this.callbackObjectFillingPens = callbackObject;
-	    this.callbackMethodFillingPens = callbackMethod;
-	} else {
-	    this.callbackObjectFillingPens = null;
-	    this.callbackMethodFillingPens = '';
-	}
-	var filterDef = {
-	    locationId : 1
-	};
-
-	consumingGateway.Read("Pen", filterDef, this, "continueFillingPens");
-
-    },
-    continueFillingPens : function(resultArray) {
-
+    getCallBack : function(resultArray) {
 	this.arrPensZone1 = [];
-
-	for ( var i = 0; i < resultArray.records.length; i++) {
-	    var objAux = resultArray.records[i];
-	    var innerModelObj = this.adapterToIn(objAux);
-	    if (innerModelObj != null)
-		this.arrPensZone1.push(innerModelObj);
-	}
-
-	var filterDef = {
-	    locationId : 2
-	};
-	consumingGateway.Read("Pen", filterDef, this, "afterFillingPens");
-
-    },
-    afterFillingPens : function(resultArray) {
 	this.arrPensZone2 = [];
 	for ( var i = 0; i < resultArray.records.length; i++) {
 	    var objAux = resultArray.records[i];
 	    var innerModelObj = this.adapterToIn(objAux);
-	    if (innerModelObj != null)
-		this.arrPensZone2.push(innerModelObj);
+	    if (innerModelObj != null){
+		if(innerModelObj.locationId== "1"){
+		    this.arrPensZone1.push(innerModelObj);
+		}else if(innerModelObj.locationId== "2"){
+		    this.arrPensZone2.push(innerModelObj);    
+		}
+	    }
 	}
-
-	if (this.callbackObjectFillingPens != null) {
+	if (this.callbackObject != null) {
 	    var milis = ((Math.random() * 1000) + 500);
-	    setTimeout(this.callbackObjectFillingPens[this.callbackMethodFillingPens](),
+	    setTimeout(this.callbackObject[this.callbackMethod](resultArray),
 		    milis);
 	}
     },
@@ -102,25 +75,26 @@ enyo.kind({
 	    }
 	}
     },
-    setOccupied:function(sID,iReceptionID){ //example: setOccupied("1E2","79")
-	
-	objAux = {};
-	objAux.sID = this.getByBarnyard(sID).penId;
-	objAux.iReceptionID = iReceptionID;
-	var objToSend = this.rec_barnAdapterToOut(objAux);
-	delete objToSend.recBarnyardId;
-	var cgCreate = consumingGateway.Create("ReceptionBarnyard", objToSend);
-	if (cgCreate.exceptionId == 0){ //Created successfully			
-		objAux.recBarnyardId = cgCreate.generatedId;
-		this.arrObjInUse[sID]={reception_id:parseInt(iReceptionID),accepted_count:"",inspections:[],feed:[]};
-		return true;
-	}
-	else{ //Error			
-		alert( cgCreate.exceptionDescription);
-		//cacheMan.setMessage("", "[Exception ID: " + cgCreate.exceptionId + "] Descripcion: " + cgCreate.exceptionDescription);
-		return false;
-	}
-    },
+//    setOccupied:function(sID,iReceptionID){ //example: setOccupied("1E2","79")
+//	
+//	
+//	objAux = {};
+//	objAux.sID = this.getByBarnyard(sID).penId;
+//	objAux.iReceptionID = iReceptionID;
+//	var objToSend = this.rec_barnAdapterToOut(objAux);
+//	delete objToSend.recBarnyardId;
+//	var cgCreate = consumingGateway.Create("ReceptionBarnyard", objToSend);
+//	if (cgCreate.exceptionId == 0){ //Created successfully			
+//		objAux.recBarnyardId = cgCreate.generatedId;
+//		this.arrObjInUse[sID]={reception_id:parseInt(iReceptionID),accepted_count:"",inspections:[],feed:[]};
+//		return true;
+//	}
+//	else{ //Error			
+//		alert( cgCreate.exceptionDescription);
+//		//cacheMan.setMessage("", "[Exception ID: " + cgCreate.exceptionId + "] Descripcion: " + cgCreate.exceptionDescription);
+//		return false;
+//	}
+//    },
     getRecIDbyBY:function(by){
 	if(by in this.arrObjInUse){
 	    return this.arrObjInUse[by].receptionId;

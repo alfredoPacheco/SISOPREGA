@@ -13,7 +13,9 @@ enyo.kind({
 		kind : enyo.VFlexBox, // defaultKind: "HFlexBox",
 		style : "padding:20px;",
 		pack : "center",
-		components : [ {
+		components : [ {kind:"controls.bindedField", value:null,
+			bindTo:"color",
+		},{
 		    layoutKind : enyo.HFlexLayout,
 		    align : "center",
 		    height : "50px;",
@@ -23,12 +25,14 @@ enyo.kind({
 			style : "text-align: right;margin-right:5px;"
 		    }, {
 			name : 'sBYs',
-			kind : "ToolInput",
 			style : "color:black",
-			hint:"",
 			flex : 1,
+			content:"",
 			bindTo:"penString"
-		    }, {
+		    }, {kind:"controls.bindedField", value:null,
+			bindTo:"Pen",
+			},
+			{
 			content : "Fecha de Llegada:",
 			width : "160px;",
 			style : "text-align: right;margin-right:5px;"
@@ -154,35 +158,42 @@ enyo.kind({
 			onkeydown : "key_down",
 	    		bindTo : "weight",
 	    		belongsTo : "ReceptionHeadcount"
-		    } ]
+		    }, {value:1,
+		    	kind:"controls.bindedField",
+			fixedValue:true,
+			bindTo:"weightUom",
+			belongsTo:"ReceptionHeadcount"} ]
 		} ]
 	    } ]
 	} ], {
 	    owner : this
 	});
     },
-    resetValues:function(){
+    ready:function(){
 	cacheMan.showScrim();
 	this.inherited(arguments);
-	
 	crudRancher.get(this, "readCallBack");
 	crudEnterpriseRancher.get(this, "readCallBack");
 	crudCattle.get(this, "readCallBack");
+	crudLocation.get(this, "readCallBack");
     },
     readCounter:0,
     readCallBack:function(){
 	this.readCounter++;
-	if(this.readCounter ==3){
+	if(this.readCounter ==4){
 	    this.loadAutocompletes();
 	    this.readCounter=0;
 	}
     },
     loadAutocompletes:function(){
-	var arrAllRanchers = crudRancher.getList().join(crudEnterpriseRancher.getList());
+	var arrAllRanchers = crudRancher.getList().concat(crudEnterpriseRancher.getList());
 	this.$.rancher_id.setItems(arrAllRanchers);	
 	this.$.cattype_id.setItems(crudCattle.getList());
-	this.$.location_id.setItems(cacheMan.getAllLocationsForList());
+	this.$.location_id.setItems(crudLocation.getList());
 	this.$.zone_id.setItems(cacheMan.getAllZonesForList());
+	if(this.objReception){
+	    this.setEntity(this.objReception);
+	}
 	cacheMan.hideScrim();
     }
 });

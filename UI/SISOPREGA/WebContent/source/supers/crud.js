@@ -58,6 +58,15 @@ enyo.kind({
 		    milis);
 	}
     },
+    getByID : function(iID) {
+	var entityIdName = this.entityIdName();
+	for ( var i = 0; i < this.arrObj.length; i++) {
+	    if (this.arrObj[i][entityIdName] == iID) {
+		return this.arrObj[i];
+	    }
+	}
+	return null;
+    },
     getList : function(captionFieldName, valueFieldName) {
 	var arrResult = [];
 	for ( var i = 0; i < this.arrObj.length; i++) {
@@ -91,10 +100,23 @@ enyo.kind({
 		"saveCallBack");
     },
     saveCallBack : function(resultObj) {
-	if (Number(resultObj.exceptionId) == 0) { // Created successfully
+	if (Number(resultObj.exceptionId) == 0) { // created or updated successfully
+	    var objOld =null; 
+	    var objNew = null;
+	    if(resultObj.origin == "Update"){
+		objNew = resultObj.records[0];
+		var idName = this.entityIdName();
+		for(var i = 0; i<this.arrObj.length;i++){
+		    if(this.arrObj[i][idName] == objNew[idName]){
+			objOld = this.arrObj[i];
+			this.arrObj[i] = this.adapterToIn(objNew);
+			break;
+		    }
+		}
+	    }
+	    
 	    var milis = ((Math.random() * 1000) + 500);
-	    setTimeout(this.callbackObject[this.callbackMethod](resultObj),
-		    milis);
+	    setTimeout(this.callbackObject[this.callbackMethod](resultObj, objOld, objNew), milis);
 	    // this.get(this.callbackObject, this.callbackMethod);
 	} else {
 	    // Hide scrim if open to see exception message.
@@ -105,8 +127,7 @@ enyo.kind({
     },
     entityIdName : function(entityObj) {
 	var lowerCaseFirstChar = this.entityName.substring(0, 1).toLowerCase();
-	var entityNameCamelCase = this.entityName.substring(1,
-		this.entityName.length);
+	var entityNameCamelCase = this.entityName.substring(1,this.entityName.length);
 	var idSuffix = "Id";
 
 	if (entityObj) {

@@ -17,25 +17,27 @@ enyo.kind(
 	createKindName : "catalogs.rancher.person.form",
     },
     adapterToIn : function(entityObj) {
+	if (entityObj) {
+	    if (entityObj.entityName == "Rancher") {
+		entityObj.rancher_type = 1;
+		if (entityObj.birthDate) {
+		    var numberBDate = Number(entityObj.birthDate);
+		    var vDate = new Date(numberBDate);
+		    entityObj.birthDate = vDate;
+		} else {
+		    entityObj.birthDate = null;
+		}
+		entityObj.phone = entityObj.phone || "";
+		entityObj.name = "" + (entityObj.lastName || "") + " "
+			+ (entityObj.motherName || "") + ", "
+			+ (entityObj.firstName || "") + " "
+			+ (entityObj.middleName || "");
 
-      if(entityObj.entityName == "Rancher"){
-        entityObj.rancher_type = 1;
-        
-        if(entityObj.birthDate){
-          var numberBDate = Number(entityObj.birthDate);
-          var vDate = new Date(numberBDate);
-          entityObj.birthDate = vDate;
-        } else {
-          entityObj.birthDate = null;
-        }
-        
-        entityObj.phone = entityObj.phone || ""; 
-        entityObj.name = "" + (entityObj.lastName || "") + " " + (entityObj.motherName || "") + ", " + (entityObj.firstName || "") + " " + (entityObj.middleName || "");
-        
-        return this.inherited(arguments);
-      }else{
-        return null;
-      }
+		entityObj.idName = this.entityIdName();
+		return entityObj;
+	    }
+	}
+	return null;
     },
     adapterToList : function(entityObj) {
       var listObj =
@@ -44,7 +46,7 @@ enyo.kind(
           caption : ""
         };
       
-      listObj.value = entityObj.rancherId;
+      listObj.value = Number(entityObj.rancherId);
       listObj.caption = entityObj.name;
       
       return listObj;
