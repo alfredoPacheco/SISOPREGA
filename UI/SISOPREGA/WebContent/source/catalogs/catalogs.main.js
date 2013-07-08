@@ -18,7 +18,8 @@ enyo
 		    kind : "catalogs.list.rancher",
 		    name : "listRanchers",
 		    label : "Ganaderos",
-		    onSelectRancher : "showOptions"
+		    onSelectRancher : "showOptions",
+		    entity : crudRancher
 		}, {
 		    kind : "catalogs.ranchers.options",
 		    name : "rancherOptions",

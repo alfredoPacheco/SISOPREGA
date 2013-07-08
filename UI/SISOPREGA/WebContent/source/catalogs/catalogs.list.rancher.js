@@ -7,7 +7,7 @@ enyo.kind({
     selectedRancher : null,
     create : function() {
 	this.inherited(arguments);
-	this.createComponent({
+	this.createComponents([{
 	    name : "options",
 	    kind : enyo.PopupSelect,
 	    onSelect : "addNewRancher",
@@ -18,17 +18,38 @@ enyo.kind({
 		caption : "Persona Fisica",
 		value : 2
 	    } ]
-	});
+	},{
+	    kind : enyo.Popup,
+	    width : "80%",
+	    height : "80%",
+	    dismissWithClick : true,
+	    layoutKind : "VFlexLayout",
+	    modal : true,
+	    style : "overflow: hidden; border-width: 0px;",
+	    scrim : true,
+	    name : "formPopUp",
+	    
+//	    components : [ {
+//		kind : this.entity.getCreateKindName(),
+//		name : "create_kind",
+//		lazy : "true",
+//		onAdd : "on_add",
+//		onUpdate : "on_upd",
+//		onCancel : "on_cancel",
+//		flex : 1
+//	    } ]
+	
+	}], {owner: this});
     },
     addNewRancher : function(inSender, inSelected) {
 
-	this.$.popup.validateComponents();
+	this.$.formPopUp.validateComponents();
 	switch (inSelected.value) {
 	case 1: // Crear nueva empresa
-	    this.setCreateKindName("catalogs.rancher.enterprise.create");
+	    this.entity.setCreateKindName("catalogs.rancher.enterprise.form");
 	    break;
 	case 2:// Crear nuevo ganadero
-	    this.setCreateKindName("catalogs.rancher.person.create");
+	    this.entity.setCreateKindName("catalogs.rancher.person.form");
 	    break;
 	}
 
@@ -39,10 +60,11 @@ enyo.kind({
 	this.$.formPopUp.openAtCenter();
     },
     resetCreateKind : function() {
-	this.$.create_kind.destroy();
+	if(this.$.create_kind !== undefined)
+	    this.$.create_kind.destroy();
 
 	this.$.formPopUp.createComponent({
-	    kind : this.getCreateKindName(),
+	    kind : this.entity.getCreateKindName(),
 	    name : "create_kind",
 	    lazy : "true",
 	    onAdd : "on_add",

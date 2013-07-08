@@ -34,7 +34,7 @@ enyo.kind({
     getBYbyRecID : function(sID) {
 	var arrBY = {};
 	for ( var sKey in this.arrObjInUse) {
-	    if (this.arrObjInUse[sKey].reception_id == sID) {
+	    if (this.arrObjInUse[sKey].receptionId == sID) {
 		arrBY[sKey] = this.arrObjInUse[sKey];
 	    }
 	}

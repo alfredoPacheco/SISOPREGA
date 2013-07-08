@@ -44,16 +44,6 @@ enyo
 		}
 		return result;
 	    },
-	    getByID : function(iID) {
-		var arrTemp = [];
-		arrTemp = enyo.clone(this.arrObj);
-		for ( var i = 0; i < arrTemp.length; i++) {
-		    if (arrTemp[i].receptionId == iID) {
-			return arrTemp[i];
-		    }
-		}
-		return null;
-	    },
 	    appendBY : function(objReception, objBY, cbObj, cbMethod) {
 
 		for ( var sKey in objBY) {

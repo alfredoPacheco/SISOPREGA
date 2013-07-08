@@ -161,19 +161,7 @@ enyo.kind({
 	
 	this.doAdd(result);
     },
-    afterUpdateEntity : function(updateResult) {
-	var objOld =null; 
-	var objNew = updateResult.records[0];
-	
-	if(!this.parentObject){
-	    var idName = this.entityKind.entityIdName();
-	    for(var i = 0; i<this.entityKind.arrObj.length;i++){
-		if(this.entityKind.arrObj[i][idName] == objNew[idName]){
-		    objOld = this.entityKind.arrObj[i];
-		    this.entityKind.arrObj[i] = this.entityKind.adapterToIn(objNew);
-		}
-	    }
-	}
+    afterUpdateEntity : function(updateResult, objOld, objNew) {
 	this.doUpdate(objOld,objNew);
     },
     beforeSave : function(obj) {

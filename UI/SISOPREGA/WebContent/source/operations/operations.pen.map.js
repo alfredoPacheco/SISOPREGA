@@ -377,10 +377,11 @@ enyo.kind({
 		}
 		sBy=sBy.slice(0,-2);
 
-		_objMainHeader.setContent(objRec.rancher_name+" - "+objRec.location_name+"<BR>"+objRec.cattype_name+
-								  "  ("+ objRec.hc_aprox+"/"+objRec.weights[0].weight+"kg)"+
-							  	  "	 "+objRec.arrival_date		
-		);	
+		_objMainHeader.setContent(crudRancher.getByID(objRec.rancherId).name + " - " +
+					crudLocation.getByID(objRec.locationId).locationName + "<BR>"+
+					crudCattle.getByID(objRec.cattleType).catclassName +
+					"  (" + objRec.ReceptionHeadcount[0].hc + "/" + objRec.ReceptionHeadcount[0].weight + "kg)" +
+					" " + objRec.dateAllotted.toLocaleDateString());	
 		}
 		catch(e){
 			_objMainHeader.setContent("");
@@ -491,7 +492,7 @@ enyo.kind({
 				var objRec=crudReception.getByID(crudPen.inUse()[this.objSelected.name].receptionId);			
 				crudPen.releaseBY(objRec,this.objSelected.name,this,"releaseBY");
 				break;			
-			case 7: 
+			case 7: //Añadir corral 
 				var objRec=crudReception.getByID(crudPen.inUse()[this.objSelected.name].receptionId);
 				crudReception.appendBY(objRec,this.arrSelected,this,"updateBY");
 				break;	

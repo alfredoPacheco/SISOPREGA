@@ -31,12 +31,22 @@ enyo.kind({
 		 ]}
 	],
 	showReceptionsMap:function(){
-	    crudReception.get(this, "openMap");
-	    crudPen.get(this, "finishFillPens");
+	    cacheMan.showScrim();
+	    crudReception.get(this, "readCallBack");
+	    crudLocation.get(this, "readCallBack");
+	    crudRancher.get(this, "readCallBack");
+	    crudCattle.get(this, "readCallBack");
+	    crudPen.get(this, "readCallBack");
 	},	
-	finishFillPens:function(){
-	  console.debug("finishFillPens");  
-	},
+	readCounter:0,
+	readCallBack:function(){
+		this.readCounter++;
+		if(this.readCounter ==5){
+		    this.readCounter=0;
+		    this.openMap();
+		    cacheMan.hideScrim();
+		}
+	    },
 	openMap:function(){
 	    this.$.mainPane.selectViewByName("receptionsMap");
 	},
