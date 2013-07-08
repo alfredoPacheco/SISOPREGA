@@ -440,7 +440,7 @@ enyo.kind({
 													 {kind: "Spacer"},
 												{name:'btnLogOut', onclick:"closePopUp",
 												 icon:"images/command-menu/icon-context.png"}]},{owner:this});						
-				this.$.popMan.createComponent({kind: "receptions.feed",
+				this.$.popMan.createComponent({kind: "operations.feed",
 										       onAddFeed:"closePopUp",onCancel:"closePopUp", 
 										       name:'dynocon',flex: 1},{owner:this});			
 				var objRec=crudReception.getByID(crudPen.inUse()[this.objSelected.name].receptionId);											

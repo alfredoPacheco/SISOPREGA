@@ -7,7 +7,6 @@ enyo.kind({
     arrPensZone1 : [],
     arrPensZone2 : [],
     arrObjInUse : {},
-
     isOccupied : function(sID) {
 	if (this.arrObjInUse[sID]) {
 	    return true;

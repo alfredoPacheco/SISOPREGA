@@ -50,9 +50,9 @@ enyo.depends(
 	
 	"source/operations/operations.reception.form.js",
 	"source/operations/operations.pen.map.js",
-
+	"source/operations/operations.feed.js",
+	
 	"source/receptions.inspections.js",
-	"source/receptions.feed.js",	
 	
 	"source/reports/reports.main.js",
 	"source/reports/reports.select.js",					

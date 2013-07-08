@@ -316,33 +316,7 @@ var consumingGateway = {
 	soapMessage += '<request><parentRecord><entity>' + entityName
 		+ '</entity>';
 
-	for (field in entity) {
-	    if (entity.hasOwnProperty(field)) {
-		if (!Array.isArray(entity[field])) {
-		    soapMessage += '<field>';
-		    soapMessage += '<name>' + field + '</name>';
-		    soapMessage += '<value>' + entity[field] + '</value>';
-		    soapMessage += '</field>';
-		} else {
-		    for (childIndex in entity[field]) {
-			var child = entity[field][childIndex];
-			soapMessage += '<childRecord>';
-			soapMessage += '<entity>' + field + '</entity>';
-			for (childField in child) {
-			    if (child.hasOwnProperty(childField)) {
-				soapMessage += '<field>';
-				soapMessage += '<name>' + childField
-					+ '</name>';
-				soapMessage += '<value>' + child[childField]
-					+ '</value>';
-				soapMessage += '</field>';
-			    }
-			}
-			soapMessage += '</childRecord>';
-		    }
-		}
-	    }
-	}
+	soapMessage += this.xmlFromObject(entity,this);
 
 	soapMessage += '</parentRecord></request>';
 	soapMessage += '</ws:Update>' + soapFooter;
@@ -814,5 +788,28 @@ var consumingGateway = {
 	});
 
 	return parentRecord;
+    },
+    xmlFromObject:function(entity, self){
+	var result = "";
+	
+	for (var field in entity) {
+	    if (entity.hasOwnProperty(field)) {
+		if (!Array.isArray(entity[field])) {
+		    result += '<field>';
+		    result += '<name>' + field + '</name>';
+		    result += '<value>' + entity[field] + '</value>';
+		    result += '</field>';
+		} else {
+		    for (var childIndex in entity[field]) {
+			var child = entity[field][childIndex];
+			result += '<childRecord>';
+			result += '<entity>' + field + '</entity>';
+			result += self.xmlFromObject(child, self);
+			result += '</childRecord>';
+		    }
+		}
+	    }
+	}
+	return result;
     }
 };
