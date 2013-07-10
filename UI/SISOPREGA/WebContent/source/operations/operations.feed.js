@@ -83,35 +83,40 @@ enyo.kind(
                                   flex : 1,
                                   feed_id : 1,
                                   className : "listSecond",
-                                  content : "MOLIDA(0)"
+                                  content : "MOLIDA(0)",
+                                  fod_id:null
                                 },
                                 {
                                   name : "lblalfalfa",
                                   flex : 1,
                                   feed_id : 2,
                                   className : "listSecond",
-                                  content : "ALFALFA(0)"
+                                  content : "ALFALFA(0)",
+                                  fod_id:null
                                 },
                                 {
                                   name : "lbloat",
                                   flex : 1,
                                   feed_id : 3,
                                   className : "listSecond",
-                                  content : "AVENA(0)"
+                                  content : "AVENA(0)",
+                                  fod_id:null
                                 },
                                 {
                                   name : "lblconcentrated",
                                   flex : 1.3,
                                   feed_id : 4,
                                   className : "listSecond",
-                                  content : "COCENTRADO(0)"
+                                  content : "COCENTRADO(0)",
+                                  fod_id:null
                                 },
                                 {
                                   name : "lblcorn",
                                   flex : 1,
                                   feed_id : 5,
                                   className : "listSecond",
-                                  content : "MAIZ(0)"
+                                  content : "MAIZ(0)",
+                                  fod_id:null
                                 }, ]
                           },
                           {
@@ -135,6 +140,7 @@ enyo.kind(
                 inputType : "number",
                 hint : "Molida",
                 changeOnInput : true,
+                fod_id:null
               },
               {
                 kind : "ToolInput",
@@ -253,26 +259,31 @@ enyo.kind(
           if (objFeedfeed = objFeed.feed[this.$.lblground.feed_id]) {
             if (objFeedfeed.feed_units) {
               this.$.lblground.setContent(objFeedfeed.feed_desc + " ( " + objFeedfeed.feed_units + " )");
+              this.$.lblground.fod_id = objFeedfeed.fod_id;
             }
           }
           if (objFeedfeed = objFeed.feed[this.$.lblalfalfa.feed_id]) {
             if (objFeedfeed.feed_units) {
               this.$.lblalfalfa.setContent(objFeedfeed.feed_desc + " ( " + objFeedfeed.feed_units + " )");
+              this.$.lblalfalfa.fod_id = objFeedfeed.fod_id;
             }
           }
           if (objFeedfeed = objFeed.feed[this.$.lbloat.feed_id]) {
             if (objFeedfeed.feed_units) {
               this.$.lbloat.setContent(objFeedfeed.feed_desc + " ( " + objFeedfeed.feed_units + " )");
+              this.$.lbloat.fod_id = objFeedfeed.fod_id;
             }
           }
           if (objFeedfeed = objFeed.feed[this.$.lblconcentrated.feed_id]) {
             if (objFeedfeed.feed_units) {
               this.$.lblconcentrated.setContent(objFeedfeed.feed_desc + " ( " + objFeedfeed.feed_units + " )");
+              this.$.lblconcentrated.fod_id = objFeedfeed.fod_id;
             }
           }
           if (objFeedfeed = objFeed.feed[this.$.lblcorn.feed_id]) {
             if (objFeedfeed.feed_units) {
               this.$.lblcorn.setContent(objFeedfeed.feed_desc + " ( " + objFeedfeed.feed_units + " )");
+              this.$.lblcorn.fod_id = objFeedfeed.fod_id;
             }
           }
           return true;
@@ -300,103 +311,87 @@ enyo.kind(
     },
     addFeed : function() {
 	var objNew = this.getFeed("add");
-	var objFeed = {
-		FeedOrderDetails:[],
-		Pen:[],
-		entityName:"FeedOrder",
-		feedDate:objNew.dateAndTime,
-		feedOriginator: "",
-		handling: objNew.handling
-	};
-	
-	for(by in objNew.barnyards){
-	    if (objNew.barnyards.hasOwnProperty(by)){
-		objFeed.Pen.push(crudPen.getByBarnyard(by));
-	    }
-	}
-	
-	for(feed in objNew.feed){
-	    if (objNew.feed.hasOwnProperty(feed) && objNew.feed[feed].feed_units != ""){
-		
-		var feedDetail = {
-			entityName: "FeedOrderDetails",
-			foodId: objNew.feed[feed].feed_id,
-			quantity: objNew.feed[feed].feed_units
-		};
-		objFeed.FeedOrderDetails.push(feedDetail);
-	    }
-	}
 	
 	if(this.objReception.FeedOrder === undefined) this.objReception.FeedOrder = [];
-	this.objReception.FeedOrder.push(objFeed);
+	this.objReception.FeedOrder.push(this.adapterOut(objNew));
 	
 	crudReception.update(this.objReception,this, "resetValues");
-//      cacheReceptions.addFeed(this._objRec, this.getFeed("add"), this, "resetValues");
     },
     getFeed : function(sOp) {
       var objData =
         {
           feeding_id : 	null,
           barnyards : 	{},
-          feed : 		{},
+          feed : 	{},
           handling : 	"",
-          dateAndTime:			""
+          dateAndTime:	""
         };
 
       var objFeed =
         {
-          feed_id : "",
-          feed_desc : "",
-          feed_units : ""
+          feed_id : 	"",
+          feed_desc : 	"",
+          feed_units : 	"",
+          fod_id:	null
         };
       objFeed.feed_id = 1;
       objFeed.feed_desc = cacheFeed.getByID(objFeed.feed_id).feed_desc;
       objFeed.feed_units = this.$.ground.getValue();
+      objFeed.fod_id = this.$.ground.fod_id;
       objData.feed[objFeed.feed_id] = objFeed;
 
       objFeed =
         {
-          feed_id : "",
-          feed_desc : "",
-          feed_units : ""
+          feed_id : 	"",
+          feed_desc : 	"",
+          feed_units : 	"",
+          fod_id:	null
         };
       objFeed.feed_id = 2;
       objFeed.feed_desc = cacheFeed.getByID(objFeed.feed_id).feed_desc;
       objFeed.feed_units = this.$.alfalfa.getValue();
+      objFeed.fod_id = this.$.alfalfa.fod_id;
       objData.feed[objFeed.feed_id] = objFeed;
 
       objFeed =
         {
-          feed_id : "",
-          feed_desc : "",
-          feed_units : ""
+          feed_id : 	"",
+          feed_desc : 	"",
+          feed_units : 	"",
+          fod_id:	null
         };
       objFeed.feed_id = 3;
       objFeed.feed_desc = cacheFeed.getByID(objFeed.feed_id).feed_desc;
       objFeed.feed_units = this.$.oat.getValue();
+      objFeed.fod_id = this.$.oat.fod_id;
       objData.feed[objFeed.feed_id] = objFeed;
 
       objFeed =
         {
-          feed_id : "",
-          feed_desc : "",
-          feed_units : ""
+          feed_id : 	"",
+          feed_desc : 	"",
+          feed_units : 	"",
+          fod_id:	null
         };
       objFeed.feed_id = 4;
       objFeed.feed_desc = cacheFeed.getByID(objFeed.feed_id).feed_desc;
       objFeed.feed_units = this.$.concentrated.getValue();
+      objFeed.fod_id = this.$.concentrated.fod_id;
       objData.feed[objFeed.feed_id] = objFeed;
 
       objFeed =
         {
-          feed_id : "",
-          feed_desc : "",
-          feed_units : ""
+          feed_id : 	"",
+          feed_desc : 	"",
+          feed_units : 	"",
+          fod_id:	null
         };
       objFeed.feed_id = 5;
       objFeed.feed_desc = cacheFeed.getByID(objFeed.feed_id).feed_desc;
       objFeed.feed_units = this.$.corn.getValue();
+      objFeed.fod_id = this.$.corn.fod_id;
       objData.feed[objFeed.feed_id] = objFeed;
+      
       objData.handling = this.$.handling.getValue();
       objData.dateAndTime = this.$.dateTime.getValue().getTime();
       
@@ -408,7 +403,12 @@ enyo.kind(
       return objData;
     },
     updateFeed : function() {
-      cacheReceptions.updateFeed(this._objRec.feed[this.iSelect], this.getFeed(), this, "afterUpdate");
+	var objNew = this.getFeed();
+	var objFeed = this.adapterOut(objNew, true);
+	
+	this.objReception.FeedOrder[this.iSelect]=objFeed;
+	
+	crudReception.update(this.objReception,this, "afterUpdate");
     },
     afterUpdate : function() {
       this.toggleAdd();
@@ -424,6 +424,40 @@ enyo.kind(
       this._objRec = this.adapterIn(objRec);
       this._arrBY = arrBY;
       this.resetValues(true);
+    },
+    adapterOut : function(objNew, bUpdating) {
+	
+	var objFeed = {
+		FeedOrderDetails : [],
+		Pen : [],
+		entityName : "FeedOrder",
+		feedDate : objNew.dateAndTime,
+		feedOriginator : "",
+		handling : objNew.handling
+	};
+	
+	if(bUpdating) objFeed.Id = objNew.feeding_id;
+	
+
+	for (by in objNew.barnyards) {
+	    if (objNew.barnyards.hasOwnProperty(by)) {
+		objFeed.Pen.push(crudPen.getByBarnyard(by));
+	    }
+	}
+
+	for (feed in objNew.feed) {
+	    if (objNew.feed.hasOwnProperty(feed) && objNew.feed[feed].feed_units != "") {
+		var feedDetail = {
+			entityName : "FeedOrderDetails",
+			foodId : objNew.feed[feed].feed_id,
+			quantity : objNew.feed[feed].feed_units
+		};
+		if(bUpdating) feedDetail.Id = objNew.feed[feed].fod_id;
+		objFeed.FeedOrderDetails.push(feedDetail);
+	    }
+	}
+
+	return objFeed;
     },
     adapterIn:function(objRec){
 	var obj_Reception = {feed:[]};
@@ -479,18 +513,23 @@ enyo.kind(
       if (objFeed = this._objRec.feed[inEvent.rowIndex]) {
         if (objFeedfeed = objFeed.feed[this.$.lblground.feed_id]) {
           this.$.ground.setValue(objFeedfeed.feed_units);
+          this.$.ground.fod_id = objFeed.fod_id;
         }
         if (objFeedfeed = objFeed.feed[this.$.lblalfalfa.feed_id]) {
           this.$.alfalfa.setValue(objFeedfeed.feed_units);
+          this.$.alfalfa.fod_id = objFeed.fod_id;
         }
         if (objFeedfeed = objFeed.feed[this.$.lbloat.feed_id]) {
           this.$.oat.setValue(objFeedfeed.feed_units);
+          this.$.oat.fod_id = objFeed.fod_id;
         }
         if (objFeedfeed = objFeed.feed[this.$.lblconcentrated.feed_id]) {
           this.$.concentrated.setValue(objFeedfeed.feed_units);
+          this.$.concentrated.fod_id = objFeed.fod_id;
         }
         if (objFeedfeed = objFeed.feed[this.$.lblcorn.feed_id]) {
           this.$.corn.setValue(objFeedfeed.feed_units);
+          this.$.corn.fod_id = objFeed.fod_id;
         }
         this.toggleUpdate();
         this._arrBYSelected = objFeed.barnyards;
