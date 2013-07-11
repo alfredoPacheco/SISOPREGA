@@ -513,23 +513,23 @@ enyo.kind(
       if (objFeed = this._objRec.feed[inEvent.rowIndex]) {
         if (objFeedfeed = objFeed.feed[this.$.lblground.feed_id]) {
           this.$.ground.setValue(objFeedfeed.feed_units);
-          this.$.ground.fod_id = objFeed.fod_id;
+          this.$.ground.fod_id = objFeedfeed.fod_id;
         }
         if (objFeedfeed = objFeed.feed[this.$.lblalfalfa.feed_id]) {
           this.$.alfalfa.setValue(objFeedfeed.feed_units);
-          this.$.alfalfa.fod_id = objFeed.fod_id;
+          this.$.alfalfa.fod_id = objFeedfeed.fod_id;
         }
         if (objFeedfeed = objFeed.feed[this.$.lbloat.feed_id]) {
           this.$.oat.setValue(objFeedfeed.feed_units);
-          this.$.oat.fod_id = objFeed.fod_id;
+          this.$.oat.fod_id = objFeedfeed.fod_id;
         }
         if (objFeedfeed = objFeed.feed[this.$.lblconcentrated.feed_id]) {
           this.$.concentrated.setValue(objFeedfeed.feed_units);
-          this.$.concentrated.fod_id = objFeed.fod_id;
+          this.$.concentrated.fod_id = objFeedfeed.fod_id;
         }
         if (objFeedfeed = objFeed.feed[this.$.lblcorn.feed_id]) {
           this.$.corn.setValue(objFeedfeed.feed_units);
-          this.$.corn.fod_id = objFeed.fod_id;
+          this.$.corn.fod_id = objFeedfeed.fod_id;
         }
         this.toggleUpdate();
         this._arrBYSelected = objFeed.barnyards;
