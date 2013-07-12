@@ -81,17 +81,17 @@
 			<basic name="smsPhoneChosen">
 				<column name="sms_phone_chosen" />
 			</basic>
-			<one-to-many name="rancherInvoice" mapped-by="rancher" target-entity="com.tramex.sisoprega.dto.RancherInvoice" fetch="EAGER">
+			<one-to-many name="rancherInvoice" mapped-by="rancher" target-entity="com.tramex.sisoprega.dto.RancherInvoice" fetch="EAGER" orphan-removal="true">
 				<cascade>
 					<cascade-all/>
 				</cascade>
 			</one-to-many>
-			<one-to-many name="rancherContact" mapped-by="rancher" target-entity="com.tramex.sisoprega.dto.RancherContact" fetch="EAGER">
+			<one-to-many name="rancherContact" mapped-by="rancher" target-entity="com.tramex.sisoprega.dto.RancherContact" fetch="EAGER" orphan-removal="true">
 				<cascade>
 					<cascade-all/>
 				</cascade>
 			</one-to-many>
-			<one-to-many name="rancherUser" mapped-by="rancher" target-entity="com.tramex.sisoprega.dto.RancherUser" fetch="EAGER">
+			<one-to-many name="rancherUser" mapped-by="rancher" target-entity="com.tramex.sisoprega.dto.RancherUser" fetch="EAGER" orphan-removal="true">
 				<cascade>
 					<cascade-all/>
 				</cascade>
@@ -158,17 +158,17 @@
 			<basic name="zipCode">
 				<column name="zip_code" length="9" />
 			</basic>
-			<one-to-many name="rancherInvoice" mapped-by="rancher" target-entity="com.tramex.sisoprega.dto.EnterpriseInvoice" fetch="EAGER">
+			<one-to-many name="rancherInvoice" mapped-by="rancher" target-entity="com.tramex.sisoprega.dto.EnterpriseInvoice" fetch="EAGER" orphan-removal="true">
 				<cascade>
 					<cascade-all/>
 				</cascade>
 			</one-to-many>
-			<one-to-many name="enterpriseContact" mapped-by="enterpriseRancher" target-entity="com.tramex.sisoprega.dto.EnterpriseContact" fetch="EAGER">
+			<one-to-many name="enterpriseContact" mapped-by="enterpriseRancher" target-entity="com.tramex.sisoprega.dto.EnterpriseContact" fetch="EAGER" orphan-removal="true">
 				<cascade>
 					<cascade-all/>
 				</cascade>
 			</one-to-many>
-			<one-to-many name="enterpriseUser" mapped-by="rancher" target-entity="com.tramex.sisoprega.dto.EnterpriseUser" fetch="EAGER">
+			<one-to-many name="enterpriseUser" mapped-by="rancher" target-entity="com.tramex.sisoprega.dto.EnterpriseUser" fetch="EAGER" orphan-removal="true">
 				<cascade>
 					<cascade-all/>
 				</cascade>
@@ -495,7 +495,7 @@
 			<basic name="locationId">
 				<column name="zone_id" />
 			</basic>
-			<one-to-many name="penCapacity" mapped-by="pen" target-entity="com.tramex.sisoprega.dto.PenCapacity" fetch="EAGER">
+			<one-to-many name="penCapacity" mapped-by="pen" target-entity="com.tramex.sisoprega.dto.PenCapacity" fetch="EAGER" orphan-removal="true">
 				<cascade>
 					<cascade-all/>
 				</cascade>
@@ -616,17 +616,17 @@
 			<basic name="cattleType">
 				<column name="cattle_type" />
 			</basic>
-			<one-to-many name="receptionHeadcount" fetch="EAGER" mapped-by="reception" target-entity="com.tramex.sisoprega.dto.ReceptionHeadcount" >
+			<one-to-many name="receptionHeadcount" fetch="EAGER" mapped-by="reception" target-entity="com.tramex.sisoprega.dto.ReceptionHeadcount" orphan-removal="true">
 				<cascade>
 					<cascade-all/>
 				</cascade>
 			</one-to-many>
-			<one-to-many name="feedOrder" fetch="EAGER" mapped-by="reception" target-entity="com.tramex.sisoprega.dto.FeedOrder">
+			<one-to-many name="feedOrder" fetch="EAGER" mapped-by="reception" target-entity="com.tramex.sisoprega.dto.FeedOrder" orphan-removal="true">
 				<cascade>
 					<cascade-all/>
 				</cascade>
 			</one-to-many>
-			<one-to-many name="inspection" fetch="EAGER" mapped-by="reception" target-entity="com.tramex.sisoprega.dto.Inspection">
+			<one-to-many name="inspection" fetch="EAGER" mapped-by="reception" target-entity="com.tramex.sisoprega.dto.Inspection" orphan-removal="true">
 				<cascade>
 					<cascade-all/>
 				</cascade>
@@ -700,7 +700,7 @@
 			<many-to-one name="reception" fetch="LAZY" optional="false">
 				<join-column name="reception_id" referenced-column-name="reception_id" nullable="false" />
 			</many-to-one>
-			<one-to-many name="feedOrderDetails" fetch="EAGER" mapped-by="feedOrder" target-entity="com.tramex.sisoprega.dto.FeedOrderDetails">
+			<one-to-many name="feedOrderDetails" fetch="EAGER" mapped-by="feedOrder" target-entity="com.tramex.sisoprega.dto.FeedOrderDetails" orphan-removal="true">
 				<cascade>
 					<cascade-all/>
 				</cascade>
@@ -760,7 +760,7 @@
 					<inverse-join-column name="barnyard_id" referenced-column-name="barnyard_id" />
 				</join-table>
 			</one-to-many>
-			<one-to-many name="inspectionDetails" fetch="EAGER" mapped-by="inspection" target-entity="com.tramex.sisoprega.dto.InspectionDetails">
+			<one-to-many name="inspectionDetails" fetch="EAGER" mapped-by="inspection" target-entity="com.tramex.sisoprega.dto.InspectionDetails" orphan-removal="true">
 				<cascade>
 					<cascade-all/>
 				</cascade>
@@ -829,7 +829,7 @@
 				<column name="forecast_date" />
 				<temporal>DATE</temporal>
 			</basic>
-			<one-to-many name="inspectionForecastDetail" fetch="EAGER" target-entity="com.tramex.sisoprega.dto.InspectionForecastDetail" mapped-by="inspectionForecast">
+			<one-to-many name="inspectionForecastDetail" fetch="EAGER" target-entity="com.tramex.sisoprega.dto.InspectionForecastDetail" mapped-by="inspectionForecast" orphan-removal="true">
 				<cascade>
 					<cascade-all/>
 				</cascade>

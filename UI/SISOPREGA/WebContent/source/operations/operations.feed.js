@@ -420,8 +420,8 @@ enyo.kind(
       this.updateHeader();
     },
     set : function(objRec, arrBY) {
-      this.objReception = objRec;
-      this._objRec = this.adapterIn(objRec);
+      this.objReception = enyo.clone(objRec);
+      this._objRec = this.adapterIn(this.objReception);
       this._arrBY = arrBY;
       this.resetValues(true);
     },
@@ -436,7 +436,7 @@ enyo.kind(
 		handling : objNew.handling
 	};
 	
-	if(bUpdating) objFeed.Id = objNew.feeding_id;
+	if(bUpdating) objFeed.feedOrderId = this.objReception.FeedOrder[this.iSelect].feedOrderId;
 	
 
 	for (by in objNew.barnyards) {
@@ -452,8 +452,8 @@ enyo.kind(
 			foodId : objNew.feed[feed].feed_id,
 			quantity : objNew.feed[feed].feed_units
 		};
-		if(bUpdating) feedDetail.Id = objNew.feed[feed].fod_id;
-		objFeed.FeedOrderDetails.push(feedDetail);
+		if(objNew.feed[feed].fod_id && bUpdating) feedDetail.feedOrderDetailsId = objNew.feed[feed].fod_id;
+		objFeed.FeedOrderDetails.push(feedDetail);    
 	    }
 	}
 
