@@ -627,7 +627,8 @@ var consumingGateway = {
 			return false;
 		    },
 		    error : function OnError(request, status, error) {
-			alert('No fue posible leer la lista de usuarios en la base de datos. ERROR: ' + status);
+			alert('No fue posible leer la lista de usuarios en la base de datos. ERROR: '
+				+ status);
 
 			if (cbObj) {
 			    var milis = ((Math.random() * 1000) + 500);
@@ -658,7 +659,7 @@ var consumingGateway = {
 	window.location = './';
 	return output;
     },
-    AddUser : function(objUser) {
+    AddUser : function(objUser, cbObj, cbMethod) {
 	// Se crea objeto que devolvera la funcion:
 	var output = {
 	    exceptionDescription : "Success",
@@ -669,7 +670,7 @@ var consumingGateway = {
 
 	var soapMessage = soapHeader + '<ws:CreateUser>';
 	soapMessage += '<user>';
-	soapMessage += '<userName>' + objUser.user_name + '</userName>';
+	soapMessage += '<userName>' + objUser.userName + '</userName>';
 	soapMessage += '<password>' + objUser.password + '</password>';
 
 	for (index in objUser.groups) {
@@ -740,10 +741,9 @@ var consumingGateway = {
 			return false;
 		    }
 		});
-	return output;
     },
 
-    AddGroup : function(userName, groupName) {
+    AddGroup : function(userName, groupName, cbObj, cbMethod) {
 	output = "OK";
 
 	var soapMessage = soapHeader + '<ws:AddGroup>';
@@ -761,18 +761,26 @@ var consumingGateway = {
 	    contentType : "text/xml;charset=UTF-8",
 	    username : utils.getCookie("username"),
 	    password : utils.getCookie("pass"),
-	    async : false,
 	    success : function OnSuccess(data) {
 		output = jQuery(data).find("return").text();
+		var milis = ((Math.random() * 1000) + 500);
+		setTimeout(cbObj[cbMethod](output), milis);
+		return false;
 	    },
 	    error : function OnError(request, status, error) {
-		alert('No fue posible agregar grupo ' + groupName
-			+ ' al usuario ' + userName);
+		output.exceptionId = 1;
+		output.exceptionDescription = 'No fue posible agregar grupo '
+			+ groupName + ' al usuario ' + userName + ' ERROR: '
+			+ status;
+		if (cbObj) {
+		    var milis = ((Math.random() * 1000) + 500);
+		    setTimeout(cbObj[cbMethod](output), milis);
+		}
+		return false;
 	    }
 	});
-	return output;
     },
-    RemoveGroup : function(userName, groupName) {
+    RemoveGroup : function(userName, groupName, cbObj, cbMethod) {
 	output = "OK";
 
 	var soapMessage = soapHeader + '<ws:RemoveGroup>';
@@ -781,27 +789,39 @@ var consumingGateway = {
 	soapMessage += '</ws:RemoveGroup>';
 	soapMessage += soapFooter;
 
-	jQuery.ajax({
-	    url : identityWsURL,
-	    type : "POST",
-	    dataType : "xml",
-	    data : soapMessage,
-	    processData : false,
-	    contentType : "text/xml;charset=UTF-8",
-	    username : utils.getCookie("username"),
-	    password : utils.getCookie("pass"),
-	    async : false,
-	    success : function OnSuccess(data) {
-		output = jQuery(data).find("return").text();
-	    },
-	    error : function OnError(request, status, error) {
-		alert('No fue posible remover el grupo ' + groupName
-			+ ' del usuario ' + userName);
-	    }
-	});
-	return output;
+	jQuery
+		.ajax({
+		    url : identityWsURL,
+		    type : "POST",
+		    dataType : "xml",
+		    data : soapMessage,
+		    processData : false,
+		    contentType : "text/xml;charset=UTF-8",
+		    username : utils.getCookie("username"),
+		    password : utils.getCookie("pass"),
+		    success : function OnSuccess(data) {
+			output = jQuery(data).find("return").text();
+			var milis = ((Math.random() * 1000) + 500);
+			setTimeout(cbObj[cbMethod](output), milis);
+			return false;
+		    },
+		    error : function OnError(request, status, error) {
+			output.exceptionId = 1;
+			output.exceptionDescription = 'No fue posible remover el grupo '
+				+ groupName
+				+ ' del usuario '
+				+ userName
+				+ ' ERROR: ' + status;
+			if (cbObj) {
+			    var milis = ((Math.random() * 1000) + 500);
+			    setTimeout(cbObj[cbMethod](output), milis);
+			}
+			return false;
+
+		    }
+		});
     },
-    changePassword : function(userName, currentPassword, newPassword) {
+    changePassword : function(userName, currentPassword, newPassword, cbObj, cbMethod) {
 	output = "OK";
 
 	var soapMessage = soapHeader + '<ws:ChangePassword>';
@@ -821,16 +841,18 @@ var consumingGateway = {
 	    contentType : "text/xml;charset=UTF-8",
 	    username : utils.getCookie("username"),
 	    password : utils.getCookie("pass"),
-	    async : false,
 	    success : function OnSuccess(data) {
 		output = jQuery(data).find("return").text();
 		utils.setCookie("pass", newPassword, 365);
+		cbObj[cbMethod](output);
+		return false;
 	    },
 	    error : function OnError(request, status, error) {
 		alert('Erro al intentar actualizar password');
+		cbObj[cbMethod](output);
+		return false;
 	    }
 	});
-	return output;
     },
     RemoveUser : function(userName) {
 	output = "OK";
@@ -849,15 +871,17 @@ var consumingGateway = {
 	    contentType : "text/xml;charset=UTF-8",
 	    username : utils.getCookie("username"),
 	    password : utils.getCookie("pass"),
-	    async : false,
 	    success : function OnSuccess(data) {
 		output = jQuery(data).find("return").text();
+		cbObj[cbMethod](output);
+		return false;
 	    },
 	    error : function OnError(request, status, error) {
 		alert('No fue posible remover el usuario ' + userName);
+		cbObj[cbMethod](output);
+		return false;
 	    }
 	});
-	return output;
     },
     childrenFromParent : function(xml, self) {
 	// child records
