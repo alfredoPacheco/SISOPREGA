@@ -161,6 +161,8 @@ public class FeedOrder {
   public void addPen(Pen inPen){
     if(pen==null)
       pen = new HashSet<Pen>();
+    
+      pen.add(inPen);
   }
 
   @Override
