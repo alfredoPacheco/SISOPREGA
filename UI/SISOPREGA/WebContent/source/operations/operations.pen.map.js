@@ -490,7 +490,7 @@ enyo.kind({
 				break;
 			case 6: //Liberar corral
 				var objRec=crudReception.getByID(crudPen.inUse()[this.objSelected.name].receptionId);			
-				crudReception.releasePens(objRec,this.arrSelectedOccupied,this,"refreshMap");
+				crudReception.releasePens(objRec,this.arrSelectedOccupied,this,"releaseBY");
 				break;			
 			case 7: //Añadir corral 
 				var objRec=crudReception.getByID(crudPen.inUse()[this.objSelected.name].receptionId);
@@ -562,18 +562,22 @@ enyo.kind({
 //		this.$.rancherFilter.setItems(crudReception.getRanchersByReceptions());
 //		this.clearDesc();
 //	},
-//	releaseBY:function(){
-//	    crudPen.updateOccupiedBarnyards();
-//	    for(by in this.arrByMOver){
-//		this.$[by].occupied = 0;
-//		this.$[by].applyStyle("background-color",this.sColorFree);
-//		this.$[by].removeClass("selectCell");
-//	    }
-//	    this.arrBYbyRancherSelected = {};
-//	    
-//	    this.clearFilter();
-//	    
-//	},
+	releaseBY:function(){
+	    crudPen.updateOccupiedBarnyards();
+	    for(by in this.arrByMOver){
+		this.$[by].occupied = 0;
+		this.$[by].applyStyle("background-color",this.sColorFree);
+		this.$[by].removeClass("selectCell");
+	    }
+
+	    this.arrBYbyRancherSelected = {};
+	    this.arrByMOver = {};
+	    this.objSelected = null;
+	    this.arrSelected = {};
+	    this.arrSelectedOccupied = {};
+	    this.clearFilter();
+	    
+	},
 	deselect:function(){
 		for (var sKey in this.arrSelected){
 			delete this.arrSelected[sKey];	
@@ -704,5 +708,5 @@ enyo.kind({
 		this.arrSelected = {};
 		this.arrSelectedOccupied = {};
 		cacheMan.hideScrim();
-	    }
+	}
 });		

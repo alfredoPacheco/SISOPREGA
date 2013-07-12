@@ -117,7 +117,8 @@ enyo
 		}
 		return result;
 	    },
-	    releasePens:function(objRec, arrPens, objCallBack, sMethod){ //arrPens {1E9: "1E9", 1E11: "1E11"}
+	    releasePens:function(objReception, arrPens, objCallBack, sMethod){ //arrPens {1E9: "1E9", 1E11: "1E11"}
+		var objRec = enyo.clone(objReception);
 		for(sPen in arrPens){
 		    if (arrPens.hasOwnProperty(sPen)){
 			var objPen = crudPen.getByBarnyard(sPen);
