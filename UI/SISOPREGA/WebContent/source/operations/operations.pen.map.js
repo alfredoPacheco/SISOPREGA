@@ -490,7 +490,7 @@ enyo.kind({
 				break;
 			case 6: //Liberar corral
 				var objRec=crudReception.getByID(crudPen.inUse()[this.objSelected.name].receptionId);			
-				crudPen.releaseBY(objRec,this.objSelected.name,this,"releaseBY");
+				crudReception.releasePens(objRec,this.arrSelectedOccupied,this,"refreshMap");
 				break;			
 			case 7: //Añadir corral 
 				var objRec=crudReception.getByID(crudPen.inUse()[this.objSelected.name].receptionId);
@@ -547,32 +547,33 @@ enyo.kind({
 		this.$.rancherFilter.setItems(crudReception.getRanchersByReceptions());
 		cacheMan.hideScrim();
     	},
-	releaseBY:function(){
-		this.objSelected.occupied=0;
-		this.objSelected.applyStyle("background-color",this.sColorFree);
-		delete this.arrSelectedOccupied[this.objSelected.name];
-
-		this.$[this.objSelected.name].removeClass("selectCell");
-		for(i in this.arrBYbyRancherSelected){
-			var activeBY = "" + this.arrBYbyRancherSelected[i].zone_id + this.arrBYbyRancherSelected[i].barnyard_code;
-			if(activeBY == this.objSelected.name){
-				delete this.arrBYbyRancherSelected[i];
-			}
-		}
-		this.$.rancherFilter.setItems(crudReception.getRanchersByReceptions());
-		this.clearDesc();
-	},
-	releaseReception:function(){
-	    for(by in this.arrByMOver){
-		this.$[by].occupied = 0;
-		this.$[by].applyStyle("background-color",this.sColorFree);
-		this.$[by].removeClass("selectCell");
-	    }
-	    this.arrBYbyRancherSelected = {};
-	    
-	    this.clearFilter();
-	    
-	},
+//	releaseBY:function(){
+//		this.objSelected.occupied=0;
+//		this.objSelected.applyStyle("background-color",this.sColorFree);
+//		delete this.arrSelectedOccupied[this.objSelected.name];
+//
+//		this.$[this.objSelected.name].removeClass("selectCell");
+//		for(i in this.arrBYbyRancherSelected){
+//			var activeBY = "" + this.arrBYbyRancherSelected[i].zone_id + this.arrBYbyRancherSelected[i].barnyard_code;
+//			if(activeBY == this.objSelected.name){
+//				delete this.arrBYbyRancherSelected[i];
+//			}
+//		}
+//		this.$.rancherFilter.setItems(crudReception.getRanchersByReceptions());
+//		this.clearDesc();
+//	},
+//	releaseBY:function(){
+//	    crudPen.updateOccupiedBarnyards();
+//	    for(by in this.arrByMOver){
+//		this.$[by].occupied = 0;
+//		this.$[by].applyStyle("background-color",this.sColorFree);
+//		this.$[by].removeClass("selectCell");
+//	    }
+//	    this.arrBYbyRancherSelected = {};
+//	    
+//	    this.clearFilter();
+//	    
+//	},
 	deselect:function(){
 		for (var sKey in this.arrSelected){
 			delete this.arrSelected[sKey];	

@@ -116,6 +116,23 @@ enyo
 		    }
 		}
 		return result;
+	    },
+	    releasePens:function(objRec, arrPens, objCallBack, sMethod){ //arrPens {1E9: "1E9", 1E11: "1E11"}
+		for(sPen in arrPens){
+		    if (arrPens.hasOwnProperty(sPen)){
+			var objPen = crudPen.getByBarnyard(sPen);
+			if(objPen){
+			    for(var i = 0;i<objRec.Pen.length;i++){
+				if(objRec.Pen[i].penId == objPen.penId){
+				    objRec.Pen.splice(i,1);
+				}
+			    }
+			}
+		    }
+		}
+		
+		this.update(objRec, objCallBack, sMethod);
+		
 	    }
 	});
 var crudReception = new crud.reception();
