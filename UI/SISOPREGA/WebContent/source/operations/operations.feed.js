@@ -291,11 +291,8 @@ enyo.kind(
       }
     },
     deleteFeed : function(inSender, inIndex) {
-      cacheReceptions.deleteFeed(this._objRec.feed, this._objRec.feed[inIndex], this, "afterDelete");
-    },
-    afterDelete : function() {
-      this.resetValues();
-      this.$.productList.render();
+	this.objReception.FeedOrder.splice(inIndex,1);
+	crudReception.update(this.objReception,this, "afterUpdate");
     },
     closeHandling : function() {
       this.$.manejo.close();
@@ -315,7 +312,10 @@ enyo.kind(
 	if(this.objReception.FeedOrder === undefined) this.objReception.FeedOrder = [];
 	this.objReception.FeedOrder.push(this.adapterOut(objNew));
 	
-	crudReception.update(this.objReception,this, "resetValues");
+	crudReception.update(this.objReception,this, "afterAdd");
+    },
+    afterAdd:function(objResult, objOld, objNew){
+	this.set(objNew, this._arrBY);
     },
     getFeed : function(sOp) {
       var objData =
@@ -410,10 +410,9 @@ enyo.kind(
 	
 	crudReception.update(this.objReception,this, "afterUpdate");
     },
-    afterUpdate : function() {
-      this.toggleAdd();
-      this.resetValues();
-      this.updatetList();
+    afterUpdate : function(objResult,objOld,objNew) {
+	this.set(objNew, this._arrBY);
+	this.toggleAdd();
     },
     updatetList : function() {
       this.$.productList.render();
@@ -547,54 +546,54 @@ enyo.kind(
       this.$.draUpdate.setOpen(false);
     },
     resetValues : function(bLoad) {
-//      //get last formula
-//      //same by?
-//      var bLast = true;
-//      //var feedLast;
-//      if (bLoad === true && this._objRec.feed.length > 0) {
-//        for ( var sKey in this._arrBY) {
-//            try{
-//        	if (!this._objRec.feed[this._objRec.feed.length - 1].barnyards[sKey]) {
-//                    bLast = false;
-//                    break;
-//                  }	
-//            }catch(e){
-//        	console.error(e.message);
-//            };
-//          
-//        }
-//        if (bLast == true) {
-//          for ( var sKey in this._objRec.feed[this._objRec.feed.length - 1].barnyards) {
-//            if (!this._arrBY[sKey]) {
-//              bLast = false;
-//              break;
-//            }
-//          }
-//        }
-//      } else {
-//        bLast = false;
-//      }
-//      if (bLoad === true && bLast === true) {
-//        var objFeed = this._objRec.feed[this._objRec.feed.length - 1].feed;
-//        var objFeedF;
-//        this.$.handling.setValue(this._objRec.feed[this._objRec.feed.length - 1].handling);
-//        if (objFeedF = objFeed[1]) {
-//          this.$.ground.setValue(objFeedF.feed_units);
-//        }
-//        if (objFeedF = objFeed[2]) {
-//          this.$.alfalfa.setValue(objFeedF.feed_units);
-//        }
-//        if (objFeedF = objFeed[3]) {
-//          this.$.oat.setValue(objFeedF.feed_units);
-//        }
-//        if (objFeedF = objFeed[4]) {
-//          this.$.concentrated.setValue(objFeedF.feed_units);
-//        }
-//        if (objFeedF = objFeed[5]) {
-//          this.$.corn.setValue(objFeedF.feed_units);
-//        }
-//      } else {
-//	  
+      //get last formula
+      //same by?
+      var bLast = true;
+      //var feedLast;
+      if (bLoad === true && this._objRec.feed.length > 0) {
+        for ( var sKey in this._arrBY) {
+            try{
+        	if (!this._objRec.feed[this._objRec.feed.length - 1].barnyards[sKey]) {
+                    bLast = false;
+                    break;
+                  }	
+            }catch(e){
+        	console.error(e.message);
+            };
+          
+        }
+        if (bLast == true) {
+          for ( var sKey in this._objRec.feed[this._objRec.feed.length - 1].barnyards) {
+            if (!this._arrBY[sKey]) {
+              bLast = false;
+              break;
+            }
+          }
+        }
+      } else {
+        bLast = false;
+      }
+      if (bLoad === true && bLast === true) {
+        var objFeed = this._objRec.feed[this._objRec.feed.length - 1].feed;
+        var objFeedF;
+        this.$.handling.setValue(this._objRec.feed[this._objRec.feed.length - 1].handling);
+        if (objFeedF = objFeed[1]) {
+          this.$.ground.setValue(objFeedF.feed_units);
+        }
+        if (objFeedF = objFeed[2]) {
+          this.$.alfalfa.setValue(objFeedF.feed_units);
+        }
+        if (objFeedF = objFeed[3]) {
+          this.$.oat.setValue(objFeedF.feed_units);
+        }
+        if (objFeedF = objFeed[4]) {
+          this.$.concentrated.setValue(objFeedF.feed_units);
+        }
+        if (objFeedF = objFeed[5]) {
+          this.$.corn.setValue(objFeedF.feed_units);
+        }
+      } else {
+	  
         this.$.ground.setValue("");
         this.$.alfalfa.setValue("");
         this.$.oat.setValue("");
@@ -603,7 +602,7 @@ enyo.kind(
         this.$.handling.setValue("");
         this.$.dateTime.setValue(new Date());
         
-//      }
+      }
       this.updatetList();
     },
     updateHeader : function() {
