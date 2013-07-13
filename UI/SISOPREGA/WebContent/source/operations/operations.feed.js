@@ -290,10 +290,7 @@ enyo.kind(
         }
       }
     },
-    deleteFeed : function(inSender, inIndex) {
-	this.objReception.FeedOrder.splice(inIndex,1);
-	crudReception.update(this.objReception,this, "afterUpdate");
-    },
+    
     closeHandling : function() {
       this.$.manejo.close();
       this[this.$.manejo.cbMethod]();
@@ -306,17 +303,7 @@ enyo.kind(
       this.$.manejo.cbMethod = "updateFeed";
       this.$.manejo.openAtCenter();
     },
-    addFeed : function() {
-	var objNew = this.getFeed("add");
-	
-	if(this.objReception.FeedOrder === undefined) this.objReception.FeedOrder = [];
-	this.objReception.FeedOrder.push(this.adapterOut(objNew));
-	
-	crudReception.update(this.objReception,this, "afterAdd");
-    },
-    afterAdd:function(objResult, objOld, objNew){
-	this.set(objNew, this._arrBY);
-    },
+    
     getFeed : function(sOp) {
       var objData =
         {
@@ -402,109 +389,12 @@ enyo.kind(
       }
       return objData;
     },
-    updateFeed : function() {
-	var objNew = this.getFeed();
-	var objFeed = this.adapterOut(objNew, true);
-	
-	this.objReception.FeedOrder[this.iSelect]=objFeed;
-	
-	crudReception.update(this.objReception,this, "afterUpdate");
-    },
-    afterUpdate : function(objResult,objOld,objNew) {
-	this.set(objNew, this._arrBY);
-	this.toggleAdd();
-    },
+    
     updatetList : function() {
       this.$.productList.render();
       this.updateHeader();
     },
-    set : function(objRec, arrBY) {
-      this.objReception = enyo.clone(objRec);
-      this._objRec = this.adapterIn(this.objReception);
-      this._arrBY = arrBY;
-      this.resetValues(true);
-    },
-    adapterOut : function(objNew, bUpdating) {
-	
-	var objFeed = {
-		FeedOrderDetails : [],
-		Pen : [],
-		entityName : "FeedOrder",
-		feedDate : objNew.dateAndTime,
-		feedOriginator : "",
-		handling : objNew.handling
-	};
-	
-	if(bUpdating) objFeed.feedOrderId = this.objReception.FeedOrder[this.iSelect].feedOrderId;
-	
-
-	for (by in objNew.barnyards) {
-	    if (objNew.barnyards.hasOwnProperty(by)) {
-		objFeed.Pen.push(crudPen.getByBarnyard(by));
-	    }
-	}
-
-	for (feed in objNew.feed) {
-	    if (objNew.feed.hasOwnProperty(feed) && objNew.feed[feed].feed_units != "") {
-		var feedDetail = {
-			entityName : "FeedOrderDetails",
-			foodId : objNew.feed[feed].feed_id,
-			quantity : objNew.feed[feed].feed_units
-		};
-		if(objNew.feed[feed].fod_id && bUpdating) feedDetail.feedOrderDetailsId = objNew.feed[feed].fod_id;
-		objFeed.FeedOrderDetails.push(feedDetail);    
-	    }
-	}
-
-	return objFeed;
-    },
-    adapterIn:function(objRec){
-	var obj_Reception = {feed:[]};
-	
-	if(objRec.FeedOrder){
-	    for(var i = 0;i<objRec.FeedOrder.length;i++){
-		
-		// feedOrder:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-	          var feedAux = {};
-	            feedAux.feeding_id = objRec.FeedOrder[i].feedOrderId;
-	            feedAux.handling = objRec.FeedOrder[i].handling;
-	            feedAux.dateAndTime = objRec.FeedOrder[i].feedDate;
-
-	        // feedOrderBarnyard::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-	            if(objRec.FeedOrder[i].Pen){
-	        	var arrFeedBarnyardAux = objRec.FeedOrder[i].Pen;
-		            var feedBarnyardAux =
-		              {
-		                barnyards : {}
-		              };
-		            for (var fb = 0; fb<arrFeedBarnyardAux.length;fb++) {
-		              
-		        	var barnyardAux = arrFeedBarnyardAux[fb];
-		              feedBarnyardAux.barnyards["" + barnyardAux.locationId + barnyardAux.barnyardCode] = 
-		        	  			"" + barnyardAux.locationId + barnyardAux.barnyardCode;
-
-		            }
-		            feedAux.barnyards = feedBarnyardAux.barnyards;
-	            }
-	            
-	            // feedOrderDetails:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-	            if(objRec.FeedOrder[i].FeedOrderDetails){
-	        	var arrFeedDetailsAux = objRec.FeedOrder[i].FeedOrderDetails;
-		            var feedDetailsAux = {};
-		            for (var fd=0;fd<arrFeedDetailsAux.length;fd++) {
-		              feedDetailsAux[arrFeedDetailsAux[fd].foodId] = {};
-		              feedDetailsAux[arrFeedDetailsAux[fd].foodId].feed_desc = cacheFeed.getByID(arrFeedDetailsAux[fd].foodId).feed_desc;
-		              feedDetailsAux[arrFeedDetailsAux[fd].foodId].feed_units = arrFeedDetailsAux[fd].quantity;
-		              feedDetailsAux[arrFeedDetailsAux[fd].foodId].fod_id = arrFeedDetailsAux[fd].feedOrderDetailsId;
-		            }
-		            feedAux.feed = feedDetailsAux;
-	            }
-	            
-	            obj_Reception.feed.push(feedAux);
-	    }
-	}
-	return obj_Reception;
-    },
+    
     setFeed : function(inSender, inEvent) {
       this.resetValues();
       this.iSelect = inEvent.rowIndex;
@@ -621,5 +511,126 @@ enyo.kind(
 //      window.focus();
       utils.openReport('/ReportingGateway/OrdenDeAlimento?orderId='+ this._objRec.feed[this._objRec.feed.length - 1].feeding_id);
       
-    }
+    },
+    set : function(objRec, arrBY) {
+		this.objReception = enyo.clone(objRec);
+		this._objRec = this.adapterIn(this.objReception);
+		this._arrBY = arrBY;
+		this.resetValues(true);
+	    },
+	    adapterOut : function(objNew, bUpdating) {
+
+		var objFeed = {
+		    FeedOrderDetails : [],
+		    Pen : [],
+		    entityName : "FeedOrder",
+		    feedDate : objNew.dateAndTime,
+		    feedOriginator : "",
+		    handling : objNew.handling
+		};
+
+		if (bUpdating)
+		    objFeed.feedOrderId = this.objReception.FeedOrder[this.iSelect].feedOrderId;
+
+		for (by in objNew.barnyards) {
+		    if (objNew.barnyards.hasOwnProperty(by)) {
+			objFeed.Pen.push(crudPen.getByBarnyard(by));
+		    }
+		}
+
+		for (feed in objNew.feed) {
+		    if (objNew.feed.hasOwnProperty(feed)
+			    && objNew.feed[feed].feed_units != "") {
+			var feedDetail = {
+			    entityName : "FeedOrderDetails",
+			    foodId : objNew.feed[feed].feed_id,
+			    quantity : objNew.feed[feed].feed_units
+			};
+			if (objNew.feed[feed].fod_id && bUpdating)
+			    feedDetail.feedOrderDetailsId = objNew.feed[feed].fod_id;
+			objFeed.FeedOrderDetails.push(feedDetail);
+		    }
+		}
+
+		return objFeed;
+	    },
+	    adapterIn : function(objRec) {
+		var obj_Reception = {
+		    feed : []
+		};
+
+		if (objRec.FeedOrder) {
+		    for ( var i = 0; i < objRec.FeedOrder.length; i++) {
+
+			// feedOrder:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+			var feedAux = {};
+			feedAux.feeding_id = objRec.FeedOrder[i].feedOrderId;
+			feedAux.handling = objRec.FeedOrder[i].handling;
+			feedAux.dateAndTime = objRec.FeedOrder[i].feedDate;
+
+			// feedOrderDetails:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+			if (objRec.FeedOrder[i].FeedOrderDetails) {
+			    var arrFeedDetailsAux = objRec.FeedOrder[i].FeedOrderDetails;
+			    var feedDetailsAux = {};
+			    for ( var fd = 0; fd < arrFeedDetailsAux.length; fd++) {
+				feedDetailsAux[arrFeedDetailsAux[fd].foodId] = {};
+				feedDetailsAux[arrFeedDetailsAux[fd].foodId].feed_desc = cacheFeed
+					.getByID(arrFeedDetailsAux[fd].foodId).feed_desc;
+				feedDetailsAux[arrFeedDetailsAux[fd].foodId].feed_units = arrFeedDetailsAux[fd].quantity;
+				feedDetailsAux[arrFeedDetailsAux[fd].foodId].fod_id = arrFeedDetailsAux[fd].feedOrderDetailsId;
+			    }
+			    feedAux.feed = feedDetailsAux;
+			}
+
+			// feedOrderBarnyard::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+			if (objRec.FeedOrder[i].Pen) {
+			    var arrFeedBarnyardAux = objRec.FeedOrder[i].Pen;
+			    var feedBarnyardAux = {
+				barnyards : {}
+			    };
+			    for ( var fb = 0; fb < arrFeedBarnyardAux.length; fb++) {
+
+				var barnyardAux = arrFeedBarnyardAux[fb];
+				feedBarnyardAux.barnyards[""
+					+ barnyardAux.locationId
+					+ barnyardAux.barnyardCode] = ""
+					+ barnyardAux.locationId
+					+ barnyardAux.barnyardCode;
+
+			    }
+			    feedAux.barnyards = feedBarnyardAux.barnyards;
+			}
+
+			obj_Reception.feed.push(feedAux);
+		    }
+		}
+		return obj_Reception;
+	    },
+	    addFeed : function() {
+		var objNew = this.getFeed("add");
+		
+		if(this.objReception.FeedOrder === undefined) this.objReception.FeedOrder = [];
+		this.objReception.FeedOrder.push(this.adapterOut(objNew));
+		
+		crudReception.update(this.objReception,this, "afterAdd");
+	    },
+	    afterAdd:function(objResult, objOld, objNew){
+		this.set(objNew, this._arrBY);
+	    },
+	    deleteFeed : function(inSender, inIndex) {
+		this.objReception.FeedOrder.splice(inIndex,1);
+		crudReception.update(this.objReception,this, "afterUpdate");
+	    },
+	    updateFeed : function() {
+		var objNew = this.getFeed();
+		var objFeed = this.adapterOut(objNew, true);
+		
+		this.objReception.FeedOrder[this.iSelect]=objFeed;
+		
+		crudReception.update(this.objReception,this, "afterUpdate");
+	    },
+	    afterUpdate : function(objResult,objOld,objNew) {
+		this.set(objNew, this._arrBY);
+		this.toggleAdd();
+	    }
   });

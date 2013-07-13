@@ -41,11 +41,12 @@ enyo.kind({
 	    crudRancher.get(this, "readCallBack");
 	    crudCattle.get(this, "readCallBack");
 	    crudPen.get(this, "readCallBack");
+	    crudInspectionCode.get(this, "readCallBack");
 	},	
 	readCounter:0,
 	readCallBack:function(){
 		this.readCounter++;
-		if(this.readCounter ==5){
+		if(this.readCounter ==6){
 		    this.readCounter=0;
 		    this.openMap();
 		    cacheMan.hideScrim();

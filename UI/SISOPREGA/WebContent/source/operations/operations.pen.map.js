@@ -464,7 +464,7 @@ enyo.kind({
 												{kind: "Spacer"},
 												{name:'btnLogOut', onclick:"closePopUp",
 												 icon:"images/command-menu/icon-context.png"}]},{owner:this});																		
-				this.$.popMan.createComponent({kind: "receptions.inspections",
+				this.$.popMan.createComponent({kind: "operations.inspections",
 										onAddReception:"closePopUp", onCancel:"closePopUp",
 										name:'dynocon',flex: 1},{owner:this});
 				var objRec=crudReception.getByID(crudPen.inUse()[this.objSelected.name].receptionId);										
@@ -486,7 +486,7 @@ enyo.kind({
 									name:'dynocon',flex: 1, objReception:objRec},{owner:this});
 				
 				this.$.popMan.render();
-				this.$.popMan.openAtCenter();		
+				this.$.popMan.openAtCenter();
 				break;
 			case 6: //Liberar corral
 				var objRec=crudReception.getByID(crudPen.inUse()[this.objSelected.name].receptionId);			
