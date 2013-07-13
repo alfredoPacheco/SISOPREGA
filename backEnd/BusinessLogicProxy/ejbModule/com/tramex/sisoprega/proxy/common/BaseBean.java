@@ -160,6 +160,7 @@ public abstract class BaseBean {
         response.setError(new GatewayError("VAL02", "No se encontraron datos para el filtro seleccionado", "entity: ["
             + request.getFilter().getEntity() + "]"));
       } else {
+        log.info("Records from query: [" + results.size() + "]");
         response.setParentRecord(getRecordsFromList(results, type));
         response.setError(new GatewayError("0", "SUCCESS", "Read"));
       }

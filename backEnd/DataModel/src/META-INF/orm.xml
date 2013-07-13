@@ -589,7 +589,7 @@
 		</named-query>
 		<named-query name="ALL_RECEPTIONS">
 			<description>Retrieves all reception records from database.</description>
-			<query>SELECT rec FROM Reception rec ORDER BY rec.rancherId</query>
+			<query>SELECT rec FROM Reception rec WHERE not rec.pen is empty ORDER BY rec.rancherId</query>
 		</named-query>
 		<named-query name="RECEPTIONS_BY_RANCHER_ID">
 			<description>Retrieves all reception records from database by rancher ID</description>
