@@ -15,6 +15,7 @@ enyo.depends(
 	"source/global/global.utils.js",
 	
 	"source/cruds/crud.cattle.js",
+	"source/cruds/crud.inspectionCode.js",
 	"source/cruds/crud.location.js",
 	"source/cruds/crud.pen.js",
 	"source/cruds/crud.rancher.js",
@@ -49,7 +50,7 @@ enyo.depends(
 	"source/operations/operations.pen.map.js",
 	"source/userAdmin/useradmin.user.form.js",
 	"source/operations/operations.feed.js",
-	"source/receptions.inspections.js",
+	"source/operations/operations.inspections.js",
 	
 	"source/reports/reports.main.js",
 	"source/reports/reports.select.js",					
