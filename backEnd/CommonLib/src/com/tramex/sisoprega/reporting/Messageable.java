@@ -43,7 +43,7 @@ public interface Messageable {
    * @param reportName
    * @return
    */
-  boolean sendReport(long rancherId, String reportName);
+  void sendReport(long rancherId, String reportName);
   
   /**
    * Send a simple message to a given rancher id.
@@ -51,7 +51,7 @@ public interface Messageable {
    * @param message
    * @return
    */
-  boolean sendSimpleMessage(long rancherId, String message);
+  void sendSimpleMessage(long rancherId, String message);
   
   
   /**
@@ -60,7 +60,7 @@ public interface Messageable {
    * @param reportName
    * @return
    */
-  boolean sendReport(Rancher rancher, String reportName);
+  void sendReport(Rancher rancher, String reportName);
 
   /**
    * Send a given report by name to an enterprise rancher.
@@ -68,7 +68,7 @@ public interface Messageable {
    * @param reportName
    * @return
    */
-  boolean sendReport(EnterpriseRancher rancher, String reportName);
+  void sendReport(EnterpriseRancher rancher, String reportName);
 
   /**
    * Send a simple message to a given person rancher.
@@ -76,7 +76,7 @@ public interface Messageable {
    * @param message
    * @return
    */
-  boolean sendSimpleMessage(Rancher rancher, String message);
+  void sendSimpleMessage(Rancher rancher, String message);
 
   /**
    * Send a simple message to a given enterprise rancher.
@@ -84,5 +84,5 @@ public interface Messageable {
    * @param message
    * @return
    */
-  boolean sendSimpleMessage(EnterpriseRancher rancher, String message);
+  void sendSimpleMessage(EnterpriseRancher rancher, String message);
 }

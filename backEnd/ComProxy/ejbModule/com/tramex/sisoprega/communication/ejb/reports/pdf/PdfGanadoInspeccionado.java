@@ -11,6 +11,6 @@ import com.tramex.sisoprega.reporting.Reporteable;
  */
 @Stateless
 @RolesAllowed({ "mx_usr", "us_usr" })
-public class PdfGanadoRecibido extends BasePdfReport implements Reporteable {
+public class PdfGanadoInspeccionado extends BasePdfReport implements Reporteable {
 
 }

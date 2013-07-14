@@ -1,5 +1,7 @@
 package com.tramex.sisoprega.communication.ejb.reports.pdf;
 
+import java.util.Map;
+
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 
@@ -11,6 +13,11 @@ import com.tramex.sisoprega.reporting.Reporteable;
  */
 @Stateless
 @RolesAllowed({ "mx_usr", "us_usr" })
-public class PdfGanadoRecibido extends BasePdfReport implements Reporteable {
-
+public class PdfRegistroModificadoEnGanadoRecibido extends BasePdfReport implements Reporteable {
+  @Override
+  public void setParameters(Map<String, Object> parameters) throws Exception {
+    long lRecordId = (Long) parameters.get("recordId");
+    this.parameters.put("CUS_RECORD_ID", lRecordId);
+    super.setParameters(parameters);
+  }
 }

@@ -3,6 +3,8 @@
  */
 package com.tramex.sisoprega.communication.ejb.reports;
 
+import java.util.Map;
+
 /**
  * USAGE COMMENT HERE
  * 
@@ -22,6 +24,12 @@ package com.tramex.sisoprega.communication.ejb.reports;
  * 
  */
 public abstract class BaseTxtReport extends BaseReport {
+  
+  public void setParameters(Map<String, Object> parameters) throws Exception {
+    if(parameters!=null)
+      this.parameters.putAll(parameters);
+  }
+  
   protected String rounded2Decs(double amount) {
 
     String sAmount = String.valueOf(amount);

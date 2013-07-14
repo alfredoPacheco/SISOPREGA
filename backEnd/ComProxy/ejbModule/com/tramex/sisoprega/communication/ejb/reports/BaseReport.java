@@ -5,6 +5,8 @@ package com.tramex.sisoprega.communication.ejb.reports;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
@@ -13,7 +15,7 @@ import javax.sql.DataSource;
 
 /**
  * USAGE COMMENT HERE
- *  
+ * 
  * <B>Revision History:</B>
  * 
  * <PRE>
@@ -26,25 +28,26 @@ import javax.sql.DataSource;
  * </PRE>
  * 
  * @author Diego Torres
- *
+ * 
  * 
  */
 public abstract class BaseReport {
   protected Logger log = Logger.getLogger(BaseReport.class.getCanonicalName());
-  
-  
+
   @Resource(name = "jdbc/sisoprega")
   protected DataSource ds;
   protected Connection conn = null;
-  
+
+  protected Map<String, Object> parameters = new HashMap<String, Object>();
+
   private String reportName;
-  
-  public BaseReport(){
+
+  public BaseReport() {
     this.log = Logger.getLogger(this.getClass().getCanonicalName());
   }
-  
+
   @PostConstruct
-  private void init(){
+  private void init() {
     System.out.println("Initializing BaseReport for " + this.getClass().getCanonicalName());
     try {
       conn = ds.getConnection();
@@ -62,7 +65,8 @@ public abstract class BaseReport {
   }
 
   /**
-   * @param reportName the reportName to set
+   * @param reportName
+   *          the reportName to set
    */
   public void setReportName(String reportName) {
     this.reportName = reportName;

@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.security.RolesAllowed;
+import javax.ejb.Asynchronous;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
@@ -31,12 +32,12 @@ import com.tramex.sisoprega.reporting.Messageable;
  * Session Bean implementation class ReceptionBean
  */
 @Stateless
-@RolesAllowed({ "sisoprega_admin", "mx_usr", "us_usr", "rancher", "agency"})
+@RolesAllowed({ "sisoprega_admin", "mx_usr", "us_usr", "rancher", "agency" })
 public class ReceptionBean extends BaseBean implements Cruddable {
 
-  @EJB(lookup="java:global/ComProxy/Messenger")
+  @EJB(lookup = "java:global/ComProxy/Messenger")
   private Messageable msgBean;
-  
+
   @Override
   public ReadResponse Create(CreateRequest request) {
     this.log.entering(this.getClass().getCanonicalName(), "CreateResponse Create(CreateRequest)");
@@ -72,8 +73,10 @@ public class ReceptionBean extends BaseBean implements Cruddable {
 
         if (getWeight(entity) > 0.0d && getHeadCount(entity) > 0) {
           // Send reception message
-          log.info("Sending receive confirmation to exporter");
-          msgBean.sendReport(entity.getRancherId(), "GanadoRecibido?Id=" + entity.getRancherId() + formatReportDateRange());
+          log.info("Sending receive confirmation to exporter [" + entity.getRancherId() + "]");
+          // TODO: Send record Id to be used in text message
+          String reportName = "GanadoRecibido?Id=" + entity.getRancherId() + formatReportDateRange();
+          sendReport(entity.getRancherId(), reportName);
         }
 
         response.setParentRecord(getRecordsFromList(updatedRecordList, type));
@@ -155,14 +158,17 @@ public class ReceptionBean extends BaseBean implements Cruddable {
 
           List<Object> updatedRecordList = new ArrayList<Object>();
           updatedRecordList.add(entity);
-          
-          if(!hasPen(entity)){
-            // TODO: Send inspection confirmation
-            log.info("Send inspection confirmation");
-            msgBean.sendSimpleMessage(entity.getRancherId(), "Aviso de ganado inspeccionado.");
-          }else{
-            log.info("Send change confirmation");
-            msgBean.sendSimpleMessage(entity.getRancherId(), "Aviso de cambio en ganado recibido.");
+
+          if (!hasPen(entity)) {
+            // Send inspection confirmation
+            log.info("Sending inspection confirmation to exporter [" + entity.getRancherId() + "]");
+            String reportName = "GanadoInspeccionado?Id=" + entity.getRancherId() + formatReportDateRange();
+            sendReport(entity.getRancherId(), reportName);
+          } else {
+            // Send modification confirmation
+            log.info("Sending reception change confirmation to exporter [" + entity.getRancherId() + "]");
+            String reportName = "RegistroModificadoEnGanadoRecibido?Id=" + entity.getRancherId() + formatReportDateRange() + "&recordId=" + entity.getReceptionId();
+            sendReport(entity.getRancherId(), reportName);
           }
 
           response.setParentRecord(getRecordsFromList(updatedRecordList, type));
@@ -189,6 +195,12 @@ public class ReceptionBean extends BaseBean implements Cruddable {
 
     this.log.exiting(this.getClass().getCanonicalName(), "ReadResponse Update(CreateRequest)");
     return response;
+  }
+  
+  @Asynchronous
+  private void sendReport(long rancherId, String reportName){
+    log.info("Sending inspection confirmation to exporter [" + rancherId + "]");
+    msgBean.sendReport(rancherId, reportName);
   }
 
   private void setInspectionForecast(Reception reception) {
@@ -300,12 +312,12 @@ public class ReceptionBean extends BaseBean implements Cruddable {
     return weight;
   }
 
-  private String formatReportDateRange(){
+  private String formatReportDateRange() {
     String result = "";
     String sToday = new SimpleDateFormat("MM/dd/yyyy").format(new Date());
-    
+
     result = "&fromDate=" + sToday + "&toDate=" + sToday;
-    
+
     return result;
   }
 }

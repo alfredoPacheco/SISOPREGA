@@ -25,6 +25,7 @@ import java.util.logging.Logger;
 
 import javax.annotation.Resource;
 import javax.annotation.security.RolesAllowed;
+import javax.ejb.Asynchronous;
 import javax.ejb.EJB;
 import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
@@ -82,7 +83,7 @@ public class Messenger implements Messageable {
 
   @Resource(lookup = "comProxy/Properties")
   private Properties comProxyProps;
-  
+
   @Resource
   private SessionContext ejbContext;
 
@@ -103,9 +104,9 @@ public class Messenger implements Messageable {
    * .sisoprega.dto.Rancher, java.lang.String)
    */
   @Override
-  public boolean sendReport(Rancher rancher, String reportName) {
+  public void sendReport(Rancher rancher, String reportName) {
     log.entering(this.getClass().getCanonicalName(), "sendReport(Rancher[" + rancher + "], reportName[" + reportName + "])");
-    return sendReport(reportName, formatPhoneNumber(rancher.getSmsPhone()), rancher.getEmailAddress());
+    sendReport(reportName, formatPhoneNumber(rancher.getSmsPhone()), rancher.getEmailAddress());
   }
 
   /*
@@ -116,10 +117,10 @@ public class Messenger implements Messageable {
    * .sisoprega.dto.EnterpriseRancher, java.lang.String)
    */
   @Override
-  public boolean sendReport(EnterpriseRancher rancher, String reportName) {
+  public void sendReport(EnterpriseRancher rancher, String reportName) {
     log.entering(this.getClass().getCanonicalName(), "sendReport(EnterpriseRancher[" + rancher + "], reportName[" + reportName
         + "])");
-    return sendReport(reportName, formatPhoneNumber(rancher.getSmsPhone()), rancher.getEmail());
+    sendReport(reportName, formatPhoneNumber(rancher.getSmsPhone()), rancher.getEmail());
   }
 
   /*
@@ -130,10 +131,9 @@ public class Messenger implements Messageable {
    * (com.tramex.sisoprega.dto.Rancher, java.lang.String)
    */
   @Override
-  public boolean sendSimpleMessage(Rancher rancher, String message) {
-    boolean sentSMS = sendSMS(formatPhoneNumber(rancher.getSmsPhone()), message);
-    boolean sentEmail = sendSimpleEmail(rancher.getEmailAddress(), message);
-    return sentSMS && sentEmail;
+  public void sendSimpleMessage(Rancher rancher, String message) {
+    sendSMS(formatPhoneNumber(rancher.getSmsPhone()), message);
+    sendSimpleEmail(rancher.getEmailAddress(), message);
   }
 
   /*
@@ -144,10 +144,9 @@ public class Messenger implements Messageable {
    * (com.tramex.sisoprega.dto.EnterpriseRancher, java.lang.String)
    */
   @Override
-  public boolean sendSimpleMessage(EnterpriseRancher rancher, String message) {
-    boolean sentSMS = sendSMS(formatPhoneNumber(rancher.getSmsPhone()), message);
-    boolean sentEmail = sendSimpleEmail(rancher.getEmail(), message);
-    return sentSMS && sentEmail;
+  public void sendSimpleMessage(EnterpriseRancher rancher, String message) {
+    sendSMS(formatPhoneNumber(rancher.getSmsPhone()), message);
+    sendSimpleEmail(rancher.getEmail(), message);
   }
 
   private boolean sendSMS(String to, String message) {
@@ -192,19 +191,19 @@ public class Messenger implements Messageable {
 
     try {
 
-      if (to == null || to.equals("")){
+      if (to == null || to.equals("")) {
         log.fine("No email found to send report.");
         return false;
       }
-        
 
       String adaptedReportName = getReportNameAdapter(reportName);
       Map<String, Object> parameters = getAdaptedParameters(reportName);
-      
+
       String reporteableInstanceName = "Pdf" + adaptedReportName;
       Reporteable reporteableInstance = getReporteableInstance(reporteableInstanceName);
       reporteableInstance.setReportName(adaptedReportName);
-      byte[] data = reporteableInstance.getBytes(parameters);
+      reporteableInstance.setParameters(parameters);
+      byte[] data = reporteableInstance.getBytes();
 
       String from = "tramex@sisoprega.com";
       String content = "Encuentre anexo el reporte con los detalles de este mensaje.";
@@ -229,7 +228,8 @@ public class Messenger implements Messageable {
   }
 
   @Override
-  public boolean sendReport(long rancherId, String reportName) {
+  @Asynchronous
+  public void sendReport(long rancherId, String reportName) {
     log.entering(this.getClass().getCanonicalName(), "sendReport(rancherId[" + rancherId + "], reportName[" + reportName + "])");
 
     Rancher person = null;
@@ -240,7 +240,7 @@ public class Messenger implements Messageable {
 
       if (person != null) {
         log.fine("Sending reportName: " + reportName);
-        return sendReport(person, reportName);
+        sendReport(person, reportName);
       }
     } catch (Exception e) {
       log.info("Person not found with provided id [" + rancherId + "]");
@@ -253,36 +253,32 @@ public class Messenger implements Messageable {
       log.finer("enterprise obtained from dataModel: " + enterprise);
       if (enterprise != null) {
         log.fine("Sending reportName: " + reportName);
-        return sendReport(enterprise, reportName);
+        sendReport(enterprise, reportName);
       }
     } catch (Exception e) {
       log.fine("Enterprise not found with provided id [" + rancherId + "]");
     }
-
-    return false;
   }
 
   @Override
-  public boolean sendSimpleMessage(long rancherId, String message) {
+  public void sendSimpleMessage(long rancherId, String message) {
     Rancher person = dataModel.readSingleDataModel("RANCHER_BY_ID", "Id", rancherId, Rancher.class);
 
     if (person != null) {
-      return sendSimpleMessage(person, message);
+      sendSimpleMessage(person, message);
     }
 
     EnterpriseRancher enterprise = dataModel.readSingleDataModel("ENTERPRISERANCHER_BY_ID", "Id", rancherId,
         EnterpriseRancher.class);
     if (enterprise != null) {
-      return sendSimpleMessage(enterprise, message);
+      sendSimpleMessage(enterprise, message);
     }
-
-    return false;
   }
 
   private String formatPhoneNumber(String phoneNumber) {
-    if(phoneNumber.trim().equals(""))
+    if (phoneNumber.trim().equals(""))
       return "";
-    
+
     String result = "+52";
     for (int i = 0; i < phoneNumber.length(); i++) {
 
@@ -298,26 +294,26 @@ public class Messenger implements Messageable {
         + "], email[" + email + "])");
     try {
       boolean smsSent = false;
-      
-      if(!phone.equals("")){
+
+      if (!phone.equals("")) {
         String adaptedReportName = getReportNameAdapter(reportName);
         Map<String, Object> parameters = getAdaptedParameters(reportName);
-        
+
         String reporteableInstanceName = "Txt" + adaptedReportName;
         Reporteable reporteableInstance = getReporteableInstance(reporteableInstanceName);
         reporteableInstance.setReportName(adaptedReportName);
-        byte[] data = reporteableInstance.getBytes(parameters);
-        
+        reporteableInstance.setParameters(parameters);
+        byte[] data = reporteableInstance.getBytes();
+
         String message = new String(data);
-        
+
         log.fine("Message from report: " + message);
         smsSent = sendSMS(phone, message);
         log.finer("smsSent [" + smsSent + "]");
-      }else{
+      } else {
         log.fine("No phone for SMS found, will try only email");
       }
-      
-      
+
       boolean emailSent = sendEmail(email, reportName);
       log.finer("emailSent [" + emailSent + "]");
       return smsSent && emailSent;
@@ -328,8 +324,8 @@ public class Messenger implements Messageable {
 
     return false;
   }
-  
-  private Reporteable getReporteableInstance(String implementationName){
+
+  private Reporteable getReporteableInstance(String implementationName) {
     this.log.entering(this.getClass().getCanonicalName(), "Reporteable getReporteableInstance(" + implementationName + ")");
     Context jndiContext = null;
     Reporteable instance = null;
@@ -344,48 +340,60 @@ public class Messenger implements Messageable {
     }
     return instance;
   }
-  
-  private String getReportNameAdapter(String inReportName){
+
+  private String getReportNameAdapter(String inReportName) {
     String[] reportNameSplitted = inReportName.split("\\?");
-    if(reportNameSplitted.length>=1){
+    if (reportNameSplitted.length >= 1) {
       return reportNameSplitted[0];
-    }else{
+    } else {
       log.finer("No parameters found in report name");
       return inReportName;
     }
   }
-  
-  private Map<String, Object> getAdaptedParameters(String inReportName) throws ParseException{
+
+  private Map<String, Object> getAdaptedParameters(String inReportName) throws ParseException {
     String[] reportNameSplitted = inReportName.split("\\?");
-    if(reportNameSplitted.length>=1){
+    if (reportNameSplitted.length >= 1) {
       String sParameters = reportNameSplitted[1];
+      log.fine("Splitting parameters to adapt: [" + sParameters + "]");
       String[] splittedParams = sParameters.split("\\&");
-      if(splittedParams.length >= 1){
+      if (splittedParams.length >= 1) {
         Map<String, Object> result = new HashMap<String, Object>();
-        for(int i=0; i<splittedParams.length; i++){
+        for (int i = 0; i < splittedParams.length; i++) {
           String param = splittedParams[i];
+          log.finer("parameter found: [" + param + "]");
           String[] splittedParam = param.split("\\=");
           String key = splittedParam[0];
-          if(key.equals("Id")){
+          if (key.equals("Id")) {
+            log.finest("reading Id parameter with value [" + splittedParam[1] + "]");
             Long value = Long.parseLong(splittedParam[1]);
             result.put(key, value);
-          }else if(key.equals("fromDate")){
+          } else if (key.equals("fromDate")) {
+            log.finest("reading fromDate parameter with value [" + splittedParam[1] + "]");
             Date value = new SimpleDateFormat("MM/dd/yyyy").parse(splittedParam[1]);
             result.put(key, value);
-          }else if(key.equals("toDate")){
+          } else if (key.equals("toDate")) {
+            log.finest("reading toDate parameter with value [" + splittedParam[1] + "]");
             Date value = new SimpleDateFormat("MM/dd/yyyy").parse(splittedParam[1]);
             result.put(key, value);
-          }else{
+          }  else if (key.equals("recordId")) {
+            log.finest("reading recordId parameter with value [" + splittedParam[1] + "]");
+            Long value = Long.parseLong(splittedParam[1]);
+            result.put(key, value);
+          } else {
+            log.finest("reading parameter with value [" + splittedParam[1] + "]");
             result.put(key, splittedParam[1]);
           }
         }
         return result;
-      }else{
+      } else {
+        log.fine("Parameters found but more than 2 are expected.");
         return null;
       }
-    }else{
+    } else {
+      log.fine("No parameters found in request.");
       return null;
     }
   }
-  
+
 }

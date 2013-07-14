@@ -24,7 +24,8 @@ import java.util.Map;
  * 
  */
 public interface Reporteable {
-  byte[] getBytes(Map<String, Object> parameters) throws Exception;
+  byte[] getBytes() throws Exception;
   String getReportName();
   void setReportName(String reportName);
+  void setParameters(Map<String, Object> parameters) throws Exception;
 }
