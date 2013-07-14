@@ -15,24 +15,23 @@
  */
 package com.tramex.sisoprega.communication.ejb;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.Authenticator;
-import java.net.PasswordAuthentication;
-import java.net.URL;
-import java.net.URLConnection;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Logger;
 
 import javax.annotation.Resource;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
+import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
 import javax.mail.Session;
+import javax.naming.Context;
+import javax.naming.InitialContext;
 
-import com.tramex.sisoprega.common.messenger.Messageable;
 import com.tramex.sisoprega.communication.dto.Attachment;
 import com.tramex.sisoprega.communication.dto.Email;
 import com.tramex.sisoprega.communication.dto.Sms;
@@ -43,6 +42,8 @@ import com.tramex.sisoprega.communication.sms.SmsProvider;
 import com.tramex.sisoprega.datamodel.RemoteModelable;
 import com.tramex.sisoprega.dto.EnterpriseRancher;
 import com.tramex.sisoprega.dto.Rancher;
+import com.tramex.sisoprega.reporting.Messageable;
+import com.tramex.sisoprega.reporting.Reporteable;
 
 /**
  * This proxy knows the logic to send messages to ranchers.<BR/>
@@ -62,12 +63,10 @@ import com.tramex.sisoprega.dto.Rancher;
  * 
  */
 @Stateless
+@RolesAllowed({ "mx_usr", "us_usr" })
 public class Messenger implements Messageable {
 
   private Logger log = Logger.getLogger(Messenger.class.getCanonicalName());
-
-  private String userName;
-  private String password;
 
   @EJB(lookup = "java:global/DataModel/BaseDataModel")
   private RemoteModelable dataModel;
@@ -83,8 +82,9 @@ public class Messenger implements Messageable {
 
   @Resource(lookup = "comProxy/Properties")
   private Properties comProxyProps;
-
-  private final static String REPORTING_URL_PROPERTY = "reporting.application";
+  
+  @Resource
+  private SessionContext ejbContext;
 
   /**
    * Default constructor.
@@ -104,8 +104,8 @@ public class Messenger implements Messageable {
    */
   @Override
   public boolean sendReport(Rancher rancher, String reportName) {
-    log.entering(this.getClass().getCanonicalName(), "sendReport");
-    return sendReport(reportName, rancher.getSmsPhone(), rancher.getEmailAddress());
+    log.entering(this.getClass().getCanonicalName(), "sendReport(Rancher[" + rancher + "], reportName[" + reportName + "])");
+    return sendReport(reportName, formatPhoneNumber(rancher.getSmsPhone()), rancher.getEmailAddress());
   }
 
   /*
@@ -117,8 +117,9 @@ public class Messenger implements Messageable {
    */
   @Override
   public boolean sendReport(EnterpriseRancher rancher, String reportName) {
-    log.entering(this.getClass().getCanonicalName(), "sendReport(EnterpriseRancher, reportName)");
-    return sendReport(reportName, rancher.getSmsPhone(), rancher.getEmail());
+    log.entering(this.getClass().getCanonicalName(), "sendReport(EnterpriseRancher[" + rancher + "], reportName[" + reportName
+        + "])");
+    return sendReport(reportName, formatPhoneNumber(rancher.getSmsPhone()), rancher.getEmail());
   }
 
   /*
@@ -130,7 +131,7 @@ public class Messenger implements Messageable {
    */
   @Override
   public boolean sendSimpleMessage(Rancher rancher, String message) {
-    boolean sentSMS = sendSMS(rancher.getSmsPhone(), message);
+    boolean sentSMS = sendSMS(formatPhoneNumber(rancher.getSmsPhone()), message);
     boolean sentEmail = sendSimpleEmail(rancher.getEmailAddress(), message);
     return sentSMS && sentEmail;
   }
@@ -144,14 +145,14 @@ public class Messenger implements Messageable {
    */
   @Override
   public boolean sendSimpleMessage(EnterpriseRancher rancher, String message) {
-    boolean sentSMS = sendSMS(rancher.getSmsPhone(), message);
+    boolean sentSMS = sendSMS(formatPhoneNumber(rancher.getSmsPhone()), message);
     boolean sentEmail = sendSimpleEmail(rancher.getEmail(), message);
     return sentSMS && sentEmail;
   }
 
   private boolean sendSMS(String to, String message) {
     String from = comProxyProps.getProperty("sms.from");
-    if(to == null || to.equals(""))
+    if (to == null || to.equals(""))
       return false;
     Sms sms = new Sms(to, from, message);
     try {
@@ -163,7 +164,7 @@ public class Messenger implements Messageable {
       smsMan.doLogin(userId, password);
 
       smsMan.sendSMS(sms);
-      log.info("SENT SMS: " + message);
+      log.info("SENT SMS: " + message + ", responded as [" + smsMan.getResponseMsg() + "]");
       return true;
     } catch (Exception e) {
       return false;
@@ -173,10 +174,10 @@ public class Messenger implements Messageable {
   private boolean sendSimpleEmail(String to, String message) {
     String from = "tramex@sisoprega.com";
     String title = "Mensaje de Eastmann Livestock.";
-    
-    if(to.equals(""))
+
+    if (to.equals(""))
       return false;
-    
+
     Email email = new Email(to, from, title, message);
 
     try {
@@ -190,11 +191,20 @@ public class Messenger implements Messageable {
   private boolean sendEmail(String to, String reportName) {
 
     try {
-      
-      if(to==null || to.equals(""))
+
+      if (to == null || to.equals("")){
+        log.fine("No email found to send report.");
         return false;
+      }
+        
+
+      String adaptedReportName = getReportNameAdapter(reportName);
+      Map<String, Object> parameters = getAdaptedParameters(reportName);
       
-      URL url = new URL(comProxyProps.getProperty(REPORTING_URL_PROPERTY) + reportName);
+      String reporteableInstanceName = "Pdf" + adaptedReportName;
+      Reporteable reporteableInstance = getReporteableInstance(reporteableInstanceName);
+      reporteableInstance.setReportName(adaptedReportName);
+      byte[] data = reporteableInstance.getBytes(parameters);
 
       String from = "tramex@sisoprega.com";
       String content = "Encuentre anexo el reporte con los detalles de este mensaje.";
@@ -203,18 +213,16 @@ public class Messenger implements Messageable {
 
       Attachment attachment = new Attachment();
       attachment.setAttachmentType("application/pdf");
-      String[] pathParts = url.getPath().split("/");
-      int iFileNamePart = pathParts.length - 1;
-      attachment.setFileName(pathParts[iFileNamePart] + ".pdf");
+      attachment.setFileName(adaptedReportName + ".pdf");
 
-      attachment.setContent(readPDF(url));
+      attachment.setContent(data);
       email.setAttachment(attachment);
 
       smtp.sendEmail(email, mailSession);
       log.info("sent email");
       return true;
     } catch (Exception e) {
-      log.severe("Unable to read file from localhost." + e.getMessage());
+      log.severe("Unable to read file from localhost. " + e.getMessage());
       log.throwing(this.getClass().getCanonicalName(), "sendReport(EnterpriseRancher, reportName)", e);
       return false;
     }
@@ -222,12 +230,12 @@ public class Messenger implements Messageable {
 
   @Override
   public boolean sendReport(long rancherId, String reportName) {
-    log.entering(this.getClass().getCanonicalName(), "sendReport(rancherId, reportName)");
+    log.entering(this.getClass().getCanonicalName(), "sendReport(rancherId[" + rancherId + "], reportName[" + reportName + "])");
 
     Rancher person = null;
     try {
       log.fine("Reading person rancher [" + rancherId + "] from dataModel");
-      person = dataModel.readSingleDataModel("RANCHER_BY_ID", "rancherId", rancherId, Rancher.class);
+      person = dataModel.readSingleDataModel("RANCHER_BY_ID", "Id", rancherId, Rancher.class);
       log.finer("person obtained from dataModel:" + person);
 
       if (person != null) {
@@ -241,7 +249,7 @@ public class Messenger implements Messageable {
     EnterpriseRancher enterprise = null;
     try {
       log.fine("Reading enterprise rancher [" + rancherId + "] from dataModel");
-      enterprise = dataModel.readSingleDataModel("ENTERPRISE_RANCHER_BY_ID", "enterpriseId", rancherId, EnterpriseRancher.class);
+      enterprise = dataModel.readSingleDataModel("ENTERPRISERANCHER_BY_ID", "Id", rancherId, EnterpriseRancher.class);
       log.finer("enterprise obtained from dataModel: " + enterprise);
       if (enterprise != null) {
         log.fine("Sending reportName: " + reportName);
@@ -256,13 +264,13 @@ public class Messenger implements Messageable {
 
   @Override
   public boolean sendSimpleMessage(long rancherId, String message) {
-    Rancher person = dataModel.readSingleDataModel("RANCHER_BY_ID", "rancherId", rancherId, Rancher.class);
+    Rancher person = dataModel.readSingleDataModel("RANCHER_BY_ID", "Id", rancherId, Rancher.class);
 
     if (person != null) {
       return sendSimpleMessage(person, message);
     }
 
-    EnterpriseRancher enterprise = dataModel.readSingleDataModel("ENTERPRISE_RANCHER_BY_ID", "enterpriseId", rancherId,
+    EnterpriseRancher enterprise = dataModel.readSingleDataModel("ENTERPRISERANCHER_BY_ID", "Id", rancherId,
         EnterpriseRancher.class);
     if (enterprise != null) {
       return sendSimpleMessage(enterprise, message);
@@ -271,94 +279,113 @@ public class Messenger implements Messageable {
     return false;
   }
 
-  private byte[] readPDF(URL url) throws IOException {
+  private String formatPhoneNumber(String phoneNumber) {
+    if(phoneNumber.trim().equals(""))
+      return "";
+    
+    String result = "+52";
+    for (int i = 0; i < phoneNumber.length(); i++) {
 
-    ByteArrayOutputStream tmpOut = new ByteArrayOutputStream();
-
-    Authenticator.setDefault(new SisopregaAuthenticator(this.userName, this.password) {
-      protected PasswordAuthentication getPasswordAuthentication() {
-        return new PasswordAuthentication(this.getUserName(), this.getPassword().toCharArray());
-      }
-    });
-    URLConnection connection = url.openConnection();
-    InputStream in = connection.getInputStream();
-    int contentLength = connection.getContentLength();
-
-    if (contentLength != -1) {
-      tmpOut = new ByteArrayOutputStream(contentLength);
+      // If we find a non-digit character we return false.
+      if (Character.isDigit(phoneNumber.charAt(i)))
+        result += phoneNumber.charAt(i);
     }
-
-    byte[] buf = new byte[512];
-    while (true) {
-      int len = in.read(buf);
-      if (len == -1) {
-        break;
-      }
-      tmpOut.write(buf, 0, len);
-    }
-    in.close();
-    tmpOut.close();
-
-    return tmpOut.toByteArray();
+    return result;
   }
 
   private boolean sendReport(String reportName, String phone, String email) {
-    log.entering(this.getClass().getCanonicalName(), "sendReport(reportName, phone, email)");
-    String message = "";
+    log.entering(this.getClass().getCanonicalName(), "boolean sendReport(reportName[" + reportName + "], phone[" + phone
+        + "], email[" + email + "])");
     try {
-      Authenticator.setDefault(new SisopregaAuthenticator(this.userName, this.password) {
-        protected PasswordAuthentication getPasswordAuthentication() {
-          return new PasswordAuthentication(this.getUserName(), this.getPassword().toCharArray());
-        }
-      });
-      URL url = new URL(comProxyProps.getProperty(REPORTING_URL_PROPERTY) + "SMS/" + reportName);
-      log.fine("Formed url: " + url.getPath());
-
-      URLConnection connection = url.openConnection();
-      BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-      String str;
-      while ((str = in.readLine()) != null) {
-        message += str;
+      boolean smsSent = false;
+      
+      if(!phone.equals("")){
+        String adaptedReportName = getReportNameAdapter(reportName);
+        Map<String, Object> parameters = getAdaptedParameters(reportName);
+        
+        String reporteableInstanceName = "Txt" + adaptedReportName;
+        Reporteable reporteableInstance = getReporteableInstance(reporteableInstanceName);
+        reporteableInstance.setReportName(adaptedReportName);
+        byte[] data = reporteableInstance.getBytes(parameters);
+        
+        String message = new String(data);
+        
+        log.fine("Message from report: " + message);
+        smsSent = sendSMS(phone, message);
+        log.finer("smsSent [" + smsSent + "]");
+      }else{
+        log.fine("No phone for SMS found, will try only email");
       }
-      in.close();
-      log.fine("Message from report: " + message);
-      boolean smsSent = sendSMS(phone, message);
+      
+      
       boolean emailSent = sendEmail(email, reportName);
+      log.finer("emailSent [" + emailSent + "]");
       return smsSent && emailSent;
     } catch (Exception e) {
-      log.severe("Unable to read file from localhost." + e.getMessage());
-      log.throwing(this.getClass().getCanonicalName(), "sendReport(EnterpriseRancher, reportName)", e);
+      log.severe("Unable to read file from localhost. " + e.getMessage());
+      log.throwing(this.getClass().getCanonicalName(), "sendReport(reportName, phone, email)", e);
     }
 
     return false;
   }
-
-  @Override
-  public void login(String userName, String password) {
-    this.userName = userName;
-    this.password = password;
+  
+  private Reporteable getReporteableInstance(String implementationName){
+    this.log.entering(this.getClass().getCanonicalName(), "Reporteable getReporteableInstance(" + implementationName + ")");
+    Context jndiContext = null;
+    Reporteable instance = null;
+    String commonPrefix = "java:global/ComProxy/";
+    try {
+      jndiContext = new InitialContext();
+      instance = (Reporteable) jndiContext.lookup(commonPrefix + implementationName);
+      log.fine("Reporteable instance created for entity [" + implementationName + "]");
+    } catch (java.lang.Exception e) {
+      log.severe("Unable to load jndi context component");
+      log.throwing(this.getClass().getName(), "Reporteable getReporteableInstance(String)", e);
+    }
+    return instance;
   }
-
-  private class SisopregaAuthenticator extends Authenticator {
-    private final String userName;
-    private final String password;
-
-    public SisopregaAuthenticator(String userName, String password) {
-      this.userName = userName;
-      this.password = password;
-    }
-
-    public String getUserName() {
-      return this.userName;
-    }
-
-    public String getPassword() {
-      return this.password;
-    }
-
-    protected PasswordAuthentication getPasswordAuthentication() {
-      return new PasswordAuthentication(this.userName, this.password.toCharArray());
+  
+  private String getReportNameAdapter(String inReportName){
+    String[] reportNameSplitted = inReportName.split("\\?");
+    if(reportNameSplitted.length>=1){
+      return reportNameSplitted[0];
+    }else{
+      log.finer("No parameters found in report name");
+      return inReportName;
     }
   }
-
+  
+  private Map<String, Object> getAdaptedParameters(String inReportName) throws ParseException{
+    String[] reportNameSplitted = inReportName.split("\\?");
+    if(reportNameSplitted.length>=1){
+      String sParameters = reportNameSplitted[1];
+      String[] splittedParams = sParameters.split("\\&");
+      if(splittedParams.length >= 1){
+        Map<String, Object> result = new HashMap<String, Object>();
+        for(int i=0; i<splittedParams.length; i++){
+          String param = splittedParams[i];
+          String[] splittedParam = param.split("\\=");
+          String key = splittedParam[0];
+          if(key.equals("Id")){
+            Long value = Long.parseLong(splittedParam[1]);
+            result.put(key, value);
+          }else if(key.equals("fromDate")){
+            Date value = new SimpleDateFormat("MM/dd/yyyy").parse(splittedParam[1]);
+            result.put(key, value);
+          }else if(key.equals("toDate")){
+            Date value = new SimpleDateFormat("MM/dd/yyyy").parse(splittedParam[1]);
+            result.put(key, value);
+          }else{
+            result.put(key, splittedParam[1]);
+          }
+        }
+        return result;
+      }else{
+        return null;
+      }
+    }else{
+      return null;
+    }
+  }
+  
 }

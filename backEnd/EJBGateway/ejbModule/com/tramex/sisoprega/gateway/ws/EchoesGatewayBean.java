@@ -12,7 +12,7 @@ import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
 
-import com.tramex.sisoprega.common.messenger.Messageable;
+import com.tramex.sisoprega.reporting.Messageable;
 
 /**
  * Session Bean implementation class EchoesGatewayBean
@@ -48,8 +48,6 @@ public class EchoesGatewayBean {
   public String sendMessage(@WebParam(name = "rancherId") long rancherId, @WebParam(name = "message") String message,
       @WebParam(name = "userName") String userName, @WebParam(name = "password") String password) {
 
-    messenger.login(userName, password);
-    
     if (!messenger.sendSimpleMessage(rancherId, message)) {
       return "Error al enviar mensaje.";
     }
@@ -68,8 +66,6 @@ public class EchoesGatewayBean {
   public String sendReport(@WebParam(name = "rancherId") long rancherId, @WebParam(name = "reportName") String reportName,
       @WebParam(name = "userName") String userName, @WebParam(name = "password") String password) {
 
-    messenger.login(userName, password);
-    
     if (!messenger.sendReport(rancherId, reportName)) {
       return "Error al enviar mensaje.";
     }

@@ -1,5 +1,6 @@
 package com.tramex.sisoprega.proxy.bean;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -9,6 +10,7 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.security.RolesAllowed;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 import com.tramex.sisoprega.dto.Inspection;
@@ -23,14 +25,18 @@ import com.tramex.sisoprega.gateway.request.CreateRequest;
 import com.tramex.sisoprega.gateway.response.ReadResponse;
 import com.tramex.sisoprega.proxy.Cruddable;
 import com.tramex.sisoprega.proxy.common.BaseBean;
+import com.tramex.sisoprega.reporting.Messageable;
 
 /**
  * Session Bean implementation class ReceptionBean
  */
 @Stateless
-@RolesAllowed({ "sisoprega_admin", "mx_usr", "us_usr", "rancher", "agency" })
+@RolesAllowed({ "sisoprega_admin", "mx_usr", "us_usr", "rancher", "agency"})
 public class ReceptionBean extends BaseBean implements Cruddable {
 
+  @EJB(lookup="java:global/ComProxy/Messenger")
+  private Messageable msgBean;
+  
   @Override
   public ReadResponse Create(CreateRequest request) {
     this.log.entering(this.getClass().getCanonicalName(), "CreateResponse Create(CreateRequest)");
@@ -63,6 +69,12 @@ public class ReceptionBean extends BaseBean implements Cruddable {
         List<Object> updatedRecordList = new ArrayList<Object>();
         log.fine("Setting as response object: {" + entity + "}");
         updatedRecordList.add(entity);
+
+        if (getWeight(entity) > 0.0d && getHeadCount(entity) > 0) {
+          // Send reception message
+          log.info("Sending receive confirmation to exporter");
+          msgBean.sendReport(entity.getRancherId(), "GanadoRecibido?Id=" + entity.getRancherId() + formatReportDateRange());
+        }
 
         response.setParentRecord(getRecordsFromList(updatedRecordList, type));
         response.setError(new GatewayError("0", "SUCCESS", "Update"));
@@ -117,18 +129,19 @@ public class ReceptionBean extends BaseBean implements Cruddable {
           response.setError(new GatewayError("VAL04", "Se ha omitido el id en la entidad [" + record.getEntity()
               + "] al intentar actualizar sus datos.", "Update"));
         } else {
-          
-          if(!hasPen(entity)){
+
+          if (!hasPen(entity)) {
             // Create inspection record if it does not exists
-            if(entity.getInspection() == null || entity.getInspection().size()==0){
+            if (entity.getInspection() == null || entity.getInspection().size() == 0) {
               log.info("Adding inspection to released reception");
               Inspection inspection = new Inspection();
               inspection.setInspectionDate(new Date());
               inspection.setComments("Ganado liberado sin defectos");
+              inspection.setWeight(getWeight(entity));
               entity.addInspection(inspection);
             }
           }
-          
+
           dataModel.updateDataModel(entity);
 
           String queryName = record.getEntity().toUpperCase() + "_BY_ID";
@@ -137,12 +150,20 @@ public class ReceptionBean extends BaseBean implements Cruddable {
           entity = (Reception) dataModel.readSingleDataModel(queryName, "Id", idToUpdate, type);
           log.fine("got updated record: [" + entity + "], setting inspection forecast");
 
-          
-          if(getTomorrow(entity.getDateAllotted()).compareTo(getTomorrow(new Date())) >= 0 )
+          if (getTomorrow(entity.getDateAllotted()).compareTo(getTomorrow(new Date())) >= 0)
             setInspectionForecast(entity);
 
           List<Object> updatedRecordList = new ArrayList<Object>();
           updatedRecordList.add(entity);
+          
+          if(!hasPen(entity)){
+            // TODO: Send inspection confirmation
+            log.info("Send inspection confirmation");
+            msgBean.sendSimpleMessage(entity.getRancherId(), "Aviso de ganado inspeccionado.");
+          }else{
+            log.info("Send change confirmation");
+            msgBean.sendSimpleMessage(entity.getRancherId(), "Aviso de cambio en ganado recibido.");
+          }
 
           response.setParentRecord(getRecordsFromList(updatedRecordList, type));
           response.setError(new GatewayError("0", "SUCCESS", "Update"));
@@ -174,20 +195,20 @@ public class ReceptionBean extends BaseBean implements Cruddable {
     this.log.entering(this.getClass().getCanonicalName(), "void setInspectionForecast(Reception)");
     InspectionForecast ifc = getInspectionForecast(reception.getDateAllotted());
     log.fine("got InspectionForecast:[" + ifc + "]");
-    
-    if(!ifc.isLocked()){
+
+    if (!ifc.isLocked()) {
       InspectionForecastDetail ifd = getInspectionForecastDetail(ifc, reception);
       log.fine("got InspectionForecastDetail:[" + ifd + "]");
 
       if (ifd.getInspectionForecastDetailId() == 0)
         ifc.addInspectionForecastDetail(ifd);
 
-      if (ifc.getInspectionForecastId() == 0){
+      if (ifc.getInspectionForecastId() == 0) {
         log.fine("inspection forecast not found in database, creating one: " + ifc);
         dataModel.createDataModel(ifc);
       }
-      
-    }else{
+
+    } else {
       log.fine("Inspection forecast is already locked");
     }
 
@@ -200,10 +221,7 @@ public class ReceptionBean extends BaseBean implements Cruddable {
 
   private InspectionForecastDetail getInspectionForecastDetail(InspectionForecast forecast, Reception reception) {
     // calculate headcount
-    long headCount = 0;
-    for (ReceptionHeadcount rh : reception.getReceptionHeadcount()) {
-      headCount += rh.getHc();
-    }
+    long headCount = getHeadCount(reception);
 
     if (headCount > 0) {
       InspectionForecastDetail ifd = getInspectionForecastDetail(forecast, reception.getPen());
@@ -254,14 +272,40 @@ public class ReceptionBean extends BaseBean implements Cruddable {
 
     return ifc;
   }
-  
-  private Date getTomorrow(Date date){
+
+  private Date getTomorrow(Date date) {
     // calculate tomorrow of given date.
     Calendar cal = Calendar.getInstance();
     cal.setTime(date);
     cal.add(Calendar.DATE, 1); // For tomorrow
-    
+
     return cal.getTime();
+
+  }
+
+  private long getHeadCount(Reception reception) {
+    // calculate headcount
+    long headCount = 0;
+    for (ReceptionHeadcount rh : reception.getReceptionHeadcount()) {
+      headCount += rh.getHc();
+    }
+    return headCount;
+  }
+
+  private double getWeight(Reception reception) {
+    double weight = 0.0d;
+    for (ReceptionHeadcount rh : reception.getReceptionHeadcount()) {
+      weight += rh.getWeight();
+    }
+    return weight;
+  }
+
+  private String formatReportDateRange(){
+    String result = "";
+    String sToday = new SimpleDateFormat("MM/dd/yyyy").format(new Date());
     
+    result = "&fromDate=" + sToday + "&toDate=" + sToday;
+    
+    return result;
   }
 }

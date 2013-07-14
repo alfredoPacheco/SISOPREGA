@@ -13,7 +13,7 @@
  * 
  * &copy; COPYRIGHT 2012 TRAMEX. ALL RIGHTS RESERVED.
  */
-package com.tramex.sisoprega.common.messenger;
+package com.tramex.sisoprega.reporting;
 
 import com.tramex.sisoprega.dto.EnterpriseRancher;
 import com.tramex.sisoprega.dto.Rancher;
@@ -85,11 +85,4 @@ public interface Messageable {
    * @return
    */
   boolean sendSimpleMessage(EnterpriseRancher rancher, String message);
-  
-  /**
-   * Set credentials
-   * @param userName
-   * @param password
-   */
-  void login(String userName, String password);
 }

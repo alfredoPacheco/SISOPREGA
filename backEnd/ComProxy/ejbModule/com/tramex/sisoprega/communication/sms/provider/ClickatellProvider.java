@@ -25,6 +25,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Properties;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 
 import com.tramex.sisoprega.communication.dto.Sms;
@@ -52,6 +53,7 @@ import com.tramex.sisoprega.communication.sms.SmsProvider;
  * 
  */
 @Stateless
+@RolesAllowed({ "mx_usr", "us_usr" })
 public class ClickatellProvider implements SmsProvider {
   private static final String REQUEST_GET = "GET";
   private static final String API_URL = "https://api.clickatell.com/http/sendmsg";

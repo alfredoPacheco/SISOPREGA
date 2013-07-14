@@ -17,6 +17,7 @@ package com.tramex.sisoprega.communication.email.provider;
 
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -52,6 +53,7 @@ import com.tramex.sisoprega.communication.email.EmailSender;
  * 
  */
 @Stateless
+@RolesAllowed({ "mx_usr", "us_usr" })
 public class SmtpEmailSender implements EmailSender {
   
   @Override

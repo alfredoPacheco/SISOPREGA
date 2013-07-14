@@ -2,17 +2,17 @@
 <ejb-jar xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:ejb="http://java.sun.com/xml/ns/javaee/ejb-jar_3_0.xsd" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/ejb-jar_3_1.xsd" version="3.1">
   <display-name>ComProxy</display-name>
   <enterprise-beans>
-  	<session>
-  		<ejb-name>MasMensajesProvider</ejb-name>
-  		<ejb-class>com.tramex.sisoprega.communication.sms.provider.MasMensajesProvider</ejb-class>
-  	</session>
-  	<session>
-  		<ejb-name>ClickatellProvider</ejb-name>
-  		<ejb-class>com.tramex.sisoprega.communication.sms.provider.ClickatellProvider</ejb-class>
-  	</session>	  		
-  	<session>
-  		<ejb-name>Messenger</ejb-name>
-  		<ejb-class>com.tramex.sisoprega.communication.ejb.Messenger</ejb-class>
-  	</session>	  	
+    <session>
+      <ejb-name>MasMensajesProvider</ejb-name>
+      <ejb-class>com.tramex.sisoprega.communication.sms.provider.MasMensajesProvider</ejb-class>
+    </session>
+    <session>
+      <ejb-name>ClickatellProvider</ejb-name>
+      <ejb-class>com.tramex.sisoprega.communication.sms.provider.ClickatellProvider</ejb-class>
+    </session>
+    <session>
+      <ejb-name>Messenger</ejb-name>
+      <ejb-class>com.tramex.sisoprega.communication.ejb.Messenger</ejb-class>
+    </session>
   </enterprise-beans>
 </ejb-jar>
