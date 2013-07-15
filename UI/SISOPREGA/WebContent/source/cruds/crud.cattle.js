@@ -26,11 +26,11 @@ enyo.kind(
       return arrList;
     },
     fillCattleTypeListWithCattleClass : function(arrList, cattleClass) {
-      for ( var i = 0; i < cattleClass.cattleType.length; i++) {
+      for ( var i = 0; i < cattleClass.CattleType.length; i++) {
         var auxObj =
           {
-            value : cattleClass.cattleType[i].cattleTypeId,
-            caption : cattleClass.cattleType[i].cattypeName
+            value : cattleClass.CattleType[i].cattleTypeId,
+            caption : cattleClass.CattleType[i].cattypeName
           };
 
         arrList.push(auxObj);

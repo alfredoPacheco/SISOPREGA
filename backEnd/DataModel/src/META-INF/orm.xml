@@ -418,6 +418,11 @@
 			<basic name="catclassName">
 				<column name="catclass_name" length="50" unique="true" />
 			</basic>
+			<one-to-many name="cattleType" fetch="EAGER" mapped-by="cattleClass" orphan-removal="true" target-entity="com.tramex.sisoprega.dto.CattleType">
+				<cascade>
+					<cascade-all/>
+				</cascade>
+			</one-to-many>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.CattleType">
@@ -430,21 +435,17 @@
 			<description>Retrieve a single cattle type record using the type id</description>
 			<query>SELECT Cattle FROM CattleType Cattle WHERE Cattle.cattleTypeId= :Id</query>
 		</named-query>
-		<named-query name="CATTLE_TYPE_BY_CLASS_ID">
-			<description>Retrieve the cattle types associated with a cattle class</description>
-			<query>SELECT Cattle FROM CattleType Cattle WHERE Cattle.catclassId = :catClassId</query>
-		</named-query>
 		<attributes>
 			<id name="cattleTypeId">
 				<column name="cattype_id" />
 				<generated-value strategy="IDENTITY" />
 			</id>
-			<basic name="catclassId">
-				<column name="catclass_id" />
-			</basic>
 			<basic name="cattypeName">
 				<column name="cattype_name" />
 			</basic>
+			<many-to-one name="cattleClass" fetch="LAZY" optional="false">
+				<join-column name="catclass_id" referenced-column-name="catclass_id" />
+			</many-to-one>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.Location">

@@ -15,6 +15,9 @@
  */
 package com.tramex.sisoprega.dto;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Defines the model for the Rancher Contact entity.<BR/>
  * 
@@ -36,6 +39,7 @@ package com.tramex.sisoprega.dto;
 public class CattleClass {
   private long cattleClassId;
   private String catclassName;
+  private Set<CattleType> cattleType;
 
   /**
    * @return the catclassId
@@ -67,8 +71,42 @@ public class CattleClass {
     this.catclassName = catclassName;
   }
 
+  /**
+   * @return the cattleType
+   */
+  public Set<CattleType> getCattleType() {
+    return cattleType;
+  }
+
+  /**
+   * @param cattleType the cattleType to set
+   */
+  public void setCattleType(Set<CattleType> cattleType) {
+    this.cattleType = cattleType;
+  }
+  
+  public void addCattleType(CattleType type){
+    if(cattleType == null)
+      cattleType = new HashSet<CattleType>();
+    
+    if(!cattleType.contains(type))
+      cattleType.add(type);
+    
+    if(type.getCattleClass() != this)
+      type.setCattleClass(this);
+  }
+  
+  @Override
+  public boolean equals(Object obj) {
+    if(obj instanceof CattleClass){
+      return this.getCattleClassId() == ((CattleClass) obj).getCattleClassId();
+    }
+    return false;
+  }
+  
   @Override
   public String toString() {
     return "catclassId:" + cattleClassId + ";catclassName:" + catclassName + ";";
   }
+  
 }
