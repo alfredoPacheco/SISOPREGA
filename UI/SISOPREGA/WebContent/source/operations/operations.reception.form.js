@@ -188,7 +188,7 @@ enyo.kind({
     loadAutocompletes:function(){
 	var arrAllRanchers = crudRancher.getList().concat(crudEnterpriseRancher.getList());
 	this.$.rancher_id.setItems(arrAllRanchers);	
-	this.$.cattype_id.setItems(crudCattle.getList());
+	this.$.cattype_id.setItems(crudCattle.getCattleTypeList());
 	this.$.location_id.setItems(crudLocation.getList());
 	this.$.zone_id.setItems(cacheMan.getAllZonesForList());
 	if(this.objReception){
