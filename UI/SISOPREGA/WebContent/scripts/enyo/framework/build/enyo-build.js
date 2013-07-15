@@ -10705,7 +10705,8 @@ toggleSelected: function() {
 this == this.pane.view ? this.selectPrevious() : this.select();
 },
 showingChanged: function(a) {
-this.hasNode() ? !this.pane.dragging && a != this.showing && (this.dispatch(this.owner, this.showing ? this.onShow : this.onHide), this.pane.stopAnimation(), this.showing && (this.inherited(arguments), this.pane.validateViewSizes(), this.applySlideToNode(this.calcSlideHidden())), this.overSliding = !0, this.pane.playAnimation(this)) : this.inherited(arguments);
+    if(this.pane)
+	this.hasNode() ? !this.pane.dragging && a != this.showing && (this.dispatch(this.owner, this.showing ? this.onShow : this.onHide), this.pane.stopAnimation(), this.showing && (this.inherited(arguments), this.pane.validateViewSizes(), this.applySlideToNode(this.calcSlideHidden())), this.overSliding = !0, this.pane.playAnimation(this)) : this.inherited(arguments);
 },
 calcSlide: function() {
 var a = this.index, b = this.pane.view.index, c = this.shouldSlideHidden() ? "Hidden" : a == b ? "Selected" : a < b ? "Before" : "After";
