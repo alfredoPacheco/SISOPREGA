@@ -27,7 +27,7 @@ enyo.kind({
 	    modal : true,
 	    style : "overflow: hidden; border-width: 0px;",
 	    scrim : true,
-	    name : "formPopUp",
+	    name : "frmPopUp",
 	    
 //	    components : [ {
 //		kind : this.entity.getCreateKindName(),
@@ -43,7 +43,7 @@ enyo.kind({
     },
     addNewRancher : function(inSender, inSelected) {
 
-	this.$.formPopUp.validateComponents();
+	this.$.frmPopUp.validateComponents();
 	switch (inSelected.value) {
 	case 1: // Crear nueva empresa
 	    this.entity.setCreateKindName("catalogs.rancher.enterprise.form");
@@ -56,14 +56,14 @@ enyo.kind({
 	this.resetCreateKind();
 
 	this.$.create_kind.toggleAdd();
-	this.$.formPopUp.render();
-	this.$.formPopUp.openAtCenter();
+	this.$.frmPopUp.render();
+	this.$.frmPopUp.openAtCenter();
     },
     resetCreateKind : function() {
 	if(this.$.create_kind !== undefined)
 	    this.$.create_kind.destroy();
 
-	this.$.formPopUp.createComponent({
+	this.$.frmPopUp.createComponent({
 	    kind : this.entity.getCreateKindName(),
 	    name : "create_kind",
 	    lazy : "true",
@@ -129,5 +129,16 @@ enyo.kind({
 
 	    entityKind.remove(obj, this, "reset");
 	}
+    },
+    on_add : function() {
+	this.$.frmPopUp.close();
+	this.reset();
+    },
+    on_upd : function() {
+	this.$.frmPopUp.close();
+	this.reset();
+    },
+    on_cancel : function() {
+	this.$.frmPopUp.close();
     }
 });
