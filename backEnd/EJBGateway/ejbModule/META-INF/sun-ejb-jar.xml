@@ -65,6 +65,13 @@
 		</ejb>
 		<ejb>
 			<ejb-name>PresentorBean</ejb-name>
+			<ior-security-config>
+				<as-context>
+					<auth-method>USERNAME_PASSWORD</auth-method>
+					<realm>security</realm>
+					<required>false</required>
+				</as-context>
+			</ior-security-config>
 			<webservice-endpoint>
 				<port-component-name>Presentor</port-component-name>
 				<login-config>
