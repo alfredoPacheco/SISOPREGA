@@ -258,5 +258,6 @@ enyo.kind({
     toggleAdd : function() {
 	this.$.draAdd.setOpen(true);
 	this.$.draUpdate.setOpen(false);
+	this.resetValues();
     }
 });
