@@ -5,6 +5,31 @@ enyo.kind({
     create : function() {
 	this.inherited(arguments);
 	this.$.mainScroller.createComponents([ {
+		name : "options",
+		kind : enyo.PopupSelect,
+		onSelect : "addNewRancher",
+		items : [ {
+		    caption : "Empresa/Sociedad",
+		    value : 1
+		}, {
+		    caption : "Persona Fisica",
+		    value : 2
+		}, ]
+	    }, {
+		name : "addRancherDialog",
+		kind : "Popup",
+		showHideMode : "transition",
+		openClassName : "zoomFadeIn",
+		className : "transitioner2",
+		layoutKind : "VFlexLayout",
+		style : "overflow: hidden",
+		width : "85%",
+		height : "85%",
+		scrim : true,
+		components : [
+
+		]
+	    },{
 	    kind : "RowGroup",
 	    name : "rowGroup",
 	    defaultKind : "HFlexBox",
@@ -195,5 +220,54 @@ enyo.kind({
 	    this.setEntity(this.objReception);
 	}
 	cacheMan.hideScrim();
+    },
+    contextMenuClicked : function(inSender, inEvent) {
+	this.$.options.openAtEvent(inEvent);
+	// inSender.stopPropagation();
+	return false;
+    },
+    addNewRancher : function(inSender, inSelected) {
+	if (this.$.dynoco) {
+	    this.$.dynoco.destroy();
+	}
+	switch (inSelected.value) {
+	case 1:
+	    this.$.addRancherDialog.createComponent({
+		kind : "catalogs.rancher.enterprise.form",
+		onAdd : "adoken",
+		onCancel:"cancelCreateRancher",
+		name : 'dynoco',
+		flex : 1
+	    }, {
+		owner : this
+	    });
+	    break;
+	case 2:
+	    this.$.addRancherDialog.createComponent({
+		kind : "catalogs.rancher.person.form",
+		onAdd : "adoken",
+		onCancel:"cancelCreateRancher",
+		name : 'dynoco',
+		flex : 1
+	    }, {
+		owner : this
+	    });
+	    break;
+	}
+	this.$.addRancherDialog.render();
+	this.$.addRancherDialog.openAtCenter();
+    },
+    adoken : function(inSender, result) {
+	var arrAllRanchers = crudRancher.getList().concat(crudEnterpriseRancher.getList());
+	this.$.rancher_id.setItems(arrAllRanchers);
+	
+	var justCreated = result.records[0];
+	
+	this.$.rancher_id.setIndex(justCreated.rancherId);
+	this.$.addRancherDialog.close();
+	cacheMan.hideScrim();
+    },
+    cancelCreateRancher:function(){
+	this.$.addRancherDialog.close();
     }
 });

@@ -28,17 +28,6 @@ enyo.kind({
 	    style : "overflow: hidden; border-width: 0px;",
 	    scrim : true,
 	    name : "frmPopUp",
-	    
-//	    components : [ {
-//		kind : this.entity.getCreateKindName(),
-//		name : "create_kind",
-//		lazy : "true",
-//		onAdd : "on_add",
-//		onUpdate : "on_upd",
-//		onCancel : "on_cancel",
-//		flex : 1
-//	    } ]
-	
 	}], {owner: this});
     },
     addNewRancher : function(inSender, inSelected) {
