@@ -23,6 +23,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 
@@ -227,6 +228,7 @@ public class IdentityManagerBean extends BaseBean implements RemoteIdentity {
    * 
    * @see com.tramex.sisoprega.identity.RemoteIdentity#allUsers()
    */
+  @PermitAll
   @Override
   public List<User> allUsers() throws IdentityManagerException {
     List<User> users = dataModel.readDataModelList("ALL_NO_RANCHER_USERS", null, User.class);

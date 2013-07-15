@@ -316,7 +316,7 @@ var consumingGateway = {
 	soapMessage += '<request><parentRecord><entity>' + entityName
 		+ '</entity>';
 
-	soapMessage += this.xmlFromObject(entity,this);
+	soapMessage += this.xmlFromObject(entity, this);
 
 	soapMessage += '</parentRecord></request>';
 	soapMessage += '</ws:Update>' + soapFooter;
@@ -494,6 +494,21 @@ var consumingGateway = {
 	    records : []
 	};
 
+	var logout = false;
+	if (utils.getCookie("username") == userName) {
+	    var change = confirm("Esta a punto de reiniciar su propia contraseña,\n"
+		    + "Esta acción sólo podrá ser procesada al volver entrar al sistema \n\n"
+		    + "¿Desea realizar esta acción y salir inmediatamente de SISOPREGA?");
+	    if (change == false) {
+		cacheMan.hideScrim();
+		return false;
+	    } else {
+		utils.setCookie("lastPass", "", 365);
+		logout = true;
+		cbObj = false;
+	    }
+	}
+
 	var soapMessage = soapHeader + '<ws:ResetPassword>';
 	soapMessage += '<user_name>' + userName + '</user_name>';
 	soapMessage += '<password>' + password + '</password>';
@@ -524,7 +539,6 @@ var consumingGateway = {
 			output.origin = jQuery(data).find("origin").text();
 
 			if (output.exceptionId == 0) {
-
 			    jQuery(data).find("parentRecord").each(
 				    function() {
 					var record = self.childrenFromParent(
@@ -542,6 +556,10 @@ var consumingGateway = {
 			    var milis = ((Math.random() * 1000) + 500);
 			    setTimeout(cbObj[cbMethod](output), milis);
 			}
+
+			if (logout)
+			    self.cleanLogout();
+
 			return false;
 		    },
 		    error : function OnError(request, status, error) {
@@ -626,12 +644,14 @@ var consumingGateway = {
 	utils.setCookie("username", "", -1);
 	utils.setCookie("pass", "", -1);
 
+	this.cleanLogout();
+    },
+    cleanLogout : function() {
 	try {
 	    enyo.$.sisoprega.destroy();
 	} catch (e) {
 	}
 	window.location = './';
-	return output;
     },
     AddUser : function(objUser, cbObj, cbMethod) {
 	// Se crea objeto que devolvera la funcion:
@@ -647,12 +667,12 @@ var consumingGateway = {
 	soapMessage += '<userName>' + objUser.userName + '</userName>';
 	soapMessage += '<password>' + objUser.password + '</password>';
 
-	for (index in objUser.groups) {
-	    var group = objUser.groups[index];
+	for (index in objUser.groupsToAdd) {
 	    soapMessage += '<groups>';
 	    soapMessage += '<record_id>0</record_id>';
-	    soapMessage += '<role_name>' + group.role_name + '</role_name>';
-	    soapMessage += '<user_name>' + objUser.user_name + '</user_name>';
+	    soapMessage += '<role_name>' + objUser.groupsToAdd[index]
+		    + '</role_name>';
+	    soapMessage += '<user_name>' + objUser.userName + '</user_name>';
 	    soapMessage += '</groups>';
 	}
 
@@ -707,7 +727,7 @@ var consumingGateway = {
 		    error : function OnError(request, status, error) {
 			output.exceptionId = 1;
 			output.exceptionDescription = 'No fue posible volver a asignar contraseña para el usuario '
-				+ userName + ' ERROR: ' + status;
+				+ objUser.userName + ' ERROR: ' + status;
 			if (cbObj) {
 			    var milis = ((Math.random() * 1000) + 500);
 			    setTimeout(cbObj[cbMethod](output), milis);
@@ -726,33 +746,42 @@ var consumingGateway = {
 	soapMessage += '</ws:AddGroup>';
 	soapMessage += soapFooter;
 
-	jQuery.ajax({
-	    url : identityWsURL,
-	    type : "POST",
-	    dataType : "xml",
-	    data : soapMessage,
-	    processData : false,
-	    contentType : "text/xml;charset=UTF-8",
-	    username : utils.getCookie("username"),
-	    password : utils.getCookie("pass"),
-	    success : function OnSuccess(data) {
-		output = jQuery(data).find("return").text();
-		var milis = ((Math.random() * 1000) + 500);
-		setTimeout(cbObj[cbMethod](output), milis);
-		return false;
-	    },
-	    error : function OnError(request, status, error) {
-		output.exceptionId = 1;
-		output.exceptionDescription = 'No fue posible agregar grupo '
-			+ groupName + ' al usuario ' + userName + ' ERROR: '
-			+ status;
-		if (cbObj) {
-		    var milis = ((Math.random() * 1000) + 500);
-		    setTimeout(cbObj[cbMethod](output), milis);
-		}
-		return false;
-	    }
-	});
+	var self = this;
+
+	jQuery
+		.ajax({
+		    url : identityWsURL,
+		    type : "POST",
+		    dataType : "xml",
+		    data : soapMessage,
+		    processData : false,
+		    contentType : "text/xml;charset=UTF-8",
+		    username : utils.getCookie("username"),
+		    password : utils.getCookie("pass"),
+		    success : function OnSuccess(data) {
+			output = jQuery(data).find("return").text();
+			var milis = ((Math.random() * 1000) + 500);
+			setTimeout(cbObj[cbMethod](output), milis);
+			return false;
+		    },
+		    error : function OnError(request, status, error) {
+			if (status == 500) {
+			    alert("Usted no cuenta con los permisos necesarios para realizar esta operación, la acción será reportada al administrador del sistema.");
+			    self.cleanLogout();
+			}
+			output.exceptionId = 1;
+			output.exceptionDescription = 'No fue posible agregar grupo '
+				+ groupName
+				+ ' al usuario '
+				+ userName
+				+ ' ERROR: ' + status;
+			if (cbObj) {
+			    var milis = ((Math.random() * 1000) + 500);
+			    setTimeout(cbObj[cbMethod](output), milis);
+			}
+			return false;
+		    }
+		});
     },
     RemoveGroup : function(userName, groupName, cbObj, cbMethod) {
 	output = "OK";
@@ -780,6 +809,10 @@ var consumingGateway = {
 			return false;
 		    },
 		    error : function OnError(request, status, error) {
+			if (status == 500) {
+			    alert("Usted no cuenta con los permisos necesarios para realizar esta operación, la acción será reportada al administrador del sistema.");
+			    self.cleanLogout();
+			}
 			output.exceptionId = 1;
 			output.exceptionDescription = 'No fue posible remover el grupo '
 				+ groupName
@@ -795,7 +828,8 @@ var consumingGateway = {
 		    }
 		});
     },
-    changePassword : function(userName, currentPassword, newPassword, cbObj, cbMethod) {
+    changePassword : function(userName, currentPassword, newPassword, cbObj,
+	    cbMethod) {
 	output = "OK";
 
 	var soapMessage = soapHeader + '<ws:ChangePassword>';
@@ -828,8 +862,15 @@ var consumingGateway = {
 	    }
 	});
     },
-    RemoveUser : function(userName) {
+    RemoveUser : function(userName, cbObj, cbMethod) {
 	output = "OK";
+
+	if (userName == utils.getCookie("username")) {
+	    alert('No se puede borrar el mismo usuario con que se inició la sesión. ['
+		    + userName + ']');
+	    cbObj[cbMethod](output);
+	    return false;
+	}
 
 	var soapMessage = soapHeader + '<ws:RemoveUser>';
 	soapMessage += '<user_name>' + userName + '</user_name>';
@@ -877,10 +918,10 @@ var consumingGateway = {
 
 	return parentRecord;
     },
-    xmlFromObject:function(entity, self){
+    xmlFromObject : function(entity, self) {
 	var result = "";
-	
-	for (var field in entity) {
+
+	for ( var field in entity) {
 	    if (entity.hasOwnProperty(field)) {
 		if (!Array.isArray(entity[field])) {
 		    result += '<field>';
@@ -888,7 +929,7 @@ var consumingGateway = {
 		    result += '<value>' + entity[field] + '</value>';
 		    result += '</field>';
 		} else {
-		    for (var childIndex in entity[field]) {
+		    for ( var childIndex in entity[field]) {
 			var child = entity[field][childIndex];
 			result += '<childRecord>';
 			result += '<entity>' + field + '</entity>';

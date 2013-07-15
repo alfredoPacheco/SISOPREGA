@@ -107,6 +107,17 @@ enyo
 		    owner : this
 		});
 	    },
+	    resetValues : function() {
+		this.inherited(arguments);
+
+		// Remove groups selection
+		this.$.isMexUser.setChecked(false);
+		this.$.isUsaUser.setChecked(false);
+		this.$.isAgency.setChecked(false);
+		this.$.isDealer.setChecked(false);
+		this.$.isAccountant.setChecked(false);
+		this.$.isAdmin.setChecked(false);
+	    },
 	    setEntity : function(obj) {
 		this.inherited(arguments);
 
@@ -119,7 +130,7 @@ enyo
 		this.$.isAccountant
 			.setChecked(obj.groups.indexOf('accountant') > -1);
 		this.$.isAdmin.setChecked(obj.groups.indexOf('admin') > -1);
-		
+
 	    },
 	    addEntity : function() {
 		cacheMan.showScrim();
@@ -135,7 +146,8 @@ enyo
 		cacheMan.showScrim();
 		var updateObject = this.getEntity();
 		if (this.beforeSave(updateObject)) {
-		    this.entityKind.update(updateObject, this, "afterUpdateEntity");
+		    this.entityKind.update(updateObject, this,
+			    "afterUpdateEntity");
 		} else {
 		    cacheMan.hideScrim();
 		    cacheMan.setMessage('', this.errorMessage);

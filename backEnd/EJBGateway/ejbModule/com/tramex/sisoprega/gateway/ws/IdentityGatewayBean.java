@@ -21,6 +21,7 @@ import com.tramex.sisoprega.gateway.request.ReadRequest;
 import com.tramex.sisoprega.gateway.response.ReadResponse;
 import com.tramex.sisoprega.identity.IdentityManagerException;
 import com.tramex.sisoprega.identity.RemoteIdentity;
+import com.tramex.sisoprega.identity.dto.Role;
 import com.tramex.sisoprega.identity.dto.User;
 
 /**
@@ -58,9 +59,38 @@ public class IdentityGatewayBean {
    */
   @RolesAllowed("sisoprega_admin")
   @WebMethod(operationName = "CreateUser")
-  public String CreateUser(@WebParam(name = "user") User user) throws IdentityManagerException {
-    identityManager.createUser(user);
-    return "OK";
+  public ReadResponse CreateUser(@WebParam(name = "user") User user) throws IdentityManagerException {
+    ReadResponse response = new ReadResponse();
+    try{
+      identityManager.createUser(user);
+      
+      log.fine("User created: [" + user + "]");
+      List<GatewayRecord> parentRecord = new ArrayList<GatewayRecord>();
+      GatewayRecord userRecord = new GatewayRecord();
+      userRecord.setEntity("User");
+      userRecord.addField(new GatewayField("user_name", user.getUserName()));
+      
+      for(Role role : user.getGroups()){
+        log.fine("found role in user: [" + role + "]");
+        GatewayRecord roleRecord = new GatewayRecord();
+        roleRecord.setEntity("Role");
+        roleRecord.addField(new GatewayField("role_name", role.getRole_name()));
+        userRecord.addChildRecord(roleRecord);
+        log.fine("role added to result record");
+      }
+      
+      parentRecord.add(userRecord);
+      response.setParentRecord(parentRecord);
+      response.setError(new GatewayError("0", "SUCCESS", "CreateUser"));
+      log.fine("User created with response as [" + response + "]");
+    }catch(IdentityManagerException e){
+      log.severe("Unable to create user due to the following error: " + e.getMessage());
+      log.throwing(this.getClass().getCanonicalName(), "ReadResponse CreateUser()", e);
+      
+      response.setError(new GatewayError("GW01", "Error when creating user: " + e.getMessage(), "CreateUser"));
+    }
+    
+    return response;
   }
 
   /**
@@ -111,7 +141,12 @@ public class IdentityGatewayBean {
   public ReadResponse ResetPassword(@WebParam(name = "user_name") String userName, @WebParam(name = "password") String newPassword)
       throws IdentityManagerException {
 
+    String loggedUser = ejbContext.getCallerPrincipal().getName();
     identityManager.resetPassword(userName, newPassword);
+    
+    if(userName.equalsIgnoreCase(loggedUser))
+      return null;
+    
     
     ReadRequest request = new ReadRequest();
     GatewayRecord filter = new GatewayRecord();
@@ -215,6 +250,7 @@ public class IdentityGatewayBean {
    * @return
    * @throws IdentityManagerException
    */
+  @PermitAll
   @WebMethod(operationName = "ReadAllUsers")
   public List<User> readAllUsers() throws IdentityManagerException {
 

@@ -79,7 +79,7 @@ enyo.kind({
 	if (this.receivedCallBacks >= this.updCallBacks) {
 	    this.receivedCallBacks = 0;
 	    this.updCallBacks = 0;
-	    this.saveCallBack();
+	    consumingGateway.ReadAllUsers(this, "getCallBack");
 	}
     },
     getCatalogsList : function() {
@@ -103,14 +103,9 @@ enyo.kind({
 	sResult = sResult.substring(0, sResult.length - 2);
 	return sResult;
     }, remove : function(entity, callbackObject, callbackMethod) {
-	var removableId = entity[this.entityIdName()];
-	var filterDef = {
-	    id : removableId
-	};
 	this.callbackObject = callbackObject;
-	this.callbackMethod = callbackMethod;
-	consumingGateway.Delete(this.entityName, filterDef, this,
-		"saveCallBack");
+	this.callbackMethod = "reset";
+	consumingGateway.RemoveUser(entity.userName, this, "updateCallBack");
     },
 });
 var crudUser = new crud.user();
