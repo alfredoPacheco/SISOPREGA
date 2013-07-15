@@ -69,12 +69,13 @@ enyo.kind({
 		]}
 		]},					 		
 	],
-	ready:function(){
-		if(enyo.$.sisoprega_receptionsMap){
-    		_objPopupHeader = enyo.$.sisoprega_receptionsMap.$.lblInfo;	
-    	}else if(enyo.$.sisoprega_mainMenu_receptionsMap){
+    	ready : function() {
+    	    if (enyo.$.sisoprega_receptionsMap) {
+    		_objPopupHeader = enyo.$.sisoprega_receptionsMap.$.lblInfo;
+    	    } else if (enyo.$.sisoprega_mainMenu_receptionsMap) {
     		_objPopupHeader = enyo.$.sisoprega_mainMenu_receptionsMap.$.lblInfo;
-    	}   
+    	    }
+    	    this.$.reject_id.setItems(crudInspectionCode.getList());
 	},
 	setupRow:function(inSender, inIndex){		
 		var objInspection;
@@ -93,7 +94,7 @@ enyo.kind({
 			objData={rejected_id:null,rejected_count:"",reject_id:"",reject_desc:""};
 			objData.rejected_count=this.$.rejected_count.getValue();
 			objData.reject_id=this.$.reject_id.getValue();
-			objData.reject_desc=crudInspectionCode.getByID(this.$.reject_id.getValue()).reject_desc;		
+			objData.reject_desc=crudInspectionCode.getByID(this.$.reject_id.getValue()).inspectionCodeDescription;		
 		}
 		return objData; 
 	},
@@ -107,78 +108,7 @@ enyo.kind({
 	    this._objRec = this.adapterIn(this.objReception);
 	    this.resetValues();
 	},
-	adapterIn : function(objRec) {
-		var obj_Reception = {
-		    inspections : []
-		};
-
-		if (objRec.Inpection) {
-		    for ( var i = 0; i < objRec.Inspection.length; i++) {
-
-			var inspectionAux = {
-			    rejected_count : undefined,
-			    reject_id : undefined,
-			    feed_desc : undefined,
-			    id : undefined,
-			    weight : undefined,
-			    weight_uom : undefined
-			};
-
-			inspectionAux.inspectionDate = objRec.Inspection[i].inspectionDate;
-			inspectionAux.comments = objRec.Inspection[i].comments;
-			inspectionAux.rejected_id = objRec.Inspection[i].inspectionId;
-
-			objAux.weight_rejected = objRec.Inspection[i].weight; // append field weight_rejected
-			objAux.weight_rejected_uom = objRec.Inspection[i].weightUom; // append  weight_rejected_uom field
-
-			// inspectionsDetails::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-			if (objRec.Inspection[i].InspectionDetails) {
-			    var arrInspectionDetailsAux = objRec.Inspection[i].InspectionDetails;
-
-			    for ( var id = 0; id < arrInspectionDetailsAux.length; id++) {
-				inspectionAux.rejected_count = arrInspectionDetailsAux[id].hc;
-				inspectionAux.reject_id = arrInspectionDetailsAux[id].inspectionCodeId;
-				inspectionAux.reject_desc = arrInspectionDetailsAux[id].note;
-				inspectionAux.id = arrInspectionDetailsAux[id].inspectionDetailsId;
-				inspectionAux.weight = arrInspectionDetailsAux[id].weight;
-				inspectionAux.weight_uom = arrInspectionDetailsAux[id].weightUom;
-				obj_Reception.inspections.push(enyo.clone(inspectionAux));
-			    }
-			}
-		    }
-		}
-		return obj_Reception;
-
-	    },
-	    adapterOut : function(objNew, bUpdating) {
-		var objInspection = {
-			InspectionDetails : [],
-			Pen : [],
-			entityName : "Inspection",
-			inspectionDate : objNew.inspectionDate,
-			weight : objNew.weight,
-			weightUom : objNew.weightUom,
-			comments : objNew.comments
-		    };
-		
-		if (bUpdating)
-			objInspection.inspectionId = this.objReception.Inspection[this.iSelect].reject_id;
-		
-		for (inspection in objNew.inspections) {
-		    var inspectionDetail = {
-				entityName : "InspectionDetails",
-				inspectionCodeId : objNew.inspections[inspection].reject_id,
-				quantity : objNew.feed[inspection].feed_units
-			    };
-		    
-		    if (objNew.inspections[inspection].inspectionDetailsId && bUpdating)
-			feedDetail.feedOrderDetailsId = objNew.feed[inspection].inspectionDetailsId;
-		    
-		    objInspection.FeedOrderDetails.push(inspectionDetail);
-		}
-
-		return objInspection;
-	    },
+	
 	setReject:function(inSender, inEvent){
 		var ObjCap;
 		if(ObjCap=this._objRec.inspections[inEvent.rowIndex]){
@@ -198,7 +128,6 @@ enyo.kind({
 		this.resetValues();	
 	},	
 	resetValues:function(){
-		this.$.reject_id.setItems(crudInspectionCode.getList());	
 		this.$.reject_id.setValue(0);
 		this.$.rejected_count.setValue("");		
 		this.updatetList();
@@ -231,48 +160,117 @@ enyo.kind({
 			}
 			this.$.comment.openAtCenter();	
 		}else{
-			cacheMan.setMessage("", "Para agregar comentarios es necesario agregar almenos un rechazo");
+			cacheMan.setMessage("", "Para guardar un comentario es necesario agregar al menos un rechazo");
 		}
 				
 	},	
-	addComment:function(){			
-		if(!cacheReceptions.addInspectionComment(this._objRec.reception_id,
-					this._objRec.inspections[this._objRec.inspections.length-1].rejected_id,
-					this._objRec.inspections[this._objRec.inspections.length-1].inspectionDate,this.$.comments.getValue())){					
-			cacheMan.setMessage("", "Error al enviar commentario de inspeccion");
-		}else{
-			this._objRec.inspections[this._objRec.inspections.length-1].comments=this.$.comments.getValue();
-			this.closeComments();
-		}			
+	addComment:function(){
+	    this.objReception.Inspection[0].comments = this.$.comments.getValue();
+	    crudReception.update(this.objReception, this, "afterUpdate");
 	},
 	sendSMS:function(){
 		cacheReceptions.sendInspectionReport(this._objRec.rancher_id);
 	},
-	addReject: function() {		
+	addReject: function() {
 	    var objNew = this.getReject();
+	    if(this.objReception.Inspection === undefined){
+		this.objReception.Inspection = [];
 	    
-	    if(this.objReception.Inspection === undefined) this.objReception.Inspection = [];
+		var objInspection = {
+			InspectionDetails : [],
+			Pen : [],
+			entityName : "Inspection",
+			inspectionDate : objNew.inspectionDate || new Date(),
+			weight : 0,
+			weightUom : 1,
+			comments : objNew.comments || ""
+		    };
 		
-	    this.objReception.Inspection.push(this.adapterOut(objNew));
+	    	this.objReception.Inspection.push(objInspection);
+	    }
+	    if(!this.objReception.Inspection[0].InspectionDetails)
+		this.objReception.Inspection[0].InspectionDetails = [];
+	    
+	    this.objReception.Inspection[0].InspectionDetails.push(this.adapterOut(objNew));
 	    
 	    crudReception.update(this.objReception,this,"afterAdd");
-		
 	},
 	afterAdd:function(objResult, objOld, objNew){
 		this.set(objNew);
 	},
 	deleteReject: function(inSender, inIndex) {
-	    this.objReception.Inspection.splice(inIndex,1);
+	    this.objReception.Inspection[0].InspectionDetails.splice(inIndex,1);
 	    crudReception.update(this.objReception,this, "afterUpdate");
 	},
 	updateReject:function(){
 	    var objNew = this.getReject();
 	    var objInspection = this.adapterOut(objNew, true);
-	    this.objReception.Inspection[this.iSelect] = objInspection;
+	    this.objReception.Inspection[0].InspectionDetails[this.iSelect] = objInspection;
 	    crudReception.update(this.objReception, this, "afterUpdate");
 	},
 	afterUpdate:function(objResult, objOld, objNew){
 	    this.set(objNew);
+	    this.closeComments();
 	    this.toggleAdd();
+	},
+	adapterIn : function(objRec) {
+		var obj_Reception = {
+		    inspections : [],
+		    hc_aprox:null
+		};
+		
+		if (objRec.ReceptionHeadcount) obj_Reception.hc_aprox = objRec.ReceptionHeadcount[0].hc;
+		if (objRec.Inspection) {
+		    for ( var i = 0; i < objRec.Inspection.length; i++) {
+
+			var inspectionAux = {
+			    rejected_count : undefined,
+			    reject_id : undefined,
+			    feed_desc : undefined,
+			    id : undefined,
+			    weight : undefined,
+			    weight_uom : undefined
+			};
+
+			inspectionAux.inspectionDate = objRec.Inspection[i].inspectionDate;
+			inspectionAux.comments = objRec.Inspection[i].comments;
+			inspectionAux.rejected_id = objRec.Inspection[i].inspectionId;
+			inspectionAux.weight_rejected = objRec.Inspection[i].weight;
+			inspectionAux.weight_rejected_uom = objRec.Inspection[i].weightUom;
+
+			// inspectionsDetails::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+			if (objRec.Inspection[i].InspectionDetails) {
+			    var arrInspectionDetailsAux = objRec.Inspection[i].InspectionDetails;
+
+			    for ( var id = 0; id < arrInspectionDetailsAux.length; id++) {
+				inspectionAux.rejected_count = arrInspectionDetailsAux[id].hc;
+				inspectionAux.reject_id = arrInspectionDetailsAux[id].inspectionCodeId;
+				inspectionAux.reject_desc = crudInspectionCode.getByID(arrInspectionDetailsAux[id].inspectionCodeId).inspectionCodeDescription;
+				inspectionAux.id = arrInspectionDetailsAux[id].inspectionDetailsId;
+				inspectionAux.weight = arrInspectionDetailsAux[id].weight;
+				inspectionAux.weight_uom = arrInspectionDetailsAux[id].weightUom;
+				obj_Reception.inspections.push(enyo.clone(inspectionAux));
+			    }
+			}
+		    }
+		}
+		return obj_Reception;
+
+	    },
+	    adapterOut : function(objNew, bUpdating) {
+		
+		var inspectionDetail = {
+			entityName : "InspectionDetails",
+			inspectionCodeId : objNew.reject_id,
+			hc : objNew.rejected_count,
+			note:"",
+			weight:0,
+			weightUom:1
+		};
+
+		if (bUpdating)
+		    inspectionDetail.inspectionDetailsId = this.objReception.Inspection[0].InspectionDetails[this.iSelect].inspectionDetailsId;
+		    
+		return inspectionDetail;
 	},
 });

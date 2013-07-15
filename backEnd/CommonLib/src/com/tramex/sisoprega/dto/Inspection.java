@@ -178,6 +178,8 @@ public class Inspection {
     if(inspectionDetails == null)
       inspectionDetails = new HashSet<InspectionDetails>();
     
+    inspectionDetails.add(childDetail);
+    
     if(childDetail.getInspection()!=this)
       childDetail.setInspection(this);
   }

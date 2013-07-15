@@ -63,8 +63,12 @@ enyo
 		entityObj.dateAllotted = utils.dateOut(entityObj.dateAllotted);
 		if (entityObj.FeedOrder) {
 		    for ( var i = 0; i < entityObj.FeedOrder.length; i++) {
-			entityObj.FeedOrder[i].feedDate = utils
-				.dateOut(entityObj.FeedOrder[i].feedDate);
+			entityObj.FeedOrder[i].feedDate = utils.dateOut(entityObj.FeedOrder[i].feedDate);
+		    }
+		}
+		if (entityObj.Inspection) {
+		    for ( var i = 0; i < entityObj.Inspection.length; i++) {
+			entityObj.Inspection[i].inspectionDate = utils.dateOut(entityObj.Inspection[i].inspectionDate);
 		    }
 		}
 		return entityObj;
@@ -81,8 +85,12 @@ enyo
 		
 		if (entityObj.FeedOrder) {
 		    for ( var i = 0; i < entityObj.FeedOrder.length; i++) {
-			entityObj.FeedOrder[i].feedDate = utils
-				.dateIn(entityObj.FeedOrder[i].feedDate);
+			entityObj.FeedOrder[i].feedDate = utils.dateIn(entityObj.FeedOrder[i].feedDate);
+		    }
+		}
+		if (entityObj.Inspection) {
+		    for ( var i = 0; i < entityObj.Inspection.length; i++) {
+			entityObj.Inspection[i].inspectionDate = utils.dateIn(entityObj.Inspection[i].inspectionDate);
 		    }
 		}
 		entityObj.color = entityObj.color || utils.colorStack.pop();
