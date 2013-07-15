@@ -39,6 +39,7 @@ import java.util.Set;
 public class InspectionForecast {
   private long inspectionForecastId;
   private Date forecastDate;
+  private boolean locked = false;
   private Set<InspectionForecastDetail> inspectionForecastDetail;
   
   /**
@@ -66,6 +67,18 @@ public class InspectionForecast {
     this.inspectionForecastId = inspectionForecastId;
   }
   /**
+   * @return the locked
+   */
+  public boolean isLocked() {
+    return locked;
+  }
+  /**
+   * @param locked the locked to set
+   */
+  public void setLocked(boolean locked) {
+    this.locked = locked;
+  }
+  /**
    * @return the inspectionForecastDetail
    */
   public Set<InspectionForecastDetail> getInspectionForecastDetail() {
@@ -90,7 +103,7 @@ public class InspectionForecast {
   
   @Override
   public String toString() {
-    return "inspectionForecastId:" + inspectionForecastId + ";forecastDate:" + forecastDate + ";";
+    return "inspectionForecastId:" + inspectionForecastId + ";forecastDate:" + forecastDate + ";isLocked:" + locked;
   }
   
   @Override

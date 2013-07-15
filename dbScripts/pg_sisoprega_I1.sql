@@ -563,7 +563,8 @@ GRANT ALL ON ctrl_inspection_result_id_seq TO sisoprega;
 DROP TABLE IF EXISTS ctrl_inspection_forecast CASCADE;
 CREATE TABLE ctrl_inspection_forecast(
 	id SERIAL PRIMARY KEY,
-	forecast_date DATE not null default CURRENT_DATE
+	forecast_date DATE not null default CURRENT_DATE,
+	locked BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 GRANT ALL ON ctrl_inspection_forecast TO sisoprega;

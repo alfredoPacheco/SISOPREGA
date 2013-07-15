@@ -33,25 +33,29 @@ package com.tramex.sisoprega.communication.dto;
  * 
  */
 public class Sms {
-    private final String sTo;
-    private final String sFrom;
-    private String sMsg;
-    public Sms(final String sTo, final String sFrom, final String sMsg){
-        this.sFrom=sFrom;
-        this.sTo=sTo;
-        this.sMsg=sMsg;
-    }
-    public String getTo() {
-        return sTo;
-    }
-    public String getFrom() {
-        return sFrom;
-    }
-    public String getMsg() {
-        return sMsg;
-    }
-    public void setMsg(String msg) {
-        this.sMsg = msg;
-    }
-}
+  private final String sTo;
+  private final String sFrom;
+  private String sMsg;
 
+  public Sms(final String sTo, final String sFrom, final String sMsg) {
+    this.sFrom = sFrom;
+    this.sTo = sTo;
+    this.sMsg = sMsg;
+  }
+
+  public String getTo() {
+    return sTo;
+  }
+
+  public String getFrom() {
+    return sFrom;
+  }
+
+  public String getMsg() {
+    return sMsg;
+  }
+
+  public void setMsg(String msg) {
+    this.sMsg = msg;
+  }
+}

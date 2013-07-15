@@ -108,8 +108,12 @@ public class BaseReportServlet extends HttpServlet {
 
     // response.setHeader("Content-disposition","attachment; filename=sisoprega.pdf");
     ServletOutputStream out = response.getOutputStream();
+    
     InputStream is = new FileInputStream(getServletContext().getRealPath(relativeReportURL));
     JasperReport reporte = (JasperReport) JRLoader.loadObject(is);
+    //byte[] bytes = JasperRunManager.runReportToPdf(reporte, parameters, conn);
+    
+    
     JasperPrint jasperPrint = JasperFillManager.fillReport(reporte, parameters, conn);
     JRExporter exporter = new JRPdfExporter();
     exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);

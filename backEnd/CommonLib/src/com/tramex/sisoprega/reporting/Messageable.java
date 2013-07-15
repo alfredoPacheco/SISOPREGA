@@ -13,7 +13,7 @@
  * 
  * &copy; COPYRIGHT 2012 TRAMEX. ALL RIGHTS RESERVED.
  */
-package com.tramex.sisoprega.common.messenger;
+package com.tramex.sisoprega.reporting;
 
 import com.tramex.sisoprega.dto.EnterpriseRancher;
 import com.tramex.sisoprega.dto.Rancher;
@@ -43,7 +43,7 @@ public interface Messageable {
    * @param reportName
    * @return
    */
-  boolean sendReport(long rancherId, String reportName);
+  void sendReport(long rancherId, String reportName);
   
   /**
    * Send a simple message to a given rancher id.
@@ -51,7 +51,7 @@ public interface Messageable {
    * @param message
    * @return
    */
-  boolean sendSimpleMessage(long rancherId, String message);
+  void sendSimpleMessage(long rancherId, String message);
   
   
   /**
@@ -60,7 +60,7 @@ public interface Messageable {
    * @param reportName
    * @return
    */
-  boolean sendReport(Rancher rancher, String reportName);
+  void sendReport(Rancher rancher, String reportName);
 
   /**
    * Send a given report by name to an enterprise rancher.
@@ -68,7 +68,7 @@ public interface Messageable {
    * @param reportName
    * @return
    */
-  boolean sendReport(EnterpriseRancher rancher, String reportName);
+  void sendReport(EnterpriseRancher rancher, String reportName);
 
   /**
    * Send a simple message to a given person rancher.
@@ -76,7 +76,7 @@ public interface Messageable {
    * @param message
    * @return
    */
-  boolean sendSimpleMessage(Rancher rancher, String message);
+  void sendSimpleMessage(Rancher rancher, String message);
 
   /**
    * Send a simple message to a given enterprise rancher.
@@ -84,12 +84,5 @@ public interface Messageable {
    * @param message
    * @return
    */
-  boolean sendSimpleMessage(EnterpriseRancher rancher, String message);
-  
-  /**
-   * Set credentials
-   * @param userName
-   * @param password
-   */
-  void login(String userName, String password);
+  void sendSimpleMessage(EnterpriseRancher rancher, String message);
 }
