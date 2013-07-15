@@ -108,7 +108,7 @@ enyo.kind(
     },
     checkLogIn : function() {
       cacheMan.showScrim();
-      consumingGateway.Login(this.$.user.getValue().toUpperCase(), this.$.password.getValue(), this.loginCallBack, this);
+      consumingGateway.Login(this.$.user.getValue().toLowerCase(), this.$.password.getValue(), this.loginCallBack, this);
     },
     loginCallBack : function(loginResult, objRef) {
       if (loginResult.exceptionId == 0) {

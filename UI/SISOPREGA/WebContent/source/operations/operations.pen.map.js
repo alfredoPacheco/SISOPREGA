@@ -1,14 +1,15 @@
 enyo.kind({
 	name: "operations.pen.map",	
 	arrReception:[{caption:"Recepcion",value:1},{caption:"Deseleccionar",value:2}],
-	arrPostReception:[{caption:"Alimento",value:3},
-				      {caption:"Inspeccion",value:4},
-					  {caption:"Editar",value:5},
-					  {caption:"Liberar Corral",value:6},
-					  {caption:"Liberar Lote", value:10},
-					  {caption:"Deseleccionar",value:8},
-					  {caption:"Imprimir",value:9}
-					  ],
+	arrPostReception:[
+	                  {caption:"Editar",value:5},
+	                  {caption:"Alimento",value:3},
+	                  {caption:"Inspeccion",value:4},
+	                  {caption:"Liberar Corral",value:6},
+	                  {caption:"Cruce sin rechazos", value:10},
+	                  {caption:"Deseleccionar",value:8},
+	                  {caption:"Imprimir",value:9}
+	                  ],
     kind: enyo.VFlexBox,
     flex:1,
 	arrByMOver:{},
@@ -509,8 +510,8 @@ enyo.kind({
 		      
 			  break;
 			case 10: //Liberar lote
-				var objRec=crudReception.getByID(crudPen.inUse()[this.objSelected.name].receptionId);			
-				crudPen.releaseBYbyReception(objRec,this,"releaseReception");
+				var objRec=crudReception.getByID(crudPen.inUse()[this.objSelected.name].receptionId);
+				crudReception.releaseAllPensInReception(objRec,this,"releaseBY");
 				break;
 		}
 	},
@@ -547,21 +548,6 @@ enyo.kind({
 		this.$.rancherFilter.setItems(crudReception.getRanchersByReceptions());
 		cacheMan.hideScrim();
     	},
-//	releaseBY:function(){
-//		this.objSelected.occupied=0;
-//		this.objSelected.applyStyle("background-color",this.sColorFree);
-//		delete this.arrSelectedOccupied[this.objSelected.name];
-//
-//		this.$[this.objSelected.name].removeClass("selectCell");
-//		for(i in this.arrBYbyRancherSelected){
-//			var activeBY = "" + this.arrBYbyRancherSelected[i].zone_id + this.arrBYbyRancherSelected[i].barnyard_code;
-//			if(activeBY == this.objSelected.name){
-//				delete this.arrBYbyRancherSelected[i];
-//			}
-//		}
-//		this.$.rancherFilter.setItems(crudReception.getRanchersByReceptions());
-//		this.clearDesc();
-//	},
 	releaseBY:function(){
 	    crudPen.updateOccupiedBarnyards();
 	    for(by in this.arrByMOver){

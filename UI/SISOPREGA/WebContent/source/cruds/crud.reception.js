@@ -139,9 +139,12 @@ enyo
 			}
 		    }
 		}
-		
 		this.update(objRec, objCallBack, sMethod);
-		
+	    },
+	    releaseAllPensInReception:function(objReception, objCallBack, sMethod){
+		var objRec = enyo.clone(objReception);
+		delete objRec.Pen;
+		this.update(objRec, objCallBack, sMethod);
 	    }
 	});
 var crudReception = new crud.reception();
