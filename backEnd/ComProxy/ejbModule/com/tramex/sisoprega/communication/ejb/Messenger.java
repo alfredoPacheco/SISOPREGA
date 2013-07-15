@@ -308,7 +308,10 @@ public class Messenger implements Messageable {
         String message = new String(data);
 
         log.fine("Message from report: " + message);
-        smsSent = sendSMS(phone, message);
+        
+        if(!message.startsWith("Error"))
+          smsSent = sendSMS(phone, message);
+        
         log.finer("smsSent [" + smsSent + "]");
       } else {
         log.fine("No phone for SMS found, will try only email");

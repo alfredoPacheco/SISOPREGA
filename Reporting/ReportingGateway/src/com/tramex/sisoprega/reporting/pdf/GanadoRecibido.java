@@ -16,14 +16,12 @@
 
 package com.tramex.sisoprega.reporting.pdf;
 
-import java.io.IOException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.ServletException;
+import javax.ejb.EJB;
 import javax.servlet.annotation.HttpConstraint;
 import javax.servlet.annotation.ServletSecurity;
 import javax.servlet.annotation.WebServlet;
@@ -31,15 +29,16 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.jasperreports.engine.JRException;
-
 import com.tramex.sisoprega.reporting.BaseReportServlet;
+import com.tramex.sisoprega.reporting.Reporteable;
 
 /**
  * Servlet implementation class ReceivedCattleRacher
  * 
  * This report shows feed order using dateAlloted and rancherId as parameters.
- * http://host/ReportingGateway/RecibidoPorGanadero?fromDate=[MM/dd/yyyy]&toDate=[MM/dd/yyyy]&rancherId=[0]
+ * http
+ * ://host/ReportingGateway/RecibidoPorGanadero?fromDate=[MM/dd/yyyy]&toDate=
+ * [MM/dd/yyyy]&rancherId=[0]
  * 
  * <B>Revision History:</B>
  * 
@@ -58,47 +57,58 @@ import com.tramex.sisoprega.reporting.BaseReportServlet;
  */
 
 @WebServlet("/GanadoRecibido")
-@ServletSecurity(@HttpConstraint(rolesAllowed = {"mx_usr", "rancher"}))
+@ServletSecurity(@HttpConstraint(rolesAllowed = { "mx_usr", "rancher" }))
 public class GanadoRecibido extends BaseReportServlet {
-  
+
   private static final long serialVersionUID = -6219583962715558016L;
+  
+  @EJB(lookup="java:global/ComProxy/PdfGanadoInspeccionado")
+  private Reporteable reporteGanadoRecibido;
 
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public GanadoRecibido() {
-        super();
-    }
+  /**
+   * @see HttpServlet#HttpServlet()
+   */
+  public GanadoRecibido() {
+    super();
+  }
 
-    @Override
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException,
-        ParseException, JRException {
-      Map<String, Object> params = new HashMap<String, Object>();
-      log.fine("fromDate: [" + request.getParameter("fromDate") + "]");
-      log.fine("toDate: [" + request.getParameter("toDate") + "]");
-      String rancherId = request.getParameter("rancherId");
-      
-      if(request.isUserInRole("rancher"))
-        rancherId = rancherFromLoggedUser(request);
-      
-      log.fine("rancherId: [" + rancherId + "]");
+  @Override
+  protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    Map<String, Object> params = new HashMap<String, Object>();
+    log.fine("fromDate: [" + request.getParameter("fromDate") + "]");
+    log.fine("toDate: [" + request.getParameter("toDate") + "]");
+    String rancherId = request.getParameter("rancherId");
 
-      Date fromDate = new SimpleDateFormat("MM/dd/yyyy").parse(request.getParameter("fromDate"));
-      Date toDate = new SimpleDateFormat("MM/dd/yyyy").parse(request.getParameter("toDate"));
-      
-      params.put("CUS_FROM_DATE", fromDate);
-      params.put("CUS_TO_DATE", toDate);
-      
-      if(rancherId != null && !rancherId.equals("-1"))
-        params.put("CUS_RANCHER_ID", Integer.parseInt(rancherId));
+    if (request.isUserInRole("rancher"))
+      rancherId = rancherFromLoggedUser(request);
 
-      String reportURL = "";
-      if(rancherId != null && !rancherId.equals("-1"))
-        reportURL = "WEB-INF/Reports/Ranchers/RecibidoPorGanadero.jasper";
-      else
-        reportURL = "WEB-INF/Reports/Tramex/GanadoRecibido.jasper";
-      
-      processRequest(reportURL, params, response);
+    log.fine("rancherId: [" + rancherId + "]");
 
-    }
+    Date fromDate = new SimpleDateFormat("MM/dd/yyyy").parse(request.getParameter("fromDate"));
+    Date toDate = new SimpleDateFormat("MM/dd/yyyy").parse(request.getParameter("toDate"));
+    params.put("fromDate", fromDate);
+    params.put("toDate", toDate);
+    params.put("Id", Long.parseLong(rancherId));
+
+    reporteGanadoRecibido.setReportName("GanadoRecibido");
+    reporteGanadoRecibido.setParameters(params);
+    //response.setHeader("Content-disposition","attachment; filename=GanadoRecibido.pdf");
+    byte[] reportBytes = reporteGanadoRecibido.getBytes();
+    log.fine("Received [" + reportBytes.length + "] from EJB response.");
+    this.processRequest(reportBytes, response);
+    
+    /*
+    if (rancherId != null && !rancherId.equals("-1"))
+      params.put("CUS_RANCHER_ID", Integer.parseInt(rancherId));
+
+    String reportURL = "";
+    if (rancherId != null && !rancherId.equals("-1"))
+      reportURL = "WEB-INF/Reports/Ranchers/RecibidoPorGanadero.jasper";
+    else
+      reportURL = "WEB-INF/Reports/Tramex/GanadoRecibido.jasper";
+
+    processRequest(reportURL, params, response);
+    */
+
+  }
 }

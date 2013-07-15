@@ -48,10 +48,7 @@ public class EchoesGatewayBean {
   public String sendMessage(@WebParam(name = "rancherId") long rancherId, @WebParam(name = "message") String message,
       @WebParam(name = "userName") String userName, @WebParam(name = "password") String password) {
 
-    if (!messenger.sendSimpleMessage(rancherId, message)) {
-      return "Error al enviar mensaje.";
-    }
-
+    messenger.sendSimpleMessage(rancherId, message);
     return "OK";
   }
 
@@ -66,10 +63,7 @@ public class EchoesGatewayBean {
   public String sendReport(@WebParam(name = "rancherId") long rancherId, @WebParam(name = "reportName") String reportName,
       @WebParam(name = "userName") String userName, @WebParam(name = "password") String password) {
 
-    if (!messenger.sendReport(rancherId, reportName)) {
-      return "Error al enviar mensaje.";
-    }
-
+    messenger.sendReport(rancherId, reportName);
     return "OK";
 
   }

@@ -6,8 +6,6 @@ package com.tramex.sisoprega.communication.ejb.reports.txt;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
@@ -46,14 +44,10 @@ public class TxtGanadoRecibido extends BaseTxtReport implements Reporteable {
   public byte[] getBytes() throws Exception {
     this.log.entering(this.getClass().getCanonicalName(), "byte[] getBytes(Map<String, Object>)");
 
-    Date fromDate = (Date) this.parameters.get("fromDate");
-    log.finer("fromDate:[" + new SimpleDateFormat("MM/dd/yyyy").format(fromDate) + "]");
-    Date toDate = (Date) this.parameters.get("toDate");
-    log.finer("toDate:[" + new SimpleDateFormat("MM/dd/yyyy").format(toDate) + "]");
-    long rancherId = (Long) this.parameters.get("Id");
-    log.finer("rancherId:[" + rancherId + "]");
+    Long recordId = (Long) this.parameters.get("recordId");
+    log.finer("recordId:[" + recordId + "]");
 
-    String sqlString = "SELECT headcount.hc as cabezas," + "cattle.cattype_name as ganado," + "headcount.weight as kilos, "
+    String sqlString = "SELECT reception.reception_id, headcount.hc as cabezas," + "cattle.cattype_name as ganado," + "headcount.weight as kilos, "
         + "headcount.weight * 2.2046 as libras," + "headcount.weight/headcount.hc as pKilos, "
         + "headcount.weight * 2.2046/headcount.hc as pLibras," + "array_to_string(array_agg(b.barnyard_code), ', ') as corrales "
         + "FROM ctrl_reception reception "
@@ -61,7 +55,7 @@ public class TxtGanadoRecibido extends BaseTxtReport implements Reporteable {
         + "INNER JOIN cat_cattle_type cattle ON reception.cattle_type = cattle.cattype_id "
         + "LEFT JOIN ctrl_reception_barnyard crb ON reception.reception_id = crb.reception_id "
         + "LEFT JOIN cat_barnyard b ON crb.barnyard_id = b.barnyard_id "
-        + "WHERE reception.date_allotted >= ? AND reception.date_allotted <= ? AND reception.rancher_id = ? "
+        + "WHERE reception.reception_id = ? "
         + "GROUP BY reception.reception_id, headcount.hc," + "cattle.cattype_name," + "headcount.weight "
         + "ORDER BY reception.reception_id desc";
 
@@ -71,15 +65,12 @@ public class TxtGanadoRecibido extends BaseTxtReport implements Reporteable {
 
     try {
       ps = conn.prepareStatement(sqlString);
-
-      ps.setDate(1, new java.sql.Date(fromDate.getTime()));
-      ps.setDate(2, new java.sql.Date(toDate.getTime()));
-      ps.setLong(3, rancherId);
+      ps.setLong(1, recordId);
 
       rs = ps.executeQuery();
 
       if (!rs.next()) {
-        sResult = "Error: No se encontró el último registro de recepción para el ganadero[" + rancherId + "].";
+        sResult = "Error: No se encontró el registro de recepción en la base de datos [" + recordId + "].";
         log.severe("Error al obtener registro de recepción.");
       } else {
         String sKilos = rounded2Decs(rs.getDouble("kilos"));

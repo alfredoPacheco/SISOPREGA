@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.security.RolesAllowed;
-import javax.ejb.Asynchronous;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
@@ -74,9 +73,9 @@ public class ReceptionBean extends BaseBean implements Cruddable {
         if (getWeight(entity) > 0.0d && getHeadCount(entity) > 0) {
           // Send reception message
           log.info("Sending receive confirmation to exporter [" + entity.getRancherId() + "]");
-          // TODO: Send record Id to be used in text message
-          String reportName = "GanadoRecibido?Id=" + entity.getRancherId() + formatReportDateRange();
-          sendReport(entity.getRancherId(), reportName);
+          // Send record Id to be used in text message
+          String reportName = "GanadoRecibido?Id=" + entity.getRancherId() + formatReportDateRange() + "&recordId=" + entity.getReceptionId();
+          msgBean.sendReport(entity.getRancherId(), reportName);
         }
 
         response.setParentRecord(getRecordsFromList(updatedRecordList, type));
@@ -163,12 +162,12 @@ public class ReceptionBean extends BaseBean implements Cruddable {
             // Send inspection confirmation
             log.info("Sending inspection confirmation to exporter [" + entity.getRancherId() + "]");
             String reportName = "GanadoInspeccionado?Id=" + entity.getRancherId() + formatReportDateRange();
-            sendReport(entity.getRancherId(), reportName);
+            msgBean.sendReport(entity.getRancherId(), reportName);
           } else {
             // Send modification confirmation
             log.info("Sending reception change confirmation to exporter [" + entity.getRancherId() + "]");
             String reportName = "RegistroModificadoEnGanadoRecibido?Id=" + entity.getRancherId() + formatReportDateRange() + "&recordId=" + entity.getReceptionId();
-            sendReport(entity.getRancherId(), reportName);
+            msgBean.sendReport(entity.getRancherId(), reportName);
           }
 
           response.setParentRecord(getRecordsFromList(updatedRecordList, type));
@@ -195,12 +194,6 @@ public class ReceptionBean extends BaseBean implements Cruddable {
 
     this.log.exiting(this.getClass().getCanonicalName(), "ReadResponse Update(CreateRequest)");
     return response;
-  }
-  
-  @Asynchronous
-  private void sendReport(long rancherId, String reportName){
-    log.info("Sending inspection confirmation to exporter [" + rancherId + "]");
-    msgBean.sendReport(rancherId, reportName);
   }
 
   private void setInspectionForecast(Reception reception) {

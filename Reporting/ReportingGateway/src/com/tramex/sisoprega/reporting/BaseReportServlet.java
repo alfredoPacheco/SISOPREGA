@@ -15,34 +15,20 @@
  */
 package com.tramex.sisoprega.reporting;
 
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.sql.DataSource;
 
 import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRExporter;
-import net.sf.jasperreports.engine.JRExporterParameter;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.export.JRPdfExporter;
-import net.sf.jasperreports.engine.util.JRLoader;
 
 import com.tramex.sisoprega.datamodel.RemoteModelable;
 import com.tramex.sisoprega.dto.RancherUser;
@@ -65,68 +51,31 @@ import com.tramex.sisoprega.dto.RancherUser;
  * 
  * 
  */
-public class BaseReportServlet extends HttpServlet {
+public abstract class BaseReportServlet extends HttpServlet {
 
   private static final long serialVersionUID = -8325869766939791546L;
   protected Logger log = Logger.getLogger(BaseReportServlet.class.getCanonicalName());
-
-  @Resource(name = "jdbc/sisoprega")
-  protected DataSource ds;
-
+  
   @EJB(lookup = "java:global/DataModel/BaseDataModel")
   protected RemoteModelable dataModel;
-
-  protected Connection conn = null;
 
   public BaseReportServlet() {
     super();
     this.log = Logger.getLogger(this.getClass().getCanonicalName());
   }
 
-  public void init() throws ServletException {
-    try {
-      conn = ds.getConnection();
-    } catch (SQLException se) {
-      log.severe("Unable to initiate sisoprega datasource connection");
-      log.throwing(this.getClass().getCanonicalName(), "init", se);
-    }
-  }
-
-  public void destroy() {
-    try {
-      if (conn != null)
-        conn.close();
-    } catch (SQLException se) {
-      log.severe("SQLException: " + se.getMessage());
-    }
-  }
-
-  protected void processRequest(String relativeReportURL, Map<String, Object> parameters, HttpServletResponse response)
+  protected void processRequest(byte[] reportBytes, HttpServletResponse response)
       throws IOException, JRException {
-    log.fine("loading report: " + relativeReportURL);
+    log.entering(this.getClass().getCanonicalName(), "void processRequest(byte[" + reportBytes.length + "], response )");
     response.setContentType("application/pdf");
-
+    response.setContentLength(reportBytes.length);
     // response.setHeader("Content-disposition","attachment; filename=sisoprega.pdf");
+    
     ServletOutputStream out = response.getOutputStream();
-    
-    InputStream is = new FileInputStream(getServletContext().getRealPath(relativeReportURL));
-    JasperReport reporte = (JasperReport) JRLoader.loadObject(is);
-    //byte[] bytes = JasperRunManager.runReportToPdf(reporte, parameters, conn);
-    
-    
-    JasperPrint jasperPrint = JasperFillManager.fillReport(reporte, parameters, conn);
-    JRExporter exporter = new JRPdfExporter();
-    exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
-    exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, out);
-    exporter.exportReport();
+    out.write(reportBytes);
   }
 
-  protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException,
-      ParseException, JRException {
-
-    throw new ServletException("Unimplemented report servlet request.");
-
-  }
+  protected abstract void processRequest(HttpServletRequest request, HttpServletResponse response) throws Exception;
 
   /**
    * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
@@ -136,15 +85,11 @@ public class BaseReportServlet extends HttpServlet {
     try {
       log.info("Executing Report by [" + request.getUserPrincipal().getName() + "]");
       processRequest(request, response);
-    } catch (ParseException e) {
-      log.severe("parameter parse exception");
+    } catch (Exception e) {
+      log.severe("process request exception");
       log.throwing(this.getClass().getCanonicalName(), "doGet", e);
       throw new ServletException(e);
-    } catch (JRException e) {
-      log.severe("Jasper reports exception");
-      log.throwing(this.getClass().getCanonicalName(), "doGet", e);
-      throw new ServletException(e);
-    }
+    } 
   }
 
   /**
