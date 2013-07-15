@@ -145,6 +145,16 @@ enyo
 		var objRec = enyo.clone(objReception);
 		delete objRec.Pen;
 		this.update(objRec, objCallBack, sMethod);
-	    }
+	    },
+	    getReceptionsByRancherID : function(rancher_id) {
+		      var result = [];
+		      var receptions = enyo.clone(this.arrObj);
+		      for (var i =0;i<receptions.length;i++) {
+		        if (receptions[i].rancherId == rancher_id) {
+		          result.push(receptions[i]);
+		        }
+		      }
+		      return result;
+		    },
 	});
 var crudReception = new crud.reception();

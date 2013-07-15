@@ -28,6 +28,7 @@ enyo.depends(
 	"source/cruds/crud.enterpriseRancher.js",
 	"source/cruds/crud.enterpriseUser.js",
 	"source/cruds/crud.user.js",
+	"source/cruds/crud.inspectionForecast.js",
 	
 	"source/cache.rejects.js",
 	"source/cache.feed.js",
@@ -51,15 +52,14 @@ enyo.depends(
 	"source/userAdmin/useradmin.user.form.js",
 	"source/operations/operations.feed.js",
 	"source/operations/operations.inspections.js",
+	"source/operations/inspections.main.fs.js",
+	"source/operations/inspection.forecast.js",
+	"source/cache.inspection.forecast.js",
 	
 	"source/reports/reports.main.js",
 	"source/reports/reports.select.js",					
 	"source/reports/reports.filter.js",	
 	"source/reports/reports.filter.by_date.js",
-	
-	"source/inspections.main.fs.js",
-	"source/inspection.forecast.js",
-	"source/cache.inspection.forecast.js",
 	
 	"source/main/login.js",
 	"source/main/sisoprega.js",
