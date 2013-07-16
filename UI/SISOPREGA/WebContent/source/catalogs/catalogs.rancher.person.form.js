@@ -141,6 +141,13 @@ enyo.kind({
 	}
     },
     beforeSave : function(obj) {
+	
+	var email = this.$.email_add.getValue();
+	if (email != '' && !/\S+@\S+\.\S+/.test(email)) {
+	    this.errorMessage = "El formato de correo electrónico no es reconocido (correo@servidor.ext).";
+	    return false;
+	}
+	
 	obj.smsPhoneChosen = this.getCheckBoxSelected();
 	var birthDateMonth = this.$.birth_date.getValue().getMonth() + 1;
 	var shortDateString = birthDateMonth + '/'

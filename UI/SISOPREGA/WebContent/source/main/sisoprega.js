@@ -57,11 +57,7 @@ enyo.kind(
               {
                 caption : "Usuarios",
                 onclick : "open_view"
-              },
-              {
-                caption : "Carga de Pedimento",
-                onclick : "open_view"
-              },
+              }
             ]
         },
         {
