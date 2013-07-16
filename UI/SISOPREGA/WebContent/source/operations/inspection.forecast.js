@@ -373,6 +373,26 @@ enyo
 	    },
 	    getInspectionForecast : function() {
 
+		var objInspectionForecast = {
+			InspectionForecastDetail:[],
+			entityName: "InspectionForecast",
+			forecastDate: this.fecha,
+			inspectionForecastId: this._id,
+			locked: "false",
+		};
+		
+		var objInspectionDetail = {
+			Pen: [],
+			cattleType: this.$.cattleType.getIndex(),
+			entityName: "InspectionForecastDetail",
+			inspectionForecastDetailId: "2",
+			origin: this.$.origin.getIndex(),
+			quantity: this.$.cantidad.getValue(),
+			rancherId: this.$.rancher.getIndex(),
+			zoneId: this.$.zone.getIndex(),
+			auth : this.$.autorizacion.getValue()
+		};
+		
 		var objInspFore = {
 		    id : undefined,
 		    fore_details_id : undefined,
@@ -386,19 +406,10 @@ enyo
 		    fore_date : undefined
 		};
 
-		objInspFore.rancherId = this.$.rancher.getIndex();
-		objInspFore.zoneId = this.$.zone.getIndex();
-		objInspFore.cattleType = this.$.cattleType.getIndex();
-		objInspFore.auth = this.$.autorizacion.getValue();
-		objInspFore.fore_date = this.fecha;
-		objInspFore.origin = this.$.origin.getIndex();
-		objInspFore.quantity = this.$.cantidad.getValue();
-
 		var barnyardsAux = this.$.barnyards.getText().split(",");
 		for ( var i = 0; i < barnyardsAux.length; i++) {
 		    barnyardsAux[i] = barnyardsAux[i].replace(" ", "");
-		    barnyardsAux[i] = this.$.zone.getIndex()
-			    + barnyardsAux[i].toUpperCase();
+		    barnyardsAux[i] = this.$.zone.getIndex() + barnyardsAux[i].toUpperCase();
 		    var auxBarn = crudPen.getByBarnyard(barnyardsAux[i]);
 		    if (auxBarn == undefined) {
 			cacheMan.setMessage("", "[Exception ID: LOCAL"
@@ -408,11 +419,9 @@ enyo
 				+ this.$.zone.getValue());
 			return null;
 		    }
-		    barnyardsAux[i] = auxBarn;
-
+		    objInspectionDetail[i].Pen.push(auxBarn);
 		}
-		objInspFore.barnyards = barnyardsAux;
-
+		
 		return objInspFore;
 	    },
 	    addInspectionForecast : function() {
@@ -619,16 +628,16 @@ enyo
 		// filling up right side**************************************
 		arrAllForecasts = crudInspectionForecast.arrObj;
 		for ( var i = 0; i < arrAllForecasts.length; i++) {
-
-		    if (fmt.format(arrAllForecasts[i].forecastDate) == fmt
-			    .format(this.fecha)) {
+		    if (fmt.format(arrAllForecasts[i].forecastDate) == fmt.format(this.fecha)) {
 			this._id = arrAllForecasts[i].inspectionForecastId;
+			
 			for ( var j = 0; j < arrAllForecasts[i].InspectionForecastDetail.length; j++) {
 			    if (arrAllForecasts[i].InspectionForecastDetail[j].inspectionForecastDetailId) {
 				this.objList
 					.push(arrAllForecasts[i].InspectionForecastDetail[j]);
 			    }
 			}
+			break;
 		    }
 		}
 		this.$.forecastList.render();
