@@ -115,13 +115,13 @@ enyo.kind(
     },
     beforeSave : function(obj) {
 	var email = this.$.email_add.getValue();
-	if (!/^([0-9a-zA-Z]([-\\.\\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\\w]*[0-9a-zA-Z]\\.)+[a-zA-Z]{2,9})$/.test(email)) {
+	if (email != '' && !/\S+@\S+\.\S+/.test(email)) {
 	    this.errorMessage = "El formato de correo electrónico no es reconocido (correo@servidor.ext).";
 	    return false;
 	}
 	
 	var zip = this.$.zip_code.getValue();
-	if (!/^[0-9]{5}$/.test(zip)) {
+	if (zip!='' && !/^[0-9]{5}$/.test(zip)) {
 	    this.errorMessage = "Por favor capture un Código Postal Válido";
 	    return false;
 	}
