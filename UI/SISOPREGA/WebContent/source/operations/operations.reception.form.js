@@ -131,9 +131,10 @@ enyo.kind({
 			height : "35px;",
 			flex : 1,
 			onEnter : "emularTabulacionConEnter",
-	    		bindTo : "locationId"
+	    		bindTo : "locationId",
+	    		onSelectItem : "locationChanged"
 		    }, {
-			content : "Zona en Corrales:",
+			content : "Zona de Inspección:",
 			width : "160px;",
 			style : "text-align: right;margin-right:5px;"
 		    }, {
@@ -212,14 +213,39 @@ enyo.kind({
     },
     loadAutocompletes:function(){
 	var arrAllRanchers = crudRancher.getList().concat(crudEnterpriseRancher.getList());
-	this.$.rancher_id.setItems(arrAllRanchers);	
+	this.$.rancher_id.setItems(arrAllRanchers);
+	
 	this.$.cattype_id.setItems(crudCattle.getCattleTypeList());
+	this.$.cattype_id.setIndex(1); // Default value: Novillos
+	
 	this.$.location_id.setItems(crudLocation.getList());
 	this.$.zone_id.setItems(cacheMan.getAllZonesForList());
+	
+	// Set location_id and zone_id based on pen.
+	var deductedZone = this.deduceZone();
+	if(deductedZone == 1)
+	    this.$.location_id.setIndex(1); // Default value: Chihuahua
+	
+	this.$.zone_id.setIndex(deductedZone);
+	
 	if(this.objReception){
 	    this.setEntity(this.objReception);
 	}
 	cacheMan.hideScrim();
+    },
+    deduceZone : function(){
+	for(var i=0; i<this.getEntity().Pen.length; i++){
+	    var penAux = this.getEntity().Pen[i];
+	    if(penAux.locationId==1)
+		return 1;
+	}
+	return 2;
+    },
+    locationChanged : function(){
+	if(this.$.location_id.getIndex()==1)
+	    this.$.zone_id.setIndex(1);
+	else
+	    this.$.zone_id.setIndex(2);
     },
     contextMenuClicked : function(inSender, inEvent) {
 	this.$.options.openAtEvent(inEvent);

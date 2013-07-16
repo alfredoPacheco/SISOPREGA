@@ -13,6 +13,16 @@ enyo.kind(
         };
       return listObj;
     },
+    getCattleTypeById : function(cattleTypeId){
+	for(var i=0; i<this.arrObj.length; i++){
+	    for(var j=0;j<this.arrObj[i].CattleType.length; j++){
+		if(this.arrObj[i].CattleType[j].cattleTypeId == cattleTypeId){
+		    return this.arrObj[i].CattleType[j];
+		}
+	    }
+	}
+	return null;
+    },
     getCattleTypeList : function(cattleClassId) {
       var arrList = [];
       for ( var i = 0; i < this.arrObj.length; i++) {

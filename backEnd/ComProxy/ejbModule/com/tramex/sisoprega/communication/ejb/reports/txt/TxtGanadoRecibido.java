@@ -35,6 +35,9 @@ import com.tramex.sisoprega.reporting.Reporteable;
 @RolesAllowed({ "mx_usr", "us_usr" })
 public class TxtGanadoRecibido extends BaseTxtReport implements Reporteable {
 
+  private int exception_counter = 0;
+  private static int MAX_EXCEPTIONS =3;
+  
   /*
    * (non-Javadoc)
    * 
@@ -67,11 +70,23 @@ public class TxtGanadoRecibido extends BaseTxtReport implements Reporteable {
       ps = conn.prepareStatement(sqlString);
       ps.setLong(1, recordId);
 
+      
+      log.fine("executing query: [" + sqlString + "]");
       rs = ps.executeQuery();
+      
 
       if (!rs.next()) {
-        sResult = "Error: No se encontró el registro de recepción en la base de datos [" + recordId + "].";
-        log.severe("Error al obtener registro de recepción.");
+        exception_counter++;
+        log.fine("------  EXECUTING AGAIN THE RECORDSET [" + exception_counter + "] -----");
+        if(exception_counter >= MAX_EXCEPTIONS){
+          exception_counter = 0;
+          sResult = "Error: No se encontró el registro de recepción en la base de datos [" + recordId + "].";
+          log.severe("Error al obtener registro de recepción.");
+        } else {
+          log.fine("** should read again in half second. **");
+          Thread.sleep(500);
+          return getBytes();
+        }
       } else {
         String sKilos = rounded2Decs(rs.getDouble("kilos"));
         String sLibras = rounded2Decs(rs.getDouble("libras"));

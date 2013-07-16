@@ -256,8 +256,11 @@ enyo.kind({
 	this.$.draUpdate.setOpen(true);
     },
     toggleAdd : function() {
+	this.activateAddButtons();
+	this.resetValues();
+    },
+    activateAddButtons : function(){
 	this.$.draAdd.setOpen(true);
 	this.$.draUpdate.setOpen(false);
-	this.resetValues();
     }
 });

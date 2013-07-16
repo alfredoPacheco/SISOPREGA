@@ -380,9 +380,9 @@ enyo.kind({
 
 		_objMainHeader.setContent(crudRancher.getByID(objRec.rancherId).name + " - " +
 					crudLocation.getByID(objRec.locationId).locationName + "<BR>"+
-					crudCattle.getByID(objRec.cattleType).catclassName +
+					crudCattle.getCattleTypeById(objRec.cattleType).cattypeName +
 					"  (" + objRec.ReceptionHeadcount[0].hc + "/" + objRec.ReceptionHeadcount[0].weight + "kg)" +
-					" " + objRec.dateAllotted.toLocaleDateString());	
+					" " + objRec.dateAllotted.toLocaleDateString());
 		}
 		catch(e){
 			_objMainHeader.setContent("");
@@ -415,7 +415,7 @@ enyo.kind({
 				if(objReception.penString != "") objReception.penString = objReception.penString.slice(0,-2);
 				
 				this.$.dynocon.setEntity(objReception);
-				this.$.dynocon.toggleAdd();
+				this.$.dynocon.activateAddButtons();
 				this.$.popMan.render();
 				this.$.popMan.openAtCenter();												
 				break;

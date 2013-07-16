@@ -29,6 +29,8 @@ import javax.ejb.Asynchronous;
 import javax.ejb.EJB;
 import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.mail.Session;
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -229,6 +231,7 @@ public class Messenger implements Messageable {
 
   @Override
   @Asynchronous
+  @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
   public void sendReport(long rancherId, String reportName) {
     log.entering(this.getClass().getCanonicalName(), "sendReport(rancherId[" + rancherId + "], reportName[" + reportName + "])");
 
