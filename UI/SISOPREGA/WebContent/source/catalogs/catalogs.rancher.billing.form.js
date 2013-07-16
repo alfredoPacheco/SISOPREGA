@@ -80,5 +80,5 @@ enyo.kind({
 	}
 
 	    return true;
-    },
+    }
 });
