@@ -8,205 +8,217 @@ enyo
 	    _objRec : null,
 	    objReception : null,
 	    bySelected : "",
-	    components : [ {
-		kind : "Popup",
-		name : "manejo",
-		lazy : false,
-		cbMethod : "",
-		showHideMode : "transition",
-		className : "formBG",
-		openClassName : "zoomFadeIn",
-		className : "transitioner2",
-		layoutKind : "VFlexLayout",
-		width : "90%",
-		style : "overflow: hidden",
-		scrim : true,
-		components : [ {
-		    components : [ {
-			content : "Manejo"
-		    }, {
-			kind : "Input",
-			name : "handling",
-			hint : "Agregar comentario"
-		    }, {
-			kind : "TimePicker",
-			name : "dateTime",
-			style : "color:'black';",
-			is24HrMode : false,
-			label : "Hora"
-		    }, {
-			kind : "Button",
-			className : "enyo-button-affirmative",
-			caption : "OK",
-			onclick : "closeHandling"
-		    } ]
-		} ]
-	    }, {
-		kind : enyo.Scroller,
-		name : "scrollProductList",
-		flex : 1,
-		className : "listBG",
-		components : [ {
-		    kind : enyo.VirtualRepeater,
-		    name : "productList",
-		    onSetupRow : "setupRow",
-		    onclick : "setFeed",
-		    components : [ {
-			kind : enyo.SwipeableItem,
+	    components : [
+		    {
+			kind : "Popup",
+			name : "manejo",
+			lazy : false,
+			cbMethod : "",
+			showHideMode : "transition",
+			className : "formBG",
+			openClassName : "zoomFadeIn",
+			className : "transitioner2",
 			layoutKind : "VFlexLayout",
-			onConfirm : "deleteFeed",
-			tapHighlight : true,
+			width : "90%",
+			style : "overflow: hidden",
+			scrim : true,
 			components : [ {
-			    name : "by",
-			    className : "listFirst",
-			    style : "font-size:12px;",
-			    content : "BY",
-			    allowHtml : true
-			}, {
-			    layoutKind : enyo.HFlexLayout,
 			    components : [ {
-				name : "lblground",
-				flex : 1,
-				feed_id : 1,
-				className : "listSecond",
-				content : "MOLIDA(0)",
-				fod_id : null
+				content : "Manejo"
 			    }, {
-				name : "lblalfalfa",
-				flex : 1,
-				feed_id : 2,
-				className : "listSecond",
-				content : "ALFALFA(0)",
-				fod_id : null
+				kind : "Input",
+				name : "handling",
+				hint : "Agregar comentario"
 			    }, {
-				name : "lbloat",
-				flex : 1,
-				feed_id : 3,
-				className : "listSecond",
-				content : "AVENA(0)",
-				fod_id : null
+				kind : "TimePicker",
+				name : "dateTime",
+				style : "color:'black';",
+				is24HrMode : false,
+				label : "Hora"
 			    }, {
-				name : "lblconcentrated",
-				flex : 1.3,
-				feed_id : 4,
-				className : "listSecond",
-				content : "COCENTRADO(0)",
-				fod_id : null
-			    }, {
-				name : "lblcorn",
-				flex : 1,
-				feed_id : 5,
-				className : "listSecond",
-				content : "MAIZ(0)",
-				fod_id : null
+				kind : "Button",
+				className : "enyo-button-affirmative",
+				caption : "OK",
+				onclick : "closeHandling"
+			    } ]
+			} ]
+		    },
+		    {
+			kind : enyo.Scroller,
+			name : "scrollProductList",
+			flex : 1,
+			className : "listBG",
+			components : [ {
+			    kind : enyo.VirtualRepeater,
+			    name : "productList",
+			    onSetupRow : "setupRow",
+			    onclick : "setFeed",
+			    components : [ {
+				kind : enyo.SwipeableItem,
+				layoutKind : "VFlexLayout",
+				onConfirm : "deleteFeed",
+				tapHighlight : true,
+				components : [ {
+				    name : "by",
+				    className : "listFirst",
+				    style : "font-size:12px;",
+				    content : "BY",
+				    allowHtml : true
+				}, {
+				    layoutKind : enyo.HFlexLayout,
+				    components : [ {
+					name : "lblground",
+					flex : 1,
+					feed_id : 1,
+					className : "listSecond",
+					content : "MOLIDA(0)",
+					fod_id : null
+				    }, {
+					name : "lblalfalfa",
+					flex : 1,
+					feed_id : 2,
+					className : "listSecond",
+					content : "ALFALFA(0)",
+					fod_id : null
+				    }, {
+					name : "lbloat",
+					flex : 1,
+					feed_id : 3,
+					className : "listSecond",
+					content : "AVENA(0)",
+					fod_id : null
+				    }, {
+					name : "lblconcentrated",
+					flex : 1.3,
+					feed_id : 4,
+					className : "listSecond",
+					content : "COCENTRADO(0)",
+					fod_id : null
+				    }, {
+					name : "lblcorn",
+					flex : 1,
+					feed_id : 5,
+					className : "listSecond",
+					content : "MAIZ(0)",
+					fod_id : null
+				    }, ]
+				}, {
+				    name : "lblhandling",
+				    className : "listSecond",
+				    style : "font-size:12px",
+				    content : ""
+				} ]
 			    }, ]
-			}, {
-			    name : "lblhandling",
-			    className : "listSecond",
-			    style : "font-size:12px",
-			    content : ""
-			} ]
-		    }, ]
-		}, ],
-	    }, {
-		kind : "Toolbar",
-		components : [
-		{
-		    kind : "controls.numberBox",
-		    inputKind : "ToolInput",
-		    name : "ground",
-		    flex : 1,
-		    width : "10%",
-		    height : "35px;",
-		    inputType : "number",
-		    hint : "Molida",
-		    changeOnInput : true,
-		    fod_id : null
-		},{
-		    kind : "controls.numberBox",
-		    inputKind : "ToolInput",
-		    name : "alfalfa",
-		    flex : 1,
-		    width : "10%",
-		    height : "35px;",
-		    inputType : "number",
-		    hint : "Alfalfa",
-		    changeOnInput : true
-		}, 
-		{
-		    kind : "controls.numberBox",
-		    inputKind : "ToolInput",
-		    name : "oat",
-		    flex : 1,
-		    width : "10%",
-		    height : "35px;",
-		    inputType : "number",
-		    hint : "Avena",
-		    changeOnInput : true
-		}, 
-		{
-		    kind : "controls.numberBox",
-		    inputKind : "ToolInput",
-		    name : "concentrated",
-		    flex : 1.3,
-		    width : "12%",
-		    height : "35px;",
-		    inputType : "number",
-		    hint : "Concentrado",
-		    changeOnInput : true
-		},{
-		    kind : "controls.numberBox",
-		    inputKind : "ToolInput",
-		    name : "corn",
-		    flex : 1,
-		    width : "10%",
-		    height : "35px;",
-		    inputType : "number",
-		    hint : "corn",
-		    changeOnInput : true
-		}, {
-		    kind : "Spacer"
-		}, {
-		    kind : "Drawer",
-		    name : "draAdd",
-		    components : [ {
-			layoutKind : "HFlexLayout",
-			align : "center",
-			components : [ {
-			    kind : "enyo.IconButton",
-			    name : "btnReport",
-			    icon : "../SISOPREGA_WEB_LIB/images/menu-icon-cards.png",
-			    onclick : "openFeedingReport"
-			}, {
-			    kind : "enyo.IconButton",
-			    name : "btnAdd",
-			    icon : "../SISOPREGA_WEB_LIB/images/menu-icon-new.png",
-			    onclick : "addFeedHandling"
-			} ]
-		    } ]
-		}, {
-		    kind : "Drawer",
-		    name : "draUpdate",
-		    components : [ {
-			layoutKind : "HFlexLayout",
-			align : "center",
-			components : [ {
-			    kind : "enyo.IconButton",
-			    name : "btnUpdate",
-			    icon : "../SISOPREGA_WEB_LIB/images/btn_edit.png",
-			    flex : 1,
-			    onclick : "updateFeedHandling"
-			}, {
-			    kind : "Button",
-			    name : "btnCancel",
-			    className : "enyo-button-negative",
-			    flex : 1,
-			    caption : "X",
-			    onclick : "toggleAdd"
-			}, ]
-		    } ]
-		} ]
-	    }, ],
+			}, ],
+		    },
+		    {
+			kind : "Toolbar",
+			components : [
+				{
+				    kind : "controls.numberBox",
+				    inputKind : "ToolInput",
+				    name : "ground",
+				    flex : 1,
+				    width : "10%",
+				    height : "35px;",
+				    inputType : "number",
+				    hint : "Molida",
+				    changeOnInput : true,
+				    fod_id : null
+				},
+				{
+				    kind : "controls.numberBox",
+				    inputKind : "ToolInput",
+				    name : "alfalfa",
+				    flex : 1,
+				    width : "10%",
+				    height : "35px;",
+				    inputType : "number",
+				    hint : "Alfalfa",
+				    changeOnInput : true
+				},
+				{
+				    kind : "controls.numberBox",
+				    inputKind : "ToolInput",
+				    name : "oat",
+				    flex : 1,
+				    width : "10%",
+				    height : "35px;",
+				    inputType : "number",
+				    hint : "Avena",
+				    changeOnInput : true
+				},
+				{
+				    kind : "controls.numberBox",
+				    inputKind : "ToolInput",
+				    name : "concentrated",
+				    flex : 1.3,
+				    width : "12%",
+				    height : "35px;",
+				    inputType : "number",
+				    hint : "Concentrado",
+				    changeOnInput : true
+				},
+				{
+				    kind : "controls.numberBox",
+				    inputKind : "ToolInput",
+				    name : "corn",
+				    flex : 1,
+				    width : "10%",
+				    height : "35px;",
+				    inputType : "number",
+				    hint : "corn",
+				    changeOnInput : true
+				},
+				{
+				    kind : "Spacer"
+				},
+				{
+				    kind : "Drawer",
+				    name : "draAdd",
+				    components : [ {
+					layoutKind : "HFlexLayout",
+					align : "center",
+					components : [
+						{
+						    kind : "enyo.IconButton",
+						    name : "btnReport",
+						    icon : "../SISOPREGA_WEB_LIB/images/menu-icon-cards.png",
+						    onclick : "openFeedingReport"
+						},
+						{
+						    kind : "enyo.IconButton",
+						    name : "btnAdd",
+						    icon : "../SISOPREGA_WEB_LIB/images/menu-icon-new.png",
+						    onclick : "addFeedHandling"
+						} ]
+				    } ]
+				},
+				{
+				    kind : "Drawer",
+				    name : "draUpdate",
+				    components : [ {
+					layoutKind : "HFlexLayout",
+					align : "center",
+					components : [
+						{
+						    kind : "enyo.IconButton",
+						    name : "btnUpdate",
+						    icon : "../SISOPREGA_WEB_LIB/images/btn_edit.png",
+						    flex : 1,
+						    onclick : "updateFeedHandling"
+						},
+						{
+						    kind : "Button",
+						    name : "btnCancel",
+						    className : "enyo-button-negative",
+						    flex : 1,
+						    caption : "X",
+						    onclick : "toggleAdd"
+						}, ]
+				    } ]
+				} ]
+		    }, ],
 	    ready : function(InSender, InEvent) {
 		if (enyo.$.sisoprega_receptionsMap) {
 		    _objPopupHeader = enyo.$.sisoprega_receptionsMap.$.lblInfo;
@@ -498,13 +510,10 @@ enyo
 			+ corralesSeleccionados);
 	    },
 	    openFeedingReport : function() {
-		// window.open('/ReportingGateway/OrdenDeAlimento?orderId='+
-		// this._objRec.feed[this._objRec.feed.length -
-		// 1].feeding_id,'_blank');
-		// window.focus();
-		utils
-			.openReport('/ReportingGateway/OrdenDeAlimento?orderId='
-				+ this._objRec.feed[this._objRec.feed.length - 1].feeding_id);
+		var feedOrderId = this._objRec.feed[this._objRec.feed.length - 1].feeding_id;
+		var reportName = '/ReportingGateway/OrdenDeAlimento?Id='
+			+ feedOrderId;
+		utils.openReport(reportName);
 
 	    },
 	    set : function(objRec, arrBY) {

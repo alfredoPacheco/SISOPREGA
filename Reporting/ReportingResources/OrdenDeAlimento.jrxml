@@ -3,7 +3,7 @@
 	<property name="ireport.zoom" value="1.1000000000000005"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	<parameter name="CUS_ORDER_ID" class="java.lang.Integer"/>
+	<parameter name="CUS_ORDER_ID" class="java.lang.Long"/>
 	<parameter name="CUS_IMG_PATH" class="java.lang.String">
 		<defaultValueExpression><![CDATA["http://sisoprega.com/images/logo_tramex.png"]]></defaultValueExpression>
 	</parameter>
@@ -67,7 +67,7 @@ GROUP BY ctrl_feed_order_order_id, ctrl_feed_order_feed_date, ctrl_feed_order_ha
 	<pageHeader>
 		<band height="33" splitType="Stretch">
 			<frame>
-				<reportElement uuid="efd025b8-af2b-46bb-9e7a-fe372e5458ae" mode="Opaque" x="0" y="0" width="572" height="16" forecolor="#996600" backcolor="#996600"/>
+				<reportElement uuid="efd025b8-af2b-46bb-9e7a-fe372e5458ae" mode="Opaque" x="0" y="0" width="572" height="16" forecolor="#0099FF" backcolor="#0099FF"/>
 			</frame>
 			<textField>
 				<reportElement uuid="09f1716c-7a47-4bd1-a088-874d0a42f574" x="159" y="16" width="193" height="16"/>
@@ -202,4 +202,13 @@ GROUP BY ctrl_feed_order_order_id, ctrl_feed_order_feed_date, ctrl_feed_order_ha
 			</textField>
 		</band>
 	</summary>
+	<noData>
+		<band height="50">
+			<staticText>
+				<reportElement uuid="2bed518c-e7a9-4f7d-841d-5e68ff0fc15e" x="0" y="13" width="572" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[NO SE ENCONTRARON DATOS PARA ESTE REPORTE.]]></text>
+			</staticText>
+		</band>
+	</noData>
 </jasperReport>
