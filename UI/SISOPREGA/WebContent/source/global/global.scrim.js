@@ -10,7 +10,7 @@ enyo.kind({
 		    },
 		    {
 			kind : "Image",
-			src : "images/ajax-loader.gif",
+			src : "../SISOPREGA_WEB_LIB/images/ajax-loader.gif",
 			style : "width:250px;"
 		    },
 		    {

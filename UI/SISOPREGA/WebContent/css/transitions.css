@@ -46,7 +46,7 @@
 	padding: 4px 4px;
 	min-width: 14px;
 	min-height: 20px;
-	-webkit-border-image: url(../scripts/enyo/framework/build/palm/themes/Onyx/images/button-up.png) 4 4 4 4 stretch stretch;
+	-webkit-border-image: url(../../SISOPREGA_WEB_LIB/scripts/enyo/framework/build/palm/themes/Onyx/images/button-up.png) 4 4 4 4 stretch stretch;
 	border-width: 4px;
 	border-radius: 5px;
 	margin: 3px;
@@ -58,16 +58,16 @@
 }
 
 .menuButton.enyo-button-down, .menuButton.enyo-button-depressed {
-	-webkit-border-image: url(../scripts/enyo/framework/build/palm/themes/Onyx/images/button-down.png) 4 4 4 4 stretch stretch;
+	-webkit-border-image: url(../../SISOPREGA_WEB_LIB/scripts/enyo/framework/build/palm/themes/Onyx/images/button-down.png) 4 4 4 4 stretch stretch;
 }
 
 @media (-webkit-min-device-pixel-ratio:1.5) {
 	.menuButton {
-		-webkit-border-image: url(../scripts/enyo/framework/build/palm/themes/Onyx/images-1.5/button-up.png) 6 6 6 6 stretch stretch;
+		-webkit-border-image: url(../../SISOPREGA_WEB_LIB/scripts/enyo/framework/build/palm/themes/Onyx/images-1.5/button-up.png) 6 6 6 6 stretch stretch;
 	}
 	
 	.menuButton.enyo-button-down, .enyo-button.enyo-button-depressed {
-		-webkit-border-image: url(../scripts/enyo/framework/build/palm/themes/Onyx/images-1.5/button-down.png) 6 6 6 6 stretch stretch;
+		-webkit-border-image: url(../../SISOPREGA_WEB_LIB/scripts/enyo/framework/build/palm/themes/Onyx/images-1.5/button-down.png) 6 6 6 6 stretch stretch;
 	}
 }
 
@@ -168,7 +168,7 @@
 	-webkit-transform: scale(1);
 }
 .selectCell{
-	background-image: url(../images/flat-shadow.png);
+	background-image: url(../../SISOPREGA_WEB_LIB/images/flat-shadow.png);
 	background-size:cover;
 	font-style:normal;
 }
@@ -205,38 +205,25 @@
 	box-sizing: border-box;	
 }
 .woodBG{
-	background-image: url(../images/bg-body.png);
+	background-image: url(../../SISOPREGA_WEB_LIB/images/bg-body.png);
 	background-repeat: repeat no-repeat;
 	background-color:#1E1C1B;
 }
 .buttonsBG{
-/*	background-image: url(../images/paper.jpg);
-	background-size:cover;
-*/
 	background-color:#DABD8B;
 }
 .listBG{
-/*	background-image: url(../images/paper.jpg);
-	background-size:cover;
-*/
 	background-color:#DABD8B;
 }
 .formBG{
-/*	background-image: url(../images/paper.jpg);
-	background-size:cover;
-*/
 	background-color:#DABD8B;
 }
 .mapBG{	
 	font-size:13px;
-/*	background-image: url(../images/paper.jpg);
-	background-size:cover;
-*/
-		
 }
 .loginBG{	
 	background-color:#1E1C1B; 
-	background-image: url(../images/bg-body.png);
+	background-image: url(../../SISOPREGA_WEB_LIB/images/bg-body.png);
 	background-repeat: repeat no-repeat;	
 }
 .loginHeader{

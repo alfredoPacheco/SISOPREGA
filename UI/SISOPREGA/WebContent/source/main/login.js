@@ -43,7 +43,7 @@ enyo.kind(
                     },
                     {
                       kind : "Image",
-                      src : "images/eastman.png"
+                      src : "../SISOPREGA_WEB_LIB/images/eastman.png"
                     },
                     {
                       kind : "RowGroup",

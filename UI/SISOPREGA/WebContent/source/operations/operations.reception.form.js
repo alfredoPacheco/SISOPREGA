@@ -91,7 +91,7 @@ enyo.kind({
 	    		bindTo : "rancherId"
 		    }, {
 			kind : enyo.IconButton,
-			icon : "images/menu-icon-new.png",
+			icon : "../SISOPREGA_WEB_LIB/images/menu-icon-new.png",
 			onclick : "contextMenuClicked"
 		    } ]
 		}, {

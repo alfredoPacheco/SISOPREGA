@@ -236,7 +236,7 @@ enyo
 		objBarn.createComponent({
 		    kind : "IconButton",
 		    onclick : "refreshMap",
-		    icon : "images/command-menu/menu-icon-music-repeat.png",
+		    icon : "../SISOPREGA_WEB_LIB/images/command-menu/menu-icon-music-repeat.png",
 		    style : "height:23px; width:45px; padding:0;margin:0px",
 		}, {
 		    owner : this
@@ -588,7 +588,7 @@ enyo
 						{
 						    name : 'btnLogOut',
 						    onclick : "closePopUp",
-						    icon : "images/command-menu/icon-context.png"
+						    icon : "../SISOPREGA_WEB_LIB/images/command-menu/icon-context.png"
 						} ]
 				    }, {
 					owner : this
@@ -633,7 +633,7 @@ enyo
 			}, {
 			    name : 'btnLogOut',
 			    onclick : "closePopUp",
-			    icon : "images/command-menu/icon-context.png"
+			    icon : "../SISOPREGA_WEB_LIB/images/command-menu/icon-context.png"
 			} ]
 		    }, {
 			owner : this

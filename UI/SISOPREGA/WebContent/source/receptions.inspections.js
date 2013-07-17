@@ -54,13 +54,13 @@ enyo.kind({
 		 style:"width:100%;color:white", contentPack:"end",
 			items: [] ,flex: 1,contentPack:"end"},							
 		{kind: "Drawer", name:"draAdd", components: [ 										
-			{kind: "enyo.IconButton",name:"btnAdd",icon:"images/menu-icon-new.png",
+			{kind: "enyo.IconButton",name:"btnAdd",icon:"../SISOPREGA_WEB_LIB/images/menu-icon-new.png",
 			 onclick: "addReject"},
 		]},
 		{kind: "Drawer", name:"draUpdate", components: [		
 			{layoutKind: "HFlexLayout", align: "center",components: [			
 				{kind: "enyo.IconButton",name:"btnUpdate", 
-				icon:"images/btn_edit.png",
+				icon:"../SISOPREGA_WEB_LIB/images/btn_edit.png",
 				 flex:1, onclick: "updateReject"},							
 				{kind: "Button",name:"btnCancel", className: "enyo-button-negative", 
 				 flex:1,caption: "X", onclick: "toggleAdd"},

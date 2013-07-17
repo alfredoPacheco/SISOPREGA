@@ -241,7 +241,7 @@ enyo
 						{
 						    kind : "enyo.IconButton",
 						    name : "btnReport",
-						    icon : "images/menu-icon-cards.png",
+						    icon : "../SISOPREGA_WEB_LIB/images/menu-icon-cards.png",
 						    onclick : "enviar_aviso",
 						    style : "width:30px;"
 						},

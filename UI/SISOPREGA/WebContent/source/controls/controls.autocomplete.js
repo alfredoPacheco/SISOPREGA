@@ -109,7 +109,7 @@ enyo
 		    }, {
 			style : "background-color:#DABD8B;margin: 0px 0px 0px 3px;",
 			kind : "IconButton",
-			icon : "images/icon-arrows-down.png",
+			icon : "../SISOPREGA_WEB_LIB/images/icon-arrows-down.png",
 			onclick : "click_button",
 			onmousehold : "hold_button",
 			name : "btnIcon"

@@ -175,12 +175,12 @@ enyo
 			components : [ {
 			    kind : "enyo.IconButton",
 			    name : "btnReport",
-			    icon : "images/menu-icon-cards.png",
+			    icon : "../SISOPREGA_WEB_LIB/images/menu-icon-cards.png",
 			    onclick : "openFeedingReport"
 			}, {
 			    kind : "enyo.IconButton",
 			    name : "btnAdd",
-			    icon : "images/menu-icon-new.png",
+			    icon : "../SISOPREGA_WEB_LIB/images/menu-icon-new.png",
 			    onclick : "addFeedHandling"
 			} ]
 		    } ]
@@ -193,7 +193,7 @@ enyo
 			components : [ {
 			    kind : "enyo.IconButton",
 			    name : "btnUpdate",
-			    icon : "images/btn_edit.png",
+			    icon : "../SISOPREGA_WEB_LIB/images/btn_edit.png",
 			    flex : 1,
 			    onclick : "updateFeedHandling"
 			}, {
