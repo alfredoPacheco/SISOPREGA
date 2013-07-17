@@ -102,6 +102,11 @@ enyo.kind({
 	    owner : this
 	});
     },
+    ready : function() {
+	this.inherited(arguments);
+	this.$.rfc.$.input.setAttribute('maxlength', '13');
+	this.$.zip_code.$.input.setAttribute('maxlength', '5');
+    },
     setEntity : function(obj) {
 	this.inherited(arguments);
 	if (obj.smsPhoneChosen !== undefined) {
@@ -130,6 +135,25 @@ enyo.kind({
 	}
     },
     beforeSave : function(obj) {
+	
+	var email = this.$.email.getValue();
+	if (email != '' && !/\S+@\S+\.\S+/.test(email)) {
+	    this.errorMessage = "El formato de correo electrónico no es reconocido (correo@servidor.ext).";
+	    return false;
+	}
+	
+	var zip = this.$.zip_code.getValue();
+	if(zip != '' && !/^[0-9]{5}$/.test(zip)){
+	    this.errorMessage = "Por favor capture un Código Postal Válido";
+	    return false;
+	}
+	
+	var rfc = this.$.rfc.getValue();
+	if (zip != '' && !/^[A-Z]{4}[0-9]{6}[0-9A-Z]{3}$/.test(rfc)) {
+	    this.errorMessage = "Por favor capture un RFC Válido";
+	    return false;
+	}
+	
 	obj.smsPhoneChosen = this.getCheckBoxSelected();
 	return true;
     },
