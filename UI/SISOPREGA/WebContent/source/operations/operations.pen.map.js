@@ -12,6 +12,9 @@ enyo
 		caption : "Editar",
 		value : 5
 	    }, {
+		caption : "Enviar Mensaje",
+		value : 11
+	    }, {
 		caption : "Alimento",
 		value : 3
 	    }, {
@@ -494,16 +497,11 @@ enyo
 		    var cattleTypeName = crudCattle
 			    .getCattleTypeById(objRec.cattleType).cattypeName;
 
-		    _objMainHeader
-			    .setContent(rancherName
-				    + " - "
-				    + locationName
-				    + "<BR>"
-				    + cattleTypeName
-				    + "  (" + objRec.ReceptionHeadcount[0].hc
-				    + "/" + objRec.ReceptionHeadcount[0].weight
-				    + "kg)" + " "
-				    + objRec.dateAllotted.toLocaleDateString());
+		    _objMainHeader.setContent(rancherName + " - "
+			    + locationName + "<BR>" + cattleTypeName + "  ("
+			    + objRec.ReceptionHeadcount[0].hc + "/"
+			    + objRec.ReceptionHeadcount[0].weight + "kg)" + " "
+			    + objRec.dateAllotted.toLocaleDateString());
 		} catch (e) {
 		    _objMainHeader.setContent("");
 		}
@@ -702,22 +700,33 @@ enyo
 						    .getRecIDbyBY(this.objSelected.name)).color);
 		    break;
 		case 9: // Imprimir
-		    var receptionId = crudPen.inUse()[this.objSelected.name].receptionId;
-		    // window.open('/ReportingGateway/RecepcionGanadoId?receptionId='
-		    // + receptionId, '_blank');
-		    // window.focus();
-		    utils
-			    .openReport('/ReportingGateway/RecepcionGanadoId?receptionId='
-				    + receptionId);
-
+		    this.showReport();
 		    break;
 		case 10: // Liberar lote
-		    var objRec = crudReception
-			    .getByID(crudPen.inUse()[this.objSelected.name].receptionId);
-		    crudReception.releaseAllPensInReception(objRec, this,
-			    "releaseBY");
+		    this.releaseAllPensInReception();
+		    break;
+		case 11: // Enviar Reporte
+		    this.sendReport();
 		    break;
 		}
+	    },
+	    showReport : function(){
+		var recId = crudPen.inUse()[this.objSelected.name].receptionId;
+		var reportName = '/ReportingGateway/ReportePromedios?Id=' + recId;
+		utils.openReport(reportName);
+	    },
+	    releaseAllPensInReception : function() {
+		var recId = crudPen.inUse()[this.objSelected.name].receptionId;
+		var objRec = crudReception.getByID(recId);
+		crudReception.releaseAllPensInReception(objRec, this,
+			"releaseBY");
+	    },
+	    sendReport : function() {
+		// Send report
+		var recId = crudPen.inUse()[this.objSelected.name].receptionId;
+		var objRec = crudReception.getByID(recId);
+		var reportName = 'ReportePromedios?Id=' + recId;
+		consumingGateway.SendReport(objRec.rancherId, reportName);
 	    },
 	    onReceptionUpdate : function(inSender, objOld, objNew) {
 		objNew.color = objOld.color;

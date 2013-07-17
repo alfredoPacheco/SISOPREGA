@@ -244,22 +244,24 @@ public class Messenger implements Messageable {
       if (person != null) {
         log.fine("Sending reportName: " + reportName);
         sendReport(person, reportName);
-      }
+      } 
     } catch (Exception e) {
       log.info("Person not found with provided id [" + rancherId + "]");
     }
 
-    EnterpriseRancher enterprise = null;
-    try {
-      log.fine("Reading enterprise rancher [" + rancherId + "] from dataModel");
-      enterprise = dataModel.readSingleDataModel("ENTERPRISERANCHER_BY_ID", "Id", rancherId, EnterpriseRancher.class);
-      log.finer("enterprise obtained from dataModel: " + enterprise);
-      if (enterprise != null) {
-        log.fine("Sending reportName: " + reportName);
-        sendReport(enterprise, reportName);
+    if(person == null){
+      EnterpriseRancher enterprise = null;
+      try {
+        log.fine("Reading enterprise rancher [" + rancherId + "] from dataModel");
+        enterprise = dataModel.readSingleDataModel("ENTERPRISERANCHER_BY_ID", "Id", rancherId, EnterpriseRancher.class);
+        log.finer("enterprise obtained from dataModel: " + enterprise);
+        if (enterprise != null) {
+          log.fine("Sending reportName: " + reportName);
+          sendReport(enterprise, reportName);
+        }
+      } catch (Exception e) {
+        log.fine("Enterprise not found with provided id [" + rancherId + "]");
       }
-    } catch (Exception e) {
-      log.fine("Enterprise not found with provided id [" + rancherId + "]");
     }
   }
 

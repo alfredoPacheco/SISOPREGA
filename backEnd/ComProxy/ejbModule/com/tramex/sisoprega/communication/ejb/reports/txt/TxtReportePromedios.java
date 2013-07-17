@@ -33,7 +33,7 @@ import com.tramex.sisoprega.reporting.Reporteable;
  */
 @Stateless
 @RolesAllowed({ "mx_usr", "us_usr" })
-public class TxtRegistroModificadoEnGanadoRecibido extends BaseTxtReport implements Reporteable {
+public class TxtReportePromedios extends BaseTxtReport implements Reporteable {
 
   /*
    * (non-Javadoc)
@@ -44,7 +44,7 @@ public class TxtRegistroModificadoEnGanadoRecibido extends BaseTxtReport impleme
   public byte[] getBytes() throws Exception {
     this.log.entering(this.getClass().getCanonicalName(), "byte[] getBytes(Map<String, Object>)");
 
-    long recordId = (Long) this.parameters.get("recordId");
+    long recordId = (Long) this.parameters.get("Id");
     log.finer("recordId:[" + recordId + "]");
 
     String sqlString = "SELECT headcount.hc as cabezas," + "cattle.cattype_name as ganado," + "headcount.weight as kilos, "
@@ -54,7 +54,8 @@ public class TxtRegistroModificadoEnGanadoRecibido extends BaseTxtReport impleme
         + "INNER JOIN ctrl_reception_headcount headcount ON reception.reception_id = headcount.reception_id "
         + "INNER JOIN cat_cattle_type cattle ON reception.cattle_type = cattle.cattype_id "
         + "LEFT JOIN ctrl_reception_barnyard crb ON reception.reception_id = crb.reception_id "
-        + "LEFT JOIN cat_barnyard b ON crb.barnyard_id = b.barnyard_id " + "WHERE reception.reception_id = ? "
+        + "LEFT JOIN cat_barnyard b ON crb.barnyard_id = b.barnyard_id "
+        + "WHERE reception.reception_id = ? AND headcount.hc > 0 "
         + "GROUP BY reception.reception_id, headcount.hc, cattle.cattype_name, headcount.weight "
         + "ORDER BY reception.reception_id desc";
 
@@ -78,8 +79,8 @@ public class TxtRegistroModificadoEnGanadoRecibido extends BaseTxtReport impleme
         String sPKilos = rounded2Decs(rs.getDouble("pkilos"));
         String sPLibras = rounded2Decs(rs.getDouble("plibras"));
 
-        sResult = "Actualizacion: " + rs.getLong("cabezas") + " cabezas de " + rs.getString("ganado") + ", "
-            + sKilos + " kg. (" + sLibras + " lbs.). Prom por Kg.: " + sPKilos + "; Prom por Lb.: " + sPLibras + ". Corrales: "
+        sResult = "Tramex - Promedios: " + rs.getLong("cabezas") + " cabezas de " + rs.getString("ganado") + ", " + sKilos
+            + " kg. (" + sLibras + " lbs.). Prom por Kg.: " + sPKilos + "; Prom por Lb.: " + sPLibras + ". Corrales: "
             + rs.getString("corrales");
       }
 

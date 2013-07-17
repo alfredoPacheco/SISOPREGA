@@ -62,20 +62,15 @@ public class ReceptionBean extends BaseBean implements Cruddable {
         this.log.fine("Valid entity found");
 
         dataModel.createDataModel(entity);
-
-        log.fine("Reception record created, setting InspectionForecast");
-        setInspectionForecast(entity);
+        log.fine("Reception record created");
 
         List<Object> updatedRecordList = new ArrayList<Object>();
         log.fine("Setting as response object: {" + entity + "}");
         updatedRecordList.add(entity);
 
         if (getWeight(entity) > 0.0d && getHeadCount(entity) > 0) {
-          // Send reception message
-          log.info("Sending receive confirmation to exporter [" + entity.getRancherId() + "]");
-          // Send record Id to be used in text message
-          String reportName = "GanadoRecibido?Id=" + entity.getRancherId() + formatReportDateRange() + "&recordId=" + entity.getReceptionId();
-          msgBean.sendReport(entity.getRancherId(), reportName);
+          // Add inspection forecast record
+          setInspectionForecast(entity);
         }
 
         response.setParentRecord(getRecordsFromList(updatedRecordList, type));
@@ -150,9 +145,10 @@ public class ReceptionBean extends BaseBean implements Cruddable {
           log.fine("Retrieving updated object with Query: " + queryName);
 
           entity = (Reception) dataModel.readSingleDataModel(queryName, "Id", idToUpdate, type);
-          log.fine("got updated record: [" + entity + "], setting inspection forecast");
+          log.fine("got updated record: [" + entity + "]");
 
-          if (getTomorrow(entity.getDateAllotted()).compareTo(getTomorrow(new Date())) >= 0)
+          if (getTomorrow(entity.getDateAllotted()).compareTo(getTomorrow(new Date())) >= 0 && getWeight(entity) > 0.0d
+              && getHeadCount(entity) > 0)
             setInspectionForecast(entity);
 
           List<Object> updatedRecordList = new ArrayList<Object>();
@@ -162,11 +158,6 @@ public class ReceptionBean extends BaseBean implements Cruddable {
             // Send inspection confirmation
             log.info("Sending inspection confirmation to exporter [" + entity.getRancherId() + "]");
             String reportName = "GanadoInspeccionado?Id=" + entity.getRancherId() + formatReportDateRange();
-            msgBean.sendReport(entity.getRancherId(), reportName);
-          } else {
-            // Send modification confirmation
-            log.info("Sending reception change confirmation to exporter [" + entity.getRancherId() + "]");
-            String reportName = "RegistroModificadoEnGanadoRecibido?Id=" + entity.getRancherId() + formatReportDateRange() + "&recordId=" + entity.getReceptionId();
             msgBean.sendReport(entity.getRancherId(), reportName);
           }
 
@@ -198,6 +189,7 @@ public class ReceptionBean extends BaseBean implements Cruddable {
 
   private void setInspectionForecast(Reception reception) {
     this.log.entering(this.getClass().getCanonicalName(), "void setInspectionForecast(Reception)");
+    log.fine("Setting InspectionForecast");
     InspectionForecast ifc = getInspectionForecast(reception.getDateAllotted());
     log.fine("got InspectionForecast:[" + ifc + "]");
 
