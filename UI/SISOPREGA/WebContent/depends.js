@@ -7,6 +7,7 @@ enyo.depends(
 	"source/controls/controls.autocomplete.js",
 	"source/controls/controls.multiselect.js",
 	"source/controls/controls.phoneBox.js",
+	"source/controls/controls.numberBox.js",
 	"source/controls/controls.reportViewer.js",
 	"source/controls/controls.bindedField.js",
 	
