@@ -50,7 +50,7 @@ import com.tramex.sisoprega.proxy.common.BaseBean;
  * MM/DD/YYYY
  * ----------  ---------------------------  -------------------------------------------
  * 02/01/2013  Diego Torres                 Initial Version.
- * 02/06/2013  Diegp Torres                 Add group only when group is not assigned to user.
+ * 02/06/2013  Diego Torres                 Add group only when group is not assigned to user.
  * ====================================================================================
  * </PRE>
  * 

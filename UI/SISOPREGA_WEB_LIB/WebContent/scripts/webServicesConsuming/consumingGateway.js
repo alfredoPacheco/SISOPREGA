@@ -54,9 +54,6 @@ var consumingGateway = {
 	var soapMessage = soapHeader + '<ws:SendReport>';
 	soapMessage += '<rancherId>' + rancher_id + '</rancherId><reportName>'
 		+ reportName + '</reportName>';
-	soapMessage += '<userName>' + utils.getCookie("username")
-		+ '</userName><password>' + utils.getCookie("pass")
-		+ '</password>';
 	soapMessage += '</ws:SendReport>';
 	soapMessage += soapFooter;
 

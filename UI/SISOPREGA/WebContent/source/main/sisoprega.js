@@ -18,7 +18,7 @@ enyo.kind(
               },
               {
                 kind : "Image",
-                src : "images/ajax-loader.gif",
+                src : "../SISOPREGA_WEB_LIB/images/ajax-loader.gif",
                 style : "width:250px;"
               },
               {
@@ -70,7 +70,7 @@ enyo.kind(
 
               {
                 name : 'btnGoBack',
-                icon : "images/command-menu/menu-icon-back.png",
+                icon : "../SISOPREGA_WEB_LIB/images/command-menu/menu-icon-back.png",
                 onclick : "goBack",
               },
               {
@@ -90,7 +90,7 @@ enyo.kind(
               {
                 name : 'btnLogOut',
                 onclick : "logOut",
-                icon : "images/command-menu/menu-icon-logout.png"
+                icon : "../SISOPREGA_WEB_LIB/images/command-menu/menu-icon-logout.png"
               } ]
         },
         {

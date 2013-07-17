@@ -18,9 +18,9 @@ enyo.kind({
 		     flex: 1,
 			 align:"center",	    
 			 components: [
-				{kind: "CustomButton", flex:1, content: "", className: "menuButton", style:"width:75px;height:75px;background-image:url('images/cow-100px.png');", onclick:"doReceptions"},		
-				{kind: "CustomButton",flex:1, content: "",className: "menuButton", style:"width:75px;height:75px;background-image:url('images/catalogos.png');", onclick:"doCatalogs",},
-				{kind: "CustomButton",flex:1, content: "",className: "menuButton", style:"width:75px;height:75px;background-image:url('images/reportes.png');", onclick:"doReports"}]
+				{kind: "CustomButton", flex:1, content: "", className: "menuButton", style:"width:75px;height:75px;background-image:url('../SISOPREGA_WEB_LIB/images/cow-100px.png');", onclick:"doReceptions"},		
+				{kind: "CustomButton",flex:1, content: "",className: "menuButton", style:"width:75px;height:75px;background-image:url('../SISOPREGA_WEB_LIB/images/catalogos.png');", onclick:"doCatalogs",},
+				{kind: "CustomButton",flex:1, content: "",className: "menuButton", style:"width:75px;height:75px;background-image:url('../SISOPREGA_WEB_LIB/images/reportes.png');", onclick:"doReports"}]
 			},
 			{kind: enyo.HFlexBox,
 				 className:"buttonsBG",		
@@ -36,8 +36,8 @@ enyo.kind({
 			     
 				 align:"center",	    
 				 components: [				
-					{kind: "CustomButton",  className:"menuButton", style:"width:85px;height:75px;background-image:url('images/inspeccion.png');", onclick:"doInspectionForecast"},
-					{kind: "CustomButton", className:"menuButton", style:"width:85px;height:75px;background-image:url('images/users.png');", onclick:"doUsers"},
+					{kind: "CustomButton",  className:"menuButton", style:"width:85px;height:75px;background-image:url('../SISOPREGA_WEB_LIB/images/inspeccion.png');", onclick:"doInspectionForecast"},
+					{kind: "CustomButton", className:"menuButton", style:"width:85px;height:75px;background-image:url('../SISOPREGA_WEB_LIB/images/users.png');", onclick:"doUsers"},
 					{kind: "Spacer"}
 					]
 				},
