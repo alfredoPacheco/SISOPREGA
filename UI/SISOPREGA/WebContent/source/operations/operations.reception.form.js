@@ -159,14 +159,12 @@ enyo.kind({
 			width : "120px;",
 			style : "text-align: right;margin-right:5px;"
 		    }, {
-			kind : "ToolInput",
+			kind : "controls.numberBox",
+			inputKind : "ToolInput",
 			name : "hc_aprox",
 			hint : "",
 			flex : 1,
 			height : "35px;",
-			changeOnInput : true,
-			inputType : "number",
-			onkeydown : "key_down",
 	    		bindTo : "hc",
 	    		belongsTo : "ReceptionHeadcount"
 		    }, {
@@ -174,21 +172,21 @@ enyo.kind({
 			width : "160px;",
 			style : "text-align: right;margin-right:5px;"
 		    }, {
-			kind : "ToolInput",
+			kind : "controls.numberBox",
+			inputKind : "ToolInput",
 			name : "weight",
 			hint : "",
 			flex : 1,
 			height : "35px;",
-			changeOnInput : true,
-			inputType : "number",
-			onkeydown : "key_down",
 	    		bindTo : "weight",
 	    		belongsTo : "ReceptionHeadcount"
-		    }, {value:1,
+		    }, {
+			value:1,
 		    	kind:"controls.bindedField",
 			fixedValue:true,
 			bindTo:"weightUom",
-			belongsTo:"ReceptionHeadcount"} ]
+			belongsTo:"ReceptionHeadcount"
+		    } ]
 		} ]
 	    } ]
 	} ], {
