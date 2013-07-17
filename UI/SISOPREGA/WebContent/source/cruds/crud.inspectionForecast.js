@@ -11,5 +11,9 @@ enyo.kind(
 	}
 	return this.inherited(arguments);
     },
+    adapterToOut : function(entityObj) {
+	entityObj.forecastDate = utils.dateOut(entityObj.forecastDate);
+	return entityObj;
+    },
   });
 var crudInspectionForecast = new crud.inspectionForecast();

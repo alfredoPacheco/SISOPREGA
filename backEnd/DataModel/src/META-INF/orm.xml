@@ -821,6 +821,10 @@
 			<description>Retrieves all inspection forecasts in database</description>
 			<query>SELECT forecast FROM InspectionForecast forecast ORDER BY forecast.forecastDate</query>
 		</named-query>
+		<named-query name="INSPECTIONFORECAST_BY_ID">
+			<description>Retrieves a single record that represents the inspection forecast for the given id</description>
+			<query>SELECT forecast FROM InspectionForecast forecast WHERE forecast.inspectionForecastId = :Id</query>
+		</named-query>
 		<named-query name="INSPECTIONFORECAST_BY_DATE">
 			<description>Retrieves a single record that represents the inspection forecast for the given date</description>
 			<query>SELECT forecast FROM InspectionForecast forecast WHERE forecast.forecastDate = :forecastDate</query>

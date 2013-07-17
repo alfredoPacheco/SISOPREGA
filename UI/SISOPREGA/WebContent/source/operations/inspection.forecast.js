@@ -5,6 +5,7 @@ enyo
 	    layoutKind : enyo.VFlexLayout,
 	    iSelected : null,
 	    _id : undefined,
+	    objInspection:null,
 	    objList : [],
 	    arrBY : [],
 	    arrTempPopupSelection : [],
@@ -371,41 +372,21 @@ enyo
 	    saveInspectionForecast : function() {
 		this.addInspectionForecast();
 	    },
-	    getInspectionForecast : function() {
+	    getInspectionForecastDetail : function(bUpdating) {
 
-		var objInspectionForecast = {
-			InspectionForecastDetail:[],
-			entityName: "InspectionForecast",
-			forecastDate: this.fecha,
-			inspectionForecastId: this._id,
-			locked: "false",
-		};
-		
 		var objInspectionDetail = {
 			Pen: [],
 			cattleType: this.$.cattleType.getIndex(),
 			entityName: "InspectionForecastDetail",
-			inspectionForecastDetailId: "2",
 			origin: this.$.origin.getIndex(),
 			quantity: this.$.cantidad.getValue(),
 			rancherId: this.$.rancher.getIndex(),
 			zoneId: this.$.zone.getIndex(),
 			auth : this.$.autorizacion.getValue()
 		};
-		
-		var objInspFore = {
-		    id : undefined,
-		    fore_details_id : undefined,
-		    rancherId : undefined,
-		    zoneId : undefined,
-		    auth : undefined,
-		    origin : undefined,
-		    cattleType : undefined,
-		    quantity : 0,
-		    barnyards : undefined,
-		    fore_date : undefined
-		};
 
+		if(bUpdating) objInspectionDetail.inspectionForecastDetailId;
+		
 		var barnyardsAux = this.$.barnyards.getText().split(",");
 		for ( var i = 0; i < barnyardsAux.length; i++) {
 		    barnyardsAux[i] = barnyardsAux[i].replace(" ", "");
@@ -419,30 +400,31 @@ enyo
 				+ this.$.zone.getValue());
 			return null;
 		    }
-		    objInspectionDetail[i].Pen.push(auxBarn);
+		    objInspectionDetail.Pen.push(auxBarn);
 		}
 		
-		return objInspFore;
+		return objInspectionDetail;
 	    },
 	    addInspectionForecast : function() {
-		var objForecast = this.getInspectionForecast();
-		if (objForecast) {
-		    if (this._id) {
-			objForecast.id = this._id;
-			cacheInspFore.addForecast(objForecast, this,
-				"afterAddInspFore");
+		var objForecastDetail = this.getInspectionForecastDetail();
+		if (objForecastDetail) {
+		    if(!this.objInspection.InspectionForecastDetail)
+			this.objInspection.InspectionForecastDetail = [];
+		    
+		    this.objInspection.InspectionForecastDetail.push(objForecastDetail);
+		    
+		    if (this.objInspection) {
+			crudInspectionForecast.update(this.objInspection, this, "afterAddInspFore");
 		    } else {
-			cacheInspFore.createForecast(objForecast, this,
-				"afterAddInspFore");
+			crudInpsectionForecast.create(this.objInspection, this, "afterAddInspFore");
 		    }
-
 		}
 	    },
 	    updateForecast : function() {
-		var objForecast = this.getInspectionForecast();
-		if (objForecast) {
-		    objForecast.id = this._id;
-		    objForecast.fore_details_id = this.getSelected().fore_details_id;
+		var objForecastDetail = this.getInspectionForecastDetail(true);
+		if (objForecastDetail) {
+		    objForecastDetail.id = this._id;
+		    objForecastDetail.fore_details_id = this.getSelected().fore_details_id;
 		    cacheInspFore.updateForecastDetails(objForecast, this,
 			    "afterAddInspFore");
 		}
@@ -490,11 +472,12 @@ enyo
 		crudCattle.get(this, "readCallBack");
 		crudLocation.get(this, "readCallBack");
 		crudReception.get(this, "readCallBack");
+		crudPen.get(this, "readCallBack");
 	    },
 	    readCounter : 0,
 	    readCallBack : function() {
 		this.readCounter++;
-		if (this.readCounter == 5) {
+		if (this.readCounter == 6) {
 		    this.loadAutocompletes();
 		    this.readCounter = 0;
 		}
@@ -618,7 +601,7 @@ enyo
 		this.resetValues();
 		crudInspectionForecast.get(this, "getInspectionForecastDone");
 	    },
-	    getInspectionForecastDone : function() {
+	    getInspectionForecastDone : function() { //TODO: WORKING HERE
 		var arrAllForecasts = [];
 		var fmt = new enyo.g11n.DateFmt({
 		    format : "yyyy/MM/dd",
@@ -630,11 +613,10 @@ enyo
 		for ( var i = 0; i < arrAllForecasts.length; i++) {
 		    if (fmt.format(arrAllForecasts[i].forecastDate) == fmt.format(this.fecha)) {
 			this._id = arrAllForecasts[i].inspectionForecastId;
-			
+			this.objInspection = arrAllForecasts[i];
 			for ( var j = 0; j < arrAllForecasts[i].InspectionForecastDetail.length; j++) {
 			    if (arrAllForecasts[i].InspectionForecastDetail[j].inspectionForecastDetailId) {
-				this.objList
-					.push(arrAllForecasts[i].InspectionForecastDetail[j]);
+				this.objList.push(arrAllForecasts[i].InspectionForecastDetail[j]);
 			    }
 			}
 			break;
