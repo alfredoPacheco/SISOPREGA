@@ -20,6 +20,8 @@ enyo.kind(
 		entityObj.legalName += '';
 		entityObj.telephone = entityObj.telephone || "";
 		entityObj.idName = this.entityIdName();
+		
+		entityObj.name = entityObj.legalName;
 		return entityObj;
 	    }
 	}

@@ -81,7 +81,8 @@ enyo
 								name : "rancher",
 								hint : "Ganadero",
 								onSelectItem : "on_select_item",
-								onEnter : "emularTabulacionConEnter"
+								onEnter : "emularTabulacionConEnter",
+								width : "270px;"
 							    } ]
 							} ]
 						    },
@@ -94,7 +95,8 @@ enyo
 								name : "zone",
 								hint : "Localidad",
 								onSelectItem : "on_select_item",
-								onEnter : "emularTabulacionConEnter"
+								onEnter : "emularTabulacionConEnter",
+								width : "270px;"
 							    } ]
 							} ]
 						    },
@@ -120,7 +122,8 @@ enyo
 								name : "origin",
 								hint : "Origen",
 								onSelectItem : "on_select_item",
-								onEnter : "emularTabulacionConEnter"
+								onEnter : "emularTabulacionConEnter",
+								width : "270px;"
 							    } ]
 							} ]
 						    },
@@ -133,7 +136,8 @@ enyo
 								name : "cattleType",
 								hint : "Ganado",
 								onSelectItem : "on_select_item",
-								onEnter : "emularTabulacionConEnter"
+								onEnter : "emularTabulacionConEnter",
+								width : "270px;"
 							    } ]
 							} ]
 						    },
@@ -160,7 +164,8 @@ enyo
 								name : "barnyards",
 								hint : "Corrales",
 								onSelectItem : "on_select_item",
-								onEnter : "emularTabulacionConEnter"
+								onEnter : "emularTabulacionConEnter",
+								width : "270px;"
 							    } ]
 							} ]
 						    },
@@ -354,78 +359,6 @@ enyo
 
 	    // TODO: BEGIN FUNCTIONS
 
-	    setupForecastRow : function(inSender, inIndex) {
-		var objFore;
-		if (objFore = this.objList[inIndex]) {
-		    var auxRancher = crudRancher.getByID(objFore.rancherId);
-		    if (auxRancher) {
-			if (auxRancher.rancher_type == 1) {
-			    this.$.listRancher.setContent(auxRancher.name);
-			} else {
-			    this.$.listRancher
-				    .setContent(auxRancher.legalName);
-			}
-		    }
-		    this.$.listAuth.setContent(objFore.auth || "");
-		    var oOrigin = crudLocation.getByID(objFore.origin);
-		    if (oOrigin) {
-			this.$.listOrigin.setContent(oOrigin.locationName);
-		    } else {
-			this.$.listOrigin.setContent("");
-		    }
-
-		    var oCattle = crudCattle.getByID(objFore.cattleType);
-		    if (oCattle) {
-			this.$.listCattleType.setContent(oCattle.cattype_name);
-		    } else {
-			this.$.listCattleType.setContent("");
-		    }
-
-		    this.$.listQuantity.setContent(objFore.quantity);
-
-		    var oZone = cacheMan.getZoneByID(objFore.zoneId);
-		    if (oZone) {
-			this.$.listZone.setContent(oZone.zone_name);
-		    } else {
-			this.$.listZone.setContent("");
-		    }
-
-		    if (objFore.Pen.length > 0) {
-			var strBarnyards = "";
-			for ( var i = 0; i < objFore.Pen.length; i++) {
-			    strBarnyards += objFore.Pen[i].barnyardCode + ", ";
-			}
-			strBarnyards = strBarnyards.slice(0, -2);
-			this.$.listBarnyards.setContent(strBarnyards);
-		    } else {
-			this.$.listBarnyards.setContent("");
-		    }
-		    if (inIndex == this.iSelected) {
-			this.$.rowItem.applyStyle("background-color",
-				"cadetblue");
-			this.$.listRancher.applyStyle("color", "white");
-			this.$.listAuth.applyStyle("color", "white");
-			this.$.listOrigin.applyStyle("color", "white");
-			this.$.listCattleType.applyStyle("color", "white");
-			this.$.listQuantity.applyStyle("color", "white");
-			this.$.listZone.applyStyle("color", "white");
-			this.$.listBarnyards.applyStyle("color", "white");
-		    } else {
-			this.$.rowItem.applyStyle("background-color", null);
-			this.$.listRancher.applyStyle("color", null);
-			this.$.listRancher.applyStyle("color", null);
-			this.$.listAuth.applyStyle("color", null);
-			this.$.listOrigin.applyStyle("color", null);
-			this.$.listCattleType.applyStyle("color", null);
-			this.$.listQuantity.applyStyle("color", null);
-			this.$.listZone.applyStyle("color", null);
-			this.$.listBarnyards.applyStyle("color", null);
-		    }
-		    this.totalItems++;
-		    return true;
-		}
-		return false;
-	    },
 	    dropForecast : function() {
 		if (cacheInspFore.deleteForecastDetail(
 			this.objList[this.iSelected], this, "updateList") == true) {
@@ -434,14 +367,32 @@ enyo
 		    return false;
 		}
 	    },
-	    getSelected : function() {
-		return this.objList[this.iSelected];
-	    },
+
 	    saveInspectionForecast : function() {
 		this.addInspectionForecast();
 	    },
 	    getInspectionForecast : function() {
 
+		var objInspectionForecast = {
+			InspectionForecastDetail:[],
+			entityName: "InspectionForecast",
+			forecastDate: this.fecha,
+			inspectionForecastId: this._id,
+			locked: "false",
+		};
+		
+		var objInspectionDetail = {
+			Pen: [],
+			cattleType: this.$.cattleType.getIndex(),
+			entityName: "InspectionForecastDetail",
+			inspectionForecastDetailId: "2",
+			origin: this.$.origin.getIndex(),
+			quantity: this.$.cantidad.getValue(),
+			rancherId: this.$.rancher.getIndex(),
+			zoneId: this.$.zone.getIndex(),
+			auth : this.$.autorizacion.getValue()
+		};
+		
 		var objInspFore = {
 		    id : undefined,
 		    fore_details_id : undefined,
@@ -455,19 +406,10 @@ enyo
 		    fore_date : undefined
 		};
 
-		objInspFore.rancherId = this.$.rancher.getIndex();
-		objInspFore.zoneId = this.$.zone.getIndex();
-		objInspFore.cattleType = this.$.cattleType.getIndex();
-		objInspFore.auth = this.$.autorizacion.getValue();
-		objInspFore.fore_date = this.fecha;
-		objInspFore.origin = this.$.origin.getIndex();
-		objInspFore.quantity = this.$.cantidad.getValue();
-
 		var barnyardsAux = this.$.barnyards.getText().split(",");
 		for ( var i = 0; i < barnyardsAux.length; i++) {
 		    barnyardsAux[i] = barnyardsAux[i].replace(" ", "");
-		    barnyardsAux[i] = this.$.zone.getIndex()
-			    + barnyardsAux[i].toUpperCase();
+		    barnyardsAux[i] = this.$.zone.getIndex() + barnyardsAux[i].toUpperCase();
 		    var auxBarn = crudPen.getByBarnyard(barnyardsAux[i]);
 		    if (auxBarn == undefined) {
 			cacheMan.setMessage("", "[Exception ID: LOCAL"
@@ -477,11 +419,9 @@ enyo
 				+ this.$.zone.getValue());
 			return null;
 		    }
-		    barnyardsAux[i] = auxBarn;
-
+		    objInspectionDetail[i].Pen.push(auxBarn);
 		}
-		objInspFore.barnyards = barnyardsAux;
-
+		
 		return objInspFore;
 	    },
 	    addInspectionForecast : function() {
@@ -507,18 +447,7 @@ enyo
 			    "afterAddInspFore");
 		}
 	    },
-	    afterAddInspFore : function() {
-		this.updateList();
-	    },
-	    onCancel : function() {
-		this.iSelected = null;
-		this.$.draDel.setOpen(false);
-		this.$.draAdd.setOpen(true);
-		this.$.draUpdate.setOpen(false);
-		this.totalItems = 0;
-		this.resetValues();
-		this.$.forecastList.render();
-	    },
+
 	    onMoverArriba : function() {
 		console.log("mover arriba");
 
@@ -526,11 +455,7 @@ enyo
 	    onMoverAbajo : function() {
 		console.log("mover abajo");
 	    },
-	    onEliminar : function() {
-		if (this.dropForecast() == true) {
-		    this.onCancel();
-		}
-	    },
+
 	    enviar_aviso : function() {
 
 		if (confirm("¿Desea enviar los avisos ahora?")) {
@@ -555,6 +480,8 @@ enyo
 		}
 
 	    },
+
+	    // TODO: done
 	    ready : function() {
 		cacheMan.showScrim();
 		this.inherited(arguments);
@@ -562,28 +489,49 @@ enyo
 		crudEnterpriseRancher.get(this, "readCallBack");
 		crudCattle.get(this, "readCallBack");
 		crudLocation.get(this, "readCallBack");
+		crudReception.get(this, "readCallBack");
 	    },
 	    readCounter : 0,
 	    readCallBack : function() {
 		this.readCounter++;
-		if (this.readCounter == 4) {
+		if (this.readCounter == 5) {
 		    this.loadAutocompletes();
 		    this.readCounter = 0;
 		}
 	    },
-	    loadAutocompletes : function() {
+	    loadAutocompletes : function() { 
 		this.arrActiveReceptions = crudReception.arrObj;
-		this.arrFilter = this.arrActiveReceptions;
+		
 
-		var arrAllRanchers = crudRancher.getList().concat(
-			crudEnterpriseRancher.getList());
+		var arrAllRanchers = crudRancher.getList().concat(crudEnterpriseRancher.getList());
 		this.$.rancher.setItems(arrAllRanchers);
 
+		this.$.origin.setItems(crudLocation.getList());
+		
 		this.$.cattleType.setItems(crudCattle.getCattleTypeList());
+		
+		
+		for(var i = 0; i<this.arrActiveReceptions.length;i++){
+			var objRanch = null;
+			var objLocation = null;
+			var objCattle = null;
+			
+			if(objRanch = crudRancher.getByID(this.arrActiveReceptions[i].rancherId) || crudEnterpriseRancher.getByID(this.arrActiveReceptions[i].rancherId))
+			    this.arrActiveReceptions[i].rancherName = objRanch.name;
+			
+			if(objLocation = crudLocation.getByID(this.arrActiveReceptions[i].locationId))
+			    this.arrActiveReceptions[i].locationName = objLocation.locationName;
+			
+			if(objCattle = crudCattle.getCattleTypeById(this.arrActiveReceptions[i].cattleType))
+			    this.arrActiveReceptions[i].cattype_name = objCattle.cattypeName;
+			    
+		}
+		
+		this.arrFilter = this.arrActiveReceptions;
+		
 		this.$.zone.setItems(cacheMan.getAllZonesForList());
 
-		this.$.origin.setItems(crudLocation.getList());
-
+		
 		// if(this.$.zone.getItems().length > 0 ){
 		// this.defaultZone = this.$.zone.getFirstOne().value;
 		// }
@@ -594,10 +542,8 @@ enyo
 		// this.load_barnyards();
 		// this.$.barnyards.setItems(this.$.barnyards.getFilter());
 
-		this.fecha = new Date();
-		this.updateList();
-		// this.$.fechaPicker.setValue(new Date());
-		// this.cambioDeFecha();
+		this.$.fechaPicker.setValue(new Date());
+		this.cambioDeFecha();
 
 		cacheMan.hideScrim();
 	    },
@@ -678,19 +624,20 @@ enyo
 		    format : "yyyy/MM/dd",
 		    locale : new enyo.g11n.Locale("es_es")
 		});
-		
+
 		// filling up right side**************************************
 		arrAllForecasts = crudInspectionForecast.arrObj;
 		for ( var i = 0; i < arrAllForecasts.length; i++) {
-		    
 		    if (fmt.format(arrAllForecasts[i].forecastDate) == fmt.format(this.fecha)) {
 			this._id = arrAllForecasts[i].inspectionForecastId;
+			
 			for ( var j = 0; j < arrAllForecasts[i].InspectionForecastDetail.length; j++) {
 			    if (arrAllForecasts[i].InspectionForecastDetail[j].inspectionForecastDetailId) {
 				this.objList
 					.push(arrAllForecasts[i].InspectionForecastDetail[j]);
 			    }
 			}
+			break;
 		    }
 		}
 		this.$.forecastList.render();
@@ -750,7 +697,7 @@ enyo
 			this.actualAutocompleteFilter.rancherId = true;
 			this.$.rancher.index = this.arrAutocompleteFilter[0].rancherId;
 			this.$.rancher
-				.setValue(this.arrAutocompleteFilter[0].rancher_name);
+				.setValue(this.arrAutocompleteFilter[0].rancherName);
 			// this.arrAutocompleteFilter
 			// =this.filterByRancher(this.$.rancher.index,
 			// this.arrAutocompleteFilter);
@@ -794,7 +741,7 @@ enyo
 			&& !this.actualAutocompleteFilter.locationId) {
 		    if (this.arrAutocompleteFilter.length == 1) {
 			this.actualAutocompleteFilter.locationId = true;
-			this.$.origin.index = this.arrAutocompleteFilter[0].location_id;
+			this.$.origin.index = this.arrAutocompleteFilter[0].locationId;
 			this.$.origin
 				.setValue(this.arrAutocompleteFilter[0].locationName);
 			// this.arrAutocompleteFilter
@@ -810,8 +757,9 @@ enyo
 			&& !this.actualAutocompleteFilter.cattleType) {
 		    if (this.arrAutocompleteFilter.length == 1) {
 			this.actualAutocompleteFilter.cattleType = true;
-			this.$.cattleType.index = this.arrAutocompleteFilter[0].cattype_id;
-			this.$.cattleType.setValue(this.arrAutocompleteFilter[0].cattype_name);
+			this.$.cattleType.index = this.arrAutocompleteFilter[0].cattleType;
+			this.$.cattleType
+				.setValue(this.arrAutocompleteFilter[0].cattype_name);
 			// this.arrAutocompleteFilter
 			// =this.filterByCattle(this.$.cattleType.index,
 			// this.arrAutocompleteFilter);
@@ -877,7 +825,7 @@ enyo
 		case "cattleType":
 		    this.actualFilter.cattleType = InSender.index;
 		    this.defaultCattle = InSender.index;
-		    // this.barnyardsFilter.cattype_id = this.defaultCattle;
+		    // this.barnyardsFilter.cattleType = this.defaultCattle;
 		    // this.$.barnyards.setFilterCriteria(this.barnyardsFilter);
 		    break;
 		case "barnyards":
@@ -956,18 +904,18 @@ enyo
 		}
 		return arrResult;
 	    },
-	    filterByOrigin : function(location_id, arrAfected) {
+	    filterByOrigin : function(locationId, arrAfected) {
 		var arrResult = [];
-		if (location_id > -1) {
+		if (locationId > -1) {
 		    if (arrAfected.length > 0) {
 			for ( var i = 0; i < arrAfected.length; i++) {
-			    if (arrAfected[i].location_id == location_id) {
+			    if (arrAfected[i].locationId == locationId) {
 				arrResult.push(arrAfected[i]);
 			    }
 			}
 		    } else {
 			for ( var i = 0; i < this.arrActiveReceptions.length; i++) {
-			    if (this.arrActiveReceptions[i].location_id == location_id) {
+			    if (this.arrActiveReceptions[i].locationId == locationId) {
 				arrResult.push(this.arrActiveReceptions[i]);
 			    }
 			}
@@ -975,18 +923,18 @@ enyo
 		}
 		return arrResult;
 	    },
-	    filterByCattle : function(cattype_id, arrAfected) {
+	    filterByCattle : function(cattleType, arrAfected) {
 		var arrResult = [];
-		if (cattype_id > -1) {
+		if (cattleType > -1) {
 		    if (arrAfected.length > 0) {
 			for ( var i = 0; i < arrAfected.length; i++) {
-			    if (arrAfected[i].cattype_id == cattype_id) {
+			    if (arrAfected[i].cattleType == cattleType) {
 				arrResult.push(arrAfected[i]);
 			    }
 			}
 		    } else {
 			for ( var i = 0; i < this.arrActiveReceptions.length; i++) {
-			    if (this.arrActiveReceptions[i].cattype_id == cattype_id) {
+			    if (this.arrActiveReceptions[i].cattleType == cattleType) {
 				arrResult.push(this.arrActiveReceptions[i]);
 			    }
 			}
@@ -1027,7 +975,7 @@ enyo
 		    for ( var i = 0; i < this.arrFilter.length; i++) {
 			var obj = {
 			    value : this.arrFilter[i].rancherId,
-			    caption : this.arrFilter[i].rancher_name
+			    caption : this.arrFilter[i].rancherName
 			};
 			if (!(arrResult[obj.value] in arrResult)) {
 			    arrResult[obj.value] = obj;
@@ -1071,7 +1019,7 @@ enyo
 		if (this.arrFilter.length > 0) {
 		    for ( var i = 0; i < this.arrFilter.length; i++) {
 			var obj = {
-			    value : this.arrFilter[i].location_id,
+			    value : this.arrFilter[i].locationId,
 			    caption : this.arrFilter[i].locationName
 			};
 			if (!(arrResult[obj.value] in arrResult)) {
@@ -1090,7 +1038,7 @@ enyo
 		if (this.arrFilter.length > 0) {
 		    for ( var i = 0; i < this.arrFilter.length; i++) {
 			var obj = {
-			    value : this.arrFilter[i].cattype_id,
+			    value : this.arrFilter[i].cattleType,
 			    caption : this.arrFilter[i].cattype_name
 			};
 			if (!(arrResult[obj.value] in arrResult)) {
@@ -1114,9 +1062,7 @@ enyo
 			    for ( var j = 0; j < this.arrActiveReceptions[i].Pen.length; j++) {
 
 				if (parseInt(this.arrActiveReceptions[i].Pen[j].locationId) == parseInt(this.defaultZone)) {
-				    auxCaption += this.arrActiveReceptions[i].Pen[j].barnyardCode
-					    .substring(1)
-					    + ", ";
+				    auxCaption += this.arrActiveReceptions[i].Pen[j].barnyardCode + ", ";
 				}
 			    }
 			}
@@ -1125,7 +1071,7 @@ enyo
 			    var obj = {
 				value : this.arrActiveReceptions[i].receptionId,
 				caption : auxCaption
-			    // cattype_id: this.arrFilter[i].cattype_id,
+			    // cattleType: this.arrFilter[i].cattleType,
 			    // zoneId: this.arrFilter[i].zoneId
 			    };
 			    if (!(arrResult[obj.value] in arrResult)) {
@@ -1139,27 +1085,27 @@ enyo
 		}
 		this.$.barnyards.setFilter(result);
 	    },
-	    addRancherSelected : function(rancherId) {
-		if (rancherId > -1) {
-		    for ( var i = 0; i < this.arrReceptions.length; i++) {
-			if (this.arrReceptions[i].rancherId == rancherId) {
-			    return;
-			}
-		    }
-
-		    var objRancherSelected = {
-			rancherId : rancherId,
-			receptions : crudReception
-				.getReceptionsByRancherID(rancherId),
-			origins : [],
-			cattleTypes : [],
-			zones : [],
-			barnyards : []
-		    };
-
-		    this.arrReceptions.push(objRancherSelected);
-		}
-	    },
+//	    addRancherSelected : function(rancherId) {
+//		if (rancherId > -1) {
+//		    for ( var i = 0; i < this.arrReceptions.length; i++) {
+//			if (this.arrReceptions[i].rancherId == rancherId) {
+//			    return;
+//			}
+//		    }
+//
+//		    var objRancherSelected = {
+//			rancherId : rancherId,
+//			receptions : crudReception
+//				.getReceptionsByRancherID(rancherId),
+//			origins : [],
+//			cattleTypes : [],
+//			zones : [],
+//			barnyards : []
+//		    };
+//
+//		    this.arrReceptions.push(objRancherSelected);
+//		}
+//	    },
 	    selectForecast : function(inSender, inEvent) {
 		if (objFore = this.objList[inEvent.rowIndex]) {
 		    this.$.rancher.setIndex(objFore.rancherId);
@@ -1187,6 +1133,93 @@ enyo
 		    this.$.draDel.setOpen(true);
 		    this.$.draAdd.setOpen(false);
 		    this.$.draUpdate.setOpen(true);
+		}
+	    },
+	    setupForecastRow : function(inSender, inIndex) {
+		var objFore;
+		if (objFore = this.objList[inIndex]) {
+		    var auxRancher = crudRancher.getByID(objFore.rancherId) || crudEnterpriseRancher.getByID(objFore.rancherId);
+		    if (auxRancher) {
+			this.$.listRancher.setContent(auxRancher.name);
+		    }
+		    this.$.listAuth.setContent(objFore.auth || "");
+		    var oOrigin = crudLocation.getByID(objFore.origin);
+		    if (oOrigin) {
+			this.$.listOrigin.setContent(oOrigin.locationName);
+		    } else {
+			this.$.listOrigin.setContent("");
+		    }
+
+		    var oCattle = crudCattle.getByID(objFore.cattleType);
+		    if (oCattle) {
+			this.$.listCattleType.setContent(oCattle.cattype_name);
+		    } else {
+			this.$.listCattleType.setContent("");
+		    }
+
+		    this.$.listQuantity.setContent(objFore.quantity);
+
+		    var oZone = cacheMan.getZoneByID(objFore.zoneId);
+		    if (oZone) {
+			this.$.listZone.setContent(oZone.zone_name);
+		    } else {
+			this.$.listZone.setContent("");
+		    }
+
+		    if (objFore.Pen.length > 0) {
+			var strBarnyards = "";
+			for ( var i = 0; i < objFore.Pen.length; i++) {
+			    strBarnyards += objFore.Pen[i].barnyardCode + ", ";
+			}
+			strBarnyards = strBarnyards.slice(0, -2);
+			this.$.listBarnyards.setContent(strBarnyards);
+		    } else {
+			this.$.listBarnyards.setContent("");
+		    }
+		    if (inIndex == this.iSelected) {
+			this.$.rowItem.applyStyle("background-color",
+				"cadetblue");
+			this.$.listRancher.applyStyle("color", "white");
+			this.$.listAuth.applyStyle("color", "white");
+			this.$.listOrigin.applyStyle("color", "white");
+			this.$.listCattleType.applyStyle("color", "white");
+			this.$.listQuantity.applyStyle("color", "white");
+			this.$.listZone.applyStyle("color", "white");
+			this.$.listBarnyards.applyStyle("color", "white");
+		    } else {
+			this.$.rowItem.applyStyle("background-color", null);
+			this.$.listRancher.applyStyle("color", null);
+			this.$.listRancher.applyStyle("color", null);
+			this.$.listAuth.applyStyle("color", null);
+			this.$.listOrigin.applyStyle("color", null);
+			this.$.listCattleType.applyStyle("color", null);
+			this.$.listQuantity.applyStyle("color", null);
+			this.$.listZone.applyStyle("color", null);
+			this.$.listBarnyards.applyStyle("color", null);
+		    }
+		    this.totalItems++;
+		    return true;
+		}
+		return false;
+	    },
+	    getSelected : function() {
+		return this.objList[this.iSelected];
+	    },
+	    onCancel : function() {
+		this.iSelected = null;
+		this.$.draDel.setOpen(false);
+		this.$.draAdd.setOpen(true);
+		this.$.draUpdate.setOpen(false);
+		this.totalItems = 0;
+		this.resetValues();
+		this.$.forecastList.render();
+	    },
+	    afterAddInspFore : function() {
+		this.updateList();
+	    },
+	    onEliminar : function() {
+		if (this.dropForecast() == true) {
+		    this.onCancel();
 		}
 	    },
 	});

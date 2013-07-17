@@ -93,6 +93,7 @@ enyo
 			entityObj.Inspection[i].inspectionDate = utils.dateIn(entityObj.Inspection[i].inspectionDate);
 		    }
 		}
+		
 		entityObj.color = entityObj.color || utils.colorStack.pop();
 		return this.inherited(arguments);
 	    },
