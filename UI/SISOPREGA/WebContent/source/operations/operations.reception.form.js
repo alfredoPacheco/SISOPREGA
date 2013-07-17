@@ -166,7 +166,7 @@ enyo.kind({
 			height : "35px;",
 			changeOnInput : true,
 			inputType : "number",
-			onkeydown : "key_down",
+			onkeydown : "numbers_only",
 	    		bindTo : "hc",
 	    		belongsTo : "ReceptionHeadcount"
 		    }, {
@@ -181,7 +181,7 @@ enyo.kind({
 			height : "35px;",
 			changeOnInput : true,
 			inputType : "number",
-			onkeydown : "key_down",
+			onkeydown : "numbers_only",
 	    		bindTo : "weight",
 	    		belongsTo : "ReceptionHeadcount"
 		    }, {value:1,
@@ -295,5 +295,27 @@ enyo.kind({
     },
     cancelCreateRancher:function(){
 	this.$.addRancherDialog.close();
+    },
+    numbers_only : function(inSender, inEvent){
+	console.debug(inEvent.keyCode);
+
+	// Numbers
+	if(inEvent.keyCode<96 || inEvent.keyCode>105)
+	    return true;
+	
+	
+	// Left & Right arrows
+	if(inEvent.keyCode == 37 || inEvent.keyCode == 39)
+	    return true;
+	
+	// backspace or delete
+	if(inEvent.keyCode == 8 || inEvent.keyCode == 46)
+	    return true;
+	
+	// shift, tab
+	if(inEvent.keyCode == 9 || inEvent.keyCode == 16)
+	    return true;
+		
+	return false;
     }
 });
