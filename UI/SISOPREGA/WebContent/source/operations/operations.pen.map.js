@@ -4,9 +4,6 @@ enyo
 	    arrReception : [ {
 		caption : "Recepcion",
 		value : 1
-	    }, {
-		caption : "Deseleccionar",
-		value : 2
 	    } ],
 	    arrPostReception : [ {
 		caption : "Editar",
