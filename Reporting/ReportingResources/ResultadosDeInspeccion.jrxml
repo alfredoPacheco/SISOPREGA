@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RecepcionGanadaId" language="groovy" pageWidth="612" pageHeight="792" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="0e217b87-07d2-46ef-b86b-c937998e1085">
+	<property name="ireport.zoom" value="2.143588810000009"/>
+	<property name="ireport.x" value="66"/>
+	<property name="ireport.y" value="47"/>
+	<parameter name="CUS_RECEPTION_ID" class="java.lang.Long"/>
+	<parameter name="CUS_IMG_PATH" class="java.lang.String">
+		<defaultValueExpression><![CDATA["http://sisoprega.com/images/logo_tramex.png"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+ctrl_reception.reception_id as folio,
+vw_rancher.rancher_name as ganadero,
+ctrl_reception.date_allotted as ctrl_reception_date_allotted,
+cat_inspection_code.inspection_code_description as inspection_code_description,
+SUM(ctrl_inspection_result.hc) AS Rechazos,
+array_to_string(array_agg(pen.barnyard_code), ', ') as corrales,
+ctrl_inspection.comments
+FROM public.ctrl_inspection ctrl_inspection
+INNER JOIN public.ctrl_reception ctrl_reception ON ctrl_reception.reception_id = ctrl_inspection.reception_id
+INNER JOIN public.vw_rancher vw_rancher ON ctrl_reception.rancher_id = vw_rancher.rancher_id
+LEFT JOIN public.ctrl_inspection_result ctrl_inspection_result ON ctrl_inspection.inspection_id = ctrl_inspection_result.inspection_id
+LEFT JOIN public.cat_inspection_code cat_inspection_code ON ctrl_inspection_result.inspection_code_id = cat_inspection_code.inspection_code_id
+LEFT JOIN public.ctrl_inspection_barnyard ctrl_inspection_barnyard ON ctrl_inspection.inspection_id = ctrl_inspection_barnyard.inspection_id
+LEFT JOIN public.cat_barnyard pen ON ctrl_inspection_barnyard.barnyard_id = pen.barnyard_id
+WHERE ctrl_inspection.reception_id = $P{CUS_RECEPTION_ID}
+GROUP BY folio, ganadero, ctrl_reception_date_allotted, inspection_code_description, ctrl_inspection.comments;]]>
+	</queryString>
+	<field name="folio" class="java.lang.Integer"/>
+	<field name="ganadero" class="java.lang.String"/>
+	<field name="ctrl_reception_date_allotted" class="java.sql.Date"/>
+	<field name="inspection_code_description" class="java.lang.String"/>
+	<field name="rechazos" class="java.lang.Long"/>
+	<field name="corrales" class="java.lang.String"/>
+	<field name="comments" class="java.lang.String"/>
+	<variable name="rechazos_1" class="java.lang.Long" resetType="Group" resetGroup="FechaRecibido" calculation="Sum">
+		<variableExpression><![CDATA[$F{rechazos}]]></variableExpression>
+	</variable>
+	<group name="FechaRecibido" keepTogether="true">
+		<groupExpression><![CDATA[$F{ctrl_reception_date_allotted}]]></groupExpression>
+		<groupHeader>
+			<band height="51">
+				<frame>
+					<reportElement uuid="f166f251-a66f-441f-a804-81b057afd198" mode="Opaque" x="0" y="0" width="572" height="16" forecolor="#0099FF" backcolor="#0099FF"/>
+					<textField>
+						<reportElement uuid="e7461f32-8753-4ac2-9d5e-7d024bd0920e" x="81" y="0" width="283" height="16"/>
+						<textElement/>
+						<textFieldExpression><![CDATA[$F{ganadero}]]></textFieldExpression>
+					</textField>
+				</frame>
+				<staticText>
+					<reportElement uuid="16dc3ec0-6af6-4028-8a3c-d9c3d3997ec6" x="6" y="0" width="75" height="16"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="SansSerif" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Exportador:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="e4af4be3-10e4-4b70-a834-a5ff881e75a5" x="6" y="16" width="95" height="20"/>
+					<textElement textAlignment="Right">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Folio de pesaje:]]></text>
+				</staticText>
+				<textField>
+					<reportElement uuid="15626794-c5db-4db3-9443-f024c666fbeb" x="101" y="16" width="100" height="20"/>
+					<textElement/>
+					<textFieldExpression><![CDATA[$F{folio}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="de6a15d5-c786-43f1-b870-e3b40da60cf0" x="201" y="16" width="100" height="20"/>
+					<textElement textAlignment="Right">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Fecha Recibido:]]></text>
+				</staticText>
+				<textField>
+					<reportElement uuid="8423666d-124f-4ac4-b728-ed616d12774a" x="301" y="16" width="109" height="20"/>
+					<textElement/>
+					<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format($F{ctrl_reception_date_allotted})]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="5164be9f-3cbe-47a9-b01e-717974223524" mode="Opaque" x="6" y="36" width="153" height="14" forecolor="#FFFFFF" backcolor="#00CCFF"/>
+					<textElement>
+						<font isUnderline="true"/>
+					</textElement>
+					<text><![CDATA[Defecto]]></text>
+				</staticText>
+				<textField>
+					<reportElement uuid="52c1bc79-73eb-44a4-9523-34e0f44f7dad" x="459" y="16" width="111" height="33"/>
+					<textElement/>
+					<textFieldExpression><![CDATA[$F{corrales}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="de6a15d5-c786-43f1-b870-e3b40da60cf0" x="410" y="16" width="49" height="20"/>
+					<textElement textAlignment="Right">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Corrales:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="34f7c3b7-d766-4677-91b4-5da43d1608aa" mode="Opaque" x="159" y="36" width="93" height="14" forecolor="#FFFFFF" backcolor="#00CCFF"/>
+					<textElement textAlignment="Right">
+						<font isUnderline="true"/>
+					</textElement>
+					<text><![CDATA[Rechazos]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="34">
+				<textField>
+					<reportElement uuid="2104bc58-f001-4679-9655-5acf2367b9c6" x="366" y="0" width="204" height="34"/>
+					<textElement/>
+					<textFieldExpression><![CDATA[$F{comments}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="d49cbc07-b748-496e-ad98-9bbdb20a4d91" x="264" y="0" width="100" height="13"/>
+					<textElement textAlignment="Right"/>
+					<text><![CDATA[Commentarios:]]></text>
+				</staticText>
+				<textField>
+					<reportElement uuid="6a39feb5-8063-4dea-8c8b-c90bacd1f62d" x="159" y="1" width="93" height="14"/>
+					<textElement textAlignment="Right">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{rechazos_1}]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement uuid="097e71b0-207c-4e2f-916d-8650fd8389e3" x="159" y="0" width="93" height="1"/>
+				</line>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="60" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="0ca3d7ba-6228-4d67-9fa4-83f66086b594" x="1" y="34" width="572" height="26"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Serif" size="20" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Resultados de Inspección de Ganado]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="5b5a4659-48b9-4114-b7be-2ab78b269c4d" x="0" y="34" width="124" height="13"/>
+				<textElement>
+					<font size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[TRAMEX PRO Customs Brokers]]></text>
+			</staticText>
+			<image isUsingCache="true" isLazy="true" onErrorType="Blank" evaluationTime="Report">
+				<reportElement uuid="14b95b13-92b9-4b20-a438-b2c19012d258" x="36" y="0" width="45" height="34"/>
+				<imageExpression><![CDATA[$P{CUS_IMG_PATH}]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="9" splitType="Stretch"/>
+	</pageHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement uuid="e61b6848-3d50-4be4-8d6a-12848bdad31b" x="6" y="0" width="153" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{inspection_code_description}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="983ed428-9060-4cff-ae31-8cd7359baed4" x="159" y="0" width="93" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{rechazos}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="9" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="23" splitType="Stretch">
+			<textField pattern="dd/MM/yyyy h.mm a">
+				<reportElement uuid="0913db78-8743-47d2-ae88-f0a0719d6fa9" x="5" y="3" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="7a1eab54-e273-4f6c-98d3-dd2a0d937bbb" x="430" y="3" width="80" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement uuid="2303ccbe-08f1-4575-ae2a-d93791c0decf" x="510" y="3" width="40" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<noData>
+		<band height="42">
+			<staticText>
+				<reportElement uuid="17feaf5b-4140-4c01-bf38-92269170b35b" x="6" y="0" width="564" height="20"/>
+				<textElement textAlignment="Center">
+					<font isBold="true" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Los datos de este reporte ya no existen en el sistema, consulte a su administrador]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="1cf6257c-187b-42e6-9d9a-4c8c80f48ee9" x="513" y="20" width="57" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{CUS_RECEPTION_ID}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="77c7abe7-369a-48f1-8de2-da910a4fde0b" x="410" y="20" width="100" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<text><![CDATA[Parámetro RecId:]]></text>
+			</staticText>
+		</band>
+	</noData>
+</jasperReport>

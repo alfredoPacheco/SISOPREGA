@@ -47,7 +47,7 @@ public class TxtReportePromedios extends BaseTxtReport implements Reporteable {
     long recordId = (Long) this.parameters.get("Id");
     log.finer("recordId:[" + recordId + "]");
 
-    String sqlString = "SELECT headcount.hc as cabezas," + "cattle.cattype_name as ganado," + "headcount.weight as kilos, "
+    String sqlString = "SELECT reception.reception_id as folio, headcount.hc as cabezas," + "cattle.cattype_name as ganado," + "headcount.weight as kilos, "
         + "headcount.weight * 2.2046 as libras," + "headcount.weight/headcount.hc as pKilos, "
         + "headcount.weight * 2.2046/headcount.hc as pLibras," + "array_to_string(array_agg(b.barnyard_code), ', ') as corrales "
         + "FROM ctrl_reception reception "
@@ -56,8 +56,8 @@ public class TxtReportePromedios extends BaseTxtReport implements Reporteable {
         + "LEFT JOIN ctrl_reception_barnyard crb ON reception.reception_id = crb.reception_id "
         + "LEFT JOIN cat_barnyard b ON crb.barnyard_id = b.barnyard_id "
         + "WHERE reception.reception_id = ? AND headcount.hc > 0 "
-        + "GROUP BY reception.reception_id, headcount.hc, cattle.cattype_name, headcount.weight "
-        + "ORDER BY reception.reception_id desc";
+        + "GROUP BY folio, headcount.hc, cattle.cattype_name, headcount.weight "
+        + "ORDER BY folio";
 
     PreparedStatement ps = null;
     ResultSet rs = null;
@@ -79,7 +79,7 @@ public class TxtReportePromedios extends BaseTxtReport implements Reporteable {
         String sPKilos = rounded2Decs(rs.getDouble("pkilos"));
         String sPLibras = rounded2Decs(rs.getDouble("plibras"));
 
-        sResult = "Tramex - Promedios: " + rs.getLong("cabezas") + " cabezas de " + rs.getString("ganado") + ", " + sKilos
+        sResult = "Tramex - Promedios (Folio #" + rs.getLong("folio") + "): " + rs.getLong("cabezas") + " cabezas de " + rs.getString("ganado") + ", " + sKilos
             + " kg. (" + sLibras + " lbs.). Prom por Kg.: " + sPKilos + "; Prom por Lb.: " + sPLibras + ". Corrales: "
             + rs.getString("corrales");
       }

@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
 import javax.sql.DataSource;
 
@@ -54,6 +55,21 @@ public abstract class BaseReport {
     } catch (SQLException se) {
       log.severe("Unable to initiate sisoprega datasource connection");
       log.throwing(this.getClass().getCanonicalName(), "init", se);
+    }
+  }
+  
+  @PreDestroy
+  private void preDestroy(){
+    log.fine("Release resouces for BaseReport: " + this.getClass().getCanonicalName());
+    if(conn!=null){
+      try{
+        conn.close();
+        conn = null;
+      }catch(SQLException se){
+        log.severe("Unable to release database connection.");
+        log.throwing(this.getClass().getCanonicalName(), "preDestroy", se);
+      }
+      
     }
   }
 
