@@ -147,12 +147,12 @@ enyo
 							components : [ {
 							    layoutKind : enyo.HFlexLayout,
 							    components : [ {
-								kind : "Input",
-								name : "cantidad",
-								hint : "Cantidad",
-								inputType : "number",
-								flex : 1,
-								onkeydown : "key_down"
+								kind : "controls.numberBox",
+                                                                name : "cantidad",
+                                                                hint : "Cantidad",
+                                                                height:"50px",
+                                                                flex : 1,
+                                                                onkeydown : "key_down"
 							    } ]
 							} ]
 						    },
@@ -359,8 +359,6 @@ enyo
 	    } ],
 
 	    // TODO: BEGIN FUNCTIONS
-
-	   
 	    
 	    onMoverArriba : function() {
 		console.log("mover arriba");
@@ -385,9 +383,7 @@ enyo
 			}
 			alert("El aviso se ha enviado satisfactoriamente.");
 		    } else {
-			cacheMan
-				.setMessage("",
-					"Error. No se ha creado la lista de inspección.");
+			cacheMan.setMessage("",	"Error. No se ha creado la lista de inspección.");
 		    }
 		}
 
@@ -511,64 +507,6 @@ enyo
 		if (inEvent.keyCode == 13) {
 		    this.emularTabulacionConEnter(inSender);
 		}
-	    },
-	    updateList : function() {
-		cacheMan.showScrim();
-		// initializing forecast master values***********************
-		this._id = undefined;
-		this.totalItems = 0;
-		this.objList = [];
-		this.objInspection = null;
-		this.iSelected = null;
-		// **********************************************************
-
-		// add mode buttons
-		this.$.draDel.setOpen(false);
-		this.$.draUpdate.setOpen(false);
-		this.$.draAdd.setOpen(true);
-
-		// reset values and load combos
-		this.resetValues();
-		crudInspectionForecast.get(this, "getInspectionForecastDone");
-	    },
-	    getInspectionForecastDone : function() {
-		var arrAllForecasts = [];
-		var fmt = new enyo.g11n.DateFmt({
-		    format : "yyyy/MM/dd",
-		    locale : new enyo.g11n.Locale("es_es")
-		});
-
-		// filling up right side**************************************
-		arrAllForecasts = crudInspectionForecast.arrObj;
-		for ( var i = 0; i < arrAllForecasts.length; i++) {
-		    if (fmt.format(arrAllForecasts[i].forecastDate) == fmt.format(this.fecha)) {
-			this._id = arrAllForecasts[i].inspectionForecastId;
-			this.objInspection = arrAllForecasts[i];
-			if(arrAllForecasts[i].InspectionForecastDetail){
-			    for ( var j = 0; j < arrAllForecasts[i].InspectionForecastDetail.length; j++) {
-				if (arrAllForecasts[i].InspectionForecastDetail[j].inspectionForecastDetailId) {
-				    this.objList.push(arrAllForecasts[i].InspectionForecastDetail[j]);
-				}
-			    }
-			}else{
-			    this.objInspection.InspectionForecastDestail = [];
-			}
-			break; 
-		    }
-		}
-		
-		if(!this.objInspection){
-		   this.objInspection = {
-			   InspectionForecastDetail: [],
-			   entityName: "InspectionForecast",
-			   forecastDate: this.fecha,
-			   locked: "false"
-		   };
-		}
-		
-		this.$.forecastList.render();
-		// ***********************************************************
-		cacheMan.hideScrim();
 	    },
 	    resetValues : function() {
 		// cleaning fileds:
@@ -1033,7 +971,7 @@ enyo
 	    selectForecast : function(inSender, inEvent) {
 		if (objFore = this.objList[inEvent.rowIndex]) {
 		    this.$.rancher.setIndex(objFore.rancherId);
-		    this.$.autorizacion.setValue(objFore.auth);
+		    this.$.autorizacion.setValue(objFore.auth || "");
 		    this.$.origin.setIndex(objFore.origin);
 		    this.$.cattleType.setIndex(objFore.cattleType);
 
@@ -1204,7 +1142,7 @@ enyo
 			    return;
 			}
 		    }
-		    cacheMan.setMessage("Error. No se ha podido encontrar el registro a intentar actualizar.");
+		    cacheMan.setMessage("Error. No se ha podido actualizar el registro seleccionado.");
 		}
 	    },
 	    dropForecast : function() {
@@ -1215,6 +1153,64 @@ enyo
 			    return;
 			}
 		    }
-		    cacheMan.setMessage("Error. No se ha podido encontrar el registro a intentar eliminar.");
+		    cacheMan.setMessage("Error. No se ha podido eliminar el registro seleccionado.");
 	    },
+	    updateList : function() {
+		cacheMan.showScrim();
+		// initializing forecast master values***********************
+		this._id = undefined;
+		this.totalItems = 0;
+		this.objList = [];
+		this.objInspection = null;
+		this.iSelected = null;
+		// **********************************************************
+
+		// add mode buttons
+		this.$.draDel.setOpen(false);
+		this.$.draUpdate.setOpen(false);
+		this.$.draAdd.setOpen(true);
+
+		// reset values and load combos
+		this.resetValues();
+		crudInspectionForecast.get(this, "getInspectionForecastDone");
+	    },
+	    getInspectionForecastDone : function() {
+		var arrAllForecasts = [];
+		var fmt = new enyo.g11n.DateFmt({
+		    format : "yyyy/MM/dd",
+		    locale : new enyo.g11n.Locale("es_es")
+		});
+
+		// filling up right side**************************************
+		arrAllForecasts = crudInspectionForecast.arrObj;
+		for ( var i = 0; i < arrAllForecasts.length; i++) {
+		    if (fmt.format(arrAllForecasts[i].forecastDate) == fmt.format(this.fecha)) {
+			this._id = arrAllForecasts[i].inspectionForecastId;
+			this.objInspection = arrAllForecasts[i];
+			if(arrAllForecasts[i].InspectionForecastDetail){
+			    for ( var j = 0; j < arrAllForecasts[i].InspectionForecastDetail.length; j++) {
+				if (arrAllForecasts[i].InspectionForecastDetail[j].inspectionForecastDetailId) {
+				    this.objList.push(arrAllForecasts[i].InspectionForecastDetail[j]);
+				}
+			    }
+			}else{
+			    this.objInspection.InspectionForecastDestail = [];
+			}
+			break; 
+		    }
+		}
+		
+		if(!this.objInspection){
+		   this.objInspection = {
+			   InspectionForecastDetail: [],
+			   entityName: "InspectionForecast",
+			   forecastDate: this.fecha,
+			   locked: "false"
+		   };
+		}
+		
+		this.$.forecastList.render();
+		// ***********************************************************
+		cacheMan.hideScrim();
+	    }
 	});
