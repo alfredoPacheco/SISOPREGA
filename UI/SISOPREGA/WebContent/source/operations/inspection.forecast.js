@@ -350,6 +350,16 @@ enyo
 						style : "width:100px;",
 						label : "Cancelar",
 						onclick : "onCancel"
+					    },{
+						kind : "enyo.IconButton",
+						style : "width:100px;",
+						label : "Mover arriba",
+						onclick : "onMoverArriba"
+					    },{
+						kind : "enyo.IconButton",
+						style : "width:100px;",
+						label : "Mover abajo",
+						onclick : "onMoverAbajo"
 					    }, ]
 					}
 
@@ -361,10 +371,18 @@ enyo
 	    // TODO: BEGIN FUNCTIONS
 	    
 	    onMoverArriba : function() {
-		console.log("mover arriba");
+		if(this.iSelected > 0){
+		    this.objList[this.iSelected].order--;
+		    this.objList[this.iSelected-1].order++;
+		}
+		//TODO: WORKING HERE
+		var arrTransaction = this.objList.slice(this.iSelected-1, this.iSelected+1);
+		consumingGateway.UpdateArrayParents("InspectionForecast",arrTransaction, this, "updateList");
 	    },
 	    onMoverAbajo : function() {
 		console.log("mover abajo");
+		console.debug(this.objList[this.iSelected]);
+		
 	    },
 	    enviar_aviso : function() {
 
@@ -1097,7 +1115,16 @@ enyo
 			auth : this.$.autorizacion.getValue()
 		};
 
-		if(bUpdating) objInspectionDetail.inspectionForecastDetailId = this.objList[this.iSelected].inspectionForecastDetailId; 
+		if(bUpdating) {
+		    objInspectionDetail.inspectionForecastDetailId = this.objList[this.iSelected].inspectionForecastDetailId;
+		    objInspectionDetail.order = this.objList[this.iSelected].order || 0;
+		}else{
+		    if(this.objList.length > 0){
+			objInspectionDetail.order = Number(this.objList[this.objList.length-1].order) + 1;
+		    }else{
+			objInspectionDetail.order = 0;
+		    }
+		}
 		
 		var barnyardsAux = this.$.barnyards.getText().split(",");
 		for ( var i = 0; i < barnyardsAux.length; i++) {
@@ -1208,6 +1235,8 @@ enyo
 			   locked: "false"
 		   };
 		}
+		
+		this.objList.sort(function(a,b){return a.order > b.order;});
 		
 		this.$.forecastList.render();
 		// ***********************************************************

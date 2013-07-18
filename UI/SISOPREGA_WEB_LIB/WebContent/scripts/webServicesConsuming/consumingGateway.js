@@ -283,14 +283,82 @@ var consumingGateway = {
 	};
 
 	// SOAP Message:
-	var soapMessage = soapHeader + '<ws:Update>';
-	soapMessage += '<request><parentRecord><entity>' + entityName
-		+ '</entity>';
+	var soapMessage = soapHeader + '<ws:Update><request>';
+	soapMessage += '<parentRecord><entity>' + entityName + '</entity>';
 
 	soapMessage += this.xmlFromObject(entity, this);
 
-	soapMessage += '</parentRecord></request>';
-	soapMessage += '</ws:Update>' + soapFooter;
+	soapMessage += '</parentRecord>';
+	soapMessage += '</request></ws:Update>' + soapFooter;
+
+	var self = this;
+
+	// Ajax request:
+	jQuery.ajax({
+	    url : gatewayWsURL,
+	    type : "POST",
+	    dataType : "xml",
+	    data : soapMessage,
+	    processData : false,
+	    contentType : "text/xml;charset=UTF-8",
+	    username : utils.getCookie("username"),
+	    password : utils.getCookie("pass"),
+	    success : function OnSuccess(data) {
+		output.exceptionDescription = jQuery(data).find(
+			"exceptionDescription").text();
+		output.exceptionId = jQuery(data).find("exceptionId").text();
+		if (output.exceptionId == "GW01") {
+		    alert(output.exceptionDescription);
+		    consumingGateway.LogOut();
+		}
+		output.origin = jQuery(data).find("origin").text();
+
+		if (output.exceptionId == 0) {
+		    output.entityName = entityName;
+
+		    jQuery(data).find("parentRecord").each(
+			    function() {
+				var record = self.childrenFromParent(
+					jQuery(this), self);
+				output.records.push(record);
+			    });
+		}
+
+		if (cbObj) {
+		    var milis = ((Math.random() * 1000) + 500);
+		    setTimeout(cbObj[cbMethod](output), milis);
+		}
+		return false;
+	    },
+	    error : function OnError(request, status, error) {
+		output.exceptionId = 1;
+		output.exceptionDescription = error + ' :' + status;
+		alert(output.exceptionDescription);
+		consumingGateway.LogOut();
+	    }
+	});
+	return false;
+    },
+    UpdateArrayParents : function(entityName, arrEntity, cbObj, cbMethod) {
+	// Se crea objeto que devolvera la funcion:
+	var output = {
+	    exceptionDescription : "Success",
+	    exceptionId : 0,
+	    origin : "",
+	    records : []
+	};
+
+	// SOAP Message:
+	var soapMessage = soapHeader + '<ws:Update><request>';
+	
+	for(var i=0;i<arrEntity.length;i++){
+	    var entity = arrEntity[i];
+	    soapMessage += '<parentRecord><entity>' + entityName + '</entity>';
+	    soapMessage += this.xmlFromObject(entity, this);
+	    soapMessage += '</parentRecord>';    
+	}
+	
+	soapMessage += '</request></ws:Update>' + soapFooter;
 
 	var self = this;
 
