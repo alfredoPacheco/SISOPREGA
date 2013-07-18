@@ -86,6 +86,7 @@ enyo.kind({
 		layoutKind : enyo.VFlexLayout,
 		items:[],
 		width: "300px",height:"300px",
+		style:"background-color: #D7D7D7;",
 		setItems:function(items, filter){
 			var newItems=[];
 			var addItem = false;

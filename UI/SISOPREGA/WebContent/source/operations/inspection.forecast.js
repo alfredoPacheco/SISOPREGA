@@ -147,12 +147,12 @@ enyo
 							components : [ {
 							    layoutKind : enyo.HFlexLayout,
 							    components : [ {
-								kind : "Input",
-								name : "cantidad",
-								hint : "Cantidad",
-								inputType : "number",
-								flex : 1,
-								onkeydown : "key_down"
+								kind : "controls.numberBox",
+                                                                name : "cantidad",
+                                                                hint : "Cantidad",
+                                                                height:"50px",
+                                                                flex : 1,
+                                                                onkeydown : "key_down"
 							    } ]
 							} ]
 						    },
@@ -359,85 +359,13 @@ enyo
 	    } ],
 
 	    // TODO: BEGIN FUNCTIONS
-
-	    dropForecast : function() {
-		if (cacheInspFore.deleteForecastDetail(
-			this.objList[this.iSelected], this, "updateList") == true) {
-		    return true;
-		} else {
-		    return false;
-		}
-	    },
-
-	    saveInspectionForecast : function() {
-		this.addInspectionForecast();
-	    },
-	    getInspectionForecastDetail : function(bUpdating) {
-
-		var objInspectionDetail = {
-			Pen: [],
-			cattleType: this.$.cattleType.getIndex(),
-			entityName: "InspectionForecastDetail",
-			origin: this.$.origin.getIndex(),
-			quantity: this.$.cantidad.getValue(),
-			rancherId: this.$.rancher.getIndex(),
-			zoneId: this.$.zone.getIndex(),
-			auth : this.$.autorizacion.getValue()
-		};
-
-		if(bUpdating) objInspectionDetail.inspectionForecastDetailId;
-		
-		var barnyardsAux = this.$.barnyards.getText().split(",");
-		for ( var i = 0; i < barnyardsAux.length; i++) {
-		    barnyardsAux[i] = barnyardsAux[i].replace(" ", "");
-		    barnyardsAux[i] = this.$.zone.getIndex() + barnyardsAux[i].toUpperCase();
-		    var auxBarn = crudPen.getByBarnyard(barnyardsAux[i]);
-		    if (auxBarn == undefined) {
-			cacheMan.setMessage("", "[Exception ID: LOCAL"
-				+ "] Descripción: No existe el corral: "
-				+ barnyardsAux[i].slice(1)
-				+ " para la localidad: "
-				+ this.$.zone.getValue());
-			return null;
-		    }
-		    objInspectionDetail.Pen.push(auxBarn);
-		}
-		
-		return objInspectionDetail;
-	    },
-	    addInspectionForecast : function() {
-		var objForecastDetail = this.getInspectionForecastDetail();
-		if (objForecastDetail) {
-		    if(!this.objInspection.InspectionForecastDetail)
-			this.objInspection.InspectionForecastDetail = [];
-		    
-		    this.objInspection.InspectionForecastDetail.push(objForecastDetail);
-		    
-		    if (this.objInspection) {
-			crudInspectionForecast.update(this.objInspection, this, "afterAddInspFore");
-		    } else {
-			crudInpsectionForecast.create(this.objInspection, this, "afterAddInspFore");
-		    }
-		}
-	    },
-	    updateForecast : function() {
-		var objForecastDetail = this.getInspectionForecastDetail(true);
-		if (objForecastDetail) {
-		    objForecastDetail.id = this._id;
-		    objForecastDetail.fore_details_id = this.getSelected().fore_details_id;
-		    cacheInspFore.updateForecastDetails(objForecast, this,
-			    "afterAddInspFore");
-		}
-	    },
-
+	    
 	    onMoverArriba : function() {
 		console.log("mover arriba");
-
 	    },
 	    onMoverAbajo : function() {
 		console.log("mover abajo");
 	    },
-
 	    enviar_aviso : function() {
 
 		if (confirm("¿Desea enviar los avisos ahora?")) {
@@ -455,9 +383,7 @@ enyo
 			}
 			alert("El aviso se ha enviado satisfactoriamente.");
 		    } else {
-			cacheMan
-				.setMessage("",
-					"Error. No se ha creado la lista de inspección.");
+			cacheMan.setMessage("",	"Error. No se ha creado la lista de inspección.");
 		    }
 		}
 
@@ -581,50 +507,6 @@ enyo
 		if (inEvent.keyCode == 13) {
 		    this.emularTabulacionConEnter(inSender);
 		}
-	    },
-	    updateList : function() {
-		cacheMan.showScrim();
-		// initializing forecast master values***********************
-		this._id = undefined;
-		this.totalItems = 0;
-		this.objList = [];
-
-		this.iSelected = null;
-		// **********************************************************
-
-		// add mode buttons
-		this.$.draDel.setOpen(false);
-		this.$.draUpdate.setOpen(false);
-		this.$.draAdd.setOpen(true);
-
-		// reset values and load combos
-		this.resetValues();
-		crudInspectionForecast.get(this, "getInspectionForecastDone");
-	    },
-	    getInspectionForecastDone : function() { //TODO: WORKING HERE
-		var arrAllForecasts = [];
-		var fmt = new enyo.g11n.DateFmt({
-		    format : "yyyy/MM/dd",
-		    locale : new enyo.g11n.Locale("es_es")
-		});
-
-		// filling up right side**************************************
-		arrAllForecasts = crudInspectionForecast.arrObj;
-		for ( var i = 0; i < arrAllForecasts.length; i++) {
-		    if (fmt.format(arrAllForecasts[i].forecastDate) == fmt.format(this.fecha)) {
-			this._id = arrAllForecasts[i].inspectionForecastId;
-			this.objInspection = arrAllForecasts[i];
-			for ( var j = 0; j < arrAllForecasts[i].InspectionForecastDetail.length; j++) {
-			    if (arrAllForecasts[i].InspectionForecastDetail[j].inspectionForecastDetailId) {
-				this.objList.push(arrAllForecasts[i].InspectionForecastDetail[j]);
-			    }
-			}
-			break;
-		    }
-		}
-		this.$.forecastList.render();
-		// ***********************************************************
-		cacheMan.hideScrim();
 	    },
 	    resetValues : function() {
 		// cleaning fileds:
@@ -750,11 +632,9 @@ enyo
 			if (this.defaultCattle) {
 			    this.actualAutocompleteFilter.cattleType = true;
 			    this.$.cattleType.index = this.defaultCattle;
-			    var oCattle = crudCattle
-				    .getByID(this.$.cattleType.index);
+			    var oCattle = crudCattle.getCattleTypeById(this.$.cattleType.index);
 			    if (oCattle) {
-				this.$.cattleType
-					.setValue(oCattle.cattype_name);
+				this.$.cattleType.setValue(oCattle.cattypeName);
 			    } else {
 				this.$.cattleType.setValue("");
 			    }
@@ -1091,7 +971,7 @@ enyo
 	    selectForecast : function(inSender, inEvent) {
 		if (objFore = this.objList[inEvent.rowIndex]) {
 		    this.$.rancher.setIndex(objFore.rancherId);
-		    this.$.autorizacion.setValue(objFore.auth);
+		    this.$.autorizacion.setValue(objFore.auth || "");
 		    this.$.origin.setIndex(objFore.origin);
 		    this.$.cattleType.setIndex(objFore.cattleType);
 
@@ -1132,9 +1012,9 @@ enyo
 			this.$.listOrigin.setContent("");
 		    }
 
-		    var oCattle = crudCattle.getByID(objFore.cattleType);
+		    var oCattle = crudCattle.getCattleTypeById(objFore.cattleType);
 		    if (oCattle) {
-			this.$.listCattleType.setContent(oCattle.cattype_name);
+			this.$.listCattleType.setContent(oCattle.cattypeName);
 		    } else {
 			this.$.listCattleType.setContent("");
 		    }
@@ -1196,12 +1076,141 @@ enyo
 		this.resetValues();
 		this.$.forecastList.render();
 	    },
-	    afterAddInspFore : function() {
-		this.updateList();
-	    },
 	    onEliminar : function() {
 		if (this.dropForecast() == true) {
 		    this.onCancel();
 		}
 	    },
+	    saveInspectionForecast : function() {
+		this.addInspectionForecast();
+	    },
+	    getInspectionForecastDetail : function(bUpdating) {
+		
+		var objInspectionDetail = {
+			Pen: [],
+			cattleType: this.$.cattleType.getIndex(),
+			entityName: "InspectionForecastDetail",
+			origin: this.$.origin.getIndex(),
+			quantity: this.$.cantidad.getValue(),
+			rancherId: this.$.rancher.getIndex(),
+			zoneId: this.$.zone.getIndex(),
+			auth : this.$.autorizacion.getValue()
+		};
+
+		if(bUpdating) objInspectionDetail.inspectionForecastDetailId = this.objList[this.iSelected].inspectionForecastDetailId; 
+		
+		var barnyardsAux = this.$.barnyards.getText().split(",");
+		for ( var i = 0; i < barnyardsAux.length; i++) {
+		    barnyardsAux[i] = barnyardsAux[i].replace(" ", "");
+		    barnyardsAux[i] = this.$.zone.getIndex() + barnyardsAux[i].toUpperCase();
+		    var auxBarn = crudPen.getByBarnyard(barnyardsAux[i]);
+		    if (auxBarn == undefined) {
+			cacheMan.setMessage("", "[Exception ID: LOCAL"
+				+ "] Descripción: No existe el corral: "
+				+ barnyardsAux[i].slice(1)
+				+ " para la localidad: "
+				+ this.$.zone.getValue());
+			return null;
+		    }
+		    objInspectionDetail.Pen.push(auxBarn);
+		}
+		
+		return objInspectionDetail;
+	    },
+	    addInspectionForecast : function() {
+		var objForecastDetail = this.getInspectionForecastDetail();
+		if (objForecastDetail) {
+		    if(!this.objInspection.InspectionForecastDetail)
+			this.objInspection.InspectionForecastDetail = [];
+		    
+		    this.objInspection.InspectionForecastDetail.push(objForecastDetail);
+		    
+		    if (this.objInspection.inspectionForecastId) {
+			crudInspectionForecast.update(this.objInspection, this, "updateList");
+		    } else {
+			crudInspectionForecast.create(this.objInspection, this, "updateList");
+		    }
+		}
+	    },
+	    updateForecast : function() {
+		var objForecastDetail = this.getInspectionForecastDetail(true);
+		if (objForecastDetail) {
+		    for(var i =0; i< this.objInspection.InspectionForecastDetail.length;i++){
+			if(this.objInspection.InspectionForecastDetail[i].inspectionForecastDetailId == objForecastDetail.inspectionForecastDetailId){
+			    this.objInspection.InspectionForecastDetail[i] = objForecastDetail;
+			    crudInspectionForecast.update(this.objInspection, this, "updateList");
+			    return;
+			}
+		    }
+		    cacheMan.setMessage("Error. No se ha podido actualizar el registro seleccionado.");
+		}
+	    },
+	    dropForecast : function() {
+		for(var i =0; i< this.objInspection.InspectionForecastDetail.length;i++){
+			if(this.objInspection.InspectionForecastDetail[i].inspectionForecastDetailId == this.objList[this.iSelected].inspectionForecastDetailId){
+			    this.objInspection.InspectionForecastDetail.splice(i, 1);
+			    crudInspectionForecast.update(this.objInspection, this, "updateList");
+			    return;
+			}
+		    }
+		    cacheMan.setMessage("Error. No se ha podido eliminar el registro seleccionado.");
+	    },
+	    updateList : function() {
+		cacheMan.showScrim();
+		// initializing forecast master values***********************
+		this._id = undefined;
+		this.totalItems = 0;
+		this.objList = [];
+		this.objInspection = null;
+		this.iSelected = null;
+		// **********************************************************
+
+		// add mode buttons
+		this.$.draDel.setOpen(false);
+		this.$.draUpdate.setOpen(false);
+		this.$.draAdd.setOpen(true);
+
+		// reset values and load combos
+		this.resetValues();
+		crudInspectionForecast.get(this, "getInspectionForecastDone");
+	    },
+	    getInspectionForecastDone : function() {
+		var arrAllForecasts = [];
+		var fmt = new enyo.g11n.DateFmt({
+		    format : "yyyy/MM/dd",
+		    locale : new enyo.g11n.Locale("es_es")
+		});
+
+		// filling up right side**************************************
+		arrAllForecasts = crudInspectionForecast.arrObj;
+		for ( var i = 0; i < arrAllForecasts.length; i++) {
+		    if (fmt.format(arrAllForecasts[i].forecastDate) == fmt.format(this.fecha)) {
+			this._id = arrAllForecasts[i].inspectionForecastId;
+			this.objInspection = arrAllForecasts[i];
+			if(arrAllForecasts[i].InspectionForecastDetail){
+			    for ( var j = 0; j < arrAllForecasts[i].InspectionForecastDetail.length; j++) {
+				if (arrAllForecasts[i].InspectionForecastDetail[j].inspectionForecastDetailId) {
+				    this.objList.push(arrAllForecasts[i].InspectionForecastDetail[j]);
+				}
+			    }
+			}else{
+			    this.objInspection.InspectionForecastDestail = [];
+			}
+			break; 
+		    }
+		}
+		
+		if(!this.objInspection){
+		   this.objInspection = {
+			   InspectionForecastDetail: [],
+			   entityName: "InspectionForecast",
+			   forecastDate: this.fecha,
+			   locked: "false"
+		   };
+		}
+		
+		this.$.forecastList.render();
+		// ***********************************************************
+		cacheMan.hideScrim();
+	    }
 	});

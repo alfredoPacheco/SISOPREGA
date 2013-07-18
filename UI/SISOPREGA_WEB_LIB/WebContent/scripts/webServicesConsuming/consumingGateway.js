@@ -145,33 +145,7 @@ var consumingGateway = {
 	soapMessage += '<request><parentRecord><entity>' + entityName
 		+ '</entity>';
 
-	for (field in entity) {
-	    if (entity.hasOwnProperty(field)) {
-		if (!Array.isArray(entity[field])) {
-		    soapMessage += '<field>';
-		    soapMessage += '<name>' + field + '</name>';
-		    soapMessage += '<value>' + entity[field] + '</value>';
-		    soapMessage += '</field>';
-		} else {
-		    for (childIndex in entity[field]) {
-			var child = entity[field][childIndex];
-			soapMessage += '<childRecord>';
-			soapMessage += '<entity>' + field + '</entity>';
-			for (childField in child) {
-			    if (child.hasOwnProperty(childField)) {
-				soapMessage += '<field>';
-				soapMessage += '<name>' + childField
-					+ '</name>';
-				soapMessage += '<value>' + child[childField]
-					+ '</value>';
-				soapMessage += '</field>';
-			    }
-			}
-			soapMessage += '</childRecord>';
-		    }
-		}
-	    }
-	}
+	soapMessage += this.xmlFromObject(entity, this);
 
 	soapMessage += '</parentRecord></request>';
 	soapMessage += '</ws:Create>' + soapFooter;
