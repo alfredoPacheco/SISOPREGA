@@ -436,6 +436,8 @@ CREATE TABLE ctrl_reception_barnyard (
   barnyard_id integer NOT NULL REFERENCES cat_barnyard(barnyard_id)
 );
 
+
+CREATE UNIQUE INDEX U_reception_barnyard ON ctrl_reception_barnyard(barnyard_id);
 GRANT ALL ON ctrl_reception_barnyard TO sisoprega;
 GRANT ALL ON ctrl_reception_barnyard_rec_barnyard_id_seq TO sisoprega;
 

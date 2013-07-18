@@ -390,6 +390,8 @@ enyo
 	    },
 
 	    updatetList : function() {
+		this._objRec.feed.sort(function(a,b){return a.fod_id >b.fod_id;});
+		//this.filter.sort(function(a,b){return a.caption >b.caption;});
 		this.$.productList.render();
 		this.updateHeader();
 	    },

@@ -4,9 +4,6 @@ enyo
 	    arrReception : [ {
 		caption : "Recepcion",
 		value : 1
-	    }, {
-		caption : "Deseleccionar",
-		value : 2
 	    } ],
 	    arrPostReception : [ {
 		caption : "Editar",
@@ -26,9 +23,6 @@ enyo
 	    }, {
 		caption : "Cruce sin rechazos",
 		value : 10
-	    }, {
-		caption : "Deseleccionar",
-		value : 8
 	    }, {
 		caption : "Imprimir",
 		value : 9
@@ -689,17 +683,7 @@ enyo
 		    crudReception.appendBY(objRec, this.arrSelected, this,
 			    "updateBY");
 		    break;
-		case 8: // Deseleccionar
-		    delete this.arrSelectedOccupied[this.objSelected.name];
-		    this.objSelected.occupied = 1;
-		    this.objSelected
-			    .applyStyle(
-				    "background-color",
-				    crudReception
-					    .getByID(crudPen
-						    .getRecIDbyBY(this.objSelected.name)).color);
-		    break;
-		case 9: // Imprimir
+		case 9: // Imprimir (Deseleccionar - 8 Eliminado)
 		    this.showReport();
 		    break;
 		case 10: // Liberar lote

@@ -7,8 +7,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
@@ -37,7 +35,7 @@ import com.tramex.sisoprega.reporting.Reporteable;
  */
 @Stateless
 @RolesAllowed({ "mx_usr", "us_usr" })
-public class TxtGanadoInspeccionado extends BaseTxtReport implements Reporteable {
+public class TxtResultadosDeInspeccion extends BaseTxtReport implements Reporteable {
 
   /*
    * (non-Javadoc)
@@ -48,20 +46,17 @@ public class TxtGanadoInspeccionado extends BaseTxtReport implements Reporteable
   public byte[] getBytes() throws Exception {
     this.log.entering(this.getClass().getCanonicalName(), "byte[] getBytes(Map<String, Object>)");
 
-    Date fromDate = (Date) this.parameters.get("fromDate");
-    log.finer("fromDate:[" + new SimpleDateFormat("MM/dd/yyyy").format(fromDate) + "]");
-    Date toDate = (Date) this.parameters.get("toDate");
-    log.finer("toDate:[" + new SimpleDateFormat("MM/dd/yyyy").format(toDate) + "]");
-    long rancherId = (Long) this.parameters.get("Id");
-    log.finer("rancherId:[" + rancherId + "]");
+    long receptionId = (Long) this.parameters.get("Id");
+    log.finer("reception:[" + receptionId + "]");
 
-    String rechazos = getRechazosDetails(fromDate, toDate, rancherId);
-    String sResult = "TRAMEX se complace en informarle que su ganado ha cruzado sin rechazos el dia de hoy. "
-        + "Para mas detalles consulte el reporte en linea";
+    String rechazos = getRechazosDetails(receptionId);
+    String sResult = "";
 
     if (rechazos.trim().length() > 0) {
       log.finer("Inspection rejects found");
-      sResult = "Reporte de Rechazos:" + rechazos;
+      sResult = "Resultados de inspección(#" + receptionId + "):" + rechazos;
+    }else{
+      throw new Exception("No hay inspección para enviar.");
     }
 
     byte[] result = sResult.getBytes();
@@ -71,16 +66,17 @@ public class TxtGanadoInspeccionado extends BaseTxtReport implements Reporteable
     return result;
   }
 
-  private String getRechazosDetails(Date fromDate, Date toDate, long rancherId) throws ServletException, ParseException {
-    String sqlString = "SELECT SUM(ctrl_inspection_result.hc) AS Rechazos,"
-        + "inspection_code.inspection_code_description AS ctrl_inspection_result_note "
-        + "FROM "
-        + "public.ctrl_reception ctrl_reception "
-        + "INNER JOIN public.ctrl_inspection ctrl_inspection ON ctrl_reception.reception_id = ctrl_inspection.reception_id "
-        + "LEFT JOIN public.ctrl_inspection_result ctrl_inspection_result ON ctrl_inspection.inspection_id = ctrl_inspection_result.inspection_id "
-        + "LEFT JOIN public.cat_inspection_code inspection_code ON ctrl_inspection_result.inspection_code_id = inspection_code.inspection_code_id "
-        + " WHERE ctrl_inspection.inspection_date >= ? " + " AND ctrl_inspection.inspection_date <= ? "
-        + " AND ctrl_reception.rancher_id = ? " + " GROUP BY ctrl_inspection_result_note;";
+  private String getRechazosDetails(long receptionId) throws ServletException, ParseException {
+    String sqlString = "SELECT cat_inspection_code.inspection_code_description as inspection_code_description,"
+        + "SUM(ctrl_inspection_result.hc) AS Rechazos,"
+        + "array_to_string(array_agg(pen.barnyard_code), ', ') as corrales,"
+        + "ctrl_inspection.comments"
+        + "FROM public.ctrl_inspection ctrl_inspection"
+        + "LEFT JOIN public.ctrl_inspection_result ctrl_inspection_result ON ctrl_inspection.inspection_id = ctrl_inspection_result.inspection_id"
+        + "LEFT JOIN public.cat_inspection_code cat_inspection_code ON ctrl_inspection_result.inspection_code_id = cat_inspection_code.inspection_code_id"
+        + "LEFT JOIN public.ctrl_inspection_barnyard ctrl_inspection_barnyard ON ctrl_inspection.inspection_id = ctrl_inspection_barnyard.inspection_id"
+        + "LEFT JOIN public.cat_barnyard pen ON ctrl_inspection_barnyard.barnyard_id = pen.barnyard_id"
+        + "WHERE ctrl_inspection.reception_id = " + receptionId + " GROUP BY inspection_code_description, ctrl_inspection.comments;";
 
     PreparedStatement ps = null;
     ResultSet rs = null;
@@ -88,22 +84,21 @@ public class TxtGanadoInspeccionado extends BaseTxtReport implements Reporteable
     StringBuilder sDetails = new StringBuilder();
     try {
       ps = conn.prepareStatement(sqlString);
-
-      ps.setDate(1, new java.sql.Date(fromDate.getTime()));
-      ps.setDate(2, new java.sql.Date(toDate.getTime()));
-      ps.setLong(3, rancherId);
-
       rs = ps.executeQuery();
 
+      String comment = "";
+      String penString = "";
+      
       while (rs.next()) {
-        String resultNote = rs.getString("ctrl_inspection_result_note");
-        if (resultNote != null) {
-          sDetails.append(rs.getString("ctrl_inspection_result_note")).append(" - ").append(rs.getString("rechazos"))
-              .append("; ");
-        }
+        sDetails.append(rs.getString("inspection_code_description")).append(" - ").append(rs.getString("rechazos"))
+        .append("; ");
+        comment = rs.getString("comments");
+        penString = rs.getString("corrales");
       }
+      
+      String result = sDetails.toString() + ". Corrales: " + penString  + ". Comentario: " + comment;
 
-      return sDetails.toString();
+      return result;
 
     } catch (SQLException e) {
       log.severe("SQLException while reading receptions");
