@@ -539,13 +539,7 @@ enyo
 		    this.$.popMan.render();
 		    this.$.popMan.openAtCenter();
 		    break;
-		case 2: // Deseleccionar
-		    delete this.arrSelected[this.objSelected.name];
-		    this.objSelected.occupied = 0;
-		    this.objSelected.applyStyle("background-color",
-			    this.sColorFree);
-		    break;
-		case 3: // Alimento
+		case 3: // Alimento --2 Deseleccionar removed from options.
 		    if (this.$.dynocon) {
 			this.$.dynocon.destroy();
 		    }
