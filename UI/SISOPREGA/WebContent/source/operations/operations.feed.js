@@ -20,7 +20,7 @@ enyo
 			className : "transitioner2",
 			layoutKind : "VFlexLayout",
 			width : "90%",
-			style : "overflow: hidden",
+			style : "overflow: hidden;background-color: #D7D7D7;",
 			scrim : true,
 			components : [ {
 			    components : [ {
@@ -29,9 +29,49 @@ enyo
 				kind : "Input",
 				name : "handling",
 				hint : "Agregar comentario"
-			    }, {
+			    },
+			    {
+				kind : enyo.HFlexBox,
+				align : "center",
+				pack : "center",
+				height : "40px;",
+				components : [
+                                        {
+                                            content : "Fecha y Hora:",
+                                            width : "166px;",
+                                            style : "text-align: right;margin-right:10px;"
+                                        }, {
+                                            kind : "ToolInput",
+                                            name : "feedDate",
+                                            hint : "mes/dia/año",
+                                            // width : "103px;",
+                                            flex : 1,
+                                            height : "35px;",
+                                            onfocus : "applyMask",
+                                        // style:"text-align: right;max-width: 500px;"
+                                        },
+                                        // {
+                                        // content : 'mes/dia/año',
+                                        // className : "listFirst",
+                                        // style :
+                                        // "background-color:#DABD8B;margin-left:2px;font-size:12px;",
+                                        // width : "80px;"
+                                        // },
+                                        {
+                                            kind : "ToolInput",
+                                            name : "feedTime",
+                                            // width : "103px;",
+                                            hint : "HH:MM",
+                                            flex : 1,
+                                            height : "35px;",
+                                            onfocus : "applyTimeMask",
+                                        // style:"text-align: right;max-width: 500px;"
+                                        } 
+                                        ]},
+			    
+			    {
 				kind : "TimePicker",
-				name : "dateTime",
+				name : "feedDate",
 				style : "color:'black';",
 				is24HrMode : false,
 				label : "Hora"
@@ -379,7 +419,7 @@ enyo
 		objData.feed[objFeed.feed_id] = objFeed;
 
 		objData.handling = this.$.handling.getValue();
-		objData.dateAndTime = this.$.dateTime.getValue().getTime();
+		objData.dateAndTime = new Date("" + this.$.feedDate.getValue() + " " + this.$.feedTime.getValue());
 
 		if (sOp == "add") {
 		    objData.barnyards = enyo.clone(this._arrBY);
@@ -424,7 +464,7 @@ enyo
 		    this.toggleUpdate();
 		    this._arrBYSelected = objFeed.barnyards;
 		    this.$.handling.setValue(objFeed.handling);
-		    this.$.dateTime.setValue(new Date(objFeed.dateAndTime));
+		    this.$.feedDate.setValue(new Date(objFeed.dateAndTime));
 		}
 
 	    },
@@ -493,7 +533,7 @@ enyo
 		    this.$.concentrated.setValue("");
 		    this.$.corn.setValue("");
 		    this.$.handling.setValue("");
-		    this.$.dateTime.setValue(new Date());
+		    this.$.feedDate.setValue(new Date());
 
 		}
 		this.updatetList();
@@ -639,5 +679,17 @@ enyo
 	    afterUpdate : function(objResult, objOld, objNew) {
 		this.set(objNew, this._arrBY);
 		this.toggleAdd();
-	    }
+	    },
+	    applyMask : function(inSender) {
+		var _id = inSender.$.input.getId();
+		jQuery(function(j) {
+		    j(document.getElementById(_id)).mask('99/99/9999');
+		});
+	    },
+	    applyTimeMask : function(inSender) {
+		var _id = inSender.$.input.getId();
+		jQuery(function(j) {
+		    j(document.getElementById(_id)).mask('99:99');
+		});
+	    },
 	});

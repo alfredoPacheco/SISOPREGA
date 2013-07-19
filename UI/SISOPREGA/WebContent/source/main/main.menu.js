@@ -11,7 +11,7 @@ enyo.kind({
 	},	
 	components:[
 		{kind: enyo.Pane,className:"buttonsBG", flex: 1, name: "mainPane", onSelectView:"selectView", transitionKind: "enyo.transitions.LeftRightFlyin", 
-	     style:"background-size: cover;",				 		
+	     style:"background-size: cover;", onCreateView:"on_create_view",				 		
 		 components:[	
 			{kind:"main.menu.options", name:"menuOptions", label:"Menu Principal", className:"buttonsBG",style:"width:1030px;margin-left: auto;margin-right: auto;",
 			flex: 1,
@@ -21,7 +21,7 @@ enyo.kind({
 			onInspectionForecast:"showInspectionForecast",
 			onUsers:"showUsersList"},
 	 		
-			{kind:"catalogs.main", name:"catalogs", label:"Catálogos",lazy:true},
+			{kind:"catalogs.main", name:"cat", label:"Catalogos", lazy:true},
 	 		{kind:"operations.pen.map", name:"receptionsMap",label:"Corrales",lazy:true, flex:1},	 		
 	 		{kind:"reports.main", name:"reports", label:"Reportes", lazy:true},
 	 		{kind:"inspections.main.fs", name:"inspectionForecast", label:"Lista de Inspección", lazy:true},
@@ -56,10 +56,12 @@ enyo.kind({
 	openMap:function(){
 	    this.$.mainPane.selectViewByName("receptionsMap");
 	},
-	showCatalogs:function(){
-		this.$.mainPane.validateView("catalogs");
-		this.$.catalogs.$.catalogsPane.selectViewByIndex(0);
-		this.$.mainPane.selectViewByName("catalogs");
+	showCatalogs:function(a, b){
+	    console.log("enter to showCatalogs");
+	    
+		this.$.mainPane.validateView("cat");
+		this.$.cat.$.catalogsPane.selectViewByIndex(0);
+		this.$.mainPane.selectViewByName("cat",true);
 	    },
 	    showReports : function() {
 		this.$.mainPane.selectViewByName("reports");
@@ -68,10 +70,12 @@ enyo.kind({
 		this.$.mainPane.selectViewByName("inspectionForecast");
 	    },
 	    showUsersList : function() {
+		console.log("Se entro a showUsersList");
 		this.$.mainPane.selectViewByName("usersList");
+		console.log("saliendo de showUsersList");
 	    },
 	    selectView : function(inSender, inView, inPreviousView) {
-
+		console.log("Entrando a selectView");
 		if (inView.name == inPreviousView.name) {
 		    return;
 		}
@@ -96,12 +100,15 @@ enyo.kind({
 
 		switch (inView.name) {
 		case "inspectionForecast":
+		    console.log("case inspectionForecast");
 		    inView.$.forecast.resetValues();
 		    break;
 		case "usersList":
+		    console.log("case usersList");
 		    inView.reset();
 		    break;
-		case "catalogs":
+		case "cat":
+		    console.log("case cat");
 		    _objMainHeader
 			    .setContent(inView.$.catalogsPane.getView().label);
 		    break;

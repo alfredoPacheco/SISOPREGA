@@ -21,7 +21,7 @@ enyo
 		caption : "Liberar Corral",
 		value : 6
 	    }, {
-		caption : "Cruce sin rechazos",
+		caption : "Liberar Lote",
 		value : 10
 	    }, {
 		caption : "Imprimir",
