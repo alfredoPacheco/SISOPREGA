@@ -3,7 +3,6 @@ enyo
 	    name : "catalogs.main",
 	    kind : enyo.VFlexBox,
 	    iProduct : "",
-	    events : {},
 	    components : [ {
 		kind : enyo.Pane,
 		flex : 1,

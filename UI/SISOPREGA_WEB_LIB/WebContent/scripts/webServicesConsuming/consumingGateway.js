@@ -228,6 +228,7 @@ var consumingGateway = {
 
 	// Ajax request:
 	jQuery.ajax({
+	    async:true,
 	    url : gatewayWsURL,
 	    type : "POST",
 	    dataType : "xml",

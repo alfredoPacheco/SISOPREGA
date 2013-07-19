@@ -32,7 +32,6 @@ enyo.depends(
 	"source/cruds/crud.inspectionForecast.js",
 	
 	"source/cache.rejects.js",
-	"source/cache.feed.js",
 	
 	"source/catalogs/catalogs.list.rancher.js",
 	"source/catalogs/catalogs.main.js",
@@ -55,7 +54,6 @@ enyo.depends(
 	"source/operations/operations.inspections.js",
 	"source/operations/inspections.main.fs.js",
 	"source/operations/inspection.forecast.js",
-	"source/cache.inspection.forecast.js",
 	
 	"source/reports/reports.main.js",
 	"source/reports/reports.select.js",					
