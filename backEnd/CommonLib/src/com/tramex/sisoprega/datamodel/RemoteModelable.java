@@ -40,14 +40,14 @@ public interface RemoteModelable {
    * Create a given model in database.
    * @param model
    */
-  void createDataModel(Object model);
+  void createDataModel(Object model) throws DataModelException;
   
   /**
    * Delete a given model from database
    * @param model
    * @param principal
    */
-  void deleteDataModel(Object model, String principal);
+  void deleteDataModel(Object model, String principal) throws DataModelException;
   
   /**
    * Read a list of model from database using a given query.
@@ -56,7 +56,7 @@ public interface RemoteModelable {
    * @param type
    * @return
    */
-  <T> List<T> readDataModelList(String queryName, Map<String, Object> parameters, Class<T> type);
+  <T> List<T> readDataModelList(String queryName, Map<String, Object> parameters, Class<T> type) throws DataModelException;
   
   /**
    * Read a single record from database given an id.
@@ -66,13 +66,13 @@ public interface RemoteModelable {
    * @param type
    * @return
    */
-  <T> T readSingleDataModel(String queryName, String idName,  long modelId, Class<T> type);
+  <T> T readSingleDataModel(String queryName, String idName,  long modelId, Class<T> type) throws DataModelException;
   
   /**
    * Update a given data model in database.
    * @param dataModel
    */
-  void updateDataModel(Object dataModel);
+  void updateDataModel(Object dataModel) throws DataModelException;
   
   /**
    * Delete a list of records by a given id.
@@ -81,7 +81,7 @@ public interface RemoteModelable {
    * @param principal
    * @return
    */
-  boolean deleteBatch(String query, Map<Integer, Object> parameters, String principal);
+  boolean deleteBatch(String query, Map<Integer, Object> parameters, String principal) throws DataModelException;
   
   
 }

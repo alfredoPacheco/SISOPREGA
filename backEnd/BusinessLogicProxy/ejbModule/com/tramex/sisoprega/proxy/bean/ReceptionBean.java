@@ -13,6 +13,7 @@ import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
+import com.tramex.sisoprega.datamodel.DataModelException;
 import com.tramex.sisoprega.dto.Inspection;
 import com.tramex.sisoprega.dto.InspectionForecast;
 import com.tramex.sisoprega.dto.InspectionForecastDetail;
@@ -202,7 +203,14 @@ public class ReceptionBean extends BaseBean implements Cruddable {
 
       if (ifc.getInspectionForecastId() == 0) {
         log.fine("inspection forecast not found in database, creating one: " + ifc);
-        dataModel.createDataModel(ifc);
+        try {
+          dataModel.createDataModel(ifc);
+        } catch (DataModelException e) {
+          log.warning("Unable to create Forecast Inspection record: [" + ifc + "] due to the following exception: ["
+              + e.getMessage() + "]");
+          log.throwing(this.getClass().getCanonicalName(), "setInspectionForecast", e);
+        }
+
       }
 
     } else {
@@ -257,8 +265,14 @@ public class ReceptionBean extends BaseBean implements Cruddable {
     Map<String, Object> parameters = new HashMap<String, Object>();
     parameters.put("forecastDate", forecastDate);
 
-    List<InspectionForecast> ifcList = dataModel.readDataModelList("INSPECTIONFORECAST_BY_DATE", parameters,
-        InspectionForecast.class);
+    List<InspectionForecast> ifcList = null;
+
+    try {
+      ifcList = dataModel.readDataModelList("INSPECTIONFORECAST_BY_DATE", parameters, InspectionForecast.class);
+    } catch (DataModelException e) {
+      this.log.warning("Unable to read inspection forecast list due to the following exception: [" + e.getMessage() + "]");
+      this.log.throwing(this.getClass().getCanonicalName(), "getInspectionForecast", e);
+    }
 
     if (ifcList == null || ifcList.isEmpty()) {
       ifc = new InspectionForecast();
