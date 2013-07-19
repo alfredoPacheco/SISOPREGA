@@ -244,12 +244,12 @@ public class Messenger implements Messageable {
       if (person != null) {
         log.fine("Sending reportName: " + reportName);
         sendReport(person, reportName);
-      } 
+      }
     } catch (Exception e) {
       log.info("Person not found with provided id [" + rancherId + "]");
     }
 
-    if(person == null){
+    if (person == null) {
       EnterpriseRancher enterprise = null;
       try {
         log.fine("Reading enterprise rancher [" + rancherId + "] from dataModel");
@@ -267,16 +267,21 @@ public class Messenger implements Messageable {
 
   @Override
   public void sendSimpleMessage(long rancherId, String message) {
-    Rancher person = dataModel.readSingleDataModel("RANCHER_BY_ID", "Id", rancherId, Rancher.class);
+    try {
+      Rancher person = dataModel.readSingleDataModel("RANCHER_BY_ID", "Id", rancherId, Rancher.class);
 
-    if (person != null) {
-      sendSimpleMessage(person, message);
-    }
+      if (person != null) {
+        sendSimpleMessage(person, message);
+      }
 
-    EnterpriseRancher enterprise = dataModel.readSingleDataModel("ENTERPRISERANCHER_BY_ID", "Id", rancherId,
-        EnterpriseRancher.class);
-    if (enterprise != null) {
-      sendSimpleMessage(enterprise, message);
+      EnterpriseRancher enterprise = dataModel.readSingleDataModel("ENTERPRISERANCHER_BY_ID", "Id", rancherId,
+          EnterpriseRancher.class);
+      if (enterprise != null) {
+        sendSimpleMessage(enterprise, message);
+      }
+    } catch (Exception e) {
+      log.warning("Unable to send message [" + message + "] to rancherId: " + rancherId);
+      log.throwing(this.getClass().getCanonicalName(), "sendSimpleMessage", e);
     }
   }
 
@@ -313,10 +318,10 @@ public class Messenger implements Messageable {
         String message = new String(data);
 
         log.fine("Message from report: " + message);
-        
-        if(!message.startsWith("Error"))
+
+        if (!message.startsWith("Error"))
           smsSent = sendSMS(phone, message);
-        
+
         log.finer("smsSent [" + smsSent + "]");
       } else {
         log.fine("No phone for SMS found, will try only email");
@@ -384,7 +389,7 @@ public class Messenger implements Messageable {
             log.finest("reading toDate parameter with value [" + splittedParam[1] + "]");
             Date value = new SimpleDateFormat("MM/dd/yyyy").parse(splittedParam[1]);
             result.put(key, value);
-          }  else if (key.equals("recordId")) {
+          } else if (key.equals("recordId")) {
             log.finest("reading recordId parameter with value [" + splittedParam[1] + "]");
             Long value = Long.parseLong(splittedParam[1]);
             result.put(key, value);

@@ -27,6 +27,7 @@ import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 
+import com.tramex.sisoprega.datamodel.DataModelException;
 import com.tramex.sisoprega.dto.EnterpriseRancher;
 import com.tramex.sisoprega.dto.EnterpriseUser;
 import com.tramex.sisoprega.dto.Rancher;
@@ -72,7 +73,12 @@ public class IdentityManagerBean extends BaseBean implements RemoteIdentity {
   public void createUser(User user) throws IdentityManagerException {
     if (validateEntity(user)) {
       user.setPassword(hashPassword(user.getPassword()));
-      dataModel.createDataModel(user);
+      try {
+        dataModel.createDataModel(user);
+      } catch (DataModelException e) {
+        log.warning("Unable to create user [" + user + "]. Due to data exception: [" + e.getMessage() + "]");
+        throw new IdentityManagerException(e);
+      }
     }
   }
 
@@ -86,47 +92,54 @@ public class IdentityManagerBean extends BaseBean implements RemoteIdentity {
   @Override
   public void createRancherUser(Long rancherId, String userName, String password) throws IdentityManagerException {
     log.info("Entering to IdentityBean");
-    Rancher rancher = dataModel.readSingleDataModel("RANCHER_BY_ID", "Id", rancherId, Rancher.class);
-    if (rancher != null) {
-      log.info("Retrieving rancher successfull");
-      RancherUser rancherUser = getRancherUser(userName, password);
+    try {
+      Rancher rancher = null;
+      rancher = dataModel.readSingleDataModel("RANCHER_BY_ID", "Id", rancherId, Rancher.class);
 
-      rancher.addRancherUser(rancherUser);
-      dataModel.updateDataModel(rancher);
+      if (rancher != null) {
+        log.info("Retrieving rancher successfull");
+        RancherUser rancherUser = getRancherUser(userName, password);
 
-    } else {
-      EnterpriseRancher er = dataModel.readSingleDataModel("ENTERPRISERANCHER_BY_ID", "Id", rancherId, EnterpriseRancher.class);
-      if(er != null){
-        log.info("Retrieving enterprise rancher successfull");
-        EnterpriseUser enterpriseUser = getEnterpriseUser(userName, password);
-        
-        er.addEnterpriseUser(enterpriseUser);
-        dataModel.updateDataModel(er);
-      }else{
-        throw new IdentityManagerException("Ganadero no encontrado.");
+        rancher.addRancherUser(rancherUser);
+        dataModel.updateDataModel(rancher);
+
+      } else {
+        EnterpriseRancher er = dataModel.readSingleDataModel("ENTERPRISERANCHER_BY_ID", "Id", rancherId, EnterpriseRancher.class);
+        if (er != null) {
+          log.info("Retrieving enterprise rancher successfull");
+          EnterpriseUser enterpriseUser = getEnterpriseUser(userName, password);
+
+          er.addEnterpriseUser(enterpriseUser);
+          dataModel.updateDataModel(er);
+        } else {
+          throw new IdentityManagerException("Ganadero no encontrado.");
+        }
       }
+    } catch (DataModelException e) {
+      log.warning("Unable to create rancher user [" + userName + "] due to exception [" + e.getMessage() + "]");
+      throw new IdentityManagerException(e);
     }
   }
-  
-  private RancherUser getRancherUser(String userName, String password) throws IdentityManagerException{
+
+  private RancherUser getRancherUser(String userName, String password) throws IdentityManagerException {
     saveUserForRancher(userName, password);
 
     RancherUser rancherUser = new RancherUser();
     rancherUser.setUser_name(userName);
-    
+
     return rancherUser;
   }
 
-  private EnterpriseUser getEnterpriseUser(String userName, String password) throws IdentityManagerException{
+  private EnterpriseUser getEnterpriseUser(String userName, String password) throws IdentityManagerException {
     saveUserForRancher(userName, password);
-    
+
     EnterpriseUser rancherUser = new EnterpriseUser();
     rancherUser.setUser_name(userName);
-    
+
     return rancherUser;
 
   }
-  
+
   private void saveUserForRancher(String userName, String password) throws IdentityManagerException {
     User user = new User();
 
@@ -137,7 +150,7 @@ public class IdentityManagerBean extends BaseBean implements RemoteIdentity {
     role.setRole_name("rancher");
     role.setUser_name(userName);
     user.addGroup(role);
-    
+
     createUser(user);
   }
 
@@ -154,8 +167,12 @@ public class IdentityManagerBean extends BaseBean implements RemoteIdentity {
     User user = getUserFromName(userName);
     newPassword = hashPassword(newPassword);
     user.setPassword(newPassword);
-    dataModel.updateDataModel(user);
-
+    try {
+      dataModel.updateDataModel(user);
+    } catch (DataModelException e) {
+      log.warning("Unable to reset password in user [" + userName + "] due to exception [" + e.getMessage() + "]");
+      throw new IdentityManagerException(e);
+    }
   }
 
   /*
@@ -176,7 +193,12 @@ public class IdentityManagerBean extends BaseBean implements RemoteIdentity {
 
       user.getGroups().add(newGroup);
       log.fine("Updating records on database");
-      dataModel.updateDataModel(user);
+      try {
+        dataModel.updateDataModel(user);
+      } catch (DataModelException e) {
+        log.warning("Unable to add group [" + groupName + "] to userName [" + groupName + "]");
+        throw new IdentityManagerException(e);
+      }
     }
   }
 
@@ -190,26 +212,32 @@ public class IdentityManagerBean extends BaseBean implements RemoteIdentity {
   @Override
   public void removeGroup(String userName, String groupName) throws IdentityManagerException {
     log.entering(this.getClass().getCanonicalName(), "removeGroup");
-    User user = getUserFromName(userName);
+    try {
+      User user = getUserFromName(userName);
 
-    log.fine("checking if group [" + groupName + "] is contained in user");
-    Role groupToRemove = null;
+      log.fine("checking if group [" + groupName + "] is contained in user");
+      Role groupToRemove = null;
 
-    for (Role group : user.getGroups()) {
-      if (group.getRole_name().equalsIgnoreCase(groupName)) {
-        groupToRemove = group;
-        log.fine("Deleting group record on database");
-        dataModel.deleteDataModel(group, "");
-        break;
+      for (Role group : user.getGroups()) {
+        if (group.getRole_name().equalsIgnoreCase(groupName)) {
+          groupToRemove = group;
+          log.fine("Deleting group record on database");
+          dataModel.deleteDataModel(group, "");
+          break;
+        }
       }
+
+      log.fine("group found in user to be removed:" + groupName);
+      user.getGroups().remove(groupToRemove);
+
+      dataModel.updateDataModel(user);
+      log.fine("Updating user record with new set of groups");
+
+    } catch (DataModelException e) {
+      log.warning("Unable to remove group [" + groupName + "] from user [" + userName + "] due to the following exception: ["
+          + e.getMessage() + "]");
+      throw new IdentityManagerException(e);
     }
-
-    log.fine("group found in user to be removed:" + groupName);
-    user.getGroups().remove(groupToRemove);
-
-    dataModel.updateDataModel(user);
-    log.fine("Updating user record with new set of groups");
-    return;
   }
 
   @Override
@@ -217,7 +245,12 @@ public class IdentityManagerBean extends BaseBean implements RemoteIdentity {
     log.entering(this.getClass().getCanonicalName(), "removeGroup");
 
     User user = getUserFromName(userName);
-    dataModel.deleteDataModel(user, "");
+    try {
+      dataModel.deleteDataModel(user, "");
+    } catch (DataModelException e) {
+      log.warning("Unable to remove user [" + userName + "] due to the following exception [" + e.getMessage() + "]");
+      throw new IdentityManagerException(e);
+    }
 
     log.fine("User record removed");
     return;
@@ -231,18 +264,24 @@ public class IdentityManagerBean extends BaseBean implements RemoteIdentity {
   @PermitAll
   @Override
   public List<User> allUsers() throws IdentityManagerException {
-    List<User> users = dataModel.readDataModelList("ALL_NO_RANCHER_USERS", null, User.class);
-    List<User> result = new ArrayList<User>();
-    for (User user : users) {
-      User uCopy = new User();
-      uCopy.setUserName(user.getUserName());
-      uCopy.setPassword("!$NoChanged$!");
-      uCopy.setGroups(new ArrayList<Role>());
-      uCopy.getGroups().addAll(user.getGroups());
-      result.add(uCopy);
-    }
+    try {
+      List<User> users = dataModel.readDataModelList("ALL_NO_RANCHER_USERS", null, User.class);
+      List<User> result = new ArrayList<User>();
+      for (User user : users) {
+        User uCopy = new User();
+        uCopy.setUserName(user.getUserName());
+        uCopy.setPassword("!$NoChanged$!");
+        uCopy.setGroups(new ArrayList<Role>());
+        uCopy.getGroups().addAll(user.getGroups());
+        result.add(uCopy);
+      }
 
-    return result;
+      return result;
+
+    } catch (DataModelException e) {
+      log.warning("Unable to read all users due to exception: [" + e.getMessage() + "]");
+      throw new IdentityManagerException(e);
+    }
   }
 
   /*
@@ -273,14 +312,19 @@ public class IdentityManagerBean extends BaseBean implements RemoteIdentity {
   }
 
   private User getUserFromName(String userName) throws IdentityManagerException {
-    Map<String, Object> parameters = new HashMap<String, Object>();
-    parameters.put("userName", userName);
-    List<User> users = dataModel.readDataModelList("USER_BY_NAME", parameters, User.class);
+    try{
+      Map<String, Object> parameters = new HashMap<String, Object>();
+      parameters.put("userName", userName);
+      List<User> users = dataModel.readDataModelList("USER_BY_NAME", parameters, User.class);
 
-    if (!users.isEmpty()) {
-      return users.get(0);
-    } else {
-      throw new IdentityManagerException("Unable to find given user.");
+      if (!users.isEmpty()) {
+        return users.get(0);
+      } else {
+        throw new IdentityManagerException("Unable to find given user.");
+      }
+    }catch(DataModelException e){
+      log.warning("Unable to get user [" + userName + "]");
+      throw new IdentityManagerException(e);
     }
   }
 

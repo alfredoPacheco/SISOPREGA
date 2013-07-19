@@ -139,5 +139,9 @@ public class Pen {
       return false;
   }
 
+  @Override
+  public String toString() {
+    return "barnyardCode:" + barnyardCode + ";penId:" + penId + ";locationId:" + locationId + ";";
+  }
   
 }

@@ -30,6 +30,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.sf.jasperreports.engine.JRException;
 
+import com.tramex.sisoprega.datamodel.DataModelException;
 import com.tramex.sisoprega.datamodel.RemoteModelable;
 import com.tramex.sisoprega.dto.RancherUser;
 
@@ -55,7 +56,7 @@ public abstract class BaseReportServlet extends HttpServlet {
 
   private static final long serialVersionUID = -8325869766939791546L;
   protected Logger log = Logger.getLogger(BaseReportServlet.class.getCanonicalName());
-  
+
   @EJB(lookup = "java:global/DataModel/BaseDataModel")
   protected RemoteModelable dataModel;
 
@@ -64,13 +65,12 @@ public abstract class BaseReportServlet extends HttpServlet {
     this.log = Logger.getLogger(this.getClass().getCanonicalName());
   }
 
-  protected void processRequest(byte[] reportBytes, HttpServletResponse response)
-      throws IOException, JRException {
+  protected void processRequest(byte[] reportBytes, HttpServletResponse response) throws IOException, JRException {
     log.entering(this.getClass().getCanonicalName(), "void processRequest(byte[" + reportBytes.length + "], response )");
     response.setContentType("application/pdf");
     response.setContentLength(reportBytes.length);
     // response.setHeader("Content-disposition","attachment; filename=sisoprega.pdf");
-    
+
     ServletOutputStream out = response.getOutputStream();
     out.write(reportBytes);
   }
@@ -89,7 +89,7 @@ public abstract class BaseReportServlet extends HttpServlet {
       log.severe("process request exception");
       log.throwing(this.getClass().getCanonicalName(), "doGet", e);
       throw new ServletException(e);
-    } 
+    }
   }
 
   /**
@@ -100,24 +100,32 @@ public abstract class BaseReportServlet extends HttpServlet {
     doGet(request, response);
   }
 
-  protected String rancherFromLoggedUser(HttpServletRequest request) {
+  protected String rancherFromLoggedUser(HttpServletRequest request) throws ServletException {
     log.entering(this.getClass().getCanonicalName(), "getLoggedRancherId");
 
-    long result = 0;
+    try {
+      long result = 0;
 
-    Map<String, Object> parameters = new HashMap<String, Object>();
-    parameters.put("userName", request.getUserPrincipal().getName());
+      Map<String, Object> parameters = new HashMap<String, Object>();
+      parameters.put("userName", request.getUserPrincipal().getName());
 
-    List<RancherUser> ranchers = dataModel.readDataModelList("RANCHER_USER_BY_USER_NAME", parameters, RancherUser.class);
+      List<RancherUser> ranchers = dataModel.readDataModelList("RANCHER_USER_BY_USER_NAME", parameters, RancherUser.class);
 
-    if (!ranchers.isEmpty()) {
-      RancherUser loggedRancher = ranchers.get(0);
-      if (loggedRancher.getRancher() != null)
-        result = loggedRancher.getRancher().getRancherId();
+      if (!ranchers.isEmpty()) {
+        RancherUser loggedRancher = ranchers.get(0);
+        if (loggedRancher.getRancher() != null)
+          result = loggedRancher.getRancher().getRancherId();
+      }
+
+      log.fine("Retrieved rancherId[" + result + "] from userName[" + request.getUserPrincipal().getName() + "]");
+      return String.valueOf(result);
+
+    } catch (DataModelException e) {
+      this.log.warning("Unable to read logged user due to the following exception: [" + e.getMessage() + "]");
+      this.log.throwing(this.getClass().getCanonicalName(), "rancherFromLoggedUser", e);
+      throw new ServletException(e);
     }
 
-    log.fine("Retrieved rancherId[" + result + "] from userName[" + request.getUserPrincipal().getName() + "]");
-    return String.valueOf(result);
   }
 
 }

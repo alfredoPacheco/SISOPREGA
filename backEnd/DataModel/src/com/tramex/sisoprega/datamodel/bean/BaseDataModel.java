@@ -25,6 +25,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
+import com.tramex.sisoprega.datamodel.DataModelException;
 import com.tramex.sisoprega.datamodel.RemoteModelable;
 
 /**
@@ -52,65 +53,94 @@ public class BaseDataModel implements RemoteModelable {
   @PersistenceContext
   protected EntityManager em;
 
-  public void createDataModel(Object dataModel) {
-    em.persist(dataModel);
-    em.flush();
-    this.log.finer("Persisted data model in database.");
-  }
-
-  public <T> List<T> readDataModelList(String queryName, Map<String, Object> parameters, Class<T> type) {
-    log.fine("JPA EntityManager Flushed away");
-    TypedQuery<T> readQuery = em.createNamedQuery(queryName, type);
-
-    log.finer("Setting up parameters for readQuery [" + readQuery + "]");
-    
-    if (parameters != null) {
-      for (Map.Entry<String, Object> entry : parameters.entrySet()) {
-        readQuery.setParameter(entry.getKey(), entry.getValue());
-        this.log.finer("Set query parameter [" + entry.getKey() + "] with value [" + entry.getValue() + "]");
-      }
-    }
-    
-    List<T> result = readQuery.getResultList();
-    log.finest("read query successfully executed.!");
-    for(Object obj : result){
-      em.refresh(obj);
-    }
-    
-    log.fine("Read query executed, retrieved [" + result.size() + "] objects");
-    
-    return result;
-  }
-
-  public <T> T readSingleDataModel(String queryName, String idName, long modelId, Class<T> type) {
-    log.fine("JPA EntityManager Flushed away");
-    TypedQuery<T> readQuery = em.createNamedQuery(queryName, type);
-
-    readQuery.setParameter(idName, modelId);
-    T result = null;
+  public void createDataModel(Object dataModel) throws DataModelException {
     try {
-      result = readQuery.getSingleResult();
-      em.refresh(result);
+      em.persist(dataModel);
+      em.flush();
+      this.log.finer("Persisted data model in database.");
     } catch (Exception e) {
-      log.fine("Could not find single data model: " + e.getMessage());
+      this.log.warning("Unable to create record: " + dataModel);
+      this.log.throwing(this.getClass().getCanonicalName(), "createDataModel", e);
+      throw new DataModelException(e.getMessage());
+    }
+  }
+
+  public <T> List<T> readDataModelList(String queryName, Map<String, Object> parameters, Class<T> type) throws DataModelException {
+    try {
+      TypedQuery<T> readQuery = em.createNamedQuery(queryName, type);
+
+      log.finer("Setting up parameters for readQuery [" + readQuery + "]");
+
+      if (parameters != null) {
+        for (Map.Entry<String, Object> entry : parameters.entrySet()) {
+          readQuery.setParameter(entry.getKey(), entry.getValue());
+          this.log.finer("Set query parameter [" + entry.getKey() + "] with value [" + entry.getValue() + "]");
+        }
+      }
+
+      List<T> result = readQuery.getResultList();
+      log.finest("read query successfully executed.!");
+      for (Object obj : result) {
+        em.refresh(obj);
+      }
+
+      log.fine("Read query executed, retrieved [" + result.size() + "] objects");
+
+      return result;
+    } catch (Exception e) {
+      this.log.warning("Unable to read with selected query: " + queryName);
+      this.log.throwing(this.getClass().getCanonicalName(), "readDataModelList", e);
+      throw new DataModelException(e.getMessage());
+    }
+  }
+
+  public <T> T readSingleDataModel(String queryName, String idName, long modelId, Class<T> type) throws DataModelException {
+    try {
+      TypedQuery<T> readQuery = em.createNamedQuery(queryName, type);
+
+      readQuery.setParameter(idName, modelId);
+      T result = null;
+      try {
+        result = readQuery.getSingleResult();
+        em.refresh(result);
+      } catch (Exception e) {
+        log.fine("Could not find single data model: " + e.getMessage());
+      }
+
+      log.fine("Single Object retrieved from database: [" + result + "]");
+      return result;
+    } catch (Exception e) {
+      this.log.warning("Unable to read with selected query: " + queryName);
+      this.log.throwing(this.getClass().getCanonicalName(), "readSingleDataModel", e);
+      throw new DataModelException(e.getMessage());
     }
 
-    log.fine("Single Object retrieved from database: [" + result + "]");
-    return result;
   }
 
-  public void updateDataModel(Object dataModel) {
-    em.merge(dataModel);
-    em.flush();
-    this.log.finer("Reception update persisted on database for object {" + dataModel + "}");
+  public void updateDataModel(Object dataModel) throws DataModelException {
+    try {
+      em.merge(dataModel);
+      em.flush();
+      this.log.finer("Reception update persisted on database for object {" + dataModel + "}");
+    } catch (Exception e) {
+      this.log.warning("Unable to update model: " + dataModel);
+      this.log.throwing(this.getClass().getCanonicalName(), "updateDataModel", e);
+      throw new DataModelException(e.getMessage());
+    }
   }
 
-  public void deleteDataModel(Object dataModel, String principal) {
-    em.merge(dataModel);
-    log.info("Deleting " + dataModel.getClass().getCanonicalName() + " [" + dataModel.toString() + "] by principal[" + principal
-        + "]");
-    em.remove(dataModel);
-    em.flush();
+  public void deleteDataModel(Object dataModel, String principal) throws DataModelException {
+    try {
+      em.merge(dataModel);
+      log.info("Deleting " + dataModel.getClass().getCanonicalName() + " [" + dataModel.toString() + "] by principal["
+          + principal + "]");
+      em.remove(dataModel);
+      em.flush();
+    } catch (Exception e) {
+      this.log.warning("Unable to delete model: [" + dataModel + "] by principal [" + principal + "]");
+      this.log.throwing(this.getClass().getCanonicalName(), "updateDataModel", e);
+      throw new DataModelException(e.getMessage());
+    }
   }
 
   @Override
