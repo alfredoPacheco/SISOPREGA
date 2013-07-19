@@ -87,13 +87,9 @@ public class ReceptionBean extends BaseBean implements Cruddable {
       this.log.severe("Exception found while creating entity: " + e.getMessage());
       this.log.throwing(this.getClass().getName(), "Create", e);
 
-      if (e instanceof javax.persistence.PersistenceException)
-        response.setError(new GatewayError("DB01",
-            "Los datos que usted ha intentado ingresar, no son permitidos por la base de datos, "
-                + "muy probablemente el registro que usted quiere agregar ya existe en la base de datos.", "Create"));
-      else {
-        response.setError(new GatewayError("DB02", "Create exception: " + e.getMessage(), "Create"));
-      }
+      response.setError(new GatewayError("DB01",
+          "Los datos que usted ha intentado ingresar, no son permitidos por la base de datos, "
+              + "muy probablemente el registro que usted quiere agregar ya existe en la base de datos.", "Create"));
     }
 
     this.log.exiting(this.getClass().getCanonicalName(), "CreateResponse Create(CreateRequest)");
@@ -175,13 +171,9 @@ public class ReceptionBean extends BaseBean implements Cruddable {
       this.log.severe("Exception found while updating entity: " + e.getMessage());
       this.log.throwing(this.getClass().getName(), "Update", e);
 
-      if (e instanceof javax.persistence.PersistenceException)
-        response.setError(new GatewayError("DB01",
-            "Los datos que usted ha intentado ingresar, no son permitidos por la base de datos, "
-                + "muy probablemente el registro que usted quiere agregar ya existe en la base de datos.", "Update"));
-      else {
-        response.setError(new GatewayError("DB02", "Update exception: " + e.getMessage(), "Update"));
-      }
+      response.setError(new GatewayError("DB01",
+          "Los datos que usted ha intentado ingresar, no son permitidos por la base de datos, "
+              + "muy probablemente el registro que usted quiere agregar ya existe en la base de datos.", "Update"));
     }
 
     this.log.exiting(this.getClass().getCanonicalName(), "ReadResponse Update(CreateRequest)");

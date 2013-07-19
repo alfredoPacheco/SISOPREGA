@@ -44,6 +44,7 @@ public class InspectionForecastDetail {
   private long origin;
   private long cattleType;
   private long quantity;
+  private long inspection_seq;
   private InspectionForecast inspectionForecast;
   private Set<Pen> pen;
 
@@ -153,6 +154,20 @@ public class InspectionForecastDetail {
    */
   public void setQuantity(long quantity) {
     this.quantity = quantity;
+  }
+
+  /**
+   * @return the inspection_seq
+   */
+  public long getInspection_seq() {
+    return inspection_seq;
+  }
+
+  /**
+   * @param inspection_seq the inspection_seq to set
+   */
+  public void setInspection_seq(long inspection_seq) {
+    this.inspection_seq = inspection_seq;
   }
 
   /**

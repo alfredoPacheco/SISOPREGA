@@ -864,11 +864,14 @@
 			<basic name="cattleType">
 				<column name="cattle_type" />
 			</basic>
+			<basic name="inspection_seq">
+				<column name="inspection_seq"/>
+			</basic>
 			<many-to-one name="inspectionForecast" optional="false" fetch="LAZY">
 				<join-column name="forecast_id" referenced-column-name="id" nullable="false" />
 			</many-to-one>
 			<one-to-many name="pen" fetch="EAGER" >
-				<join-table name="ctrl_inspection_forecast_barnyard">
+				<join-table name="ctrl_inspection_forecast_barnyard"> 
 					<join-column name="detail_id" referenced-column-name="id" />
 					<inverse-join-column name="barnyard_id" referenced-column-name="barnyard_id" />
 				</join-table>

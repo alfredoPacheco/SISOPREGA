@@ -5,7 +5,7 @@ enyo
 	    layoutKind : enyo.VFlexLayout,
 	    iSelected : null,
 	    _id : undefined,
-	    objInspection:null,
+	    objInspection : null,
 	    objList : [],
 	    arrBY : [],
 	    arrTempPopupSelection : [],
@@ -148,11 +148,11 @@ enyo
 							    layoutKind : enyo.HFlexLayout,
 							    components : [ {
 								kind : "controls.numberBox",
-                                                                name : "cantidad",
-                                                                hint : "Cantidad",
-                                                                height:"50px",
-                                                                flex : 1,
-                                                                onkeydown : "key_down"
+								name : "cantidad",
+								hint : "Cantidad",
+								height : "50px",
+								flex : 1,
+								onkeydown : "key_down"
 							    } ]
 							} ]
 						    },
@@ -350,12 +350,12 @@ enyo
 						style : "width:100px;",
 						label : "Cancelar",
 						onclick : "onCancel"
-					    },{
+					    }, {
 						kind : "enyo.IconButton",
 						style : "width:100px;",
 						label : "Mover arriba",
 						onclick : "onMoverArriba"
-					    },{
+					    }, {
 						kind : "enyo.IconButton",
 						style : "width:100px;",
 						label : "Mover abajo",
@@ -369,8 +369,7 @@ enyo
 	    } ],
 
 	    // TODO: BEGIN FUNCTIONS
-	    
-	    
+
 	    enviar_aviso : function() {
 
 		if (confirm("¿Desea enviar los avisos ahora?")) {
@@ -381,14 +380,17 @@ enyo
 			    if (!(customers_set[this.objList[i].rancherId] in customers_set)) {
 				customers_set[this.objList[i].rancherId] = this.objList[i].rancherId;
 				var report_name = 'ListaInspeccion?rancherId='
-					+ this.objList[i].rancherId;
+					+ this.objList[i].rancherId
+					+ '&amp;Id='
+					+ this.objInspection.inspectionForecastId;
 				consumingGateway.SendReport(
 					this.objList[i].rancherId, report_name);
 			    }
 			}
-			alert("El aviso se ha enviado satisfactoriamente.");
 		    } else {
-			cacheMan.setMessage("",	"Error. No se ha creado la lista de inspección.");
+			cacheMan
+				.setMessage("",
+					"Error. No se ha creado la lista de inspección.");
 		    }
 		}
 
@@ -413,39 +415,42 @@ enyo
 		    this.readCounter = 0;
 		}
 	    },
-	    loadAutocompletes : function() { 
+	    loadAutocompletes : function() {
 		this.arrActiveReceptions = crudReception.arrObj;
-		
 
-		var arrAllRanchers = crudRancher.getList().concat(crudEnterpriseRancher.getList());
+		var arrAllRanchers = crudRancher.getList().concat(
+			crudEnterpriseRancher.getList());
 		this.$.rancher.setItems(arrAllRanchers);
 
 		this.$.origin.setItems(crudLocation.getList());
-		
+
 		this.$.cattleType.setItems(crudCattle.getCattleTypeList());
-		
-		
-		for(var i = 0; i<this.arrActiveReceptions.length;i++){
-			var objRanch = null;
-			var objLocation = null;
-			var objCattle = null;
-			
-			if(objRanch = crudRancher.getByID(this.arrActiveReceptions[i].rancherId) || crudEnterpriseRancher.getByID(this.arrActiveReceptions[i].rancherId))
-			    this.arrActiveReceptions[i].rancherName = objRanch.name;
-			
-			if(objLocation = crudLocation.getByID(this.arrActiveReceptions[i].locationId))
-			    this.arrActiveReceptions[i].locationName = objLocation.locationName;
-			
-			if(objCattle = crudCattle.getCattleTypeById(this.arrActiveReceptions[i].cattleType))
-			    this.arrActiveReceptions[i].cattype_name = objCattle.cattypeName;
-			    
+
+		for ( var i = 0; i < this.arrActiveReceptions.length; i++) {
+		    var objRanch = null;
+		    var objLocation = null;
+		    var objCattle = null;
+
+		    if (objRanch = crudRancher
+			    .getByID(this.arrActiveReceptions[i].rancherId)
+			    || crudEnterpriseRancher
+				    .getByID(this.arrActiveReceptions[i].rancherId))
+			this.arrActiveReceptions[i].rancherName = objRanch.name;
+
+		    if (objLocation = crudLocation
+			    .getByID(this.arrActiveReceptions[i].locationId))
+			this.arrActiveReceptions[i].locationName = objLocation.locationName;
+
+		    if (objCattle = crudCattle
+			    .getCattleTypeById(this.arrActiveReceptions[i].cattleType))
+			this.arrActiveReceptions[i].cattype_name = objCattle.cattypeName;
+
 		}
-		
+
 		this.arrFilter = this.arrActiveReceptions;
-		
+
 		this.$.zone.setItems(cacheMan.getAllZonesForList());
 
-		
 		// if(this.$.zone.getItems().length > 0 ){
 		// this.defaultZone = this.$.zone.getFirstOne().value;
 		// }
@@ -637,7 +642,8 @@ enyo
 			if (this.defaultCattle) {
 			    this.actualAutocompleteFilter.cattleType = true;
 			    this.$.cattleType.index = this.defaultCattle;
-			    var oCattle = crudCattle.getCattleTypeById(this.$.cattleType.index);
+			    var oCattle = crudCattle
+				    .getCattleTypeById(this.$.cattleType.index);
 			    if (oCattle) {
 				this.$.cattleType.setValue(oCattle.cattypeName);
 			    } else {
@@ -929,7 +935,8 @@ enyo
 			    for ( var j = 0; j < this.arrActiveReceptions[i].Pen.length; j++) {
 
 				if (parseInt(this.arrActiveReceptions[i].Pen[j].locationId) == parseInt(this.defaultZone)) {
-				    auxCaption += this.arrActiveReceptions[i].Pen[j].barnyardCode + ", ";
+				    auxCaption += this.arrActiveReceptions[i].Pen[j].barnyardCode
+					    + ", ";
 				}
 			    }
 			}
@@ -952,27 +959,27 @@ enyo
 		}
 		this.$.barnyards.setFilter(result);
 	    },
-//	    addRancherSelected : function(rancherId) {
-//		if (rancherId > -1) {
-//		    for ( var i = 0; i < this.arrReceptions.length; i++) {
-//			if (this.arrReceptions[i].rancherId == rancherId) {
-//			    return;
-//			}
-//		    }
-//
-//		    var objRancherSelected = {
-//			rancherId : rancherId,
-//			receptions : crudReception
-//				.getReceptionsByRancherID(rancherId),
-//			origins : [],
-//			cattleTypes : [],
-//			zones : [],
-//			barnyards : []
-//		    };
-//
-//		    this.arrReceptions.push(objRancherSelected);
-//		}
-//	    },
+	    // addRancherSelected : function(rancherId) {
+	    // if (rancherId > -1) {
+	    // for ( var i = 0; i < this.arrReceptions.length; i++) {
+	    // if (this.arrReceptions[i].rancherId == rancherId) {
+	    // return;
+	    // }
+	    // }
+	    //
+	    // var objRancherSelected = {
+	    // rancherId : rancherId,
+	    // receptions : crudReception
+	    // .getReceptionsByRancherID(rancherId),
+	    // origins : [],
+	    // cattleTypes : [],
+	    // zones : [],
+	    // barnyards : []
+	    // };
+	    //
+	    // this.arrReceptions.push(objRancherSelected);
+	    // }
+	    // },
 	    selectForecast : function(inSender, inEvent) {
 		if (objFore = this.objList[inEvent.rowIndex]) {
 		    this.$.rancher.setIndex(objFore.rancherId);
@@ -1005,7 +1012,8 @@ enyo
 	    setupForecastRow : function(inSender, inIndex) {
 		var objFore;
 		if (objFore = this.objList[inIndex]) {
-		    var auxRancher = crudRancher.getByID(objFore.rancherId) || crudEnterpriseRancher.getByID(objFore.rancherId);
+		    var auxRancher = crudRancher.getByID(objFore.rancherId)
+			    || crudEnterpriseRancher.getByID(objFore.rancherId);
 		    if (auxRancher) {
 			this.$.listRancher.setContent(auxRancher.name);
 		    }
@@ -1017,7 +1025,8 @@ enyo
 			this.$.listOrigin.setContent("");
 		    }
 
-		    var oCattle = crudCattle.getCattleTypeById(objFore.cattleType);
+		    var oCattle = crudCattle
+			    .getCattleTypeById(objFore.cattleType);
 		    if (oCattle) {
 			this.$.listCattleType.setContent(oCattle.cattypeName);
 		    } else {
@@ -1090,33 +1099,34 @@ enyo
 		this.addInspectionForecast();
 	    },
 	    getInspectionForecastDetail : function(bUpdating) {
-		
+
 		var objInspectionDetail = {
-			Pen: [],
-			cattleType: this.$.cattleType.getIndex(),
-			entityName: "InspectionForecastDetail",
-			origin: this.$.origin.getIndex(),
-			quantity: this.$.cantidad.getValue(),
-			rancherId: this.$.rancher.getIndex(),
-			zoneId: this.$.zone.getIndex(),
-			auth : this.$.autorizacion.getValue()
+		    Pen : [],
+		    cattleType : this.$.cattleType.getIndex(),
+		    entityName : "InspectionForecastDetail",
+		    origin : this.$.origin.getIndex(),
+		    quantity : this.$.cantidad.getValue(),
+		    rancherId : this.$.rancher.getIndex(),
+		    zoneId : this.$.zone.getIndex(),
+		    auth : this.$.autorizacion.getValue()
 		};
 
-		if(bUpdating) {
+		if (bUpdating) {
 		    objInspectionDetail.inspectionForecastDetailId = this.objList[this.iSelected].inspectionForecastDetailId;
-		    objInspectionDetail.order = this.objList[this.iSelected].order || 0;
-		}else{
-		    if(this.objList.length > 0){
-			objInspectionDetail.order = Number(this.objList[this.objList.length-1].order) + 1;
-		    }else{
-			objInspectionDetail.order = 0;
+		    objInspectionDetail.inspection_seq = this.objList[this.iSelected].order || 0;
+		} else {
+		    if (this.objList.length > 0) {
+			objInspectionDetail.inspection_seq = Number(this.objList[this.objList.length - 1].order) + 1;
+		    } else {
+			objInspectionDetail.inspection_seq = 0;
 		    }
 		}
-		
+
 		var barnyardsAux = this.$.barnyards.getText().split(",");
 		for ( var i = 0; i < barnyardsAux.length; i++) {
 		    barnyardsAux[i] = barnyardsAux[i].replace(" ", "");
-		    barnyardsAux[i] = this.$.zone.getIndex() + barnyardsAux[i].toUpperCase();
+		    barnyardsAux[i] = this.$.zone.getIndex()
+			    + barnyardsAux[i].toUpperCase();
 		    var auxBarn = crudPen.getByBarnyard(barnyardsAux[i]);
 		    if (auxBarn == undefined) {
 			cacheMan.setMessage("", "[Exception ID: LOCAL"
@@ -1128,46 +1138,54 @@ enyo
 		    }
 		    objInspectionDetail.Pen.push(auxBarn);
 		}
-		
+
 		return objInspectionDetail;
 	    },
 	    addInspectionForecast : function() {
 		var objForecastDetail = this.getInspectionForecastDetail();
 		if (objForecastDetail) {
-		    if(!this.objInspection.InspectionForecastDetail)
+		    if (!this.objInspection.InspectionForecastDetail)
 			this.objInspection.InspectionForecastDetail = [];
-		    
-		    this.objInspection.InspectionForecastDetail.push(objForecastDetail);
-		    
+
+		    this.objInspection.InspectionForecastDetail
+			    .push(objForecastDetail);
+
 		    if (this.objInspection.inspectionForecastId) {
-			crudInspectionForecast.update(this.objInspection, this, "updateList");
+			crudInspectionForecast.update(this.objInspection, this,
+				"updateList");
 		    } else {
-			crudInspectionForecast.create(this.objInspection, this, "updateList");
+			crudInspectionForecast.create(this.objInspection, this,
+				"updateList");
 		    }
 		}
 	    },
 	    updateForecast : function() {
 		var objForecastDetail = this.getInspectionForecastDetail(true);
 		if (objForecastDetail) {
-		    for(var i =0; i< this.objInspection.InspectionForecastDetail.length;i++){
-			if(this.objInspection.InspectionForecastDetail[i].inspectionForecastDetailId == objForecastDetail.inspectionForecastDetailId){
+		    for ( var i = 0; i < this.objInspection.InspectionForecastDetail.length; i++) {
+			if (this.objInspection.InspectionForecastDetail[i].inspectionForecastDetailId == objForecastDetail.inspectionForecastDetailId) {
 			    this.objInspection.InspectionForecastDetail[i] = objForecastDetail;
-			    crudInspectionForecast.update(this.objInspection, this, "updateList");
+			    crudInspectionForecast.update(this.objInspection,
+				    this, "updateList");
 			    return;
 			}
 		    }
-		    cacheMan.setMessage("Error. No se ha podido actualizar el registro seleccionado.");
+		    cacheMan
+			    .setMessage("Error. No se ha podido actualizar el registro seleccionado.");
 		}
 	    },
 	    dropForecast : function() {
-		for(var i =0; i< this.objInspection.InspectionForecastDetail.length;i++){
-			if(this.objInspection.InspectionForecastDetail[i].inspectionForecastDetailId == this.objList[this.iSelected].inspectionForecastDetailId){
-			    this.objInspection.InspectionForecastDetail.splice(i, 1);
-			    crudInspectionForecast.update(this.objInspection, this, "updateList");
-			    return;
-			}
+		for ( var i = 0; i < this.objInspection.InspectionForecastDetail.length; i++) {
+		    if (this.objInspection.InspectionForecastDetail[i].inspectionForecastDetailId == this.objList[this.iSelected].inspectionForecastDetailId) {
+			this.objInspection.InspectionForecastDetail
+				.splice(i, 1);
+			crudInspectionForecast.update(this.objInspection, this,
+				"updateList");
+			return;
 		    }
-		    cacheMan.setMessage("Error. No se ha podido eliminar el registro seleccionado.");
+		}
+		cacheMan
+			.setMessage("Error. No se ha podido eliminar el registro seleccionado.");
 	    },
 	    updateList : function() {
 		cacheMan.showScrim();
@@ -1198,55 +1216,61 @@ enyo
 		// filling up right side**************************************
 		arrAllForecasts = crudInspectionForecast.arrObj;
 		for ( var i = 0; i < arrAllForecasts.length; i++) {
-		    if (fmt.format(arrAllForecasts[i].forecastDate) == fmt.format(this.fecha)) {
+		    if (fmt.format(arrAllForecasts[i].forecastDate) == fmt
+			    .format(this.fecha)) {
 			this._id = arrAllForecasts[i].inspectionForecastId;
 			this.objInspection = arrAllForecasts[i];
-			if(arrAllForecasts[i].InspectionForecastDetail){
+			if (arrAllForecasts[i].InspectionForecastDetail) {
 			    for ( var j = 0; j < arrAllForecasts[i].InspectionForecastDetail.length; j++) {
 				if (arrAllForecasts[i].InspectionForecastDetail[j].inspectionForecastDetailId) {
-				    this.objList.push(arrAllForecasts[i].InspectionForecastDetail[j]);
+				    this.objList
+					    .push(arrAllForecasts[i].InspectionForecastDetail[j]);
 				}
 			    }
-			}else{
+			} else {
 			    this.objInspection.InspectionForecastDestail = [];
 			}
-			break; 
+			break;
 		    }
 		}
-		
-		if(!this.objInspection){
-		   this.objInspection = {
-			   InspectionForecastDetail: [],
-			   entityName: "InspectionForecast",
-			   forecastDate: this.fecha,
-			   locked: "false"
-		   };
+
+		if (!this.objInspection) {
+		    this.objInspection = {
+			InspectionForecastDetail : [],
+			entityName : "InspectionForecast",
+			forecastDate : this.fecha,
+			locked : "false"
+		    };
 		}
-		
-		this.objList.sort(function(a,b){return a.order > b.order;});
-		
+
+		this.objList.sort(function(a, b) {
+		    return a.inspection_seq > b.inspection_seq;
+		});
+
 		this.$.forecastList.render();
 		// ***********************************************************
 		cacheMan.hideScrim();
 	    },
 	    onMoverArriba : function() {
-		if(this.objList.length > 0){
-		    if(this.iSelected > 0){
-			this.objList[this.iSelected].order--;
-			this.objList[this.iSelected-1].order++;
+		if (this.objList.length > 0) {
+		    if (this.iSelected > 0) {
+			this.objList[this.iSelected].inspection_seq--;
+			this.objList[this.iSelected - 1].inspection_seq++;
 			this.objInspection.InspectionForecastDetail = this.objList;
-			crudInspectionForecast.update(this.objInspection, this, "updateList");    
-		    }    
+			crudInspectionForecast.update(this.objInspection, this,
+				"updateList");
+		    }
 		}
 	    },
 	    onMoverAbajo : function() {
-		if(this.objList.length > 0){
-		    if(this.iSelected < this.objList.length -1){
-			this.objList[this.iSelected].order++;
-			this.objList[this.iSelected+1].order--;
+		if (this.objList.length > 0) {
+		    if (this.iSelected < this.objList.length - 1) {
+			this.objList[this.iSelected].inspection_seq++;
+			this.objList[this.iSelected + 1].inspection_seq--;
 			this.objInspection.InspectionForecastDetail = this.objList;
-			crudInspectionForecast.update(this.objInspection, this, "updateList");    
-		    }    
+			crudInspectionForecast.update(this.objInspection, this,
+				"updateList");
+		    }
 		}
 	    },
 	});
