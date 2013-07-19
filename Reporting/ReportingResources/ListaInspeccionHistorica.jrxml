@@ -47,9 +47,9 @@ GROUP BY
      ctrl_inspection_forecast_forecast_date,
      cat_cattle_type_cattype_name,
      cat_location_location_name,
-     ctrl_inspection_forecast."id"
+     ctrl_inspection_forecast_detail."inspection_seq"
 ORDER BY
-     ctrl_inspection_forecast."id" ASC]]>
+     ctrl_inspection_forecast_detail."inspection_seq" ASC]]>
 	</queryString>
 	<field name="barnyards" class="java.lang.String"/>
 	<field name="ctrl_inspection_forecast_detail_auth" class="java.lang.String"/>

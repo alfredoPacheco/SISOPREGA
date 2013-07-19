@@ -62,7 +62,7 @@ public class ReporteAlimento extends BaseReportServlet {
 
   private static final long serialVersionUID = -6219583962715558016L;
   
-  @EJB(lookup="java:global/ComProxy/PdfOrdenDeAlimento")
+  @EJB(lookup="java:global/ComProxy/PdfEntregaAlimento")
   private Reporteable reporteAlimento;
 
   /**
@@ -90,7 +90,7 @@ public class ReporteAlimento extends BaseReportServlet {
     params.put("toDate", toDate);
     params.put("Id", Long.parseLong(rancherId));
 
-    reporteAlimento.setReportName("GanadoRecibido");
+    reporteAlimento.setReportName("EntregaAlimento");
     reporteAlimento.setParameters(params);
     //response.setHeader("Content-disposition","attachment; filename=GanadoRecibido.pdf");
     byte[] reportBytes = reporteAlimento.getBytes();
