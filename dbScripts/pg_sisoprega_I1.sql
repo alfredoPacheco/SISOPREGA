@@ -582,6 +582,7 @@ CREATE TABLE ctrl_inspection_forecast_detail(
 	origin integer NOT NULL,
 	cattle_type integer NOT NULL REFERENCES cat_cattle_type(cattype_id),
 	quantity integer not null,
+	inspection_seq integer not null,
 	UNIQUE (forecast_id, rancher_id, zone_id, auth, origin, cattle_type, quantity)
 );
 

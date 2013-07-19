@@ -106,8 +106,9 @@ public class TxtGanadoInspeccionado extends BaseTxtReport implements Reporteable
       return sDetails.toString();
 
     } catch (SQLException e) {
-      log.severe("SQLException while reading receptions");
+      log.severe("SQLException while reading inspections");
       log.throwing(this.getClass().getCanonicalName(), "processReques", e);
+      e.printStackTrace();
       throw new ServletException(e);
     } finally {
       try {
