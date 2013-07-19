@@ -370,20 +370,7 @@ enyo
 
 	    // TODO: BEGIN FUNCTIONS
 	    
-	    onMoverArriba : function() {
-		if(this.iSelected > 0){
-		    this.objList[this.iSelected].order--;
-		    this.objList[this.iSelected-1].order++;
-		}
-		//TODO: WORKING HERE
-		var arrTransaction = this.objList.slice(this.iSelected-1, this.iSelected+1);
-		consumingGateway.UpdateArrayParents("InspectionForecast",arrTransaction, this, "updateList");
-	    },
-	    onMoverAbajo : function() {
-		console.log("mover abajo");
-		console.debug(this.objList[this.iSelected]);
-		
-	    },
+	    
 	    enviar_aviso : function() {
 
 		if (confirm("¿Desea enviar los avisos ahora?")) {
@@ -1241,5 +1228,25 @@ enyo
 		this.$.forecastList.render();
 		// ***********************************************************
 		cacheMan.hideScrim();
-	    }
+	    },
+	    onMoverArriba : function() {
+		if(this.objList.length > 0){
+		    if(this.iSelected > 0){
+			this.objList[this.iSelected].order--;
+			this.objList[this.iSelected-1].order++;
+			this.objInspection.InspectionForecastDetail = this.objList;
+			crudInspectionForecast.update(this.objInspection, this, "updateList");    
+		    }    
+		}
+	    },
+	    onMoverAbajo : function() {
+		if(this.objList.length > 0){
+		    if(this.iSelected < this.objList.length -1){
+			this.objList[this.iSelected].order++;
+			this.objList[this.iSelected+1].order--;
+			this.objInspection.InspectionForecastDetail = this.objList;
+			crudInspectionForecast.update(this.objInspection, this, "updateList");    
+		    }    
+		}
+	    },
 	});
