@@ -1,7 +1,6 @@
 enyo.kind({
 	name: "catalogs.menu",	
-	kind: enyo.SlidingView,
-	layoutKind: enyo.VFlexLayout,
+	kind: enyo.VFlexBox,
 	events: {
 		onRanchers:"",		
 		onCattle:"",

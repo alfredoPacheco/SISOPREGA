@@ -58,10 +58,12 @@ enyo.kind({
 	},
 	showCatalogs:function(a, b){
 	    console.log("enter to showCatalogs");
-	    
+	    console.log("change");
 		this.$.mainPane.validateView("cat");
-		this.$.cat.$.catalogsPane.selectViewByIndex(0);
-		this.$.mainPane.selectViewByName("cat",true);
+//		alert(this.$.cat);
+//		this.$.cat.$.catalogsPane.selectViewByIndex(0);
+		this.$.mainPane.selectViewByName("cat");
+		console.log("end showcatalogs");
 	    },
 	    showReports : function() {
 		this.$.mainPane.selectViewByName("reports");

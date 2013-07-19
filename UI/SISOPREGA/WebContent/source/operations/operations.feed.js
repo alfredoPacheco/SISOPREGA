@@ -20,21 +20,15 @@ enyo
 			className : "transitioner2",
 			layoutKind : "VFlexLayout",
 			width : "90%",
-			style : "overflow: hidden;background-color: #D7D7D7;",
+			style : "overflow: hidden;background-color: #DABD8B;padding:10px;",
 			scrim : true,
 			components : [ {
 			    components : [ {
-				content : "Manejo"
-			    }, {
-				kind : "Input",
-				name : "handling",
-				hint : "Agregar comentario"
-			    },
-			    {
 				kind : enyo.HFlexBox,
 				align : "center",
 				pack : "center",
 				height : "40px;",
+				style:"margin-bottom: 10px;",
 				components : [
                                         {
                                             content : "Fecha y Hora:",
@@ -67,15 +61,22 @@ enyo
                                             onfocus : "applyTimeMask",
                                         // style:"text-align: right;max-width: 500px;"
                                         } 
-                                        ]},
-			    
-			    {
-				kind : "TimePicker",
-				name : "feedDate",
-				style : "color:'black';",
-				is24HrMode : false,
-				label : "Hora"
+                                        ]},{
+				content : "Manejo"
 			    }, {
+				kind : "Input",
+				name : "handling",
+				hint : "Agregar comentario"
+			    },
+			    
+//			    {
+//				kind : "TimePicker",
+//				name : "feedDate",
+//				style : "color:'black';",
+//				is24HrMode : false,
+//				label : "Hora"
+//			    },
+			    {
 				kind : "Button",
 				className : "enyo-button-affirmative",
 				caption : "OK",
@@ -342,6 +343,8 @@ enyo
 	    },
 	    addFeedHandling : function() {
 		this.$.manejo.cbMethod = "addFeed";
+		this.$.feedDate.setValue(utils.dateOut(new Date()));
+		this.$.feedTime.setValue(new Date().toLocaleTimeString().substring(0, 5));
 		this.$.manejo.openAtCenter();
 	    },
 	    updateFeedHandling : function() {
@@ -420,13 +423,21 @@ enyo
 
 		objData.handling = this.$.handling.getValue();
 		objData.dateAndTime = new Date("" + this.$.feedDate.getValue() + " " + this.$.feedTime.getValue());
-
+		
 		if (sOp == "add") {
 		    objData.barnyards = enyo.clone(this._arrBY);
 		} else {
 		    objData.barnyards = enyo.clone(this._arrBYSelected);
 		}
-		return objData;
+		return this.validateFeed(objData);
+	    },
+	    validateFeed:function(objFeed){
+		if(objFeed.dateAndTime.toString() == "Invalid Date"){
+		    cacheMan.setMessage("","Error. Fecha u hora incorrecta.");
+		    return null;
+		    
+		}
+		return objFeed;
 	    },
 
 	    updatetList : function() {
@@ -464,7 +475,8 @@ enyo
 		    this.toggleUpdate();
 		    this._arrBYSelected = objFeed.barnyards;
 		    this.$.handling.setValue(objFeed.handling);
-		    this.$.feedDate.setValue(new Date(objFeed.dateAndTime));
+		    this.$.feedDate.setValue(utils.dateOut(new Date(objFeed.dateAndTime)));
+		    this.$.feedTime.setValue(new Date(objFeed.dateAndTime).toLocaleTimeString().substring(0, 5));
 		}
 
 	    },
@@ -533,8 +545,9 @@ enyo
 		    this.$.concentrated.setValue("");
 		    this.$.corn.setValue("");
 		    this.$.handling.setValue("");
-		    this.$.feedDate.setValue(new Date());
-
+		    this.$.feedDate.setValue(utils.dateOut(new Date()));
+		    this.$.feedTime.setValue(new Date().toLocaleTimeString().substring(0, 5));
+		    
 		}
 		this.updatetList();
 	    },
@@ -655,11 +668,13 @@ enyo
 	    addFeed : function() {
 		var objNew = this.getFeed("add");
 
-		if (this.objReception.FeedOrder === undefined)
-		    this.objReception.FeedOrder = [];
-		this.objReception.FeedOrder.push(this.adapterOut(objNew));
+		if(objNew){
+		    if (this.objReception.FeedOrder === undefined)
+			    this.objReception.FeedOrder = [];
+			this.objReception.FeedOrder.push(this.adapterOut(objNew));
 
-		crudReception.update(this.objReception, this, "afterAdd");
+			crudReception.update(this.objReception, this, "afterAdd");    
+		}
 	    },
 	    afterAdd : function(objResult, objOld, objNew) {
 		this.set(objNew, this._arrBY);
@@ -670,11 +685,13 @@ enyo
 	    },
 	    updateFeed : function() {
 		var objNew = this.getFeed();
-		var objFeed = this.adapterOut(objNew, true);
+		if(objNew){
+		    var objFeed = this.adapterOut(objNew, true);
 
-		this.objReception.FeedOrder[this.iSelect] = objFeed;
+			this.objReception.FeedOrder[this.iSelect] = objFeed;
 
-		crudReception.update(this.objReception, this, "afterUpdate");
+			crudReception.update(this.objReception, this, "afterUpdate");    
+		}
 	    },
 	    afterUpdate : function(objResult, objOld, objNew) {
 		this.set(objNew, this._arrBY);

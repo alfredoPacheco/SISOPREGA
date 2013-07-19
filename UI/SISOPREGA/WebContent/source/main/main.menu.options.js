@@ -12,6 +12,12 @@ enyo.kind({
 		onInspectionForecast:"",
 		onUsers: ""
 	},		
+	catalogs_click:function(a,b){
+	    console.debug(a);
+	    console.debug(b);
+	    this.doCatalogs();
+	    b.stopPropagation();
+	},
 		components: [{style:"height:10px;"},
 			{kind: enyo.HFlexBox,
 			 className:"buttonsBG",		
@@ -19,7 +25,7 @@ enyo.kind({
 			 align:"center",	    
 			 components: [
 				{kind: "CustomButton", flex:1, content: "", className: "menuButton", style:"width:75px;height:75px;background-image:url('../SISOPREGA_WEB_LIB/images/cow-100px.png');", onclick:"doReceptions"},		
-				{kind: "CustomButton",flex:1, content: "",className: "menuButton", style:"width:75px;height:75px;background-image:url('../SISOPREGA_WEB_LIB/images/catalogos.png');", onclick:"doCatalogs",},
+				{kind: "CustomButton",flex:1, content: "",className: "menuButton", style:"width:75px;height:75px;background-image:url('../SISOPREGA_WEB_LIB/images/catalogos.png');", onclick:"catalogs_click",},
 				{kind: "CustomButton",flex:1, content: "",className: "menuButton", style:"width:75px;height:75px;background-image:url('../SISOPREGA_WEB_LIB/images/reportes.png');", onclick:"doReports"}]
 			},
 			{kind: enyo.HFlexBox,

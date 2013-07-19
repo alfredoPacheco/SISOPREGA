@@ -70,7 +70,7 @@ enyo
 		if (entityObj.FeedOrder) {
 		    for ( var i = 0; i < entityObj.FeedOrder.length; i++) {
 			entityObj.FeedOrder[i].feedDate = utils
-				.dateOut(entityObj.FeedOrder[i].feedDate);
+				.dateTimeOut(entityObj.FeedOrder[i].feedDate);
 		    }
 		}
 		if (entityObj.Inspection) {
@@ -95,8 +95,8 @@ enyo
 
 		if (entityObj.FeedOrder) {
 		    for ( var i = 0; i < entityObj.FeedOrder.length; i++) {
-			entityObj.FeedOrder[i].feedDate = utils
-				.dateIn(entityObj.FeedOrder[i].feedDate);
+			entityObj.FeedOrder[i].feedDate = 
+			    new Date(Number(entityObj.FeedOrder[i].feedDate));
 		    }
 		}
 		if (entityObj.Inspection) {
