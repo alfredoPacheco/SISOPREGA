@@ -32,6 +32,7 @@ enyo.depends(
 	"source/cruds/crud.inspectionForecast.js",
 	
 	"source/cache.rejects.js",
+	"source/cache.feed.js",
 	
 	"source/catalogs/catalogs.list.rancher.js",
 	"source/catalogs/catalogs.main.js",
