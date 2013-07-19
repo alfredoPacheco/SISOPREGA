@@ -77,7 +77,7 @@ public class GanadoRecibido extends BaseReportServlet {
     Map<String, Object> params = new HashMap<String, Object>();
     log.fine("fromDate: [" + request.getParameter("fromDate") + "]");
     log.fine("toDate: [" + request.getParameter("toDate") + "]");
-    String rancherId = request.getParameter("rancherId");
+    String rancherId = request.getParameter("Id");
 
     if (request.isUserInRole("rancher"))
       rancherId = rancherFromLoggedUser(request);
@@ -96,19 +96,5 @@ public class GanadoRecibido extends BaseReportServlet {
     byte[] reportBytes = reporteGanadoRecibido.getBytes();
     log.fine("Received [" + reportBytes.length + "] from EJB response.");
     this.processRequest(reportBytes, response);
-    
-    /*
-    if (rancherId != null && !rancherId.equals("-1"))
-      params.put("CUS_RANCHER_ID", Integer.parseInt(rancherId));
-
-    String reportURL = "";
-    if (rancherId != null && !rancherId.equals("-1"))
-      reportURL = "WEB-INF/Reports/Ranchers/RecibidoPorGanadero.jasper";
-    else
-      reportURL = "WEB-INF/Reports/Tramex/GanadoRecibido.jasper";
-
-    processRequest(reportURL, params, response);
-    */
-
   }
 }
