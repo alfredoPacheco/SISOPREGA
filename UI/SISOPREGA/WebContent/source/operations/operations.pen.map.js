@@ -790,7 +790,7 @@ enyo
 					var byFinded = crudPen
 						.getByBarnyard(b.name);
 					if (byFinded) {
-					    if (byFinded.barnyard_id == receptions[x].value) {
+					    if (byFinded.penId == receptions[x].value) {
 						this.$[b.name].occupied = 1;
 						this.$[b.name]
 							.applyStyle(

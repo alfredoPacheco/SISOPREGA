@@ -30,10 +30,16 @@ enyo
 		var arrReceptions = this.arrObj;
 
 		for ( var i = 0; i < arrReceptions.length; i++) {
-		    // TODO: Create getRancherByID
+		    // Create getRancherByID
+		    var rancher = crudRancher.getByID(arrReceptions[i].rancherId);
+		    if (rancher == null) {
+			rancher = crudEnterpriseRancher.getByID(arrReceptions[i].rancherId);
+		    }
+		    
+		    var rancherName = rancher.name;
 		    var obj = {
 			value : arrReceptions[i].rancherId,
-			caption : "getRancherByID"
+			caption : rancherName
 		    };
 		    if (!(arrResult[obj.value] in arrResult)) {
 			arrResult[obj.value] = obj;
@@ -63,37 +69,43 @@ enyo
 		entityObj.dateAllotted = utils.dateOut(entityObj.dateAllotted);
 		if (entityObj.FeedOrder) {
 		    for ( var i = 0; i < entityObj.FeedOrder.length; i++) {
-			entityObj.FeedOrder[i].feedDate = utils.dateOut(entityObj.FeedOrder[i].feedDate);
+			entityObj.FeedOrder[i].feedDate = utils
+				.dateOut(entityObj.FeedOrder[i].feedDate);
 		    }
 		}
 		if (entityObj.Inspection) {
 		    for ( var i = 0; i < entityObj.Inspection.length; i++) {
-			entityObj.Inspection[i].inspectionDate = utils.dateOut(entityObj.Inspection[i].inspectionDate);
+			entityObj.Inspection[i].inspectionDate = utils
+				.dateOut(entityObj.Inspection[i].inspectionDate);
 		    }
 		}
 		return entityObj;
 	    },
 	    adapterToIn : function(entityObj) {
-		if(entityObj.Pen){
+		if (entityObj.Pen) {
 		    entityObj.penString = "";
-			for(var i = 0; i<entityObj.Pen.length;i++){
-			    entityObj.penString += ""+ entityObj.Pen[i].barnyardCode + ", "; 
-			}
-			if(entityObj.penString != "") entityObj.penString = entityObj.penString.slice(0,-2);    
+		    for ( var i = 0; i < entityObj.Pen.length; i++) {
+			entityObj.penString += ""
+				+ entityObj.Pen[i].barnyardCode + ", ";
+		    }
+		    if (entityObj.penString != "")
+			entityObj.penString = entityObj.penString.slice(0, -2);
 		}
 		entityObj.dateAllotted = utils.dateIn(entityObj.dateAllotted);
-		
+
 		if (entityObj.FeedOrder) {
 		    for ( var i = 0; i < entityObj.FeedOrder.length; i++) {
-			entityObj.FeedOrder[i].feedDate = utils.dateIn(entityObj.FeedOrder[i].feedDate);
+			entityObj.FeedOrder[i].feedDate = utils
+				.dateIn(entityObj.FeedOrder[i].feedDate);
 		    }
 		}
 		if (entityObj.Inspection) {
 		    for ( var i = 0; i < entityObj.Inspection.length; i++) {
-			entityObj.Inspection[i].inspectionDate = utils.dateIn(entityObj.Inspection[i].inspectionDate);
+			entityObj.Inspection[i].inspectionDate = utils
+				.dateIn(entityObj.Inspection[i].inspectionDate);
 		    }
 		}
-		
+
 		entityObj.color = entityObj.color || utils.colorStack.pop();
 		return this.inherited(arguments);
 	    },
@@ -103,38 +115,44 @@ enyo
 		for ( var i = 0; i < receptions.length; i++) {
 		    if (receptions[i].rancherId == rancher_id) {
 			var barnyards = receptions[i].Pen;
-			if(barnyards){
+			if (barnyards) {
 			    for ( var j = 0; j < barnyards.length; j++) {
-				    var barnyard = {
-					caption : "",
-					value : ""
-				    };
+				var barnyard = {
+				    caption : "",
+				    value : ""
+				};
 
-				    barnyard.caption = ""
-					    + barnyards[j].barnyardCode
-					    + (Number(barnyards[j].locationId) == 1 ? " [Chihuahua]"
-						    : " [Zona Sur]");
-				    barnyard.value = barnyards[j].penId;
-				    barnyard.barnyard_code = barnyards[j].barnyardCode;
-				    barnyard.zone_id = barnyards[j].locationId;
-				    result.push(barnyard);
-				}    
-			}else{
-			    console.error("Error. No existe arreglo Pen en objeto Reception. {receptionId: " + receptions[i].receptionId + "}");
+				barnyard.caption = ""
+					+ barnyards[j].barnyardCode
+					+ (Number(barnyards[j].locationId) == 1 ? " [Chihuahua]"
+						: " [Zona Sur]");
+				barnyard.value = barnyards[j].penId;
+				barnyard.barnyard_code = barnyards[j].barnyardCode;
+				barnyard.zone_id = barnyards[j].locationId;
+				result.push(barnyard);
+			    }
+			} else {
+			    console
+				    .error("Error. No existe arreglo Pen en objeto Reception. {receptionId: "
+					    + receptions[i].receptionId + "}");
 			}
 		    }
 		}
 		return result;
 	    },
-	    releasePens:function(objReception, arrPens, objCallBack, sMethod){ //arrPens {1E9: "1E9", 1E11: "1E11"}
+	    releasePens : function(objReception, arrPens, objCallBack, sMethod) { // arrPens
+										    // {1E9:
+										    // "1E9",
+										    // 1E11:
+										    // "1E11"}
 		var objRec = enyo.clone(objReception);
-		for(sPen in arrPens){
-		    if (arrPens.hasOwnProperty(sPen)){
+		for (sPen in arrPens) {
+		    if (arrPens.hasOwnProperty(sPen)) {
 			var objPen = crudPen.getByBarnyard(sPen);
-			if(objPen){
-			    for(var i = 0;i<objRec.Pen.length;i++){
-				if(objRec.Pen[i].penId == objPen.penId){
-				    objRec.Pen.splice(i,1);
+			if (objPen) {
+			    for ( var i = 0; i < objRec.Pen.length; i++) {
+				if (objRec.Pen[i].penId == objPen.penId) {
+				    objRec.Pen.splice(i, 1);
 				}
 			    }
 			}
@@ -142,20 +160,21 @@ enyo
 		}
 		this.update(objRec, objCallBack, sMethod);
 	    },
-	    releaseAllPensInReception:function(objReception, objCallBack, sMethod){
+	    releaseAllPensInReception : function(objReception, objCallBack,
+		    sMethod) {
 		var objRec = enyo.clone(objReception);
 		delete objRec.Pen;
 		this.update(objRec, objCallBack, sMethod);
 	    },
 	    getReceptionsByRancherID : function(rancher_id) {
-		      var result = [];
-		      var receptions = enyo.clone(this.arrObj);
-		      for (var i =0;i<receptions.length;i++) {
-		        if (receptions[i].rancherId == rancher_id) {
-		          result.push(receptions[i]);
-		        }
-		      }
-		      return result;
-		    },
+		var result = [];
+		var receptions = enyo.clone(this.arrObj);
+		for ( var i = 0; i < receptions.length; i++) {
+		    if (receptions[i].rancherId == rancher_id) {
+			result.push(receptions[i]);
+		    }
+		}
+		return result;
+	    },
 	});
 var crudReception = new crud.reception();
