@@ -38,15 +38,6 @@ enyo.kind(
                 onclick : "open_view"
               },
               {
-                caption : "Catálogos",
-                components :
-                  [
-                    {
-                      caption : "Ganaderos",
-                      onclick : "open_view"
-                    }]
-              },
-              {
                 caption : "Reportes",
                 onclick : "open_view"
               },
@@ -168,11 +159,6 @@ enyo.kind(
         break;
       case 'Reportes':
         this.$.mainMenu.$.mainPane.selectViewByName("reports");
-        break;
-      case 'Ganaderos':
-        this.$.mainMenu.$.mainPane.validateView("catalogs");
-        this.$.mainMenu.$.catalogs.showRanchers();
-        this.$.mainMenu.$.mainPane.selectViewByName("catalogs");
         break;
       case 'Lista de Inspección':
         this.$.mainMenu.$.mainPane.selectViewByName("inspectionForecast");
