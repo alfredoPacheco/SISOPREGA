@@ -60,7 +60,7 @@ enyo
 				    + parameters.start_date
 				    + '&toDate='
 				    + parameters.end_date
-				    + '&rancherId='
+				    + '&Id='
 				    + parameters.rancher_id);
 		}
 		if (this.reportName == 'inspection') {

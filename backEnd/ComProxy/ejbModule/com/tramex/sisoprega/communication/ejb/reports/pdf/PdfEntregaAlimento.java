@@ -13,13 +13,14 @@ import com.tramex.sisoprega.reporting.Reporteable;
  */
 @Stateless
 @RolesAllowed({ "mx_usr", "us_usr" })
-public class PdfGanadoInspeccionado extends BasePdfReport implements Reporteable {
+public class PdfEntregaAlimento extends BasePdfReport implements Reporteable {
+  @Override
   public void setParameters(Map<String, Object> parameters) throws Exception {
     super.setParameters(parameters);    
 
     long lRancherId = (Long) parameters.get("Id");
     if(lRancherId == -1)
-      this.setReportName("TodaInspeccionGanado");
-    
+      this.setReportName("TodaEntregaAlimento");
+
   }
 }

@@ -90,25 +90,11 @@ public class InspeccionGanado extends BaseReportServlet {
     params.put("toDate", toDate);
     params.put("Id", Long.parseLong(rancherId));
 
-    reporteInspeccionGanado.setReportName("GanadoRecibido");
+    reporteInspeccionGanado.setReportName("GanadoInspeccionado");
     reporteInspeccionGanado.setParameters(params);
-    //response.setHeader("Content-disposition","attachment; filename=GanadoRecibido.pdf");
     byte[] reportBytes = reporteInspeccionGanado.getBytes();
     log.fine("Received [" + reportBytes.length + "] from EJB response.");
     this.processRequest(reportBytes, response);
-    
-    /*
-    if (rancherId != null && !rancherId.equals("-1"))
-      params.put("CUS_RANCHER_ID", Integer.parseInt(rancherId));
-
-    String reportURL = "";
-    if (rancherId != null && !rancherId.equals("-1"))
-      reportURL = "WEB-INF/Reports/Ranchers/RecibidoPorGanadero.jasper";
-    else
-      reportURL = "WEB-INF/Reports/Tramex/GanadoRecibido.jasper";
-
-    processRequest(reportURL, params, response);
-    */
 
   }
 }
