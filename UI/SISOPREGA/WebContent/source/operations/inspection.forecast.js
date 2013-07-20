@@ -368,76 +368,13 @@ enyo
 		    return false;
 		}
 	    },
-
-	    saveInspectionForecast : function() {
-		this.addInspectionForecast();
-	    },
-	    getInspectionForecastDetail : function(bUpdating) {
-
-		var objInspectionDetail = {
-			Pen: [],
-			cattleType: this.$.cattleType.getIndex(),
-			entityName: "InspectionForecastDetail",
-			origin: this.$.origin.getIndex(),
-			quantity: this.$.cantidad.getValue(),
-			rancherId: this.$.rancher.getIndex(),
-			zoneId: this.$.zone.getIndex(),
-			auth : this.$.autorizacion.getValue()
-		};
-
-		if(bUpdating) objInspectionDetail.inspectionForecastDetailId;
-		
-		var barnyardsAux = this.$.barnyards.getText().split(",");
-		for ( var i = 0; i < barnyardsAux.length; i++) {
-		    barnyardsAux[i] = barnyardsAux[i].replace(" ", "");
-		    barnyardsAux[i] = this.$.zone.getIndex() + barnyardsAux[i].toUpperCase();
-		    var auxBarn = crudPen.getByBarnyard(barnyardsAux[i]);
-		    if (auxBarn == undefined) {
-			cacheMan.setMessage("", "[Exception ID: LOCAL"
-				+ "] Descripción: No existe el corral: "
-				+ barnyardsAux[i].slice(1)
-				+ " para la localidad: "
-				+ this.$.zone.getValue());
-			return null;
-		    }
-		    objInspectionDetail.Pen.push(auxBarn);
-		}
-		
-		return objInspectionDetail;
-	    },
-	    addInspectionForecast : function() {
-		var objForecastDetail = this.getInspectionForecastDetail();
-		if (objForecastDetail) {
-		    if(!this.objInspection.InspectionForecastDetail)
-			this.objInspection.InspectionForecastDetail = [];
-		    
-		    this.objInspection.InspectionForecastDetail.push(objForecastDetail);
-		    
-		    if (this.objInspection) {
-			crudInspectionForecast.update(this.objInspection, this, "afterAddInspFore");
-		    } else {
-			crudInpsectionForecast.create(this.objInspection, this, "afterAddInspFore");
-		    }
-		}
-	    },
-	    updateForecast : function() {
-		var objForecastDetail = this.getInspectionForecastDetail(true);
-		if (objForecastDetail) {
-		    objForecastDetail.id = this._id;
-		    objForecastDetail.fore_details_id = this.getSelected().fore_details_id;
-		    cacheInspFore.updateForecastDetails(objForecast, this,
-			    "afterAddInspFore");
-		}
-	    },
-
+	    
 	    onMoverArriba : function() {
 		console.log("mover arriba");
-
 	    },
 	    onMoverAbajo : function() {
 		console.log("mover abajo");
 	    },
-
 	    enviar_aviso : function() {
 
 		if (confirm("¿Desea enviar los avisos ahora?")) {
@@ -588,7 +525,7 @@ enyo
 		this._id = undefined;
 		this.totalItems = 0;
 		this.objList = [];
-
+		this.objInspection = null;
 		this.iSelected = null;
 		// **********************************************************
 
@@ -601,7 +538,7 @@ enyo
 		this.resetValues();
 		crudInspectionForecast.get(this, "getInspectionForecastDone");
 	    },
-	    getInspectionForecastDone : function() { //TODO: WORKING HERE
+	    getInspectionForecastDone : function() {
 		var arrAllForecasts = [];
 		var fmt = new enyo.g11n.DateFmt({
 		    format : "yyyy/MM/dd",
@@ -622,6 +559,16 @@ enyo
 			break;
 		    }
 		}
+		
+		if(!this.objInspection){
+		   this.objInspection = {
+			   InspectionForecastDetail: [],
+			   entityName: "InspectionForecast",
+			   forecastDate: this.fecha,
+			   locked: "false"
+		   };
+		}
+		
 		this.$.forecastList.render();
 		// ***********************************************************
 		cacheMan.hideScrim();
@@ -750,11 +697,9 @@ enyo
 			if (this.defaultCattle) {
 			    this.actualAutocompleteFilter.cattleType = true;
 			    this.$.cattleType.index = this.defaultCattle;
-			    var oCattle = crudCattle
-				    .getByID(this.$.cattleType.index);
+			    var oCattle = crudCattle.getCattleTypeById(this.$.cattleType.index);
 			    if (oCattle) {
-				this.$.cattleType
-					.setValue(oCattle.cattype_name);
+				this.$.cattleType.setValue(oCattle.cattypeName);
 			    } else {
 				this.$.cattleType.setValue("");
 			    }
@@ -1132,9 +1077,9 @@ enyo
 			this.$.listOrigin.setContent("");
 		    }
 
-		    var oCattle = crudCattle.getByID(objFore.cattleType);
+		    var oCattle = crudCattle.getCattleTypeById(objFore.cattleType);
 		    if (oCattle) {
-			this.$.listCattleType.setContent(oCattle.cattype_name);
+			this.$.listCattleType.setContent(oCattle.cattypeName);
 		    } else {
 			this.$.listCattleType.setContent("");
 		    }
@@ -1202,6 +1147,70 @@ enyo
 	    onEliminar : function() {
 		if (this.dropForecast() == true) {
 		    this.onCancel();
+		}
+	    },
+	    saveInspectionForecast : function() {
+		this.addInspectionForecast();
+	    },
+	    getInspectionForecastDetail : function(bUpdating) {
+		
+		var objInspectionDetail = {
+			Pen: [],
+			cattleType: this.$.cattleType.getIndex(),
+			entityName: "InspectionForecastDetail",
+			origin: this.$.origin.getIndex(),
+			quantity: this.$.cantidad.getValue(),
+			rancherId: this.$.rancher.getIndex(),
+			zoneId: this.$.zone.getIndex(),
+			auth : this.$.autorizacion.getValue()
+		};
+
+		if(bUpdating) objInspectionDetail.inspectionForecastDetailId = this.objList[this.iSelected].inspectionForecastDetailId; 
+		
+		var barnyardsAux = this.$.barnyards.getText().split(",");
+		for ( var i = 0; i < barnyardsAux.length; i++) {
+		    barnyardsAux[i] = barnyardsAux[i].replace(" ", "");
+		    barnyardsAux[i] = this.$.zone.getIndex() + barnyardsAux[i].toUpperCase();
+		    var auxBarn = crudPen.getByBarnyard(barnyardsAux[i]);
+		    if (auxBarn == undefined) {
+			cacheMan.setMessage("", "[Exception ID: LOCAL"
+				+ "] Descripción: No existe el corral: "
+				+ barnyardsAux[i].slice(1)
+				+ " para la localidad: "
+				+ this.$.zone.getValue());
+			return null;
+		    }
+		    objInspectionDetail.Pen.push(auxBarn);
+		}
+		
+		return objInspectionDetail;
+	    },
+	    addInspectionForecast : function() {
+		var objForecastDetail = this.getInspectionForecastDetail();
+		if (objForecastDetail) {
+		    if(!this.objInspection.InspectionForecastDetail)
+			this.objInspection.InspectionForecastDetail = [];
+		    
+		    this.objInspection.InspectionForecastDetail.push(objForecastDetail);
+		    
+		    if (this.objInspection.inspectionForecastId) {
+			crudInspectionForecast.update(this.objInspection, this, "afterAddInspFore");
+		    } else {
+			crudInspectionForecast.create(this.objInspection, this, "afterAddInspFore");
+		    }
+		}
+	    },
+	    updateForecast : function() {
+		var objForecastDetail = this.getInspectionForecastDetail(true);
+		if (objForecastDetail) {
+		    for(var i =0; i< this.objInspection.InspectionForecastDetail.length;i++){
+			if(this.objInspection.InspectionForecastDetail[i].inspectionForecastDetailId == objForecastDetail.inspectionForecastDetailId){
+			    this.objInspection.InspectionForecastDetail[i] = objForecastDetail;
+			    crudInspectionForecast.update(this.objInspection, this, "afterAddInspFore");
+			    return;
+			}
+		    }
+		    cacheMan.setMessage("Error. No se ha podido encontrar el registro a intentar actualizar.");
 		}
 	    },
 	});
