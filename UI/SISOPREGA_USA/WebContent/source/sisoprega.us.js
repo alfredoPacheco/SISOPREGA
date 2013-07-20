@@ -207,7 +207,7 @@ enyo.kind(
       cacheMan.goBack();
       if (_objMainHeader.getContent() == "Menu Principal") {
         this.$.btnGoBack.setShowing(!1);
-        _objMainHeader.setStyle("color:#FFF;border:none;font-size:15px; text-align:center;min-width:150px;");
+        _objMainHeader.applyStyle("font-size","15px");
       } else {
         this.$.btnGoBack.setShowing(1);
       }

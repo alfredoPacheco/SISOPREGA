@@ -463,8 +463,7 @@ enyo
 		this.$.spacerone.setContent("");
 	    },
 	    setDesc : function(sBY) {
-		_objMainHeader
-			.setStyle("color:#FFF;border:none;font-size:12px; text-align:center;min-width:150px;");
+		_objMainHeader.applyStyle("font-size","12px");
 		try {
 		    var objRec = crudReception
 			    .getByID(crudPen.inUse()[sBY].receptionId);

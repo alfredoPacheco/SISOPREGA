@@ -75,7 +75,7 @@ enyo.kind(
                 name : 'lblMainCap',
                 allowHtml : true,
                 flex : 1,
-                style : "color:#FFF;border:none;font-size:15px; text-align:center;min-width:150px;",
+                style : "color:#FFF;border:none;font-size:15px; text-align:center;",
                 content : "Menu Principal"
               },
               {

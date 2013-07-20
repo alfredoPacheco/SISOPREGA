@@ -186,8 +186,7 @@ enyo
 		_objMainHeader.setContent(inView.label);
 		if (_gobackStack.length == 0) {
 		    _goBackButton.setShowing(!1);
-		    _objMainHeader
-			    .setStyle("color:#FFF;border:none;font-size:15px; text-align:center;min-width:150px;");
+		    _objMainHeader.applyStyle("font-size","15px");
 		} else {
 		    _goBackButton.setShowing(1);
 		}

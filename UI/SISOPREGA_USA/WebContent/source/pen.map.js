@@ -470,8 +470,7 @@ enyo
 		_objMainHeader.setContent("");
 	    },
 	    setDesc : function(sBY) {
-		_objMainHeader
-			.setStyle("color:#FFF;border:none;font-size:12px; text-align:center;min-width:150px;");
+		_objMainHeader.applyStyle("font-size","12px");
 		var obj = cachePen.getByBarnyard(sBY);
 		if (obj) {
 		    var dateAux = "";
