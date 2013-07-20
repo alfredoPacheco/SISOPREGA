@@ -360,14 +360,7 @@ enyo
 
 	    // TODO: BEGIN FUNCTIONS
 
-	    dropForecast : function() {
-		if (cacheInspFore.deleteForecastDetail(
-			this.objList[this.iSelected], this, "updateList") == true) {
-		    return true;
-		} else {
-		    return false;
-		}
-	    },
+	   
 	    
 	    onMoverArriba : function() {
 		console.log("mover arriba");
@@ -551,12 +544,16 @@ enyo
 		    if (fmt.format(arrAllForecasts[i].forecastDate) == fmt.format(this.fecha)) {
 			this._id = arrAllForecasts[i].inspectionForecastId;
 			this.objInspection = arrAllForecasts[i];
-			for ( var j = 0; j < arrAllForecasts[i].InspectionForecastDetail.length; j++) {
-			    if (arrAllForecasts[i].InspectionForecastDetail[j].inspectionForecastDetailId) {
-				this.objList.push(arrAllForecasts[i].InspectionForecastDetail[j]);
+			if(arrAllForecasts[i].InspectionForecastDetail){
+			    for ( var j = 0; j < arrAllForecasts[i].InspectionForecastDetail.length; j++) {
+				if (arrAllForecasts[i].InspectionForecastDetail[j].inspectionForecastDetailId) {
+				    this.objList.push(arrAllForecasts[i].InspectionForecastDetail[j]);
+				}
 			    }
+			}else{
+			    this.objInspection.InspectionForecastDestail = [];
 			}
-			break;
+			break; 
 		    }
 		}
 		
@@ -1141,9 +1138,6 @@ enyo
 		this.resetValues();
 		this.$.forecastList.render();
 	    },
-	    afterAddInspFore : function() {
-		this.updateList();
-	    },
 	    onEliminar : function() {
 		if (this.dropForecast() == true) {
 		    this.onCancel();
@@ -1194,9 +1188,9 @@ enyo
 		    this.objInspection.InspectionForecastDetail.push(objForecastDetail);
 		    
 		    if (this.objInspection.inspectionForecastId) {
-			crudInspectionForecast.update(this.objInspection, this, "afterAddInspFore");
+			crudInspectionForecast.update(this.objInspection, this, "updateList");
 		    } else {
-			crudInspectionForecast.create(this.objInspection, this, "afterAddInspFore");
+			crudInspectionForecast.create(this.objInspection, this, "updateList");
 		    }
 		}
 	    },
@@ -1206,11 +1200,21 @@ enyo
 		    for(var i =0; i< this.objInspection.InspectionForecastDetail.length;i++){
 			if(this.objInspection.InspectionForecastDetail[i].inspectionForecastDetailId == objForecastDetail.inspectionForecastDetailId){
 			    this.objInspection.InspectionForecastDetail[i] = objForecastDetail;
-			    crudInspectionForecast.update(this.objInspection, this, "afterAddInspFore");
+			    crudInspectionForecast.update(this.objInspection, this, "updateList");
 			    return;
 			}
 		    }
 		    cacheMan.setMessage("Error. No se ha podido encontrar el registro a intentar actualizar.");
 		}
+	    },
+	    dropForecast : function() {
+		for(var i =0; i< this.objInspection.InspectionForecastDetail.length;i++){
+			if(this.objInspection.InspectionForecastDetail[i].inspectionForecastDetailId == this.objList[this.iSelected].inspectionForecastDetailId){
+			    this.objInspection.InspectionForecastDetail.splice(i, 1);
+			    crudInspectionForecast.update(this.objInspection, this, "updateList");
+			    return;
+			}
+		    }
+		    cacheMan.setMessage("Error. No se ha podido encontrar el registro a intentar eliminar.");
 	    },
 	});
