@@ -4,6 +4,7 @@ enyo
 	    kind : enyo.SlidingView,
 	    layoutKind : enyo.VFlexLayout,
 	    iSelected : null,
+	    bMoving:false,
 	    _id : undefined,
 	    objInspection : null,
 	    objList : [],
@@ -553,6 +554,7 @@ enyo
 		this.autoCompleteFields();
 	    },
 	    cambioDeFecha : function() {
+		this.$.fechaPicker.setValue(new Date(this.$.fechaPicker.getValue()));
 		this.fecha = this.$.fechaPicker.getDate();
 
 		// this.$.cattleType.setIndex(1);
@@ -984,7 +986,7 @@ enyo
 	    // this.arrReceptions.push(objRancherSelected);
 	    // }
 	    // },
-	    selectForecast : function(inSender, inEvent) {
+	    selectForecast : function(inSender, inEvent) { //TODO WORKING HERE
 		if (objFore = this.objList[inEvent.rowIndex]) {
 		    this.$.rancher.setIndex(objFore.rancherId);
 		    this.$.autorizacion.setValue(objFore.auth || "");
@@ -1117,10 +1119,10 @@ enyo
 
 		if (bUpdating) {
 		    objInspectionDetail.inspectionForecastDetailId = this.objList[this.iSelected].inspectionForecastDetailId;
-		    objInspectionDetail.inspection_seq = this.objList[this.iSelected].order || 0;
+		    objInspectionDetail.inspection_seq = this.objList[this.iSelected].inspection_seq || 0;
 		} else {
 		    if (this.objList.length > 0) {
-			objInspectionDetail.inspection_seq = Number(this.objList[this.objList.length - 1].order) + 1;
+			objInspectionDetail.inspection_seq = Number(this.objList[this.objList.length - 1].inspection_seq) + 1;
 		    } else {
 			objInspectionDetail.inspection_seq = 0;
 		    }
@@ -1198,7 +1200,7 @@ enyo
 		this.totalItems = 0;
 		this.objList = [];
 		this.objInspection = null;
-		this.iSelected = null;
+		if(this.bMoving ==false) this.iSelected = null;
 		// **********************************************************
 
 		// add mode buttons
@@ -1253,14 +1255,24 @@ enyo
 
 		this.$.forecastList.render();
 		// ***********************************************************
+		
+		if(this.bMoving == true){
+		    var inEventEmulated = {};
+		    inEventEmulated.rowIndex = this.iSelected;
+		    this.selectForecast(null, inEventEmulated);
+		}
+		
 		cacheMan.hideScrim();
 	    },
 	    onMoverArriba : function() {
 		if (this.objList.length > 0) {
 		    if (this.iSelected > 0) {
-			this.objList[this.iSelected].inspection_seq--;
-			this.objList[this.iSelected - 1].inspection_seq++;
+			var tempInspectionSeq = this.objList[this.iSelected].inspection_seq;
+			this.objList[this.iSelected].inspection_seq = this.objList[this.iSelected-1].inspection_seq;
+			this.objList[this.iSelected - 1].inspection_seq = tempInspectionSeq;
 			this.objInspection.InspectionForecastDetail = this.objList;
+			this.bMoving = true;
+			this.iSelected--;
 			crudInspectionForecast.update(this.objInspection, this,
 				"updateList");
 		    }
@@ -1269,9 +1281,14 @@ enyo
 	    onMoverAbajo : function() {
 		if (this.objList.length > 0) {
 		    if (this.iSelected < this.objList.length - 1) {
-			this.objList[this.iSelected].inspection_seq++;
-			this.objList[this.iSelected + 1].inspection_seq--;
+			var tempInspectionSeq = this.objList[this.iSelected].inspection_seq;
+			this.objList[this.iSelected].inspection_seq = this.objList[this.iSelected+1].inspection_seq;
+			this.objList[this.iSelected + 1].inspection_seq=tempInspectionSeq;
+			
 			this.objInspection.InspectionForecastDetail = this.objList;
+			this.bMoving = true;
+			this.iSelected++;
+			
 			crudInspectionForecast.update(this.objInspection, this,
 				"updateList");
 		    }
