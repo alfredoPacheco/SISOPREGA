@@ -57,13 +57,9 @@ enyo.kind({
 	    this.$.mainPane.selectViewByName("receptionsMap");
 	},
 	showCatalogs:function(a, b){
-	    console.log("enter to showCatalogs");
-	    console.log("change");
 		this.$.mainPane.validateView("cat");
-//		alert(this.$.cat);
-//		this.$.cat.$.catalogsPane.selectViewByIndex(0);
+		this.$.cat.$.catalogsPane.selectViewByIndex(0);
 		this.$.mainPane.selectViewByName("cat");
-		console.log("end showcatalogs");
 	    },
 	    showReports : function() {
 		this.$.mainPane.selectViewByName("reports");
@@ -72,12 +68,9 @@ enyo.kind({
 		this.$.mainPane.selectViewByName("inspectionForecast");
 	    },
 	    showUsersList : function() {
-		console.log("Se entro a showUsersList");
 		this.$.mainPane.selectViewByName("usersList");
-		console.log("saliendo de showUsersList");
 	    },
 	    selectView : function(inSender, inView, inPreviousView) {
-		console.log("Entrando a selectView");
 		if (inView.name == inPreviousView.name) {
 		    return;
 		}
@@ -101,15 +94,12 @@ enyo.kind({
 
 		switch (inView.name) {
 		case "inspectionForecast":
-		    console.log("case inspectionForecast");
 		    inView.$.forecast.resetValues();
 		    break;
 		case "usersList":
-		    console.log("case usersList");
 		    inView.reset();
 		    break;
 		case "cat":
-		    console.log("case cat");
 		    _objMainHeader
 			    .setContent(inView.$.catalogsPane.getView().label);
 		    break;

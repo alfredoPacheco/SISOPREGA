@@ -21,7 +21,7 @@ enyo.kind(
 		entityObj.telephone = entityObj.telephone || "";
 		entityObj.idName = this.entityIdName();
 		
-		entityObj.name = entityObj.legalName;
+		entityObj.name = entityObj.legalName.trim();
 		return entityObj;
 	    }
 	}

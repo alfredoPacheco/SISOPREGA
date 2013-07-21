@@ -39,19 +39,19 @@ enyo.kind({
 		focusClassName : "darkFocus",
 		bindTo : "motherName"
 	    }, {
-		kind : "VFlexBox",
+		kind : "HFlexBox",
 		style : "",
+		align:"center",
 		components : [ {
 		    content : "Fecha de Nacimiento"
-		}, {
-		    kind : "DatePicker",
+		},
+		{
+		    kind : "controls.dateMask",
 		    name : "birth_date",
-		    minYear : 1940,
-		    maxYear : new Date().getFullYear(),
-		    label : "",
-		    className : "picker-hbox",
-		    bindTo : "birthDate"
-		} ]
+		    bindTo : "birthDate",
+		    style:"max-width:130px;"
+		    }
+		 ]
 	    }, {
 		kind : "Input",
 		name : "email_add",

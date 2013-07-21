@@ -10,6 +10,7 @@ enyo.depends(
 	"source/controls/controls.numberBox.js",
 	"source/controls/controls.reportViewer.js",
 	"source/controls/controls.bindedField.js",
+	"source/controls/controls.dateMask.js",
 	
 	"source/global/global.scrim.js",
 	"source/global/cache.js",

@@ -30,27 +30,28 @@ enyo.kind({
 		style : "",
 		components : [ {
 		    content : "Fecha Inicial",
-		}, {
-		    kind : "DatePicker",
+		}, 
+		{
+		    kind : "controls.dateMask",
+		    inputKind : "ToolInput",
 		    name : "start_date",
-		    label : "",
-		    inputClassName : "blankInput",
-		    focusClassName : "darkFocus",
-		    changeOnInput : true
-		} ]
+		    bindTo : "birthDate",
+		    style:"max-width:130px;"
+		    } ]
 	    }, {
 		kind : "VFlexBox",
 		style : "",
 		components : [ {
 		    content : "Fecha Final",
-		}, {
-		    kind : "DatePicker",
+		}, 
+		{
+		    kind : "controls.dateMask",
+		    inputKind : "ToolInput",
 		    name : "end_date",
-		    label : "",
-		    inputClassName : "blankInput",
-		    focusClassName : "darkFocus",
-		    changeOnInput : true
-		} ],
+		    bindTo : "birthDate",
+		    style:"max-width:130px;"
+		    } 
+		],
 	    } ]
 	}, {
 	    kind : "Button",

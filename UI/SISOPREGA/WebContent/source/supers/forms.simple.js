@@ -1,14 +1,15 @@
 enyo.kind({
     name : "forms.simple",
-    kind : enyo.SlidingView,
-    layoutKind : enyo.VFlexLayout,
-    iCreated : null,
+    kind : enyo.VFlexBox,
     events : {
 	onAdd : "",
 	onUpdate : "",
 	onCancel : "",
+	onAfterLoad:""
     },
     updatingEntityId : 0,
+    bUpdatingMode:false,
+    objToSet:null,
     errorMessage : "Error al validar datos",
     published : {
 	entityKind : null,
@@ -71,14 +72,19 @@ enyo.kind({
 	    }, ]
 	} ]
     } ],
-    ready : function() {
+    create:function(){
+	this.inherited(arguments);
 	this.$.draAdd.setOpen(true);
 	this.$.draUpdate.setOpen(false);
-	this.resetValues();
+    },
+    afterLoad:function(){
+	this.setEntity(this.objToSet, this.bUpdatingMode);
+	this.render();
+	this.doAfterLoad();
+	cacheMan.hideScrim();
     },
     resetValues : function() {
 	var controls = this.$;
-
 	for ( var i in controls) {
 	    if (controls[i].bindTo && !controls[i].fixedValue) {
 		this.setValueForControl(controls[i], "");
@@ -229,29 +235,40 @@ enyo.kind({
 	    case "Control":
 		control.setContent(value);
 		break;
+	    case "controls.dateMask":
+		if (!this.bUpdatingMode){
+		    control.setToday();
+		    break;
+		} //else continue to default case 
 	    case "controls.bindedField":
 	    default:
 		control.setValue(value);
 	    }    
 	}
     },
-    setEntity : function(entity) {
-	this.resetValues();
+    setEntity : function(entity, bUpdatingMode) {
+	if(bUpdatingMode){
+	    this.toggleUpdate();
+	    this.resetValues();
+	}else{
+	    this.toggleAdd();
+	}
+	
 	if(entity){
 	    var controls = this.$;
-		for ( var i in controls) {
-		    if (controls[i].hasOwnProperty("belongsTo")) {
-			if(entity[controls[i].belongsTo])
-			    this.setValueForControl(controls[i], entity[controls[i].belongsTo][0][controls[i].bindTo]);
-		    }else if (controls[i].hasOwnProperty("bindTo")){
-			this.setValueForControl(controls[i], entity[controls[i].bindTo]);
-		    }
+	    for ( var i in controls) {
+		if (controls[i].hasOwnProperty("belongsTo")) {
+		    if(entity[controls[i].belongsTo])
+			this.setValueForControl(controls[i], entity[controls[i].belongsTo][0][controls[i].bindTo]);
+		}else if (controls[i].hasOwnProperty("bindTo")){
+		    this.setValueForControl(controls[i], entity[controls[i].bindTo]);
 		}
-		this.updatingEntityId = entity[this.entityKind.entityIdName()];
+	    }
+	    this.updatingEntityId = entity[this.entityKind.entityIdName()];
 	}
-	this.toggleUpdate();
     },
     toggleUpdate : function() {
+	this.bUpdatingMode = true;
 	this.$.draAdd.setOpen(false);
 	this.$.draUpdate.setOpen(true);
     },
@@ -260,6 +277,7 @@ enyo.kind({
 	this.resetValues();
     },
     activateAddButtons : function(){
+	this.bUpdatingMode = false;
 	this.$.draAdd.setOpen(true);
 	this.$.draUpdate.setOpen(false);
     }

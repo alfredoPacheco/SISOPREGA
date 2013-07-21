@@ -54,12 +54,20 @@ enyo
 						    content : "Hoy",
 						    style : "background-color:#DABD8B;",
 						    onclick : "cambiarAHoy"
-						}, {
-						    kind : "DatePicker",
-						    label : "",
+						},
+						{
+						    kind : "controls.dateMask",
+						    inputKind : "ToolInput",
 						    name : "fechaPicker",
-						    onChange : "cambioDeFecha"
-						} ]
+						    bindTo : "birthDate",
+						    style : "max-width:130px;"
+						},
+						{
+						    kind : "Button",
+						    content : "Ir",
+						    style : "background-color:#DABD8B;",
+						    onclick : "cambioDeFecha"
+						}, ]
 				    },
 				    {
 					kind : enyo.Scroller,
@@ -368,8 +376,6 @@ enyo
 			} ]
 	    } ],
 
-	    // TODO: BEGIN FUNCTIONS
-
 	    enviar_aviso : function() {
 
 		if (confirm("¿Desea enviar los avisos ahora?")) {
@@ -395,8 +401,6 @@ enyo
 		}
 
 	    },
-
-	    // TODO: done
 	    ready : function() {
 		cacheMan.showScrim();
 		this.inherited(arguments);

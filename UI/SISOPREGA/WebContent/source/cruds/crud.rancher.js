@@ -32,7 +32,7 @@ enyo.kind(
 			+ (entityObj.motherName || "") + ", "
 			+ (entityObj.firstName || "") + " "
 			+ (entityObj.middleName || "");
-
+		entityObj.name = entityObj.name.trim();
 		entityObj.idName = this.entityIdName();
 		return entityObj;
 	    }

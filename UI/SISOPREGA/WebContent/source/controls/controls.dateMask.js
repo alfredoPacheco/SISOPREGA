@@ -1,28 +1,35 @@
 enyo.kind({
-    name : "controls.numberBox",
+    name : "controls.dateMask",
     kind : "Control",
     flex : 1,
     layoutKind : enyo.HFlexLayout,
     sColorWithOutIndex : "teal",
     sColorWithIndex : "black",
+    internalValue : null,
     published : {
-	hint : "",
+	hint : "mes/dia/año",
 	highLighted : false,
 	width : null,
-	height : "25px",
+	height : null,
 	inputKind : "Input",
-	bindTo : null,
-	fontColor:"black"
+	bindTo : null
     },
     events : {
-	// "onSelectItem" : "",
 	"onEnter" : ""
+    },
+    getDate : function() {
+	return this.internalValue;
     },
     getValue : function() {
 	return this.$.textField.getValue();
     },
     setValue : function(value) {
-	this.$.textField.setValue(value);
+	this.internalValue = value;
+	if (this.internalValue)
+	    this.$.textField.setValue(utils.dateOut(this.internalValue));
+    },
+    setToday : function() {
+	this.setValue(new Date());
     },
     setFocus : function() {
 	this.$.textField.forceFocus();
@@ -56,9 +63,7 @@ enyo.kind({
 		name : "textField",
 		hint : "",
 		flex : 1,
-		oninput:"on_input", //TODO WORKING HERE
-		onfocus:"on_focus",
-		onblur:"on_lost_focus"
+		onfocus : "applyMask"
 	    } ]
 	});
 
@@ -66,25 +71,20 @@ enyo.kind({
 	this.highLightedChanged();
 	this.heightChanged();
 	this.widthChanged();
-	this.on_lost_focus();
     },
-    on_lost_focus : function(inSender, inEvent) {
-	this.$.textField.$.input.applyStyle("color",this.getFontColor());	
-    },
-    on_focus : function(){
-	this.$.textField.$.input.applyStyle("color","black");
+    lostFocus : function(inSender, inEvent) {
     },
     clear : function() {
 	this.$.textField.setValue("");
 	this.setHighLighted(false);
     },
-    on_input : function(inSender, inEvent, keyPressed) {
-	var x = keyPressed.charCodeAt(keyPressed.length-1);
-	switch (true) {
-	case (x == 8): // backspace
-	case (x >= 46 && x <= 57): // numbers
-	    return;
-	}
-	inSender.setValue(inSender.value.slice(0,-1));
+    ready : function() {
+	this.$.textField.$.input.applyStyle("text-align", "center");
+    },
+    applyMask : function(inSender) {
+	var _id = inSender.$.input.getId();
+	jQuery(function(j) {
+	    j(document.getElementById(_id)).mask('99/99/9999');
+	});
     }
 });

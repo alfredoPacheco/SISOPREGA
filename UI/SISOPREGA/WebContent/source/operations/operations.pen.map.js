@@ -69,8 +69,8 @@ enyo
 			dismissWithClick : false,
 			layoutKind : "VFlexLayout",
 			style : "overflow: hidden;max-height:360px;max-width:1000px;background-color:#DABD8B;font-size:15px;",
-			height : "95%",
-			width : "95%",
+			height : "370px",
+			width : "840px",
 			scrim : true
 		    },
 
@@ -502,23 +502,11 @@ enyo
 	    actionSelected : function(inSender, inSelected) {
 		switch (inSelected.value) {
 		case 1: // Crear Recepcion
+		    
 		    if (this.$.dynocon) {
 			this.$.dynocon.destroy();
 		    }
-		    if (this.$.tbHeaderRec) {
-			this.$.tbHeaderRec.destroy();
-		    }
-
-		    this.$.popMan.createComponent({
-			kind : "operations.reception.form",
-			onAdd : "updateBY",
-			onCancel : "closePopUp",
-			name : 'dynocon',
-			flex : 1
-		    }, {
-			owner : this
-		    });
-
+		    
 		    var objReception = {};
 		    objReception.penString = "";
 		    objReception.Pen = [];
@@ -532,137 +520,77 @@ enyo
 		    if (objReception.penString != "")
 			objReception.penString = objReception.penString.slice(
 				0, -2);
+		    
+		    this.$.popMan.createComponent({
+			kind : "operations.reception.form",
+			onAdd : "updateBY",
+			onCancel : "closePopUp",
+			onAfterLoad:"dynoconReady",
+			name : 'dynocon',
+			flex : 1,
+			objToSet:objReception
+		    }, {
+			owner : this
+		    });
 
-		    this.$.dynocon.setEntity(objReception);
-		    this.$.dynocon.activateAddButtons();
-		    this.$.popMan.render();
-		    this.$.popMan.openAtCenter();
 		    break;
 		case 3: // Alimento --2 Deseleccionar removed from options.
 		    if (this.$.dynocon) {
 			this.$.dynocon.destroy();
 		    }
-		    if (this.$.tbHeaderRec) {
-			this.$.tbHeaderRec.destroy();
-		    }
-		    this.$.popMan
-			    .createComponent(
-				    {
-					kind : "Toolbar",
-					name : "tbHeaderRec",
-					style : "height:10px",
-					components : [
-						{
-						    kind : "VFlexBox",
-						    name : 'lblBYselected',
-						    allowHtml : true,
-						    style : "color:#FFF;border:none;font-size:12px",
-						    content : ""
-						},
-						{
-						    kind : "Spacer"
-						},
-						{
-						    kind : "VFlexBox",
-						    name : 'lblInfo',
-						    allowHtml : true,
-						    style : "color:#FFF;border:none;font-size:12px;text-align:center;",
-						    content : ""
-						},
-						{
-						    kind : "Spacer"
-						},
-						{
-						    name : 'btnLogOut',
-						    onclick : "closePopUp",
-						    icon : "../SISOPREGA_WEB_LIB/images/command-menu/icon-context.png"
-						} ]
-				    }, {
-					owner : this
-				    });
+		    
 		    this.$.popMan.createComponent({
 			kind : "operations.feed",
 			onAddFeed : "closePopUp",
 			onCancel : "closePopUp",
+			onAfterLoad:"dynoconReady",
 			name : 'dynocon',
 			flex : 1
 		    }, {
 			owner : this
 		    });
-		    var objRec = crudReception
-			    .getByID(crudPen.inUse()[this.objSelected.name].receptionId);
+		    var objRec = crudReception.getByID(crudPen.inUse()[this.objSelected.name].receptionId);
 		    this.$.dynocon.set(objRec, this.arrSelectedOccupied);
 		    this.$.dynocon.toggleAdd();
-		    this.$.popMan.render();
-		    this.$.popMan.openAtCenter();
 		    break;
 		case 4: // Inspeccion
 		    if (this.$.dynocon) {
 			this.$.dynocon.destroy();
 		    }
-		    if (this.$.tbHeaderRec) {
-			this.$.tbHeaderRec.destroy();
-		    }
-		    this.$.popMan.createComponent({
-			kind : "Toolbar",
-			name : "tbHeaderRec",
-			style : "height:10px",
-			components : [ {
-			    kind : "Spacer"
-			}, {
-			    kind : "VFlexBox",
-			    name : 'lblInfo',
-			    allowHtml : true,
-			    style : "color:#FFF;border:none;font-size:15px",
-			    content : "Texto"
-			}, {
-			    kind : "Spacer"
-			}, {
-			    name : 'btnLogOut',
-			    onclick : "closePopUp",
-			    icon : "../SISOPREGA_WEB_LIB/images/command-menu/icon-context.png"
-			} ]
-		    }, {
-			owner : this
-		    });
+		    
 		    this.$.popMan.createComponent({
 			kind : "operations.inspections",
 			onAddReception : "closePopUp",
 			onCancel : "closePopUp",
+			onAfterLoad:"dynoconReady",
 			name : 'dynocon',
 			flex : 1
 		    }, {
 			owner : this
 		    });
-		    var objRec = crudReception
-			    .getByID(crudPen.inUse()[this.objSelected.name].receptionId);
-		    this.$.dynocon.set(objRec);
+		    var objRec = crudReception.getByID(crudPen.inUse()[this.objSelected.name].receptionId);
 		    this.$.dynocon.toggleAdd();
-		    this.$.popMan.render();
-		    this.$.popMan.openAtCenter();
+		    this.$.dynocon.set(objRec);
+		    
 		    break;
 		case 5: // Editar
 		    if (this.$.dynocon) {
 			this.$.dynocon.destroy();
 		    }
-		    if (this.$.tbHeaderRec) {
-			this.$.tbHeaderRec.destroy();
-		    }
-		    var objRec = crudReception
-			    .getByID(crudPen.inUse()[this.objSelected.name].receptionId);
+		    var objRec = crudReception.getByID(crudPen.inUse()[this.objSelected.name].receptionId);
 		    this.$.popMan.createComponent({
 			kind : "operations.reception.form",
 			onUpdate : "onReceptionUpdate",
 			onCancel : "closePopUp",
+			onAfterLoad:"dynoconReady",
 			name : 'dynocon',
 			flex : 1,
-			objReception : objRec
+			objToSet:objRec,
+			bUpdatingMode :true
 		    }, {
 			owner : this
 		    });
-
-		    this.$.popMan.render();
-		    this.$.popMan.openAtCenter();
+		    
 		    break;
 		case 6: // Liberar corral
 		    var objRec = crudReception
@@ -686,6 +614,9 @@ enyo
 		    this.sendReport();
 		    break;
 		}
+	    },
+	    dynoconReady:function(){
+		this.$.popMan.openAtCenter();
 	    },
 	    showReport : function(){
 		var recId = crudPen.inUse()[this.objSelected.name].receptionId;

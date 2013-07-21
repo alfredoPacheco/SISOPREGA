@@ -8,6 +8,15 @@ enyo
 	    _objRec : null,
 	    objReception : null,
 	    bySelected : "",
+	    events:{
+		onAfterLoad:"",
+		onClosePopUp:"closePopUp"
+	    },
+	    afterLoad:function(){
+		this.render();
+		this.doAfterLoad();
+		cacheMan.hideScrim();
+	    },
 	    components : [
 		    {
 			kind : "Popup",
@@ -83,6 +92,38 @@ enyo
 				onclick : "closeHandling"
 			    } ]
 			} ]
+		    },
+		    {
+			kind : "Toolbar",
+			name : "tbHeaderRec",
+			style : "height:10px",
+			pack:"center",
+			components : [
+				{
+				    kind : "VFlexBox",
+				    name : 'lblBYselected',
+				    allowHtml : true,
+				    style : "color:#FFF;border:none;font-size:12px",
+				    content : ""
+				},
+				{
+				    kind : "Spacer"
+				},
+				{
+				    kind : "VFlexBox",
+				    name : 'lblInfo',
+				    allowHtml : true,
+				    style : "color:#FFF;border:none;font-size:12px;text-align:center;",
+				    content : ""
+				},
+				{
+				    kind : "Spacer"
+				},
+				{
+				    name : 'btnLogOut',
+				    onclick : "doClosePopUp",
+				    icon : "../SISOPREGA_WEB_LIB/images/command-menu/icon-context.png"
+				} ]
 		    },
 		    {
 			kind : enyo.Scroller,
@@ -165,7 +206,8 @@ enyo
 				    inputType : "number",
 				    hint : "Molida",
 				    changeOnInput : true,
-				    fod_id : null
+				    fod_id : null,
+				    fontColor:"#e5e5e5"
 				},
 				{
 				    kind : "controls.numberBox",
@@ -176,7 +218,8 @@ enyo
 				    height : "35px;",
 				    inputType : "number",
 				    hint : "Alfalfa",
-				    changeOnInput : true
+				    changeOnInput : true,
+				    fontColor:"#e5e5e5"
 				},
 				{
 				    kind : "controls.numberBox",
@@ -187,7 +230,8 @@ enyo
 				    height : "35px;",
 				    inputType : "number",
 				    hint : "Avena",
-				    changeOnInput : true
+				    changeOnInput : true,
+				    fontColor:"#e5e5e5"
 				},
 				{
 				    kind : "controls.numberBox",
@@ -198,7 +242,8 @@ enyo
 				    height : "35px;",
 				    inputType : "number",
 				    hint : "Concentrado",
-				    changeOnInput : true
+				    changeOnInput : true,
+				    fontColor:"#e5e5e5"
 				},
 				{
 				    kind : "controls.numberBox",
@@ -209,7 +254,8 @@ enyo
 				    height : "35px;",
 				    inputType : "number",
 				    hint : "corn",
-				    changeOnInput : true
+				    changeOnInput : true,
+				    fontColor:"#e5e5e5"
 				},
 				{
 				    kind : "Spacer"
@@ -261,14 +307,8 @@ enyo
 				} ]
 		    }, ],
 	    ready : function(InSender, InEvent) {
-		if (enyo.$.sisoprega_receptionsMap) {
-		    _objPopupHeader = enyo.$.sisoprega_receptionsMap.$.lblInfo;
-		    this.bySelected = enyo.$.sisoprega_receptionsMap.$.lblBYselected;
-		} else if (enyo.$.sisoprega_mainMenu_receptionsMap) {
-		    _objPopupHeader = enyo.$.sisoprega_mainMenu_receptionsMap.$.lblInfo;
-		    this.bySelected = enyo.$.sisoprega_mainMenu_receptionsMap.$.lblBYselected;
-		}
-		_objPopupHeader.setContent(_objMainHeader.getContent());
+		this.bySelected = this.$.lblBYselected;
+		this.$.lblInfo.setContent(_objMainHeader.getContent());
 	    },
 	    setupRow : function(inSender, inIndex) {
 		var objFeed;
@@ -336,7 +376,6 @@ enyo
 		    }
 		}
 	    },
-
 	    closeHandling : function() {
 		this.$.manejo.close();
 		this[this.$.manejo.cbMethod]();
@@ -351,7 +390,6 @@ enyo
 		this.$.manejo.cbMethod = "updateFeed";
 		this.$.manejo.openAtCenter();
 	    },
-
 	    getFeed : function(sOp) {
 		var objData = {
 		    feeding_id : null,
@@ -439,14 +477,12 @@ enyo
 		}
 		return objFeed;
 	    },
-
 	    updatetList : function() {
 		this._objRec.feed.sort(function(a,b){return a.fod_id >b.fod_id;});
 		//this.filter.sort(function(a,b){return a.caption >b.caption;});
 		this.$.productList.render();
 		this.updateHeader();
 	    },
-
 	    setFeed : function(inSender, inEvent) {
 		this.resetValues();
 		this.iSelect = inEvent.rowIndex;
@@ -576,6 +612,7 @@ enyo
 		this._objRec = this.adapterIn(this.objReception);
 		this._arrBY = arrBY;
 		this.resetValues(true);
+		this.afterLoad();
 	    },
 	    adapterOut : function(objNew, bUpdating) {
 

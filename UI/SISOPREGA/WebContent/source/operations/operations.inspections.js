@@ -5,6 +5,15 @@ enyo
 	    iSelect : null,
 	    _objRec : null,
 	    objReception : null,
+	    events:{
+		onAfterLoad:"",
+		onClosePopUp:"closePopUp"
+	    },
+	    afterLoad:function(){
+		this.render();
+		this.doAfterLoad();
+		cacheMan.hideScrim();
+	    },
 	    components : [
 		    {
 			kind : "Popup",
@@ -47,6 +56,26 @@ enyo
 				    onclick : "closeComments"
 				} ]
 			    } ]
+			} ]
+		    },
+		    {
+			kind : "Toolbar",
+			name : "tbHeaderRec",
+			style : "height:10px",
+			components : [ {
+			    kind : "Spacer"
+			}, {
+			    kind : "VFlexBox",
+			    name : 'lblInfo',
+			    allowHtml : true,
+			    style : "color:#FFF;border:none;font-size:15px",
+			    content : "Texto"
+			}, {
+			    kind : "Spacer"
+			}, {
+			    name : 'btnLogOut',
+			    onclick : "doClosePopUp",
+			    icon : "../SISOPREGA_WEB_LIB/images/command-menu/icon-context.png"
 			} ]
 		    },
 		    {
@@ -143,16 +172,11 @@ enyo
 						    flex : 1,
 						    caption : "X",
 						    onclick : "toggleAdd"
-						}, ]
+						} ]
 				    } ]
 				} ]
 		    }, ],
 	    ready : function() {
-		if (enyo.$.sisoprega_receptionsMap) {
-		    _objPopupHeader = enyo.$.sisoprega_receptionsMap.$.lblInfo;
-		} else if (enyo.$.sisoprega_mainMenu_receptionsMap) {
-		    _objPopupHeader = enyo.$.sisoprega_mainMenu_receptionsMap.$.lblInfo;
-		}
 		this.$.reject_id.setItems(crudInspectionCode.getList());
 	    },
 	    setupRow : function(inSender, inIndex) {
@@ -185,7 +209,9 @@ enyo
 	    },
 	    validateReject:function(objRej){
 		var result = this.summarizeTotals();
-		if(result.totalRejected >= result.totalHeads){
+		iValue = Number(this.$.rejected_count.getValue());
+		
+		if(iValue > result.totalAccepted){
 		    cacheMan.setMessage("","Error. No se pueden rechazar mas cabezas de las existentes.");
 		    return false;
 		}
@@ -199,8 +225,8 @@ enyo
 		this.objReception = enyo.clone(objRec);
 		this._objRec = this.adapterIn(this.objReception);
 		this.resetValues();
+		this.afterLoad();
 	    },
-
 	    setReject : function(inSender, inEvent) {
 		var ObjCap;
 		if (ObjCap = this._objRec.inspections[inEvent.rowIndex]) {
@@ -254,7 +280,7 @@ enyo
 	    },
 	    setHeader:function(){
 		var result = this.summarizeTotals();
-		_objPopupHeader.setContent("Total HC: [" + result.totalHeads
+		this.$.lblInfo.setContent("Total HC: [" + result.totalHeads
 			+ "]   Total Aceptados: [" + result.totalAccepted
 			+ "]   Total Rechazados: [" + result.totalRejected + "]");
 	    },
