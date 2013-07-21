@@ -155,7 +155,8 @@ enyo.kind(
       }
       switch (view) {
       case 'Operaciones':
-        this.$.mainMenu.$.mainPane.selectViewByName("receptionsMap");
+        this.$.mainMenu.showReceptionsMap();
+        
         break;
       case 'Reportes':
         this.$.mainMenu.$.mainPane.selectViewByName("reports");

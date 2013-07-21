@@ -14,8 +14,9 @@ enyo.kind({
 			caption : "",
 			style : "color:black",
 			components : [ {
-				kind : "VFlexBox",
+				kind : "HFlexBox",
 				style : "",
+				align:"center",
 				components : [ {
 					content : "Fecha Inicial",
 				}, 
@@ -28,8 +29,9 @@ enyo.kind({
 				    }
 				 ]
 			}, {
-				kind : "VFlexBox",
+				kind : "HFlexBox",
 				style : "",
+				align:"center",
 				components : [ {
 					content : "Fecha Final",
 				}, 
@@ -55,16 +57,12 @@ enyo.kind({
 	  this.resetValues();
 	},
 	getParams : function() {
-		var fmt = new enyo.g11n.DateFmt({
-			format : "MM/dd/yyyy",
-			locale : new enyo.g11n.Locale("es_es")
-		});
-		var params = {
-			start_date : "",
-			end_date : ""
-		};
-		params.start_date = fmt.format(this.$.start_date.getValue());
-		params.end_date = fmt.format(this.$.end_date.getValue());
+	    var params = {
+        	    start_date : "",
+        	    end_date : ""
+        	   };
+		params.start_date = this.$.start_date.getValue();
+		params.end_date = this.$.end_date.getValue();
 		
 		return params;
 	},

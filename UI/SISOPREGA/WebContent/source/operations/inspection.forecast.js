@@ -502,7 +502,7 @@ enyo
 		    break;
 		case "cattleType":
 		    this.$.cattleType.setIndex(this.$.cattleType.getIndex());
-		    this.$.cantidad.forceFocus();
+		    this.$.cantidad.setFocus();
 		    break;
 		case "cantidad":
 		    this.$.barnyards.setFocus();
@@ -553,7 +553,7 @@ enyo
 		this.autoCompleteFields();
 	    },
 	    cambioDeFecha : function() {
-		this.fecha = this.$.fechaPicker.getValue();
+		this.fecha = this.$.fechaPicker.getDate();
 
 		// this.$.cattleType.setIndex(1);
 		// this.$.zone.setIndex(1);

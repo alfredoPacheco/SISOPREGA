@@ -87,7 +87,7 @@ enyo.kind({
 	this.callbackObject = callbackObject;
 	this.callbackMethod = callbackMethod;
 	consumingGateway.Update(objEntity.entityName || this.entityName,
-		outerObj, this, "saveCallBack");
+		outerObj, this, "updateCallBack");
     },
     remove : function(entity, callbackObject, callbackMethod) {
 	var removableId = entity[this.entityIdName()];
@@ -100,6 +100,16 @@ enyo.kind({
 		"saveCallBack");
     },
     saveCallBack : function(resultObj) {
+	if (Number(resultObj.exceptionId) == 0) { // created or updated successfully
+	    var milis = ((Math.random() * 1000) + 500);
+	    setTimeout(this.callbackObject[this.callbackMethod](resultObj), milis);
+	} else {
+	    // Hide scrim if open to see exception message.
+	    cacheMan.hideScrim();
+	    cacheMan.setMessage("", "[Exception ID: " + resultObj.exceptionId
+		    + "] Descripcion: " + resultObj.exceptionDescription);
+	}
+    },updateCallBack : function(resultObj) {
 	if (Number(resultObj.exceptionId) == 0) { // created or updated successfully
 	    var objOld =null; 
 	    var objNew = null;

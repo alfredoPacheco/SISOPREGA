@@ -216,7 +216,7 @@ enyo.kind({
 	this.$.rancher_id.setItems(arrAllRanchers);
 
 	this.$.cattype_id.setItems(crudCattle.getCattleTypeList());
-	this.$.cattype_id.setIndex(1); // Default value: Novillos
+	
 
 	this.$.location_id.setItems(crudLocation.getList());
 	this.$.zone_id.setItems(cacheMan.getAllZonesForList());
@@ -225,7 +225,9 @@ enyo.kind({
 	this.afterLoad();
 	
 	if(!this.bUpdatingMode){
-	 // Set location_id and zone_id based on pen.
+	    this.$.cattype_id.setIndex(1); // Default value: Novillos
+
+	    // Set location_id and zone_id based on pen.
 		var deductedZone = this.deduceZone();
 		if (deductedZone == 1)
 		    this.$.location_id.setIndex(1); // Default value: Chihuahua

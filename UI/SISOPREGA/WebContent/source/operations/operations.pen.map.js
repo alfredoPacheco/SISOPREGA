@@ -540,7 +540,7 @@ enyo
 		    }, {
 			owner : this
 		    });
-		    
+		    cacheMan.showScrim();
 		    break;
 		case 3: // Alimento --2 Deseleccionar removed from options.
 		    if (this.$.dynocon) {
@@ -598,7 +598,7 @@ enyo
 		    }, {
 			owner : this
 		    });
-		    
+		    cacheMan.showScrim();
 		    break;
 		case 6: // Liberar corral
 		    var objRec = crudReception
