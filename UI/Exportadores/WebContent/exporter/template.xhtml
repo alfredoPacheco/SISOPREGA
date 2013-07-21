@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html">
+<head>
+<meta http-equiv="Content-Type"
+	content="application/xhtml+xml; charset=UTF-8" />
+<title>SISOPREGA - EXPORTADORES</title>
+<link href="css/exportador.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+	<div id="container">
+		<div id="menu">
+			<div id="menu-header">
+				<img src="images/ProCustomBrokers.png" width="80%" title="Pro Custom Brokers" alt="Pro Custom Brokers" />
+				<br/>
+				<b>PRO</b> Customs Brokers
+			</div>
+			<div id="menu-options">
+				<a href="mapa.xhtml">Mapa de Corrales</a>
+				<br/>
+				<br/>
+				<b>Reportes</b><br/>
+				<ul>
+					<li><a href="reporteGanadoRecibido.xhtml">Ganado Recibido</a></li>
+					<li><a href="reporteAlimento.xhtml">Alimento</a></li>
+					<li><a href="reporteListaDeInspeccion.xhtml">Lista de Inspección</a></li>
+					<li><a href="reporteResultadosDeInspeccion.xhtml">Resultados de Inspección</a></li>
+				</ul>
+				<br/>
+				<b>Perfil</b><br/>
+				<ul>
+					<li><a href="actualizar.xhtml">Mis datos</a></li>
+					<li><a href="chgpwd.xhtml">Contraseña</a></li>
+				</ul>
+			</div>
+		</div>
+		<div id="header">
+			<ui:insert name="header">
+				<!--  include your header file or uncomment the include below and create header.xhtml in this directory -->
+				<ui:include src="header.xhtml" />
+			</ui:insert>
+		</div>
+		<div id="content">
+			<ui:insert name="content" />
+		</div>
+		<div id="footer">
+			<ui:insert name="footer">
+				<!--  include your header file or uncomment the include below and create footer.xhtml in this directory -->
+				<ui:include src="footer.xhtml" />
+			</ui:insert>
+		</div>
+	</div>
+</body>
+
+</html>

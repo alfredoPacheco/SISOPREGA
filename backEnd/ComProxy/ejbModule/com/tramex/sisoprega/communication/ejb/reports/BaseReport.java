@@ -4,6 +4,8 @@
 package com.tramex.sisoprega.communication.ejb.reports;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,6 +14,7 @@ import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
+import javax.ejb.SessionContext;
 import javax.sql.DataSource;
 
 /**
@@ -39,6 +42,10 @@ public abstract class BaseReport {
   protected DataSource ds;
   protected Connection conn = null;
 
+  @Resource
+  protected SessionContext ejbContext;
+  protected String RANCHER_ROLE_NAME = "rancher";
+
   protected Map<String, Object> parameters = new HashMap<String, Object>();
 
   private String reportName;
@@ -57,19 +64,19 @@ public abstract class BaseReport {
       log.throwing(this.getClass().getCanonicalName(), "init", se);
     }
   }
-  
+
   @PreDestroy
-  private void preDestroy(){
+  private void preDestroy() {
     log.fine("Release resouces for BaseReport: " + this.getClass().getCanonicalName());
-    if(conn!=null){
-      try{
+    if (conn != null) {
+      try {
         conn.close();
         conn = null;
-      }catch(SQLException se){
+      } catch (SQLException se) {
         log.severe("Unable to release database connection.");
         log.throwing(this.getClass().getCanonicalName(), "preDestroy", se);
       }
-      
+
     }
   }
 
@@ -87,4 +94,41 @@ public abstract class BaseReport {
   public void setReportName(String reportName) {
     this.reportName = reportName;
   }
+
+  protected long loggedRancherId() {
+    long result = 0;
+
+    String rancherName = ejbContext.getCallerPrincipal().getName();
+
+    String sqlString = "SELECT rancher_id FROM cat_rancher_user WHERE user_name=?";
+
+    PreparedStatement ps = null;
+    ResultSet rs = null;
+
+    try {
+      ps = conn.prepareStatement(sqlString);
+      ps.setString(1, rancherName);
+
+      log.fine("executing query: [" + sqlString + "]");
+      rs = ps.executeQuery();
+
+      if (rs.next()) {
+        result = rs.getLong("rancher_id");
+      }
+
+    } catch (SQLException e) {
+      this.log.severe("SQLException while reading receptions");
+      this.log.throwing(this.getClass().getCanonicalName(), "byte[] getBytes(Map<String, Object>)", e);
+    } finally {
+      try {
+        if (ps != null)
+          ps.close();
+      } catch (Exception e) {
+        this.log.warning("Unable to release some resources.");
+      }
+    }
+
+    return result;
+  }
+
 }

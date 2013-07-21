@@ -42,6 +42,8 @@ public class InspectionDetails {
   private String note;
   private Inspection inspection;
 
+  public InspectionDetails(){}
+  
   /**
    * @return the inspectionDetailsId
    */

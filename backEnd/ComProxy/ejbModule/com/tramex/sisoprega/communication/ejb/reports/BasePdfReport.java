@@ -40,8 +40,16 @@ public abstract class BasePdfReport extends BaseReport {
     Date toDate = (Date) parameters.get("toDate");
     log.finer("toDate:[" + new SimpleDateFormat("MM/dd/yyyy").format(toDate) + "]");
     
-    long lRancherId = (Long) parameters.get("Id");
+    long lRancherId = 0;
+    if(ejbContext.isCallerInRole(RANCHER_ROLE_NAME)){
+      // Calculate RANCHER_ID
+      lRancherId = loggedRancherId();
+    }else{
+      lRancherId = (Long) parameters.get("Id");
+    }
+    
     String sRancherId = String.valueOf(lRancherId);
+    
     int rancherId = Integer.parseInt(sRancherId);
     log.finer("rancherId:[" + rancherId + "]");
 
@@ -70,4 +78,7 @@ public abstract class BasePdfReport extends BaseReport {
     this.log.exiting(this.getClass().getCanonicalName(), "byte[] getBytes(Map<String, Object)");
     return bytes;
   }
+  
+  
+  
 }

@@ -79,16 +79,15 @@ public class ReporteAlimento extends BaseReportServlet {
     log.fine("toDate: [" + request.getParameter("toDate") + "]");
     String rancherId = request.getParameter("rancherId");
 
-    if (request.isUserInRole("rancher"))
-      rancherId = rancherFromLoggedUser(request);
-
     log.fine("rancherId: [" + rancherId + "]");
 
     Date fromDate = new SimpleDateFormat("MM/dd/yyyy").parse(request.getParameter("fromDate"));
     Date toDate = new SimpleDateFormat("MM/dd/yyyy").parse(request.getParameter("toDate"));
     params.put("fromDate", fromDate);
     params.put("toDate", toDate);
-    params.put("Id", Long.parseLong(rancherId));
+    
+    if(rancherId != null)
+      params.put("Id", Long.parseLong(rancherId));
 
     reporteAlimento.setReportName("EntregaAlimento");
     reporteAlimento.setParameters(params);

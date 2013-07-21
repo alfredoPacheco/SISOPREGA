@@ -14,7 +14,7 @@ import com.tramex.sisoprega.reporting.Reporteable;
  * Session Bean implementation class PdfGanadoRecibido
  */
 @Stateless
-@RolesAllowed({ "mx_usr", "us_usr" })
+@RolesAllowed({ "mx_usr", "us_usr", "rancher" })
 public class PdfGanadoRecibido extends BasePdfReport implements Reporteable {
   public void setParameters(Map<String, Object> parameters) throws Exception {
     Date fromDate = (Date) parameters.get("fromDate");
@@ -22,8 +22,16 @@ public class PdfGanadoRecibido extends BasePdfReport implements Reporteable {
     Date toDate = (Date) parameters.get("toDate");
     log.finer("toDate:[" + new SimpleDateFormat("MM/dd/yyyy").format(toDate) + "]");
 
-    long lRancherId = (Long) parameters.get("Id");
+    long lRancherId = 0;
+    if(ejbContext.isCallerInRole(RANCHER_ROLE_NAME)){
+      // Calculate RANCHER_ID
+      lRancherId = loggedRancherId();
+    }else{
+      lRancherId = (Long) parameters.get("Id");
+    }
+    
     String sRancherId = String.valueOf(lRancherId);
+    
     int rancherId = Integer.parseInt(sRancherId);
     log.finer("rancherId:[" + rancherId + "]");
 

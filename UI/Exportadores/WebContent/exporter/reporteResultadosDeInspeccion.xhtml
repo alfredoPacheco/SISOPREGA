@@ -1,0 +1,23 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+<ui:composition template="template.xhtml">
+	<ui:define name="content">
+	    <h:form id="filterForm">
+	    	<h:inputText value="#{ganadoInspeccionado.filterBean.fromDate}" id="fromDate">
+	    		<f:convertDateTime dateStyle="short" type="date" />
+	    	</h:inputText> <br/> 
+	    	<h:inputText value="#{ganadoInspeccionado.filterBean.toDate}" id="toDate">
+	    		<f:convertDateTime dateStyle="short" type="date" />
+	    	</h:inputText><br/>
+	    	<h:commandLink value="Descargar Reporte" action="#{ganadoInspeccionado.downloadPDF}" target="_blank"/><br/><br/>
+	    	<h:messages id="errorMsg"/>
+	    </h:form>
+	</ui:define>
+</ui:composition>
+</html>
