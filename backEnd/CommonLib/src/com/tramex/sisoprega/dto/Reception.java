@@ -49,6 +49,8 @@ public class Reception {
   private Set<Inspection> inspection;
   private Set<Pen> pen;
 
+  public Reception(){}
+  
   /**
    * @return the receptionId
    */
@@ -242,8 +244,9 @@ public class Reception {
 
   @Override
   public String toString() {
-    return "cattleType:" + cattleType + ";dateAllotted:" + dateAllotted + ";locationId:" + locationId + ";zoneId:" + zoneId
-        + ";rancherId:" + rancherId + ";receptionId:" + receptionId + ";";
+    long dateAllotedMilis = dateAllotted.getTime();
+    return "{\"cattleType\":" + cattleType + ",\"dateAllotted\":" + dateAllotedMilis + ",\"locationId\":" + locationId + ",\"zoneId\":" + zoneId
+        + ",\"rancherId\":" + rancherId + ",\"receptionId\":" + receptionId + "}";
   }
 
   @Override

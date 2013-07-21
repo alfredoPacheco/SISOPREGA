@@ -16,9 +16,6 @@
 package com.tramex.sisoprega.reporting;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.logging.Logger;
 
 import javax.ejb.EJB;
@@ -30,9 +27,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.sf.jasperreports.engine.JRException;
 
-import com.tramex.sisoprega.datamodel.DataModelException;
 import com.tramex.sisoprega.datamodel.RemoteModelable;
-import com.tramex.sisoprega.dto.RancherUser;
 
 /**
  * All reporting servlets are based on this class.
@@ -99,33 +94,4 @@ public abstract class BaseReportServlet extends HttpServlet {
   protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     doGet(request, response);
   }
-
-  protected String rancherFromLoggedUser(HttpServletRequest request) throws ServletException {
-    log.entering(this.getClass().getCanonicalName(), "getLoggedRancherId");
-
-    try {
-      long result = 0;
-
-      Map<String, Object> parameters = new HashMap<String, Object>();
-      parameters.put("userName", request.getUserPrincipal().getName());
-
-      List<RancherUser> ranchers = dataModel.readDataModelList("RANCHER_USER_BY_USER_NAME", parameters, RancherUser.class);
-
-      if (!ranchers.isEmpty()) {
-        RancherUser loggedRancher = ranchers.get(0);
-        if (loggedRancher.getRancher() != null)
-          result = loggedRancher.getRancher().getRancherId();
-      }
-
-      log.fine("Retrieved rancherId[" + result + "] from userName[" + request.getUserPrincipal().getName() + "]");
-      return String.valueOf(result);
-
-    } catch (DataModelException e) {
-      this.log.warning("Unable to read logged user due to the following exception: [" + e.getMessage() + "]");
-      this.log.throwing(this.getClass().getCanonicalName(), "rancherFromLoggedUser", e);
-      throw new ServletException(e);
-    }
-
-  }
-
 }

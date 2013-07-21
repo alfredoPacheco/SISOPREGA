@@ -39,6 +39,8 @@ public class ReceptionHeadcount {
   private double weight;
   private long weightUom;
   private Reception reception;
+  
+  public ReceptionHeadcount(){}
 
   /**
    * @return the hc
@@ -116,7 +118,7 @@ public class ReceptionHeadcount {
 
   @Override
   public String toString() {
-    return "hc:" + hc + ";receptionHeadcountId:" + receptionHeadcountId + ";weight:" + weight + ";weightUom:"
-        + weightUom + ";";
+    return "{\"hc\":" + hc + ",\"receptionHeadcountId\":" + receptionHeadcountId + ",\"weight\":" + weight + ",\"weightUom\":"
+        + weightUom + "}";
   }
 }

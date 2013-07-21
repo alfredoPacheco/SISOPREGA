@@ -44,6 +44,7 @@ public class Pen {
   private long locationId;
   private Set<PenCapacity> penCapacity;
 
+  public Pen(){}
 
   /**
    * @return the penCapacity
@@ -141,7 +142,7 @@ public class Pen {
 
   @Override
   public String toString() {
-    return "barnyardCode:" + barnyardCode + ";penId:" + penId + ";locationId:" + locationId + ";";
+    return "{\"barnyardCode\":\"" + barnyardCode + "\",\"penId\":" + penId + ",\"locationId\":" + locationId + "}";
   }
   
 }

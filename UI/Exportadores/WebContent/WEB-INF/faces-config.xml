@@ -5,5 +5,57 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_1.xsd"
     version="2.1">
-
+	<application>
+		<resource-bundle>
+			<base-name>com.tramex.sisoprega.exporter.cross.resources.labels</base-name>
+			<var>lbl</var>
+		</resource-bundle>
+	</application>
+	<managed-bean>
+		<description>Handles the logout request to invalidate session.</description>
+		<managed-bean-name>logoutBean</managed-bean-name>
+		<managed-bean-class>com.tramex.sisoprega.exporter.cross.LogoutBean</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<description>Handles requests to database regarding reception entities for the given loggedin user.</description>
+		<managed-bean-name>receptionBean</managed-bean-name>
+		<managed-bean-class>com.tramex.sisoprega.exporter.cross.ReceptionBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<description>handles filters to execute reports.</description>
+		<managed-bean-name>filterBean</managed-bean-name>
+		<managed-bean-class>com.tramex.sisoprega.exporter.cross.FilterBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<description>Provides interface to download pdf report from comProxy component.</description>
+		<managed-bean-name>ganadoRecibido</managed-bean-name>
+		<managed-bean-class>com.tramex.sisoprega.exporter.cross.reporting.GanadoRecibidoReportBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+		<managed-property>
+			<property-name>filterBean</property-name>
+			<property-class>com.tramex.sisoprega.exporter.cross.FilterBean</property-class>
+			<value>#{filterBean}</value>
+		</managed-property>
+	</managed-bean>
+	<managed-bean>
+		<description>Handles the requests to download &quot;Entrega Alimento&quot; pdf report.</description>
+		<managed-bean-name>entregaAlimento</managed-bean-name>
+		<managed-bean-class>com.tramex.sisoprega.exporter.cross.reporting.EntregaAlimentoReportBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<description>Handles the requests for downloading inspection list pdf report.</description>
+		<managed-bean-name>listaInspeccion</managed-bean-name>
+		<managed-bean-class>com.tramex.sisoprega.exporter.cross.reporting.ListaInspeccionReportBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<description>Handles requests to download inspection report pdf.</description>
+		<managed-bean-name>ganadoInspeccionado</managed-bean-name>
+		<managed-bean-class>com.tramex.sisoprega.exporter.cross.reporting.GanadoInspeccionadoReportBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
 </faces-config>

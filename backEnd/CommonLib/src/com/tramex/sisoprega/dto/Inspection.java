@@ -49,6 +49,8 @@ public class Inspection {
   private Set<Pen> pen;
   private Set<InspectionDetails> inspectionDetails;
 
+  public Inspection(){}
+  
   /**
    * @return the inspectionId
    */

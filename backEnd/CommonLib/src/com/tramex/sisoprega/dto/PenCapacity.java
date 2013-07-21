@@ -39,6 +39,8 @@ public class PenCapacity {
   private long headCount;
   private Pen pen;
 
+  public PenCapacity(){}
+  
   /**
    * @return the pen
    */

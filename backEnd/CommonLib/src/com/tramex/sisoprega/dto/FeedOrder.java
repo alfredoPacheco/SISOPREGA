@@ -46,6 +46,8 @@ public class FeedOrder {
   private Set<FeedOrderDetails> feedOrderDetails;
   private Set<Pen> pen;
 
+  public FeedOrder(){}
+  
   /**
    * @return the feedOrderId
    */

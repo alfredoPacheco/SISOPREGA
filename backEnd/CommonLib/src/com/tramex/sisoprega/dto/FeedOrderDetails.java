@@ -39,6 +39,8 @@ public class FeedOrderDetails {
   private double quantity;
   private FeedOrder feedOrder;
 
+  public FeedOrderDetails(){}
+  
   /**
    * @return the feedOrderDetailsid
    */

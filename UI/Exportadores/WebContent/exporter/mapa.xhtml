@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
+<ui:composition template="template.xhtml">
+	<ui:define name="content">
+		<div id="loading"/>
+		<div id="penMapWrapper">
+		<script src="scripts/enyo/enyo.js"></script>
+		<script src="scripts/package.js"></script>
+		<script>
+		var receptions = #{receptionBean.receptions};
+	    document.onselectstart = function() {
+		  return false;
+	    }
+
+	    var penMap = new penMap();
+	    penMap.setActiveReceptions(receptions);
+	    penMap.write(true);
+	    
+	    document.getElementById("loading").style.display = 'none';
+	    document.getElementById("penMapWrapper").style.display = 'block';
+	    
+		</script>
+		</div>
+
+	</ui:define>
+</ui:composition>
+</html>

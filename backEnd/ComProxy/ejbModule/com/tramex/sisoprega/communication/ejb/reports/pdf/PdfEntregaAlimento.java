@@ -12,7 +12,7 @@ import com.tramex.sisoprega.reporting.Reporteable;
  * Session Bean implementation class PdfGanadoRecibido
  */
 @Stateless
-@RolesAllowed({ "mx_usr", "us_usr" })
+@RolesAllowed({ "mx_usr", "us_usr", "rancher" })
 public class PdfEntregaAlimento extends BasePdfReport implements Reporteable {
   @Override
   public void setParameters(Map<String, Object> parameters) throws Exception {

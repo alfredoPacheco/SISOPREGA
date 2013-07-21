@@ -9,5 +9,9 @@
 		<role-name>us_usr</role-name>
 		<group-name>usa_user</group-name>
 	</security-role-mapping>
+	<security-role-mapping>
+		<role-name>rancher</role-name>
+		<group-name>rancher</group-name>
+	</security-role-mapping>
 	<enterprise-beans/>
 </sun-ejb-jar>
