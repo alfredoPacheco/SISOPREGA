@@ -46,7 +46,7 @@ enyo.kind(
 		
 	 for ( var i = 0; i < arrAdapterList.length; i++) {
 	 var obj = arrAdapterList[i];
-	 obj.importantInfo = "" + arrAdapterList[i].legalName;
+	 obj.importantInfo = "" + arrAdapterList[i].name;
 	 obj.secundaryInfo = "" + arrAdapterList[i].telephone;
 	 result.push(obj);
 	 }

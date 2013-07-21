@@ -104,12 +104,12 @@ enyo.kind({
 	    var objOld =null; 
 	    var objNew = null;
 	    if(resultObj.origin == "Update"){
-		objNew = resultObj.records[0];
+		objNew = this.adapterToIn(resultObj.records[0]);
 		var idName = this.entityIdName();
 		for(var i = 0; i<this.arrObj.length;i++){
 		    if(this.arrObj[i][idName] == objNew[idName]){
 			objOld = this.arrObj[i];
-			this.arrObj[i] = this.adapterToIn(objNew);
+			this.arrObj[i] = objNew;
 			break;
 		    }
 		}

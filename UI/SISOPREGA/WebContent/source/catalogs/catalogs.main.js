@@ -93,13 +93,15 @@ enyo
 		    }
 		    this.$.catalogsPane.validateView(view);
 		    this.$.catalogsPane.selectViewByName(view);
-		    this.$[view].setEntity(rancher);
+		    this.$[view].setEntity(rancher,true);
 		    _objMainHeader.setContent(rancher.importantInfo);
 		}
 	    },
-	    on_update_rancher : function() {
+	    on_update_rancher : function(inSender, objOld,objNew) {
 		this.$.listRanchers.reset();
 		this.goBack();
+		// Update main screen title		
+		_objMainHeader.setContent(objNew.name);
 	    },
 	    on_cancel_edit : function() {
 		this.goBack();

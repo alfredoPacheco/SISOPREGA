@@ -92,7 +92,7 @@ enyo.kind({
 		this.selectedItem = this.getItemById(this.selectedItem[idName]);
 		
 		// Update main screen title
-		_objMainHeader.setContent(this.selectedItem.importantInfo);
+//		_objMainHeader.setContent(this.selectedItem.importantInfo);
 	    }
 	    
 	    cacheMan.hideScrim();

@@ -540,7 +540,7 @@ enyo
 		    }, {
 			owner : this
 		    });
-
+		    
 		    break;
 		case 3: // Alimento --2 Deseleccionar removed from options.
 		    if (this.$.dynocon) {

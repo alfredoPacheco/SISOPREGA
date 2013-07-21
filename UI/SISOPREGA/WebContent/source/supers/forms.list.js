@@ -276,7 +276,7 @@ enyo.kind({
 	if (this.arrList[inEvent.rowIndex]) {
 	    this.selectedItem = this.arrList[inEvent.rowIndex];
 	    this.$.formPopUp.validateComponents();
-	    this.$.create_kind.setEntity(this.selectedItem);
+	    this.$.create_kind.setEntity(this.selectedItem,true);
 	    this.$.formPopUp.openAtCenter();
 	}
     },
