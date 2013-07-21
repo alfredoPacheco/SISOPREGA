@@ -99,93 +99,93 @@ enyo
 		// this.addRow(true);
 		this.addRow();
 		this.addRowHeader();
-		this.createCells("2E", -7, 4, "50px", "50px");
+		this.createCells("2E", -7, 4, "45px", "45px");
 		this.splitRow();
 		this.addCustomCell("corraman", "Corrales de <br/> Manejo",
-			"100px", "50px");
-		this.createCells("1E", 5, 6, "50px", "50px");
+			"90px", "45px");
+		this.createCells("1E", 5, 6, "45px", "45px");
 		this.splitRow();
-		this.createCells("1E", 17, 8, "50px", "50px");
+		this.createCells("1E", 17, 8, "45px", "45px");
 
 		this.addRow();
-		this.createCells("2E", -8, 4, "50px", "50px");
+		this.createCells("2E", -8, 4, "45px", "45px");
 		this.splitRow();
-		this.createCells("1E", 2, 8, "50px", "50px");
+		this.createCells("1E", 2, 8, "45px", "45px");
 		this.splitRow();
-		this.createCells("1E", 18, 8, "50px", "50px");
+		this.createCells("1E", 18, 8, "45px", "45px");
 
 		this.addRow(true);
-		this.createCells("2D", -11, 1, "50px", "50px");
-		this.createCells("2D", -7, 2, "50px", "50px");
-		this.createCells("2D", -1, 1, "50px", "50px");
+		this.createCells("2D", -11, 1, "45px", "45px");
+		this.createCells("2D", -7, 2, "45px", "45px");
+		this.createCells("2D", -1, 1, "45px", "45px");
 		this.splitRow();
-		this.createCells("1D", 1, 8, "50px", "50px");
+		this.createCells("1D", 1, 8, "45px", "45px");
 		this.splitRow();
-		this.createCells("1D", 17, 8, "50px", "50px");
+		this.createCells("1D", 17, 8, "45px", "45px");
 
 		this.addRow();
-		this.createCells("2D", -12, 6, "33.33px", "25px");
+		this.createCells("2D", -12, 6, "30px", "20px");
 		this.splitRow();
-		this.createCells("1D", 2, 12, "33.33px", "25px");
+		this.createCells("1D", 2, 12, "30px", "20px");
 		this.splitRow();
-		this.createCells("1D", 26, 4, "100px", "25px");
+		this.createCells("1D", 26, 4, "90px", "20px");
 
 		this.addRow(true);
-		this.createCells("2C", -11, 6, "33.33px", "25px");
+		this.createCells("2C", -11, 6, "30px", "20px");
 		this.splitRow();
-		this.createCells("1C", 1, 12, "33.33px", "25px");
+		this.createCells("1C", 1, 12, "30px", "20px");
 		this.splitRow();
-		this.createCells("1C", 25, 4, "100px", "25px");
+		this.createCells("1C", 25, 4, "90px", "20px");
 
 		this.addRow();
-		this.createCells("2C", -12, 6, "33.33px", "25px");
+		this.createCells("2C", -12, 6, "30px", "20px");
 		this.splitRow();
-		this.createCells("1C", 2, 12, "33.33px", "25px");
+		this.createCells("1C", 2, 12, "30px", "20px");
 		this.splitRow();
-		this.createCells("1C", 26, 4, "100px", "25px");
+		this.createCells("1C", 26, 4, "90px", "20px");
 
 		this.addRow(true);
-		this.createCells("2B", -11, 6, "33.33px", "25px");
+		this.createCells("2B", -11, 6, "30px", "20px");
 		this.splitRow();
-		this.createCells("1B", 1, 12, "33.33px", "25px");
+		this.createCells("1B", 1, 12, "30px", "20px");
 		this.splitRow();
-		this.createCells("1B", 25, 4, "100px", "25px");
+		this.createCells("1B", 25, 4, "90px", "20px");
 
 		this.addRow(true);
-		this.createCells("2B", -8, 4, "50px", "50px");
+		this.createCells("2B", -8, 4, "45px", "45px");
 		this.splitRow();
-		this.createCells("1B", 2, 8, "50px", "50px");
+		this.createCells("1B", 2, 8, "45px", "45px");
 		this.splitRow();
-		this.createCells("1B", 18, 6, "50px", "50px");
+		this.createCells("1B", 18, 6, "45px", "45px");
 		this.addCustomCell("lagoxi", "Laguna de <br/> Oxidacion",
-			"98px", "50px");
+			"90px", "45px");
 
 		this.addRow(true);
-		this.createCells("2A", -7, 4, "50px", "50px");
+		this.createCells("2A", -7, 4, "45px", "45px");
 		this.splitRow();
-		this.createCells("1A", 1, 8, "50px", "50px");
+		this.createCells("1A", 1, 8, "45px", "45px");
 		this.splitRow();
-		this.createCells("1A", 17, 8, "50px", "50px");
+		this.createCells("1A", 17, 8, "45px", "45px");
 
 		this.addRow();
-		this.createCells("2A", -8, 4, "50px", "50px");
+		this.createCells("2A", -8, 4, "45px", "45px");
 		this.splitRow();
-		this.addCustomCell("cabaA", "Caballerizas A", "99px", "50px");
-		this.addCustomCell("cabaB", "Caballerizas B", "100px", "50px");
-		this.createCells("1A", 10, 4, "50px", "50px");
+		this.addCustomCell("cabaA", "Caballerizas A", "90px", "45px");
+		this.addCustomCell("cabaB", "Caballerizas B", "90px", "45px");
+		this.createCells("1A", 10, 4, "45px", "45px");
 		this.splitRow();
-		this.createCells("1A", 18, 8, "50px", "50px");
+		this.createCells("1A", 18, 8, "45px", "45px");
 
 		this.addRow();
-		this.createCells("2R", -7, 4, "50px", "50px");
+		this.createCells("2R", -7, 4, "45px", "45px");
 		this.splitRow();
-		this.addCustomCell("spacerone", "", "813px", "50px",
+		this.addCustomCell("spacerone", "", "730px", "45px",
 			"customBYCellDesc");
 
 		this.addRow();
-		this.createCells("2R", -8, 4, "50px", "50px");
+		this.createCells("2R", -8, 4, "45px", "45px");
 		this.splitRow();
-		this.addCustomCell("spacertwo", "", "813px", "50px");
+		this.addCustomCell("spacertwo", "", "730px", "45px");
 
 		this.$.rancherFilter.$.textField.applyStyle("border-width",
 			"7px");
@@ -215,10 +215,10 @@ enyo
 		    kind : "HFlexBox"
 		});
 		this.addCustomCell("alatwo", "<strong>ZONA SUR</strong>",
-			"200px", "30px", "customBYcellZone");
+			"180px", "30px", "customBYcellZone");
 		this.splitRow();
 		this.addCustomCell("alaone", "<strong>CHIHUAHUA</strong>",
-			"765px", "30px", "customBYcellZone");
+			"690px", "30px", "customBYcellZone");
 		this.addRefreshButton();
 		this.addRow();
 	    },
@@ -231,18 +231,26 @@ enyo
 		    kind : "IconButton",
 		    onclick : "refreshMap",
 		    icon : "../SISOPREGA_WEB_LIB/images/command-menu/menu-icon-music-repeat.png",
-		    style : "height:23px; width:45px; padding:0;margin:0px",
+		    style : "height:23px;min-width: 37px; padding:0;margin:0px",
 		}, {
 		    owner : this
 		});
 	    },
 	    addRow : function(bDiv) {
 		if (bDiv) {
-		    this.$.cells.createComponent({
-			kind : "Divider",
-			caption : "",
-			style : "margin-left:-15px;width: 1040px;"
-		    });
+		    this.$.cells.createComponent(
+			{kind:"VFlexBox",
+			    style : "width: 930px;height:15px;",pack:"center",
+			    components:[
+			                {kind:"HFlexBox", style:"max-height:2px;background-color:#381402;",flex:1,pack:"center",align:"center"}
+			                ]}
+//			    {
+//			kind : "Divider",
+//			caption : "",
+//			style : "margin-left:-15px;width: 930px;height:25px;"
+//		    }
+			    
+		    );
 		} else {
 		    this.$.cells.createComponent({
 			kind : "HFlexBox",
@@ -261,7 +269,7 @@ enyo
 		});
 	    },
 	    createCells : function(sLetter, iStart, iNumber, sWidth, sHeight) {
-		// this.createCells("1E",5,6,"50px","50px");
+		// this.createCells("1E",5,6,"45px","45px");
 		objBarn = this.last;
 		var sColor;
 		for ( var i = 0; i < iNumber; i++) {
