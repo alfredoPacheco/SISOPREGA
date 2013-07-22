@@ -1,29 +1,43 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" >
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:f="http://java.sun.com/jsf/core" 
-      xmlns:h="http://java.sun.com/jsf/html" 
-      xmlns:ui="http://java.sun.com/jsf/facelets">
-<head>
-	<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+	<meta http-equiv="Content-Type"
+		content="application/xhtml+xml; charset=UTF-8" />
 	<title>SISOPREGA - EXPORTADORES</title>
-</head>
+	<h:outputStylesheet library="css" name="style.css" />
+</h:head>
 
 <h:body>
-	<p>Login to access secure pages:</p>
-	<form method="post" action="j_security_check">
-		<h:panelGrid columns="2">
-			<h:outputLabel for="j_username" value="Username" />
-			<input type="text" name="j_username" />
 
-			<h:outputLabel for="j_password" value="Password" />
-			<input type="password" name="j_password" />
+	
+		
+		<!-- h1>Inicio de sesion</h1>
+					<span>Ingrese usuario y contraseña, si usted no tiene uno
+						registrese con su representante de Tramex</span>-->
+<h:graphicImage library="img" name="ProCustomBrokers.png" />
+	<form method="post" action="j_security_check" class="login">
 
-			<h:outputText value="" />
-			<h:panelGrid columns="2">
-				<input type="submit" name="submit" value="Login" />
-			</h:panelGrid>
-		</h:panelGrid>
+		<p>
+			<label for="login">Usuario:</label> <input type="text"
+				name="j_username" id="login" value="" />
+		</p>
+		<p>
+			<label for="password">Contraseña:</label> <input type="password"
+				name="j_password" id="password" value="" />
+		</p>
+
+		<p class="login-submit">
+			<button type="submit" class="login-button">Login</button>
+		</p>
+		<p class="forgot-password">
+			<a href="index.html">¿Olvido su contraseña?</a>
+		</p>
+
 	</form>
+
 </h:body>
 </html>
