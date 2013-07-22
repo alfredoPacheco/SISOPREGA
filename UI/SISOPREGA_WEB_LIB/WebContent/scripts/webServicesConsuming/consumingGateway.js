@@ -340,7 +340,7 @@ var consumingGateway = {
 	});
 	return false;
     },
-    UpdateArrayParents : function(entityName, arrEntity, cbObj, cbMethod) {
+    Save : function(entityName, arrEntity, cbObj, cbMethod) {
 	// Se crea objeto que devolvera la funcion:
 	var output = {
 	    exceptionDescription : "Success",
@@ -350,7 +350,7 @@ var consumingGateway = {
 	};
 
 	// SOAP Message:
-	var soapMessage = soapHeader + '<ws:Update><request>';
+	var soapMessage = soapHeader + '<ws:Save><request>';
 	
 	for(var i=0;i<arrEntity.length;i++){
 	    var entity = arrEntity[i];
@@ -359,7 +359,7 @@ var consumingGateway = {
 	    soapMessage += '</parentRecord>';    
 	}
 	
-	soapMessage += '</request></ws:Update>' + soapFooter;
+	soapMessage += '</request></ws:Save>' + soapFooter;
 
 	var self = this;
 
