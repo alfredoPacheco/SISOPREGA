@@ -34,7 +34,17 @@ enyo
 		cattleType : undefined,
 		receptionId : undefined, // reception for barnyards
 	    },
+	    arrPopupMenu : [ {
+		caption : "Mover a mañana",
+		value : 1
+	    } ],
 	    components : [ {
+		name : "options",
+		kind : enyo.PopupSelect,
+		onSelect : "actionSelected",
+		items : []
+	    },
+	    {
 		kind : "SlidingPane",
 		flex : 1,
 		name : "slidingpane",
@@ -302,6 +312,7 @@ enyo
 					    components : [ {
 						kind : enyo.RowItem,
 						onConfirm : "dropForecast",
+						onmousehold : "rowHold",
 						layoutKind : enyo.HFlexLayout,
 						tapHighlight : true,
 						style : "font-size:13px;",
@@ -376,7 +387,6 @@ enyo
 				    }, ]
 			} ]
 	    } ],
-
 	    enviar_aviso : function() {
 
 		if (confirm("¿Desea enviar los avisos ahora?")) {
@@ -986,7 +996,8 @@ enyo
 	    // this.arrReceptions.push(objRancherSelected);
 	    // }
 	    // },
-	    selectForecast : function(inSender, inEvent) { //TODO WORKING HERE
+	    selectForecast : function(inSender, inEvent) {
+		var objFore = null;
 		if (objFore = this.objList[inEvent.rowIndex]) {
 		    this.$.rancher.setIndex(objFore.rancherId);
 		    this.$.autorizacion.setValue(objFore.auth || "");
@@ -1183,8 +1194,7 @@ enyo
 	    dropForecast : function() {
 		for ( var i = 0; i < this.objInspection.InspectionForecastDetail.length; i++) {
 		    if (this.objInspection.InspectionForecastDetail[i].inspectionForecastDetailId == this.objList[this.iSelected].inspectionForecastDetailId) {
-			this.objInspection.InspectionForecastDetail
-				.splice(i, 1);
+			this.objInspection.InspectionForecastDetail.splice(i, 1);
 			crudInspectionForecast.update(this.objInspection, this,
 				"updateList");
 			return;
@@ -1222,8 +1232,7 @@ enyo
 		// filling up right side**************************************
 		arrAllForecasts = crudInspectionForecast.arrObj;
 		for ( var i = 0; i < arrAllForecasts.length; i++) {
-		    if (fmt.format(arrAllForecasts[i].forecastDate) == fmt
-			    .format(this.fecha)) {
+		    if (fmt.format(arrAllForecasts[i].forecastDate) == fmt.format(this.fecha)) {
 			this._id = arrAllForecasts[i].inspectionForecastId;
 			this.objInspection = arrAllForecasts[i];
 			if (arrAllForecasts[i].InspectionForecastDetail) {
@@ -1292,6 +1301,52 @@ enyo
 			crudInspectionForecast.update(this.objInspection, this,
 				"updateList");
 		    }
+		}
+	    },
+	    rowHold : function(inSender, inEvent) {
+		inEvent.stopPropagation();
+		this.iSelected = inEvent.rowIndex;
+		this.$.options.setItems(this.arrPopupMenu);
+		this.$.options.render();
+		this.$.options.openAtEvent(inEvent);
+	    },
+	    actionSelected : function(inSender, inSelected) {
+		switch (inSelected.value) {
+		case 1: //Mover a mañana
+		    var tomorrow = new Date();
+		    tomorrow.setDate(tomorrow.getDate()+1);
+		    
+		    if(tomorrowInspection = crudInspectionForecast.getByDate(tomorrow)){
+			
+		    }else{
+			tomorrowInspection = {
+				InspectionForecastDetail : [],
+				entityName : "InspectionForecast",
+				forecastDate : tomorrow,
+				locked : "false"
+			    };
+			var objForecastDetail = null;
+			
+			for ( var i = 0; i < this.objInspection.InspectionForecastDetail.length; i++) {
+			    if (this.objInspection.InspectionForecastDetail[i].inspectionForecastDetailId == this.objList[this.iSelected].inspectionForecastDetailId) {
+				objForecastDetail =  this.objInspection.InspectionForecastDetail[i];
+				this.objInspection.InspectionForecastDetail.splice(i, 1);
+			    }
+			}
+			if (objForecastDetail) {
+			    objForecastDetail.inspection_seq = 0;
+			    tomorrowInspection.InspectionForecastDetail.push(objForecastDetail);
+			    
+			    var arrEntity = [];
+			    arrEntity.push(crudInspectionForecast.adapterToOut(tomorrowInspection));
+			    arrEntity.push(crudInspectionForecast.adapterToOut(this.objInspection));
+			    
+			    consumingGateway.UpdateArrayParents("InspectionForecast", arrEntity, this, "updateList");
+			}
+		    }
+		    
+		    cacheMan.showScrim();
+		    break;
 		}
 	    },
 	});
