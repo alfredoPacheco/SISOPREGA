@@ -29,8 +29,12 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.xml.bind.annotation.XmlElement;
 
+import com.tramex.sisoprega.gateway.GatewayError;
+import com.tramex.sisoprega.gateway.GatewayField;
+import com.tramex.sisoprega.gateway.GatewayRecord;
 import com.tramex.sisoprega.gateway.request.CreateRequest;
 import com.tramex.sisoprega.gateway.request.ReadRequest;
+import com.tramex.sisoprega.gateway.request.SaveRequest;
 import com.tramex.sisoprega.gateway.response.BaseResponse;
 import com.tramex.sisoprega.gateway.response.ReadResponse;
 import com.tramex.sisoprega.proxy.Cruddable;
@@ -80,10 +84,10 @@ public class PresentorBean {
     log.info("Create gateway invoked with the following content: [" + request + "]");
 
     String entity = request.getParentRecord().getEntity();
-    
+
     Cruddable entityProxy = getCruddable(entity);
     log.exiting(this.getClass().getCanonicalName(), "Create");
-    
+
     ReadResponse response = entityProxy.Create(request);
     log.info("Create gateway completed by " + getLoggedUser() + " as: [" + response.getError() + "]");
     return response;
@@ -101,9 +105,9 @@ public class PresentorBean {
     log.info("Read gateway completed by " + getLoggedUser() + " as: [" + response.getError() + "]");
     return response;
   }
-  
+
   @WebMethod
-  public ReadResponse Update(@XmlElement(required = true, nillable = false) @WebParam(name = "request") CreateRequest request){
+  public ReadResponse Update(@XmlElement(required = true, nillable = false) @WebParam(name = "request") CreateRequest request) {
     log.entering(this.getClass().getCanonicalName(), "Update");
     log.info("Update gateway invoked with the following content: [" + request + "]");
 
@@ -112,12 +116,12 @@ public class PresentorBean {
 
     ReadResponse response = entityProxy.Update(request);
     log.info("Update gateway completed by " + getLoggedUser() + " as: [" + response.getError() + "]");
-    
+
     return response;
   }
-  
+
   @WebMethod
-  public BaseResponse Delete(@XmlElement(required = true, nillable = false) @WebParam(name = "request") ReadRequest request){
+  public BaseResponse Delete(@XmlElement(required = true, nillable = false) @WebParam(name = "request") ReadRequest request) {
     log.entering(this.getClass().getCanonicalName(), "Delete");
     log.info("Delete gateway invoked with the following content: [" + request + "]");
 
@@ -126,6 +130,53 @@ public class PresentorBean {
 
     BaseResponse response = entityProxy.Delete(request);
     log.info("Delete gateway completed by " + getLoggedUser() + " as: [" + response.getError() + "]");
+    return response;
+  }
+
+  @WebMethod
+  public ReadResponse Save(@XmlElement(required = true, nillable = false) @WebParam(name = "request") SaveRequest request)
+      throws Exception {
+
+    ReadResponse response = new ReadResponse();
+    response.setError(new GatewayError("0", "SUCCESS", "SAVE"));
+
+    for (GatewayRecord parentRecord : request.getParentRecord()) {
+      String operationName = "Create";
+      String entityIdFieldName = parentRecord.getEntity() + "Id";
+      for (GatewayField field : parentRecord.getField()) {
+        if (field.getName().equalsIgnoreCase(entityIdFieldName) && !field.getValue().equals("0")) {
+          log.fine("Found update operation for entityId: [" + field.getValue() + "]");
+          operationName = "Update";
+          break;
+        }
+      }
+
+      CreateRequest transactionRequest = new CreateRequest();
+      transactionRequest.setParentRecord(parentRecord);
+
+      Cruddable entityProxy = getCruddable(parentRecord.getEntity());
+      ReadResponse transactionResponse = null;
+      if (operationName.equals("Create")) {
+        log.info("Executing create operation with record: [" + transactionRequest + "]");
+        transactionResponse = entityProxy.Create(transactionRequest);
+      } else {
+        log.info("Executing update operation with record: [" + transactionRequest + "]");
+        transactionResponse = entityProxy.Update(transactionRequest);
+      }
+
+      if (!transactionResponse.getError().getExceptionId().equals("0")) {
+        log.severe("An exception has occured during transaction processing.");
+        throw new Exception(transactionResponse.getError().getExceptionDescription());
+      } else {
+        log.fine("Transaction succesfully executed, building response.");
+        for (GatewayRecord responseRecord : transactionResponse.getParentRecord()) {
+          log.finer("Adding response record: " + responseRecord);
+          response.addParentRecord(responseRecord);
+        }
+      }
+
+    }
+
     return response;
   }
 
@@ -144,8 +195,8 @@ public class PresentorBean {
     }
     return crud;
   }
-  
-  private String getLoggedUser(){
+
+  private String getLoggedUser() {
     return ejbContext.getCallerPrincipal().getName();
   }
 

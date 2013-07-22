@@ -45,17 +45,32 @@
 		<managed-bean-name>entregaAlimento</managed-bean-name>
 		<managed-bean-class>com.tramex.sisoprega.exporter.cross.reporting.EntregaAlimentoReportBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
+		<managed-property>
+			<property-name>filterBean</property-name>
+			<property-class>com.tramex.sisoprega.exporter.cross.FilterBean</property-class>
+			<value>#{filterBean}</value>
+		</managed-property>
 	</managed-bean>
 	<managed-bean>
 		<description>Handles the requests for downloading inspection list pdf report.</description>
 		<managed-bean-name>listaInspeccion</managed-bean-name>
 		<managed-bean-class>com.tramex.sisoprega.exporter.cross.reporting.ListaInspeccionReportBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
+		<managed-property>
+			<property-name>filterBean</property-name>
+			<property-class>com.tramex.sisoprega.exporter.cross.FilterBean</property-class>
+			<value>#{filterBean}</value>
+		</managed-property>
 	</managed-bean>
 	<managed-bean>
 		<description>Handles requests to download inspection report pdf.</description>
 		<managed-bean-name>ganadoInspeccionado</managed-bean-name>
 		<managed-bean-class>com.tramex.sisoprega.exporter.cross.reporting.GanadoInspeccionadoReportBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
+		<managed-property>
+			<property-name>filterBean</property-name>
+			<property-class>com.tramex.sisoprega.exporter.cross.FilterBean</property-class>
+			<value>#{filterBean}</value>
+		</managed-property>
 	</managed-bean>
 </faces-config>
