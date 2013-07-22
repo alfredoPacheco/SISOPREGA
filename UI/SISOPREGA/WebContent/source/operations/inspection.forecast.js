@@ -35,7 +35,7 @@ enyo
 		receptionId : undefined, // reception for barnyards
 	    },
 	    arrPopupMenu : [ {
-		caption : "Mover a mañana",
+		caption : "Mover a dia siguiente",
 		value : 1
 	    } ],
 	    components : [
@@ -577,7 +577,7 @@ enyo
 
 		// this.$.cattleType.setIndex(1);
 		// this.$.zone.setIndex(1);
-
+		this.bMoving = false;
 		this.updateList();
 
 	    },
@@ -1242,15 +1242,13 @@ enyo
 		// filling up right side**************************************
 		arrAllForecasts = crudInspectionForecast.arrObj;
 		for ( var i = 0; i < arrAllForecasts.length; i++) {
-		    if (fmt.format(arrAllForecasts[i].forecastDate) == fmt
-			    .format(this.fecha)) {
+		    if (fmt.format(arrAllForecasts[i].forecastDate) == fmt.format(this.fecha)) {
 			this._id = arrAllForecasts[i].inspectionForecastId;
 			this.objInspection = arrAllForecasts[i];
 			if (arrAllForecasts[i].InspectionForecastDetail) {
 			    for ( var j = 0; j < arrAllForecasts[i].InspectionForecastDetail.length; j++) {
 				if (arrAllForecasts[i].InspectionForecastDetail[j].inspectionForecastDetailId) {
-				    this.objList
-					    .push(arrAllForecasts[i].InspectionForecastDetail[j]);
+				    this.objList.push(arrAllForecasts[i].InspectionForecastDetail[j]);
 				}
 			    }
 			} else {
@@ -1317,6 +1315,7 @@ enyo
 	    rowHold : function(inSender, inEvent) {
 		inEvent.stopPropagation();
 		this.iSelected = inEvent.rowIndex;
+		this.bMoving = false;
 		this.$.options.setItems(this.arrPopupMenu);
 		this.$.options.render();
 		this.$.options.openAtEvent(inEvent);
@@ -1324,7 +1323,7 @@ enyo
 	    actionSelected : function(inSender, inSelected) {
 		switch (inSelected.value) {
 		case 1: // Mover a mañana
-		    var tomorrow = new Date();
+		    var tomorrow = new Date(this.fecha);
 		    tomorrow.setDate(tomorrow.getDate() + 1);
 		    var tomorrowInspection = null;
 		    if (tomorrowInspection = crudInspectionForecast
@@ -1353,7 +1352,7 @@ enyo
 			    delete objForecastDetail.inspectionForecastDetailId;
 			    
 			    tomorrowInspection.InspectionForecastDetail.push(objForecastDetail);
-			    crudInspectionForecast.update(crudInspectionForecast.adapterToOut(tomorrowInspection),this, "finishMove");
+//			    crudInspectionForecast.update(crudInspectionForecast.adapterToOut(tomorrowInspection),this, "finishMove");
 			}
 
 		    } else {
@@ -1379,26 +1378,23 @@ enyo
 			    tomorrowInspection.InspectionForecastDetail
 				    .push(objForecastDetail);
 
-			    crudInspectionForecast.create(
-				    crudInspectionForecast
-					    .adapterToOut(tomorrowInspection),
-				    this, "finishMove");
-
-			    // var arrEntity = [];
-			    // arrEntity.push(crudInspectionForecast.adapterToOut(tomorrowInspection));
-			    // arrEntity.push(crudInspectionForecast.adapterToOut(this.objInspection));
-			    //			    
-			    // consumingGateway.Save("InspectionForecast",
-			    // arrEntity, this, "updateList");
+//			    crudInspectionForecast.create(
+//				    crudInspectionForecast
+//					    .adapterToOut(tomorrowInspection),
+//				    this, "finishMove");
+			    
 			}
 		    }
-
+		    var arrEntity = [];
+		     arrEntity.push(crudInspectionForecast.adapterToOut(tomorrowInspection));
+		     arrEntity.push(crudInspectionForecast.adapterToOut(this.objInspection));
+		    			    
+		     consumingGateway.Save("InspectionForecast",arrEntity, this, "updateList");
 		    cacheMan.showScrim();
 		    break;
 		}
 	    },
 	    finishMove : function() {
-		crudInspectionForecast.update(this.objInspection, this,
-			"updateList");
+		crudInspectionForecast.update(this.objInspection, this,"updateList");
 	    }
 	});
