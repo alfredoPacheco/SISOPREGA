@@ -65,6 +65,11 @@ enyo.kind({
 	    this.errorMessage = 'La contraseña y su confirmación no coinciden.';
 	    return false;
 	}
+	if(this.$.password.value == this.NO_CHANGED){
+	    this.errorMessage = 'No se realizo ningún cambio a la contraseña.';
+	    return false;
+	}
+	
 	return true;
     }
 });

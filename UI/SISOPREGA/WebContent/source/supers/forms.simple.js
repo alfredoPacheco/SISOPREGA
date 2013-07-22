@@ -1,6 +1,7 @@
 enyo.kind({
     name : "forms.simple",
     kind : enyo.VFlexBox,
+    className : "formBG",
     events : {
 	onAdd : "",
 	onUpdate : "",

@@ -21,13 +21,15 @@ enyo.kind({
 		    flex : 1
 		}, {
 		    kind : "controls.autocomplete",
+		    inputKind : "ToolInput",
 		    name : "rancher_id",
 		    hint : "",
 		    flex : 1
 		} ]
 	    }, {
-		kind : "VFlexBox",
+		kind : "HFlexBox",
 		style : "",
+		align:"center",
 		components : [ {
 		    content : "Fecha Inicial",
 		}, 
@@ -39,8 +41,9 @@ enyo.kind({
 		    style:"max-width:130px;"
 		    } ]
 	    }, {
-		kind : "VFlexBox",
+		kind : "HFlexBox",
 		style : "",
+		align:"center",
 		components : [ {
 		    content : "Fecha Final",
 		}, 
@@ -81,18 +84,14 @@ enyo.kind({
 	this.resetValues();
     },
     getParams : function() {
-	var fmt = new enyo.g11n.DateFmt({
-	    format : "MM/dd/yyyy",
-	    locale : new enyo.g11n.Locale("es_es")
-	});
 	var params = {
 	    rancher_id : "",
 	    start_date : "",
 	    end_date : ""
 	};
 	params.rancher_id = this.$.rancher_id.getIndex();
-	params.start_date = fmt.format(this.$.start_date.getValue());
-	params.end_date = fmt.format(this.$.end_date.getValue());
+	params.start_date = this.$.start_date.getValue();
+	params.end_date = this.$.end_date.getValue();
 	;
 	return params;
     },
