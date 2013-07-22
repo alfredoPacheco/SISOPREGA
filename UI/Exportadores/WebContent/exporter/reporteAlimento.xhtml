@@ -9,10 +9,10 @@
 <ui:composition template="template.xhtml">
 	<ui:define name="content">
 	    <h:form id="filterForm">
-	    	<h:inputText value="#{entragaAlimento.filterBean.fromDate}" id="fromDate">
+	    	<h:inputText value="#{entregaAlimento.filterBean.fromDate}" id="fromDate">
 	    		<f:convertDateTime dateStyle="short" type="date" />
 	    	</h:inputText> <br/> 
-	    	<h:inputText value="#{entragaAlimento.filterBean.toDate}" id="toDate">
+	    	<h:inputText value="#{entregaAlimento.filterBean.toDate}" id="toDate">
 	    		<f:convertDateTime dateStyle="short" type="date" />
 	    	</h:inputText><br/>
 	    	<h:commandLink value="Descargar Reporte" action="#{entregaAlimento.downloadPDF}" target="_blank"/><br/><br/>

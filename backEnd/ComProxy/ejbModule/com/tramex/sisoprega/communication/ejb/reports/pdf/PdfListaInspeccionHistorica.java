@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 
+import javax.annotation.security.DeclareRoles;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 
@@ -14,6 +15,7 @@ import com.tramex.sisoprega.reporting.Reporteable;
  * Session Bean implementation class PdfGanadoRecibido
  */
 @Stateless
+@DeclareRoles({"mx_usr", "us_usr", "rancher"})
 @RolesAllowed({ "mx_usr", "us_usr", "rancher" })
 public class PdfListaInspeccionHistorica extends BasePdfReport implements Reporteable {
   @Override
