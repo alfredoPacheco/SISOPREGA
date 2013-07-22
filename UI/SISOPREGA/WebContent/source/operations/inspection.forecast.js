@@ -4,7 +4,7 @@ enyo
 	    kind : enyo.SlidingView,
 	    layoutKind : enyo.VFlexLayout,
 	    iSelected : null,
-	    bMoving:false,
+	    bMoving : false,
 	    _id : undefined,
 	    objInspection : null,
 	    objList : [],
@@ -35,358 +35,365 @@ enyo
 		receptionId : undefined, // reception for barnyards
 	    },
 	    arrPopupMenu : [ {
-		caption : "Mover a mañana",
+		caption : "Mover a dia siguiente",
 		value : 1
 	    } ],
-	    components : [ {
-		name : "options",
-		kind : enyo.PopupSelect,
-		onSelect : "actionSelected",
-		items : []
-	    },
-	    {
-		kind : "SlidingPane",
-		flex : 1,
-		name : "slidingpane",
-		components : [
-			{
-			    name : "left",
-			    width : "300px",
-			    kind : enyo.SlidingView,
-			    components : [
-				    {
-					kind : "Header",
-					name : "encabezadoFecha",
-					style : "background-color:#DABD8B;",
-					pack : "center",
-					components : [
-						{
-						    kind : "Button",
-						    content : "Hoy",
-						    style : "background-color:#DABD8B;",
-						    onclick : "cambiarAHoy"
-						},
-						{
-						    kind : "controls.dateMask",
-						    inputKind : "ToolInput",
-						    name : "fechaPicker",
-						    bindTo : "birthDate",
-						    style : "max-width:130px;"
-						},
-						{
-						    kind : "Button",
-						    content : "Ir",
-						    style : "background-color:#DABD8B;",
-						    onclick : "cambioDeFecha"
-						}, ]
-				    },
-				    {
-					kind : enyo.Scroller,
-					name : "FormScroller",
-					horizontal : false,
-					autoHorizontal : false,
-					flex : 1,
-					onScroll : "scroll",
-					components : [ {
-					    kind : "RowGroup",
-					    defaultKind : "HFlexBox",
-					    caption : "",
-					    components : [
-						    {
-							kind : "Item",
-							components : [ {
-							    layoutKind : enyo.HFlexLayout,
-							    components : [ {
-								kind : "controls.autocomplete",
-								name : "rancher",
-								hint : "Ganadero",
-								onSelectItem : "on_select_item",
-								onEnter : "emularTabulacionConEnter",
-								width : "270px;"
-							    } ]
-							} ]
-						    },
-						    {
-							kind : "Item",
-							components : [ {
-							    layoutKind : enyo.HFlexLayout,
-							    components : [ {
-								kind : "controls.autocomplete",
-								name : "zone",
-								hint : "Localidad",
-								onSelectItem : "on_select_item",
-								onEnter : "emularTabulacionConEnter",
-								width : "270px;"
-							    } ]
-							} ]
-						    },
-						    {
-							kind : "Item",
-							components : [ {
-							    layoutKind : enyo.HFlexLayout,
-							    components : [ {
-								kind : "Input",
-								name : "autorizacion",
-								hint : "Autorizacion",
-								flex : 1,
-								onkeydown : "key_down"
-							    } ]
-							} ]
-						    },
-						    {
-							kind : "Item",
-							components : [ {
-							    layoutKind : enyo.HFlexLayout,
-							    components : [ {
-								kind : "controls.autocomplete",
-								name : "origin",
-								hint : "Origen",
-								onSelectItem : "on_select_item",
-								onEnter : "emularTabulacionConEnter",
-								width : "270px;"
-							    } ]
-							} ]
-						    },
-						    {
-							kind : "Item",
-							components : [ {
-							    layoutKind : enyo.HFlexLayout,
-							    components : [ {
-								kind : "controls.autocomplete",
-								name : "cattleType",
-								hint : "Ganado",
-								onSelectItem : "on_select_item",
-								onEnter : "emularTabulacionConEnter",
-								width : "270px;"
-							    } ]
-							} ]
-						    },
-						    {
-							kind : "Item",
-							components : [ {
-							    layoutKind : enyo.HFlexLayout,
-							    components : [ {
-								kind : "controls.numberBox",
-								name : "cantidad",
-								hint : "Cantidad",
-								height : "50px",
-								flex : 1,
-								onkeydown : "key_down"
-							    } ]
-							} ]
-						    },
-						    {
-							kind : "Item",
-							components : [ {
-							    layoutKind : enyo.HFlexLayout,
-							    components : [ {
-								kind : "controls.multiselect",
-								name : "barnyards",
-								hint : "Corrales",
-								onSelectItem : "on_select_item",
-								onEnter : "emularTabulacionConEnter",
-								width : "270px;"
-							    } ]
-							} ]
-						    },
-					    // {
-					    // kind : "Item",
-					    // components : [ {
-					    // layoutKind : enyo.HFlexLayout,
-					    // components : [ {
-					    // kind : "Input",
-					    // name : "corrales",
-					    // hint : "Corrales",
-					    // flex : 1
-					    // } ]
-					    // } ]
-					    // }
-					    ]
-					} ]
-				    },
-				    {
-					kind : "Drawer",
-					name : "draAdd",
-					animate : false,
-					components : [ {
-					    kind : "Button",
-					    name : "btnAdd",
-					    className : "enyo-button-affirmative",
-					    caption : "Agregar",
-					    onclick : "saveInspectionForecast"
-					} ]
-				    },
-				    {
-					kind : "Drawer",
-					name : "draUpdate",
-					animate : false,
-					open : false,
-					components : [ {
-					    layoutKind : "HFlexLayout",
-					    align : "center",
-					    components : [
-						    {
-							kind : "Button",
-							name : "btnUpdate",
-							className : "enyo-button-affirmative",
-							flex : 1,
-							caption : "Actualizar",
-							onclick : "updateForecast"
-
-						    },
-						    {
-							kind : "Button",
-							name : "btnCancel",
-							className : "enyo-button-negative",
-							flex : 1,
-							caption : "Cancelar",
-							onclick : "onCancel"
-						    } ]
-					} ]
-				    } ]
-
-			},
-			{
-			    name : "middle",
-			    kind : enyo.SlidingView,
-			    edgeDragging : true,
-			    peekwidth : 58,
-			    components : [
-				    {
-					kind : "Header",
-					name : "encabezado",
-					className : "listFirst",
-					style : "font-size:13px;background-color:#DABD8B;",
-					components : [
-						{
-						    kind : "enyo.IconButton",
-						    name : "btnReport",
-						    icon : "../SISOPREGA_WEB_LIB/images/menu-icon-cards.png",
-						    onclick : "enviar_aviso",
-						    style : "width:30px;"
-						},
-						{
-						    content : "Ganadero",
-						    style : "width:150px;text-align:right;margin-right:35px;"
-						},
-						{
-						    content : "Autorización",
-						    style : "width:100px;text-align:center;"
-						},
-						{
-						    content : "Origen",
-						    style : "width:100px;text-align:center;"
-						},
-						{
-						    content : "Clase",
-						    style : "width:100px;text-align:center;"
-						},
-						{
-						    content : "Cantidad",
-						    style : "width:100px;text-align:center;"
-						},
-						{
-						    content : "Localidad",
-						    style : "width:150px;text-align:center;"
-						},
-						{
-						    content : "Corrales",
-						    style : "width:100px;text-align:left;"
-						}
-
-					]
-				    },
-				    {
-					kind : enyo.Scroller,
-					name : "listaScroller",
-					horizontal : false,
-					autoHorizontal : false,
-					flex : 1,
-					className : "listBG",
-					onScroll : "scroll",
-					components : [ {
-					    kind : enyo.VirtualRepeater,
-					    name : "forecastList",
-					    onSetupRow : "setupForecastRow",
-					    onclick : "selectForecast",
-					    components : [ {
-						kind : enyo.RowItem,
-						onConfirm : "dropForecast",
-						onmousehold : "rowHold",
-						layoutKind : enyo.HFlexLayout,
-						tapHighlight : true,
-						style : "font-size:13px;",
+	    components : [
+		    {
+			name : "options",
+			kind : enyo.PopupSelect,
+			onSelect : "actionSelected",
+			items : []
+		    },
+		    {
+			kind : "SlidingPane",
+			flex : 1,
+			name : "slidingpane",
+			components : [
+				{
+				    name : "left",
+				    width : "300px",
+				    kind : enyo.SlidingView,
+				    components : [
+					    {
+						kind : "Header",
+						name : "encabezadoFecha",
+						style : "background-color:#DABD8B;",
+						pack : "center",
 						components : [
 							{
-							    name : "listRancher",
-							    style : "width:215px;text-align:right;margin-right:35px;",
-							    content : ""
+							    kind : "Button",
+							    content : "Hoy",
+							    style : "background-color:#DABD8B;",
+							    onclick : "cambiarAHoy"
 							},
 							{
-							    name : "listAuth",
-							    style : "width:100px;text-align:center;",
-							    content : ""
+							    kind : "controls.dateMask",
+							    inputKind : "ToolInput",
+							    name : "fechaPicker",
+							    bindTo : "birthDate",
+							    style : "max-width:130px;"
 							},
 							{
-							    name : "listOrigin",
-							    style : "width:100px;text-align:center;",
-							    content : ""
-							},
-							{
-							    name : "listCattleType",
-							    style : "width:100px;text-align:center;",
-							    content : ""
-							},
-							{
-							    name : "listQuantity",
-							    style : "width:100px;text-align:center;",
-							    content : ""
-							},
-							{
-							    name : "listZone",
-							    style : "width:150px;text-align:center;",
-							    content : ""
-							},
-							{
-							    name : "listBarnyards",
-							    style : "width:100px;text-align:left;",
-							    content : ""
-							} ]
-					    } ]
-					} ]
-				    }, {
-					kind : "Drawer",
-					name : "draDel",
-					open : false,
-					components : [ {
-					    kind : "Toolbar",
-					    components : [ {
-						kind : "enyo.IconButton",
-						style : "width:100px;",
-						label : "Eliminar",
-						onclick : "onEliminar"
-					    }, {
-						kind : "enyo.IconButton",
-						style : "width:100px;",
-						label : "Cancelar",
-						onclick : "onCancel"
-					    }, {
-						kind : "enyo.IconButton",
-						style : "width:100px;",
-						label : "Mover arriba",
-						onclick : "onMoverArriba"
-					    }, {
-						kind : "enyo.IconButton",
-						style : "width:100px;",
-						label : "Mover abajo",
-						onclick : "onMoverAbajo"
-					    }, ]
-					}
+							    kind : "Button",
+							    content : "Ir",
+							    style : "background-color:#DABD8B;",
+							    onclick : "cambioDeFecha"
+							}, ]
+					    },
+					    {
+						kind : enyo.Scroller,
+						name : "FormScroller",
+						horizontal : false,
+						autoHorizontal : false,
+						flex : 1,
+						onScroll : "scroll",
+						components : [ {
+						    kind : "RowGroup",
+						    defaultKind : "HFlexBox",
+						    caption : "",
+						    components : [
+							    {
+								kind : "Item",
+								components : [ {
+								    layoutKind : enyo.HFlexLayout,
+								    components : [ {
+									kind : "controls.autocomplete",
+									name : "rancher",
+									hint : "Ganadero",
+									onSelectItem : "on_select_item",
+									onEnter : "emularTabulacionConEnter",
+									width : "270px;"
+								    } ]
+								} ]
+							    },
+							    {
+								kind : "Item",
+								components : [ {
+								    layoutKind : enyo.HFlexLayout,
+								    components : [ {
+									kind : "controls.autocomplete",
+									name : "zone",
+									hint : "Localidad",
+									onSelectItem : "on_select_item",
+									onEnter : "emularTabulacionConEnter",
+									width : "270px;"
+								    } ]
+								} ]
+							    },
+							    {
+								kind : "Item",
+								components : [ {
+								    layoutKind : enyo.HFlexLayout,
+								    components : [ {
+									kind : "Input",
+									name : "autorizacion",
+									hint : "Autorizacion",
+									flex : 1,
+									onkeydown : "key_down"
+								    } ]
+								} ]
+							    },
+							    {
+								kind : "Item",
+								components : [ {
+								    layoutKind : enyo.HFlexLayout,
+								    components : [ {
+									kind : "controls.autocomplete",
+									name : "origin",
+									hint : "Origen",
+									onSelectItem : "on_select_item",
+									onEnter : "emularTabulacionConEnter",
+									width : "270px;"
+								    } ]
+								} ]
+							    },
+							    {
+								kind : "Item",
+								components : [ {
+								    layoutKind : enyo.HFlexLayout,
+								    components : [ {
+									kind : "controls.autocomplete",
+									name : "cattleType",
+									hint : "Ganado",
+									onSelectItem : "on_select_item",
+									onEnter : "emularTabulacionConEnter",
+									width : "270px;"
+								    } ]
+								} ]
+							    },
+							    {
+								kind : "Item",
+								components : [ {
+								    layoutKind : enyo.HFlexLayout,
+								    components : [ {
+									kind : "controls.numberBox",
+									name : "cantidad",
+									hint : "Cantidad",
+									height : "50px",
+									flex : 1,
+									onkeydown : "key_down"
+								    } ]
+								} ]
+							    },
+							    {
+								kind : "Item",
+								components : [ {
+								    layoutKind : enyo.HFlexLayout,
+								    components : [ {
+									kind : "controls.multiselect",
+									name : "barnyards",
+									hint : "Corrales",
+									onSelectItem : "on_select_item",
+									onEnter : "emularTabulacionConEnter",
+									width : "270px;"
+								    } ]
+								} ]
+							    },
+						    // {
+						    // kind : "Item",
+						    // components : [ {
+						    // layoutKind :
+						    // enyo.HFlexLayout,
+						    // components : [ {
+						    // kind : "Input",
+						    // name : "corrales",
+						    // hint : "Corrales",
+						    // flex : 1
+						    // } ]
+						    // } ]
+						    // }
+						    ]
+						} ]
+					    },
+					    {
+						kind : "Drawer",
+						name : "draAdd",
+						animate : false,
+						components : [ {
+						    kind : "Button",
+						    name : "btnAdd",
+						    className : "enyo-button-affirmative",
+						    caption : "Agregar",
+						    onclick : "saveInspectionForecast"
+						} ]
+					    },
+					    {
+						kind : "Drawer",
+						name : "draUpdate",
+						animate : false,
+						open : false,
+						components : [ {
+						    layoutKind : "HFlexLayout",
+						    align : "center",
+						    components : [
+							    {
+								kind : "Button",
+								name : "btnUpdate",
+								className : "enyo-button-affirmative",
+								flex : 1,
+								caption : "Actualizar",
+								onclick : "updateForecast"
 
-					]
-				    }, ]
-			} ]
-	    } ],
+							    },
+							    {
+								kind : "Button",
+								name : "btnCancel",
+								className : "enyo-button-negative",
+								flex : 1,
+								caption : "Cancelar",
+								onclick : "onCancel"
+							    } ]
+						} ]
+					    } ]
+
+				},
+				{
+				    name : "middle",
+				    kind : enyo.SlidingView,
+				    edgeDragging : true,
+				    peekwidth : 58,
+				    components : [
+					    {
+						kind : "Header",
+						name : "encabezado",
+						className : "listFirst",
+						style : "font-size:13px;background-color:#DABD8B;",
+						components : [
+							{
+							    kind : "enyo.IconButton",
+							    name : "btnReport",
+							    icon : "../SISOPREGA_WEB_LIB/images/menu-icon-cards.png",
+							    onclick : "enviar_aviso",
+							    style : "width:30px;"
+							},
+							{
+							    content : "Ganadero",
+							    style : "width:150px;text-align:right;margin-right:35px;"
+							},
+							{
+							    content : "Autorización",
+							    style : "width:100px;text-align:center;"
+							},
+							{
+							    content : "Origen",
+							    style : "width:100px;text-align:center;"
+							},
+							{
+							    content : "Clase",
+							    style : "width:100px;text-align:center;"
+							},
+							{
+							    content : "Cantidad",
+							    style : "width:100px;text-align:center;"
+							},
+							{
+							    content : "Localidad",
+							    style : "width:150px;text-align:center;"
+							},
+							{
+							    content : "Corrales",
+							    style : "width:100px;text-align:left;"
+							}
+
+						]
+					    },
+					    {
+						kind : enyo.Scroller,
+						name : "listaScroller",
+						horizontal : false,
+						autoHorizontal : false,
+						flex : 1,
+						className : "listBG",
+						onScroll : "scroll",
+						components : [ {
+						    kind : enyo.VirtualRepeater,
+						    name : "forecastList",
+						    onSetupRow : "setupForecastRow",
+						    onclick : "selectForecast",
+						    components : [ {
+							kind : enyo.RowItem,
+							onConfirm : "dropForecast",
+							onmousehold : "rowHold",
+							layoutKind : enyo.HFlexLayout,
+							tapHighlight : true,
+							style : "font-size:13px;",
+							components : [
+								{
+								    name : "listRancher",
+								    style : "width:215px;text-align:right;margin-right:35px;",
+								    content : ""
+								},
+								{
+								    name : "listAuth",
+								    style : "width:100px;text-align:center;",
+								    content : ""
+								},
+								{
+								    name : "listOrigin",
+								    style : "width:100px;text-align:center;",
+								    content : ""
+								},
+								{
+								    name : "listCattleType",
+								    style : "width:100px;text-align:center;",
+								    content : ""
+								},
+								{
+								    name : "listQuantity",
+								    style : "width:100px;text-align:center;",
+								    content : ""
+								},
+								{
+								    name : "listZone",
+								    style : "width:150px;text-align:center;",
+								    content : ""
+								},
+								{
+								    name : "listBarnyards",
+								    style : "width:100px;text-align:left;",
+								    content : ""
+								} ]
+						    } ]
+						} ]
+					    },
+					    {
+						kind : "Drawer",
+						name : "draDel",
+						open : false,
+						components : [ {
+						    kind : "Toolbar",
+						    components : [
+							    {
+								kind : "enyo.IconButton",
+								style : "width:100px;",
+								label : "Eliminar",
+								onclick : "onEliminar"
+							    },
+							    {
+								kind : "enyo.IconButton",
+								style : "width:100px;",
+								label : "Cancelar",
+								onclick : "onCancel"
+							    },
+							    {
+								kind : "enyo.IconButton",
+								style : "width:100px;",
+								label : "Mover arriba",
+								onclick : "onMoverArriba"
+							    },
+							    {
+								kind : "enyo.IconButton",
+								style : "width:100px;",
+								label : "Mover abajo",
+								onclick : "onMoverAbajo"
+							    }, ]
+						}
+
+						]
+					    }, ]
+				} ]
+		    } ],
 	    enviar_aviso : function() {
 
 		if (confirm("¿Desea enviar los avisos ahora?")) {
@@ -564,12 +571,13 @@ enyo
 		this.autoCompleteFields();
 	    },
 	    cambioDeFecha : function() {
-		this.$.fechaPicker.setValue(new Date(this.$.fechaPicker.getValue()));
+		this.$.fechaPicker.setValue(new Date(this.$.fechaPicker
+			.getValue()));
 		this.fecha = this.$.fechaPicker.getDate();
 
 		// this.$.cattleType.setIndex(1);
 		// this.$.zone.setIndex(1);
-
+		this.bMoving = false;
 		this.updateList();
 
 	    },
@@ -1194,7 +1202,8 @@ enyo
 	    dropForecast : function() {
 		for ( var i = 0; i < this.objInspection.InspectionForecastDetail.length; i++) {
 		    if (this.objInspection.InspectionForecastDetail[i].inspectionForecastDetailId == this.objList[this.iSelected].inspectionForecastDetailId) {
-			this.objInspection.InspectionForecastDetail.splice(i, 1);
+			this.objInspection.InspectionForecastDetail
+				.splice(i, 1);
 			crudInspectionForecast.update(this.objInspection, this,
 				"updateList");
 			return;
@@ -1210,7 +1219,8 @@ enyo
 		this.totalItems = 0;
 		this.objList = [];
 		this.objInspection = null;
-		if(this.bMoving ==false) this.iSelected = null;
+		if (this.bMoving == false)
+		    this.iSelected = null;
 		// **********************************************************
 
 		// add mode buttons
@@ -1238,8 +1248,7 @@ enyo
 			if (arrAllForecasts[i].InspectionForecastDetail) {
 			    for ( var j = 0; j < arrAllForecasts[i].InspectionForecastDetail.length; j++) {
 				if (arrAllForecasts[i].InspectionForecastDetail[j].inspectionForecastDetailId) {
-				    this.objList
-					    .push(arrAllForecasts[i].InspectionForecastDetail[j]);
+				    this.objList.push(arrAllForecasts[i].InspectionForecastDetail[j]);
 				}
 			    }
 			} else {
@@ -1264,20 +1273,20 @@ enyo
 
 		this.$.forecastList.render();
 		// ***********************************************************
-		
-		if(this.bMoving == true){
+
+		if (this.bMoving == true) {
 		    var inEventEmulated = {};
 		    inEventEmulated.rowIndex = this.iSelected;
 		    this.selectForecast(null, inEventEmulated);
 		}
-		
+
 		cacheMan.hideScrim();
 	    },
 	    onMoverArriba : function() {
 		if (this.objList.length > 0) {
 		    if (this.iSelected > 0) {
 			var tempInspectionSeq = this.objList[this.iSelected].inspection_seq;
-			this.objList[this.iSelected].inspection_seq = this.objList[this.iSelected-1].inspection_seq;
+			this.objList[this.iSelected].inspection_seq = this.objList[this.iSelected - 1].inspection_seq;
 			this.objList[this.iSelected - 1].inspection_seq = tempInspectionSeq;
 			this.objInspection.InspectionForecastDetail = this.objList;
 			this.bMoving = true;
@@ -1291,13 +1300,13 @@ enyo
 		if (this.objList.length > 0) {
 		    if (this.iSelected < this.objList.length - 1) {
 			var tempInspectionSeq = this.objList[this.iSelected].inspection_seq;
-			this.objList[this.iSelected].inspection_seq = this.objList[this.iSelected+1].inspection_seq;
-			this.objList[this.iSelected + 1].inspection_seq=tempInspectionSeq;
-			
+			this.objList[this.iSelected].inspection_seq = this.objList[this.iSelected + 1].inspection_seq;
+			this.objList[this.iSelected + 1].inspection_seq = tempInspectionSeq;
+
 			this.objInspection.InspectionForecastDetail = this.objList;
 			this.bMoving = true;
 			this.iSelected++;
-			
+
 			crudInspectionForecast.update(this.objInspection, this,
 				"updateList");
 		    }
@@ -1306,47 +1315,86 @@ enyo
 	    rowHold : function(inSender, inEvent) {
 		inEvent.stopPropagation();
 		this.iSelected = inEvent.rowIndex;
+		this.bMoving = false;
 		this.$.options.setItems(this.arrPopupMenu);
 		this.$.options.render();
 		this.$.options.openAtEvent(inEvent);
 	    },
 	    actionSelected : function(inSender, inSelected) {
 		switch (inSelected.value) {
-		case 1: //Mover a mañana
-		    var tomorrow = new Date();
-		    tomorrow.setDate(tomorrow.getDate()+1);
-		    
-		    if(tomorrowInspection = crudInspectionForecast.getByDate(tomorrow)){
-			
-		    }else{
-			tomorrowInspection = {
-				InspectionForecastDetail : [],
-				entityName : "InspectionForecast",
-				forecastDate : tomorrow,
-				locked : "false"
-			    };
+		case 1: // Mover a mañana
+		    var tomorrow = new Date(this.fecha);
+		    tomorrow.setDate(tomorrow.getDate() + 1);
+		    var tomorrowInspection = null;
+		    if (tomorrowInspection = crudInspectionForecast
+			    .getByDate(tomorrow)) {
+			if (!tomorrowInspection.InspectionForecastDetail) {
+			    tomorrowInspection.InspectionForecastDetail = [];
+			}
+
 			var objForecastDetail = null;
-			
+
 			for ( var i = 0; i < this.objInspection.InspectionForecastDetail.length; i++) {
 			    if (this.objInspection.InspectionForecastDetail[i].inspectionForecastDetailId == this.objList[this.iSelected].inspectionForecastDetailId) {
-				objForecastDetail =  this.objInspection.InspectionForecastDetail[i];
+				objForecastDetail = this.objInspection.InspectionForecastDetail[i];
 				this.objInspection.InspectionForecastDetail.splice(i, 1);
+				break;
+			    }
+			}
+			if (objForecastDetail) {
+			    tomorrowInspection.InspectionForecastDetail.sort(function(a, b) {
+					return a.inspection_seq > b.inspection_seq;
+			    });
+			    
+			    objForecastDetail.inspection_seq = 
+				Number(tomorrowInspection.InspectionForecastDetail[tomorrowInspection.InspectionForecastDetail.length-1].inspection_seq)+1;
+			    
+			    delete objForecastDetail.inspectionForecastDetailId;
+			    
+			    tomorrowInspection.InspectionForecastDetail.push(objForecastDetail);
+//			    crudInspectionForecast.update(crudInspectionForecast.adapterToOut(tomorrowInspection),this, "finishMove");
+			}
+
+		    } else {
+			tomorrowInspection = {
+			    InspectionForecastDetail : [],
+			    entityName : "InspectionForecast",
+			    forecastDate : tomorrow,
+			    locked : "false"
+			};
+			var objForecastDetail = null;
+
+			for ( var i = 0; i < this.objInspection.InspectionForecastDetail.length; i++) {
+			    if (this.objInspection.InspectionForecastDetail[i].inspectionForecastDetailId == this.objList[this.iSelected].inspectionForecastDetailId) {
+				objForecastDetail = this.objInspection.InspectionForecastDetail[i];
+				this.objInspection.InspectionForecastDetail
+					.splice(i, 1);
+				break;
 			    }
 			}
 			if (objForecastDetail) {
 			    objForecastDetail.inspection_seq = 0;
-			    tomorrowInspection.InspectionForecastDetail.push(objForecastDetail);
+			    delete objForecastDetail.inspectionForecastDetailId;
+			    tomorrowInspection.InspectionForecastDetail
+				    .push(objForecastDetail);
+
+//			    crudInspectionForecast.create(
+//				    crudInspectionForecast
+//					    .adapterToOut(tomorrowInspection),
+//				    this, "finishMove");
 			    
-			    var arrEntity = [];
-			    arrEntity.push(crudInspectionForecast.adapterToOut(tomorrowInspection));
-			    arrEntity.push(crudInspectionForecast.adapterToOut(this.objInspection));
-			    
-			    consumingGateway.UpdateArrayParents("InspectionForecast", arrEntity, this, "updateList");
 			}
 		    }
-		    
+		    var arrEntity = [];
+		     arrEntity.push(crudInspectionForecast.adapterToOut(tomorrowInspection));
+		     arrEntity.push(crudInspectionForecast.adapterToOut(this.objInspection));
+		    			    
+		     consumingGateway.Save("InspectionForecast",arrEntity, this, "updateList");
 		    cacheMan.showScrim();
 		    break;
 		}
 	    },
+	    finishMove : function() {
+		crudInspectionForecast.update(this.objInspection, this,"updateList");
+	    }
 	});
