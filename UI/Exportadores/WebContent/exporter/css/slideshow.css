@@ -1,0 +1,23 @@
+#slideshow { 
+    position: relative; 
+    width: 80%; 
+    height: 240px; 
+    padding: 10px; 
+    box-shadow: 0 0 20px rgba(0,0,0,0.4); 
+    overflow: hidden;
+}
+
+#slideshow > div { 
+    /*position: absolute;*/ 
+    top: 10px; 
+    left: 10px; 
+    right: 10px; 
+    bottom: 10px; 
+    overflow: hidden;
+    border: thin solid red;
+}
+
+#slideshow div img {
+	text-align: right;
+	/*vertical-align: text-top;*/
+}

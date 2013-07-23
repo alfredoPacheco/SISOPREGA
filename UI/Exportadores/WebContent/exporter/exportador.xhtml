@@ -7,7 +7,54 @@
 	xmlns:f="http://java.sun.com/jsf/core">
 <ui:composition template="template.xhtml">
 	<ui:define name="content">
-	   CONTENT!!!
+		<div id="slideshow">
+			<div>
+				<img
+					src="http://www.alessioatzeni.com/CSS3-Cycle-Image-Slider/images/img_1.jpg"
+					alt="Cougar" />
+				<h1>El proceso de exportación Ganadera</h1>
+				<p>Consulta de estado actual del proceso de exportación de
+					ganado, lo mantenemos al tanto del ganado que se recibe en Santa
+					Teresa, alimento entregado y los resultados de la inspección del
+					ganado al momento del cruce.</p>
+
+			</div>
+			<div>
+				<img
+					src="http://www.alessioatzeni.com/CSS3-Cycle-Image-Slider/images/img_2.jpg"
+					alt="Lions" />
+			</div>
+			<div>
+				<img
+					src="http://www.alessioatzeni.com/CSS3-Cycle-Image-Slider/images/img_3.jpg"
+					alt="Snowalker" />
+			</div>
+			<div>
+				<img
+					src="http://www.alessioatzeni.com/CSS3-Cycle-Image-Slider/images/img_4.jpg"
+					alt="Howling" />
+			</div>
+		</div>
+		<script>
+	    $("#slideshow > div:gt(0)").hide();
+
+	    setInterval(function() {
+		$('#slideshow > div:first').fadeOut(2000).next().fadeIn(2000)
+			.end().appendTo('#slideshow');
+	    }, 4000);
+	</script>
+		<div>
+			<img
+				src="http://www.alessioatzeni.com/CSS3-Cycle-Image-Slider/images/img_1.jpg"
+				alt="Cougar" />
+			<div style="float: right; border: thin solid red;">
+				<h1>El proceso de exportación Ganadera</h1>
+				<p>Consulta de estado actual del proceso de exportación de
+					ganado, lo mantenemos al tanto del ganado que se recibe en Santa
+					Teresa, alimento entregado y los resultados de la inspección del
+					ganado al momento del cruce.</p>
+			</div>
+		</div>
 	</ui:define>
 </ui:composition>
 </html>

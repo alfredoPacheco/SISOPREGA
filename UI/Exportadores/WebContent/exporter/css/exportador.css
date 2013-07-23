@@ -15,6 +15,10 @@
 	padding-right: 10%;
 }
 
+#menu #logout{
+	float: right;
+}
+
 #menu #menu-options {
 	font-family: Helvetica, sans-serif;
 	font-size: 12px;
@@ -27,10 +31,8 @@
 	border-radius: 10px;
 }
 
-}
 #nav {
-	margin: 100px 100px;
-	text-align: center;
+	margin-left: 10%;
 }
 
 #nav a img{
@@ -117,59 +119,29 @@
 	top: 0;
 }
 
-#header-container {
-	width: 82%;
-	margin: 5px 18%;
-	font-size: 12px;
-	background-color: white;
-	background-color: #381402;
-	color: #DABD8B;
-	height: 36px;
-	padding-top: 10px;
-	padding-bottom: 10px;
+#status-bar{
+	margin:15px;
+	width:90%;
+	height:40px;
+	background: #4b545f;
+	background: linear-gradient(top, #4f5964 0%, #5f6975 40%);
+	background: -moz-linear-gradient(top, #4f5964 0%, #5f6975 40%);
+	background: -webkit-linear-gradient(top, #4f5964 0%, #5f6975 40%);
+	font-size:small;
+	color:white;
 }
 
-#header-container #title {
-	float: left;
-	width: 30%;
-	margin-left: 1%;
+#status-bar-title{
+	float:left;
+	height:40px;
+	margin-left:15px;
+	width:215px;
+	border-right:thin solid white;
 }
 
-#header-container #status-container {
-	width: 67%;
-	margin-left: 32%;
-}
-
-#header-container #status-container #status-bar {
-	width: 74%;
-	float: left;
-	border-right: thin solid white;
-	border-left: thin solid white;
-	height: 36px;
-	padding-left: 5px;
-	padding-right: 5px;
-}
-
-#header-container #status-container #user-logout {
-	margin-left: 75%;
-	width: 24%;
-	padding-left: 10px;
-}
-
-#header #user-logout label {
-	float: left;
-}
-
-#header #user-logout form {
-	width: 100%;
-}
-
-#header #user-logout form a {
-	color: #DABD8B;
-}
-
-#header #user-logout form a:hover {
-	color: #F3DEBA;
+#status-bar-content{
+	margin-left: 235px;
+	height:40px;
 }
 
 #content {
@@ -200,7 +172,7 @@
 #footer {
 	margin-left: 0px;
 	margin-top: 10px;
-	background-color: #381402;
+	background-color: black;
 	color: #DABD8B;
 	width: 100%;
 	height: 30px;
