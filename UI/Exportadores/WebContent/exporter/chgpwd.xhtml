@@ -1,0 +1,28 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+<ui:composition template="template.xhtml">
+	<ui:define name="content">
+	    <h:form id="personForm" styleClass="dataForm">
+	    	<h1>Actualizar mis Contraseña: <u>#{request.remoteUser}</u></h1>
+	    	<br/><br/>
+	    	<h:outputLabel value="Contraseña actual" for="password"/>
+	    	<h:inputSecret id="password" /> <br/>
+	    	<h:outputLabel value="Nueva Contraseña" for="new_password"/>
+	    	<h:inputSecret id="new_password" /> <br/>
+	    	<h:outputLabel value="Confirmar Contraseña" for="confirm_new_password"/>
+	    	<h:inputSecret id="confirm_new_password" /> <br/>
+	    	<h:commandButton value="Actualizar"/>
+	    </h:form>
+	    
+	    <h:form id="enterpriseForm" styleClass="dataForm" rendered="#{not rancherBean.person}">
+	    	<h:outputText value="Actualizar mis datos: #{request.remoteUser}"/>
+	    </h:form>
+	</ui:define>
+</ui:composition>
+</html>

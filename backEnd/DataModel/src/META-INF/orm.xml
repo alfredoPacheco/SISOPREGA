@@ -81,17 +81,17 @@
 			<basic name="smsPhoneChosen">
 				<column name="sms_phone_chosen" />
 			</basic>
-			<one-to-many name="rancherInvoice" mapped-by="rancher" target-entity="com.tramex.sisoprega.dto.RancherInvoice" fetch="EAGER" orphan-removal="true">
+			<one-to-many name="rancherInvoice" mapped-by="rancher" target-entity="com.tramex.sisoprega.dto.RancherInvoice" fetch="EAGER">
 				<cascade>
 					<cascade-all/>
 				</cascade>
 			</one-to-many>
-			<one-to-many name="rancherContact" mapped-by="rancher" target-entity="com.tramex.sisoprega.dto.RancherContact" fetch="EAGER" orphan-removal="true">
+			<one-to-many name="rancherContact" mapped-by="rancher" target-entity="com.tramex.sisoprega.dto.RancherContact" fetch="EAGER">
 				<cascade>
 					<cascade-all/>
 				</cascade>
 			</one-to-many>
-			<one-to-many name="rancherUser" mapped-by="rancher" target-entity="com.tramex.sisoprega.dto.RancherUser" fetch="EAGER" orphan-removal="true">
+			<one-to-many name="rancherUser" mapped-by="rancher" target-entity="com.tramex.sisoprega.dto.RancherUser" fetch="EAGER">
 				<cascade>
 					<cascade-all/>
 				</cascade>
@@ -158,17 +158,17 @@
 			<basic name="zipCode">
 				<column name="zip_code" length="9" />
 			</basic>
-			<one-to-many name="rancherInvoice" mapped-by="rancher" target-entity="com.tramex.sisoprega.dto.EnterpriseInvoice" fetch="EAGER" orphan-removal="true">
+			<one-to-many name="rancherInvoice" mapped-by="rancher" target-entity="com.tramex.sisoprega.dto.EnterpriseInvoice" fetch="EAGER">
 				<cascade>
 					<cascade-all/>
 				</cascade>
 			</one-to-many>
-			<one-to-many name="enterpriseContact" mapped-by="enterpriseRancher" target-entity="com.tramex.sisoprega.dto.EnterpriseContact" fetch="EAGER" orphan-removal="true">
+			<one-to-many name="enterpriseContact" mapped-by="enterpriseRancher" target-entity="com.tramex.sisoprega.dto.EnterpriseContact" fetch="EAGER">
 				<cascade>
 					<cascade-all/>
 				</cascade>
 			</one-to-many>
-			<one-to-many name="enterpriseUser" mapped-by="rancher" target-entity="com.tramex.sisoprega.dto.EnterpriseUser" fetch="EAGER" orphan-removal="true">
+			<one-to-many name="enterpriseUser" mapped-by="rancher" target-entity="com.tramex.sisoprega.dto.EnterpriseUser" fetch="EAGER">
 				<cascade>
 					<cascade-all/>
 				</cascade>

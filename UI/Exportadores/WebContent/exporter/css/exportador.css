@@ -180,3 +180,13 @@
 	padding-left: 5px;
 	border-top: thin solid white;
 }
+
+.dataForm h1{
+	font-size:larger;
+	margin: 20px;
+	font-weight: bold;
+}
+
+.dataForm label{
+	width: 200px;
+}
