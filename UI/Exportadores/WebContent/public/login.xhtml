@@ -12,15 +12,12 @@
 </h:head>
 
 <h:body>
-
-	
-		
-		<!-- h1>Inicio de sesion</h1>
-					<span>Ingrese usuario y contraseña, si usted no tiene uno
-						registrese con su representante de Tramex</span>-->
-<h:graphicImage library="img" name="ProCustomsBrokers.png" />
+	<div id="imgWrapper" style="left:40%;margin:20px auto;width:14%;color:white;">
+		<h:graphicImage library="img" name="ProCustomsBrokers.png" />
+		<p><b>PRO</b> Customs Brokers</p>
+	</div>
 	<form method="post" action="j_security_check" class="login">
-
+		
 		<p>
 			<label for="login">Usuario:</label> <input type="text"
 				name="j_username" id="login" value="" />
@@ -33,10 +30,6 @@
 		<p class="login-submit">
 			<button type="submit" class="login-button">Login</button>
 		</p>
-		<p class="forgot-password">
-			<a href="index.html">¿Olvido su contraseña?</a>
-		</p>
-
 	</form>
 
 </h:body>
