@@ -73,4 +73,10 @@
 			<value>#{filterBean}</value>
 		</managed-property>
 	</managed-bean>
+	<managed-bean>
+		<description>handle requests for rancher profile changes.</description>
+		<managed-bean-name>rancherBean</managed-bean-name>
+		<managed-bean-class>com.tramex.sisoprega.exporter.cross.RancherBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
 </faces-config>

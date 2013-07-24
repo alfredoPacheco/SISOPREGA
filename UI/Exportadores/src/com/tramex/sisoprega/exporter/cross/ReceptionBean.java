@@ -43,7 +43,7 @@ public class ReceptionBean {
   private static Logger log = Logger.getLogger(ReceptionBean.class.getName());
   
   @EJB(lookup = "java:global/DataModel/BaseDataModel")
-  protected RemoteModelable dataModel;
+  private RemoteModelable dataModel;
   
   public String getReceptions() throws DataModelException{
     FacesContext context = FacesContext.getCurrentInstance();

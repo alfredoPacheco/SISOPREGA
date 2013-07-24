@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+<ui:composition template="template.xhtml">
+	<ui:define name="content">
+	    <h:form id="personForm" styleClass="dataForm" rendered="#{rancherBean.person}">
+	    	<h1>Actualizar mis datos: <u>#{request.remoteUser}</u></h1>
+	    	<br/><br/>
+	    	<h:outputLabel value="Nombre(s)" for="inputFirstName"/>
+	    	<h:inputText id="inputFirstName" style="color:black;" value="#{rancherBean.personRancher.firstName}"/><br/>
+	    	<h:outputLabel value="Apellido Paterno" for="inputLastName"/>
+	    	<h:inputText id="inputLastName" style="color:black;" value="#{rancherBean.personRancher.lastName}"/><br/>
+	    	<h:outputLabel value="Apellido Materno" for="inputLastName"/>
+	    	<h:inputText id="inputMotherName" style="color:black;" value="#{rancherBean.personRancher.motherName}"/><br/>
+	    	<br/><br/>
+	    	<h:outputLabel value="eMail" for="inputEmail"/>
+	    	<h:inputText id="inputEmail" style="color:black;" value="#{rancherBean.personRancher.emailAddress}"/><br/>
+	    	<h:outputLabel value="Teléfonos"/>
+	    	<h:inputText id="inputPhone1" style="color:black;width:150px;" value="#{rancherBean.personRancher.phone}"/>
+	    	&nbsp;SMS <h:selectBooleanCheckbox value="#{rancherBean.phoneOne}" />  <br/>
+	    	<h:outputLabel value="&nbsp;"/>
+	    	<h:inputText id="inputPhone2" style="color:black;width:150px;" value="#{rancherBean.personRancher.phone2}"/>
+	    	&nbsp;SMS <h:selectBooleanCheckbox value="#{rancherBean.phoneTwo}" /><br/>
+	    	<h:outputLabel value="&nbsp;"/>
+	    	<h:inputText id="inputPhone3" style="color:black;width:150px;" value="#{rancherBean.personRancher.phone3}"/>
+	    	&nbsp;SMS <h:selectBooleanCheckbox value="#{rancherBean.phoneThree}" /><br/><br/>
+	    	<h:commandButton value="Actualizar" action="#{rancherBean.updatePerson}"/>
+	    </h:form>
+	    
+	    <h:form id="enterpriseForm" styleClass="dataForm" rendered="#{not rancherBean.person}">
+	    	<h:outputText value="Actualizar mis datos: #{request.remoteUser}"/>
+	    </h:form>
+	</ui:define>
+</ui:composition>
+</html>

@@ -243,7 +243,7 @@ enyo
 		if (objRec.accepted_count != "") {
 		    objRec.accepted_count;
 		}
-		var statusBar = document.getElementById("status-bar");
+		var statusBar = document.getElementById("status-bar-content");
 		var content = objRec.headcounts[0].hc
 			+ " "
 			+ objRec.cattype_name

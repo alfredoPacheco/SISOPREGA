@@ -7,7 +7,66 @@
 	xmlns:f="http://java.sun.com/jsf/core">
 <ui:composition template="template.xhtml">
 	<ui:define name="content">
-	   CONTENT!!!
+		<div id="slideshow">
+			<div>
+				<img src="img/cattle_art/cruising-the-cows.jpg"
+					alt="cruising the cows" />
+				<h1>El proceso de exportación Ganadera</h1>
+				<br /> <br />
+				<p>Consulta de estado actual del proceso de exportación de
+					ganado, lo mantenemos al tanto del ganado que se recibe en Santa
+					Teresa, alimento entregado y los resultados de la inspección del
+					ganado al momento del cruce.</p>
+
+			</div>
+			<div>
+				<img src="img/cattle_art/Horses-And-Cattle-In-A-Farmyard.jpg"
+					alt="Horses and cattle in a farmyard" />
+				<h1>Consulta el ganado en corrales.</h1>
+				<br /> <br />
+				<p>Por medio del servicio de consulta en línea usted puede
+					enterarse de la localización de su ganado en los corrales de Santa
+					Teresa. Cuando nosotros recibimos el ganado, llevamos un registro
+					del destino en el mapa de corrales, este registro es capturado para
+					darle el servicio de localización de ganado, con esta acción, usted
+					puede ver donde esta hubicado su ganado.</p>
+			</div>
+			<div>
+				<img src="img/cattle_art/original-virginia-cow.jpg"
+					alt="Original Virgina Cow" />
+				<h1>Repores de actividad.</h1>
+				<br /> <br />
+				<p>Los reportes de actividad recompilan información importante
+					acerca de los diferentes eventos de la exportación de ganado:</p>
+				<ul style="list-style: circle;">
+					<li>Ganado Recibido</li>
+					<li>Alimentación de Ganado</li>
+					<li>Ganado en la lista de inspección de la UGRCH</li>
+					<li>Ganado inspeccionado (Cruce)</li>
+				</ul>
+				<p>Usted puede consultar esta información en cualquier lugar
+					donde tenga acceso a una conexión de internet.</p>
+			</div>
+			<div>
+				<img src="img/cattle_art/roping-horse.jpg" alt="roping horse" />
+				<h1>Perfil.</h1>
+				<br /> <br />
+				<p>Cada uno de los eventos de exportación de ganado, generan
+					mensajes SMS y mensajes de correo electrónico. Al entregarnos esta
+					información a través de la herramienta de perfil, usted recibira
+					notificaciones continuas del estado de su ganado. En esta opción,
+					usted también puede cambiar la contraseña para ingresar al sistema.</p>
+			</div>
+		</div>
+		<script>
+		    $("#slideshow > div:gt(0)").hide();
+	
+		    setInterval(function() {
+			$('#slideshow > div:first').fadeOut(3000).next().fadeIn(3000)
+				.end().appendTo('#slideshow');
+		    }, 15000);
+		</script>
+
 	</ui:define>
 </ui:composition>
 </html>
