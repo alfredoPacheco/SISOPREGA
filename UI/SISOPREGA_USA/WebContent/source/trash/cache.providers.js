@@ -11,28 +11,29 @@ enyo.kind(
     name : "cache.providers",
     get : function() {
 
-      // if (this.gatewayWasRead == false) {
-      // this.gatewayWasRead = true;
-      var objAux = {};
-      var arrAux = [];
-      var selfCacheSeller = this;
-      // Retrieve Providers (sellers)
-      var cgReadAllSellers = consumingGateway.Read("Seller", {});
-      if (cgReadAllSellers.exceptionId == 0) { // Read success
-        jQuery.each(cgReadAllSellers.records, function() {
-          jQuery.each(this, function(key, value) {
-            objAux[key] = value;
-          });
-          objTmp = selfCacheSeller.adapterToIn(objAux);
-          objAux = {};
-          arrAux.push(objTmp);
-        });
-      } else {
-        if (cgReadAllSellers.exceptionId != "DB02" && cgReadAllSellers.exceptionId != "VAL02") {
-          cacheMan.setMessage("", "[Exception ID: " + cgReadAllRanchers.exceptionId + "] Descripción: " + cgReadAllRanchers.exceptionDescription);
-        }
-      }
-      return arrAux;
+//      // if (this.gatewayWasRead == false) {
+//      // this.gatewayWasRead = true;
+//      var objAux = {};
+//      var arrAux = [];
+//      var selfCacheSeller = this;
+//      // Retrieve Providers (sellers)
+//      var cgReadAllSellers = consumingGateway.Read("Seller", {});
+//      if (cgReadAllSellers.exceptionId == 0) { // Read success
+//        jQuery.each(cgReadAllSellers.records, function() {
+//          jQuery.each(this, function(key, value) {
+//            objAux[key] = value;
+//          });
+//          objTmp = selfCacheSeller.adapterToIn(objAux);
+//          objAux = {};
+//          arrAux.push(objTmp);
+//        });
+//      } else {
+//        if (cgReadAllSellers.exceptionId != "DB02" && cgReadAllSellers.exceptionId != "VAL02") {
+//          cacheMan.setMessage("", "[Exception ID: " + cgReadAllSellers.exceptionId + "] Descripción: " + cgReadAllSellers.exceptionDescription);
+//        }
+//      }
+//      return arrAux;
+	return [];
     },
     getAllForList : function() {
       var result = [];

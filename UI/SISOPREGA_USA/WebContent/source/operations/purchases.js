@@ -344,8 +344,9 @@ enyo.kind(
       this.$.provider.setItems(cacheProviders.getAllForList());
       this.$.corral.setItems(cachePen.getList());
       this.$.clase.setItems(cacheClasses.getList());
-
-      this.$.cattleType.setItems(cacheCattle.getAllCattleType());
+      
+      this.$.cattleType.setItems([]); //TODO for the while
+//      this.$.cattleType.setItems(cacheCattle.getAllCattleType());
       this.$.cattleType.setIndex(1);
 
     },
@@ -416,7 +417,7 @@ enyo.kind(
       // TODO: Fill cache and report event to close pop up.
       for ( var recordIndex = 0; recordIndex < this.arrDetail.length; recordIndex++) {
         var purchase = this.purchaseFromRecord(recordIndex);
-        cachePur.createPurchase(purchase);
+        crudPurchase.createPurchase(purchase);
       }
 
       this.arrDetail = [];
@@ -433,7 +434,7 @@ enyo.kind(
 
       while (!selected) {
         var possibleId = Math.floor((Math.random() * 100) + 1);
-        var purchases = cachePur.get().purchased;
+        var purchases = crudPurchase.get().purchased;
         for ( var i = 0; i < purchases.length; i++) {
           if (purchases[i].id == possibleId)
             break;

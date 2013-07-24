@@ -83,7 +83,7 @@ enyo.kind(
               },
               {
                 name : 'btnGoBack',
-                icon : "../SISOPREGA/images/command-menu/menu-icon-back.png",
+                icon : "../SISOPREGA_WEB_LIB/images/command-menu/menu-icon-back.png",
                 onclick : "goBack"
               },
               {
@@ -103,7 +103,7 @@ enyo.kind(
               {
                 name : 'btnLogOut',
                 onclick : "logOut",
-                icon : "../SISOPREGA/images/command-menu/menu-icon-logout.png"
+                icon : "../SISOPREGA_WEB_LIB/images/command-menu/menu-icon-logout.png"
               } ]
         },
         {
@@ -152,7 +152,7 @@ enyo.kind(
                     } ]
               },
               {
-                kind : "receptions.barnyards.map",
+                kind : "operations.pen.map",
                 name : "mexMap_kind",
                 lazy : true
               },

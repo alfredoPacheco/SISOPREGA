@@ -165,7 +165,7 @@ enyo.kind(
                       kind : "admin.purchased",
                       flex : 1,
                       maxState : false,
-                      arrData : cachePur.get(),
+                      arrData : crudPurchase.get(),
                       onPurchase : "showPurchase"
                     } ]
               },
