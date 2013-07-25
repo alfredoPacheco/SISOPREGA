@@ -227,30 +227,31 @@ enyo
 		if (!sClass) {
 		    sClass = "customBYcell";
 		}
-		objBarn.createComponent({
-		    kind : "IconButton",
-		    onclick : "refreshMap",
-		    icon : "../SISOPREGA_WEB_LIB/images/command-menu/menu-icon-music-repeat.png",
-		    style : "height:23px;min-width: 37px; padding:0;margin:0px",
-		}, {
-		    owner : this
-		});
+		objBarn
+			.createComponent(
+				{
+				    kind : "IconButton",
+				    onclick : "refreshMap",
+				    icon : "../SISOPREGA_WEB_LIB/images/command-menu/menu-icon-music-repeat.png",
+				    style : "height:23px;min-width: 37px; padding:0;margin:0px",
+				}, {
+				    owner : this
+				});
 	    },
 	    addRow : function(bDiv) {
 		if (bDiv) {
-		    this.$.cells.createComponent(
-			{kind:"VFlexBox",
-			    style : "width: 930px;height:15px;",pack:"center",
-			    components:[
-			                {kind:"HFlexBox", style:"max-height:2px;background-color:#381402;",flex:1,pack:"center",align:"center"}
-			                ]}
-//			    {
-//			kind : "Divider",
-//			caption : "",
-//			style : "margin-left:-15px;width: 930px;height:25px;"
-//		    }
-			    
-		    );
+		    this.$.cells.createComponent({
+			kind : "VFlexBox",
+			style : "width: 930px;height:15px;",
+			pack : "center",
+			components : [ {
+			    kind : "HFlexBox",
+			    style : "max-height:2px;background-color:#381402;",
+			    flex : 1,
+			    pack : "center",
+			    align : "center"
+			} ]
+		    });
 		} else {
 		    this.$.cells.createComponent({
 			kind : "HFlexBox",
@@ -269,7 +270,6 @@ enyo
 		});
 	    },
 	    createCells : function(sLetter, iStart, iNumber, sWidth, sHeight) {
-		// this.createCells("1E",5,6,"45px","45px");
 		objBarn = this.last;
 		var sColor;
 		for ( var i = 0; i < iNumber; i++) {
@@ -401,7 +401,6 @@ enyo
 			for ( var sKey in this.arrSelectedOccupied) {
 			    if (crudPen.isOccupied(sKey)) {
 				this.$[sKey].occupied = 1;
-				// this.$[sKey].applyStyle("background-color",crudReception.getByID(crudPen.getRecIDbyBY(sKey)).color);
 			    }
 			}
 			this.arrSelectedOccupied = {};
@@ -471,7 +470,7 @@ enyo
 		this.$.spacerone.setContent("");
 	    },
 	    setDesc : function(sBY) {
-		_objMainHeader.applyStyle("font-size","12px");
+		_objMainHeader.applyStyle("font-size", "12px");
 		try {
 		    var objRec = crudReception
 			    .getByID(crudPen.inUse()[sBY].receptionId);
@@ -510,11 +509,11 @@ enyo
 	    actionSelected : function(inSender, inSelected) {
 		switch (inSelected.value) {
 		case 1: // Crear Recepcion
-		    
+
 		    if (this.$.dynocon) {
 			this.$.dynocon.destroy();
 		    }
-		    
+
 		    var objReception = {};
 		    objReception.penString = "";
 		    objReception.Pen = [];
@@ -528,15 +527,15 @@ enyo
 		    if (objReception.penString != "")
 			objReception.penString = objReception.penString.slice(
 				0, -2);
-		    
+
 		    this.$.popMan.createComponent({
 			kind : "operations.reception.form",
 			onAdd : "updateBY",
 			onCancel : "closePopUp",
-			onAfterLoad:"dynoconReady",
+			onAfterLoad : "dynoconReady",
 			name : 'dynocon',
 			flex : 1,
-			objToSet:objReception
+			objToSet : objReception
 		    }, {
 			owner : this
 		    });
@@ -546,18 +545,19 @@ enyo
 		    if (this.$.dynocon) {
 			this.$.dynocon.destroy();
 		    }
-		    
+
 		    this.$.popMan.createComponent({
 			kind : "operations.feed",
 			onAddFeed : "closePopUp",
 			onCancel : "closePopUp",
-			onAfterLoad:"dynoconReady",
+			onAfterLoad : "dynoconReady",
 			name : 'dynocon',
 			flex : 1
 		    }, {
 			owner : this
 		    });
-		    var objRec = crudReception.getByID(crudPen.inUse()[this.objSelected.name].receptionId);
+		    var objRec = crudReception
+			    .getByID(crudPen.inUse()[this.objSelected.name].receptionId);
 		    this.$.dynocon.set(objRec, this.arrSelectedOccupied);
 		    this.$.dynocon.toggleAdd();
 		    break;
@@ -565,36 +565,38 @@ enyo
 		    if (this.$.dynocon) {
 			this.$.dynocon.destroy();
 		    }
-		    
+
 		    this.$.popMan.createComponent({
 			kind : "operations.inspections",
 			onAddReception : "closePopUp",
 			onCancel : "closePopUp",
-			onAfterLoad:"dynoconReady",
+			onAfterLoad : "dynoconReady",
 			name : 'dynocon',
 			flex : 1
 		    }, {
 			owner : this
 		    });
-		    var objRec = crudReception.getByID(crudPen.inUse()[this.objSelected.name].receptionId);
+		    var objRec = crudReception
+			    .getByID(crudPen.inUse()[this.objSelected.name].receptionId);
 		    this.$.dynocon.toggleAdd();
 		    this.$.dynocon.set(objRec);
-		    
+
 		    break;
 		case 5: // Editar
 		    if (this.$.dynocon) {
 			this.$.dynocon.destroy();
 		    }
-		    var objRec = crudReception.getByID(crudPen.inUse()[this.objSelected.name].receptionId);
+		    var objRec = crudReception
+			    .getByID(crudPen.inUse()[this.objSelected.name].receptionId);
 		    this.$.popMan.createComponent({
 			kind : "operations.reception.form",
 			onUpdate : "onReceptionUpdate",
 			onCancel : "closePopUp",
-			onAfterLoad:"dynoconReady",
+			onAfterLoad : "dynoconReady",
 			name : 'dynocon',
 			flex : 1,
-			objToSet:objRec,
-			bUpdatingMode :true
+			objToSet : objRec,
+			bUpdatingMode : true
 		    }, {
 			owner : this
 		    });
@@ -623,12 +625,13 @@ enyo
 		    break;
 		}
 	    },
-	    dynoconReady:function(){
+	    dynoconReady : function() {
 		this.$.popMan.openAtCenter();
 	    },
-	    showReport : function(){
+	    showReport : function() {
 		var recId = crudPen.inUse()[this.objSelected.name].receptionId;
-		var reportName = '/ReportingGateway/ReportePromedios?Id=' + recId;
+		var reportName = '/ReportingGateway/ReportePromedios?Id='
+			+ recId;
 		utils.openReport(reportName);
 	    },
 	    releaseAllPensInReception : function() {
