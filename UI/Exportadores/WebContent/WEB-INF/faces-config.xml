@@ -79,4 +79,28 @@
 		<managed-bean-class>com.tramex.sisoprega.exporter.cross.RancherBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
+	<managed-bean>
+		<description>Handles change password request.</description>
+		<managed-bean-name>changePasswordBean</managed-bean-name>
+		<managed-bean-class>com.tramex.sisoprega.exporter.cross.ChangePasswordBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<validator>
+		<description>validates that fromDate is not before toDate</description>
+		<display-name>reportDateValidator</display-name>
+		<validator-id>sisoprega.reportDateValidator</validator-id>
+		<validator-class>com.tramex.sisoprega.exporter.validator.ReportDateValidator</validator-class>
+	</validator>
+	<validator>
+		<description>Validates if new password and confirm password are valid.</description>
+		<display-name>confirmPasswordValidator</display-name>
+		<validator-id>sisoprega.confirmPasswordValidator</validator-id>
+		<validator-class>com.tramex.sisoprega.exporter.validator.ConfirmPasswordValidator</validator-class>
+	</validator>
+	<validator>
+		<description>Validates if current password matches with the one in the database.</description>
+		<display-name>currentPasswordValidator</display-name>
+		<validator-id>sisoprega.currentPasswordValidator</validator-id>
+		<validator-class>com.tramex.sisoprega.exporter.validator.CurrentPasswordValidator</validator-class>
+	</validator>
 </faces-config>

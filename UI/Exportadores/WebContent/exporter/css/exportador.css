@@ -15,7 +15,7 @@
 	padding-right: 10%;
 }
 
-#menu #logout{
+#menu #logout {
 	float: right;
 }
 
@@ -35,9 +35,9 @@
 	margin-left: 10%;
 }
 
-#nav a img{
+#nav a img {
 	vertical-align: middle;
-	margin-right:5px;
+	margin-right: 5px;
 }
 
 #nav ul ul {
@@ -119,29 +119,29 @@
 	top: 0;
 }
 
-#status-bar{
-	margin:15px;
-	width:90%;
-	height:40px;
+#status-bar {
+	margin: 15px;
+	width: 90%;
+	height: 40px;
 	background: #4b545f;
 	background: linear-gradient(top, #4f5964 0%, #5f6975 40%);
 	background: -moz-linear-gradient(top, #4f5964 0%, #5f6975 40%);
 	background: -webkit-linear-gradient(top, #4f5964 0%, #5f6975 40%);
-	font-size:small;
-	color:white;
+	font-size: small;
+	color: white;
 }
 
-#status-bar-title{
-	float:left;
-	height:40px;
-	margin-left:15px;
-	width:215px;
-	border-right:thin solid white;
+#status-bar-title {
+	float: left;
+	height: 40px;
+	margin-left: 15px;
+	width: 215px;
+	border-right: thin solid white;
 }
 
-#status-bar-content{
+#status-bar-content {
 	margin-left: 235px;
-	height:40px;
+	height: 40px;
 }
 
 #content {
@@ -152,7 +152,7 @@
 	box-shadow: 0px 0px 9px rgba(0, 0, 0, 0.15);
 	border-radius: 10px;
 	overflow: scroll;
-	width:88%;
+	width: 88%;
 }
 
 #content #penMapWrapper {
@@ -181,12 +181,55 @@
 	border-top: thin solid white;
 }
 
-.dataForm h1{
-	font-size:larger;
+.dataForm{
+	width:60%;
+}
+
+.dataForm h1 {
+	font-size: larger;
 	margin: 20px;
 	font-weight: bold;
 }
 
-.dataForm label{
+.dataForm label {
 	width: 200px;
+}
+
+.blueFormSubmit {
+	-moz-box-shadow: inset 0px 0px 9px 1px #bbdaf7;
+	-webkit-box-shadow: inset 0px 0px 9px 1px #bbdaf7;
+	box-shadow: inset 0px 0px 9px 1px #bbdaf7;
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #79bbff
+		), color-stop(1, #378de5) );
+	background: -moz-linear-gradient(center top, #79bbff 5%, #378de5 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#79bbff',
+		endColorstr='#378de5' );
+	background-color: #79bbff;
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+	border-radius: 6px;
+	border: 1px solid #84bbf3;
+	display: inline-block;
+	color: #ffffff;
+	font-family: arial;
+	font-size: 15px;
+	font-weight: normal;
+	padding: 9px 59px;
+	text-decoration: none;
+	text-shadow: 1px 2px 19px #528ecc;
+	margin-left: 205px;
+}
+
+.blueFormSubmit:hover {
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #378de5
+		), color-stop(1, #79bbff) );
+	background: -moz-linear-gradient(center top, #378de5 5%, #79bbff 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#378de5',
+		endColorstr='#79bbff' );
+	background-color: #378de5;
+}
+
+.blueFormSubmit:active {
+	position: relative;
+	top: 1px;
 }

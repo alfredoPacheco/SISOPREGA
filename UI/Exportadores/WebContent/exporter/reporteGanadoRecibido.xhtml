@@ -11,12 +11,12 @@
 	    <h:form id="filterForm">
 	    	<h:inputText value="#{ganadoRecibido.filterBean.fromDate}" id="fromDate">
 	    		<f:convertDateTime dateStyle="short" type="date" />
-	    	</h:inputText> <br/> 
+	    	</h:inputText><h:message style="margin-left:15px;color:red;" for="fromDate" id="fromDateError" lang="es" /> <br/> 
 	    	<h:inputText value="#{ganadoRecibido.filterBean.toDate}" id="toDate">
 	    		<f:convertDateTime dateStyle="short" type="date" />
-	    	</h:inputText><br/>
-	    	<h:commandLink value="Descargar Reporte" action="#{ganadoRecibido.downloadPDF}" target="_blank"/><br/><br/>
-	    	<h:messages id="errorMsg"/>
+	    		<f:validator validatorId="sisoprega.reportDateValidator" />
+	    	</h:inputText><h:message style="margin-left:15px;color:red;" for="toDate" id="toDateError" lang="es" /> <br/>
+	    	<h:commandLink value="Descargar Reporte" action="#{ganadoRecibido.downloadPDF}"/><br/><br/>
 	    </h:form>
 	</ui:define>
 </ui:composition>

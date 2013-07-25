@@ -104,4 +104,15 @@ public interface RemoteIdentity {
    */
   List<String> readUserRoles(String userName) throws IdentityManagerException;
 
+  /**
+   * Change current password to a new password. Client should do
+   * confirmation about new password. This method will also validate
+   * that current provided password is as the one saved on database.
+   * @param currentPassword
+   * @param newPassword
+   * @return
+   * @throws IdentityManagerException
+   */
+  boolean changePassword(String currentPassword, String newPassword) throws IdentityManagerException;
+
 }

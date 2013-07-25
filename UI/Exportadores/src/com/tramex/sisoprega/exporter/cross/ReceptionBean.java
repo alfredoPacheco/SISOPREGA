@@ -108,10 +108,12 @@ public class ReceptionBean {
       log.fine("reception transformed json:" + json);
     }
     
-    json = json.substring(0, json.length()-1) + "]";
+    if(json.length() > 5)
+      json = json.substring(0, json.length()-1) + "]";
+    else
+      json = "''";
     
     log.fine(json);
-    
     return json;
   }
 }
