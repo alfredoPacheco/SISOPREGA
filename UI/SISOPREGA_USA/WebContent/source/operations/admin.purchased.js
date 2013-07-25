@@ -214,7 +214,7 @@ enyo
 	    }
         },
         updateList : function() {
-          this.arrData = cachePur.get();
+          this.arrData = crudPurchase.get();
           this.$.listPurchased.render();
 
           this.updateSummary();
@@ -232,7 +232,7 @@ enyo
               reweight : 536,
               rtype : "inv"
             };
-          cachePur.setInventory(objInventory);
+          crudPurchase.setInventory(objInventory);
 
           this.updateSummary();
         }

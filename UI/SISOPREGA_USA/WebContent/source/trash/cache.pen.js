@@ -140,6 +140,7 @@ enyo.kind(
     },
     barnyardListByZone : function(zoneId) {
       var result = [];
+      return result; //TODO for the while
       var barnyard =
         {
           locationId : zoneId
@@ -228,7 +229,7 @@ enyo.kind(
       for ( var index = 0; index < items.length; index++) {
         var item =
           {
-            caption : cacheClasses.getByID(items[index].cattleType).name,
+//            caption : cacheClasses.getByID(items[index].cattleType).name, TODO: commented when I was changing of data model, shoulb be uncommented
             value : items[index].cattleType
           // items[index].id TODO: work with id
           };

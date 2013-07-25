@@ -197,7 +197,8 @@ enyo.kind(
 
       ],
     ready : function() {
-      this.$.rancher_id.setItems(cacheRanchers.getAllForList());
+//      this.$.rancher_id.setItems(cacheRanchers.getAllForList());
+      this.$.rancher_id.setItems([]); //TODO for the while
     },
     resetForm : function() {
       this.$.entryNo.setValue('');
@@ -352,7 +353,7 @@ enyo.kind(
       var arrCortes = this.$.details.$.listaCorte.cortes;
       for ( var recordIndex = 0; recordIndex < arrCortes.length; recordIndex++) {
         var purchase = this.purchaseFromCorte(arrCortes[recordIndex]);
-        cachePur.createPurchase(purchase);
+        crudPurchase.createPurchase(purchase);
       }
 
       this.doSave();
@@ -364,7 +365,7 @@ enyo.kind(
 
       while (!selected) {
         var possibleId = Math.floor((Math.random() * 100) + 1);
-        var purchases = cachePur.get().purchased;
+        var purchases = crudPurchase.get().purchased;
         for ( var i = 0; i < purchases.length; i++) {
           if (purchases[i].id == possibleId)
             break;
