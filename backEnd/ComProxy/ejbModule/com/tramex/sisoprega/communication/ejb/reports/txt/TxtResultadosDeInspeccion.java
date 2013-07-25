@@ -54,8 +54,9 @@ public class TxtResultadosDeInspeccion extends BaseTxtReport implements Reportea
 
     if (rechazos.trim().length() > 0) {
       log.finer("Inspection rejects found");
-      sResult = "Resultados de inspección(#" + receptionId + "):" + rechazos;
-    }else{
+      sResult = getAcceptedDetails(receptionId) + rechazos;
+      log.fine(sResult);
+    } else {
       throw new Exception("No hay inspección para enviar.");
     }
 
@@ -66,17 +67,59 @@ public class TxtResultadosDeInspeccion extends BaseTxtReport implements Reportea
     return result;
   }
 
+  private String getAcceptedDetails(long receptionId) throws ServletException, ParseException {
+    String sqlString = "SELECT SUM(ctrl_reception_headcount.hc) as head_count, " + "SUM(ctrl_inspection_result.hc) as rejects, "
+        + "cat_cattle_type.cattype_name " + "FROM ctrl_reception_headcount  "
+        + "INNER JOIN ctrl_reception ON ctrl_reception_headcount.reception_id = ctrl_reception.reception_id "
+        + "INNER JOIN cat_cattle_type ON ctrl_reception.cattle_type = cat_cattle_type.cattype_id "
+        + "LEFT JOIN ctrl_inspection ON ctrl_reception_headcount.reception_id = ctrl_inspection.reception_id "
+        + "LEFT JOIN ctrl_inspection_result ON ctrl_inspection.inspection_id = ctrl_inspection_result.inspection_id "
+        + "WHERE ctrl_reception_headcount.reception_id=" + receptionId + " GROUP BY cat_cattle_type.cattype_name;";
+
+    PreparedStatement ps = null;
+    ResultSet rs = null;
+
+    try {
+      ps = conn.prepareStatement(sqlString);
+      rs = ps.executeQuery();
+
+      String result = "";
+
+      if (rs.next()) {
+        long accepted = rs.getLong("head_count") - rs.getLong("rejects");
+        result = "Resultados de inspección de ganado: " + rs.getLong("head_count") + " " + rs.getString("cattype_name") + ". "
+            + accepted + " Aceptados, " + rs.getLong("rejects") + " Rechazados: ";
+      }
+
+      return result;
+
+    } catch (SQLException e) {
+      log.severe("SQLException while reading inspection results");
+      log.throwing(this.getClass().getCanonicalName(), "processReques", e);
+      throw new ServletException(e);
+    } finally {
+      try {
+        if (ps != null)
+          ps.close();
+      } catch (Exception e) {
+        log.info("Unable to release some resources.");
+      }
+
+    }
+  }
+
   private String getRechazosDetails(long receptionId) throws ServletException, ParseException {
-    String sqlString = "SELECT cat_inspection_code.inspection_code_description as inspection_code_description,"
-        + "SUM(ctrl_inspection_result.hc) AS Rechazos,"
-        + "array_to_string(array_agg(pen.barnyard_code), ', ') as corrales,"
-        + "ctrl_inspection.comments"
-        + "FROM public.ctrl_inspection ctrl_inspection"
-        + "LEFT JOIN public.ctrl_inspection_result ctrl_inspection_result ON ctrl_inspection.inspection_id = ctrl_inspection_result.inspection_id"
-        + "LEFT JOIN public.cat_inspection_code cat_inspection_code ON ctrl_inspection_result.inspection_code_id = cat_inspection_code.inspection_code_id"
-        + "LEFT JOIN public.ctrl_inspection_barnyard ctrl_inspection_barnyard ON ctrl_inspection.inspection_id = ctrl_inspection_barnyard.inspection_id"
-        + "LEFT JOIN public.cat_barnyard pen ON ctrl_inspection_barnyard.barnyard_id = pen.barnyard_id"
-        + "WHERE ctrl_inspection.reception_id = " + receptionId + " GROUP BY inspection_code_description, ctrl_inspection.comments;";
+    String sqlString = "SELECT cat_inspection_code.inspection_code_description as inspection_code_description, "
+        + "SUM(ctrl_inspection_result.hc) AS Rechazos, "
+        + "array_to_string(array_agg(pen.barnyard_code), ', ') as corrales, "
+        + "ctrl_inspection.comments "
+        + "FROM public.ctrl_inspection ctrl_inspection "
+        + "LEFT JOIN public.ctrl_inspection_result ctrl_inspection_result ON ctrl_inspection.inspection_id = ctrl_inspection_result.inspection_id "
+        + "LEFT JOIN public.cat_inspection_code cat_inspection_code ON ctrl_inspection_result.inspection_code_id = cat_inspection_code.inspection_code_id "
+        + "LEFT JOIN public.ctrl_inspection_barnyard ctrl_inspection_barnyard ON ctrl_inspection.inspection_id = ctrl_inspection_barnyard.inspection_id "
+        + "LEFT JOIN public.cat_barnyard pen ON ctrl_inspection_barnyard.barnyard_id = pen.barnyard_id "
+        + "WHERE ctrl_inspection.reception_id = " + receptionId
+        + " GROUP BY inspection_code_description, ctrl_inspection.comments;";
 
     PreparedStatement ps = null;
     ResultSet rs = null;
@@ -88,20 +131,19 @@ public class TxtResultadosDeInspeccion extends BaseTxtReport implements Reportea
 
       String comment = "";
       String penString = "";
-      
+
       while (rs.next()) {
-        sDetails.append(rs.getString("inspection_code_description")).append(" - ").append(rs.getString("rechazos"))
-        .append("; ");
+        sDetails.append(rs.getString("inspection_code_description")).append(" - ").append(rs.getString("rechazos")).append("; ");
         comment = rs.getString("comments");
         penString = rs.getString("corrales");
       }
-      
-      String result = sDetails.toString() + ". Corrales: " + penString  + ". Comentario: " + comment;
+
+      String result = sDetails.toString() + ". Corrales: " + penString + ". Comentario: " + comment;
 
       return result;
 
     } catch (SQLException e) {
-      log.severe("SQLException while reading receptions");
+      log.severe("SQLException while reading inspection results");
       log.throwing(this.getClass().getCanonicalName(), "processReques", e);
       throw new ServletException(e);
     } finally {
