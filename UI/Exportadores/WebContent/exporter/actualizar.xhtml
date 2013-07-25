@@ -20,7 +20,7 @@
 	    	<br/><br/>
 	    	<h:outputLabel value="eMail" for="inputEmail"/>
 	    	<h:inputText id="inputEmail" style="color:black;" value="#{rancherBean.personRancher.emailAddress}">
-	    		<f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]"/>
+	    		<f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
 	    	</h:inputText><h:message style="margin-left:15px;color:red;" for="inputEmail" id="emailError" lang="es" /><br/>
 	    	<h:outputLabel value="Teléfonos"/>
 	    	<h:inputText id="inputPhone1" style="color:black;width:150px;" value="#{rancherBean.personRancher.phone}"/>
