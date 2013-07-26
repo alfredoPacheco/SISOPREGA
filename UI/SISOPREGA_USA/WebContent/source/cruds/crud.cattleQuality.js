@@ -10,11 +10,11 @@
  */
 enyo.kind(
   {
-    name : "crud.purchase",
+    name : "crud.cattleQuality",
     kind : "crud",
     published : {
-	entityName : "Purchase",
-	createKindName : "operations.purchase.form",
+	entityName : "cattleQuality",
+	createKindName : "catalogs.cattleQuality.form",
     }
   });
-var crudPurchase = new crud.purchase();
+var crudCattleQuality = new crud.cattleQuality();

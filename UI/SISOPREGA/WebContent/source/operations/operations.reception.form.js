@@ -209,8 +209,6 @@ enyo.kind({
     },
     loadAutocompletes : function() {
 	
-	
-	
 	var arrAllRanchers = crudRancher.getList().concat(
 		crudEnterpriseRancher.getList());
 	this.$.rancher_id.setItems(arrAllRanchers);

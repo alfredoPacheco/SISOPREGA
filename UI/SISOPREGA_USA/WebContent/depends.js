@@ -1,11 +1,8 @@
 // JavaScript Document
 enyo.depends(
 
-
 // "../SISOPREGA/source/cache.ranchers.js",
 // "../SISOPREGA/source/controls.reportViewer.js",
-
-
 
 // "../SISOPREGA/source/cache.receptions.js",
 // "../SISOPREGA/source/cache.cattle.js",
@@ -18,20 +15,11 @@ enyo.depends(
 // "css/controls.css",
 // "css/general.css",
 
-//  
-
-
 // "source/releases.list.js",
 // "source/release.rejects.weight.js",
 // "source/pen.map.js",
 
-
-//  
- 
-
 // "source/driver.select.js",
-
-	
 	
 // "source/utils.format.js",
 // "source/movePen.js",
@@ -50,6 +38,9 @@ enyo.depends(
 	"../SISOPREGA/css/transitions.css",
 
 	"../SISOPREGA/source/supers/crud.js",
+	"../SISOPREGA/source/supers/forms.simple.js",
+	"../SISOPREGA/source/supers/forms.list.js",
+	
 
 	"../SISOPREGA/source/cruds/crud.inspectionForecast.js",
 	"../SISOPREGA/source/cruds/crud.location.js",
@@ -72,12 +63,14 @@ enyo.depends(
 	 "../SISOPREGA/source/operations/inspection.forecast.js",
 	 "../SISOPREGA/source/operations/operations.pen.map.js",
 
+	 "source/supers/forms.masterDetail.js",
+	 
 	 "source/controls/controls.Table.js",
 	 "source/controls/controls.DataTable.js",
 
 	 
 	
-	"source/cruds/crud.Purchase.js",
+	"source/cruds/crud.purchase.js",
 
 	"source/trash/cache.sales.price.js",
 	"source/trash/cache.sales.js",
@@ -106,7 +99,6 @@ enyo.depends(
 	"source/operations/shipments.js",
 	"source/operations/shipments.schedule.js",
 	"source/operations/shipments.popup.split.js",
-	"source/operations/purchases.js",
 	"source/operations/hermana.de.js",
 	"source/operations/hermana.corte.list.js",
 	"source/operations/hermana.gastos.list.js",
@@ -122,7 +114,8 @@ enyo.depends(
 	"source/operations/admin.sales.js",
 	"source/operations/admin.shipments.js",
 	"source/operations/admin.screen.js",
-	
+	"source/operations/operations.purchase.form.js",
+	"source/operations/purchases.js",	
 
 	 "../SISOPREGA/source/reports/reports.main.js",
 	 "../SISOPREGA/source/reports/reports.select.js",

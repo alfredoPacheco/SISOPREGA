@@ -1,8 +1,8 @@
 enyo.kind(
   {
     name : "purchases",
-    kind : enyo.VFlexBox,
-    events :
+    kind : "operations.purchase.form"//enyo.VFlexBox,
+    /*events :
       {
         onPurchaseCompleted : ""
       },
@@ -140,7 +140,8 @@ enyo.kind(
                       name : "cattleType",
                       width : "200px;",
                       height : "35px;",
-                    } ]
+                    } 
+                    ]
               } ]
         },
         {
@@ -475,5 +476,5 @@ enyo.kind(
       this.$.popup.close();
       this.$.provider.clear();
       this.$.provider.setItems(cacheProviders.getAllForList());
-    }
+    }*/
   });

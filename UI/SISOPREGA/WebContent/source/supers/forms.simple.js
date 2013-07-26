@@ -13,7 +13,7 @@ enyo.kind({
     objToSet:null,
     errorMessage : "Error al validar datos",
     published : {
-	entityKind : null,
+	entityKind : null, //some crud, example: crudRancher
 	parentObject : null
     },
     components : [ {
@@ -75,10 +75,12 @@ enyo.kind({
     } ],
     create:function(){
 	this.inherited(arguments);
-	this.$.draAdd.setOpen(true);
-	this.$.draUpdate.setOpen(false);
+	if(this.$.draAdd && this.$.draUpdate){
+	    this.$.draAdd.setOpen(true);
+	    this.$.draUpdate.setOpen(false);
+	}
     },
-    afterLoad:function(){
+    afterLoad:function(){ //Called from subclass
 	this.setEntity(this.objToSet, this.bUpdatingMode);
 	this.render();
 	this.doAfterLoad();
@@ -269,13 +271,18 @@ enyo.kind({
 	}
     },
     toggleUpdate : function() {
-	this.bUpdatingMode = true;
-	this.$.draAdd.setOpen(false);
-	this.$.draUpdate.setOpen(true);
+	if(this.$.draAdd && this.$.draUpdate){
+	    this.bUpdatingMode = true;
+	    this.$.draAdd.setOpen(false);
+	    this.$.draUpdate.setOpen(true);    
+	}
     },
     toggleAdd : function() {
-	this.activateAddButtons();
-	this.resetValues();
+	if(this.$.draAdd && this.$.draUpdate){
+	    this.activateAddButtons();
+	    this.resetValues();    
+	}
+	
     },
     activateAddButtons : function(){
 	this.bUpdatingMode = false;
