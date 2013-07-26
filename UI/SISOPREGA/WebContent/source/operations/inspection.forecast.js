@@ -241,7 +241,7 @@ enyo
 								name : "btnCancel",
 								className : "enyo-button-negative",
 								flex : 1,
-								caption : "Cancelar",
+								caption : "Limpiar Selección",
 								onclick : "onCancel"
 							    } ]
 						} ]
@@ -373,7 +373,7 @@ enyo
 							    {
 								kind : "enyo.IconButton",
 								style : "width:100px;",
-								label : "Cancelar",
+								label : "Limpiar Selección",
 								onclick : "onCancel"
 							    },
 							    {
@@ -472,16 +472,6 @@ enyo
 		this.arrFilter = this.arrActiveReceptions;
 
 		this.$.zone.setItems(cacheMan.getAllZonesForList());
-
-		// if(this.$.zone.getItems().length > 0 ){
-		// this.defaultZone = this.$.zone.getFirstOne().value;
-		// }
-		// if(this.$.cattleType.getItems().length > 0 ){
-		// this.defaultCattle = this.$.cattleType.getFirstOne().value;
-		// }
-		//				
-		// this.load_barnyards();
-		// this.$.barnyards.setItems(this.$.barnyards.getFilter());
 
 		this.$.fechaPicker.setValue(new Date());
 		this.cambioDeFecha();
@@ -1248,7 +1238,11 @@ enyo
 			if (arrAllForecasts[i].InspectionForecastDetail) {
 			    for ( var j = 0; j < arrAllForecasts[i].InspectionForecastDetail.length; j++) {
 				if (arrAllForecasts[i].InspectionForecastDetail[j].inspectionForecastDetailId) {
-				    this.objList.push(arrAllForecasts[i].InspectionForecastDetail[j]);
+				    var fd = arrAllForecasts[i].InspectionForecastDetail[j];
+				    if(fd.inspection_seq==0){
+					fd.inspection_seq = fd.inspectionForecastDetailId;
+				    }
+				    this.objList.push(fd);
 				}
 			    }
 			} else {
@@ -1266,10 +1260,6 @@ enyo
 			locked : "false"
 		    };
 		}
-
-		this.objList.sort(function(a, b) {
-		    return a.inspection_seq > b.inspection_seq;
-		});
 
 		this.$.forecastList.render();
 		// ***********************************************************

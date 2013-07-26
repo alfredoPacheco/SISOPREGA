@@ -842,6 +842,7 @@
 				<column name="locked"/>
 			</basic>
 			<one-to-many name="inspectionForecastDetail" fetch="EAGER" target-entity="com.tramex.sisoprega.dto.InspectionForecastDetail" mapped-by="inspectionForecast" orphan-removal="true">
+				<order-by>inspection_seq ASC</order-by>
 				<cascade>
 					<cascade-all/>
 				</cascade>
