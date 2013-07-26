@@ -28,7 +28,7 @@ enyo
 			openClassName : "zoomFadeIn",
 			className : "transitioner2",
 			layoutKind : "VFlexLayout",
-			width : "90%",
+			width : "80%",
 			style : "overflow: hidden;background-color: #DABD8B;padding:10px;",
 			scrim : true,
 			components : [ {

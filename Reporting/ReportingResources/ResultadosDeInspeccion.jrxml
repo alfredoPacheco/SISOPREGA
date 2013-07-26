@@ -13,7 +13,7 @@ ctrl_reception.reception_id as folio,
 vw_rancher.rancher_name as ganadero,
 ctrl_reception.date_allotted as ctrl_reception_date_allotted,
 cat_inspection_code.inspection_code_description as inspection_code_description,
-SUM(ctrl_inspection_result.hc) AS Rechazos,
+ctrl_inspection_result.hc AS Rechazos,
 array_to_string(array_agg(pen.barnyard_code), ', ') as corrales,
 ctrl_inspection.comments
 FROM public.ctrl_inspection ctrl_inspection
@@ -24,7 +24,7 @@ LEFT JOIN public.cat_inspection_code cat_inspection_code ON ctrl_inspection_resu
 LEFT JOIN public.ctrl_inspection_barnyard ctrl_inspection_barnyard ON ctrl_inspection.inspection_id = ctrl_inspection_barnyard.inspection_id
 LEFT JOIN public.cat_barnyard pen ON ctrl_inspection_barnyard.barnyard_id = pen.barnyard_id
 WHERE ctrl_inspection.reception_id = $P{CUS_RECEPTION_ID}
-GROUP BY folio, ganadero, ctrl_reception_date_allotted, inspection_code_description, ctrl_inspection.comments;]]>
+GROUP BY folio, ganadero, ctrl_reception_date_allotted, inspection_code_description, ctrl_inspection.comments, ctrl_inspection_result.hc;]]>
 	</queryString>
 	<field name="folio" class="java.lang.Integer"/>
 	<field name="ganadero" class="java.lang.String"/>

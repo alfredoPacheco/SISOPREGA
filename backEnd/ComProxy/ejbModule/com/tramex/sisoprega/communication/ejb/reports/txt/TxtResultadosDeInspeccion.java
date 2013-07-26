@@ -110,7 +110,7 @@ public class TxtResultadosDeInspeccion extends BaseTxtReport implements Reportea
 
   private String getRechazosDetails(long receptionId) throws ServletException, ParseException {
     String sqlString = "SELECT cat_inspection_code.inspection_code_description as inspection_code_description, "
-        + "SUM(ctrl_inspection_result.hc) AS Rechazos, "
+        + "ctrl_inspection_result.hc AS Rechazos, "
         + "array_to_string(array_agg(pen.barnyard_code), ', ') as corrales, "
         + "ctrl_inspection.comments "
         + "FROM public.ctrl_inspection ctrl_inspection "
@@ -119,7 +119,7 @@ public class TxtResultadosDeInspeccion extends BaseTxtReport implements Reportea
         + "LEFT JOIN public.ctrl_inspection_barnyard ctrl_inspection_barnyard ON ctrl_inspection.inspection_id = ctrl_inspection_barnyard.inspection_id "
         + "LEFT JOIN public.cat_barnyard pen ON ctrl_inspection_barnyard.barnyard_id = pen.barnyard_id "
         + "WHERE ctrl_inspection.reception_id = " + receptionId
-        + " GROUP BY inspection_code_description, ctrl_inspection.comments;";
+        + " GROUP BY inspection_code_description, ctrl_inspection.comments, ctrl_inspection_result.hc;";
 
     PreparedStatement ps = null;
     ResultSet rs = null;
