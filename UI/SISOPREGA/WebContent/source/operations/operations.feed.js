@@ -47,28 +47,17 @@ enyo
                                             kind : "ToolInput",
                                             name : "feedDate",
                                             hint : "mes/dia/año",
-                                            // width : "103px;",
                                             flex : 1,
                                             height : "35px;",
                                             onfocus : "applyMask",
-                                        // style:"text-align: right;max-width: 500px;"
                                         },
-                                        // {
-                                        // content : 'mes/dia/año',
-                                        // className : "listFirst",
-                                        // style :
-                                        // "background-color:#DABD8B;margin-left:2px;font-size:12px;",
-                                        // width : "80px;"
-                                        // },
                                         {
                                             kind : "ToolInput",
                                             name : "feedTime",
-                                            // width : "103px;",
                                             hint : "HH:MM",
                                             flex : 1,
                                             height : "35px;",
                                             onfocus : "applyTimeMask",
-                                        // style:"text-align: right;max-width: 500px;"
                                         } 
                                         ]},{
 				content : "Manejo"
@@ -77,14 +66,6 @@ enyo
 				name : "handling",
 				hint : "Agregar comentario"
 			    },
-			    
-//			    {
-//				kind : "TimePicker",
-//				name : "feedDate",
-//				style : "color:'black';",
-//				is24HrMode : false,
-//				label : "Hora"
-//			    },
 			    {
 				kind : "Button",
 				className : "enyo-button-affirmative",
@@ -383,7 +364,7 @@ enyo
 	    addFeedHandling : function() {
 		this.$.manejo.cbMethod = "addFeed";
 		this.$.feedDate.setValue(utils.dateOut(new Date()));
-		this.$.feedTime.setValue(new Date().toLocaleTimeString().substring(0, 5));
+		this.$.feedTime.setValue(new Date().toTimeString().replace(/.*(\d{2}:\d{2})(:\d{2}).*/, "$1"));
 		this.$.manejo.openAtCenter();
 	    },
 	    updateFeedHandling : function() {
@@ -478,7 +459,7 @@ enyo
 		return objFeed;
 	    },
 	    updatetList : function() {
-		this._objRec.feed.sort(function(a,b){return a.fod_id >b.fod_id;});
+		this._objRec.feed.sort(function(a,b){return a.feeding_id >b.feeding_id;});
 		//this.filter.sort(function(a,b){return a.caption >b.caption;});
 		this.$.productList.render();
 		this.updateHeader();
