@@ -234,7 +234,7 @@ enyo
 				    width : "10%",
 				    height : "35px;",
 				    inputType : "number",
-				    hint : "corn",
+				    hint : "Maiz",
 				    changeOnInput : true,
 				    fontColor:"#e5e5e5"
 				},
