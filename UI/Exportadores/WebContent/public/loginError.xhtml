@@ -4,9 +4,14 @@
       xmlns:f="http://java.sun.com/jsf/core" 
       xmlns:h="http://java.sun.com/jsf/html" 
       xmlns:ui="http://java.sun.com/jsf/facelets">
-<h:head>Login error</h:head>
+<h:head>
+	<meta http-equiv="Content-Type"
+		content="application/xhtml+xml; charset=UTF-8" />
+	<title>SISOPREGA - EXPORTADORES : ACCESO NO AUTORIZADO!</title>
+	<h:outputStylesheet library="css" name="style.css" />
+</h:head>
 <h:body>
-	<p>Login error has occurred. Please try again.</p>
-	<h:link outcome="login">Go to login page</h:link>
+	<p style="color:white;">Ha ocurrido un problema al ingresar al sistema, intente de nuevo.</p>
+	<h:link outcome="login">Ir a la página de ingreso nuevamente.</h:link>
 </h:body>
 </html>

@@ -12,28 +12,73 @@
 	    	<h1>Actualizar mis datos: <u>#{request.remoteUser}</u></h1>
 	    	<br/><br/>
 	    	<h:outputLabel value="Nombre(s)" for="inputFirstName"/>
-	    	<h:inputText id="inputFirstName" style="color:black;" value="#{rancherBean.personRancher.firstName}"/><br/>
+	    	<h:inputText id="inputFirstName" style="color:black;" value="#{rancherBean.personRancher.firstName}"/><h:message style="margin-left:15px;color:red;" for="inputFirstName" id="firstNameError" lang="es" /><br/>
 	    	<h:outputLabel value="Apellido Paterno" for="inputLastName"/>
-	    	<h:inputText id="inputLastName" style="color:black;" value="#{rancherBean.personRancher.lastName}"/><br/>
-	    	<h:outputLabel value="Apellido Materno" for="inputLastName"/>
-	    	<h:inputText id="inputMotherName" style="color:black;" value="#{rancherBean.personRancher.motherName}"/><br/>
+	    	<h:inputText id="inputLastName" style="color:black;" value="#{rancherBean.personRancher.lastName}"/><h:message style="margin-left:15px;color:red;" for="inputLastName" id="lastNameError" lang="es" /><br/>
+	    	<h:outputLabel value="Apellido Materno" for="inputMotherName"/>
+	    	<h:inputText id="inputMotherName" style="color:black;" value="#{rancherBean.personRancher.motherName}"/><h:message style="margin-left:15px;color:red;" for="inputMotherName" id="motherNameError" lang="es" /><br/>
 	    	<br/><br/>
 	    	<h:outputLabel value="eMail" for="inputEmail"/>
-	    	<h:inputText id="inputEmail" style="color:black;" value="#{rancherBean.personRancher.emailAddress}"/><br/>
+	    	<h:inputText id="inputEmail" style="color:black;" value="#{rancherBean.personRancher.emailAddress}">
+	    		<f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
+	    	</h:inputText><h:message style="margin-left:15px;color:red;" for="inputEmail" id="emailError" lang="es" /><br/>
 	    	<h:outputLabel value="Teléfonos"/>
 	    	<h:inputText id="inputPhone1" style="color:black;width:150px;" value="#{rancherBean.personRancher.phone}"/>
-	    	&nbsp;SMS <h:selectBooleanCheckbox value="#{rancherBean.phoneOne}" />  <br/>
+	    	&nbsp;SMS <h:selectBooleanCheckbox value="#{rancherBean.phoneOne}" />  <h:message style="margin-left:15px;color:red;" for="inputPhone1" id="phoneOneError" lang="es" /><br/>
 	    	<h:outputLabel value="&nbsp;"/>
 	    	<h:inputText id="inputPhone2" style="color:black;width:150px;" value="#{rancherBean.personRancher.phone2}"/>
-	    	&nbsp;SMS <h:selectBooleanCheckbox value="#{rancherBean.phoneTwo}" /><br/>
+	    	&nbsp;SMS <h:selectBooleanCheckbox value="#{rancherBean.phoneTwo}" /> <h:message style="margin-left:15px;color:red;" for="inputPhone2" id="phoneTwoError" lang="es" /><br/>
 	    	<h:outputLabel value="&nbsp;"/>
 	    	<h:inputText id="inputPhone3" style="color:black;width:150px;" value="#{rancherBean.personRancher.phone3}"/>
-	    	&nbsp;SMS <h:selectBooleanCheckbox value="#{rancherBean.phoneThree}" /><br/><br/>
-	    	<h:commandButton value="Actualizar" action="#{rancherBean.updatePerson}"/>
+	    	&nbsp;SMS <h:selectBooleanCheckbox value="#{rancherBean.phoneThree}" /><h:message style="margin-left:15px;color:red;" for="inputPhone3" id="phoneThreeError" lang="es" /><br/><br/>
+	    	<h:commandButton value="Actualizar" styleClass="blueFormSubmit" action="#{rancherBean.updatePerson}"/>
 	    </h:form>
 	    
 	    <h:form id="enterpriseForm" styleClass="dataForm" rendered="#{not rancherBean.person}">
-	    	<h:outputText value="Actualizar mis datos: #{request.remoteUser}"/>
+	    	<h1>Actualizar los datos de mi empresa: <u>#{request.remoteUser}</u></h1>
+	    	<br/><br/>
+	    	<h:outputLabel value="Razón Social" for="inputLegalName"/>
+	    	<h:inputText id="inputLegalName" style="color:black;" value="#{rancherBean.enterpriseRancher.legalName}"/> 
+	    	<h:message style="margin-left:15px;color:red;" for="inputLegalName" id="legalNameError" lang="es" /><br/>
+	    	<h:outputLabel value="RFC" for="inputLegalId"/>
+	    	<h:inputText id="inputLegalId" style="color:black;" value="#{rancherBean.enterpriseRancher.legalId}"/> 
+	    	<h:message style="margin-left:15px;color:red;" for="inputLegalId" id="legalIdError" lang="es" /><br/>
+	    	<h:outputLabel value="Calle y número" for="inputAddressOne"/>
+	    	<h:inputText id="inputAddressOne" style="color:black;" value="#{rancherBean.enterpriseRancher.addressOne}"/> 
+	    	<h:message style="margin-left:15px;color:red;" for="inputAddressOne" id="addressOneError" lang="es" /><br/>
+	    	<h:outputLabel value="Colonia" for="inputAddressTwo"/>
+	    	<h:inputText id="inputAddressTwo" style="color:black;" value="#{rancherBean.enterpriseRancher.addressTwo}"/> 
+	    	<h:message style="margin-left:15px;color:red;" for="inputAddressTwo" id="addressTwoError" lang="es" /><br/>
+	    	<h:outputLabel value="Ciudad" for="inputCity"/>
+	    	<h:inputText id="inputCity" style="color:black;" value="#{rancherBean.enterpriseRancher.city}"/> 
+	    	<h:message style="margin-left:15px;color:red;" for="inputAddressThree" id="addressThreeError" lang="es" /><br/>
+	    	<h:outputLabel value="Estado" for="inputState"/>
+	    	<h:inputText id="inputState" style="color:black;" value="#{rancherBean.enterpriseRancher.state}"/>
+	    	<h:message style="margin-left:15px;color:red;" for="inputState" id="inputStateError" lang="es" /><br/>
+	    	<h:outputLabel value="Código Postal" for="inputZip"/>
+	    	<h:inputText id="inputZip" style="color:black;" value="#{rancherBean.enterpriseRancher.zipCode}">
+	    		<f:validateRegex pattern="*[0-9]{5}"/>
+	    	</h:inputText>
+	    	<h:message style="margin-left:15px;color:red;" for="inputZip" id="zipError" lang="es" /><br/>
+	    	<br/><br/>
+	    	<h:outputLabel value="eMail" for="inputEmail"/>
+	    	<h:inputText id="inputEmail" style="color:black;" value="#{rancherBean.enterpriseRancher.email}">
+	    		<f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]"/>
+	    	</h:inputText>
+	    	<h:message style="margin-left:15px;color:red;" for="inputEmail" id="emailError" lang="es" /><br/>
+	    	<h:outputLabel value="Teléfonos"/>
+	    	<h:inputText id="inputPhone1" style="color:black;width:150px;" value="#{rancherBean.enterpriseRancher.telephone}"/>
+	    	&nbsp;SMS <h:selectBooleanCheckbox value="#{rancherBean.phoneOne}" />  
+	    	<h:message style="margin-left:15px;color:red;" for="inputPhone1" id="phoneOneError" lang="es" /><br/>
+	    	<h:outputLabel value="&nbsp;"/>
+	    	<h:inputText id="inputPhone2" style="color:black;width:150px;" value="#{rancherBean.enterpriseRancher.telephone2}"/>
+	    	&nbsp;SMS <h:selectBooleanCheckbox value="#{rancherBean.phoneTwo}" />
+	    	<h:message style="margin-left:15px;color:red;" for="inputPhone2" id="phoneTwoError" lang="es" /><br/>
+	    	<h:outputLabel value="&nbsp;"/>
+	    	<h:inputText id="inputPhone3" style="color:black;width:150px;" value="#{rancherBean.enterpriseRancher.telephone3}"/>
+	    	&nbsp;SMS <h:selectBooleanCheckbox value="#{rancherBean.phoneThree}" />
+	    	<h:message style="margin-left:15px;color:red;" for="inputPhone3" id="phoneThreeError" lang="es" /><br/><br/>
+	    	<h:commandButton value="Actualizar" styleClass="blueFormSubmit" action="#{rancherBean.updateEnterprise}"/>
 	    </h:form>
 	</ui:define>
 </ui:composition>

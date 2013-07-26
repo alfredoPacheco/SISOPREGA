@@ -5,11 +5,11 @@ enyo
 	    iSelect : null,
 	    _objRec : null,
 	    objReception : null,
-	    events:{
-		onAfterLoad:"",
-		onClosePopUp:"closePopUp"
+	    events : {
+		onAfterLoad : "",
+		onClosePopUp : "closePopUp"
 	    },
-	    afterLoad:function(){
+	    afterLoad : function() {
 		this.render();
 		this.doAfterLoad();
 		cacheMan.hideScrim();
@@ -24,8 +24,8 @@ enyo
 			openClassName : "zoomFadeIn",
 			className : "transitioner2",
 			layoutKind : "VFlexLayout",
-			width : "90%",
-			style : "overflow: hidden",
+			width : "80%",
+			style : "overflow: hidden;background-color: #DABD8B;padding:10px;",
 			scrim : true,
 			getComment : function() {
 			    return this.$.comments.getValue();
@@ -62,21 +62,25 @@ enyo
 			kind : "Toolbar",
 			name : "tbHeaderRec",
 			style : "height:10px",
-			components : [ {
-			    kind : "Spacer"
-			}, {
-			    kind : "VFlexBox",
-			    name : 'lblInfo',
-			    allowHtml : true,
-			    style : "color:#FFF;border:none;font-size:15px",
-			    content : "Texto"
-			}, {
-			    kind : "Spacer"
-			}, {
-			    name : 'btnLogOut',
-			    onclick : "doClosePopUp",
-			    icon : "../SISOPREGA_WEB_LIB/images/command-menu/icon-context.png"
-			} ]
+			components : [
+				{
+				    kind : "Spacer"
+				},
+				{
+				    kind : "VFlexBox",
+				    name : 'lblInfo',
+				    allowHtml : true,
+				    style : "color:#FFF;border:none;font-size:15px",
+				    content : "Texto"
+				},
+				{
+				    kind : "Spacer"
+				},
+				{
+				    name : 'btnLogOut',
+				    onclick : "doClosePopUp",
+				    icon : "../SISOPREGA_WEB_LIB/images/command-menu/icon-context.png"
+				} ]
 		    },
 		    {
 			kind : enyo.Scroller,
@@ -110,11 +114,13 @@ enyo
 			kind : "Toolbar",
 			components : [
 				{
-				    kind : "ToolInput",
+				    kind : "controls.numberBox",
+				    inputKind : "ToolInput",
 				    name : "rejected_count",
-				    width : "23%",
 				    hint : "Rechazados",
-				    changeOnInput : true,
+				    width : "23%",
+				    height : "35px;",
+				    changeOnInput : true
 				},
 				{
 				    kind : "Button",
@@ -207,12 +213,14 @@ enyo
 		}
 		return this.validateReject(objData);
 	    },
-	    validateReject:function(objRej){
+	    validateReject : function(objRej) {
 		var result = this.summarizeTotals();
 		iValue = Number(this.$.rejected_count.getValue());
-		
-		if(iValue > result.totalAccepted){
-		    cacheMan.setMessage("","Error. No se pueden rechazar mas cabezas de las existentes.");
+
+		if (iValue > result.totalAccepted) {
+		    cacheMan
+			    .setMessage("",
+				    "Error. No se pueden rechazar mas cabezas de las existentes.");
 		    return false;
 		}
 		return objRej;
@@ -267,22 +275,21 @@ enyo
 		}
 
 		totalAccepted = totalHeads - totalRejected;
-		
+
 		var result = {};
-		result.totalHeads = 	totalHeads;
-		result.totalAccepted = 	totalAccepted;
-		result.totalRejected = 	totalRejected;
-		
-		
-		
+		result.totalHeads = totalHeads;
+		result.totalAccepted = totalAccepted;
+		result.totalRejected = totalRejected;
+
 		return result;
-		
+
 	    },
-	    setHeader:function(){
+	    setHeader : function() {
 		var result = this.summarizeTotals();
 		this.$.lblInfo.setContent("Total HC: [" + result.totalHeads
 			+ "]   Total Aceptados: [" + result.totalAccepted
-			+ "]   Total Rechazados: [" + result.totalRejected + "]");
+			+ "]   Total Rechazados: [" + result.totalRejected
+			+ "]");
 	    },
 	    closeComments : function() {
 		this.$.comment.close();
@@ -315,37 +322,38 @@ enyo
 			    reportName);
 		} else {
 		    cacheMan
-		    .setMessage("",
-			    "Para enviar un resumen de inspección es necesario agregar al menos un rechazo");
+			    .setMessage("",
+				    "Para enviar un resumen de inspección es necesario agregar al menos un rechazo");
 		}
 	    },
 	    addReject : function() {
 		var objNew = this.getReject();
-		if(objNew){
+		if (objNew) {
 		    if (this.objReception.Inspection === undefined) {
-			    this.objReception.Inspection = [];
+			this.objReception.Inspection = [];
 
-			    var objInspection = {
-				InspectionDetails : [],
-				Pen : this.objReception.Pen,
-				entityName : "Inspection",
-				inspectionDate : objNew.inspectionDate || new Date(),
-				weight : 0,
-				weightUom : 1,
-				comments : objNew.comments || ""
-			    };
+			var objInspection = {
+			    InspectionDetails : [],
+			    Pen : this.objReception.Pen,
+			    entityName : "Inspection",
+			    inspectionDate : objNew.inspectionDate
+				    || new Date(),
+			    weight : 0,
+			    weightUom : 1,
+			    comments : objNew.comments || ""
+			};
 
-			    this.objReception.Inspection.push(objInspection);
-			}
-			if (!this.objReception.Inspection[0].InspectionDetails)
-			    this.objReception.Inspection[0].InspectionDetails = [];
+			this.objReception.Inspection.push(objInspection);
+		    }
+		    if (!this.objReception.Inspection[0].InspectionDetails)
+			this.objReception.Inspection[0].InspectionDetails = [];
 
-			this.objReception.Inspection[0].InspectionDetails.push(this
-				.adapterOut(objNew));
+		    this.objReception.Inspection[0].InspectionDetails.push(this
+			    .adapterOut(objNew));
 
-			crudReception.update(this.objReception, this, "afterAdd");    
+		    crudReception.update(this.objReception, this, "afterAdd");
 		}
-		
+
 	    },
 	    afterAdd : function(objResult, objOld, objNew) {
 		this.set(objNew);
@@ -357,10 +365,11 @@ enyo
 	    },
 	    updateReject : function() {
 		var objNew = this.getReject();
-		if(objNew){
+		if (objNew) {
 		    var objInspection = this.adapterOut(objNew, true);
-			this.objReception.Inspection[0].InspectionDetails[this.iSelect] = objInspection;
-			crudReception.update(this.objReception, this, "afterUpdate");    
+		    this.objReception.Inspection[0].InspectionDetails[this.iSelect] = objInspection;
+		    crudReception
+			    .update(this.objReception, this, "afterUpdate");
 		}
 	    },
 	    afterUpdate : function(objResult, objOld, objNew) {

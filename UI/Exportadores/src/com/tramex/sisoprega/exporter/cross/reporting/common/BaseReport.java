@@ -52,6 +52,7 @@ public abstract class BaseReport {
       response.reset();
       response.setHeader("Content-Type", "application/pdf");
       response.setHeader("Content-Length", String.valueOf(reportBytes.length));
+      response.setHeader("Content-disposition","attachment; filename=" + reporteable.getReportName() + ".pdf");
       output = new BufferedOutputStream(response.getOutputStream());
 
       // Write file contents to response.

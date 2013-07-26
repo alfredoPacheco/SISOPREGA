@@ -3,7 +3,6 @@ enyo.kind({
 	kind: enyo.Scroller,
 	layoutKind: enyo.VFlexLayout,	
 	align:"center",
-	//pack:"center",	
 	style:"width:320px;",
 	events: {
 		onReceptions:"",	

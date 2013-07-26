@@ -73,6 +73,7 @@ public abstract class BasePdfReport extends BaseReport {
     JasperReport report = (JasperReport) JRLoader.loadObject(is);
     this.log.fine("file loaded into JasperReport instance");
     byte[] bytes = JasperRunManager.runReportToPdf(report, parameters, conn);
+    
     this.log.fine("Got [" + bytes.length + "] bytes from report [" + this.getReportName() + "]");
 
     this.log.exiting(this.getClass().getCanonicalName(), "byte[] getBytes(Map<String, Object)");

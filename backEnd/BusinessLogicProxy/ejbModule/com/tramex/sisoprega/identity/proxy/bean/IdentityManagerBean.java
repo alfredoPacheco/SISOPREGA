@@ -161,6 +161,7 @@ public class IdentityManagerBean extends BaseBean implements RemoteIdentity {
    * com.tramex.sisoprega.identity.RemoteIdentity#resetPassword(java.lang.String
    * , java.lang.String)
    */
+  @RolesAllowed({ "sisoprega_admin", "rancher" })
   @Override
   public void resetPassword(String userName, String newPassword) throws IdentityManagerException {
 
@@ -291,6 +292,7 @@ public class IdentityManagerBean extends BaseBean implements RemoteIdentity {
    * com.tramex.sisoprega.identity.RemoteIdentity#validateCurrentPassword(java
    * .lang.String, java.lang.String)
    */
+  @RolesAllowed({ "sisoprega_admin", "rancher" })
   @Override
   public boolean validateCurrentPassword(String userName, String password) throws IdentityManagerException {
     log.fine("validatingCurrenPassword using [" + getLoggedUser() + "] as principal");
@@ -298,7 +300,7 @@ public class IdentityManagerBean extends BaseBean implements RemoteIdentity {
     log.fine("[" + user.getPassword() + "] == [" + hashPassword(password) + "] ?");
     return user.getPassword().equals(hashPassword(password));
   }
-
+  
   @RolesAllowed({ "sisoprega_admin", "agency", "us_usr" })
   @Override
   public List<String> readUserRoles(String userName) throws IdentityManagerException {
@@ -309,6 +311,17 @@ public class IdentityManagerBean extends BaseBean implements RemoteIdentity {
     }
 
     return result;
+  }
+  
+  @PermitAll
+  @Override
+  public boolean changePassword(String currentPassword, String newPassword) throws IdentityManagerException{
+    String userName = getLoggedUser();
+    if(validateCurrentPassword(userName, currentPassword)){
+      resetPassword(userName, newPassword);
+      return true;
+    }
+    return false;
   }
 
   private User getUserFromName(String userName) throws IdentityManagerException {

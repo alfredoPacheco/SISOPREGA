@@ -17,13 +17,14 @@ import com.tramex.sisoprega.dto.Pen;
 import com.tramex.sisoprega.dto.Rancher;
 import com.tramex.sisoprega.dto.Reception;
 import com.tramex.sisoprega.dto.ReceptionHeadcount;
+
 /**
  * 
  */
 
 /**
  * USAGE COMMENT HERE
- *  
+ * 
  * <B>Revision History:</B>
  * 
  * <PRE>
@@ -36,82 +37,92 @@ import com.tramex.sisoprega.dto.ReceptionHeadcount;
  * </PRE>
  * 
  * @author Diego Torres
- *
+ * 
  * 
  */
 public class ReceptionBean {
   private static Logger log = Logger.getLogger(ReceptionBean.class.getName());
-  
+
   @EJB(lookup = "java:global/DataModel/BaseDataModel")
   private RemoteModelable dataModel;
-  
-  public String getReceptions() throws DataModelException{
+
+  public String getReceptions() throws DataModelException {
     FacesContext context = FacesContext.getCurrentInstance();
     HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
-    
+
     String loggedinUser = request.getUserPrincipal().getName();
     log.fine("Loading pen map reception results for user [" + loggedinUser + "]");
-    
+
     Map<String, Object> parameters = new HashMap<String, Object>();
     parameters.put("userName", loggedinUser);
-    
+
     log.fine("Looking for rancher entity");
     List<Rancher> personRanchers = dataModel.readDataModelList("RANCHER_BY_USER_NAME", parameters, Rancher.class);
-    long rancherId =0;
-    if(personRanchers.isEmpty()){
-      List<EnterpriseRancher> enterprises = dataModel.readDataModelList("ENTERPRISE_BY_USER_NAME", parameters, EnterpriseRancher.class);
+    long rancherId = 0;
+    if (personRanchers.isEmpty()) {
+      List<EnterpriseRancher> enterprises = dataModel.readDataModelList("ENTERPRISE_BY_USER_NAME", parameters,
+          EnterpriseRancher.class);
       rancherId = enterprises.get(0).getEnterpriseRancherId();
       log.fine("Found [" + rancherId + "] as enterprise");
-    }else{
+    } else {
       rancherId = personRanchers.get(0).getRancherId();
       log.fine("Found [" + rancherId + "] as person");
     }
-    
+
     parameters.clear();
     parameters.put("rancherID", rancherId);
     List<Reception> receptions = dataModel.readDataModelList("RECEPTIONS_BY_RANCHER_ID", parameters, Reception.class);
 
     log.fine("[" + receptions.size() + "] records retrieved from reception list");
     String json = "[";
-    for(Reception reception : receptions){
+    for (Reception reception : receptions) {
       String receptionJson = reception.toString();
       log.fine("got reception:" + receptionJson);
-      receptionJson = receptionJson.substring(0, receptionJson.length()-1) + ",";
-      
-      if(reception.getCattleType()==1){
-        receptionJson +="\"cattype_name\":\"Novillos\",";
+      receptionJson = receptionJson.substring(0, receptionJson.length() - 1) + ",";
+
+      if (reception.getCattleType() == 1) {
+        receptionJson += "\"cattype_name\":\"Novillos\",";
       }
-      if(reception.getCattleType()==2){
-        receptionJson +="\"cattype_name\":\"Vaquillas\",";
+      if (reception.getCattleType() == 2) {
+        receptionJson += "\"cattype_name\":\"Vaquillas\",";
       }
-      if(reception.getCattleType()==3){
-        receptionJson +="\"cattype_name\":\"Caballos\",";
+      if (reception.getCattleType() == 3) {
+        receptionJson += "\"cattype_name\":\"Caballos\",";
       }
-      
+
       Location location = dataModel.readSingleDataModel("CAT_LOCATION_BY_ID", "Id", reception.getLocationId(), Location.class);
       receptionJson += "\"location_name\":\"" + location.getLocationName() + "\"";
-      
+
       receptionJson += ", \"Pens\":[";
-      
-      for(Pen pen : reception.getPen()){
+
+      for (Pen pen : reception.getPen()) {
         log.fine("got pen: " + pen.toString());
         receptionJson += pen.toString() + ",";
       }
-      
-      receptionJson = receptionJson.substring(0, receptionJson.length()-1) + "], \"headcounts\":[";
-      
-      for(ReceptionHeadcount hc : reception.getReceptionHeadcount()){
+      if (reception.getPen().size() >= 1)
+        receptionJson = receptionJson.substring(0, receptionJson.length() - 1) + "], \"headcounts\":[";
+      else
+        receptionJson += "], \"headcounts\":[";
+
+      for (ReceptionHeadcount hc : reception.getReceptionHeadcount()) {
         log.fine("got hc: " + hc.toString());
         receptionJson += hc.toString() + ",";
       }
-      json += receptionJson.substring(0, receptionJson.length()-1) + "]},";
+
+      if (reception.getReceptionHeadcount().size() >= 1)
+        json += receptionJson.substring(0, receptionJson.length() - 1) + "]},";
+      else
+        json += "]},";
+
       log.fine("reception transformed json:" + json);
     }
-    
-    json = json.substring(0, json.length()-1) + "]";
-    
+
+    if (json.length() > 5)
+      json = json.substring(0, json.length() - 1) + "]";
+    else
+      json = "''";
+
     log.fine(json);
-    
     return json;
   }
 }

@@ -42,8 +42,8 @@ public class FilterBean {
    */
   public void setToDate(Date toDate) {
     if (toDate.before(fromDate))
-      FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Revise su selección de fechas, el rango final no debe ser menor al rango inicial!"));
-    
+      FacesContext.getCurrentInstance().addMessage("filterForm:toDate", new FacesMessage("Revise su selección de fechas, el rango final no debe ser menor al rango inicial!"));
+
     this.toDate = toDate;
   }
 

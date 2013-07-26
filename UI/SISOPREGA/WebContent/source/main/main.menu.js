@@ -62,6 +62,8 @@ enyo.kind({
 		this.$.mainPane.selectViewByName("cat");
 	    },
 	    showReports : function() {
+		this.$.mainPane.validateView("reports");
+		this.$.reports.$.reportsPane.selectViewByIndex(0);
 		this.$.mainPane.selectViewByName("reports");
 	    },
 	    showInspectionForecast : function() {
@@ -86,10 +88,12 @@ enyo.kind({
 		_objMainHeader.setContent(inView.label);
 		if (inView.label == "Menu Principal") {
 		    _goBackButton.setShowing(!1);
+		    _goHomeButton.setShowing(!1);
 		    _objMainHeader.applyStyle("font-size","15px");
 		    _gobackStack = [];
 		} else {
 		    _goBackButton.setShowing(1);
+		    _goHomeButton.setShowing(1);
 		}
 
 		switch (inView.name) {

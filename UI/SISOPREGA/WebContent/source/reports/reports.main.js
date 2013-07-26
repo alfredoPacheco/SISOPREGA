@@ -102,6 +102,7 @@ enyo
 		    });
 		} catch (e) {
 		    // in iteration 2, this code is not in use
+		    alert('fail to add goback');
 		}
 
 	    },

@@ -99,37 +99,23 @@ ORDER BY
 	<group name="Grupo por Ranchero">
 		<groupExpression><![CDATA[$F{vw_rancher_rancher_name}]]></groupExpression>
 		<groupHeader>
-			<band height="31">
+			<band height="16">
 				<rectangle>
-					<reportElement uuid="d77e300e-752b-414e-bc0c-29e8ca0586b0" x="0" y="0" width="555" height="15" forecolor="#996600" backcolor="#996600"/>
+					<reportElement uuid="d77e300e-752b-414e-bc0c-29e8ca0586b0" x="0" y="0" width="555" height="15" forecolor="#00CCFF" backcolor="#00CCFF"/>
 				</rectangle>
 				<textField isStretchWithOverflow="true">
-					<reportElement uuid="94480909-8f3b-4760-b898-f4efa0c886c6" style="Detail" x="51" y="0" width="175" height="15"/>
+					<reportElement uuid="94480909-8f3b-4760-b898-f4efa0c886c6" style="Detail" x="66" y="0" width="160" height="15" forecolor="#FFFFFF"/>
 					<textElement verticalAlignment="Bottom">
-						<font fontName="Serif" size="10" isBold="true"/>
+						<font fontName="Arial" size="10" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{vw_rancher_rancher_name}]]></textFieldExpression>
 				</textField>
-				<textField>
-					<reportElement uuid="55d0fc7f-ef83-4d31-939b-49db24b47017" x="66" y="15" width="160" height="15"/>
-					<textElement verticalAlignment="Bottom">
-						<font fontName="Serif" isBold="true"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$F{ctrl_reception_reception_id}]]></textFieldExpression>
-				</textField>
 				<staticText>
-					<reportElement uuid="0329d3d7-9730-4ac2-9701-e7b4395f35df" x="2" y="0" width="47" height="15" forecolor="#000000"/>
+					<reportElement uuid="0329d3d7-9730-4ac2-9701-e7b4395f35df" x="2" y="0" width="64" height="15" forecolor="#FFFFFF"/>
 					<textElement verticalAlignment="Bottom">
-						<font fontName="Serif" isBold="true"/>
+						<font fontName="Arial" isBold="true"/>
 					</textElement>
-					<text><![CDATA[Ganadero:]]></text>
-				</staticText>
-				<staticText>
-					<reportElement uuid="1c49298e-c70c-437a-9446-53083526ab83" x="1" y="15" width="65" height="15" forecolor="#996600"/>
-					<textElement textAlignment="Center" verticalAlignment="Bottom">
-						<font fontName="Serif" isBold="true"/>
-					</textElement>
-					<text><![CDATA[No. de Lote:]]></text>
+					<text><![CDATA[Exportador:]]></text>
 				</staticText>
 			</band>
 		</groupHeader>
@@ -153,6 +139,30 @@ ORDER BY
 					<reportElement uuid="b2cdff90-36f1-47df-b3c9-20b44628699c" x="1" y="16" width="554" height="1"/>
 				</line>
 			</band>
+		</groupFooter>
+	</group>
+	<group name="RECEPTION_ID">
+		<groupExpression><![CDATA[$F{ctrl_reception_reception_id}]]></groupExpression>
+		<groupHeader>
+			<band height="15">
+				<textField>
+					<reportElement uuid="55d0fc7f-ef83-4d31-939b-49db24b47017" x="66" y="0" width="160" height="15"/>
+					<textElement verticalAlignment="Bottom">
+						<font fontName="Serif" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{ctrl_reception_reception_id}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="1c49298e-c70c-437a-9446-53083526ab83" x="1" y="0" width="65" height="15" forecolor="#996600"/>
+					<textElement textAlignment="Center" verticalAlignment="Bottom">
+						<font fontName="Serif" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Folio:]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="6"/>
 		</groupFooter>
 	</group>
 	<group name="Grupo por Ganado">
@@ -180,13 +190,6 @@ ORDER BY
 					</textElement>
 					<text><![CDATA[Ganado:]]></text>
 				</staticText>
-				<textField evaluationTime="Group" evaluationGroup="Grupo por Ganado">
-					<reportElement uuid="25de01f4-0732-4ab9-8349-5d048408c912" x="133" y="15" width="113" height="15"/>
-					<textElement>
-						<font fontName="Serif" isBold="true"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$V{totalcabezas_2}]]></textFieldExpression>
-				</textField>
 				<staticText>
 					<reportElement uuid="81e0f390-4c3b-4c03-bc4a-924340cae45e" x="66" y="15" width="65" height="15" forecolor="#996600"/>
 					<textElement textAlignment="Right">
@@ -206,7 +209,7 @@ ORDER BY
 					<textElement>
 						<font fontName="Serif" isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$V{totalcabezas_2}-$V{rechazos_4}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{totalcabezas}-$V{rechazos_4}]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement uuid="df3b34bc-2546-4082-8cbb-61bd860a08a7" x="133" y="0" width="113" height="15"/>
@@ -214,6 +217,13 @@ ORDER BY
 						<font fontName="Serif" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{cat_cattle_type_cattype_name}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement uuid="ea80690d-6990-419d-93ac-6a77fc8ceee7" x="133" y="15" width="113" height="16"/>
+					<textElement>
+						<font fontName="Serif" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{totalcabezas}]]></textFieldExpression>
 				</textField>
 			</band>
 		</groupHeader>

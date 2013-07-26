@@ -43,7 +43,6 @@ public class RancherBean {
   private RemoteModelable dataModel;
 
   private boolean person = false;
-  private boolean resolved = false;
 
   private long rancherId;
   private Rancher personRancher;
@@ -53,12 +52,11 @@ public class RancherBean {
    * @return the person
    */
   public boolean isPerson() {
-    if (!resolved)
-      try {
-        resolveFromDb();
-      } catch (DataModelException e) {
-        e.printStackTrace();
-      }
+    try {
+      resolveFromDb();
+    } catch (DataModelException e) {
+      e.printStackTrace();
+    }
 
     return person;
   }
@@ -167,9 +165,23 @@ public class RancherBean {
       else
         enterpriseRancher.setSmsPhoneChosen(3);
   }
-  
-  public String updatePerson(){
-    return "/exporter/exportador";
+
+  public String updatePerson() {
+    try {
+      dataModel.updateDataModel(personRancher);
+      return "/exporter/chDataConfirmation";
+    } catch (DataModelException e) {
+      return "/exporter/chDataFail";
+    }
+  }
+
+  public String updateEnterprise() {
+    try {
+      dataModel.updateDataModel(enterpriseRancher);
+      return "/exporter/chDataConfirmation";
+    } catch (DataModelException e) {
+      return "/exporter/chDataFail";
+    }
   }
 
   private void resolveFromDb() throws DataModelException {
@@ -197,7 +209,5 @@ public class RancherBean {
       person = true;
       log.fine("Found [" + rancherId + "] as person");
     }
-
-    resolved = true;
   }
 }
