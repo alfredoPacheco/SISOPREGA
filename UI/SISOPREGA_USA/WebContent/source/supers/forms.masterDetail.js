@@ -25,19 +25,24 @@ enyo
 			style : "padding-left:100px;",
 			align : "center",
 			pack : "start",
-			name : "detailFields",
-			components : [ {
-			    content : '<button type="button" style="border: 0;background-color: transparent;margin: 0px;padding: 0px;color: #292929;font-size: 16px;">Agregar</button>',
-			    allowHtml : true,
-			    onclick : "addDetailItem",
-			    onmousedown : "buttonDown",
-			    onmouseup : "buttonUp",
-			    onmouseout : "buttonUp",
-			    onmouseover : "buttonDown",
-			    className : "enyo-button",
-			    style : "background-color:  #DABD8B;",
-
-			} ]
+			components : [
+				{
+				    kind : "HFlexBox",
+				    align : "center",
+				    pack : "start",
+				    name : "detailFields"
+				},
+				{
+				    content : '<button type="button" style="border: 0;background-color: transparent;margin: 0px;padding: 0px;color: #292929;font-size: 16px;">Agregar</button>',
+				    allowHtml : true,
+				    onclick : "addDetailItem",
+				    onmousedown : "buttonDown",
+				    onmouseup : "buttonUp",
+				    onmouseout : "buttonUp",
+				    onmouseover : "buttonDown",
+				    className : "enyo-button",
+				    style : "background-color:  #DABD8B;"
+				} ]
 		    },
 		    {// HEADER:
 			kind : "HFlexBox",
@@ -88,7 +93,7 @@ enyo
 				height : "40px",
 				className : "listBG",
 				onConfirm : "delDetailItem",
-				name:"detailItem",
+				name : "detailItem",
 				components : [
 				// {
 				// name : 'detail_number',
@@ -145,31 +150,36 @@ enyo
 		    } ],
 	    ready : function() {
 		var dataFields = this.$.detailFields.children;
+		var count =0;
 		for ( var i = 0; i < dataFields.length; i++) {
-		    if(dataFields[i].bindTo){
-			this.$.detailHeader.createComponent(
-				    {
-					content : dataFields[i].hint,
-					style : "margin-right:15px;margin-left:107px;width:" + dataFields[i].width,
-				    }, {
-					owner : this
-				    });
-		    
-		    this.$.detailItem.createComponent(
+		    if (dataFields[i].hasOwnProperty("bindTo")) {
+			this.$.detailHeader
+				.createComponent(
+					{
+					    content : dataFields[i].hint,
+					    style : "margin-right:15px;margin-left:107px;min-width:"
+						    + dataFields[i].width,
+					}, {
+					    owner : this
+					});
+
+			this.$.detailItem.createComponent(
 			    {
-//				name : dataFields[i].bindTo,
-				className : "listSecond",
-				style :"margin-right:15px;margin-left:23px;width:" + dataFields[i].width,
-			    }, {
-				owner : this
-			    });
-		}
+					    name : "detailItem" + count++,
+					    className : "listSecond",
+					    style : "margin-right:15px;margin-left:23px;min-width:"
+						    + dataFields[i].width,
+					}, {
+					    owner : this
+					});
 		    }
-		    
+		}
+
 	    },
 	    buttonDown : function(inSender, inEvent) {
 		if (inEvent.which) {
-		    inSender.setClassName("enyo-button enyo-button-hot enyo-button-down");
+		    inSender
+			    .setClassName("enyo-button enyo-button-hot enyo-button-down");
 		}
 	    },
 	    buttonUp : function(inSender, inEvent) {
@@ -177,12 +187,12 @@ enyo
 	    },
 	    addDetailItem : function() {
 		var newObject = {
-//		    detailNumber : this.detailNumber++,
-		    fields:[]
+		    // detailNumber : this.detailNumber++,
+		    fields : []
 		};
 
 		var detailFields = this.$.detailFields.children;
-		for(var i =0;i<detailFields.length;i++){
+		for ( var i = 0; i < detailFields.length; i++) {
 		    newObject.fields[i] = this.getValueFromControl(detailFields[i]);
 		}
 
@@ -200,10 +210,9 @@ enyo
 	    },
 	    setupRow : function(inSender, inIndex) {
 		if (objItem = this.arrDetail[inIndex]) {
-//		    this.$.detail_number.setContent(inIndex + 1);
-		    for(var i=0;i<objItem.fields.length;i++){
-			if(this.$.detailItem.children[i].bindTo)
-			    this.$.detailItem.children[i].setContent(objItem.fields[i]);
+		    // this.$.detail_number.setContent(inIndex + 1);
+		    for ( var i = 0; i < objItem.fields.length; i++) {
+			    this.$["detailItem" + i].content = objItem.fields[i];
 		    }
 		    // this.$.detail_clase.setContent(this.arrDetail[inIndex].cattleName);
 		    // this.$.detail_cabezas.setContent(utils.formatNumberThousands(this.arrDetail[inIndex].heads));

@@ -158,7 +158,7 @@ enyo
                        ]
                 }, ],
         loadPurchased : function(inSender, inIndex) {
-          var objData = undefined;
+         /* var objData = undefined; TODO TEMPORARILY DISABLED
 
           if (inIndex == 0 && this.arrData.inventory) {
             // Draw inventory record
@@ -187,9 +187,10 @@ enyo
           if (inIndex % 2 == 0)
             inSender.$.client.$.client.applyStyle("background-color", "#DFC699");
 
-          return true;
+          return true;*/
         },
         updateSummary : function() {
+            /*TODO TEMPORARILY DISABLED
           var iHeadHeads = 0;
           var iHeadWeight = 0;
           var iFotHeads = 0;
@@ -212,6 +213,7 @@ enyo
 	    }else{
 		this.$.lblSumAveWeight.setContent("Peso Prom.<br />0.00");
 	    }
+	    */
         },
         updateList : function() {
           this.arrData = crudPurchase.get();
@@ -232,7 +234,8 @@ enyo
               reweight : 536,
               rtype : "inv"
             };
-          crudPurchase.setInventory(objInventory);
+          
+//          crudPurchase.setInventory(objInventory); //TODO temporarily disabled
 
           this.updateSummary();
         }

@@ -9,7 +9,10 @@
 enyo.kind({
     name : "operations.purchase.form",
     kind : "forms.masterDetail",
-    entityKind : crudPurchase,
+    published : {
+	entityKind : crudPurchase, 
+	parentObject : null
+    },
     create : function() {
 	this.inherited(arguments);
 	this.$.masterFields.createComponents([ 

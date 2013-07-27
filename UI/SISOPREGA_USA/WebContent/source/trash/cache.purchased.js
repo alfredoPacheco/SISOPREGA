@@ -30,4 +30,4 @@ enyo.kind(
       return this.objPurchased;
     }
   });
-var crudPurchase = new cache.purchased();
+var cachePurchase = new cache.purchased();
