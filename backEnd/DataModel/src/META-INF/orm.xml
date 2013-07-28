@@ -951,7 +951,7 @@
 			<description>Retrieves a single cattle quality record based on its unique id</description>
 			<query>SELECT cq FROM CattleQuality cq WHERE cq.qualityId = :Id</query>
 		</named-query>
-		<named-query name="ALL_CATTLE_QUALITY">
+		<named-query name="ALL_CATTLEQUALITYS">
 			<description>Retrieves all records from database</description>
 			<query>SELECT cq FROM CattleQuality cq ORDER BY cq.qualityName</query>
 		</named-query>

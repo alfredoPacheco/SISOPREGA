@@ -95,7 +95,7 @@ enyo.kind({
                 height : "35px;",
                 name : "cattleQuality",
                 hint : 'Clase',
-                width : "150px;",
+                width : "200px;",
                 style : "margin-right: 15px;",
                 bindTo:"cattleQualityId",
                 belongsTo : "PurchaseDetail"
@@ -156,7 +156,7 @@ enyo.kind({
 	this.$.seller.setItems(crudSeller.getList());
 	this.$.cattleType.setItems(crudCattle.getCattleTypeList());
 
-	this.$.pen.setItems(crudPen.getList());
+	this.$.pen.setItems(crudPen.getListUsaPens());
 	
 	this.$.cattleQuality.setItems(crudCattleQuality.getList());
 	

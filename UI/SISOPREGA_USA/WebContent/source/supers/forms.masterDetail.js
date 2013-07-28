@@ -49,25 +49,25 @@ enyo
 			pack : "start",
 			name : "detailHeader",
 			components : [
-//				{//For detail_number
-//				    // className : "listSecond",
-//				    style : "width:110px;",
-//				}, 
-//				{
-//				    content : "Corrales",
-//				    // className : "listSecond",
-//				    style : "width:200px;margin-right:15px;"
-//				}, {
-//				    content : 'Cantidad',
-//				    // className : "listSecond",
-//				    style : "width:153px;margin-right:15px;"
-//				}, {
-//				    content : "Peso",
-//				    style : "width:300px;margin-right:15px;"
-//				}, {
-//				    style : "width:79px;margin-left:20px;"
-//				}
-				]
+			 {//For detail_number
+			 // className : "listSecond",
+			 style : "width:30px;margin-left:30px",
+			 },
+			// {
+			// content : "Corrales",
+			// // className : "listSecond",
+			// style : "width:200px;margin-right:15px;"
+			// }, {
+			// content : 'Cantidad',
+			// // className : "listSecond",
+			// style : "width:153px;margin-right:15px;"
+			// }, {
+			// content : "Peso",
+			// style : "width:300px;margin-right:15px;"
+			// }, {
+			// style : "width:79px;margin-left:20px;"
+			// }
+			]
 		    },
 		    {
 			kind : enyo.Scroller,
@@ -89,14 +89,14 @@ enyo
 				className : "listBG",
 				onConfirm : "delDetailItem",
 				name : "detailItem",
-				style:"padding:0px;",
+				style : "padding:0px;",
 				components : [
-//				 {
-//				 name : 'detail_number',
-//				 className : "listSecond",
-//				 style :
-//				 "width:30px;margin-right:15px;margin-left:30px;color:#5F0712",
-//				 },
+				 {
+				 name : 'detail_number',
+				 className : "listSecond",
+				 style :
+				 "width:30px;margin-left:30px;color:#5F0712",
+				 },
 				// {
 				// name : 'detail_clase',
 				// className : "listSecond",
@@ -132,9 +132,11 @@ enyo
 			    height : "40px;",
 			    style : "font-size:14px;",
 			    components : [ {
+				kind : enyo.Spacer
+			    }, {
 				kind : enyo.Button,
 				caption : "Efectuar Venta",
-				onclick : "test",//"addEntity",
+				onclick : "test",// "addEntity",
 				style : "background-color: #DABD8B;"
 			    }, {
 				kind : enyo.Button,
@@ -144,45 +146,44 @@ enyo
 			    } ]
 			} ]
 		    } ],
-		    
-		    test:function(){
-			console.debug(this.getEntity());
-		    },
+
+	    test : function() {
+		console.debug(this.getEntity());
+	    },
 	    ready : function() {
 		var dataFields = this.$.detailFields.children;
-		var count =0;
+		var count = 0;
 		for ( var i = 0; i < dataFields.length; i++) {
 		    if (dataFields[i].hasOwnProperty("bindTo")) {
 			var sStyle = "";
 			sStyle += "margin-right:15px;margin-left:30px;";
-			sStyle += "min-width:"+ dataFields[i].width;
-			sStyle += "text-align:" + dataFields[i].textAlign || "left";
-			this.$.detailHeader
-				.createComponent(
-					{
-					    content : dataFields[i].hint,
-					    style : sStyle,
-					}, {
-					    owner : this
-					});
+			sStyle += "min-width:" + dataFields[i].width;
+			sStyle += "text-align:" + dataFields[i].textAlign
+				|| "left";
+			this.$.detailHeader.createComponent({
+			    content : dataFields[i].hint,
+			    style : sStyle,
+			}, {
+			    owner : this
+			});
 
-			this.$.detailItem.createComponent(
-			    {
-					    name : "detailItem" + count++,
-					    className : "listSecond",
-					    style : sStyle,
-					    bindTo:dataFields[i].bindTo,
-					    belongsTo : dataFields[i].belongsTo
-					}, {
-					    owner : this
-					});
+			this.$.detailItem.createComponent({
+			    name : "detailItem" + count++,
+			    className : "listSecond",
+			    style : sStyle,
+			    bindTo : dataFields[i].bindTo,
+			    belongsTo : dataFields[i].belongsTo
+			}, {
+			    owner : this
+			});
 		    }
 		}
 
 	    },
 	    buttonDown : function(inSender, inEvent) {
 		if (inEvent.which) {
-		    inSender.setClassName("enyo-button enyo-button-hot enyo-button-down");
+		    inSender
+			    .setClassName("enyo-button enyo-button-hot enyo-button-down");
 		}
 	    },
 	    buttonUp : function(inSender, inEvent) {
@@ -196,8 +197,8 @@ enyo
 
 		var detailFields = this.$.detailFields.children;
 		for ( var i = 0; i < detailFields.length; i++) {
-		    newObject.fields[i] = this.getValueFromControl(detailFields[i]);
-		    newObject[detailFields[i].bindTo] = newObject.fields[i];
+		    newObject.fields[i] = detailFields[i].getValue();
+		    newObject[detailFields[i].bindTo] = this.getValueFromControl(detailFields[i]);
 		}
 
 		this.arrDetail.push(newObject);
@@ -211,7 +212,7 @@ enyo
 	    getEntity : function() {
 		var objEntity = this.inherited(arguments);
 		var detail = enyo.clone(this.arrDetail);
-		for(var i =0;i<detail.length;i++){
+		for ( var i = 0; i < detail.length; i++) {
 		    delete detail[i].fields;
 		}
 		objEntity[this.$.detailFields.children[0].belongsTo] = detail;
@@ -223,9 +224,10 @@ enyo
 	    },
 	    setupRow : function(inSender, inIndex) {
 		if (objItem = this.arrDetail[inIndex]) {
-//		    this.$.detail_number.setContent(inIndex + 1);
+		     this.$.detail_number.setContent(inIndex + 1);
 		    for ( var i = 0; i < objItem.fields.length; i++) {
-			    this.$["detailItem" + i].content = objItem.fields[i];
+
+			this.$["detailItem" + i].content = objItem.fields[i];
 		    }
 
 		    // this.totalHC += Number(this.arrDetail[inIndex].heads);

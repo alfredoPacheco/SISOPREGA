@@ -6,6 +6,8 @@ enyo.kind({
     },
     arrPensZone1 : [],
     arrPensZone2 : [],
+    arrPensUsaEast: [],
+    arrPensUsaWest : [],
     arrObjInUse : {},
     isOccupied : function(sID) {
 	if (this.arrObjInUse[sID]) {
@@ -50,6 +52,10 @@ enyo.kind({
 		    this.arrPensZone1.push(innerModelObj);
 		}else if(innerModelObj.locationId== "2"){
 		    this.arrPensZone2.push(innerModelObj);    
+		}else if (innerModelObj.locationId == "3"){
+		    this.arrPensUsaEast.push(innerModelObj);
+		}else if (innerModelObj.locationId == "4"){
+		    this.arrPensUsaWest.push(innerModelObj);
 		}
 	    }
 	}
@@ -66,10 +72,22 @@ enyo.kind({
 		    return enyo.clone(this.arrPensZone1[i]);
 		}
 	    }
-	}else {
+	}else if (pen.substr(0,1) == "2"){
 	    for(var i=0; i<this.arrPensZone2.length;i++){
 		if (this.arrPensZone2[i].barnyardCode==pen.substr(1)){
 		    return enyo.clone(this.arrPensZone2[i]);
+		}
+	    }
+	}else if (pen.substr(0,1) == "3"){
+	    for(var i=0; i<this.arrPensUsaEast.length;i++){
+		if (this.arrPensUsaEast[i].barnyardCode==pen.substr(1)){
+		    return enyo.clone(this.arrPensUsaEast[i]);
+		}
+	    }
+	}else if (pen.substr(0,1) == "4"){
+	    for(var i=0; i<this.arrPensUsaWest.length;i++){
+		if (this.arrPensUsaWest[i].barnyardCode==pen.substr(1)){
+		    return enyo.clone(this.arrPensUsaWest[i]);
 		}
 	    }
 	}
@@ -100,5 +118,31 @@ enyo.kind({
 	}
 	return null;
     },
+    adapterToList : function(entityObj) {
+	      var listObj =
+	        {
+	          value : 0,
+	          caption : ""
+	        };
+	      
+	      listObj.value = Number(entityObj.penId);
+	      if(entityObj.locationId == "3"){
+		  listObj.caption = "E" + entityObj.barnyardCode;
+	      }else if(entityObj.locationId == "4"){
+		  listObj.caption = "W" + entityObj.barnyardCode;
+	      } 
+	      
+	      return listObj;
+	    },
+    getListUsaPens:function(){
+	var result=[];
+	for(var i=0;i<this.arrPensUsaEast.length;i++){
+	    result.push(this.adapterToList(this.arrPensUsaEast[i]));
+	}
+	for(var i=0;i<this.arrPensUsaWest.length;i++){
+	    result.push(this.adapterToList(this.arrPensUsaWest[i]));
+	}
+	return result;
+    }
 });
 var crudPen = new crud.pen();
