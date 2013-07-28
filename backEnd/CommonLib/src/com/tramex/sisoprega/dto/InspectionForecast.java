@@ -15,9 +15,9 @@
  */
 package com.tramex.sisoprega.dto;
 
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 /**
  * Defines the model for the Inspection Forecast entity.<BR/>
@@ -40,7 +40,7 @@ public class InspectionForecast {
   private long inspectionForecastId;
   private Date forecastDate;
   private boolean locked = false;
-  private Set<InspectionForecastDetail> inspectionForecastDetail;
+  private List<InspectionForecastDetail> inspectionForecastDetail;
   
   /**
    * @return the forecastDate
@@ -81,19 +81,19 @@ public class InspectionForecast {
   /**
    * @return the inspectionForecastDetail
    */
-  public Set<InspectionForecastDetail> getInspectionForecastDetail() {
+  public List<InspectionForecastDetail> getInspectionForecastDetail() {
     return inspectionForecastDetail;
   }
   /**
    * @param inspectionForecastDetail the inspectionForecastDetail to set
    */
-  public void setInspectionForecastDetail(Set<InspectionForecastDetail> inspectionForecastDetail) {
+  public void setInspectionForecastDetail(List<InspectionForecastDetail> inspectionForecastDetail) {
     this.inspectionForecastDetail = inspectionForecastDetail;
   }
   
   public void addInspectionForecastDetail(InspectionForecastDetail detail){
     if(inspectionForecastDetail == null)
-      inspectionForecastDetail = new HashSet<InspectionForecastDetail>();
+      inspectionForecastDetail = new ArrayList<InspectionForecastDetail>();
     
     inspectionForecastDetail.add(detail);
     

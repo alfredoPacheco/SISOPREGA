@@ -9,15 +9,39 @@
 		content="application/xhtml+xml; charset=UTF-8" />
 	<title>SISOPREGA - EXPORTADORES</title>
 	<h:outputStylesheet library="css" name="style.css" />
+	<script language="javascript" type="text/javascript" >
+	function getInternetExplorerVersion()
+	// Returns the version of Internet Explorer or a -1
+	// (indicating the use of another browser).
+	{
+	    var rv = -1; // Return value assumes failure.
+	    if (navigator.appName == 'Microsoft Internet Explorer') {
+		var ua = navigator.userAgent;
+		var re = new RegExp("MSIE ([0-9]{1,}[\.0-9]{0,})");
+		if (re.exec(ua) != null)
+		    rv = parseFloat(RegExp.$1);
+	    }
+	    return rv;
+	}
+	function checkVersion() {
+	    var ver = getInternetExplorerVersion();
+	    if(ver>-1 &amp;&amp; ver &lt; 9){
+			window.location.href = '/Exportadores/ExplorerError.jsp';
+	    }
+	}
+	checkVersion();
+    </script>
 </h:head>
-
 <h:body>
-	<div id="imgWrapper" style="left:40%;margin:20px auto;width:14%;color:white;">
+	<div id="imgWrapper"
+		style="left: 40%; margin: 20px auto; width: 14%; color: white;">
 		<h:graphicImage library="img" name="ProCustomsBrokers.png" />
-		<p><b>PRO</b> Customs Brokers</p>
+		<p>
+			<b>PRO</b> Customs Brokers
+		</p>
 	</div>
 	<form method="post" action="j_security_check" class="login">
-		
+
 		<p>
 			<label for="login">Usuario:</label> <input type="text"
 				name="j_username" id="login" value="" />

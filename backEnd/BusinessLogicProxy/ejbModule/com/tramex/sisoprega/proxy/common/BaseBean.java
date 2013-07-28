@@ -20,6 +20,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -100,7 +101,7 @@ public abstract class BaseBean {
         List<Object> updatedRecordList = new ArrayList<Object>();
         log.fine("Setting as response object: {" + entity + "}");
         updatedRecordList.add(entity);
-        
+
         response.setParentRecord(getRecordsFromList(updatedRecordList, type));
         response.setError(new GatewayError("0", "SUCCESS", "Update"));
 
@@ -165,8 +166,7 @@ public abstract class BaseBean {
       this.log.severe("Exception found while reading [" + request + "]");
       this.log.throwing(this.getClass().getCanonicalName(), "ReadResponse Read(ReadRequest)", e);
 
-      response.setError(new GatewayError("DB02", "Error al leer datos", "entity: ["
-          + request.getFilter().getEntity() + "]"));
+      response.setError(new GatewayError("DB02", "Error al leer datos", "entity: [" + request.getFilter().getEntity() + "]"));
     }
 
     log.exiting(this.getClass().getCanonicalName(), "ReadResponse Read(ReadRequest)");
@@ -203,13 +203,13 @@ public abstract class BaseBean {
 
           String queryName = record.getEntity().toUpperCase() + "_BY_ID";
           log.fine("Retrieving updated object with Query: " + queryName);
-          
+
           entity = dataModel.readSingleDataModel(queryName, "Id", idToUpdate, type);
           log.fine("got updated record: [" + entity + "]");
-          
+
           List<Object> updatedRecordList = new ArrayList<Object>();
           updatedRecordList.add(entity);
-          
+
           response.setParentRecord(getRecordsFromList(updatedRecordList, type));
           response.setError(new GatewayError("0", "SUCCESS", "Update"));
         }
@@ -259,16 +259,16 @@ public abstract class BaseBean {
       this.log.severe("Exception found while deleting [" + request + "]");
       this.log.throwing(this.getClass().getCanonicalName(), "ReadResponse Delete(ReadRequest)", e);
 
-      response.setError(new GatewayError("DB02", "Error al borrar datos.", "entity: ["
-          + request.getFilter().getEntity() + "]"));
+      response.setError(new GatewayError("DB02", "Error al borrar datos.", "entity: [" + request.getFilter().getEntity() + "]"));
     }
 
     log.exiting(this.getClass().getCanonicalName(), "ReadResponse Delete(ReadRequest)");
     return response;
   }
 
-  protected GatewayRecord getRecordFromContent(Object content, Class<?> type, List<String> parentType) throws IllegalArgumentException,
-      IllegalAccessException, InvocationTargetException, NoSuchMethodException, SecurityException {
+  protected GatewayRecord getRecordFromContent(Object content, Class<?> type, List<String> parentType)
+      throws IllegalArgumentException, IllegalAccessException, InvocationTargetException, NoSuchMethodException,
+      SecurityException {
     GatewayRecord record = new GatewayRecord();
     record.setEntity(type.getSimpleName());
 
@@ -280,7 +280,9 @@ public abstract class BaseBean {
 
       this.log.finest("Identified field in entity:{" + fieldName + "} of type {" + fieldTypeName + "}");
 
-      if (fieldTypeName.equals("java.util.Set")) {
+      if (fieldTypeName.equals("java.util.Set") || fieldTypeName.equals("java.util.List")) {
+
+        this.log.fine("reading collection contents for [" + fieldName + "]");
 
         ParameterizedType listType = (ParameterizedType) field.getGenericType();
         Class<?> genericType = (Class<?>) listType.getActualTypeArguments()[0];
@@ -289,8 +291,8 @@ public abstract class BaseBean {
 
         String methodName = "get" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1, fieldName.length());
         this.log.finer("Method to be executed in order to obtain one to many : [" + methodName + "]");
-        
-        if(parentType == null)
+
+        if (parentType == null)
           parentType = new ArrayList<String>();
 
         if (genericType.getName().contains("com.tramex.sisoprega") && !parentType.contains(genericType.getName())) {
@@ -298,12 +300,21 @@ public abstract class BaseBean {
           Class<?>[] params = null;
           Object[] invokeParams = null;
 
-          Set<?> memberList = (Set<?>) type.getMethod(methodName, params).invoke(content, invokeParams);
+          Collection<?> memberList = null;
+
+          if (fieldTypeName.equals("java.util.List")) {
+            log.fine("Casting List collection to Set");
+            memberList = (List<?>) type.getMethod(methodName, params).invoke(content, invokeParams);
+          } else {
+            log.finest("Found set, getting values");
+            memberList = (Set<?>) type.getMethod(methodName, params).invoke(content, invokeParams);
+          }
+
           this.log.fine("memberList: [" + memberList + "]");
           if (memberList != null && !memberList.isEmpty()) {
             for (Object member : memberList) {
               log.fine("found list member of type: " + member.getClass());
-              
+
               parentType.add(type.getName());
               record.addChildRecord(getRecordFromContent(member, member.getClass(), parentType));
             }
@@ -396,11 +407,13 @@ public abstract class BaseBean {
         field.setAccessible(true);
 
         if (field.getType() == String.class) {
-          this.log.finest("found String field [" + gField.getName() + "], setting direct value from request [" + gField.getValue() + "]");
+          this.log.finest("found String field [" + gField.getName() + "], setting direct value from request ["
+              + gField.getValue() + "]");
           field.set(entity, gField.getValue());
         } else {
           String sValue = gField.getValue();
-          this.log.finest("The field [" + gField.getName() + "] is a [" + field.getType().getCanonicalName() + "], will cast it's value [" + sValue + "] in the request");
+          this.log.finest("The field [" + gField.getName() + "] is a [" + field.getType().getCanonicalName()
+              + "], will cast it's value [" + sValue + "] in the request");
 
           if (sValue != null && !sValue.trim().equals(""))
             field.set(entity, castValueFromString(sValue, field.getType()));
