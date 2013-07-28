@@ -92,26 +92,6 @@ enyo.kind({
 	    }
 	}
     },
-//    setOccupied:function(sID,iReceptionID){ //example: setOccupied("1E2","79")
-//	
-//	
-//	objAux = {};
-//	objAux.sID = this.getByBarnyard(sID).penId;
-//	objAux.iReceptionID = iReceptionID;
-//	var objToSend = this.rec_barnAdapterToOut(objAux);
-//	delete objToSend.recBarnyardId;
-//	var cgCreate = consumingGateway.Create("ReceptionBarnyard", objToSend);
-//	if (cgCreate.exceptionId == 0){ //Created successfully			
-//		objAux.recBarnyardId = cgCreate.generatedId;
-//		this.arrObjInUse[sID]={reception_id:parseInt(iReceptionID),accepted_count:"",inspections:[],feed:[]};
-//		return true;
-//	}
-//	else{ //Error			
-//		alert( cgCreate.exceptionDescription);
-//		//cacheMan.setMessage("", "[Exception ID: " + cgCreate.exceptionId + "] Descripcion: " + cgCreate.exceptionDescription);
-//		return false;
-//	}
-//    },
     getRecIDbyBY:function(by){
 	if(by in this.arrObjInUse){
 	    return this.arrObjInUse[by].receptionId;

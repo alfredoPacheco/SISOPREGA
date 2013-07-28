@@ -250,6 +250,11 @@ enyo
 		// this.$.totalHC.setContent(utils.formatNumberThousands(this.totalHC));
 		// this.$.totalWeight.setContent(utils.formatNumberThousands(this.totalWeight));
 	    },
+	    cancel:function(){
+		this.arrDetail = [];
+		this.updateList();
+		this.inherited(arguments);
+	    }
 	// save_click : function() {
 	// var sale = this.getSale();
 	// if (sale) {

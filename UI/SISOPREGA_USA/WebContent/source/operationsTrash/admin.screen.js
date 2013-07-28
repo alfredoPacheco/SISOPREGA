@@ -72,8 +72,8 @@ enyo.kind(
           components :
             [
               {
-                kind : "purchases",
-                name : "purchases_kind",
+                kind : "operations.purchase.form",
+                name : "purchase_form",
                 onPurchaseCompleted : "savePurchaseGroup",
                 flex : 1
               } ]
@@ -224,8 +224,8 @@ enyo.kind(
     buy_cattle_click : function() {
       this.$.popup_add.close();
 
-      if (this.$.purchases_kind)
-        this.$.purchases_kind.updateList();
+      if (this.$.purchase_form)
+        this.$.purchase_form.updateList();
 
       this.$.popup_purchases.openAtCenter();
     },

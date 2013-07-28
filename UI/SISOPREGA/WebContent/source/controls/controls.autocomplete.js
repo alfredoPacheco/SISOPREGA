@@ -54,9 +54,8 @@ enyo
 	    },
 	    indexChanged : function(inOldValue) {
 		if (this.items.length > 0) {
-		    if (this.getIndex() > -1) {
-			this.$.textField.setValue(this.getCaptionByIndex(this
-				.getIndex()));
+		    if (this.getIndex() > -1 && String(this.getIndex()).trim() != "") {
+			this.$.textField.setValue(this.getCaptionByIndex(this.getIndex()));
 			this.setHighLighted(false);
 		    } else {
 			this.$.textField.setValue("");
