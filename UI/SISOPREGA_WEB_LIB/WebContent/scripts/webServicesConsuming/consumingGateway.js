@@ -169,6 +169,7 @@ var consumingGateway = {
 		if (output.exceptionId == "GW01") {
 		    alert(output.exceptionDescription);
 		    consumingGateway.LogOut();
+		    return;
 		}
 		output.origin = jQuery(data).find("origin").text();
 		if (output.exceptionId == 0) {
@@ -192,6 +193,7 @@ var consumingGateway = {
 		output.exceptionDescription = error + ' :' + status;
 		alert(output.exceptionDescription);
 		consumingGateway.LogOut();
+		return;
 	    }
 	});
 	return output;
@@ -222,6 +224,7 @@ var consumingGateway = {
 	if (utils.getCookie("username") == null) {
 	    alert('Usuario no identificado');
 	    consumingGateway.LogOut();
+	    return;
 	}
 
 	var self = this;
@@ -244,6 +247,7 @@ var consumingGateway = {
 		if (output.exceptionId == "GW01") {
 		    alert(output.exceptionDescription);
 		    consumingGateway.LogOut();
+		    return;
 		}
 		output.origin = jQuery(data).find("origin").text();
 
@@ -270,6 +274,7 @@ var consumingGateway = {
 		output.exceptionDescription = error;
 		alert(output.exceptionDescription);
 		consumingGateway.LogOut();
+		return;
 	    }
 	});
 	return false;
@@ -311,6 +316,7 @@ var consumingGateway = {
 		if (output.exceptionId == "GW01") {
 		    alert(output.exceptionDescription);
 		    consumingGateway.LogOut();
+		    return;
 		}
 		output.origin = jQuery(data).find("origin").text();
 
@@ -336,6 +342,7 @@ var consumingGateway = {
 		output.exceptionDescription = error + ' :' + status;
 		alert(output.exceptionDescription);
 		consumingGateway.LogOut();
+		return;
 	    }
 	});
 	return false;
@@ -380,6 +387,7 @@ var consumingGateway = {
 		if (output.exceptionId == "GW01") {
 		    alert(output.exceptionDescription);
 		    consumingGateway.LogOut();
+		    return;
 		}
 		output.origin = jQuery(data).find("origin").text();
 
@@ -405,6 +413,7 @@ var consumingGateway = {
 		output.exceptionDescription = error + ' :' + status;
 		alert(output.exceptionDescription);
 		consumingGateway.LogOut();
+		return;
 	    }
 	});
 	return false;
@@ -446,6 +455,7 @@ var consumingGateway = {
 		if (output.exceptionId == "GW01") {
 		    alert(output.exceptionDescription);
 		    consumingGateway.LogOut();
+		    return;
 		}
 		output.origin = jQuery(data).find("origin").text();
 		if (cbObj) {
@@ -459,6 +469,7 @@ var consumingGateway = {
 		output.exceptionDescription = error + ' :' + status;
 		alert(output.exceptionDescription);
 		consumingGateway.LogOut();
+		return;
 	    }
 	});
 	return output;
@@ -498,6 +509,7 @@ var consumingGateway = {
 		if (output.exceptionId == "GW01") {
 		    alert(output.exceptionDescription);
 		    consumingGateway.LogOut();
+		    return;
 		}
 		output.origin = jQuery(data).find("origin").text();
 
@@ -522,6 +534,7 @@ var consumingGateway = {
 		output.exceptionDescription = error + ' :' + status;
 		alert(output.exceptionDescription);
 		consumingGateway.LogOut();
+		return;		
 	    }
 	});
     },
@@ -575,6 +588,7 @@ var consumingGateway = {
 			if (output.exceptionId == "GW01") {
 			    alert(output.exceptionDescription);
 			    consumingGateway.LogOut();
+			    return;
 			}
 			output.origin = jQuery(data).find("origin").text();
 
@@ -599,7 +613,6 @@ var consumingGateway = {
 
 			if (logout)
 			    self.cleanLogout();
-
 			return false;
 		    },
 		    error : function OnError(request, status, error) {
@@ -740,6 +753,7 @@ var consumingGateway = {
 			if (output.exceptionId == "GW01") {
 			    alert(output.exceptionDescription);
 			    consumingGateway.LogOut();
+			    return;
 			}
 			output.origin = jQuery(data).find("origin").text();
 
@@ -808,6 +822,7 @@ var consumingGateway = {
 			if (status == 500) {
 			    alert("Usted no cuenta con los permisos necesarios para realizar esta operación, la acción será reportada al administrador del sistema.");
 			    self.cleanLogout();
+			    return;
 			}
 			output.exceptionId = 1;
 			output.exceptionDescription = 'No fue posible agregar grupo '
@@ -852,6 +867,7 @@ var consumingGateway = {
 			if (status == 500) {
 			    alert("Usted no cuenta con los permisos necesarios para realizar esta operación, la acción será reportada al administrador del sistema.");
 			    self.cleanLogout();
+			    return;
 			}
 			output.exceptionId = 1;
 			output.exceptionDescription = 'No fue posible remover el grupo '

@@ -13,8 +13,32 @@ enyo.kind(
     name : "crud.cattleQuality",
     kind : "crud",
     published : {
-	entityName : "cattleQuality",
+	entityName : "CattleQuality",
 	createKindName : "catalogs.cattleQuality.form",
+    },
+    adapterToList : function(entityObj) {
+	var listObj = {
+	    value : 0,
+	    caption : ""
+	};
+	
+	listObj.value = Number(entityObj.qualityId);
+	listObj.caption = entityObj.qualityName;
+
+	return listObj;
+    },
+    getCatalogsList : function() {
+
+	var arrAdapterList = enyo.clone(this.arrObj);
+	var result = [];
+
+	for ( var i = 0; i < arrAdapterList.length; i++) {
+	    var obj = arrAdapterList[i];
+	    obj.importantInfo = "" + arrAdapterList[i].qualityName;
+	    obj.secundaryInfo = "" + arrAdapterList[i].forHorses;
+	    result.push(obj);
+	}
+	return result;
     }
   });
 var crudCattleQuality = new crud.cattleQuality();

@@ -57,7 +57,7 @@ enyo.kind({
                     {
                       kind : "controls.autocomplete",
                       inputKind : "ToolInput",
-                      name : "provider",
+                      name : "seller",
                       width : "275px;",
                       height : "35px;",
                       bindTo:"supplierId"
@@ -88,12 +88,12 @@ enyo.kind({
 	 ], {
 	    owner : this
 	});
-	this.$.detailFields.createComponents([ 
+	this.$.detailFields.createComponents([
 	    {
                 kind : "controls.autocomplete",
                 inputKind : "ToolInput",
                 height : "35px;",
-                name : "clase",
+                name : "cattleQuality",
                 hint : 'Clase',
                 width : "150px;",
                 style : "margin-right: 15px;",
@@ -104,7 +104,7 @@ enyo.kind({
                 kind : "controls.autocomplete",
                 inputKind : "ToolInput",
                 height : "35px;",
-                name : "corral",
+                name : "pen",
                 hint : "Corral",
                 width : "150px;",
                 style : "margin-right: 15px;",
@@ -118,7 +118,9 @@ enyo.kind({
                 width : "125px;",
                 style : "margin-right: 15px;",
                 bindTo:"heads",
-                belongsTo : "PurchaseDetail"
+                belongsTo : "PurchaseDetail",
+                textAlign:"right"
+
               },
               {
                 kind : "ToolInput",
@@ -127,11 +129,48 @@ enyo.kind({
                 width : "125px;",
                 style : "margin-right: 15px;",
                 bindTo:"avgWeight",
-                belongsTo : "PurchaseDetail"
+                belongsTo : "PurchaseDetail",
+                textAlign:"right"
               }
 	 ], {
 	    owner : this
 	});
+    },
+    ready : function() {
+	this.inherited(arguments);
+	crudSeller.get(this, "readCallBack");
+	crudCattle.get(this, "readCallBack");
+	crudCattleQuality.get(this, "readCallBack");
+	crudPen.get(this, "readCallBack");
+    },
+    readCounter : 0,
+    readCallBack : function() {
+	this.readCounter++;
+	if (this.readCounter == 4) {
+	    this.loadAutocompletes();
+	    this.readCounter = 0;
+	}
+    },
+    loadAutocompletes : function() {
 	
+	this.$.seller.setItems(crudSeller.getList());
+	this.$.cattleType.setItems(crudCattle.getCattleTypeList());
+
+	this.$.pen.setItems(crudPen.getList());
+	
+	this.$.cattleQuality.setItems(crudCattleQuality.getList());
+	
+	this.afterLoad();
+	
+//	if(!this.bUpdatingMode){
+//	    this.$.cattype_id.setIndex(1); // Default value: Novillos
+//
+//	    // Set location_id and zone_id based on pen.
+//		var deductedZone = this.deduceZone();
+//		if (deductedZone == 1)
+//		    this.$.location_id.setIndex(1); // Default value: Chihuahua
+//
+//		this.$.zone_id.setIndex(deductedZone);    
+//	}
     },
 });

@@ -64,7 +64,10 @@ enyo.depends(
 	"../SISOPREGA/source/cruds/crud.rancher.js",
 	"../SISOPREGA/source/cruds/crud.enterpriseRancher.js",
 	
+	"source/cruds/crud.seller.js",
+	"source/cruds/crud.cattleQuality.js",
 	"source/cruds/crud.purchase.js",
+	
 	
 	"source/trash/cache.sales.price.js",
 	"source/trash/cache.sales.js",

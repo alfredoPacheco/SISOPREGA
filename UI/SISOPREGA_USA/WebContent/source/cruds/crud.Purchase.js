@@ -15,6 +15,50 @@ enyo.kind(
     published : {
 	entityName : "Purchase",
 	createKindName : "operations.purchase.form",
-    }
+    },
+    get : function(callbackObject, callbackMethod) {
+	var filterDef = {}; // Always return all records
+
+	if (callbackObject) {
+	    this.callbackObject = callbackObject;
+	    this.callbackMethod = callbackMethod;
+	} else {
+	    this.callbackObject = null;
+	    this.callbackMethod = '';
+	}
+
+//	if (callbackObject && callbackObject.parentObject != null) {
+//	    consumingGateway.Read(callbackObject.parentObject.entityName,
+//		    filterDef, this, "getCallBack");
+//	} else {
+//	    consumingGateway.Read(this.entityName, filterDef, this,
+//		    "getCallBack");
+//	}
+	this.getCallBack();
+    },
+    getCallBack : function(resultArray) {
+	resultArray = {
+		exceptionDescription : "Success",
+		exceptionId : 0,
+		origin : "",
+		entityName : "",
+		records : [
+		           
+		           ]
+	};
+	this.arrObj = [];
+	for ( var i = 0; i < resultArray.records.length; i++) {
+	    var objAux = resultArray.records[i];
+	    var innerModelObj = this.adapterToIn(objAux);
+	    if (innerModelObj != null)
+		this.arrObj.push(innerModelObj);
+	}
+
+	if (this.callbackObject != null) {
+	    var milis = ((Math.random() * 1000) + 500);
+	    setTimeout(this.callbackObject[this.callbackMethod](resultArray),
+		    milis);
+	}
+    },
   });
 var crudPurchase = new crud.purchase();

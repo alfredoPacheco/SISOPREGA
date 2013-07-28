@@ -8,10 +8,6 @@ enyo
 	    // totalWeight : 0,
 	    detailNumber : 0,
 	    style : "background-color:#DABD8B;font-size:15px;",
-	    events : {
-		onSave : "",
-		onCancel : ""
-	    },
 	    components : [
 		    {
 			kind : enyo.VFlexBox,
@@ -53,26 +49,25 @@ enyo
 			pack : "start",
 			name : "detailHeader",
 			components : [
-			// {
-			// content : 'Clase',
-			// // className : "listSecond",
-			// style :
-			// "width:153px;margin-right:15px;margin-left:107px;",
-			// }, {
-			// content : "Corrales",
-			// // className : "listSecond",
-			// style : "width:200px;margin-right:15px;"
-			// }, {
-			// content : 'Cantidad',
-			// // className : "listSecond",
-			// style : "width:153px;margin-right:15px;"
-			// }, {
-			// content : "Peso",
-			// style : "width:300px;margin-right:15px;"
-			// }, {
-			// style : "width:79px;margin-left:20px;"
-			// }
-			]
+//				{//For detail_number
+//				    // className : "listSecond",
+//				    style : "width:110px;",
+//				}, 
+//				{
+//				    content : "Corrales",
+//				    // className : "listSecond",
+//				    style : "width:200px;margin-right:15px;"
+//				}, {
+//				    content : 'Cantidad',
+//				    // className : "listSecond",
+//				    style : "width:153px;margin-right:15px;"
+//				}, {
+//				    content : "Peso",
+//				    style : "width:300px;margin-right:15px;"
+//				}, {
+//				    style : "width:79px;margin-left:20px;"
+//				}
+				]
 		    },
 		    {
 			kind : enyo.Scroller,
@@ -94,13 +89,14 @@ enyo
 				className : "listBG",
 				onConfirm : "delDetailItem",
 				name : "detailItem",
+				style:"padding:0px;",
 				components : [
-				// {
-				// name : 'detail_number',
-				// className : "listSecond",
-				// style :
-				// "width:30px;margin-right:15px;margin-left:30px;color:#5F0712",
-				// },
+//				 {
+//				 name : 'detail_number',
+//				 className : "listSecond",
+//				 style :
+//				 "width:30px;margin-right:15px;margin-left:30px;color:#5F0712",
+//				 },
 				// {
 				// name : 'detail_clase',
 				// className : "listSecond",
@@ -138,7 +134,7 @@ enyo
 			    components : [ {
 				kind : enyo.Button,
 				caption : "Efectuar Venta",
-				onclick : "addEntity",
+				onclick : "test",//"addEntity",
 				style : "background-color: #DABD8B;"
 			    }, {
 				kind : enyo.Button,
@@ -148,17 +144,24 @@ enyo
 			    } ]
 			} ]
 		    } ],
+		    
+		    test:function(){
+			console.debug(this.getEntity());
+		    },
 	    ready : function() {
 		var dataFields = this.$.detailFields.children;
 		var count =0;
 		for ( var i = 0; i < dataFields.length; i++) {
 		    if (dataFields[i].hasOwnProperty("bindTo")) {
+			var sStyle = "";
+			sStyle += "margin-right:15px;margin-left:30px;";
+			sStyle += "min-width:"+ dataFields[i].width;
+			sStyle += "text-align:" + dataFields[i].textAlign || "left";
 			this.$.detailHeader
 				.createComponent(
 					{
 					    content : dataFields[i].hint,
-					    style : "margin-right:15px;margin-left:107px;min-width:"
-						    + dataFields[i].width,
+					    style : sStyle,
 					}, {
 					    owner : this
 					});
@@ -167,8 +170,9 @@ enyo
 			    {
 					    name : "detailItem" + count++,
 					    className : "listSecond",
-					    style : "margin-right:15px;margin-left:23px;min-width:"
-						    + dataFields[i].width,
+					    style : sStyle,
+					    bindTo:dataFields[i].bindTo,
+					    belongsTo : dataFields[i].belongsTo
 					}, {
 					    owner : this
 					});
@@ -178,8 +182,7 @@ enyo
 	    },
 	    buttonDown : function(inSender, inEvent) {
 		if (inEvent.which) {
-		    inSender
-			    .setClassName("enyo-button enyo-button-hot enyo-button-down");
+		    inSender.setClassName("enyo-button enyo-button-hot enyo-button-down");
 		}
 	    },
 	    buttonUp : function(inSender, inEvent) {
@@ -194,6 +197,7 @@ enyo
 		var detailFields = this.$.detailFields.children;
 		for ( var i = 0; i < detailFields.length; i++) {
 		    newObject.fields[i] = this.getValueFromControl(detailFields[i]);
+		    newObject[detailFields[i].bindTo] = newObject.fields[i];
 		}
 
 		this.arrDetail.push(newObject);
@@ -204,21 +208,25 @@ enyo
 		this.$.detailScroller.scrollTo(this.$.detailScroller
 			.getBoundaries().bottom, 0);
 	    },
+	    getEntity : function() {
+		var objEntity = this.inherited(arguments);
+		var detail = enyo.clone(this.arrDetail);
+		for(var i =0;i<detail.length;i++){
+		    delete detail[i].fields;
+		}
+		objEntity[this.$.detailFields.children[0].belongsTo] = detail;
+		return objEntity;
+	    },
 	    delDetailItem : function(inSender, inIndex) {
 		this.arrDetail.splice(inIndex, 1);
 		this.updateList();
 	    },
 	    setupRow : function(inSender, inIndex) {
 		if (objItem = this.arrDetail[inIndex]) {
-		    // this.$.detail_number.setContent(inIndex + 1);
+//		    this.$.detail_number.setContent(inIndex + 1);
 		    for ( var i = 0; i < objItem.fields.length; i++) {
 			    this.$["detailItem" + i].content = objItem.fields[i];
 		    }
-		    // this.$.detail_clase.setContent(this.arrDetail[inIndex].cattleName);
-		    // this.$.detail_cabezas.setContent(utils.formatNumberThousands(this.arrDetail[inIndex].heads));
-		    // this.$.detail_corrales.setContent(this.arrDetail[inIndex].pen.substring(1));
-		    // this.$.detail_weight.setContent(utils.formatNumberThousands(this.arrDetail[inIndex].weight)
-		    // + " lb");
 
 		    // this.totalHC += Number(this.arrDetail[inIndex].heads);
 		    // this.totalWeight +=
