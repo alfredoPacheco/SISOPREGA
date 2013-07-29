@@ -212,13 +212,25 @@ enyo.kind(
         this.$.btnGoBack.setShowing(1);
       }
     },
-    goAhead : function() {
-      this.$.btnGoBack.setShowing(!1);
-      this.$.tbHeader.show();
-      this.$.mainPane.selectViewByName(cacheMan.mainView);
-      if (cacheMan.mainView == 'mainAgency')
-        this.$.btnMenu.hide();
-    },
+    readCounter : 0,
+    readCallBack : function() {
+	this.readCounter++;
+	if (this.readCounter == 4) {
+	    this.readCounter = 0;
+	    
+	    this.$.btnGoBack.setShowing(!1);
+	    this.$.tbHeader.show();
+	    this.$.mainPane.selectViewByName(cacheMan.mainView);
+	    if (cacheMan.mainView == 'mainAgency')
+		this.$.btnMenu.hide();
+		}
+	},
+	goAhead : function() {
+	crudSeller.get(this, "readCallBack");
+	crudCattle.get(this, "readCallBack");
+	crudCattleQuality.get(this, "readCallBack");
+	crudPen.get(this, "readCallBack");
+	},
     noAccess : function() {
       cacheMan.setMessage("", "Usuario o contraseña incorrecta.");
     },

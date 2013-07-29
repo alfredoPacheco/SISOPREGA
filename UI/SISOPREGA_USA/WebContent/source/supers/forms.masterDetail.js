@@ -178,7 +178,7 @@ enyo
 			});
 		    }
 		}
-
+		
 	    },
 	    buttonDown : function(inSender, inEvent) {
 		if (inEvent.which) {
@@ -211,9 +211,12 @@ enyo
 	    },
 	    getEntity : function() {
 		var objEntity = this.inherited(arguments);
-		var detail = enyo.clone(this.arrDetail);
-		for ( var i = 0; i < detail.length; i++) {
-		    delete detail[i].fields;
+		var detail = [];
+		
+		for(var i=0;i<this.arrDetail.length;i++){
+		    var objItem = enyo.clone(this.arrDetail[i]);
+		    delete objItem.fields;
+		    detail.push(objItem);
 		}
 		objEntity[this.$.detailFields.children[0].belongsTo] = detail;
 		return objEntity;

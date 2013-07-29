@@ -142,6 +142,8 @@ enyo.kind({
 	crudCattle.get(this, "readCallBack");
 	crudCattleQuality.get(this, "readCallBack");
 	crudPen.get(this, "readCallBack");
+	
+	this.$.purchDate.setToday();
     },
     readCounter : 0,
     readCallBack : function() {
