@@ -53,7 +53,7 @@ enyo.kind(
           components :
             [
               {
-                kind : "addCattle",
+                kind : "admin.purchased.addCattle",
                 name : "addCattle_kind",
                 onBuyCattle : "buy_cattle_click",
                 onCaptureHermana : "capture_hermana_click",

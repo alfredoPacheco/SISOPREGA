@@ -201,20 +201,19 @@ enyo
 		}
 	    },
 	    updateSummary : function() {
-
-		/*var iHeadHeads = 0;
-		var iHeadWeight = 0;
+//		var iHeadHeads = 0;
+//		var iHeadWeight = 0;
 		var iFotHeads = 0;
 		var iFotWeight = 0;
 
-		for ( var j = 0; j < this.arrData.purchased.length; j++) {
-		    iFotHeads += this.arrData.purchased[j].heads;
-		    iFotWeight += this.arrData.purchased[j].weight;
+		for ( var j = 0; j < this.arrData.length; j++) {
+		    iFotHeads += this.arrData[j].totalHeads;
+		    iFotWeight += this.arrData[j].totalWeight;
 		}
 
-		iHeadHeads += this.arrData.inventory.heads;
-		iHeadWeight += this.arrData.inventory.weight;
-		iHeadAve = iHeadWeight / iHeadHeads;
+//		iHeadHeads += this.arrData.inventory.heads;
+//		iHeadWeight += this.arrData.inventory.weight;
+//		iHeadAve = iHeadWeight / iHeadHeads;
 
 		this.$.lblPurSumHeads.setContent("Cabezas<br />"
 			+ utils.formatNumberThousands(iFotHeads.toFixed(2)));
@@ -226,10 +225,10 @@ enyo
 			    + utils.formatNumberThousands(avg.toFixed(2)));
 		} else {
 		    this.$.lblSumAveWeight.setContent("Peso Prom.<br />0.00");
-		}*/
+		}
 
 	    },
-	    updateList : function() {
+	    updateView : function() {
 		crudPurchase.get(this, "readCallBack");
 	    },
 //		var objInventory = {
@@ -243,19 +242,19 @@ enyo
 //		    rtype : "inv"
 //		};
 	    ready : function() {
-		this.updateList();
+		this.updateView();
 	    },
 	    readCounter : 0,
 	    readCallBack : function() {
 		this.readCounter++;
 		if (this.readCounter == 1) {
-		    this.loadAutocompletes();
 		    this.readCounter = 0;
+		    this.loadAutocompletes();
 		}
 	    },
 	    loadAutocompletes : function() {
 		this.arrData = crudPurchase.arrObj;
 		this.$.listPurchased.render();
-//		this.updateSummary();		
+		this.updateSummary();		
 	    }
 	});
