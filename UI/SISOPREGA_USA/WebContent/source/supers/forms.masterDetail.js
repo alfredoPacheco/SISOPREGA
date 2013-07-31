@@ -135,7 +135,7 @@ enyo
 				kind : enyo.Spacer
 			    }, {
 				kind : enyo.Button,
-				caption : "Efectuar Venta",
+				caption : "Guardar",
 				onclick : "test",// "addEntity",
 				style : "background-color: #DABD8B;"
 			    }, {
@@ -176,14 +176,35 @@ enyo
 			}, {
 			    owner : this
 			});
+		    }else if (dataFields[i].hasOwnProperty("calculated")){
+			var sStyle = "";
+			sStyle += "margin-right:15px;margin-left:30px;";
+			sStyle += "min-width:" + dataFields[i].width;
+			sStyle += "text-align:" + dataFields[i].textAlign
+				|| "left";
+			this.$.detailHeader.createComponent({
+			    content : dataFields[i].hint,
+			    style : sStyle,
+			}, {
+			    owner : this
+			});
+
+			this.$.detailItem.createComponent({
+			    name : "detailItem" + count++,
+			    className : "listSecond",
+			    style : sStyle,
+			    calculated:dataFields[i].calculated
+			}, {
+			    owner : this
+			});
+			
 		    }
 		}
 		
 	    },
 	    buttonDown : function(inSender, inEvent) {
 		if (inEvent.which) {
-		    inSender
-			    .setClassName("enyo-button enyo-button-hot enyo-button-down");
+		    inSender.setClassName("enyo-button enyo-button-hot enyo-button-down");
 		}
 	    },
 	    buttonUp : function(inSender, inEvent) {
@@ -197,8 +218,11 @@ enyo
 
 		var detailFields = this.$.detailFields.children;
 		for ( var i = 0; i < detailFields.length; i++) {
-		    newObject.fields[i] = detailFields[i].getValue();
-		    newObject[detailFields[i].bindTo] = this.getValueFromControl(detailFields[i]);
+		    if(detailFields[i].hasOwnProperty("bindTo")){
+			newObject.fields[i] = detailFields[i].getValue();
+			newObject[detailFields[i].bindTo] = this.getValueFromControl(detailFields[i]);
+		    }
+		    
 		}
 
 		this.arrDetail.push(newObject);
@@ -229,8 +253,9 @@ enyo
 		if (objItem = this.arrDetail[inIndex]) {
 		     this.$.detail_number.setContent(inIndex + 1);
 		    for ( var i = 0; i < objItem.fields.length; i++) {
-
-			this.$["detailItem" + i].content = objItem.fields[i];
+			if(this.$["detailItem" + i]!==undefined){
+			    this.$["detailItem" + i].content = objItem.fields[i];    
+			}
 		    }
 
 		    // this.totalHC += Number(this.arrDetail[inIndex].heads);

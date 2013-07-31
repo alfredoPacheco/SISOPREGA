@@ -16,7 +16,7 @@ enyo.kind(
           components :
             [
               {
-                kind : "sales",
+                kind : "operations.sales.form",
                 name : "sales_kind",
                 flex : 1,
                 onSale : "on_sale",

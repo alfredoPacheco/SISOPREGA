@@ -65,8 +65,11 @@ enyo.depends(
 	"../SISOPREGA/source/cruds/crud.enterpriseRancher.js",
 	
 	"source/cruds/crud.seller.js",
+	"source/cruds/crud.customer.js",
 	"source/cruds/crud.cattleQuality.js",
 	"source/cruds/crud.purchase.js",
+	"source/cruds/crud.sale.js",
+	"source/cruds/crud.inventory.js",
 	
 	
 	"source/trash/cache.sales.price.js",
@@ -104,7 +107,7 @@ enyo.depends(
 	"source/operationsTrash/hermana.de.tabs.js",
 	"source/operationsTrash/sales.purchase.list.js",
 	"source/operationsTrash/sales.price.assignment.js",
-	"source/operationsTrash/sales.js",
+//	"source/operationsTrash/sales.js",
 	"source/operationsTrash/sales.screen.js",
 	
 	"source/operations/admin.inventory.js",
@@ -116,6 +119,7 @@ enyo.depends(
 	
 	"source/operations/admin.purchased.js",
 	"source/operations/operations.purchase.form.js",
+	"source/operations/operations.sales.form.js",
 
 	 "../SISOPREGA/source/reports/reports.main.js",
 	 "../SISOPREGA/source/reports/reports.select.js",
