@@ -53,7 +53,7 @@ enyo.kind(
           components :
             [
               {
-                kind : "admin.purchased.addCattle",
+                kind : "admin.addCattle",
                 name : "addCattle_kind",
                 onBuyCattle : "buy_cattle_click",
                 onCaptureHermana : "capture_hermana_click",
@@ -201,6 +201,7 @@ enyo.kind(
       this.$.popup_sales.openAtCenter();
     },
     showPurchase : function() {
+	this.$.popup_add.validateComponents();
       this.$.popup_add.openAtCenter();
     },
     showShipment : function() {

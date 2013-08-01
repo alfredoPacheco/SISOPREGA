@@ -44,12 +44,12 @@ enyo
 			    avgWeight : 43.4,
 			    cattleQualityId : 6,
 			    heads : 43,
-			    penString : 216
+			    penId : 216
 			}, {
 			    avgWeight : 43.4,
 			    cattleQualityId : 6,
 			    heads : 43,
-			    penString : 216
+			    penId : 216
 			} ],
 			cattleTypeId : 1,
 			totalHeads:86,
@@ -62,7 +62,7 @@ enyo
 			    avgWeight : 32.3,
 			    cattleQualityId : 16,
 			    heads : 23,
-			    penString : 228
+			    penId : 228
 			} ],
 			cattleTypeId : 2,
 			totalHeads:23,

@@ -113,8 +113,9 @@ enyo.depends(
 	"source/operations/admin.inventory.js",
 	"source/operations/admin.sales.js",
 	"source/operations/admin.shipments.js",
+	"source/operations/admin.addCattle.js",
 	"source/operations/admin.screen.js",
-	"source/operations/admin.purchased.addCattle.js",
+	
 //	"source/operationsTrash/purchases.js",
 	
 	"source/operations/admin.purchased.js",

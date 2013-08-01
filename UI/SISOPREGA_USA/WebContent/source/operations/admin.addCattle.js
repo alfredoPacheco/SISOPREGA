@@ -1,6 +1,6 @@
 enyo.kind(
   {
-    name : "admin.purchased.addCattle",
+    name : "admin.addCattle",
     kind : enyo.HFlexBox,
     events:{
 	onBuyCattle:"",

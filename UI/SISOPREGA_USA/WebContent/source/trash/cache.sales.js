@@ -30,19 +30,19 @@ enyo.kind({
 //                     sale_id: 7,
 //                     weight: 8896
 //                 }],
-//	sale_id : 1,
-//	buyer:"un cliente",
-//	sale_date:new Date(),
-//	totalHeads:123,
-//	totalWeight:123.23,
-//	aveWeight:1.01,
+//	sale_id : 1,   			=saleId
+//	buyer:"un cliente",		=customerId
+//	sale_date:new Date(),		=saleDate
+//	totalHeads:123,			=totalHeads calculated locally
+//	totalWeight:123.23,		=totalWeight calculated locally
+//	aveWeight:1.01,			=totalAveWeigth calculated locally
 //	detail:[{
-//	    detailNumber:1,
-//	    aveWeight:152,
-//	    cattleName:"Caballos",
-//	    heads:91,
-//	    id_inventory: 1,
-//	    pen:"3C12",
+//	    detailNumber:1,		?
+//	    aveWeight:152,		=aveWeight calculated locally
+//	    cattleName:"Caballos",	=cattleQualityId
+//	    heads:91,			=heads
+//	    id_inventory: 1,		
+//	    pen:"3C12",			=penId
 //	    weight:13832
 //	},{
 //	    detailNumber:2,
@@ -54,7 +54,6 @@ enyo.kind({
 //	    weight: 18330
 //	}]	
 //                 Finish correct model
-                 
                  
                  
 //    }, {

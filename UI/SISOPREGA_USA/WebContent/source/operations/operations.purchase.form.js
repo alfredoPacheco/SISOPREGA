@@ -108,7 +108,7 @@ enyo.kind({
                 hint : "Corral",
                 width : "150px;",
                 style : "margin-right: 15px;",
-                bindTo:"penString",
+                bindTo:"penId",
                 belongsTo : "PurchaseDetail"
               },
               {
