@@ -17,7 +17,7 @@ enyo.kind(
 	createKindName : "catalogs.charge.form",
     },
     get : function(callbackObject, callbackMethod) {
-	var filterDef = {}; // Always return all records
+//	var filterDef = {}; // Always return all records
 
 	if (callbackObject) {
 	    this.callbackObject = callbackObject;

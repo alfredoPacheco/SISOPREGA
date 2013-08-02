@@ -262,16 +262,21 @@ enyo.kind({
     setupRow:function(inSender, inIndex){
 	if (this.arrToShipDetailed[inIndex]) {
 	    this.$.detail_number.setContent(inIndex + 1);
-	    this.$.detail_customer
-	    .setContent(this.arrToShipDetailed[inIndex].buyer);
-	    this.$.detail_clase
-		    .setContent(this.arrToShipDetailed[inIndex].cattleName);
-	    this.$.detail_cabezas
-		    .setContent(utils.formatNumberThousands(this.arrToShipDetailed[inIndex].heads));
-	    this.$.detail_corrales
-		    .setContent(this.arrToShipDetailed[inIndex].pen.substring(1));
-	    this.$.detail_weight
-		    .setContent(utils.formatNumberThousands(this.arrToShipDetailed[inIndex].weight) + " lb");
+	    var customer = null;
+	    if(customer = crudCustomer.getByID(this.arrToShipDetailed[inIndex].customerId)){
+		this.$.detail_customer.setContent(customer.customerName);
+	    }else{
+		this.$.detail_customer.setContent("");
+	    }
+	    var quality = null;
+	    if(quality = crudCattleQuality.getByID(this.arrToShipDetailed[inIndex].cattleQualityId)){
+		this.$.detail_clase.setContent(quality.qualityName);
+	    }else{
+		this.$.detail_clase.setContent("");
+	    }
+	    this.$.detail_cabezas.setContent(utils.formatNumberThousands(this.arrToShipDetailed[inIndex].heads));
+//	    this.$.detail_corrales.setContent(crudPen.getBythis.arrToShipDetailed[inIndex].pen.substring(1)); //TODO getByID in crudPen depends in zone
+	    this.$.detail_weight.setContent(utils.formatNumberThousands(this.arrToShipDetailed[inIndex].weight) + " lb");
 	    this.totalHC += Number(this.arrToShipDetailed[inIndex].heads);
 	    this.totalWeight += Number(this.arrToShipDetailed[inIndex].weight);
 	    if(this.arrToShipDetailed[inIndex].shipProgramDateTime){
@@ -306,10 +311,10 @@ enyo.kind({
 		    this.arrToShipDetailed.push(objShipmentDetailed);
 		}
 	    }else{	
-		for(var j=0;j<this.arrSales[i].detail.length;j++){
-		    var objShipmentDetailed = enyo.clone(this.arrSales[i].detail[j]);
-		    objShipmentDetailed.buyer = this.arrSales[i].buyer;
-		    objShipmentDetailed.sale_id = this.arrSales[i].sale_id;
+		for(var j=0;j<this.arrSales[i].SaleDetail.length;j++){
+		    var objShipmentDetailed = enyo.clone(this.arrSales[i].SaleDetail[j]);
+		    objShipmentDetailed.customerId = this.arrSales[i].customerId;
+		    objShipmentDetailed.saleId = this.arrSales[i].saleId;
 		    objShipmentDetailed.itemNumber = this.itemNumber++;
 		    this.arrToShipDetailed.push(objShipmentDetailed);
 		}
@@ -325,14 +330,14 @@ enyo.kind({
 			.getValue() + " " + this.$.programTime.getValue());
 		this.arrToShipDetailed[i].shipCarrier = this.$.carrier.getValue();
     	    	var obj = {
-    		    buyer : 			this.arrToShipDetailed[i].buyer,
+    		    customerId : 			this.arrToShipDetailed[i].customerId,
     		    cattleName : 		this.arrToShipDetailed[i].cattleName,
     		    totalHeads : 		this.arrToShipDetailed[i].heads,
     		    totalWeight : 		this.arrToShipDetailed[i].weight,
     		    aveWeight : 		this.arrToShipDetailed[i].aveWeight,
     		    shipCarrier : 		this.arrToShipDetailed[i].shipCarrier,
     		    shipProgramDateTime :	this.arrToShipDetailed[i].shipProgramDateTime,
-    		    sale_id:			this.arrToShipDetailed[i].sale_id,
+    		    saleId:			this.arrToShipDetailed[i].saleId,
     		    id_inventory:		this.arrToShipDetailed[i].id_inventory,
     		    itemNumber:			this.arrToShipDetailed[i].itemNumber,
     	    	};
@@ -354,15 +359,15 @@ enyo.kind({
 	}
     },
     saveShip:function(arrShip){
-	//Ordering data by buyer
+	//Ordering data by customerId
 	
 	var arrByBuyer={};
 	
 	for(var i=0;i<arrShip.length;i++){
-	    if(!(arrShip[i].buyer in arrByBuyer)){
-		arrByBuyer[arrShip[i].buyer] = [];
+	    if(!(arrShip[i].customerId in arrByBuyer)){
+		arrByBuyer[arrShip[i].customerId] = [];
 	    }
-	    arrByBuyer[arrShip[i].buyer].push(arrShip[i]);
+	    arrByBuyer[arrShip[i].customerId].push(arrShip[i]);
 	}
 	
 	//Ordering data by cattle
@@ -417,7 +422,7 @@ enyo.kind({
     setShipToSale:function(objShip){
 	var shipAlreadyExistsInShip=false;
 	for(var i=0;i<this.arrSales.length;i++){
-	    if(this.arrSales[i].sale_id==objShip.sale_id){
+	    if(this.arrSales[i].saleId==objShip.saleId){
 		if(!("arrToShipDetailed" in this.arrSales[i])){
 		    this.arrSales[i].arrToShipDetailed=[];
 		    this.arrSales[i].arrToShipDetailed.push(objShip);

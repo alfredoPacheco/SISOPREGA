@@ -89,7 +89,12 @@ enyo
 	    adapterToIn : function(entityObj) {
 		if (entityObj) {
 		    entityObj = this.inherited(arguments);
-		    entityObj.seller = crudSeller.getByID(entityObj.supplierId).sellerName;
+		    var seller = null;
+		    if(seller = crudSeller.getByID(entityObj.supplierId)){
+			entityObj.seller = seller.sellerName;
+		    }else{
+			entityObj.seller = "";
+		    }
 		    entityObj.purchaseDate = utils.dateIn(entityObj.purchaseDate);
 		    entityObj.aveweight = Number(entityObj.totalHeads) / Number(entityObj.totalWeight);
 		    return entityObj;

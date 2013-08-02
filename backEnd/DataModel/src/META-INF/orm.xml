@@ -1081,6 +1081,38 @@
 			</basic>
 		</attributes>
 	</entity>
+	<entity class="com.tramex.sisoprega.dto.Customer">
+		<table name="cat_customer" />
+		<named-query name="CUSTOMER_BY_ID">
+			<description>Retrieve a single customer record by it's ID</description>
+			<query>SELECT iCustomer FROM Customer iCustomer WHERE iCustomer.customerId = :Id</query>
+		</named-query>
+		<named-query name="ALL_CUSTOMERS">
+			<description>Retrieve all customer records from database.</description>
+			<query>SELECT iCustomer FROM Customer iCustomer</query>
+		</named-query>
+		<attributes>
+			<id name="customerId">
+				<column name="customer_id" />
+				<generated-value strategy="IDENTITY" />
+			</id>
+			<basic name="customerName">
+				<column name="customer_name" />
+			</basic>
+			<basic name="addressOne">
+				<column name="address_one" />
+			</basic>
+			<basic name="addressTwo">
+				<column name="address_two" />
+			</basic>
+			<basic name="addressState">
+				<column name="address_state" />
+			</basic>
+			<basic name="zipCode">
+				<column name="zip_code" />
+			</basic>
+		</attributes>
+	</entity>
 	<entity class="com.tramex.sisoprega.dto.Purchase">
 		<table name="ctrl_purchase" />
 		<attributes>

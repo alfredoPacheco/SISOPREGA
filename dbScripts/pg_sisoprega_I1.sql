@@ -29,6 +29,7 @@
  * 04/06/2013  Diego Torres                  Adding tables for I2
  * 05/08/2013  Diego Torres                  Adding zones for I2: 3 = West; 4 = East
  * 06/30/2013  Diego Torres                  Cascade and trigger for rancher users.
+ * 08/01/2013  Alfredo Pacheco               Customer table added.
  * ====================================================================================
  * 
  * Author: Diego Torres
@@ -721,5 +722,22 @@ CREATE TABLE ctrl_purchase_detail(
 	heads        integer not null,
 	weight       decimal(12,4) not null
 );
+
+DROP TABLE IF EXISTS cat_customer CASCADE;
+CREATE TABLE cat_customer(
+	customer_id    SERIAL PRIMARY KEY,
+	customer_name  varchar(80) UNIQUE NOT NULL,
+	address_one  varchar(250),
+	address_two  varchar(250),
+	city         varchar(80),
+	address_state varchar(80),
+	zip_code varchar(20),
+	phone varchar(20),
+	email varchar(150)
+);
+
+GRANT ALL ON cat_customer TO sisoprega;
+GRANT ALL ON cat_customer_customer_id_seq TO sisoprega;
+
 
 DROP TABLE IF EXISTS ctrl_print_queue CASCADE;

@@ -40,7 +40,7 @@ enyo
 		    origin : "",
 		    entityName : "",
 		    records : [ {
-			SalesDetail : [ {
+			SaleDetail : [ {
 			    avgWeight : 43.4,
 			    cattleQualityId : 6,
 			    heads : 43,
@@ -51,25 +51,29 @@ enyo
 			    heads : 43,
 			    penId : 216
 			} ],
-			cattleTypeId : 1,
+			cattleQualityId : 1,
 			totalHeads:86,
 			totalWeight:234.4,
-			salesDate : "07/28/2013",
-			salesId : 0,
-			supplierId : 1
-		    }, {
-			SalesDetail : [ {
+			totalAvgWeight:12.2,
+			saleDate : "07/28/2013",
+			saleId : 0,
+			customerId : 1
+		    }, 
+		    
+		    {
+			SaleDetail : [ {
 			    avgWeight : 32.3,
 			    cattleQualityId : 16,
 			    heads : 23,
 			    penId : 228
 			} ],
-			cattleTypeId : 2,
+			cattleQualityId : 2,
 			totalHeads:23,
 			totalWeight:228,
-			salesDate : "07/28/2013",
-			salesId : 0,
-			supplierId : 1
+			totalAvgWeight:12.2,
+			saleDate : "07/28/2013",
+			saleId : 0,
+			customerId : 1
 		    } ]
 		};
 		this.arrObj = [];
@@ -89,9 +93,14 @@ enyo
 	    adapterToIn : function(entityObj) {
 		if (entityObj) {
 		    entityObj = this.inherited(arguments);
-		    entityObj.seller = crudSeller.getByID(entityObj.supplierId).sellerName;
-		    entityObj.salesDate = utils.dateIn(entityObj.salesDate);
-		    entityObj.aveweight = Number(entityObj.totalHeads) / Number(entityObj.totalWeight);
+		    var customer = null;
+		    if(customer = crudCustomer.getByID(entityObj.customerId)){
+			entityObj.customer = customer.customerName;
+		    }else{
+			entityObj.customer = "";
+		    }
+		    entityObj.saleDate = utils.dateIn(entityObj.saleDate);
+		    entityObj.totalAvgWeight = Number(entityObj.totalHeads) / Number(entityObj.totalWeight);
 		    return entityObj;
 		}
 		return null;

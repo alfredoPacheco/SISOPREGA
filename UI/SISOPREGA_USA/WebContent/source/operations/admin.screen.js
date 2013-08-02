@@ -179,7 +179,7 @@ enyo.kind(
                       kind : "admin.sales",
                       flex : 1,
                       maxState : false,
-                      arrData : cacheSales.readData(),
+//                      arrData : cacheSales.readData(),
                       onShipment : "showShipment"
                     },
                     {
