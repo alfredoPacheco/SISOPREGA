@@ -1114,7 +1114,15 @@
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.Purchase">
-		<table name="ctrl_purchase" />
+	<table name="ctrl_purchase" />
+	<named-query name="PURCHASE_BY_ID">
+			<description>Retrieve a single purchase record by it's ID</description>
+			<query>SELECT iPurchase FROM Purchase iPurchase WHERE iPurchase.purchaseId = :Id</query>
+		</named-query>
+		<named-query name="ALL_PURCHASES">
+			<description>Retrieve all purchases records from database.</description>
+			<query>SELECT iPurchase FROM Purchase iPurchase</query>
+		</named-query>
 		<attributes>
 			<id name="purchaseId">
 				<column name="purchase_id" />

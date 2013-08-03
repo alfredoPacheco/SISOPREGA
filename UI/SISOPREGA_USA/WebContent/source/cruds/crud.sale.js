@@ -44,12 +44,14 @@ enyo
 			    avgWeight : 43.4,
 			    cattleQualityId : 6,
 			    heads : 43,
-			    penId : 216
+			    penId : 216,
+			    weight: 12.3
 			}, {
 			    avgWeight : 43.4,
 			    cattleQualityId : 6,
 			    heads : 43,
-			    penId : 216
+			    penId : 216,
+			    weight:234.3
 			} ],
 			cattleQualityId : 1,
 			totalHeads:86,
@@ -65,14 +67,15 @@ enyo
 			    avgWeight : 32.3,
 			    cattleQualityId : 16,
 			    heads : 23,
-			    penId : 228
+			    penId : 228,
+			    weight: 12.3
 			} ],
 			cattleQualityId : 2,
 			totalHeads:23,
 			totalWeight:228,
 			totalAvgWeight:12.2,
 			saleDate : "07/28/2013",
-			saleId : 0,
+			saleId : 1,
 			customerId : 1
 		    } ]
 		};

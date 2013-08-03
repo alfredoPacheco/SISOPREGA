@@ -9,6 +9,7 @@ enyo
 	    },
 	    ready : function() {
 	    },
+	    arrData:[],
 	    components : [
 		    {
 			kind : "Toolbar",
@@ -166,7 +167,7 @@ enyo
 		    }, ],
 	    loadPurchased : function(inSender, inIndex) {
 		var objData = null;
-
+		
 		if (objData = this.arrData[inIndex]) {// && this.arrData.inventory) {
 		    // Draw inventory record
 //		    objData = this.arrData.inventory;

@@ -125,7 +125,6 @@ enyo
 			kind : enyo.VFlexBox,
 			style : "padding:20px;border-top-style: solid;border-top-color:#482400",
 			pack : "center",
-
 			components : [ {
 			    kind : enyo.HFlexBox,
 			    align : "center",
@@ -136,7 +135,7 @@ enyo
 			    }, {
 				kind : enyo.Button,
 				caption : "Guardar",
-				onclick : "test",// "addEntity",
+				onclick : "addEntity",
 				style : "background-color: #DABD8B;"
 			    }, {
 				kind : enyo.Button,
@@ -147,9 +146,6 @@ enyo
 			} ]
 		    } ],
 
-	    test : function() {
-		console.debug(this.getEntity());
-	    },
 	    ready : function() {
 		var dataFields = this.$.detailFields.children;
 		var count = 0;

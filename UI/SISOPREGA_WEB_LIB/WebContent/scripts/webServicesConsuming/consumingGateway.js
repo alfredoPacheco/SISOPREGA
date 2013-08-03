@@ -985,7 +985,7 @@ var consumingGateway = {
 		    result += '<value>' + entity[field] + '</value>';
 		    result += '</field>';
 		} else {
-		    for ( var childIndex in entity[field]) {
+		    for ( var childIndex = 0; childIndex<entity[field].length;childIndex++) {
 			var child = entity[field][childIndex];
 			result += '<childRecord>';
 			result += '<entity>' + field + '</entity>';

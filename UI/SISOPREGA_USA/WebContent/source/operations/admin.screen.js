@@ -75,6 +75,8 @@ enyo.kind(
                 kind : "operations.purchase.form",
                 name : "purchase_form",
                 onPurchaseCompleted : "savePurchaseGroup",
+                onAfterLoad : "purchaseFormReady",
+                onCancel:"onCancelPurchase",
                 flex : 1
               } ]
         },
@@ -222,13 +224,20 @@ enyo.kind(
       this.$.popup_add.close();
       this.$.popup_hermana.openAtCenter();
     },
+    onCancelPurchase:function(){
+	this.$.popup_purchases.close();
+    },
+    purchaseFormReady:function(){
+	this.$.popup_purchases.openAtCenter();
+    },
     buy_cattle_click : function() {
-      this.$.popup_add.close();
-
-      if (this.$.purchase_form)
-        this.$.purchase_form.updateList();
-
-      this.$.popup_purchases.openAtCenter();
+	this.$.popup_add.close();
+	cacheMan.showScrim();
+	
+      if (!this.$.purchase_form)
+	  this.$.popup_purchases.validateComponents();
+      else
+	  this.$.purchase_form.ready();
     },
     inventory_select : function(inSender, inEvent) {
       this.$.popup_map.openAtCenter();

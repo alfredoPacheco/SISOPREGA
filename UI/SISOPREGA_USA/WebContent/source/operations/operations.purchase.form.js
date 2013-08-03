@@ -60,7 +60,7 @@ enyo.kind({
                       name : "seller",
                       width : "275px;",
                       height : "35px;",
-                      bindTo:"supplierId"
+                      bindTo:"sellerId"
                     },
                     {
                       kind : enyo.IconButton,
@@ -97,7 +97,7 @@ enyo.kind({
                 hint : 'Clase',
                 width : "200px;",
                 style : "margin-right: 15px;",
-                bindTo:"cattleQualityId",
+                bindTo:"qualityId",
                 belongsTo : "PurchaseDetail"
               },
               {
@@ -125,10 +125,10 @@ enyo.kind({
               {
                 kind : "ToolInput",
                 name : "peso",
-                hint : 'Peso Promedio',
+                hint : 'Peso',
                 width : "125px;",
                 style : "margin-right: 15px;",
-                bindTo:"avgWeight",
+                bindTo:"weight",
                 belongsTo : "PurchaseDetail",
                 textAlign:"right"
               }
