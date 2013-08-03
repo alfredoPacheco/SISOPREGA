@@ -708,7 +708,8 @@ DROP TABLE IF EXISTS ctrl_purchase CASCADE;
 CREATE TABLE ctrl_purchase(
 	purchase_id    SERIAL PRIMARY KEY,
 	seller_id      integer NOT NULL REFERENCES cat_seller(seller_id),
-	cattype_id     integer NOT NULL REFERENCES cat_cattle_type(cattype_id)
+	cattype_id     integer NOT NULL REFERENCES cat_cattle_type(cattype_id),
+	purchase_date  DATE not null DEFAULT current_date
 );
 
 GRANT ALL ON ctrl_purchase TO sisoprega;
@@ -717,11 +718,15 @@ GRANT ALL ON ctrl_purchase_purchase_id_seq TO sisoprega;
 DROP TABLE IF EXISTS ctrl_purchase_detail CASCADE;
 CREATE TABLE ctrl_purchase_detail(
 	record_id    SERIAL PRIMARY KEY,
+	purchase_id  integer NOT NULL REFERENCES ctrl_purchase(purchase_id),
 	barnyard_id  integer NOT NULL REFERENCES cat_barnyard(barnyard_id),
 	quality_id   integer NOT NULL REFERENCES cat_cattle_quality(quality_id),
 	heads        integer not null,
 	weight       decimal(12,4) not null
 );
+
+GRANT ALL ON ctrl_purchase_detail TO sisoprega;
+GRANT ALL ON ctrl_purchase_detail_record_id_seq TO sisoprega;
 
 DROP TABLE IF EXISTS cat_customer CASCADE;
 CREATE TABLE cat_customer(

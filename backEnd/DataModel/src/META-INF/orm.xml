@@ -1126,6 +1126,15 @@
 			<basic name="cattleTypeId">
 				<column name="cattype_id" />
 			</basic>
+			<basic name="purchaseDate">
+				<column name="purchase_date"/>
+				<temporal>DATE</temporal>
+			</basic>
+			<one-to-many name="purchaseDetail" fetch="EAGER" mapped-by="purchase" target-entity="com.tramex.sisoprega.dto.PurchaseDetail" orphan-removal="true">
+				<cascade>
+					<cascade-all/>
+				</cascade>
+			</one-to-many>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.PurchaseDetail">
@@ -1135,12 +1144,15 @@
 				<column name="record_id" />
 				<generated-value strategy="IDENTITY" />
 			</id>
-			<basic name="barnyardId">
+			<basic name="penId">
 				<column name="barnyard_id" />
 			</basic>
 			<basic name="qualityId">
 				<column name="quality_id" />
 			</basic>
+			<many-to-one name="purchase" fetch="LAZY" optional="false">
+				<join-column name="purchase_id" referenced-column-name="purchase_id" nullable="false" />
+			</many-to-one>
 		</attributes>
 	</entity>
 </entity-mappings>

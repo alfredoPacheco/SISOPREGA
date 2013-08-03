@@ -15,6 +15,10 @@
  */
 package com.tramex.sisoprega.dto;
 
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Cattle purchase data model for us operations.
  *  
@@ -37,6 +41,9 @@ public class Purchase {
   private long purchaseId;
   private long sellerId;
   private long cattleTypeId;
+  private Date purchaseDate = new Date();
+  private Set<PurchaseDetail> purchaseDetail;
+  
   /**
    * @return the purchaseId
    */
@@ -72,6 +79,43 @@ public class Purchase {
    */
   public void setCattleTypeId(long cattleTypeId) {
     this.cattleTypeId = cattleTypeId;
+  }
+  
+  /**
+   * @return the purchaseDate
+   */
+  public Date getPurchaseDate() {
+    return purchaseDate;
+  }
+  /**
+   * @param purchaseDate the purchaseDate to set
+   */
+  public void setPurchaseDate(Date purchaseDate) {
+    this.purchaseDate = purchaseDate;
+  }
+  /**
+   * @return the purchaseDetail
+   */
+  public Set<PurchaseDetail> getPurchaseDetail() {
+    return purchaseDetail;
+  }
+  /**
+   * @param purchaseDetail the purchaseDetail to set
+   */
+  public void setPurchaseDetail(Set<PurchaseDetail> purchaseDetail) {
+    this.purchaseDetail = purchaseDetail;
+  }
+  
+  public void addPurchaseDetail(PurchaseDetail detail){
+    if(purchaseDetail == null)
+      purchaseDetail = new HashSet<PurchaseDetail>();
+
+    
+    purchaseDetail.add(detail);
+    
+    if(detail.getPurchase() != this)
+      detail.setPurchase(this);
+    
   }
   
   @Override

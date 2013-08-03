@@ -35,10 +35,12 @@ package com.tramex.sisoprega.dto;
  */
 public class PurchaseDetail {
   private long purchaseDetailId;
-  private long barnyardId;
+  private long penId;
   private long qualityId;
   private long heads;
   private double weight;
+  private Purchase purchase;
+  
   /**
    * @return the purchaseDetailId
    */
@@ -52,16 +54,16 @@ public class PurchaseDetail {
     this.purchaseDetailId = purchaseDetailId;
   }
   /**
-   * @return the barnyardId
+   * @return the penId
    */
-  public long getBarnyardId() {
-    return barnyardId;
+  public long getPenId() {
+    return penId;
   }
   /**
-   * @param barnyardId the barnyardId to set
+   * @param penId the penId to set
    */
-  public void setBarnyardId(long barnyardId) {
-    this.barnyardId = barnyardId;
+  public void setPenId(long penId) {
+    this.penId = penId;
   }
   /**
    * @return the qualityId
@@ -100,9 +102,22 @@ public class PurchaseDetail {
     this.weight = weight;
   }
 
+  /**
+   * @return the purchase
+   */
+  public Purchase getPurchase() {
+    return purchase;
+  }
+  /**
+   * @param purchase the purchase to set
+   */
+  public void setPurchase(Purchase purchase) {
+    this.purchase = purchase;
+  }
+  
   @Override
   public String toString() {
-    return "recordId:" + purchaseDetailId + ";barnyardId:" + barnyardId + ";qualityId:" + qualityId + ";heads:" + heads + ";weight:" + weight + ";";
+    return "recordId:" + purchaseDetailId + ";penId:" + penId + ";qualityId:" + qualityId + ";heads:" + heads + ";weight:" + weight + ";";
   }
   
 }
