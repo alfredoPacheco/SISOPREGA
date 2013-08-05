@@ -157,6 +157,7 @@ enyo.kind({
 	
 	this.$.seller.setItems(crudSeller.getList());
 	this.$.cattleType.setItems(crudCattle.getCattleTypeList());
+	this.$.cattleType.setIndex(1); // Default value: Novillos
 
 	this.$.pen.setItems(crudPen.getListUsaPens());
 	

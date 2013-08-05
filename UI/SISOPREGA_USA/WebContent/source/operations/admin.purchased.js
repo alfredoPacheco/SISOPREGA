@@ -9,7 +9,7 @@ enyo
 	    },
 	    ready : function() {
 	    },
-	    arrData:[],
+	    arrData : [],
 	    components : [
 		    {
 			kind : "Toolbar",
@@ -167,54 +167,85 @@ enyo
 		    }, ],
 	    loadPurchased : function(inSender, inIndex) {
 		var objData = null;
-		
-		if (objData = this.arrData[inIndex]) {// && this.arrData.inventory) {
+
+		if (objData = this.arrData[inIndex]) {// &&
+		    // this.arrData.inventory)
+		    // {
 		    // Draw inventory record
-//		    objData = this.arrData.inventory;
-		    
+		    // objData = this.arrData.inventory;
+
 		    this.$.lblPurSeller.setContent(objData.seller);
-//		} else if (objData = this.arrData.purchased[inIndex - 1]) {
-//		    // Draw purchase record
-//		    objData = this.arrData.purchased[inIndex - 1];
-//		    this.$.lblPurSeller.setContent(objData.seller + "("+ objData.cattleName + ")");
-//		} else {
-//		    return false;
-//		}
+		    // } else if (objData = this.arrData.purchased[inIndex - 1])
+		    // {
+		    // // Draw purchase record
+		    // objData = this.arrData.purchased[inIndex - 1];
+		    // this.$.lblPurSeller.setContent(objData.seller + "("+
+		    // objData.cattleName + ")");
+		    // } else {
+		    // return false;
+		    // }
 
-		this.$.lblPurDate.setContent(utils.dateOut(objData.purchaseDate));
-		this.$.lblPurHeads.setContent(objData.totalHeads);
-		this.$.lblPurWeight.setContent(utils.formatNumberThousands(objData.totalWeight));
-		this.$.lblPurAveWeight.setContent(utils.formatNumberThousands(objData.aveweight));
-//		if (objData.reweight) {
-//		    if (objData.reweight > 0) {
-//			this.$.lblPurRew.setContent("(+" + objData.reweight
-//				+ ")");
-//		    } else {
-//			this.$.lblPurRew.setContent("(" + objData.reweight
-//				+ ")");
-//		    }
-//		}
+		    this.$.lblPurDate.setContent(utils
+			    .dateOut(objData.purchaseDate));
+		    var totalHeads = this
+			    .calculateTotalHeads(objData.PurchaseDetail);
+		    var totalWeight = this
+			    .calculateTotalWeight(objData.PurchaseDetail);
+		    
+		    this.$.lblPurHeads.setContent(utils.formatNumberThousands(totalHeads));
+		    this.$.lblPurWeight.setContent(utils.formatNumberThousands(totalWeight));
+		    this.$.lblPurAveWeight.setContent(utils.formatNumberThousands(totalWeight / totalHeads));
+		    // if (objData.reweight) {
+		    // if (objData.reweight > 0) {
+		    // this.$.lblPurRew.setContent("(+" + objData.reweight
+		    // + ")");
+		    // } else {
+		    // this.$.lblPurRew.setContent("(" + objData.reweight
+		    // + ")");
+		    // }
+		    // }
 
-		if (inIndex % 2 == 0)
-		    inSender.$.client.$.client.applyStyle("background-color","#DFC699");
+		    if (inIndex % 2 == 0)
+			inSender.$.client.$.client.applyStyle(
+				"background-color", "#DFC699");
 
-		return true;
+		    return true;
 		}
 	    },
+	    calculateTotalHeads : function(arrDetails) {
+		if (arrDetails) {
+		    var totalHeads = 0;
+		    for ( var i = 0; i < arrDetails.length; i++) {
+			totalHeads += Number(arrDetails[i].heads);
+		    }
+		    return totalHeads;
+		}
+		return 0;
+	    },
+	    calculateTotalWeight : function(arrDetails) {
+		if (arrDetails) {
+		    var totalWeight = 0;
+		    for ( var i = 0; i < arrDetails.length; i++) {
+			totalWeight += Number(arrDetails[i].weight);
+		    }
+		    return totalWeight;
+		}
+		return 0;
+	    },
 	    updateSummary : function() {
-//		var iHeadHeads = 0;
-//		var iHeadWeight = 0;
+		// var iHeadHeads = 0;
+		// var iHeadWeight = 0;
 		var iFotHeads = 0;
 		var iFotWeight = 0;
 
 		for ( var j = 0; j < this.arrData.length; j++) {
-		    iFotHeads += this.arrData[j].totalHeads;
-		    iFotWeight += this.arrData[j].totalWeight;
+		    iFotHeads += this.calculateTotalHeads(this.arrData[j].PurchaseDetail);
+		    iFotWeight += this.calculateTotalWeight(this.arrData[j].PurchaseDetail);
 		}
 
-//		iHeadHeads += this.arrData.inventory.heads;
-//		iHeadWeight += this.arrData.inventory.weight;
-//		iHeadAve = iHeadWeight / iHeadHeads;
+		// iHeadHeads += this.arrData.inventory.heads;
+		// iHeadWeight += this.arrData.inventory.weight;
+		// iHeadAve = iHeadWeight / iHeadHeads;
 
 		this.$.lblPurSumHeads.setContent("Cabezas<br />"
 			+ utils.formatNumberThousands(iFotHeads.toFixed(2)));
@@ -232,16 +263,16 @@ enyo
 	    updateView : function() {
 		crudPurchase.get(this, "readCallBack");
 	    },
-//		var objInventory = {
-//		    purdate : utils.dateOut(new Date()),
-//		    seller : "Inventario",
-//		    cattleName : "Novillos",
-//		    heads : 109,
-//		    weight : 40650,
-//		    aveweight : 372.9,
-//		    reweight : 536,
-//		    rtype : "inv"
-//		};
+	    // var objInventory = {
+	    // purdate : utils.dateOut(new Date()),
+	    // seller : "Inventario",
+	    // cattleName : "Novillos",
+	    // heads : 109,
+	    // weight : 40650,
+	    // aveweight : 372.9,
+	    // reweight : 536,
+	    // rtype : "inv"
+	    // };
 	    ready : function() {
 		this.updateView();
 	    },
@@ -256,6 +287,6 @@ enyo
 	    loadAutocompletes : function() {
 		this.arrData = crudPurchase.arrObj;
 		this.$.listPurchased.render();
-		this.updateSummary();		
+		this.updateSummary();
 	    }
 	});
