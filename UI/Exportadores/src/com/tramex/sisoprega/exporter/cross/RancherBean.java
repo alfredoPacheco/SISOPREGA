@@ -44,7 +44,6 @@ public class RancherBean {
 
   private boolean person = false;
 
-  private long rancherId;
   private Rancher personRancher;
   private EnterpriseRancher enterpriseRancher;
 
@@ -53,7 +52,8 @@ public class RancherBean {
    */
   public boolean isPerson() {
     try {
-      resolveFromDb();
+      if(personRancher == null && enterpriseRancher == null)
+        resolveFromDb();
     } catch (DataModelException e) {
       e.printStackTrace();
     }
@@ -203,11 +203,11 @@ public class RancherBean {
       List<EnterpriseRancher> enterprises = dataModel.readDataModelList("ENTERPRISE_BY_USER_NAME", parameters,
           EnterpriseRancher.class);
       setEnterpriseRancher(enterprises.get(0));
-      log.fine("Found [" + rancherId + "] as enterprise");
+      log.fine("Found [" + enterpriseRancher.getEnterpriseRancherId() + "] as enterprise");
     } else {
       setPersonRancher(personRanchers.get(0));
       person = true;
-      log.fine("Found [" + rancherId + "] as person");
+      log.fine("Found [" + personRancher.getRancherId() + "] as person");
     }
   }
 }

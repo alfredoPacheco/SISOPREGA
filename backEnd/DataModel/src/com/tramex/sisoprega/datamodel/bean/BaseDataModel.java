@@ -119,9 +119,10 @@ public class BaseDataModel implements RemoteModelable {
 
   public void updateDataModel(Object dataModel) throws DataModelException {
     try {
+      this.log.fine("Updating entity in database: [" + dataModel + "]");
       em.merge(dataModel);
       em.flush();
-      this.log.finer("Reception update persisted on database for object {" + dataModel + "}");
+      this.log.finer("Entity update persisted on database for object {" + dataModel + "}");
     } catch (Exception e) {
       this.log.warning("Unable to update model: " + dataModel);
       this.log.throwing(this.getClass().getCanonicalName(), "updateDataModel", e);

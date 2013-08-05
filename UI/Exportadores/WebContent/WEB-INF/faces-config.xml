@@ -82,6 +82,16 @@
 		<managed-bean-name>rancherBean</managed-bean-name>
 		<managed-bean-class>com.tramex.sisoprega.exporter.cross.RancherBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
+		<managed-property>
+			<property-name>personRancher</property-name>
+			<property-class>com.tramex.sisoprega.dto.Rancher</property-class>
+			<value>#{personRancher}</value>
+		</managed-property>
+		<managed-property>
+			<property-name>enterpriseRancher</property-name>
+			<property-class>com.tramex.sisoprega.dto.EnterpriseRancher</property-class>
+			<value>#{enterpriseRancher}</value>
+		</managed-property>
 	</managed-bean>
 	<managed-bean>
 		<description>Handles change password request.</description>
