@@ -165,7 +165,7 @@ public class Messenger implements Messageable {
       smsMan.doLogin(userId, password);
 
       smsMan.sendSMS(sms);
-      log.info("SENT SMS: " + message + ", responded as [" + smsMan.getResponseMsg() + "]");
+      log.info("SENT SMS: " + sms.getMsg() + ", responded as [" + smsMan.getResponseMsg() + "]");
       return true;
     } catch (Exception e) {
       return false;

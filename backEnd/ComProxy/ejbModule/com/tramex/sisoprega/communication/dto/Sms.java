@@ -40,7 +40,7 @@ public class Sms {
   public Sms(final String sTo, final String sFrom, final String sMsg) {
     this.sFrom = sFrom;
     this.sTo = sTo;
-    this.sMsg = sMsg;
+    this.sMsg = removeTildes(sMsg);
   }
 
   public String getTo() {
@@ -56,6 +56,15 @@ public class Sms {
   }
 
   public void setMsg(String msg) {
-    this.sMsg = msg;
+    this.sMsg = removeTildes(msg);
+  }
+  
+  private String removeTildes(String msg){
+    msg = msg.replaceAll("á", "a");
+    msg = msg.replaceAll("é", "e");
+    msg = msg.replaceAll("í", "i");
+    msg = msg.replaceAll("ó", "o");
+    msg = msg.replaceAll("ú", "u");
+    return msg;
   }
 }
