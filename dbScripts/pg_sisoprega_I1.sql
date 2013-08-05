@@ -743,3 +743,17 @@ CREATE TABLE cat_customer(
 
 GRANT ALL ON cat_customer TO sisoprega;
 GRANT ALL ON cat_customer_customer_id_seq TO sisoprega;
+
+DROP TABLE IF EXISTS ctrl_inventory CASCADE;
+CREATE TABLE ctrl_inventory(
+	inventory_id SERIAL PRIMARY KEY,
+	cattype_id     integer NOT NULL REFERENCES cat_cattle_type(cattype_id),
+	quality_id   integer NOT NULL REFERENCES cat_cattle_quality(quality_id),
+	heads integer NOT NULL DEFAULT 0,
+	weight decimal(12,4) not null,
+	feed integer NOT NULL DEFAULT 0,
+	inventory_date DATE not null DEFAULT current_date
+);
+
+GRANT ALL ON ctrl_inventory TO sisoprega;
+GRANT ALL ON ctrl_inventory_inventory_id_seq TO sisoprega;
