@@ -40,7 +40,7 @@ public class PurchaseBean extends BaseBean implements Cruddable {
 
       // Add purchase to inventory
       for (PurchaseDetail detail : entity.getPurchaseDetail()) {
-        Inventory inventory = getInventoryRecord(entity.getCattleTypeId(), detail.getQualityId(), entity.getPurchaseDate());
+        Inventory inventory = getInventoryRecord(entity.getCattleTypeId(), detail.getQualityId(), detail.getPenId(), entity.getPurchaseDate());
 
         long heads = detail.getHeads();
         double weight = detail.getWeight();
@@ -61,6 +61,7 @@ public class PurchaseBean extends BaseBean implements Cruddable {
           inventory.setHeads(detail.getHeads());
           inventory.setInventoryDate(entity.getPurchaseDate());
           inventory.setQualityId(detail.getQualityId());
+          inventory.setPenId(detail.getPenId());
           inventory.setWeight(detail.getWeight());
 
           dataModel.createDataModel(inventory);
@@ -86,11 +87,12 @@ public class PurchaseBean extends BaseBean implements Cruddable {
    * @return
    * @throws DataModelException
    */
-  private Inventory getInventoryRecord(long cattleType, long qualityId, Date date) throws DataModelException {
+  private Inventory getInventoryRecord(long cattleType, long qualityId, long penId, Date date) throws DataModelException {
     Map<String, Object> parameters = new HashMap<String, Object>();
     parameters.put("cattleType", cattleType);
     parameters.put("qualityId", qualityId);
     parameters.put("inventoryDate", date);
+    parameters.put("penId", penId);
     List<Inventory> inventoryRecord = dataModel
         .readDataModelList("INVENTORY_BY_CATTLE_QUALITY_DATE", parameters, Inventory.class);
 

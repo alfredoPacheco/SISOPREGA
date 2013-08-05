@@ -39,6 +39,7 @@ public class Inventory {
   private long inventoryId;
   private long cattypeId;
   private long qualityId;
+  private long penId;
   private long heads;
   private double weight;
   private long feed;
@@ -78,6 +79,18 @@ public class Inventory {
    */
   public void setQualityId(long qualityId) {
     this.qualityId = qualityId;
+  }
+  /**
+   * @return the barnyardId
+   */
+  public long getPenId() {
+    return penId;
+  }
+  /**
+   * @param barnyardId the barnyardId to set
+   */
+  public void setPenId(long penId) {
+    this.penId = penId;
   }
   /**
    * @return the heads

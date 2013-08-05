@@ -38,7 +38,7 @@ enyo
 			align : "center",
 			pack : "start",
 			components : [ {
-			    content : 'Fecha',
+			    content : 'Proveedor',
 			    flex : 1
 			}, {
 			    content : 'Cabezas',
@@ -65,51 +65,29 @@ enyo
 			    components : [ {
 				kind : enyo.Item,
 				style : "font-size:14px;",
-				components : [
-					{
-					    layoutKind : enyo.HFlexLayout,
-					    components : [ {
-						name : "lblPurDate",
-						flex : 1,
-						content : ""
-					    }, {
-						name : "lblPurHeads",
-						flex : 1.5,
-						content : "",
-						style : "text-align: right;"
-					    }, {
-						name : "lblPurWeight",
-						flex : 1.5,
-						content : "",
-						style : "text-align: right;"
-					    }, {
-						name : "lblPurAveWeight",
-						flex : 1.5,
-						content : "",
-						style : "text-align: right;"
-					    }, ]
-					},
-					{
-					    layoutKind : enyo.HFlexLayout,
-					    components : [
-						    {
-							name : "lblPurSeller",
-							flex : .45,
-							style : "font-size: 0.85em;color:#008B8B",
-							content : ""
-						    },
-						    {
-							kind : "VFlexBox",
-							name : "lblPurRew",
-							flex : .1,
-							style : "font-size: 0.85em;color:#008B8B",
-							align : "center",
-							content : ""
-						    }, {
-							kind : "Spacer",
-							flex : .4
-						    } ]
-					} ]
+				components : [ {
+				    layoutKind : enyo.HFlexLayout,
+				    components : [ {
+					name : "lblPurSeller",
+					flex : 1.5,
+					content : ""
+				    }, {
+					name : "lblPurHeads",
+					flex : 1,
+					content : "",
+					style : "text-align: right;"
+				    }, {
+					name : "lblPurWeight",
+					flex : 1.5,
+					content : "",
+					style : "text-align: right;"
+				    }, {
+					name : "lblPurAveWeight",
+					flex : 1.5,
+					content : "",
+					style : "text-align: right;"
+				    }, ]
+				} ]
 			    } ]
 			} ]
 		    },
@@ -168,49 +146,96 @@ enyo
 	    loadPurchased : function(inSender, inIndex) {
 		var objData = null;
 
-		if (objData = this.arrData[inIndex]) {// &&
-		    // this.arrData.inventory)
-		    // {
-		    // Draw inventory record
-		    // objData = this.arrData.inventory;
-
-		    this.$.lblPurSeller.setContent(objData.seller);
-		    // } else if (objData = this.arrData.purchased[inIndex - 1])
-		    // {
-		    // // Draw purchase record
-		    // objData = this.arrData.purchased[inIndex - 1];
-		    // this.$.lblPurSeller.setContent(objData.seller + "("+
-		    // objData.cattleName + ")");
-		    // } else {
-		    // return false;
-		    // }
-
-		    this.$.lblPurDate.setContent(utils
-			    .dateOut(objData.purchaseDate));
-		    var totalHeads = this
-			    .calculateTotalHeads(objData.PurchaseDetail);
-		    var totalWeight = this
-			    .calculateTotalWeight(objData.PurchaseDetail);
-		    
-		    this.$.lblPurHeads.setContent(utils.formatNumberThousands(totalHeads));
-		    this.$.lblPurWeight.setContent(utils.formatNumberThousands(totalWeight));
-		    this.$.lblPurAveWeight.setContent(utils.formatNumberThousands(totalWeight / totalHeads));
-		    // if (objData.reweight) {
-		    // if (objData.reweight > 0) {
-		    // this.$.lblPurRew.setContent("(+" + objData.reweight
-		    // + ")");
-		    // } else {
-		    // this.$.lblPurRew.setContent("(" + objData.reweight
-		    // + ")");
-		    // }
-		    // }
-
-		    if (inIndex % 2 == 0)
-			inSender.$.client.$.client.applyStyle(
-				"background-color", "#DFC699");
-
+		if (objData = this.arrData[inIndex]) {
+		    this.$.lblPurSeller.setContent(objData.sellerName);
+		    this.$.lblPurHeads.setContent(utils
+			    .formatNumberThousands(objData.heads));
+		    this.$.lblPurWeight.setContent(utils
+			    .formatNumberThousands(objData.weight));
+		    this.$.lblPurAveWeight.setContent(utils
+			    .formatNumberThousands(objData.weight
+				    / objData.heads));
 		    return true;
 		}
+	    },
+	    updateSummary : function() {
+		var iFotHeads = 0;
+		var iFotWeight = 0;
+
+		for ( var j = 0; j < this.arrData.length; j++) {
+		    iFotHeads += this.arrData[j].heads;
+		    iFotWeight += this.arrData[j].weight;
+		}
+
+		this.$.lblPurSumHeads.setContent("Cabezas<br />"
+			+ utils.formatNumberThousands(iFotHeads.toFixed(2)));
+		this.$.lblPurSumWeight.setContent("Peso<br />"
+			+ utils.formatNumberThousands(iFotWeight.toFixed(2)));
+		var avg = null;
+		if (avg = (iFotWeight / iFotHeads)) {
+		    this.$.lblSumAveWeight.setContent("Peso Prom.<br />"
+			    + utils.formatNumberThousands(avg.toFixed(2)));
+		} else {
+		    this.$.lblSumAveWeight.setContent("Peso Prom.<br />0.00");
+		}
+
+	    },
+	    updateView : function() {
+		crudSeller.get(this, "readCallBack");
+		crudPurchase.get(this, "readCallBack");
+	    },
+	    ready : function() {
+		this.updateView();
+	    },
+	    readCounter : 0,
+	    readCallBack : function() {
+		this.readCounter++;
+		if (this.readCounter == 2) {
+		    this.readCounter = 0;
+		    this.loadAutocompletes();
+		}
+	    },
+	    loadAutocompletes : function() {
+		// groups by sellerId into this.arrData
+		this.groupBySeller(crudPurchase.arrObj);
+		this.$.listPurchased.render();
+		this.updateSummary();
+	    },
+	    groupBySeller : function(purchaseArray) {
+		this.arrData = [];
+		for ( var i = 0; i < purchaseArray.length; i++) {
+		    var sellerId = purchaseArray[i].sellerId;
+		    if (!this.sellerIsSummarized(sellerId))
+			this.arrData.push(this.sellerSummary(purchaseArray,
+				sellerId));
+		}
+	    },
+	    sellerSummary : function(purchaseArray, sellerId) {
+		var heads = 0;
+		var weight = 0;
+		for ( var i = 0; i < purchaseArray.length; i++) {
+		    if (purchaseArray[i].sellerId == sellerId) {
+			heads += Number(this
+				.calculateTotalHeads(purchaseArray[i].PurchaseDetail));
+			weight += Number(this
+				.calculateTotalWeight(purchaseArray[i].PurchaseDetail));
+		    }
+		}
+		var sellerName = crudSeller.getByID(sellerId).sellerName;
+		var objResult = {
+		    sellerId : sellerId,
+		    sellerName : sellerName,
+		    heads : heads,
+		    weight : weight
+		};
+		return objResult;
+	    },
+	    sellerIsSummarized : function(sellerId) {
+		for ( var i = 0; i < this.arrData.length; i++) {
+		    if (this.arrData[i].sellerId == sellerId)
+			return true;
+		}
+		return false;
 	    },
 	    calculateTotalHeads : function(arrDetails) {
 		if (arrDetails) {
@@ -231,62 +256,5 @@ enyo
 		    return totalWeight;
 		}
 		return 0;
-	    },
-	    updateSummary : function() {
-		// var iHeadHeads = 0;
-		// var iHeadWeight = 0;
-		var iFotHeads = 0;
-		var iFotWeight = 0;
-
-		for ( var j = 0; j < this.arrData.length; j++) {
-		    iFotHeads += this.calculateTotalHeads(this.arrData[j].PurchaseDetail);
-		    iFotWeight += this.calculateTotalWeight(this.arrData[j].PurchaseDetail);
-		}
-
-		// iHeadHeads += this.arrData.inventory.heads;
-		// iHeadWeight += this.arrData.inventory.weight;
-		// iHeadAve = iHeadWeight / iHeadHeads;
-
-		this.$.lblPurSumHeads.setContent("Cabezas<br />"
-			+ utils.formatNumberThousands(iFotHeads.toFixed(2)));
-		this.$.lblPurSumWeight.setContent("Peso<br />"
-			+ utils.formatNumberThousands(iFotWeight.toFixed(2)));
-		var avg = null;
-		if (avg = (iFotWeight / iFotHeads)) {
-		    this.$.lblSumAveWeight.setContent("Peso Prom.<br />"
-			    + utils.formatNumberThousands(avg.toFixed(2)));
-		} else {
-		    this.$.lblSumAveWeight.setContent("Peso Prom.<br />0.00");
-		}
-
-	    },
-	    updateView : function() {
-		crudPurchase.get(this, "readCallBack");
-	    },
-	    // var objInventory = {
-	    // purdate : utils.dateOut(new Date()),
-	    // seller : "Inventario",
-	    // cattleName : "Novillos",
-	    // heads : 109,
-	    // weight : 40650,
-	    // aveweight : 372.9,
-	    // reweight : 536,
-	    // rtype : "inv"
-	    // };
-	    ready : function() {
-		this.updateView();
-	    },
-	    readCounter : 0,
-	    readCallBack : function() {
-		this.readCounter++;
-		if (this.readCounter == 1) {
-		    this.readCounter = 0;
-		    this.loadAutocompletes();
-		}
-	    },
-	    loadAutocompletes : function() {
-		this.arrData = crudPurchase.arrObj;
-		this.$.listPurchased.render();
-		this.updateSummary();
 	    }
 	});
