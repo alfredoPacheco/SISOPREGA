@@ -24,25 +24,6 @@ enyo.kind({
 
 	return listObj;
     },
-    get : function(callbackObject, callbackMethod) {
-
-	if (callbackObject) {
-	    this.callbackObject = callbackObject;
-	    this.callbackMethod = callbackMethod;
-	} else {
-	    this.callbackObject = null;
-	    this.callbackMethod = '';
-	}
-
-	// if (callbackObject && callbackObject.parentObject != null) {
-	// consumingGateway.Read(callbackObject.parentObject.entityName,
-	// filterDef, this, "getCallBack");
-	// } else {
-	// consumingGateway.Read(this.entityName, filterDef, this,
-	// "getCallBack");
-	// }
-	this.getCallBack({records:[]});
-    },
     getCatalogsList : function() {
 
 	var arrAdapterList = enyo.clone(this.arrObj);
