@@ -48,6 +48,7 @@ enyo.depends(
 	"../SISOPREGA/source/controls/controls.reportViewer.js",
 	"../SISOPREGA/source/controls/controls.autocomplete.js",
 	"../SISOPREGA/source/controls/controls.dateMask.js",
+	"../SISOPREGA/source/controls/controls.phoneBox.js",
 	
 	"source/controls/controls.Table.js",
 	"source/controls/controls.DataTable.js",
@@ -76,7 +77,6 @@ enyo.depends(
 	"source/trash/cache.sales.js",
 	"source/trash/cache.cattle.quality.js",
 	"source/trash/cache.corte.js",
-	"source/trash/cache.customers.js",
 	"source/trash/cache.drivers.js",
 	"source/trash/cache.inventory.js",
 	"source/trash/cache.pen.js",
@@ -86,8 +86,8 @@ enyo.depends(
 	"source/trash/cache.shipments.js",
 	"source/trash/cache.charges.js",
 	
-	"source/catalogs/catalogs.customers.list.js",
-	"source/catalogs/catalogs.customers.create.js",
+	"source/catalogs/catalogs.customer.form.js",
+	
 	"source/catalogs/catalogs.providers.list.js",
 	"source/catalogs/catalogs.providers.create.js",
 	"source/catalogs/catalogs.drivers.list.js",

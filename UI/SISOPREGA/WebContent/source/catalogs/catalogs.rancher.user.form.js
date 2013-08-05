@@ -1,9 +1,3 @@
-/**
- * Provides a handler for rancher data options.
- * 
- * Revision History: - 02/03/2013 By Diego Torres: Initial Version.
- * 
- */
 enyo.kind({
     name : "catalogs.rancher.user.form",
     kind : "forms.simple",

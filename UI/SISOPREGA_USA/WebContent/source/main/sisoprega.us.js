@@ -139,9 +139,9 @@ enyo
 			    name : "inspection_kind",
 			    lazy : true
 			}, {
-			    kind : "catalogs.customers.list",
+			    kind : "forms.list",
 			    name : "customersList_kind",
-			    lazy : true
+			    entity : crudCustomer
 			}, {
 			    kind : "catalogs.drivers.list",
 			    name : "driversList_kind",

@@ -64,7 +64,7 @@ enyo.kind({
                     },
                     {
                       kind : enyo.IconButton,
-                      icon : "../SISOPREGA/images/menu-icon-new.png",
+                      icon : "../SISOPREGA_WEB_LIB/images/menu-icon-new.png",
                       onclick : "doAddCustomer",
                       height : "23px",
                       width : "23px",

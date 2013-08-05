@@ -743,6 +743,3 @@ CREATE TABLE cat_customer(
 
 GRANT ALL ON cat_customer TO sisoprega;
 GRANT ALL ON cat_customer_customer_id_seq TO sisoprega;
-
-
-DROP TABLE IF EXISTS ctrl_print_queue CASCADE;
