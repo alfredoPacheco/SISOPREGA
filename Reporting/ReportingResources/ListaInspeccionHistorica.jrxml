@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ListaInspeccionHistorica" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ede80ead-e69f-4f07-9be0-9d5476cede16">
-	<property name="ireport.zoom" value="1.3310000000000004"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.zoom" value="3.4522712143931042"/>
+	<property name="ireport.x" value="309"/>
+	<property name="ireport.y" value="715"/>
 	<style name="Title" fontName="Times New Roman" fontSize="50" isBold="true" pdfFontName="Times-Bold"/>
 	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
 	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
@@ -209,6 +209,31 @@ ORDER BY
 				<reportElement uuid="14b95b13-92b9-4b20-a438-b2c19012d258" x="36" y="0" width="45" height="34"/>
 				<imageExpression><![CDATA[$P{CUS_IMG_PATH}]]></imageExpression>
 			</image>
+			<staticText>
+				<reportElement uuid="06ee404e-05dc-485d-8e59-edb2699736aa" x="3" y="64" width="131" height="18"/>
+				<textElement/>
+				<text><![CDATA[Reporte generado desde el]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="7d68c9a7-ec67-4b0c-a0f7-e0187d6a393c" x="134" y="64" width="64" height="18"/>
+				<textElement>
+					<font isUnderline="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format($P{CUS_FROM_DATE})
+]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="6ff51a45-31d6-4e15-97eb-c869387e0cbb" x="198" y="64" width="39" height="18"/>
+				<textElement/>
+				<text><![CDATA[hasta el]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="414f8d7f-138c-4ff3-bab7-893fd5428c39" x="237" y="64" width="70" height="18"/>
+				<textElement>
+					<font isUnderline="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format($P{CUS_TO_DATE})]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 	<pageHeader>
@@ -310,4 +335,13 @@ ORDER BY
 	<summary>
 		<band splitType="Stretch"/>
 	</summary>
+	<noData>
+		<band height="50">
+			<staticText>
+				<reportElement uuid="6468daa0-ae53-40f3-87e3-076e3cbd5c79" x="3" y="0" width="250" height="20"/>
+				<textElement/>
+				<text><![CDATA[No se encontraron datos para el filtro seleccionado.]]></text>
+			</staticText>
+		</band>
+	</noData>
 </jasperReport>
