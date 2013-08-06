@@ -579,7 +579,7 @@ CREATE TABLE ctrl_inspection_forecast_detail(
 	forecast_id integer NOT NULL REFERENCES ctrl_inspection_forecast(id) ON DELETE CASCADE,
 	rancher_id integer NOT NULL REFERENCES cat_rancher(rancher_id),
 	zone_id integer NOT NULL REFERENCES cat_zone(zone_id),
-	auth varchar(10),
+	auth varchar(150),
 	origin integer NOT NULL,
 	cattle_type integer NOT NULL REFERENCES cat_cattle_type(cattype_id),
 	quantity integer not null,

@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
+<title>IE Version Incompatible</title>
 </head>
 <body style="font: 11px/18px 'Lucida Grande', Arial, sans-serif;">
 	<h1>¿Sabía usted que su explorador de Internet es anticuado?</h1>
