@@ -235,7 +235,7 @@ enyo
 		var iBy = 0;
 		for ( var i = 0; i < objRec.Pens.length; i++) {
 		    var objPen = objRec.Pens[i];
-		    var penCode = objPen.locationId + objPen.barnyardCode;
+		    var penCode = objPen.barnyardCode;
 		    iBy++;
 		    sBy += penCode + ", ";
 		}

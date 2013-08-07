@@ -11,10 +11,10 @@ enyo
 	    name : "crud.inventory",
 	    kind : "crud",
 	    published : {
-		entityName : "inventory",
+		entityName : "Inventory",
 		createKindName : "operations.inventory.form",
 	    },
-	    get : function(callbackObject, callbackMethod) {
+	    /*get : function(callbackObject, callbackMethod) {
 		// var filterDef = {}; // Always return all records
 
 		if (callbackObject) {
@@ -51,7 +51,7 @@ enyo
 			} ]
 		    } ]
 		});
-	    },
+	    },*/
 
 //	    adapterToIn : function(entityObj) {
 //		if (entityObj) {
