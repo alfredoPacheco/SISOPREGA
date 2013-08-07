@@ -241,7 +241,7 @@ enyo
 								name : "btnCancel",
 								className : "enyo-button-negative",
 								flex : 1,
-								caption : "Limpiar Selección",
+								caption : "Cancelar",
 								onclick : "onCancel"
 							    } ]
 						} ]
@@ -269,15 +269,15 @@ enyo
 							},
 							{
 							    content : "Ganadero",
-							    style : "width:150px;text-align:right;margin-right:35px;"
+							    style : "width:130px;text-align:right;margin-right:35px;"
 							},
 							{
 							    content : "Autorización",
-							    style : "width:100px;text-align:center;"
+							    style : "width:150px;text-align:left;"
 							},
 							{
 							    content : "Origen",
-							    style : "width:100px;text-align:center;"
+							    style : "width:130px;text-align:center;"
 							},
 							{
 							    content : "Clase",
@@ -285,17 +285,16 @@ enyo
 							},
 							{
 							    content : "Cantidad",
-							    style : "width:100px;text-align:center;"
+							    style : "width:60px;text-align:center;"
 							},
 							{
 							    content : "Localidad",
-							    style : "width:150px;text-align:center;"
+							    style : "width:90px;text-align:center;"
 							},
 							{
 							    content : "Corrales",
-							    style : "width:100px;text-align:left;"
+							    style : "width:200px;text-align:left;"
 							}
-
 						]
 					    },
 					    {
@@ -321,17 +320,17 @@ enyo
 							components : [
 								{
 								    name : "listRancher",
-								    style : "width:215px;text-align:right;margin-right:35px;",
+								    style : "width:192px;text-align:right;margin-right:35px;",
 								    content : ""
 								},
 								{
 								    name : "listAuth",
-								    style : "width:100px;text-align:center;",
+								    style : "width:150px;text-align:left;",
 								    content : ""
 								},
 								{
 								    name : "listOrigin",
-								    style : "width:100px;text-align:center;",
+								    style : "width:130px;text-align:center;",
 								    content : ""
 								},
 								{
@@ -341,17 +340,17 @@ enyo
 								},
 								{
 								    name : "listQuantity",
-								    style : "width:100px;text-align:center;",
+								    style : "width:60px;text-align:center;",
 								    content : ""
 								},
 								{
 								    name : "listZone",
-								    style : "width:150px;text-align:center;",
+								    style : "width:90px;text-align:center;",
 								    content : ""
 								},
 								{
 								    name : "listBarnyards",
-								    style : "width:100px;text-align:left;",
+								    style : "width:200px;text-align:left;",
 								    content : ""
 								} ]
 						    } ]
@@ -372,7 +371,7 @@ enyo
 							    },
 							    {
 								kind : "enyo.IconButton",
-								style : "width:100px;",
+								style : "width:140px;",
 								label : "Limpiar Selección",
 								onclick : "onCancel"
 							    },

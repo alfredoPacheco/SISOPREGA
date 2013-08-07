@@ -603,25 +603,27 @@ enyo
 		    cacheMan.showScrim();
 		    break;
 		case 6: // Liberar corral
-		    var objRec = crudReception
-			    .getByID(crudPen.inUse()[this.objSelected.name].receptionId);
-		    crudReception.releasePens(objRec, this.arrSelectedOccupied,
-			    this, "releaseBY");
+		    if (confirm("¿Desea liberar corrales seleccionados?")) {
+			var objRec = crudReception.getByID(crudPen.inUse()[this.objSelected.name].receptionId);
+			crudReception.releasePens(objRec, this.arrSelectedOccupied, this, "releaseBY");
+		    }
 		    break;
 		case 7: // Añadir corral
-		    var objRec = crudReception
-			    .getByID(crudPen.inUse()[this.objSelected.name].receptionId);
-		    crudReception.appendBY(objRec, this.arrSelected, this,
-			    "updateBY");
+		    var objRec = crudReception.getByID(crudPen.inUse()[this.objSelected.name].receptionId);
+		    crudReception.appendBY(objRec, this.arrSelected, this,"updateBY");
 		    break;
 		case 9: // Imprimir (Deseleccionar - 8 Eliminado)
 		    this.showReport();
 		    break;
 		case 10: // Liberar lote
-		    this.releaseAllPensInReception();
+		    if (confirm("¿Desea liberar el lote?")) {
+			this.releaseAllPensInReception();
+		    }
 		    break;
 		case 11: // Enviar Reporte
-		    this.sendReport();
+		    if (confirm("¿Desea enviar un mensaje SMS?")) {
+			this.sendReport();
+		    }
 		    break;
 		}
 	    },
