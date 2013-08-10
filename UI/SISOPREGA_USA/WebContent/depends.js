@@ -87,9 +87,8 @@ enyo.depends(
 	"source/trash/cache.charges.js",
 	
 	"source/catalogs/catalogs.customer.form.js",
+	"source/catalogs/catalogs.seller.form.js",
 	
-	"source/catalogs/catalogs.providers.list.js",
-	"source/catalogs/catalogs.providers.create.js",
 	"source/catalogs/catalogs.drivers.list.js",
 	"source/catalogs/catalogs.drivers.create.js",
 	"source/catalogs/catalogs.drivers.contacts.js",

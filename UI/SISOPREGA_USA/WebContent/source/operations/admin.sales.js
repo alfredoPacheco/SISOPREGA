@@ -21,15 +21,6 @@ enyo
 			    flex : 1,
 			    style : "color:white;font-size:15px;"
 			},
-			// {kind:"RowGroup",layoutKind: enyo.VFlexLayout, align:
-			// "center", flex:.7, style:"margin:0",
-			// components:[
-			// {name: "lblSalesShipment",
-			// className:"listSecond",style:"font-size:
-			// 0.75em;color:#999",
-			// content: "Cabezas - Peso"},
-			// ]},
-			// {kind: "Spacer",flex:.1},
 			{
 			    kind : "Button",
 			    caption : "+",

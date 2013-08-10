@@ -141,14 +141,16 @@ enyo
 			}, {
 			    kind : "forms.list",
 			    name : "customersList_kind",
-			    entity : crudCustomer
+			    entity : crudCustomer,
+			    lazy : true
 			}, {
 			    kind : "catalogs.drivers.list",
 			    name : "driversList_kind",
 			    lazy : true
 			}, {
-			    kind : "catalogs.providers.list",
+			    kind : "forms.list",
 			    name : "providersList_kind",
+			    entity : crudSeller,
 			    lazy : true
 			} ]
 		    },

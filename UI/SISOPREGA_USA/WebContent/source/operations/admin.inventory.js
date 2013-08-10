@@ -116,11 +116,7 @@ enyo
 							style : "font-size: 0.85em;color:#008B8B;text-align:right;",
 							flex : 1,
 							content : ""
-						    },
-					    // {name: "lblInvDescTruck",style:
-					    // "font-size:
-					    // 0.85em;color:#008B8B;text-align:right;",flex:1,content:""}
-					    ]
+						    } ]
 					} ]
 			    } ]
 			} ]
@@ -128,7 +124,6 @@ enyo
 		    {
 			kind : "Toolbar",
 			components : [
-
 				{
 				    kind : "RowGroup",
 				    contentFit : true,
