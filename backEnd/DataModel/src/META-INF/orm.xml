@@ -1222,7 +1222,7 @@
 				<column name="cattype_id" />
 			</basic>
 			<basic name="penId">
-				<column name="barnyard_id"/>
+				<column name="barnyard_id" unique="true"/>
 			</basic>
 			<basic name="inventoryDate">
 				<column name="inventory_date" />

@@ -44,6 +44,8 @@ enyo.kind({
     getCallBack : function(resultArray) {
 	this.arrPensZone1 = [];
 	this.arrPensZone2 = [];
+	this.arrPensUsaEast = [];
+	this.arrPensUsaWest = [];
 	for ( var i = 0; i < resultArray.records.length; i++) {
 	    var objAux = resultArray.records[i];
 	    var innerModelObj = this.adapterToIn(objAux);

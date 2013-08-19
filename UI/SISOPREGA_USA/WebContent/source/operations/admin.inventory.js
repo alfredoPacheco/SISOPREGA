@@ -22,7 +22,7 @@ enyo
 			    flex : .05
 			}, {
 			    kind : "Button",
-			    caption : "+",
+			    caption : "Vender",
 			    onclick : "doSale"
 			} ]
 		    },

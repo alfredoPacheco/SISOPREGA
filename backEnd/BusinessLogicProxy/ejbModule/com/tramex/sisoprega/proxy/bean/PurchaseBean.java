@@ -26,11 +26,10 @@ import com.tramex.sisoprega.proxy.common.BaseBean;
 @RolesAllowed({ "sisoprega_admin", "mx_usr", "us_usr", "rancher", "agency" })
 public class PurchaseBean extends BaseBean implements Cruddable {
 
+  ReadResponse response = new ReadResponse();
+  
   @Override
   public ReadResponse Create(CreateRequest request) {
-    // Create purchase
-    ReadResponse response = super.Create(request);
-
     // Use purchase to create inventory
     try {
       GatewayRecord record = request.getParentRecord();
@@ -66,6 +65,9 @@ public class PurchaseBean extends BaseBean implements Cruddable {
 
           dataModel.createDataModel(inventory);
         }
+        
+        // Create purchase
+        response = super.Create(request);
       }
     } catch (Exception e) {
       this.log.severe("Exception found while creating inventory record: " + e.getMessage());
