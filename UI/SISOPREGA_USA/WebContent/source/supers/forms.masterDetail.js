@@ -240,6 +240,11 @@ enyo
         afterUpdate : function() {
           this.updateList();
         },
+        afterAddEntity : function(){
+          this.arrDetail = [];
+          this.updateList();
+          this.inherited(arguments);
+        },
         updateList : function() {
           this.$.list.render();
         },
