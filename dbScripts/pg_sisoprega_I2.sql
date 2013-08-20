@@ -133,11 +133,10 @@ CREATE TABLE ctrl_inventory(
 	inventory_id SERIAL PRIMARY KEY,
 	cattype_id     integer NOT NULL REFERENCES cat_cattle_type(cattype_id),
 	quality_id   integer NOT NULL REFERENCES cat_cattle_quality(quality_id),
-	barnyard_id  integer NOT NULL REFERENCES cat_barnyard(barnyard_id),
+	barnyard_id  integer UNIQUE NOT NULL REFERENCES cat_barnyard(barnyard_id),
 	heads integer NOT NULL DEFAULT 0,
 	weight decimal(12,4) not null,
 	feed integer NOT NULL DEFAULT 0,
-	inventory_date DATE not null DEFAULT current_date,
 	UNIQUE (barnyard_id)
 );
 

@@ -121,9 +121,7 @@ enyo
                 ]
               }
         ],
-        
         ready : function() {
-            
             if(!this.openOnce){
         	var dataFields = this.$.detailFields.children;
                 var count = 0;
@@ -182,9 +180,6 @@ enyo
                 }
         	this.openOnce = true;
             }
-            
-          
-          
         },
         buttonDown : function(inSender, inEvent) {
           if (inEvent.which) {

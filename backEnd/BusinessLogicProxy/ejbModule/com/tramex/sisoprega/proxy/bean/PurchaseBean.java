@@ -58,7 +58,6 @@ public class PurchaseBean extends BaseBean implements Cruddable {
           inventory = new Inventory();
           inventory.setCattypeId(entity.getCattleTypeId());
           inventory.setHeads(detail.getHeads());
-          inventory.setInventoryDate(entity.getPurchaseDate());
           inventory.setQualityId(detail.getQualityId());
           inventory.setPenId(detail.getPenId());
           inventory.setWeight(detail.getWeight());
@@ -93,10 +92,9 @@ public class PurchaseBean extends BaseBean implements Cruddable {
     Map<String, Object> parameters = new HashMap<String, Object>();
     parameters.put("cattleType", cattleType);
     parameters.put("qualityId", qualityId);
-    parameters.put("inventoryDate", date);
     parameters.put("penId", penId);
     List<Inventory> inventoryRecord = dataModel
-        .readDataModelList("INVENTORY_BY_CATTLE_QUALITY_DATE", parameters, Inventory.class);
+        .readDataModelList("INVENTORY_UNIQUE_RECORD", parameters, Inventory.class);
 
     if (inventoryRecord != null && !inventoryRecord.isEmpty()) {
       return inventoryRecord.get(0);

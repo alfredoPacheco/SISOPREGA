@@ -1207,8 +1207,8 @@
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.Inventory">
 		<table name="ctrl_inventory" />
-		<named-query name="INVENTORY_BY_CATTLE_QUALITY_DATE">
-			<query>SELECT iInventory FROM Inventory iInventory WHERE iInventory.cattypeId = :cattleType AND iInventory.qualityId = :qualityId AND iInventory.penId = :penId AND iInventory.inventoryDate = :inventoryDate</query>
+		<named-query name="INVENTORY_UNIQUE_RECORD">
+			<query>SELECT iInventory FROM Inventory iInventory WHERE iInventory.cattypeId = :cattleType AND iInventory.qualityId = :qualityId AND iInventory.penId = :penId</query>
 		</named-query>
 		<named-query name="ALL_INVENTORYS">
 			<query>SELECT iInventory FROM Inventory iInventory</query>
@@ -1223,10 +1223,6 @@
 			</basic>
 			<basic name="penId">
 				<column name="barnyard_id" unique="true"/>
-			</basic>
-			<basic name="inventoryDate">
-				<column name="inventory_date" />
-				<temporal>DATE</temporal>
 			</basic>
 			<basic name="qualityId">
 				<column name="quality_id" />
