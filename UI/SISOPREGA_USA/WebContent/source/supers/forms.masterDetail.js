@@ -120,8 +120,8 @@ enyo
                 ]
               }
         ],
-        
         ready : function() {
+          // TODO: Validate if already created.
           var dataFields = this.$.detailFields.children;
           var count = 0;
           for ( var i = 0; i < dataFields.length; i++) {
@@ -174,7 +174,6 @@ enyo
                 {
                   owner : this
                 });
-              
             }
           }
           

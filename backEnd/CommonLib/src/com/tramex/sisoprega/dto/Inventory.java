@@ -15,7 +15,6 @@
  */
 package com.tramex.sisoprega.dto;
 
-import java.util.Date;
 
 /**
  * USAGE COMMENT HERE
@@ -43,7 +42,6 @@ public class Inventory {
   private long heads;
   private double weight;
   private long feed;
-  private Date inventoryDate;
   /**
    * @return the inventoryId
    */
@@ -128,17 +126,4 @@ public class Inventory {
   public void setFeed(long feed) {
     this.feed = feed;
   }
-  /**
-   * @return the inventoryDate
-   */
-  public Date getInventoryDate() {
-    return inventoryDate;
-  }
-  /**
-   * @param inventoryDate the inventoryDate to set
-   */
-  public void setInventoryDate(Date inventoryDate) {
-    this.inventoryDate = inventoryDate;
-  }
-  
 }
