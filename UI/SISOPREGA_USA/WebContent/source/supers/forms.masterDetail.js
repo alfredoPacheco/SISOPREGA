@@ -6,6 +6,7 @@ enyo
         objMaster : {},
         arrDetail : [],
         detailNumber : 0,
+        openOnce:false,
         style : "background-color:#DABD8B;font-size:15px;",
         components : [
               {
@@ -122,61 +123,67 @@ enyo
         ],
         
         ready : function() {
-          var dataFields = this.$.detailFields.children;
-          var count = 0;
-          for ( var i = 0; i < dataFields.length; i++) {
-            if (dataFields[i].hasOwnProperty("bindTo")) {
-              var sStyle = "";
-              sStyle += "margin-right:15px;margin-left:30px;";
-              sStyle += "min-width:" + dataFields[i].width;
-              sStyle += "text-align:" + dataFields[i].textAlign || "left";
-              this.$.detailHeader.createComponent(
-                {
-                  content : dataFields[i].hint,
-                  style : sStyle,
-                },
-                {
-                  owner : this
-                });
-              
-              this.$.detailItem.createComponent(
-                {
-                  name : "detailItem" + count++,
-                  className : "listSecond",
-                  style : sStyle,
-                  bindTo : dataFields[i].bindTo,
-                  belongsTo : dataFields[i].belongsTo
-                },
-                {
-                  owner : this
-                });
-            } else if (dataFields[i].hasOwnProperty("calculated")) {
-              var sStyle = "";
-              sStyle += "margin-right:15px;margin-left:30px;";
-              sStyle += "min-width:" + dataFields[i].width;
-              sStyle += "text-align:" + dataFields[i].textAlign || "left";
-              this.$.detailHeader.createComponent(
-                {
-                  content : dataFields[i].hint,
-                  style : sStyle,
-                },
-                {
-                  owner : this
-                });
-              
-              this.$.detailItem.createComponent(
-                {
-                  name : "detailItem" + count++,
-                  className : "listSecond",
-                  style : sStyle,
-                  calculated : dataFields[i].calculated
-                },
-                {
-                  owner : this
-                });
-              
+            
+            if(!this.openOnce){
+        	var dataFields = this.$.detailFields.children;
+                var count = 0;
+                for ( var i = 0; i < dataFields.length; i++) {
+                  if (dataFields[i].hasOwnProperty("bindTo")) {
+                    var sStyle = "";
+                    sStyle += "margin-right:15px;margin-left:30px;";
+                    sStyle += "min-width:" + dataFields[i].width;
+                    sStyle += "text-align:" + dataFields[i].textAlign || "left";
+                    this.$.detailHeader.createComponent(
+                      {
+                        content : dataFields[i].hint,
+                        style : sStyle,
+                      },
+                      {
+                        owner : this
+                      });
+                    
+                    this.$.detailItem.createComponent(
+                      {
+                        name : "detailItem" + count++,
+                        className : "listSecond",
+                        style : sStyle,
+                        bindTo : dataFields[i].bindTo,
+                        belongsTo : dataFields[i].belongsTo
+                      },
+                      {
+                        owner : this
+                      });
+                  } else if (dataFields[i].hasOwnProperty("calculated")) {
+                    var sStyle = "";
+                    sStyle += "margin-right:15px;margin-left:30px;";
+                    sStyle += "min-width:" + dataFields[i].width;
+                    sStyle += "text-align:" + dataFields[i].textAlign || "left";
+                    this.$.detailHeader.createComponent(
+                      {
+                        content : dataFields[i].hint,
+                        style : sStyle,
+                      },
+                      {
+                        owner : this
+                      });
+                    
+                    this.$.detailItem.createComponent(
+                      {
+                        name : "detailItem" + count++,
+                        className : "listSecond",
+                        style : sStyle,
+                        calculated : dataFields[i].calculated
+                      },
+                      {
+                        owner : this
+                      });
+                    
+                  }
+                }
+        	this.openOnce = true;
             }
-          }
+            
+          
           
         },
         buttonDown : function(inSender, inEvent) {
