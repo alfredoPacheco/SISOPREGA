@@ -125,6 +125,30 @@ enyo.kind({
 	    result.push(this.adapterToList(this.arrPensUsaEast[i]));
 	}
 	return result;
-    }
+    },
+    getByID : function(iID) {
+	var entityIdName = this.entityIdName();
+	for ( var i = 0; i < this.arrPensZone1.length; i++) {
+	    if (this.arrPensZone1[i][entityIdName] == iID) {
+		return this.arrPensZone1[i];
+	    }
+	}
+	for ( var i = 0; i < this.arrPensZone2.length; i++) {
+	    if (this.arrPensZone2[i][entityIdName] == iID) {
+		return this.arrPensZone2[i];
+	    }
+	}
+	for ( var i = 0; i < this.arrPensUsaWest.length; i++) {
+	    if (this.arrPensUsaWest[i][entityIdName] == iID) {
+		return this.arrPensUsaWest[i];
+	    }
+	}
+	for ( var i = 0; i < this.arrPensUsaEast.length; i++) {
+	    if (this.arrPensUsaEast[i][entityIdName] == iID) {
+		return this.arrPensUsaEast[i];
+	    }
+	}	
+	return null;
+    },
 });
 var crudPen = new crud.pen();

@@ -1227,6 +1227,15 @@
 			<basic name="qualityId">
 				<column name="quality_id" />
 			</basic>
+			<basic name="heads">
+				<column name="heads" />
+			</basic>
+			<basic name="weight">
+				<column name="weight" />
+			</basic>
+			<basic name="feed">
+				<column name="feed" />
+			</basic>
 		</attributes>
 	</entity>
 </entity-mappings>

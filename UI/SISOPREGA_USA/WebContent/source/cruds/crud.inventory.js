@@ -53,19 +53,16 @@ enyo
 		});
 	    },*/
 
-//	    adapterToIn : function(entityObj) {
-//		if (entityObj) {
-//		    var objAdapted = {};
-//		    objAdapted.cattleName
-//		    entityObj = this.inherited(arguments);
-//		    entityObj.seller = crudSeller.getByID(entityObj.supplierId).sellerName;
-//		    entityObj.purchaseDate = utils
-//			    .dateIn(entityObj.purchaseDate);
-//		    entityObj.aveweight = Number(entityObj.totalHeads)
-//			    / Number(entityObj.totalWeight);
-//		    return entityObj;
-//		}
-//		return null;
-//	    }
+	    adapterToIn : function(entityObj) {
+		if (entityObj) {
+		    entityObj = this.inherited(arguments);
+		     
+		    entityObj.pen = crudPen.getByID(entityObj.penId);
+		    
+		    entityObj.aveweight = Number(entityObj.heads) / Number(entityObj.weight);
+		    return entityObj;
+		}
+		return null;
+	    },
 	});
 var crudInventory = new crud.inventory();

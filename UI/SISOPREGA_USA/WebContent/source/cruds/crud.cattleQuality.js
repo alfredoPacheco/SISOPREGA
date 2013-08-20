@@ -39,6 +39,14 @@ enyo.kind(
 	    result.push(obj);
 	}
 	return result;
-    }
+    },
+    getByID : function(iID) {
+	for ( var i = 0; i < this.arrObj.length; i++) {
+	    if (Number(this.arrObj[i]["qualityId"]) == Number(iID)) {
+		return this.arrObj[i];
+	    }
+	}
+	return null;
+    },
   });
 var crudCattleQuality = new crud.cattleQuality();

@@ -160,10 +160,6 @@ enyo.kind({
 	    } ]
 	}, ]
     } ],
-    ready : function() {
-	this.$.inventory.setListContent(cachePen.get());
-	this.$.inventory.updateView();
-    },
     showSale : function() {
 	this.$.popup_sales.openAtCenter();
     },
@@ -235,6 +231,9 @@ enyo.kind({
 	if (this.$.popup_hermana) {
 	    this.$.popup_hermana.close();
 	}
+	
+	this.$.inventory.updateView();
+	
 	cacheMan.hideScrim();
     },
     releaseShipment : function() {
