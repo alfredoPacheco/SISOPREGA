@@ -142,3 +142,27 @@ CREATE TABLE ctrl_inventory(
 
 GRANT ALL ON ctrl_inventory TO sisoprega;
 GRANT ALL ON ctrl_inventory_inventory_id_seq TO sisoprega;
+
+DROP TABLE IF EXISTS ctrl_sale CASCADE;
+CREATE TABLE ctrl_sale(
+	sale_id        	SERIAL PRIMARY KEY,
+	customer_id     integer NOT NULL REFERENCES cat_customer(customer_id),
+	cattype_id     	integer NOT NULL REFERENCES cat_cattle_type(cattype_id),
+	sale_date  	DATE not null DEFAULT current_date
+);
+
+GRANT ALL ON ctrl_sale TO sisoprega;
+GRANT ALL ON ctrl_sale_sale_id_seq TO sisoprega;
+
+DROP TABLE IF EXISTS ctrl_sale_detail CASCADE;
+CREATE TABLE ctrl_sale_detail(
+	record_id    SERIAL PRIMARY KEY,
+	sale_id      integer NOT NULL REFERENCES ctrl_sale(sale_id),
+	barnyard_id  integer NOT NULL REFERENCES cat_barnyard(barnyard_id),
+	quality_id   integer NOT NULL REFERENCES cat_cattle_quality(quality_id),
+	heads        integer not null,
+	weight       decimal(12,4) not null
+);
+
+GRANT ALL ON ctrl_sale_detail TO sisoprega;
+GRANT ALL ON ctrl_sale_detail_record_id_seq TO sisoprega;

@@ -3,7 +3,7 @@ enyo
 	    name : "admin.sales",
 	    kind : "VFlexBox",
 	    className : "enyo-bg",
-	    arrData : null,
+	    arrData : [],
 	    iHeads : null,
 	    iWeight : null,
 	    arrSelectedItems : {},

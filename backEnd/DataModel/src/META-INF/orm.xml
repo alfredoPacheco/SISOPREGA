@@ -1238,4 +1238,57 @@
 			</basic>
 		</attributes>
 	</entity>
+	<entity class="com.tramex.sisoprega.dto.Sale">
+		<table name="ctrl_sale" />
+		<named-query name="SALE_BY_ID">
+			<description>Retrieve a single sale record by it's ID</description>
+			<query>SELECT iSale FROM Sale iSale WHERE iSale.saleId = :Id</query>
+		</named-query>
+		<named-query name="ALL_SALES">
+			<description>Retrieve all sales records from database.</description>
+			<query>SELECT iSale FROM Sale iSale WHERE iSale.saleDate = current_date</query>
+		</named-query>
+		<attributes>
+			<id name="saleId">
+				<column name="sale_id" />
+				<generated-value strategy="IDENTITY" />
+			</id>
+			<basic name="customerId">
+				<column name="customer_id" />
+			</basic>
+			<basic name="cattleTypeId">
+				<column name="cattype_id" />
+			</basic>
+			<basic name="saleDate">
+				<column name="sale_date" />
+				<temporal>DATE</temporal>
+			</basic>
+			<one-to-many name="saleDetail" fetch="EAGER"
+				mapped-by="sale" target-entity="com.tramex.sisoprega.dto.SaleDetail"
+				orphan-removal="true">
+				<cascade>
+					<cascade-all />
+				</cascade>
+			</one-to-many>
+		</attributes>
+	</entity>
+	<entity class="com.tramex.sisoprega.dto.SaleDetail">
+		<table name="ctrl_sale_detail" />
+		<attributes>
+			<id name="saleDetailId">
+				<column name="record_id" />
+				<generated-value strategy="IDENTITY" />
+			</id>
+			<basic name="penId">
+				<column name="barnyard_id" />
+			</basic>
+			<basic name="qualityId">
+				<column name="quality_id" />
+			</basic>
+			<many-to-one name="sale" fetch="LAZY" optional="false">
+				<join-column name="sale_id" referenced-column-name="sale_id"
+					nullable="false" />
+			</many-to-one>
+		</attributes>
+	</entity>
 </entity-mappings>

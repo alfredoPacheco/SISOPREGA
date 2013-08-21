@@ -152,6 +152,7 @@ enyo.kind(
       }
     },
     loadAutocompletes : function() {
+	
       this.$.customer.setItems(crudCustomer.getList());
       this.$.pen.setItems(crudPen.getListUsaPens());
       this.$.cattleQuality.setItems(crudCattleQuality.getList());
@@ -183,7 +184,7 @@ enyo.kind(
       this.$.addCustomerDialog.close();
       cacheMan.hideScrim();
     },
-    cancelCreateSeller : function() {
+    cancelCreateCustomer : function() {
       this.$.addCustomerDialog.close();
     },
     setupRow : function(inSender, inIndex) {
@@ -192,7 +193,7 @@ enyo.kind(
         for ( var i = 0; i < objItem.fields.length; i++) {
           this.$["detailItem" + i].content = objItem.fields[i];
         }
-// this.$["detailItem3"].content = Number(objItem.fields[3])/Number(objItem.fields[2]);
+        // this.$["detailItem3"].content = Number(objItem.fields[3])/Number(objItem.fields[2]);
         
         // this.totalHC += Number(this.arrDetail[inIndex].heads);
         // this.totalWeight +=
