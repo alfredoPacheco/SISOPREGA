@@ -64,10 +64,10 @@ public class PurchaseBean extends BaseBean implements Cruddable {
 
           dataModel.createDataModel(inventory);
         }
-        
-        // Create purchase
-        response = super.Create(request);
       }
+      
+      // Create purchase
+      response = super.Create(request);
     } catch (Exception e) {
       this.log.severe("Exception found while creating inventory record: " + e.getMessage());
       this.log.throwing(this.getClass().getName(), "Create", e);
