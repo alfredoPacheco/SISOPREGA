@@ -73,8 +73,8 @@ enyo.kind(
                       icon : "../SISOPREGA_WEB_LIB/images/menu-icon-new.png",
                       onclick : "showSellerForm",
                       height : "23px",
-                      width : "23px",
-                      style : "padding: 2px;margin-top: 0px;background-color: #DABD8B;"
+                      width : "31px",
+                      style : "padding: 2px;margin-top: 3px;background-color: #DABD8B;"
                     },
                     {
                       content : "Ganado:",
@@ -165,12 +165,9 @@ enyo.kind(
       
       this.$.seller.setItems(crudSeller.getList());
       this.$.cattleType.setItems(crudCattle.getCattleTypeList());
-      this.$.cattleType.setIndex(1); // Default value: Novillos
-      
-      this.$.pen.setItems(crudPen.getListUsaPens());
-      
-      this.$.cattleQuality.setItems(crudCattleQuality.getList());
-      
+      this.$.cattleType.setIndex(1); // Default value: Novillos      
+      this.$.pen.setItems(crudPen.getListUsaPens());      
+      this.$.cattleQuality.setItems(crudCattleQuality.getList());      
       this.afterLoad();
     },
     showSellerForm : function() {

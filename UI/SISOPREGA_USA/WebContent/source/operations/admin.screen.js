@@ -12,10 +12,11 @@ enyo.kind({
 	scrim : true,
 	components : [ {
 	    kind : "operations.sales.form",
-	    name : "sales_kind",
-	    flex : 1,
-	    onSale : "on_sale",
-	    onCancel : "on_cancel_sale"
+	    name : "sales_form",
+	    onAdd : "on_sale",
+	    onAfterLoad : "saleFormReady",
+	    onCancel : "on_cancel_sale",
+	    flex : 1
 	} ]
     }, {
 	kind : enyo.Popup,
@@ -51,8 +52,8 @@ enyo.kind({
     }, {
 	kind : enyo.Popup,
 	name : "popup_purchases",
-	width : "90%;",
-	height : "90%;",
+	width : "85%;",
+	height : "85%;",
 	dismissWithClick : true,
 	layoutKind : "VFlexLayout",
 	style : "overflow: hidden;border-width: 8px;",
@@ -160,8 +161,14 @@ enyo.kind({
 	    } ]
 	}, ]
     } ],
-    showSale : function() {
-	this.$.popup_sales.openAtCenter();
+    showSale : function() {	
+	cacheMan.showScrim();
+
+	if (!this.$.sales_form)
+	    this.$.popup_sales.validateComponents();
+	else
+	    this.$.sales_form.ready();	
+	
     },
     showPurchase : function() {
 	this.$.popup_add.validateComponents();
@@ -192,6 +199,30 @@ enyo.kind({
     purchaseFormReady : function() {
 	this.$.popup_purchases.openAtCenter();
     },
+    on_sale : function() {
+	this.$.popup_sales.close();
+	this.$.inventory.updateView();
+	this.$.sales.updateView();
+	this.$.sales.moveToBottom();
+	cacheMan.hideScrim();
+    },
+    on_cancel_sale : function() {
+	this.$.popup_sales.close();
+    },
+    savePurchaseGroup : function() {
+	this.$.purchased.updateView();
+	if (this.$.popup_purchases) {
+	    this.$.popup_purchases.close();
+	}
+	if (this.$.popup_hermana) {
+	    this.$.popup_hermana.close();
+	}	
+	this.$.inventory.updateView();	
+	cacheMan.hideScrim();
+    },
+    saleFormReady : function() {
+	this.$.popup_sales.openAtCenter();
+    },
     buy_cattle_click : function() {
 	this.$.popup_add.close();
 	cacheMan.showScrim();
@@ -213,28 +244,6 @@ enyo.kind({
     },
     cancelShipment_click : function() {
 	this.$.popup_shipments.close();
-    },
-    on_sale : function() {
-	this.$.popup_sales.close();
-	this.$.inventory.updateView();
-	this.$.sales.updateView();
-	this.$.sales.moveToBottom();
-    },
-    on_cancel_sale : function() {
-	this.$.popup_sales.close();
-    },
-    savePurchaseGroup : function() {
-	this.$.purchased.updateView();
-	if (this.$.popup_purchases) {
-	    this.$.popup_purchases.close();
-	}
-	if (this.$.popup_hermana) {
-	    this.$.popup_hermana.close();
-	}
-	
-	this.$.inventory.updateView();
-	
-	cacheMan.hideScrim();
     },
     releaseShipment : function() {
 	this.$.popup_driver.close();

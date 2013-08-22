@@ -188,12 +188,7 @@ enyo.kind(
     },
     afterUpdateEntity : function(updateResult, objOld, objNew) {
       this.doUpdate(objOld, objNew);
-    },
-    beforeSave : function(obj) {
-      // this function can be overriden in order to do something with obj
-      // can do validations, if false, will cancel save operation.
-      return true;
-    },
+    },    
     cancel : function() {
       this.resetValues();
       this.doCancel();
@@ -301,5 +296,9 @@ enyo.kind(
       this.bUpdatingMode = false;
       this.$.draAdd.setOpen(true);
       this.$.draUpdate.setOpen(false);
+    },beforeSave : function(obj) {
+	// this function can be overriden in order to do something with obj
+	// can do validations, if false, will cancel save operation.
+	return true;
     }
   });

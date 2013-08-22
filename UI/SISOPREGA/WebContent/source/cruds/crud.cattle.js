@@ -46,5 +46,6 @@ enyo.kind(
         arrList.push(auxObj);
       }
     }
+    
   });
 var crudCattle = new crud.cattle();

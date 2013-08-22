@@ -38,7 +38,7 @@ enyo.kind(
                     {
                       kind : "controls.dateMask",
                       inputKind : "ToolInput",
-                      name : "purchDate",
+                      name : "saleDate",
                       height : "35px;",
                       bindTo : "dateAllotted",
                       style : "max-width:130px;",
@@ -75,9 +75,22 @@ enyo.kind(
                       icon : "../SISOPREGA_WEB_LIB/images/menu-icon-new.png",
                       onclick : "showCustomerForm",
                       height : "23px",
-                      width : "23px",
-                      style : "padding: 2px;margin-top: 0px;background-color: #DABD8B;"
-                    }
+                      width : "31px",
+                      style : "padding: 2px;margin-top: 3px;background-color: #DABD8B;"
+                    },
+                    {
+                        content : "Ganado:",
+                        width : "80px;",
+                        style : "text-align: right;margin-right:5px;"
+                      },
+                      {
+                        kind : "controls.autocomplete",
+                        inputKind : "ToolInput",
+                        name : "cattleType",
+                        width : "200px;",
+                        height : "35px;",
+                        bindTo : "cattleTypeId"
+                      }
               ]
             }
       ],
@@ -93,7 +106,7 @@ enyo.kind(
               hint : 'Clase',
               width : "200px;",
               style : "margin-right: 15px;",
-              bindTo : "cattleQualityId",
+              bindTo : "qualityId",
               belongsTo : "SaleDetail",
               onSelectItem : "clase_select"
             },
@@ -120,15 +133,15 @@ enyo.kind(
             
             },
             {
-              kind : "ToolInput",
-              name : "peso",
-              hint : 'Peso Promedio',
-              width : "125px;",
-              style : "margin-right: 15px;",
-              calculated : true,
-              textAlign : "right",
-              showing : false
-            }
+                kind : "ToolInput",
+                name : "peso",
+                hint : 'Peso',
+                width : "125px;",
+                style : "margin-right: 15px;",
+                bindTo : "weight",
+                belongsTo : "SaleDetail",
+                textAlign : "right"
+              }
       ],
         {
           owner : this
@@ -141,7 +154,7 @@ enyo.kind(
       crudCattleQuality.get(this, "readCallBack");
       crudPen.get(this, "readCallBack");
       
-      this.$.purchDate.setToday();
+      this.$.saleDate.setToday();
     },
     readCounter : 0,
     readCallBack : function() {
@@ -154,6 +167,8 @@ enyo.kind(
     loadAutocompletes : function() {
 	
       this.$.customer.setItems(crudCustomer.getList());
+      this.$.cattleType.setItems(crudCattle.getCattleTypeList());
+      this.$.cattleType.setIndex(1); // Default value: Novillos
       this.$.pen.setItems(crudPen.getListUsaPens());
       this.$.cattleQuality.setItems(crudCattleQuality.getList());
       this.afterLoad();
@@ -187,21 +202,21 @@ enyo.kind(
     cancelCreateCustomer : function() {
       this.$.addCustomerDialog.close();
     },
-    setupRow : function(inSender, inIndex) {
-      if (objItem = this.arrDetail[inIndex]) {
-        this.$.detail_number.setContent(inIndex + 1);
-        for ( var i = 0; i < objItem.fields.length; i++) {
-          this.$["detailItem" + i].content = objItem.fields[i];
-        }
-        // this.$["detailItem3"].content = Number(objItem.fields[3])/Number(objItem.fields[2]);
-        
-        // this.totalHC += Number(this.arrDetail[inIndex].heads);
-        // this.totalWeight +=
-        // Number(this.arrDetail[inIndex].weight);
-        
-        return true;
-      }
-    },
+//    setupRow : function(inSender, inIndex) {
+//      if (objItem = this.arrDetail[inIndex]) {
+//        this.$.detail_number.setContent(inIndex + 1);
+//        for ( var i = 0; i < objItem.fields.length; i++) {
+//          this.$["detailItem" + i].content = objItem.fields[i];
+//        }
+//        // this.$["detailItem3"].content = Number(objItem.fields[3])/Number(objItem.fields[2]);
+//        
+//        // this.totalHC += Number(this.arrDetail[inIndex].heads);
+//        // this.totalWeight +=
+//        // Number(this.arrDetail[inIndex].weight);
+//        
+//        return true;
+//      }
+//    },
     clase_select : function(inSender) { // TODO rewrite this function when crudPen.getUsaPenOccupied is ready
 // var filter = [];
 // var items = crudPen.getListUsaPens(); //TODO get pens occupied right now instead
@@ -213,5 +228,5 @@ enyo.kind(
 // this.$.pen.setFilter(filter);
 // this.$.pen.clear();
 // this.$.pen.useFilter();
-    },
+    }
   });

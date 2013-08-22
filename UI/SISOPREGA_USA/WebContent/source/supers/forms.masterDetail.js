@@ -208,6 +208,8 @@ enyo
             
           }
           
+          detailFields[0].setFocus();
+          
           this.arrDetail.push(newObject);
           this.updateList();
           this.$.detailScroller.scrollTo(this.$.detailScroller.getBoundaries().bottom, 0);
