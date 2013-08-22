@@ -331,22 +331,13 @@ enyo
           }
         },
         updateSummary : function() {
-          var iHeads = 0;
-          var iSumWeight = 0;
-          var iSumAve = 0;
-          var iSumFeed = 0;
+          var iHeads = crudInventory.getObjSummary().heads;
+          var iSumWeight = crudInventory.getObjSummary().weight;
+          var iSumAve = iSumWeight/iHeads;
+          var iSumFeed = crudInventory.getObjSummary().feed;
           var iSold = 0;
           var iSoldAve = 0;
-          var iCount = 0;
-          for ( var j = 0; j < this.arrData.length; j++) {
-            for ( var i = 0; i < this.arrData[j].length; i++) {
-              iCount++;
-              iHeads += Number(this.arrData[j][i].heads);
-              iSumWeight += Number(this.arrData[j][i].weight);
-              iSumFeed += Number(this.arrData[j][i].feed.quantity);
-            }
-          }
-          iSumAve = iSumAve / iCount;
+          
           this.$.lblInvSumHeadClass.setContent("Cabezas<br />" + utils.formatNumberThousands(iHeads));
           this.$.lblInvSumWeight.setContent("Peso<br />" + utils.formatNumberThousands(iSumWeight));
           this.$.lblInvSumAvgWeight.setContent("Peso Prom.<br />" + utils.formatNumberThousands(iSumAve.toFixed(2)));

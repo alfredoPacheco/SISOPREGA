@@ -42,6 +42,7 @@ enyo.depends(
 	"../SISOPREGA/source/supers/crud.js",
 	
 	"source/supers/forms.masterDetail.js",
+	"source/supers/crud.summarized.js",
 
 	"../SISOPREGA/source/controls/controls.multiselect.js",
 	"../SISOPREGA/source/controls/controls.numberBox.js",
