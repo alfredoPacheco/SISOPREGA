@@ -197,7 +197,7 @@ enyo
 		    this.$.lblSalesHeads.setContent(utils.formatNumberThousands(objData.totalHeads));
 		    this.$.lblSalesWeight.setContent(utils.formatNumberThousands(objData.totalWeight));
 		    this.$.lblSalesAverage.setContent(utils.formatNumberThousands(objData.totalAvgWeight));
-		    this.$.lblSalesClient.setContent(objData.customerId);
+		    this.$.lblSalesClient.setContent(objData.customer);
 		    this.$.chkSalesShip.iPos = inIndex;
 		    if (objData.arrToShipDetailed) {
 			var strShipDescription = "";

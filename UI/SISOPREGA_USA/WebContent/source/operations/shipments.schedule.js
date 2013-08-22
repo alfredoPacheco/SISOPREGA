@@ -269,13 +269,18 @@ enyo.kind({
 		this.$.detail_customer.setContent("");
 	    }
 	    var quality = null;
-	    if(quality = crudCattleQuality.getByID(this.arrToShipDetailed[inIndex].cattleQualityId)){
+	    if(quality = crudCattleQuality.getByID(this.arrToShipDetailed[inIndex].qualityId)){
 		this.$.detail_clase.setContent(quality.qualityName);
 	    }else{
 		this.$.detail_clase.setContent("");
 	    }
 	    this.$.detail_cabezas.setContent(utils.formatNumberThousands(this.arrToShipDetailed[inIndex].heads));
-//	    this.$.detail_corrales.setContent(crudPen.getBythis.arrToShipDetailed[inIndex].pen.substring(1)); //TODO getByID in crudPen depends in zone
+	    var pen = null;
+	    if(pen=crudPen.getByID(this.arrToShipDetailed[inIndex].penId)){
+		this.$.detail_corrales.setContent(pen.barnyardCode);
+	    }else{
+		this.$.detail_corrales.setContent("");
+	    }
 	    this.$.detail_weight.setContent(utils.formatNumberThousands(this.arrToShipDetailed[inIndex].weight) + " lb");
 	    this.totalHC += Number(this.arrToShipDetailed[inIndex].heads);
 	    this.totalWeight += Number(this.arrToShipDetailed[inIndex].weight);

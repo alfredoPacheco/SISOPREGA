@@ -85,6 +85,14 @@ enyo
 			entityObj.customer = "";
 		    }
 		    entityObj.saleDate = utils.dateIn(entityObj.saleDate);
+		    if(entityObj.SaleDetail){
+			entityObj.totalHeads = 0;
+			entityObj.totalWeight = 0.0;
+			for(var i=0;i<entityObj.SaleDetail.length;i++){
+			    entityObj.totalHeads+=Number(entityObj.SaleDetail[i].heads);
+			    entityObj.totalWeight+=Number(entityObj.SaleDetail[i].weight);
+			}
+		    }
 		    entityObj.totalAvgWeight = Number(entityObj.totalHeads) / Number(entityObj.totalWeight);
 		    return entityObj;
 		}

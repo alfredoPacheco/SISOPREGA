@@ -1291,4 +1291,39 @@
 			</many-to-one>
 		</attributes>
 	</entity>
+	<entity class="com.tramex.sisoprega.dto.Carrier">
+		<table name="cat_carrier" />
+		<named-query name="CARRIER_BY_ID">
+			<description>Retrieve a single carrier record by it's ID</description>
+			<query>SELECT iCarrier FROM Carrier iCarrier WHERE iCarrier.carrierId = :Id</query>
+		</named-query>
+		<named-query name="ALL_CARRIERS">
+			<description>Retrieve all carriers records from database.</description>
+			<query>SELECT iCarrier FROM Carrier iCarrier</query>
+		</named-query>
+		<attributes>
+			<id name="carrierId">
+				<column name="carrier_id" />
+				<generated-value strategy="IDENTITY" />
+			</id>
+			<basic name="carrierName">
+				<column name="carrier_name" />
+			</basic>
+			<basic name="addressOne">
+				<column name="address_one" />
+			</basic>
+			<basic name="addressTwo">
+				<column name="address_two" />
+			</basic>
+			<basic name="addressState">
+				<column name="address_state" />
+			</basic>
+			<basic name="zipCode">
+				<column name="zip_code" />
+			</basic>
+			<basic name="phone">
+				<column name="phone" length="20" />
+			</basic>
+		</attributes>
+	</entity>
 </entity-mappings>

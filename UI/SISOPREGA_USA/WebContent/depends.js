@@ -98,8 +98,6 @@ enyo.depends(
 	 "../SISOPREGA/source/operations/operations.pen.map.js",
 	
 	"source/operationsTrash/shipments.js",
-	"source/operationsTrash/shipments.schedule.js",
-	"source/operationsTrash/shipments.popup.split.js",
 	"source/operationsTrash/hermana.de.js",
 	"source/operationsTrash/hermana.corte.list.js",
 	"source/operationsTrash/hermana.gastos.list.js",
@@ -120,6 +118,8 @@ enyo.depends(
 	"source/operations/admin.purchased.js",
 	"source/operations/operations.purchase.form.js",
 	"source/operations/operations.sales.form.js",
+	"source/operations/shipments.schedule.js",
+	"source/operations/shipments.popup.split.js",
 
 	 "../SISOPREGA/source/reports/reports.main.js",
 	 "../SISOPREGA/source/reports/reports.select.js",

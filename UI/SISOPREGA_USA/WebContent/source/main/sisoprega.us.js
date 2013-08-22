@@ -191,7 +191,7 @@ enyo
 	    readCounter : 0,
 	    readCallBack : function() {
 		this.readCounter++;
-		if (this.readCounter == 4) {
+		if (this.readCounter == 5) {
 		    this.readCounter = 0;
 
 		    this.$.btnGoBack.setShowing(!1);
@@ -203,6 +203,7 @@ enyo
 	    },
 	    goAhead : function() {
 		crudSeller.get(this, "readCallBack");
+		crudCustomer.get(this, "readCallBack");
 		crudCattle.get(this, "readCallBack");
 		crudCattleQuality.get(this, "readCallBack");
 		crudPen.get(this, "readCallBack");

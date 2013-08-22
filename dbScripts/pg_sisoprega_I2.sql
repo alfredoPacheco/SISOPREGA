@@ -166,3 +166,18 @@ CREATE TABLE ctrl_sale_detail(
 
 GRANT ALL ON ctrl_sale_detail TO sisoprega;
 GRANT ALL ON ctrl_sale_detail_record_id_seq TO sisoprega;
+
+DROP TABLE IF EXISTS cat_carrier CASCADE;
+CREATE TABLE cat_carrier(
+	carrier_id	SERIAL PRIMARY KEY,
+	carrier_name	varchar(80) UNIQUE NOT NULL,
+	address_one 	varchar(250),
+	address_two	varchar(250),
+	city		varchar(80),
+	address_state	varchar(80),
+	zip_code	varchar(20),
+	phone		varchar(20)
+);
+
+GRANT ALL ON cat_carrier TO sisoprega;
+GRANT ALL ON cat_carrier_carrier_id_seq TO sisoprega;

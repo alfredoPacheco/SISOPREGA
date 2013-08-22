@@ -225,7 +225,7 @@ enyo
                 components : [
                       {
                         kind : "VFlexBox",
-                        content : "Ending Inv.",
+                        content : "Inventario Final",
                         flex : 1.5,
                         style : "color:white;margin:0;font-size:15px;"
                       },
