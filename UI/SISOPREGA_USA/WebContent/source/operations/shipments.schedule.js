@@ -12,6 +12,18 @@ enyo.kind({
 	onCancel : ""
     },
     components : [ {
+        name : "addCarrierDialog",
+        kind : "Popup",
+        showHideMode : "transition",
+        openClassName : "zoomFadeIn",
+        className : "transitioner2",
+        layoutKind : "VFlexLayout",
+        style : "overflow: hidden",
+        width : "85%",
+        height : "85%",
+        scrim : true,
+        components : []
+      },{
         kind : enyo.Popup,
         name : "popup_split",
         width : "330px",
@@ -76,7 +88,14 @@ enyo.kind({
 		width : "500px;",
 		flex:1,
 		height : "35px;",
-	    } ]
+	    },{
+                kind : enyo.IconButton,
+                icon : "../SISOPREGA_WEB_LIB/images/menu-icon-new.png",
+                onclick : "showCarrierForm",
+                height : "23px",
+                width : "31px",
+                style : "padding: 2px;margin-top: 3px;background-color: #DABD8B;"
+              }]
 	}]
     },
     {// HEADER:
@@ -257,7 +276,7 @@ enyo.kind({
 	this.$.programTime.$.input.applyStyle("text-align", "black");
 	this.$.programTime.setValue(new Date().toLocaleTimeString()
 		.substring(0, 5));
-	this.$.carrier.setItems(cacheDrivers.getAllForList());
+	this.$.carrier.setItems(crudCarrier.getList());
     },
     setupRow:function(inSender, inIndex){
 	if (this.arrToShipDetailed[inIndex]) {
@@ -505,8 +524,8 @@ enyo.kind({
 	var weight = 0;
 	for ( var i = 0;i<this.arrToShipDetailed.length;i++){
 	    if (!this.arrToShipDetailed[i].shipProgramDateTime && this.arrToShipDetailed[i].checked) {
-		hc += this.arrToShipDetailed[i].heads;
-		weight += this.arrToShipDetailed[i].weight;
+		hc += Number(this.arrToShipDetailed[i].heads);
+		weight += Number(this.arrToShipDetailed[i].weight);
 	    }
 	}
 	if (weight > 50000) {
@@ -524,5 +543,32 @@ enyo.kind({
 	jQuery(function(j) {
 	    j(document.getElementById(_id)).mask('99/99/9999');
 	});
+    },
+    showCarrierForm : function() {
+	if (this.$.carrierForm) {
+	    this.$.carrierForm.destroy();
+	}
+	this.$.addCarrierDialog.createComponent({
+	kind : "catalogs.carrier.form",
+	onAdd : "addCarrier",
+	onCancel : "cancelCreateCarrier",
+	name : "carrierForm",
+	flex : 1
+	}, {
+	    owner : this
+	});
+	this.$.addCarrierDialog.render();
+	this.$.addCarrierDialog.openAtCenter();
+    },
+    addCarrier : function(inSender, result) {
+	this.$.carrier.setItems(crudCarrier.getList());
+	
+	var justCreated = result.records[0];
+	this.$.carrier.setIndex(justCreated.carrierId);
+	this.$.addCarrierDialog.close();
+	cacheMan.hideScrim();
+    },
+    cancelCreateCarrier: function() {
+	this.$.addCarrierDialog.close();
     }
 });

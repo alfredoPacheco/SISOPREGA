@@ -21,18 +21,19 @@ enyo.kind({
 	    style:"margin:5px;",
 	    components : [ {
 		content : "Cantidad a separar:",
-		width : "130px;",
+		width : "130px",
 		style : "text-align: right;margin-right: 5px;"
 	    }, {
 		kind : "ToolInput",
 		name : "txtQuantity",
 		hint : "",
-		flex : 1,
+		width:"60px",
 		height : "35px",
 		oninput:"on_input"
 	    },{
 		name:"lblWeight",
 		content:"Peso aprox. <br />0.00 lb",
+		width:"100px",
 		style:"text-align:center;margin:5px;font-size:12px;",
 		allowHtml:true
 	    }
@@ -60,8 +61,7 @@ enyo.kind({
 	}
     ],
     ready : function() {
-	this.$.txtQuantity.$.input.applyStyle("text-align", "center");
-	this.$.lblWeight.setContent("Peso aprox. <br />" + 223.34 +" lb");
+	this.$.txtQuantity.$.input.applyStyle("text-align", "center");	
     },
     accept_click : function() {
 	var objNew = enyo.clone(this.objToSplit);
@@ -81,6 +81,12 @@ enyo.kind({
 	if(isNaN(Number(inSender.value))){
 	    return false;
 	}else{
+	    this.$.lblWeight.setContent("Peso aprox. <br />" + 
+		    utils.formatNumberThousands(
+		    (Number(inSender.value)*
+		    Number(this.objToSplit.weight)/
+		    Number(this.objToSplit.heads))) +
+		    " lb");	    
 	    return true;
 	}
 	

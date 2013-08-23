@@ -67,6 +67,7 @@ enyo.depends(
 	"../SISOPREGA/source/cruds/crud.enterpriseRancher.js",
 	
 	"source/cruds/crud.seller.js",
+	"source/cruds/crud.carrier.js",
 	"source/cruds/crud.customer.js",
 	"source/cruds/crud.cattleQuality.js",
 	"source/cruds/crud.purchase.js",
@@ -91,9 +92,11 @@ enyo.depends(
 	"source/catalogs/catalogs.seller.form.js",
 	
 	"source/catalogs/catalogs.drivers.list.js",
-	"source/catalogs/catalogs.drivers.create.js",
+	"source/catalogs/catalogs.drivers.create.js",	
 	"source/catalogs/catalogs.drivers.contacts.js",
 	"source/catalogs/catalogs.cattle.js",
+	
+	"source/catalogs/catalogs.carrier.form.js",
 	
 	 "../SISOPREGA/source/operations/inspection.forecast.js",
 	 "../SISOPREGA/source/operations/operations.pen.map.js",

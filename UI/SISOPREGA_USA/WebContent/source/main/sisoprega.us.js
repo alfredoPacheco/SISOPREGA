@@ -187,11 +187,19 @@ enyo
 		} else {
 		    this.$.btnGoBack.setShowing(1);
 		}
+	    },	    
+	    goAhead : function() {
+		crudSeller.get(this, "readCallBack");
+		crudCustomer.get(this, "readCallBack");
+		crudCarrier.get(this, "readCallBack");
+		crudCattle.get(this, "readCallBack");
+		crudCattleQuality.get(this, "readCallBack");
+		crudPen.get(this, "readCallBack");
 	    },
 	    readCounter : 0,
 	    readCallBack : function() {
 		this.readCounter++;
-		if (this.readCounter == 5) {
+		if (this.readCounter == 6) {
 		    this.readCounter = 0;
 
 		    this.$.btnGoBack.setShowing(!1);
@@ -200,13 +208,6 @@ enyo
 		    if (cacheMan.mainView == 'mainAgency')
 			this.$.btnMenu.hide();
 		}
-	    },
-	    goAhead : function() {
-		crudSeller.get(this, "readCallBack");
-		crudCustomer.get(this, "readCallBack");
-		crudCattle.get(this, "readCallBack");
-		crudCattleQuality.get(this, "readCallBack");
-		crudPen.get(this, "readCallBack");
 	    },
 	    noAccess : function() {
 		cacheMan.setMessage("", "Usuario o contraseña incorrecta.");

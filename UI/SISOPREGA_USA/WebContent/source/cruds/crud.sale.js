@@ -91,6 +91,8 @@ enyo
 			for(var i=0;i<entityObj.SaleDetail.length;i++){
 			    entityObj.totalHeads+=Number(entityObj.SaleDetail[i].heads);
 			    entityObj.totalWeight+=Number(entityObj.SaleDetail[i].weight);
+			    entityObj.SaleDetail[i].aveWeight = Number(entityObj.SaleDetail[i].weight)/
+			    					Number(entityObj.SaleDetail[i].heads);
 			}
 		    }
 		    entityObj.totalAvgWeight = Number(entityObj.totalHeads) / Number(entityObj.totalWeight);
