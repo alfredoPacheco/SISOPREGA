@@ -35,6 +35,20 @@ enyo.kind(
         return entityObj;
       }
       return null;
+    },
+    getPensList:function(){
+	var arrInventory = [];
+	var arrActivePens=[];
+	arrInventory = enyo.clone(this.arrObj);
+	for(var i=0;i<arrInventory.length;i++){
+	    var obj={
+		caption:arrInventory[i].pen.barnyardCode,
+		value:arrInventory[i].pen.penId
+	    };
+	    obj.object = arrInventory[i];
+	    arrActivePens.push(obj);
+	}
+	return arrActivePens;
     }
   });
 var crudInventory = new crud.inventory();

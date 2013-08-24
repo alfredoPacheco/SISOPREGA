@@ -202,31 +202,16 @@ enyo.kind(
     cancelCreateCustomer : function() {
       this.$.addCustomerDialog.close();
     },
-//    setupRow : function(inSender, inIndex) {
-//      if (objItem = this.arrDetail[inIndex]) {
-//        this.$.detail_number.setContent(inIndex + 1);
-//        for ( var i = 0; i < objItem.fields.length; i++) {
-//          this.$["detailItem" + i].content = objItem.fields[i];
-//        }
-//        // this.$["detailItem3"].content = Number(objItem.fields[3])/Number(objItem.fields[2]);
-//        
-//        // this.totalHC += Number(this.arrDetail[inIndex].heads);
-//        // this.totalWeight +=
-//        // Number(this.arrDetail[inIndex].weight);
-//        
-//        return true;
-//      }
-//    },
-    clase_select : function(inSender) { // TODO rewrite this function when crudPen.getUsaPenOccupied is ready
-// var filter = [];
-// var items = crudPen.getListUsaPens(); //TODO get pens occupied right now instead
-// for ( var i = 0; i < items.length; i++) {
-// if (items[i].object.cattleType == this.$.clase.getIndex()) {
-// filter.push(items[i]);
-// }
-// }
-// this.$.pen.setFilter(filter);
-// this.$.pen.clear();
-// this.$.pen.useFilter();
+    clase_select : function(inSender) {
+     var filter = [];
+     var items = crudInventory.getPensList();
+     for (var i = 0; i < items.length; i++) {
+         if (items[i].object.qualityId == this.$.cattleQuality.getIndex()) {
+             filter.push(items[i]);
+         }
+     }
+     this.$.pen.setFilter(filter);
+     this.$.pen.clear();
+     this.$.pen.useFilter();
     }
   });
