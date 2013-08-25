@@ -10,16 +10,18 @@ enyo.kind(
     calculateSummary : function() {
       var heads = 0;
       var weight = 0;
+      var objSummary = {
+          heads: 0,
+          weight:0
+      };
       for ( var i = 0; i < this.arrObj.length; i++) {
         for(var j=0; j < this.arrObj[i].PurchaseDetail.length; j++){
           heads += Number(this.arrObj[i].PurchaseDetail[j].heads);
           weight += Number(this.arrObj[i].PurchaseDetail[j].weight);
         }
       }
-      var objSummary = {
-          heads : heads,
-          weight : weight
-      };
+      objSummary.heads = heads;
+      objSummary.weigth = weight;
       
       this.setObjSummary(objSummary);
       

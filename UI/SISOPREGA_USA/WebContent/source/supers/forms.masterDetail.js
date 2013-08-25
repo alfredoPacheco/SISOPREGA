@@ -204,8 +204,7 @@ enyo
                 this.setValueForControl(detailFields[i], -1);
               else
                 this.setValueForControl(detailFields[i], '');
-            }
-            
+            } 
           }
           
           detailFields[0].setFocus();

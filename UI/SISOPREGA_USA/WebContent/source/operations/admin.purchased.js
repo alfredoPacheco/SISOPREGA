@@ -172,7 +172,6 @@ enyo
         ],
         loadPurchased : function(inSender, inIndex) {
           var objData = null;
-          
           if (objData = this.arrData[inIndex]) {
             this.$.lblPurSeller.setContent(objData.sellerName);
             this.$.lblPurHeads.setContent(utils.formatNumberThousands(objData.heads));
@@ -217,21 +216,26 @@ enyo
           this.$.listPurchased.render();
           this.updateSummary();
         },
-        calculateInventory : function(){
+        calculateInventory : function(useFirstListItem){
           // Add inventory record.
           if(!crudInventory.getDataLoaded()){
             var milis = ((Math.random() * 1000) + 500);
             setTimeout(this.calculateInventory, milis);
           }
           
-          this.arrData = [];
           var objInventory = {
               sellerId : 0,
               sellerName : 'Inv. ELLLC @ STT',
               heads : crudInventory.getObjSummary().heads - crudPurchase.getObjSummary().heads,
               weight : crudInventory.getObjSummary().weight - crudPurchase.getObjSummary().weight
           };
-          this.arrData.push(objInventory);
+          
+          if(useFirstListItem){
+            this.arrData[0] = objInventory;
+          }else{
+            this.arrData = [];
+            this.arrData.push(objInventory);
+          }
         },
         groupBySeller : function(purchaseArray) {
           for ( var i = 0; i < purchaseArray.length; i++) {
