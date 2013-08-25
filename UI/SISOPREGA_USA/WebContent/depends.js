@@ -102,22 +102,20 @@ enyo.depends(
 	 "../SISOPREGA/source/operations/operations.pen.map.js",
 	
 	"source/operationsTrash/shipments.js",
-	"source/operationsTrash/hermana.de.js",
-	"source/operationsTrash/hermana.corte.list.js",
-	"source/operationsTrash/hermana.gastos.list.js",
-	"source/operationsTrash/hermana.de.tabs.js",
 	"source/operationsTrash/sales.purchase.list.js",
 	"source/operationsTrash/sales.price.assignment.js",
-//	"source/operationsTrash/sales.js",
 	"source/operationsTrash/sales.screen.js",
 	
 	"source/operations/admin.inventory.js",
 	"source/operations/admin.sales.js",
 	"source/operations/admin.shipments.js",
 	"source/operations/admin.addCattle.js",
-	"source/operations/admin.screen.js",
+	"source/operations/admin.screen.js",	
 	
-//	"source/operationsTrash/purchases.js",
+	"source/operations/hermana/hermana.de.js",
+    "source/operations/hermana/hermana.corte.list.js",
+    "source/operations/hermana/hermana.gastos.list.js",
+    "source/operations/hermana/hermana.de.tabs.js",
 	
 	"source/operations/admin.purchased.js",
 	"source/operations/operations.purchase.form.js",

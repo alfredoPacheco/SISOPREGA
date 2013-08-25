@@ -20,7 +20,6 @@ enyo.kind({
 				kind : "HFlexBox",
 				components:[
 					{kind : "Input",name : "charge_desc",hint : "Concepto",flex:.7}, 
-					//{kind : "Input",name : "charge_price",hint : "Costo",flex:.3,}
 					]}
 		]},
 		{

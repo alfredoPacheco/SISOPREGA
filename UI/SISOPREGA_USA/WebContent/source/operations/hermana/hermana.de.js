@@ -119,7 +119,6 @@ enyo.kind(
                             hint : "",
                             width : "500px",
                             height : "35px",
-                            // contentPack : "end",
                             onEnter : "emularTabulacionConEnter"
                           } ]
                     },
@@ -141,7 +140,6 @@ enyo.kind(
                             hint : "",
                             width : "500px",
                             height : "35px",
-                            // contentPack : "end",
                             onEnter : "emularTabulacionConEnter"
                           } ]
                     },
@@ -164,7 +162,6 @@ enyo.kind(
                             hint : '',
                             width : "500px;",
                             height : "35px;",
-                            // contentPack : "end",
                             onEnter : "emularTabulacionConEnter"
                           },
                           {

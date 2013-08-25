@@ -111,7 +111,7 @@ enyo.kind(
                     },
                     {
                       kind : enyo.IconButton,
-                      icon : "../SISOPREGA/images/menu-icon-new.png",
+                      icon : "../SISOPREGA_WEB_LIB/images/menu-icon-new.png",
                       onclick : "doAddClass",
                       height: "23px",
                       width: "23px",
@@ -135,7 +135,7 @@ enyo.kind(
                     },
                     {
                       kind : enyo.IconButton,
-                      icon : "../SISOPREGA/images/menu-icon-new.png",
+                      icon : "../SISOPREGA_WEB_LIB/images/menu-icon-new.png",
                       className : "enyo-button-affirmative",
                       onclick : "agregarCorte",
                       height: "23px",
@@ -187,7 +187,7 @@ enyo.kind(
                     {
                       name : 'btnCancel',
                       onclick : "resetForm",
-                      icon : "images/cancel.png",
+                      icon : "images/clear.png",
                     },
                     {
                       fit : true,
@@ -243,7 +243,7 @@ enyo.kind(
                     },
                     {
                       kind : enyo.IconButton,
-                      icon : "../SISOPREGA/images/menu-icon-new.png",
+                      icon : "../SISOPREGA_WEB_LIB/images/menu-icon-new.png",
                       className : "enyo-button-affirmative",
                       onclick : "reClassify",
                       height:"20px",
@@ -285,7 +285,7 @@ enyo.kind(
                     },
                     {
                       kind : enyo.IconButton,
-                      icon : "../SISOPREGA/images/menu-icon-new.png",
+                      icon : "../SISOPREGA_WEB_LIB/images/menu-icon-new.png",
                       onclick : "showNewCharge",
                       height:"23px",
                       width:"23px",
@@ -299,7 +299,7 @@ enyo.kind(
                     },
                     {
                       kind : enyo.IconButton,
-                      icon : "../SISOPREGA/images/menu-icon-new.png",
+                      icon : "../SISOPREGA_WEB_LIB/images/menu-icon-new.png",
                       className : "enyo-button-affirmative",
                       onclick : "addCharge",
                       height:"23px",
