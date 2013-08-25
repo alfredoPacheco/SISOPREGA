@@ -14,105 +14,126 @@ enyo.kind(
         onCancel : "",
         onResolveSelected : ""
       },
-    components :
-      [
-        {
-          kind : "HFlexBox",
-          name : "title",
-          content : "Lotes inspeccionados del exportador: {EXPORTADOR SELECCIONADO}"
-        },
-        {
-          kind : "Header",
-          name : "encabezado",
-          style : "font-size:13px;background-color:#381402;color:#DABD8B;",
-          components :
-            [
-              {
-                content : "Ganado",
-                style : "width:150px;text-align:center;"
-              },
-              {
-                content : "Cabezas",
-                style : "width:150px;text-align:center;"
-              },
-              {
-                content : "Rechazos",
-                style : "width:150px;text-align:center;"
-              },
-              {
-                content : "Peso de Rechazos",
-                style : "width:250px;text-align:center;"
-              } ]
-        },
-        {
-          kind : enyo.Scroller,
-          name : "releasesScroller",
-          style : "height:350px;border:thin solid black;",
-          components :
-            [
-              {
-                kind : enyo.VirtualRepeater,
-                name : "releasesList",
-                onSetupRow : "setupReleaseRow",
-                onclick : "selectRelease",
-                style : "background-color:#F3DEBA;",
-                components :
-                  [
-                    {
-                      kind : enyo.RowItem,
-                      layoutKind : enyo.HFlexLayout,
-                      style : "font-size:13px;",
-                      tapHighlight : true,
-                      components :
-                        [
-                          {
-                            name : "cattle",
-                            style : "width:150px;text-align:center;"
-                          },
-                          {
-                            name : "heads",
-                            style : "width:150px;text-align:center;"
-                          },
-                          {
-                            name : "rejects",
-                            style : "width:150px;text-align:center;"
-                          },
-                          {
-                            name : "rejectsWeight",
-                            style : "width:250px;text-align:right;",
-                            kind : "release.rejects.weight"
-                          } ]
-                    } ]
-              } ]
-        },
-        {
-          kind : enyo.HFlexBox,
-          components :
-            [
-              {
-                kind : "Button",
-                style : "background-color:#AC0909;color:#F3DEBA;",
-                caption : "CORTAR SELECCIÓN",
-                onclick : "setupCutSelection"
-              },
-              {
-                kind : "Button",
-                style : "background-color:#AC0909;color:#F3DEBA;",
-                caption : "CERRAR",
-                onclick : "doCancel"
-              } ]
-        } ],
+    components : [
+          {
+            kind : "HFlexBox",
+            name : "title",
+            content : "Lotes inspeccionados del exportador: {EXPORTADOR SELECCIONADO}",
+            style : "font-size:18px;background-color:black;color:white;"
+          },
+          {
+            kind : "Header",
+            name : "encabezado",
+            style : "font-size:13px;background-color:#381402;color:#DABD8B;",
+            components : [
+                  {
+                    content : "Ganado",
+                    style : "width:150px;text-align:center;"
+                  },
+                  {
+                    content : "Cabezas",
+                    style : "width:150px;text-align:center;"
+                  },
+                  {
+                    content : "Rechazos",
+                    style : "width:150px;text-align:center;"
+                  },
+                  {
+                    content : "Peso de Rechazos",
+                    style : "width:250px;text-align:center;"
+                  }
+            ]
+          },
+          {
+            kind : enyo.Scroller,
+            name : "releasesScroller",
+            style : "height:350px;border:thin solid black;",
+            components : [
+                {
+                  kind : enyo.VirtualRepeater,
+                  name : "releasesList",
+                  onSetupRow : "setupReleaseRow",
+                  onclick : "selectRelease",
+                  style : "background-color:#F3DEBA;",
+                  components : [
+                      {
+                        kind : enyo.RowItem,
+                        layoutKind : enyo.HFlexLayout,
+                        style : "font-size:13px;",
+                        tapHighlight : true,
+                        components : [
+                              {
+                                name : "cattle",
+                                style : "width:150px;text-align:center;"
+                              },
+                              {
+                                name : "heads",
+                                style : "width:150px;text-align:center;"
+                              },
+                              {
+                                name : "rejects",
+                                style : "width:150px;text-align:center;"
+                              },
+                              {
+                                name : "rejectsWeight",
+                                style : "width:250px;text-align:right;",
+                                kind : "release.rejects.weight"
+                              }
+                        ]
+                      }
+                  ]
+                }
+            ]
+          },
+          {
+            kind : enyo.HFlexBox,
+            components : [
+                  {
+                    kind : "Button",
+                    style : "background-color:#AC0909;color:#F3DEBA;",
+                    caption : "CORTAR SELECCIÓN",
+                    onclick : "setupCutSelection"
+                  },
+                  {
+                    kind : "Button",
+                    style : "background-color:#AC0909;color:#F3DEBA;",
+                    caption : "CERRAR",
+                    onclick : "doCancel"
+                  }
+            ]
+          }
+    ],
     setRancher : function(rancherId, rancherName) {
+      cacheMan.showScrim();
       this.rancher_id = rancherId;
       this.rancher_name = rancherName;
       this.$.title.content = "Lotes inspeccionados del exportador: " + rancherName;
-      this.loadReleases(rancherId);
+      crudReleased.get(this, "readCallBack");
     },
-    loadReleases : function(rancherId, cattleType) {
-      this.releases = releasesCache.loadReleases(rancherId, cattleType);
-      if (this.releases.length > 0)
+    readCallBack : function() {
+      this.loadReleases();
+    },
+    filterReleases : function(cattleType) {
+      this.releases = [];
+      for ( var i = 0; i < crudReleased.arrObj.length; i++) {
+        var releasedRecord = crudReleased.arrObj[i];
+        if (releasedRecord.rancherId == this.rancher_id) {
+          if(cattleType){
+            if(releasedRecord.cattleType == cattleType)
+              this.releases.push(releasedRecord);
+          }else{
+            this.releases.push(releasedRecord);
+          }
+        }
+      }
+    },
+    loadReleases : function(cattleType) {
+      this.filterReleases(cattleType);
+      if (this.releases.length > 0) {
         this.$.releasesList.render();
-      else {
+        cacheMan.hideScrim();
+      } else {
+        cacheMan.hideScrim();
         alert('No hay inspecciones liberadas para este exportador, intente más tarde.');
         this.$.doCancel();
       }
@@ -122,16 +143,16 @@ enyo.kind(
       if (objRelease) {
         this.$.cattle.setContent(objRelease.cattleName);
         this.$.heads.setContent(objRelease.heads);
-        this.$.rejects.setContent(objRelease.rejects);
-        this.$.rejectsWeight.setWeight(objRelease.rejectsWeight);
-        this.$.rejectsWeight.setRejectedRecord(objRelease.recordId);
+        this.$.rejects.setContent(objRelease.rejects_heads);
+        this.$.rejectsWeight.setWeight(objRelease.rejects_weight);
+        this.$.rejectsWeight.setRejectedRecord(objRelease.receptionId);
         this.$.rejectsWeight.cancelSelection = true;
         this.$.rejectsWeight.listIndex = inIndex;
-
+        
         // If filtered with this record as selected
-        if (this.selectedIds && this.selectedIds[0] == objRelease.recordId)
+        if (this.selectedIds && this.selectedIds[0] == objRelease.receptionId) 
           this.$.rejectsWeight.setSelected(true);
-
+        
         return true;
       }
       return false;
@@ -141,9 +162,9 @@ enyo.kind(
         this.selectedCattleType = this.releases[inEvent.rowIndex].cattleType;
         this.selectedCattleName = this.releases[inEvent.rowIndex].cattleName;
         this.selectedIds = [];
-        this.selectedIds.push(this.releases[inEvent.rowIndex].recordId);
+        this.selectedIds.push(this.releases[inEvent.rowIndex].receptionId);
         // Filter list
-        this.loadReleases(this.rancher_id, this.selectedCattleType);
+        this.loadReleases(this.selectedCattleType);
         this.$.rejectsWeight.setSelected(true);
         return true;
       }
@@ -151,24 +172,24 @@ enyo.kind(
         alert('No se pueden seleccionar dos tipos de ganado diferente, previamente usted ha seleccionado ' + this.selectedCattleName);
         return false;
       }
-
+      
       this.$.rejectsWeight.setSelected(!this.$.rejectsWeight.isSelected());
-
+      
       if (this.$.rejectsWeight.isSelected()) {
-        this.selectedIds.push(this.releases[inEvent.rowIndex].recordId);
+        this.selectedIds.push(this.releases[inEvent.rowIndex].receptionId);
       } else {
         for ( var i = 0; i < this.selectedIds.length; i++) {
-          if (this.selectedIds[i] == this.releases[inEvent.rowIndex].recordId) {
+          if (this.selectedIds[i] == this.releases[inEvent.rowIndex].receptionId) {
             this.selectedIds.splice(i, 1);
             break;
           }
         }
       }
-
+      
       if (this.selectedIds.length == 0) {
         this.selectedCattleType = 0;
         this.selectedCattleName = '';
-        this.loadReleases(this.rancher_id);
+        this.loadReleases();
       }
     },
     setupCutSelection : function(inSender) {
@@ -176,8 +197,8 @@ enyo.kind(
         alert("Usted no ha seleccionado ningún lote para cortar, seleccione uno o más elementos de la lista posterior e intente nuevamente.");
         return false;
       }
-
+      
       this.doResolveSelected();
     }
-
+  
   });

@@ -131,7 +131,8 @@ public class ReceptionBean extends BaseBean implements Cruddable {
               Inspection inspection = new Inspection();
               inspection.setInspectionDate(new Date());
               inspection.setComments("Ganado liberado sin defectos");
-              inspection.setWeight(getWeight(entity));
+              // inspection weight is basically the rejects total weight
+              //inspection.setWeight(getWeight(entity));
               entity.addInspection(inspection);
             }
           }
