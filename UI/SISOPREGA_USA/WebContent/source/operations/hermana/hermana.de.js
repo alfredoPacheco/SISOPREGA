@@ -194,8 +194,22 @@ enyo.kind(
 
       ],
     ready : function() {
-//      this.$.rancher_id.setItems(cacheRanchers.getAllForList());
-      this.$.rancher_id.setItems([]); //TODO for the while
+      // Retrieve ranchers.
+      crudRancher.get(this, "readCallBack");
+      crudEnterpriseRancher.get(this, "readCallBack");
+    },
+    readCounter : 0,
+    readCallBack : function() {
+      this.readCounter++;
+      if (this.readCounter == 2) {
+        this.loadAutocompletes();
+        this.readCounter = 0;
+      }
+    },
+    loadAutocompletes : function() {
+      
+      var arrAllRanchers = crudRancher.getList().concat(crudEnterpriseRancher.getList());
+      this.$.rancher_id.setItems(arrAllRanchers);
     },
     resetForm : function() {
       this.$.entryNo.setValue('');

@@ -1,6 +1,78 @@
 /* *************************************************************
 I2 Tables.
    ************************************************************ */
+
+DROP TABLE IF EXISTS cat_cattle_quality CASCADE;
+CREATE TABLE cat_cattle_quality(
+	quality_id    SERIAL PRIMARY KEY,
+	quality_name  VARCHAR(20) UNIQUE NOT NULL,
+	min_weight    decimal(12,4) NOT NULL DEFAULT 0,
+	max_weight    decimal(12,4) NOT NULL DEFAULT 0,
+	for_horses    boolean DEFAULT FALSE
+);
+
+GRANT ALL ON cat_cattle_quality TO sisoprega;
+GRANT ALL ON cat_cattle_quality_quality_id_seq TO sisoprega;
+
+
+DROP TABLE IF EXISTS cat_expense_concept CASCADE;
+CREATE TABLE cat_expense_concept(
+	concept_id      SERIAL PRIMARY KEY,
+	concept_name    VARCHAR(30) UNIQUE NOT NULL,
+	expense_formula VARCHAR(50)
+);
+
+GRANT ALL ON cat_expense_concept TO sisoprega;
+GRANT ALL ON cat_expense_concept_concept_id_seq TO sisoprega;
+
+DROP TABLE IF EXISTS cat_seller CASCADE;
+CREATE TABLE cat_seller(
+	seller_id    SERIAL PRIMARY KEY,
+	seller_name  varchar(80) UNIQUE NOT NULL,
+	address_one  varchar(250),
+	address_two  varchar(250),
+	city         varchar(80),
+	address_state varchar(80),
+	zip_code varchar(20),
+	phone varchar(20),
+	email varchar(150)
+);
+
+GRANT ALL ON cat_seller TO sisoprega;
+GRANT ALL ON cat_seller_seller_id_seq TO sisoprega;
+
+DROP TABLE IF EXISTS cat_customer CASCADE;
+CREATE TABLE cat_customer(
+	customer_id    SERIAL PRIMARY KEY,
+	customer_name  varchar(80) UNIQUE NOT NULL,
+	address_one  varchar(250),
+	address_two  varchar(250),
+	city         varchar(80),
+	address_state varchar(80),
+	zip_code varchar(20),
+	phone varchar(20),
+	email varchar(150)
+);
+
+GRANT ALL ON cat_customer TO sisoprega;
+GRANT ALL ON cat_customer_customer_id_seq TO sisoprega;
+
+DROP TABLE IF EXISTS cat_carrier CASCADE;
+CREATE TABLE cat_carrier(
+	carrier_id	SERIAL PRIMARY KEY,
+	carrier_name	varchar(80) UNIQUE NOT NULL,
+	address_one 	varchar(250),
+	address_two	varchar(250),
+	city		varchar(80),
+	address_state	varchar(80),
+	zip_code	varchar(20),
+	phone		varchar(20)
+);
+
+GRANT ALL ON cat_carrier TO sisoprega;
+GRANT ALL ON cat_carrier_carrier_id_seq TO sisoprega;
+
+   
 DROP TABLE IF EXISTS ctrl_hermana CASCADE;
 CREATE TABLE ctrl_hermana(
 	hermana_id SERIAL PRIMARY KEY,
@@ -16,18 +88,11 @@ CREATE TABLE ctrl_hermana(
 GRANT ALL ON ctrl_hermana TO sisoprega;
 GRANT ALL ON ctrl_hermana_hermana_id_seq TO sisoprega;
 
-DROP TABLE IF EXISTS cat_cattle_quality CASCADE;
-CREATE TABLE cat_cattle_quality(
-	quality_id    SERIAL PRIMARY KEY,
-	quality_name  VARCHAR(20) UNIQUE NOT NULL,
-	min_weight    decimal(12,4) NOT NULL DEFAULT 0,
-	max_weight    decimal(12,4) NOT NULL DEFAULT 0,
-	for_horses    boolean DEFAULT FALSE
+DROP TABLE IF EXISTS ctrl_hermana_reception CASCADE;
+CREATE TABLE ctrl_hermana_reception(
+	hermana_id integer NOT NULL REFERENCES ctrl_hermana(hermana_id),
+	reception_id integer NOT NULL REFERENCES ctrl_reception(reception_id)
 );
-
-GRANT ALL ON cat_cattle_quality TO sisoprega;
-GRANT ALL ON cat_cattle_quality_quality_id_seq TO sisoprega;
-
 
 DROP TABLE IF EXISTS ctrl_hermana_corte_exportador CASCADE;
 CREATE TABLE ctrl_hermana_corte_exportador(
@@ -54,16 +119,6 @@ CREATE TABLE ctrl_hermana_corte(
 GRANT ALL ON ctrl_hermana_corte TO sisoprega;
 GRANT ALL ON ctrl_hermana_corte_corte_seq TO sisoprega;
 
-DROP TABLE IF EXISTS cat_expense_concept CASCADE;
-CREATE TABLE cat_expense_concept(
-	concept_id      SERIAL PRIMARY KEY,
-	concept_name    VARCHAR(30) UNIQUE NOT NULL,
-	expense_formula VARCHAR(50)
-);
-
-GRANT ALL ON cat_expense_concept TO sisoprega;
-GRANT ALL ON cat_expense_concept_concept_id_seq TO sisoprega;
-
 DROP TABLE IF EXISTS ctrl_hermana_expense CASCADE;
 CREATE TABLE ctrl_hermana_expense(
 	expense_id   SERIAL PRIMARY KEY,
@@ -71,22 +126,6 @@ CREATE TABLE ctrl_hermana_expense(
 	hermana_id  integer NOT NULL REFERENCES ctrl_hermana(hermana_id),
 	amount      decimal(12,2) NOT NULL
 );
-
-DROP TABLE IF EXISTS cat_seller CASCADE;
-CREATE TABLE cat_seller(
-	seller_id    SERIAL PRIMARY KEY,
-	seller_name  varchar(80) UNIQUE NOT NULL,
-	address_one  varchar(250),
-	address_two  varchar(250),
-	city         varchar(80),
-	address_state varchar(80),
-	zip_code varchar(20),
-	phone varchar(20),
-	email varchar(150)
-);
-
-GRANT ALL ON cat_seller TO sisoprega;
-GRANT ALL ON cat_seller_seller_id_seq TO sisoprega;
 
 DROP TABLE IF EXISTS ctrl_purchase CASCADE;
 CREATE TABLE ctrl_purchase(
@@ -111,22 +150,6 @@ CREATE TABLE ctrl_purchase_detail(
 
 GRANT ALL ON ctrl_purchase_detail TO sisoprega;
 GRANT ALL ON ctrl_purchase_detail_record_id_seq TO sisoprega;
-
-DROP TABLE IF EXISTS cat_customer CASCADE;
-CREATE TABLE cat_customer(
-	customer_id    SERIAL PRIMARY KEY,
-	customer_name  varchar(80) UNIQUE NOT NULL,
-	address_one  varchar(250),
-	address_two  varchar(250),
-	city         varchar(80),
-	address_state varchar(80),
-	zip_code varchar(20),
-	phone varchar(20),
-	email varchar(150)
-);
-
-GRANT ALL ON cat_customer TO sisoprega;
-GRANT ALL ON cat_customer_customer_id_seq TO sisoprega;
 
 DROP TABLE IF EXISTS ctrl_inventory CASCADE;
 CREATE TABLE ctrl_inventory(
@@ -167,17 +190,18 @@ CREATE TABLE ctrl_sale_detail(
 GRANT ALL ON ctrl_sale_detail TO sisoprega;
 GRANT ALL ON ctrl_sale_detail_record_id_seq TO sisoprega;
 
-DROP TABLE IF EXISTS cat_carrier CASCADE;
-CREATE TABLE cat_carrier(
-	carrier_id	SERIAL PRIMARY KEY,
-	carrier_name	varchar(80) UNIQUE NOT NULL,
-	address_one 	varchar(250),
-	address_two	varchar(250),
-	city		varchar(80),
-	address_state	varchar(80),
-	zip_code	varchar(20),
-	phone		varchar(20)
-);
+CREATE OR REPLACE VIEW vw_importable AS
+SELECT 
+reception.rancher_id, reception.cattle_type, cattle.cattype_name as cattle_name,
+detail.hc, detail.weight,
+SUM(rejects.hc) as rejects_hc, SUM(rejects.weight) as rejects_weight
+FROM ctrl_reception reception
+INNER JOIN cat_cattle_type cattle ON reception.cattle_type = cattle.cattype_id 
+INNER JOIN ctrl_reception_headcount detail ON reception.reception_id = detail.reception_id
+INNER JOIN ctrl_inspection inspection ON reception.reception_id = inspection.reception_id
+LEFT JOIN ctrl_inspection_result rejects ON inspection.inspection_id = rejects.inspection_id
+LEFT JOIN ctrl_hermana_reception hermana ON reception.reception_id = hermana.reception_id
+WHERE  hermana.hermana_id IS NULL
+GROUP BY reception.rancher_id, reception.cattle_type, cattle_name, detail.hc, detail.weight, hermana.hermana_id;
 
-GRANT ALL ON cat_carrier TO sisoprega;
-GRANT ALL ON cat_carrier_carrier_id_seq TO sisoprega;
+GRANT ALL ON vw_importable TO sisoprega;

@@ -15,7 +15,6 @@ enyo.depends(
 // "css/controls.css",
 // "css/general.css",
 
-// "source/releases.list.js",
 // "source/release.rejects.weight.js",
 // "source/pen.map.js",
 
@@ -27,13 +26,6 @@ enyo.depends(
 // "source/hermana.gastos.concepto.js",
 
 // "source/corte.js",
-
-// "source/cache.finance.js",
-
-// "source/finance.screen.js",
-// "source/finance.charges.payments.list.js",
-// "source/finance.charges.list.js",
-// "source/finance.payments.form.js",
 
 	"../SISOPREGA/css/transitions.css",
 
@@ -116,6 +108,8 @@ enyo.depends(
     "source/operations/hermana/hermana.corte.list.js",
     "source/operations/hermana/hermana.gastos.list.js",
     "source/operations/hermana/hermana.de.tabs.js",
+    "source/operations/hermana/releases.list.js",
+    "source/operations/hermana/release.rejects.weight.js",
 	
 	"source/operations/admin.purchased.js",
 	"source/operations/operations.purchase.form.js",
