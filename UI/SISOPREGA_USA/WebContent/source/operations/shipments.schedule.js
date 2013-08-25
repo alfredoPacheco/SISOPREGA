@@ -309,7 +309,7 @@ enyo.kind({
 		this.$.rowItem.setSwipeable(false);
 		this.$.lblAlreadyProgrammed.setContent("Programado para " + this.arrToShipDetailed[inIndex].shipProgramDateTime.toLocaleDateString() +
 			" " + this.arrToShipDetailed[inIndex].shipProgramDateTime.toLocaleTimeString().substring(0,5) +
-			"<br />Transporte: " + this.arrToShipDetailed[inIndex].shipCarrier);
+			"<br />Transporte: " + this.arrToShipDetailed[inIndex].carrierId);
 		this.$.lblAlreadyProgrammed.show();
 		
 	    }else if(this.arrToShipDetailed[inIndex].checked) {
@@ -352,17 +352,17 @@ enyo.kind({
 	    if(this.arrToShipDetailed[i].checked){
 		this.arrToShipDetailed[i].shipProgramDateTime = new Date("" + this.$.programDate
 			.getValue() + " " + this.$.programTime.getValue());
-		this.arrToShipDetailed[i].shipCarrier = this.$.carrier.getValue();
+		this.arrToShipDetailed[i].carrierId = this.$.carrier.getIndex();
     	    	var obj = {
-    		    customerId : 			this.arrToShipDetailed[i].customerId,
-    		    cattleName : 		this.arrToShipDetailed[i].cattleName,
+    		    customerId : 		this.arrToShipDetailed[i].customerId,
+    		    qualityId : 		this.arrToShipDetailed[i].qualityId,
     		    totalHeads : 		this.arrToShipDetailed[i].heads,
     		    totalWeight : 		this.arrToShipDetailed[i].weight,
     		    aveWeight : 		this.arrToShipDetailed[i].aveWeight,
-    		    shipCarrier : 		this.arrToShipDetailed[i].shipCarrier,
+    		    carrierId : 		this.arrToShipDetailed[i].carrierId,
     		    shipProgramDateTime :	this.arrToShipDetailed[i].shipProgramDateTime,
     		    saleId:			this.arrToShipDetailed[i].saleId,
-    		    id_inventory:		this.arrToShipDetailed[i].id_inventory,
+    		    id_inventory:		this.arrToShipDetailed[i].id_inventory,//TODO: id_inventory does not exists by this time
     		    itemNumber:			this.arrToShipDetailed[i].itemNumber,
     	    	};
     	    	arrToShip.push(obj);
@@ -400,14 +400,14 @@ enyo.kind({
 	for(i in arrByBuyer){
 	    if (arrByBuyer.hasOwnProperty(i)){
 		for(var j=0;j<arrByBuyer[i].length;j++){
-		    if(!(arrByBuyer[i][j].cattleName in arrDetail)){
-			arrDetail[arrByBuyer[i][j].cattleName]=[];
-			arrDetail[arrByBuyer[i][j].cattleName].totalHeads =0;
-			arrDetail[arrByBuyer[i][j].cattleName].totalWeight =0;
+		    if(!(arrByBuyer[i][j].qualityId in arrDetail)){
+			arrDetail[arrByBuyer[i][j].qualityId]=[];
+			arrDetail[arrByBuyer[i][j].qualityId].totalHeads =0;
+			arrDetail[arrByBuyer[i][j].qualityId].totalWeight =0;
 		    }
-		    arrDetail[arrByBuyer[i][j].cattleName].push(arrByBuyer[i][j]);
-		    arrDetail[arrByBuyer[i][j].cattleName].totalHeads += arrByBuyer[i][j].totalHeads;
-		    arrDetail[arrByBuyer[i][j].cattleName].totalWeight += arrByBuyer[i][j].totalWeight;
+		    arrDetail[arrByBuyer[i][j].qualityId].push(arrByBuyer[i][j]);
+		    arrDetail[arrByBuyer[i][j].qualityId].totalHeads += arrByBuyer[i][j].totalHeads;
+		    arrDetail[arrByBuyer[i][j].qualityId].totalWeight += arrByBuyer[i][j].totalWeight;
 		}
 		objShip[i] = arrDetail;
 		arrDetail={};
@@ -499,7 +499,7 @@ enyo.kind({
 	var firstFound = -1;
 	var itemInIndex = this.arrToShipDetailed[inIndex];
 	for (var i=0;i<len;i++){
-		if(this.arrToShipDetailed[i].detailNumber == itemInIndex.detailNumber){
+		if(this.arrToShipDetailed[i].detailNumber == itemInIndex.detailNumber){ //TODO: actualmente detailNumber = undefined
 		    if(!this.arrToShipDetailed[i].hasOwnProperty("shipProgramDateTime")){
 			if(firstFound > -1){
 			    this.arrToShipDetailed[firstFound].heads += Number(this.arrToShipDetailed[i].heads);
