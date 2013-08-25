@@ -1329,4 +1329,31 @@
 			</basic>
 		</attributes>
 	</entity>
+	<entity class="com.tramex.sisoprega.dto.Released">
+		<table name="vw_importable"><unique-constraint><column-name>reception_id</column-name></unique-constraint></table>
+		<named-query name="ALL_RELEASEDS">
+			<description>Retrieve all release records from database.</description>
+			<query>SELECT iReleased FROM Released iReleased</query>
+		</named-query>
+		<attributes>
+			<id name="receptionId">
+				<column name="reception_id"/>
+			</id>
+			<basic name="rancherId">
+				<column name="rancher_id"/>
+			</basic>
+			<basic name="cattleType">
+				<column name="cattle_type"/>
+			</basic>
+			<basic name="cattleName">
+				<column name="cattle_name"/>
+			</basic>
+			<basic name="heads">
+				<column name="hc"/>
+			</basic>
+			<basic name="rejects_heads">
+				<column name="rejects_hc"/>
+			</basic>
+		</attributes>
+	</entity>
 </entity-mappings>

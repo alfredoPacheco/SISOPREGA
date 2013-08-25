@@ -10,7 +10,7 @@ import com.tramex.sisoprega.proxy.common.BaseBean;
  * Session Bean implementation class CustomerBean
  */
 @Stateless
-@RolesAllowed({"sisoprega_admin", "mx_usr", "us_usr", "rancher", "agency"})
+@RolesAllowed({"us_usr", "agency"})
 public class CarrierBean extends BaseBean implements Cruddable {
 
 }
