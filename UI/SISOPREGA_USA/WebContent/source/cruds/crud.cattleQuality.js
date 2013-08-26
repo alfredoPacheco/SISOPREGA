@@ -48,5 +48,20 @@ enyo.kind(
 	}
 	return null;
     },
+    getFilteredList : function(cattleClass){
+      var arrList = [];
+      for(var i=0; i < this.arrObj.length; i++){
+        var listObject = this.adapterToList(this.arrObj[i]);
+        if(cattleClass == 3){
+          if(this.arrObj[i].forHorses)
+            arrList.push(listObject);
+        } else {
+          arrList.push(listObject);
+        }
+      }
+      
+      return arrList;
+      
+    }
   });
 var crudCattleQuality = new crud.cattleQuality();

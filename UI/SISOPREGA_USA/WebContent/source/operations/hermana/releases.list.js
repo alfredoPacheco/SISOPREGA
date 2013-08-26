@@ -19,7 +19,7 @@ enyo.kind(
             kind : "HFlexBox",
             name : "title",
             content : "Lotes inspeccionados del exportador: {EXPORTADOR SELECCIONADO}",
-            style : "font-size:18px;background-color:black;color:white;"
+            style : "font-size:18px;background-color:#333;color:white;"
           },
           {
             kind : "Header",

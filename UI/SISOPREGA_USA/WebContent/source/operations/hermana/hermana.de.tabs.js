@@ -153,8 +153,6 @@ enyo.kind(
                 kind : "hermana.corte.list",
                 name : "listaCorte",
                 onRemoveCorte : "corteRemoved",
-//                style : "border: solid 1px black;",
-//                height:"200px",
                 flex:1
               } ]
         },
@@ -252,8 +250,6 @@ enyo.kind(
               },
               {
                 kind : "hermana.corte.list",
-//                style : "border: thin dotted black;", 
-//                height:"200px",
                 flex:1,
                 name : "listaCorteExpo",
                 onRemoveCorte : "clearCorteExpoDataEntry",
@@ -310,7 +306,6 @@ enyo.kind(
               {
                 kind : "hermana.gastos.list",
                 name : "chargeList",
-//                style : "border: thin dotted black;",
                 flex:1
               } ]
         },
@@ -378,10 +373,6 @@ enyo.kind(
               } ]
         } ],
     ready : function() {
-      this.$.penAutoComplete.setItems(cachePen.getList());
-      this.$.classAutoComplete.setItems(cacheClasses.getList());
-      this.$.classAutoCompleteExpo.setItems(cacheClasses.getList());
-      this.$.charge.setItems(cacheCharges.getList());
       this.$.listaCorteExpo.$.rowContainer.setConfirmCaption("Reestablecer");
       this.$.listaCorteExpo.isForExporter = true;
       this.tabClicked(this.$.btnCorte);
@@ -444,7 +435,7 @@ enyo.kind(
       this.$.tabSummary.setShowing(true);
     },
     setCattleClass : function(cattleClass, cattleClassName) {
-      this.$.classAutoComplete.setItems(cacheClasses.getList(cattleClass));
+      this.$.classAutoComplete.setItems(crudCattleQuality.getFilteredList(cattleClass));
       this.cattleClassName = cattleClassName;
     },
     setSummary : function(summaryObj) {
