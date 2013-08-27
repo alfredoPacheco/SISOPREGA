@@ -145,7 +145,6 @@ enyo.kind(
 
         if (this.iSelected == inIndex) {
           this.$.rowContainer.applyStyle("background-color", "wheat");
-//          this.$.rowContainer.applyStyle("color", "#EBCE9C");
         }
 
         return true;

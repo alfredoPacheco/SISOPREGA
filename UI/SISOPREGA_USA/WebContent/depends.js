@@ -71,7 +71,6 @@ enyo.depends(
 	"source/trash/cache.sales.price.js",
 	"source/trash/cache.sales.js",
 	"source/trash/cache.cattle.quality.js",
-	"source/trash/cache.corte.js",
 	"source/trash/cache.drivers.js",
 	"source/trash/cache.inventory.js",
 	"source/trash/cache.pen.js",
@@ -79,7 +78,6 @@ enyo.depends(
 	"source/trash/cache.purchased.js",
 	"source/trash/cache.releases.js",
 	"source/trash/cache.shipments.js",
-	"source/trash/cache.charges.js",
 	
 	"source/catalogs/catalogs.customer.form.js",
 	"source/catalogs/catalogs.seller.form.js",
@@ -105,6 +103,8 @@ enyo.depends(
 	"source/operations/admin.addCattle.js",
 	"source/operations/admin.screen.js",	
 	
+	"source/operations/hermana/cache/cache.corte.js",
+	"source/operations/hermana/cache/cache.charges.js",
 	"source/operations/hermana/hermana.de.js",
     "source/operations/hermana/hermana.corte.list.js",
     "source/operations/hermana/hermana.gastos.list.js",

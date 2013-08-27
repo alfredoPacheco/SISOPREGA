@@ -362,9 +362,14 @@ enyo.kind(
       summary.trade_lbs = Math.floor((summary.trade_kgs * 2.2046) * 100) / 100;
       summary.trade_avg = Math.floor((summary.trade_lbs / summary.trade_hc) * 100) / 100;
       
+      cacheCorte.clear();
+      this.$.details.$.listaCorte.setCortes(cacheCorte.get());
+      this.$.details.$.listaCorteExpo.setCortes(cacheCorte.getExpo());
+      
       this.$.details.setReleaseIds(this.$.releasesList.selectedIds);
       this.$.details.setSummary(summary);
       this.$.details.updateTableContents();
+      
       this.closePopUp();
     },
     saveHermana : function() {
