@@ -1266,6 +1266,7 @@
 			<one-to-many name="saleDetail" fetch="EAGER"
 				mapped-by="sale" target-entity="com.tramex.sisoprega.dto.SaleDetail"
 				orphan-removal="true">
+				<order-by>sale_seq ASC</order-by>
 				<cascade>
 					<cascade-all />
 				</cascade>
@@ -1285,10 +1286,16 @@
 			<basic name="qualityId">
 				<column name="quality_id" />
 			</basic>
+			<basic name="sale_seq">
+				<column name="sale_seq" />
+			</basic>
+			<basic name="inventoryId">
+				<column name="inventoryId" />
+			</basic>
 			<many-to-one name="sale" fetch="LAZY" optional="false">
 				<join-column name="sale_id" referenced-column-name="sale_id"
-					nullable="false" />
-			</many-to-one>
+					nullable="false" />					
+			</many-to-one>			
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.Carrier">

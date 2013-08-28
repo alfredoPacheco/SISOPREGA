@@ -184,7 +184,9 @@ CREATE TABLE ctrl_sale_detail(
 	barnyard_id  integer NOT NULL REFERENCES cat_barnyard(barnyard_id),
 	quality_id   integer NOT NULL REFERENCES cat_cattle_quality(quality_id),
 	heads        integer not null,
-	weight       decimal(12,4) not null
+	weight       decimal(12,4) not null,
+	sale_seq     integer not null,
+	inventoryId  integer not null
 );
 
 GRANT ALL ON ctrl_sale_detail TO sisoprega;

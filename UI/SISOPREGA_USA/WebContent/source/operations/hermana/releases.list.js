@@ -134,7 +134,7 @@ enyo.kind(
         cacheMan.hideScrim();
       } else {
         cacheMan.hideScrim();
-        alert('No hay inspecciones liberadas para este exportador, intente más tarde.');
+        cacheMan.setMessage("",'No hay inspecciones liberadas para este exportador, intente más tarde.');
         this.$.doCancel();
       }
     },
@@ -169,7 +169,7 @@ enyo.kind(
         return true;
       }
       if (this.selectedCattleType != this.releases[inEvent.rowIndex].cattleType && !this.$.rejectsWeight.isSelected()) {
-        alert('No se pueden seleccionar dos tipos de ganado diferente, previamente usted ha seleccionado ' + this.selectedCattleName);
+	  cacheMan.setMessage("",'No se pueden seleccionar dos tipos de ganado diferente, previamente usted ha seleccionado ' + this.selectedCattleName);
         return false;
       }
       
@@ -194,7 +194,7 @@ enyo.kind(
     },
     setupCutSelection : function(inSender) {
       if (this.selectedIds.length == 0) {
-        alert("Usted no ha seleccionado ningún lote para cortar, seleccione uno o más elementos de la lista posterior e intente nuevamente.");
+	  cacheMan.setMessage("","Usted no ha seleccionado ningún lote para cortar, seleccione uno o más elementos de la lista posterior e intente nuevamente.");
         return false;
       }
       

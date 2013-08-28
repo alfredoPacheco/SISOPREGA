@@ -238,12 +238,12 @@ enyo.kind(
       var rancherName = this.$.rancher_id.getValue();
       
       if (rancherId == -1 && rancherName == '') {
-        alert('Seleccione primero un exportador de la lista');
+	  cacheMan.setMessage("","Seleccione primero un exportador de la lista");
         return false;
       }
       
       if (rancherId == -1 && rancherName != '') {
-        alert('El exportador que usted ha capturado (' + rancherName + ') no se encuentra en la lista, por favor seleccione un exportador válido');
+	  cacheMan.setMessage("","El exportador que usted ha capturado (" + rancherName + ") no se encuentra en la lista, por favor seleccione un exportador válido");
         return false;
       }
       

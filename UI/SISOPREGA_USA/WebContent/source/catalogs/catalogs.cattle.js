@@ -163,7 +163,7 @@ enyo.kind(
         };
 
       if(newCattleClass.cattle_types.length==0){
-        alert('Seleccione el tipo de ganado compatible con esta clasificación.');
+        cacheMan.setMessage("","Seleccione el tipo de ganado compatible con esta clasificación.");
         return false;
       }
       

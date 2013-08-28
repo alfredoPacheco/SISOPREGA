@@ -182,7 +182,7 @@ enyo.kind({
 	    this.$.popup_shipments.openAtCenter();
 	    this.$.shipments_kind.updateList();
 	} else {
-	    alert("No hay registros seleccionados");
+	    cacheMan.setMessage("","No hay registros seleccionados");
 	}
     },
     showSelectShipment : function(arrShipment) {

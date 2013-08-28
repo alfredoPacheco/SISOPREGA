@@ -56,8 +56,8 @@ enyo.kind(
       if (this.cortesExpo[index].recordIds.length == 1) {
         var recordId = this.cortesExpo[index].recordIds[0];
         if (this.cortes[recordId].cattleClassId == this.cortesExpo[index].cattleClassId) {
-          alert('El registro es igual al registro original, ningun valor puede ser reiniciado');
-          return false;
+            cacheMan.setMessage("","El registro es igual al registro original, ningun valor puede ser reiniciado");
+            return false;
         }
       }
 

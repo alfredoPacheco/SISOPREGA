@@ -573,7 +573,7 @@ enyo.kind(
         this.$.charge_price.setValue("");
         this.$.charge.setValue("");
       } else {
-        alert("Concepto no registrado");
+	  cacheMan.setMessage("","Concepto no registrado");
       }
     },
     showNewCharge : function() {
@@ -607,7 +607,7 @@ enyo.kind(
     },
     reClassify : function() {
       if (this.$.listaCorteExpo.iSelected == -1) {
-        alert("No hay registro seleccionado para re clasificación");
+	  cacheMan.setMessage("","No hay registro seleccionado para re clasificación");
         return false;
       }
 

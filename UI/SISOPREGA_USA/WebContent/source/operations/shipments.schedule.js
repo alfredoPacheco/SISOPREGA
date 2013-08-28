@@ -362,7 +362,7 @@ enyo.kind({
     		    carrierId : 		this.arrToShipDetailed[i].carrierId,
     		    shipProgramDateTime :	this.arrToShipDetailed[i].shipProgramDateTime,
     		    saleId:			this.arrToShipDetailed[i].saleId,
-    		    id_inventory:		this.arrToShipDetailed[i].id_inventory,//TODO: id_inventory does not exists by this time
+    		    inventoryId:		this.arrToShipDetailed[i].inventoryId,
     		    itemNumber:			this.arrToShipDetailed[i].itemNumber,
     	    	};
     	    	arrToShip.push(obj);
@@ -379,7 +379,7 @@ enyo.kind({
 	if(arrToShip.length){
 	    this.saveShip(arrToShip);    
 	}else{
-	    alert("nada seleccionado");//TODO aviso con enyo
+	    cacheMan.setMessage("","Nada seleccionado.");
 	}
     },
     saveShip:function(arrShip){
@@ -499,7 +499,7 @@ enyo.kind({
 	var firstFound = -1;
 	var itemInIndex = this.arrToShipDetailed[inIndex];
 	for (var i=0;i<len;i++){
-		if(this.arrToShipDetailed[i].detailNumber == itemInIndex.detailNumber){ //TODO: actualmente detailNumber = undefined
+		if(this.arrToShipDetailed[i].saleDetailId == itemInIndex.saleDetailId){
 		    if(!this.arrToShipDetailed[i].hasOwnProperty("shipProgramDateTime")){
 			if(firstFound > -1){
 			    this.arrToShipDetailed[firstFound].heads += Number(this.arrToShipDetailed[i].heads);

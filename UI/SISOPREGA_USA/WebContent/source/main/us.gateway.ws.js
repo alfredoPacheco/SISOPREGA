@@ -27,7 +27,7 @@ enyo.kind({
           });
         },
         error : function OnError(request, status, error) {
-          alert(request.getResponse.text());
+            cacheMan.setMessage("",request.getResponse.text());
         }
       });
     return roles;

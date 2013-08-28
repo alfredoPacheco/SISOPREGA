@@ -410,7 +410,7 @@ enyo
 		    var objTo = cachePen.getByBarnyard(this.movingTo.name);
 		    if (objTo && objFrom) {
 			if (objFrom.cattleName != objTo.cattleName) {
-			    alert("No es posible mezclar clases de ganado en un corral");
+			    cacheMan.setMessage("","No es posible mezclar clases de ganado en un corral");
 			    break;
 			}
 		    }
@@ -423,7 +423,7 @@ enyo
 			this.$.movePen_kind.setObj(objFrom);
 			this.$.popup_movePen.openAtCenter();
 		    } else {
-			alert("actionSelected Error");
+			cacheMan.setMessage("","actionSelected Error");
 		    }
 
 		    break;
@@ -503,7 +503,7 @@ enyo
 		    this.$.btnCancelMoving.hide();
 		    this.setDesc(this.movingTo.name);
 		} else {
-		    alert("saveMoving Error");
+		    cacheMan.setMessage("","saveMoving Error");
 		}
 	    },
 	    cancelFeed : function() {

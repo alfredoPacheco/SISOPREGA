@@ -56,7 +56,7 @@ enyo.kind({
 		name : "textField",
 		hint : "",
 		flex : 1,
-		oninput:"on_input", //TODO WORKING HERE
+		oninput:"on_input",
 		onfocus:"on_focus",
 		onblur:"on_lost_focus"
 	    } ]

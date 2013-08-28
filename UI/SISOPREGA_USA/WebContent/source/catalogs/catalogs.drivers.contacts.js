@@ -144,7 +144,7 @@ enyo
 
 					this.$.detailScroller.scrollToBottom();					
 				}else
-					alert("Verifique campos.");
+					cacheMan.setMessage("","Verifique campos.");
 				
 
 			},
@@ -201,8 +201,7 @@ enyo
 				this.$.draAdd.setOpen(false);
 				this.$.draUpdate.setOpen(true);
 			},
-			update_click:function(){
-				alert(this.iSelected);
+			update_click:function(){				
 				var newInfo = {
 						id: this.obj.contacts[this.iSelected].id,
 						contact : this.$.contact.getValue(),
@@ -214,7 +213,7 @@ enyo
 						cacheDrivers.updContact(this.obj, newInfo, this,
 								"updateList");										
 					}else
-						alert("Verifique campos.");
+					    cacheMan.setMessage("","Verifique campos.");
 				
 			},
 			cancel_click:function(){

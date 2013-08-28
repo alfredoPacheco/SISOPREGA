@@ -196,7 +196,7 @@ enyo
             };
           
           var detailFields = this.$.detailFields.children;
-          for ( var i = 0; i < detailFields.length; i++) {
+          for ( var i = detailFields.length-1; i >= 0; i--) {
             if (detailFields[i].hasOwnProperty("bindTo")) {
               newObject.fields[i] = detailFields[i].getValue();
               newObject[detailFields[i].bindTo] = this.getValueFromControl(detailFields[i]);

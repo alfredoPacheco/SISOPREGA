@@ -18,7 +18,7 @@ enyo.depends(
 // "source/release.rejects.weight.js",
 // "source/pen.map.js",
 
-// "source/driver.select.js",
+
 	
 // "source/utils.format.js",
 // "source/movePen.js",
@@ -117,6 +117,7 @@ enyo.depends(
 	"source/operations/operations.sales.form.js",
 	"source/operations/shipments.schedule.js",
 	"source/operations/shipments.popup.split.js",
+	"source/operations/driver.select.js",
 
 	 "../SISOPREGA/source/reports/reports.main.js",
 	 "../SISOPREGA/source/reports/reports.select.js",

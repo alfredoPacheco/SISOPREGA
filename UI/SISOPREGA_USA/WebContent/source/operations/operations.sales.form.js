@@ -213,5 +213,20 @@ enyo.kind(
      this.$.pen.setFilter(filter);
      this.$.pen.clear();
      this.$.pen.useFilter();
+    },
+    beforeSave : function(obj) {
+	var items = crudInventory.getPensList();	     
+	if(obj.SaleDetail){
+	    for(var i=0;i<obj.SaleDetail.length;i++){
+		obj.SaleDetail[i].inventoryId =-1;
+		for (var j = 0; j < items.length; j++) {
+		    if (items[j].value == obj.SaleDetail[i].penId) {
+			obj.SaleDetail[i].inventoryId = items[j].object.inventoryId;
+			break;
+		    }
+		}
+	    }
+	}
+	return true;
     }
   });

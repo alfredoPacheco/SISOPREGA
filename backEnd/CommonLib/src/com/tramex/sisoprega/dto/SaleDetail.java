@@ -39,6 +39,8 @@ public class SaleDetail {
   private long qualityId;
   private long heads;
   private double weight;
+  private long sale_seq;
+  private long inventoryId;
   private Sale sale;
   
   /**
@@ -115,9 +117,33 @@ public class SaleDetail {
     this.sale = sale;
   }
   
+  /**
+   * @return the sale_seq
+   */
+  public long getSale_seq() {
+    return sale_seq;
+  }
+  /**
+   * @param sale_seq the sale_seq to set
+   */
+  public void setSale_seq(long sale_seq) {
+    this.sale_seq = sale_seq;
+  }
+  /**
+   * @return the inventoryId
+   */
+  public long getInventoryId() {
+    return inventoryId;
+  }
+  /**
+   * @param inventoryId the inventoryId to set
+   */
+  public void setInventoryId(long inventoryId) {
+    this.inventoryId = inventoryId;
+  }
   @Override
   public String toString() {
-    return "recordId:" + saleDetailId + ";penId:" + penId + ";qualityId:" + qualityId + ";heads:" + heads + ";weight:" + weight + ";";
+    return "recordId:" + saleDetailId + ";penId:" + penId + ";qualityId:" + qualityId + ";heads:" + heads + ";weight:" + weight + ";sale_seq:" + sale_seq + ";inventoryId:" + inventoryId + ";";
   }
   
 }

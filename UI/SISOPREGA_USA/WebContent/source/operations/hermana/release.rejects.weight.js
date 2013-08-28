@@ -29,7 +29,7 @@ enyo.kind(
         saveRejectedWeight : function(){
           // TODO: Save using web service.
           releasesCache.updateRejectsWeight(this.rejectedRecord, this.$.weightInput.value);
-          alert('El registro de peso de rechazos ha sido grabado exitosamente.');
+          cacheMan.setMessage("",'El registro de peso de rechazos ha sido grabado exitosamente.');
           this.cancelCheckBox();
           this.doSaved();
         },
