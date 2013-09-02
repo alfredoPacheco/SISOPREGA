@@ -16,6 +16,8 @@
 package com.tramex.sisoprega.dto;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Defines the model for the Hermana entity.<BR/>
@@ -44,6 +46,9 @@ public class Hermana {
   private long rancherId;
   private Date deWhen = new Date();
   private String hermanaBy;
+  private Set<HermanaCorte> hermanaCorte;
+  private Set<HermanaCorteExportador> hermanaCorteExportador;
+  private Set<HermanaExpense> hermanaExpense;
 
   /**
    * @return the hermanaId
@@ -161,6 +166,86 @@ public class Hermana {
   public String toString() {
     return "hermanaId:" + hermanaId + ";entryNo:" + entryNo + ";refNo:" + refNo + ";consignee:" + consignee + ";accountOf:"
         + accountOf + ";rancherId:" + rancherId + ";hermanaBy:" + hermanaBy + ";";
+  }
+
+  /**
+   * @return the hermanaCorte
+   */
+  public Set<HermanaCorte> getHermanaCorte() {
+    return hermanaCorte;
+  }
+
+  /**
+   * @param hermanaCorte the hermanaCorte to set
+   */
+  public void setHermanaCorte(Set<HermanaCorte> hermanaCorte) {
+    this.hermanaCorte = hermanaCorte;
+  }
+  
+  public void addHermanaCorte(HermanaCorte hermanaCorte){
+    if(this.hermanaCorte == null)
+      this.hermanaCorte = new HashSet<HermanaCorte>();
+    
+    this.hermanaCorte.add(hermanaCorte);
+    
+    if(hermanaCorte.getHermana() != this)
+      hermanaCorte.setHermana(this);
+  }
+
+  /**
+   * @return the hermanaCorteExportador
+   */
+  public Set<HermanaCorteExportador> getHermanaCorteExportador() {
+    return hermanaCorteExportador;
+  }
+
+  /**
+   * @param hermanaCorteExportador the hermanaCorteExportador to set
+   */
+  public void setHermanaCorteExportador(Set<HermanaCorteExportador> hermanaCorteExportador) {
+    this.hermanaCorteExportador = hermanaCorteExportador;
+  }
+  
+  public void addHermanaCorteExportador(HermanaCorteExportador hermanaCorteExportador){
+    if(this.hermanaCorteExportador == null)
+      this.hermanaCorteExportador = new HashSet<HermanaCorteExportador>();
+    
+    this.hermanaCorteExportador.add(hermanaCorteExportador);
+    
+    if(hermanaCorteExportador.getHermana() != this)
+      hermanaCorteExportador.setHermana(this);
+  }
+  
+  /**
+   * @return the hermanaExpense
+   */
+  public Set<HermanaExpense> getHermanaExpense() {
+    return hermanaExpense;
+  }
+
+  /**
+   * @param hermanaExpense the hermanaExpense to set
+   */
+  public void setHermanaExpense(Set<HermanaExpense> hermanaExpense) {
+    this.hermanaExpense = hermanaExpense;
+  }
+  
+  public void addHermanaExpense (HermanaExpense hermanaExpense){
+    if(this.hermanaExpense == null)
+      this.hermanaExpense = new HashSet<HermanaExpense>();
+    
+    this.hermanaExpense.add(hermanaExpense);
+    
+    if(hermanaExpense.getHermana()!=this)
+      hermanaExpense.setHermana(this);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if(obj instanceof Hermana){
+      return this.getHermanaId() == ((Hermana) obj).getHermanaId();
+    }
+    return false;
   }
 
 }

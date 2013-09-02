@@ -35,9 +35,9 @@ package com.tramex.sisoprega.dto;
  */
 public class HermanaCorteExportador {
   private long hermanaCorteExportadorId;
-  private long hermanaId;
   private long qualityId;
   private double purchasePrice = 0.0d;
+  private Hermana hermana;
   
   /**
    * @return the hermanaCorteExportadorId
@@ -52,21 +52,7 @@ public class HermanaCorteExportador {
   public void setHermanaCorteExportadorId(long hermanaCorteExportadorId) {
     this.hermanaCorteExportadorId = hermanaCorteExportadorId;
   }
-  
-  /**
-   * @return the hermanaId
-   */
-  public long getHermanaId() {
-    return hermanaId;
-  }
-  
-  /**
-   * @param hermanaId the hermanaId to set
-   */
-  public void setHermanaId(long hermanaId) {
-    this.hermanaId = hermanaId;
-  }
-  
+
   /**
    * @return the qualityId
    */
@@ -95,9 +81,23 @@ public class HermanaCorteExportador {
     this.purchasePrice = purchasePrice;
   }
 
+  /**
+   * @return the hermana
+   */
+  public Hermana getHermana() {
+    return hermana;
+  }
+
+  /**
+   * @param hermana the hermana to set
+   */
+  public void setHermana(Hermana hermana) {
+    this.hermana = hermana;
+  }
+
   @Override
   public String toString() {
-    return "corteExpo:" + hermanaCorteExportadorId + ";hermanaId:" + hermanaId + ";qualityId:" + qualityId + ";";
+    return "corteExpo:" + hermanaCorteExportadorId + ";qualityId:" + qualityId + ";";
   }
   
 }
