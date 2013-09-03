@@ -559,8 +559,15 @@ enyo.kind(
     },
     chargeSelected : function() {
       if (this.$.charge.getIndex() > -1) {
+        // TODO: Calculate price from formula
         //this.$.charge_price.setValue(cacheCharges.getList()[this.$.charge.getIndex()-1].charge_price);
       }
+    },
+    calcularGasto : function(charge){
+      // TODO: Replace heads
+      // TODO: Replace pounds
+      // TODO: Replace kilos
+      // TODO: Evaluate expresion
     },
     addCharge : function() {
       if (this.$.charge.getIndex() > -1) {

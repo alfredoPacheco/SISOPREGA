@@ -198,11 +198,12 @@ enyo.kind(
       crudEnterpriseRancher.get(this, "readCallBack");
       crudPen.get(this, "readCallBack");
       crudCattleQuality.get(this, "readCallBack");
+      crudExpenseConcept.get(this, "readCallBack");
     },
     readCounter : 0,
     readCallBack : function() {
       this.readCounter++;
-      if (this.readCounter == 4) {
+      if (this.readCounter == 5) {
         this.loadAutocompletes();
         this.readCounter = 0;
       }
@@ -213,9 +214,7 @@ enyo.kind(
       this.$.details.$.penAutoComplete.setItems(crudPen.getListUsaPens());
       this.$.details.$.classAutoComplete.setItems(crudCattleQuality.getList());
       this.$.details.$.classAutoCompleteExpo.setItems(crudCattleQuality.getList());
-      /*
-      this.$.charge.setItems(cacheCharges.getList());
-       * */
+      this.$.details.$.charge.setItems(crudExpenseConcept.getList());
       
       cacheMan.hideScrim();
     },

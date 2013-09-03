@@ -1076,6 +1076,10 @@
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.ExpenseConcept">
 		<table name="cat_expense_concept" />
+		<named-query name="ALL_EXPENSECONCEPTS">
+			<description>Retrieve all records from database</description>
+			<query>SELECT iExpense FROM ExpenseConcept iExpense</query>
+		</named-query>
 		<attributes>
 			<id name="expenseConceptId">
 				<column name="concept_id" />
