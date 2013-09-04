@@ -3,8 +3,9 @@ package com.tramex.sisoprega.dto;
 public class HermanaExpense {
   private long hermanaExpenseId;
   private long conceptId;
-  private long hermanaId;
   private double amount;
+  private Hermana hermana;
+  
   /**
    * @return the hermanaExpenseId
    */
@@ -16,18 +17,6 @@ public class HermanaExpense {
    */
   public void setHermanaExpenseId(long hermanaExpenseId) {
     this.hermanaExpenseId = hermanaExpenseId;
-  }
-  /**
-   * @return the hermanaId
-   */
-  public long getHermanaId() {
-    return hermanaId;
-  }
-  /**
-   * @param hermanaId the hermanaId to set
-   */
-  public void setHermanaId(long hermanaId) {
-    this.hermanaId = hermanaId;
   }
   /**
    * @return the amount
@@ -55,8 +44,20 @@ public class HermanaExpense {
     this.conceptId = conceptId;
   }
   
+  /**
+   * @return the hermana
+   */
+  public Hermana getHermana() {
+    return hermana;
+  }
+  /**
+   * @param hermana the hermana to set
+   */
+  public void setHermana(Hermana hermana) {
+    this.hermana = hermana;
+  }
   @Override
   public String toString() {
-    return "expenseId:" + hermanaExpenseId + ";hermanaId:" + hermanaId + ";amount:" + amount + ";";
+    return "expenseId:" + hermanaExpenseId + ";amount:" + amount + ";";
   }
 }

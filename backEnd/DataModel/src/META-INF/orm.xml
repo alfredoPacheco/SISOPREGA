@@ -982,6 +982,22 @@
 				<column name="de_when" />
 				<temporal>TIMESTAMP</temporal>
 			</basic>
+			<one-to-many name="hermanaCorte" fetch="EAGER"
+			mapped-by="hermana" target-entity="com.tramex.sisoprega.dto.HermanaCorte" orphan-removal="true">
+				<cascade>
+					<cascade-all/>
+				</cascade>
+			</one-to-many>
+			<one-to-many name="hermanaCorteExportador" fetch="EAGER" mapped-by="hermana" target-entity="com.tramex.sisoprega.dto.HermanaCorteExportador" orphan-removal="true">
+				<cascade>
+					<cascade-all/>
+				</cascade>
+			</one-to-many>
+			<one-to-many name="hermanaExpense" fetch="EAGER" mapped-by="hermana" target-entity="com.tramex.sisoprega.dto.HermanaExpense" orphan-removal="true">
+				<cascade>
+					<cascade-all/>
+				</cascade>
+			</one-to-many>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.CattleQuality">
@@ -1020,15 +1036,15 @@
 				<column name="corte_expo" />
 				<generated-value strategy="IDENTITY" />
 			</id>
-			<basic name="hermanaId">
-				<column name="hermana_id" />
-			</basic>
 			<basic name="qualityId">
 				<column name="quality_id" />
 			</basic>
 			<basic name="purchasePrice">
 				<column name="purchase_price" />
 			</basic>
+			<many-to-one name="hermana" fetch="LAZY" optional="false">
+				<join-column name="hermana_id" referenced-column-name="hermana_id" nullable="false"/>
+			</many-to-one>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.HermanaCorte">
@@ -1038,9 +1054,6 @@
 				<column name="corte" />
 				<generated-value strategy="IDENTITY" />
 			</id>
-			<basic name="hermanaId">
-				<column name="hermana_id" />
-			</basic>
 			<basic name="barnyardId">
 				<column name="barnyard_id" />
 			</basic>
@@ -1056,10 +1069,17 @@
 			<basic name="weight">
 				<column name="weight" />
 			</basic>
+			<many-to-one name="hermana" fetch="LAZY" optional="false">
+				<join-column name="hermana_id" referenced-column-name="hermana_id" nullable="false"/>
+			</many-to-one>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.ExpenseConcept">
 		<table name="cat_expense_concept" />
+		<named-query name="ALL_EXPENSECONCEPTS">
+			<description>Retrieve all records from database</description>
+			<query>SELECT iExpense FROM ExpenseConcept iExpense</query>
+		</named-query>
 		<attributes>
 			<id name="expenseConceptId">
 				<column name="concept_id" />
@@ -1080,12 +1100,12 @@
 				<column name="expense_id" />
 				<generated-value strategy="IDENTITY" />
 			</id>
-			<basic name="hermanaId">
-				<column name="hermana_id" />
-			</basic>
 			<basic name="conceptId">
 				<column name="concept_id" />
 			</basic>
+			<many-to-one name="hermana" fetch="LAZY" optional="false">
+				<join-column name="hermana_id" referenced-column-name="hermana_id" nullable="false"/>
+			</many-to-one>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.Seller">

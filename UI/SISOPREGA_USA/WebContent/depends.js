@@ -67,7 +67,7 @@ enyo.depends(
 	"source/cruds/crud.inventory.js",
 	"source/cruds/crud.released.js",
 	"source/cruds/crud.shipment.js",
-	
+	"source/cruds/crud.expenseConcept.js",	
 	
 	"source/trash/cache.sales.price.js",
 	"source/trash/cache.sales.js",
@@ -89,6 +89,7 @@ enyo.depends(
 	"source/catalogs/catalogs.cattle.js",
 	
 	"source/catalogs/catalogs.carrier.form.js",
+	"source/catalogs/catalogs.expenseConcept.form.js",
 	
 	 "../SISOPREGA/source/operations/inspection.forecast.js",
 	 "../SISOPREGA/source/operations/operations.pen.map.js",

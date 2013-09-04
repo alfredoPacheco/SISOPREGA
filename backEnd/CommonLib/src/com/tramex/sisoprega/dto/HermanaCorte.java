@@ -35,12 +35,13 @@ package com.tramex.sisoprega.dto;
  */
 public class HermanaCorte {
   private long hermanaCorteId;
-  private long hermanaId;
   private long barnyardId;
   private long qualityId;
   private long corteExpo;
   private long heads;
   private double weight;
+  private Hermana hermana;
+  
   /**
    * @return the hermanaCorteId
    */
@@ -52,18 +53,6 @@ public class HermanaCorte {
    */
   public void setHermanaCorteId(long hermanaCorteId) {
     this.hermanaCorteId = hermanaCorteId;
-  }
-  /**
-   * @return the hermanaId
-   */
-  public long getHermanaId() {
-    return hermanaId;
-  }
-  /**
-   * @param hermanaId the hermanaId to set
-   */
-  public void setHermanaId(long hermanaId) {
-    this.hermanaId = hermanaId;
   }
   /**
    * @return the barnyardId
@@ -126,9 +115,22 @@ public class HermanaCorte {
     this.weight = weight;
   }
   
+  /**
+   * @return the hermana
+   */
+  public Hermana getHermana() {
+    return hermana;
+  }
+  /**
+   * @param hermana the hermana to set
+   */
+  public void setHermana(Hermana hermana) {
+    this.hermana = hermana;
+  }
+  
   @Override
   public String toString() {
-    return "corte:" + hermanaCorteId + ";hermanaId:" + hermanaId + ";barnyardId:" + barnyardId + ";qualityId:" + qualityId + ";corteExpo:" + corteExpo + ";heads:" + heads + ";weight:" + weight + ";";
+    return "corte:" + hermanaCorteId + ";barnyardId:" + barnyardId + ";qualityId:" + qualityId + ";corteExpo:" + corteExpo + ";heads:" + heads + ";weight:" + weight + ";";
   }
   
 }

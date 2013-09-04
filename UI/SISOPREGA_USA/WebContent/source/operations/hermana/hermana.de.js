@@ -198,11 +198,12 @@ enyo.kind(
       crudEnterpriseRancher.get(this, "readCallBack");
       crudPen.get(this, "readCallBack");
       crudCattleQuality.get(this, "readCallBack");
+      crudExpenseConcept.get(this, "readCallBack");
     },
     readCounter : 0,
     readCallBack : function() {
       this.readCounter++;
-      if (this.readCounter == 4) {
+      if (this.readCounter == 5) {
         this.loadAutocompletes();
         this.readCounter = 0;
       }
@@ -213,9 +214,7 @@ enyo.kind(
       this.$.details.$.penAutoComplete.setItems(crudPen.getListUsaPens());
       this.$.details.$.classAutoComplete.setItems(crudCattleQuality.getList());
       this.$.details.$.classAutoCompleteExpo.setItems(crudCattleQuality.getList());
-      /*
-      this.$.charge.setItems(cacheCharges.getList());
-       * */
+      this.$.details.$.charge.setItems(crudExpenseConcept.getList());
       
       cacheMan.hideScrim();
     },
@@ -373,14 +372,37 @@ enyo.kind(
       this.closePopUp();
     },
     saveHermana : function() {
-      // TODO: Save data to database.
-      var arrCortes = this.$.details.$.listaCorte.cortes;
-      for ( var recordIndex = 0; recordIndex < arrCortes.length; recordIndex++) {
-        var purchase = this.purchaseFromCorte(arrCortes[recordIndex]);
-        crudPurchase.createPurchase(purchase);
+      chacheMan.showScrim();
+      var hermana = {
+          accountOf : this.$.accountOf.getValue(),
+          consignee : this.$.consignee.getValue(),
+          entryNo : this.$.entryNo.getValue(),
+          hermanaBy : utils.getCookie("username"),
+          rancherId : this.$.rancher_id.getIndex(),
+          refNo : this.$.refNo.getValue(),
+          HermanaCorte : [],
+          HermanaCorteExportador: [],
+          HermanaExpense : []
+      };
+      
+      for(var i=0; i<this.$.details.$.listaCorte.cortes.length; i++){
+        hermana.HermanaCorte.push(this.$.details.$.listaCorte.cortes[i]);
       }
       
+      for(var i=0; i<this.$.details.$.listaCorteExpo.cortes.length; i++){
+        hermana.HermanaCorteExportador.push(this.$.details.$.listaCorteExpo.cortes[i]);
+      }
+      
+      for(var i=0; i<this.$.details.$.chargeList.arrData.length; i++){
+        hermana.HermanaExpense.push(this.$.details.$.chargeList.arrData[i]);
+      }
+      
+      
+      consumingGateway.Create("Hermana", hermana, this, "createCallBack");
+    },
+    createCallBack : function(result){
       this.doSave();
+      chacheMan.hideScrim();
     },
     purchaseFromCorte : function(corte) {
       

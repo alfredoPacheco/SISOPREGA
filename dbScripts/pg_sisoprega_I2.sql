@@ -18,8 +18,8 @@ GRANT ALL ON cat_cattle_quality_quality_id_seq TO sisoprega;
 DROP TABLE IF EXISTS cat_expense_concept CASCADE;
 CREATE TABLE cat_expense_concept(
 	concept_id      SERIAL PRIMARY KEY,
-	concept_name    VARCHAR(30) UNIQUE NOT NULL,
-	expense_formula VARCHAR(50)
+	concept_name    VARCHAR(80) UNIQUE NOT NULL,
+	expense_formula VARCHAR(150)
 );
 
 GRANT ALL ON cat_expense_concept TO sisoprega;
