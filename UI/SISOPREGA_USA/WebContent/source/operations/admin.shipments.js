@@ -85,14 +85,14 @@ enyo.kind({
 							
 			]},	
 	],
-	loadShipments:function(inSender, inIndex) {		
+	loadShipments:function(inSender, inIndex) {
 		var objData;
 		if(objData=this.arrData[inIndex]){
-			this.$.lblShipProgramDate.setContent(objData[0].shipProgramDateTime.toLocaleDateString()+ " " +objData[0].shipProgramDateTime.toLocaleTimeString().substring(0,5));
+			this.$.lblShipProgramDate.setContent(objData.dateTimeProgrammed.toLocaleDateString()+ " " +objData.dateTimeProgrammed.toLocaleTimeString().substring(0,5));
 			this.$.lblShipHeads.setContent(utils.formatNumberThousands(objData.totalHeads));
 			this.$.lblShipWeight.setContent(utils.formatNumberThousands(objData.totalWeight));
-			this.$.lblShipAverage.setContent(objData[0].aveWeight);
-			this.$.lblShipClient.setContent(objData[0].buyer);	
+			this.$.lblShipAverage.setContent(objData.totalWeight);
+			this.$.lblShipClient.setContent(objData.customer);	
 			if(inIndex % 2 == 0)inSender.$.client.$.client.applyStyle("background-color","#DFC699");
 //			if(inIndex % 2 == 0)inSender.$.client.$.client.applyStyle("background-color","#DCC190");
 			if(objData.hasOwnProperty("releaseDate")){
@@ -107,25 +107,25 @@ enyo.kind({
 			}
 			return true;
 		}else{
-			return false;			
+			return false;
 		}
 	},
 	updateSummary:function(){
-	    var iHeads=0;		
+	    var iHeads=0;	
 	    var iWeight=0;
-	    var iAve=0;		
+	    var iAve=0;
 	    
-	    for (var j=0;j<this.arrData.length;j++){
-		iHeads+=this.arrData[j].totalHeads;			
+	    for (var j=0;j<this.arrData.length;j++) {
+		iHeads+=this.arrData[j].totalHeads;
 		iWeight+=this.arrData[j].totalWeight;
-		iAve+=this.arrData[j][0].aveWeight;			
+		iAve+=this.arrData[j].totalAvgWeight;
 	    }
 	    
 	    this.$.lblShipSumHeads.setContent("Cabezas<br />" + utils.formatNumberThousands(iHeads.toFixed(2)));
 	    this.$.lblShipSumWeight.setContent("Peso<br />" + utils.formatNumberThousands(iWeight.toFixed(2)));
 	    var avg = null;
 	    if(avg=(iAve/this.arrData.length)){
-		this.$.lblShipSumAveWeight.setContent("Peso Prom.<br />" + utils.formatNumberThousands(avg.toFixed(2)));    
+		this.$.lblShipSumAveWeight.setContent("Peso Prom.<br />" + utils.formatNumberThousands(avg.toFixed(2)));
 	    }else{
 		this.$.lblShipSumAveWeight.setContent("Peso Prom.<br />0.00");
 	    }
@@ -134,7 +134,7 @@ enyo.kind({
 	    this.updateSummary();
 	},
 	selectShipRow:function(inSender, inEvent){
-		
+	    
 	},
 	selectShipment:function(inSender, inEvent){
 	    this.objSelectedShipment=this.arrData[inEvent.rowIndex];
@@ -142,22 +142,32 @@ enyo.kind({
 	},
 	getSelectedShipment:function(){
 	    return this.objSelectedShipment;
-	},
-	updateList:function(){
-	    this.arrData = [];
-	    var items = cacheShip.readData();
-	    var len = items.length;
-	    for(var i = 0; i<len;i++){
-		this.arrData.push(items[i]);
-	    }
-	    this.$.listShipments.render();
-	    this.updateSummary();
-	},
+	},	
 	moveToBottom:function(){
 	    this.$.scroller.scrollTo(this.$.scroller
 			.getBoundaries().bottom, 0);
 	},
 	onDeleteShip:function(inSender, inIndex){
 	    this.doDeleteShipProgrammed(this.arrData[inIndex]);
+	},
+	ready : function() {
+	    this.updateView();
+	},
+	updateView : function() {
+	    crudShipment.get(this, "readCallBack");
+	},
+	readCounter : 0,
+	readCallBack : function() {
+	    this.readCounter++;
+	    if (this.readCounter == 1) {
+		this.readCounter = 0;
+		this.loadAutocompletes();
+	    }
+	},
+	loadAutocompletes : function() {
+	    this.arrSelectedItems = {};
+	    this.arrData = crudShipment.arrObj;		
+	    this.$.listShipments.render();
+	    this.updateSummary();
 	}
 });

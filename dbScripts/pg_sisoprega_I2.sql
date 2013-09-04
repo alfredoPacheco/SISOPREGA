@@ -154,7 +154,7 @@ GRANT ALL ON ctrl_purchase_detail_record_id_seq TO sisoprega;
 DROP TABLE IF EXISTS ctrl_inventory CASCADE;
 CREATE TABLE ctrl_inventory(
 	inventory_id SERIAL PRIMARY KEY,
-	cattype_id     integer NOT NULL REFERENCES cat_cattle_type(cattype_id),
+	cattype_id   integer NOT NULL REFERENCES cat_cattle_type(cattype_id),
 	quality_id   integer NOT NULL REFERENCES cat_cattle_quality(quality_id),
 	barnyard_id  integer UNIQUE NOT NULL REFERENCES cat_barnyard(barnyard_id),
 	heads integer NOT NULL DEFAULT 0,
@@ -186,7 +186,7 @@ CREATE TABLE ctrl_sale_detail(
 	heads        integer not null,
 	weight       decimal(12,4) not null,
 	sale_seq     integer not null,
-	inventoryId  integer not null
+	inventory_id integer not null
 );
 
 GRANT ALL ON ctrl_sale_detail TO sisoprega;
@@ -207,3 +207,47 @@ WHERE  hermana.hermana_id IS NULL
 GROUP BY reception.reception_id, reception.rancher_id, reception.cattle_type, cattle_name, detail.hc, detail.weight, hermana.hermana_id;
 
 GRANT ALL ON vw_importable TO sisoprega;
+
+DROP TABLE IF EXISTS ctrl_shipment CASCADE;
+CREATE TABLE ctrl_shipment(
+	shipment_id  		SERIAL PRIMARY KEY,
+	date_time_programed    	DATE DEFAULT current_date,
+	customer_id   		integer NOT NULL REFERENCES cat_customer(customer_id),
+	carrier_id_programed   	integer REFERENCES cat_carrier(carrier_id)
+);
+
+GRANT ALL ON ctrl_shipment TO sisoprega;
+GRANT ALL ON ctrl_shipment_shipment_id_seq TO sisoprega;
+
+DROP TABLE IF EXISTS ctrl_shipment_detail CASCADE;
+CREATE TABLE ctrl_shipment_detail(
+	shipment_detail_id	SERIAL PRIMARY KEY,
+	shipment_id  		integer NOT NULL REFERENCES ctrl_shipment(shipment_id),
+	inventory_id		integer NOT NULL REFERENCES ctrl_inventory(inventory_id),
+	heads        		integer NOT NULL,
+	weight       		decimal(12,4) NOT NULL,
+	sale_id  		integer NOT NULL REFERENCES ctrl_sale(sale_id),
+	item_number		integer not null,
+	quality_id		integer NOT NULL REFERENCES cat_cattle_quality(quality_id)
+);
+
+GRANT ALL ON ctrl_shipment_detail TO sisoprega;
+GRANT ALL ON ctrl_shipment_detail_shipment_detail_id_seq TO sisoprega;
+
+DROP TABLE IF EXISTS ctrl_shipment_release CASCADE;
+CREATE TABLE ctrl_shipment_release (
+	shipment_release_id	SERIAL PRIMARY KEY,
+	shipment_id  		integer NOT NULL REFERENCES ctrl_shipment(shipment_id),
+	inventory_id		integer NOT NULL REFERENCES ctrl_inventory(inventory_id),
+	heads        		integer NOT NULL,
+	weight       		decimal(12,4) NOT NULL,
+	sale_id  		integer NOT NULL REFERENCES ctrl_sale(sale_id),	
+	quality_id		integer NOT NULL REFERENCES cat_cattle_quality(quality_id),
+	date_time    		DATE DEFAULT current_date,
+	carrier_id   		integer REFERENCES cat_carrier(carrier_id),
+	driver			VARCHAR(80),
+	plates			VARCHAR(20)
+);
+
+GRANT ALL ON ctrl_shipment_release TO sisoprega;
+GRANT ALL ON ctrl_shipment_release_shipment_release_id_seq TO sisoprega;

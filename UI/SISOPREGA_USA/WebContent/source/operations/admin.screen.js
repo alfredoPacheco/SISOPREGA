@@ -182,7 +182,7 @@ enyo.kind({
 	    this.$.popup_shipments.openAtCenter();
 	    this.$.shipments_kind.updateList();
 	} else {
-	    cacheMan.setMessage("","No hay registros seleccionados");
+	    cacheMan.setMessage("","No hay registros seleccionados.");
 	}
     },
     showSelectShipment : function(arrShipment) {
@@ -239,7 +239,7 @@ enyo.kind({
 	this.$.popup_shipments.close();
 	this.$.sales.arrToShip = {};
 	this.$.sales.updateView();
-	this.$.shipment.updateList();
+	this.$.shipment.updateView();
 	this.$.shipment.moveToBottom();
     },
     cancelShipment_click : function() {

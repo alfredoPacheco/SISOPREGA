@@ -354,8 +354,8 @@ enyo.kind({
 			.getValue() + " " + this.$.programTime.getValue());
 		this.arrToShipDetailed[i].carrierId = this.$.carrier.getIndex();
     	    	var obj = {
-    		    customerId : 		this.arrToShipDetailed[i].customerId,
-    		    qualityId : 		this.arrToShipDetailed[i].qualityId,
+    		    customerId :		this.arrToShipDetailed[i].customerId,
+    		    qualityId :			this.arrToShipDetailed[i].qualityId,
     		    totalHeads : 		this.arrToShipDetailed[i].heads,
     		    totalWeight : 		this.arrToShipDetailed[i].weight,
     		    aveWeight : 		this.arrToShipDetailed[i].aveWeight,
@@ -406,34 +406,52 @@ enyo.kind({
 			arrDetail[arrByBuyer[i][j].qualityId].totalWeight =0;
 		    }
 		    arrDetail[arrByBuyer[i][j].qualityId].push(arrByBuyer[i][j]);
-		    arrDetail[arrByBuyer[i][j].qualityId].totalHeads += arrByBuyer[i][j].totalHeads;
-		    arrDetail[arrByBuyer[i][j].qualityId].totalWeight += arrByBuyer[i][j].totalWeight;
+		    arrDetail[arrByBuyer[i][j].qualityId].totalHeads += Number(arrByBuyer[i][j].totalHeads);
+		    arrDetail[arrByBuyer[i][j].qualityId].totalWeight += Number(arrByBuyer[i][j].totalWeight);
 		}
 		objShip[i] = arrDetail;
 		arrDetail={};
 	    }
 	}
 	
+	var shipsToSave=[];
+	
 	for(client in objShip){
 	    if(objShip.hasOwnProperty(client)){
 		for(cattle in objShip[client]){
-		    if(objShip[client].hasOwnProperty(cattle)){
-			if(!cacheShip.createData(objShip[client][cattle])){
-			    return;
-			}
-			for(var y =0;y<objShip[client][cattle].length;y++){
-			    var obj=null;
-			    if(obj=this.getItemByItemNumber(objShip[client][cattle][y].itemNumber)){
-				obj.shipment_id = objShip[client][cattle].shipment_id;
-			    }else{
-				return;
-			    }
-			}
+		    if(objShip[client].hasOwnProperty(cattle)){			
+			shipsToSave.push(objShip[client][cattle]);			
 		    }
 		}
 	    }
 	}
 	
+	this.readCounter = 0;
+	this.iShipTotal = shipsToSave.length;
+	for(var i=0;i<shipsToSave.length;i++){
+	    crudShipment.create(shipsToSave[i],this,"readCallBack");
+	}
+	
+//	for(var y =0;y<objShip[client][cattle].length;y++){
+//	    var obj=null;
+//	    if(obj=this.getItemByItemNumber(objShip[client][cattle][y].itemNumber)){
+//		obj.shipment_id = objShip[client][cattle].shipment_id;
+//	    }else{
+//		return;
+//	    }
+//	}
+	
+    },
+    iShipTotal:0, //Total of shipments to save
+    readCounter : 0,
+    readCallBack : function() {
+	this.readCounter++;
+	if (this.readCounter == this.iShipTotal) {
+	    this.readCounter = 0;
+	    this.finishRead();
+	}
+    },
+    finishRead : function() {
 	this.doProgram();
     },
     getItemByItemNumber:function(itemNumber){

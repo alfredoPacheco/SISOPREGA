@@ -66,6 +66,7 @@ enyo.depends(
 	"source/cruds/crud.sale.js",
 	"source/cruds/crud.inventory.js",
 	"source/cruds/crud.released.js",
+	"source/cruds/crud.shipment.js",
 	
 	
 	"source/trash/cache.sales.price.js",

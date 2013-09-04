@@ -9,6 +9,34 @@ enyo
 	    obj:{},
 	    style : "padding:10px;font-size:17px;background-color:#DABD8B;",
 	    components : [ {
+		    kind : enyo.HFlexBox,
+		    align : "center",
+		    pack : "center",
+		    height : "40px;",
+		    components : [ {
+			content : "Fecha y Hora:",
+			width : "103px;",
+			style : "text-align: right;margin-right:10px;"
+		    }, {
+			kind : "ToolInput",
+			name : "releaseDate",
+			hint : "mes/dia/año",
+			// width : "103px;",
+			flex : 1,
+			height : "35px;",
+			onfocus : "applyMask",
+		    // style:"text-align: right;max-width: 500px;"
+		    }, {
+			kind : "ToolInput",
+			name : "releaseTime",
+			// width : "103px;",
+			hint : "HH:MM",
+			flex : 1,
+			height : "35px;",
+			onfocus : "applyTimeMask",
+		    // style:"text-align: right;max-width: 500px;"
+		    } ]
+		},{
 		kind : enyo.HFlexBox,
 		align : "center",
 		pack : "center",
@@ -58,36 +86,38 @@ enyo
 		    flex : 1,
 		// style:"max-width: 500px;"
 		}, ]
-	    }, {
-		kind : enyo.HFlexBox,
-		align : "center",
-		pack : "center",
-		height : "40px;",
-		components : [ {
-		    content : "Fecha y Hora:",
-		    width : "103px;",
-		    style : "text-align: right;margin-right:10px;"
-		}, {
-		    kind : "ToolInput",
-		    name : "releaseDate",
-		    hint : "mes/dia/año",
-		    // width : "103px;",
-		    flex : 1,
-		    height : "35px;",
-		    onfocus : "applyMask",
-		// style:"text-align: right;max-width: 500px;"
-		},
-		{
-		    kind : "ToolInput",
-		    name : "releaseTime",
-		    // width : "103px;",
-		    hint : "HH:MM",
-		    flex : 1,
-		    height : "35px;",
-		    onfocus : "applyTimeMask",
-		// style:"text-align: right;max-width: 500px;"
-		} ]
-	    }, {
+	    }, 
+//	    {
+//		kind : enyo.HFlexBox,
+//		align : "center",
+//		pack : "center",
+//		height : "40px;",
+//		components : [ {
+//		    content : "Fecha y Hora:",
+//		    width : "103px;",
+//		    style : "text-align: right;margin-right:10px;"
+//		}, {
+//		    kind : "ToolInput",
+//		    name : "releaseDate",
+//		    hint : "mes/dia/año",
+//		    // width : "103px;",
+//		    flex : 1,
+//		    height : "35px;",
+//		    onfocus : "applyMask",
+//		// style:"text-align: right;max-width: 500px;"
+//		},
+//		{
+//		    kind : "ToolInput",
+//		    name : "releaseTime",
+//		    // width : "103px;",
+//		    hint : "HH:MM",
+//		    flex : 1,
+//		    height : "35px;",
+//		    onfocus : "applyTimeMask",
+//		// style:"text-align: right;max-width: 500px;"
+//		} ]
+//	    }, 
+	    {
 		kind : enyo.HFlexBox,
 		align : "center",
 		height : "40px;",
@@ -111,34 +141,54 @@ enyo
 	    ready : function() {
 		this.$.releaseDate.$.input.applyStyle("text-align", "center");
 		this.$.releaseTime.$.input.applyStyle("text-align", "center");
-		this.reset();
+		this.reset();		
 	    },
 	    reset:function(){
 		this.$.releaseDate.setValue(utils.dateOut(new Date()));
 		this.$.releaseTime.setValue(new Date().toLocaleTimeString()
 			.substring(0, 5));
-		this.$.carrier.setItems(cacheDrivers.getAllForList());
-		this.$.carrier.clear();
+		crudCarrier.get(this, "readCallBack");		
 		this.$.plate.setValue("");
 		this.$.driver.setValue("");
 	    },
 	    setObj:function(obj){
 		this.obj = obj;
 		this.reset();
-		this.$.carrier.setValue(obj[0].shipCarrier);
+		this.$.carrier.setValue(obj.carrierIdProgrammed);
 	    },
 	    save_release:function(){
-		cacheShip.releaseShip(this.getObj(), this, "afterSaveRelease");		
+		crudShipment.update(this.getObj(),this, "afterSaveRelease");
+		//cacheShip.releaseShip(this.getObj(), this, "afterSaveRelease");		
 	    },
 	    afterSaveRelease:function(){
 		this.doAfterSave();
 	    },
 	    getObj:function(){
-		this.obj.carrier = this.$.carrier.getValue();
-		this.obj.plates = this.$.plate.getValue();
-		this.obj.driver = this.$.driver.getValue();
-		this.obj.releaseDate = new Date("" + this.$.releaseDate.getValue() + " " + this.$.releaseTime.getValue());		
-		return this.obj;
+		var shipmentRelease = enyo.clone(this.obj.ShipmentDetail[0]);
+		delete shipmentRelease.itemNumber;
+		delete shipmentRelease.entityName;
+		shipmentRelease.carrierId =this.$.carrier.getValue();
+		shipmentRelease.plates = this.$.plate.getValue();
+		shipmentRelease.driver = this.$.driver.getValue();
+		shipmentRelease.dateTime = utils.dateTimeOut(new Date("" + this.$.releaseDate.getValue() + " " + this.$.releaseTime.getValue()));
+		
+		if(!this.obj.ShipmentRelease){
+		    this.obj.ShipmentRelease = [];
+		}
+		this.obj.ShipmentRelease.push(shipmentRelease);
+		return shipmentRelease;
+	    },
+	    readCounter : 0,
+	    readCallBack : function() {
+		this.readCounter++;
+		if (this.readCounter == 1) {
+		    this.readCounter = 0;
+		    this.loadAutocompletes();
+		}
+	    },
+	    loadAutocompletes : function() {
+		this.$.carrier.setItems(crudCarrier.getList());
+		this.$.carrier.clear();
 	    },
 	    applyMask : function(inSender) {
 		var _id = inSender.$.input.getId();

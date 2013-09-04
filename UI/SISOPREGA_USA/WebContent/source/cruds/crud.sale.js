@@ -14,67 +14,6 @@ enyo
 		entityName : "Sale",
 		createKindName : "operations.sales.form",
 	    },
-	    
-//	    getCallBack : function(resultArray) {
-//		resultArray = {
-//		    exceptionDescription : "Success",
-//		    exceptionId : 0,
-//		    origin : "",
-//		    entityName : "",
-//		    records : [ {
-//			SaleDetail : [ {
-//			    avgWeight : 43.4,
-//			    cattleQualityId : 6,
-//			    heads : 43,
-//			    penId : 216,
-//			    weight: 12.3
-//			}, {
-//			    avgWeight : 43.4,
-//			    cattleQualityId : 6,
-//			    heads : 43,
-//			    penId : 216,
-//			    weight:234.3
-//			} ],
-//			cattleQualityId : 1,
-//			totalHeads:86,
-//			totalWeight:234.4,
-//			totalAvgWeight:12.2,
-//			saleDate : "07/28/2013",
-//			saleId : 0,
-//			customerId : 1
-//		    }, 
-//		    
-//		    {
-//			SaleDetail : [ {
-//			    avgWeight : 32.3,
-//			    cattleQualityId : 16,
-//			    heads : 23,
-//			    penId : 228,
-//			    weight: 12.3
-//			} ],
-//			cattleQualityId : 2,
-//			totalHeads:23,
-//			totalWeight:228,
-//			totalAvgWeight:12.2,
-//			saleDate : "07/28/2013",
-//			saleId : 1,
-//			customerId : 1
-//		    } ]
-//		};
-//		this.arrObj = [];
-//		for ( var i = 0; i < resultArray.records.length; i++) {
-//		    var objAux = resultArray.records[i];
-//		    var innerModelObj = this.adapterToIn(objAux);
-//		    if (innerModelObj != null)
-//			this.arrObj.push(innerModelObj);
-//		}
-//
-//		if (this.callbackObject != null) {
-//		    var milis = ((Math.random() * 1000) + 500);
-//		    setTimeout(this.callbackObject[this.callbackMethod]
-//			    (resultArray), milis);
-//		}
-//	    },
 	    adapterToIn : function(entityObj) {
 		if (entityObj) {
 		    entityObj = this.inherited(arguments);
