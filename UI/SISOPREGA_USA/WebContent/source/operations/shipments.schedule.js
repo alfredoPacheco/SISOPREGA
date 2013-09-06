@@ -429,7 +429,25 @@ enyo.kind({
 	this.readCounter = 0;
 	this.iShipTotal = shipsToSave.length;
 	for(var i=0;i<shipsToSave.length;i++){
-	    crudShipment.create(shipsToSave[i],this,"readCallBack");
+	    var objShip = {};
+	    var obj = enyo.clone(shipsToSave[i][0]);
+	    // Defining parent
+	    objShip.carrierIdProgrammed = Number(obj.carrierId);
+	    objShip.customerId = Number(obj.customerId);
+	    objShip.dateTimeProgrammed = obj.shipProgramDateTime;
+	    // Defining child
+	    objShip.ShipmentDetail = [];
+	    var child = {};
+	    child.heads = obj.totalHeads;
+	    child.inventoryId = obj.inventoryId;
+	    child.itemNumber = obj.itemNumber;
+	    child.qualityId = obj.qualityId;
+	    child.saleId = obj.saleId;
+	    child.weight = obj.totalWeight;
+	    
+	    objShip.ShipmentDetail.push(child);
+	    
+	    crudShipment.create(objShip,this,"readCallBack");
 	}
 	
 //	for(var y =0;y<objShip[client][cattle].length;y++){

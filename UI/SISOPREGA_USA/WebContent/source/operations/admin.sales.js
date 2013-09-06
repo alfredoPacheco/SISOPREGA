@@ -23,7 +23,7 @@ enyo
 			},
 			{
 			    kind : "Button",
-			    caption : "+",
+			    caption : "Programar Embarque",
 			    onclick : "doShipment"
 			} ]
 		    },

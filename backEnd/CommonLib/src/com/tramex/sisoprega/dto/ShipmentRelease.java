@@ -46,7 +46,7 @@ public class ShipmentRelease {
   private long carrierId;
   private String driver;
   private String plates;
-  private Shipment shipment;
+  private ShipmentDetail shipmentDetail;
   
   
   /**
@@ -145,22 +145,6 @@ public class ShipmentRelease {
 
 
   /**
-   * @return the shipment
-   */
-  public Shipment getShipment() {
-    return shipment;
-  }
-
-
-  /**
-   * @param shipment the shipment to set
-   */
-  public void setShipment(Shipment shipment) {
-    this.shipment = shipment;
-  }
-
-
-  /**
    * @return the dateTime
    */
   public Date getDateTime() {
@@ -220,6 +204,16 @@ public class ShipmentRelease {
    */
   public void setPlates(String plates) {
     this.plates = plates;
+  }
+
+
+  public ShipmentDetail getShipmentDetail() {
+    return shipmentDetail;
+  }
+
+
+  public void setShipmentDetail(ShipmentDetail shipmentDetail) {
+    this.shipmentDetail = shipmentDetail;
   }
 
 

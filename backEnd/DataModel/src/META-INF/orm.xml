@@ -1445,7 +1445,13 @@
 			<many-to-one name="shipment" fetch="LAZY" optional="false">
 				<join-column name="shipment_id" referenced-column-name="shipment_id"
 					nullable="false" />
-			</many-to-one>			
+			</many-to-one>
+			<one-to-many name="shipmentRelease" fetch="EAGER" mapped-by="shipmentDetail" 
+				target-entity="com.tramex.sisoprega.dto.ShipmentRelease" orphan-removal="true">				
+				<cascade>
+					<cascade-all />
+				</cascade>
+			</one-to-many>	
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.ShipmentRelease">
@@ -1469,6 +1475,7 @@
 			</basic>
 			<basic name="dateTime">
 				<column name="date_time" />
+				<temporal>DATE</temporal>
 			</basic>
 			<basic name="qualityId">
 				<column name="quality_id" />
@@ -1482,8 +1489,8 @@
 			<basic name="plates">
 				<column name="plates" />
 			</basic>
-			<many-to-one name="shipment" fetch="LAZY" optional="false">
-				<join-column name="shipment_id" referenced-column-name="shipment_id"
+			<many-to-one name="shipmentDetail" fetch="LAZY" optional="false">
+				<join-column name="shipment_detail_id" referenced-column-name="shipment_detail_id"
 					nullable="false" />
 			</many-to-one>			
 		</attributes>

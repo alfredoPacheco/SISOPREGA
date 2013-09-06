@@ -281,7 +281,7 @@ enyo.kind(
     },
     releaseShipment : function() {
       this.$.popup_driver.close();
-      this.$.shipment.updateList();
+      this.$.shipment.updateView();
       this.$.inventory.updateView();
     },
     cancel_release : function() {

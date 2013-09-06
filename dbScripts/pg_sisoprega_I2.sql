@@ -237,7 +237,7 @@ GRANT ALL ON ctrl_shipment_detail_shipment_detail_id_seq TO sisoprega;
 DROP TABLE IF EXISTS ctrl_shipment_release CASCADE;
 CREATE TABLE ctrl_shipment_release (
 	shipment_release_id	SERIAL PRIMARY KEY,
-	shipment_id  		integer NOT NULL REFERENCES ctrl_shipment(shipment_id),
+	shipment_detail_id 	integer NOT NULL REFERENCES ctrl_shipment_detail(shipment_detail_id),
 	inventory_id		integer NOT NULL REFERENCES ctrl_inventory(inventory_id),
 	heads        		integer NOT NULL,
 	weight       		decimal(12,4) NOT NULL,

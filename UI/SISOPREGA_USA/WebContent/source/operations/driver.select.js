@@ -167,16 +167,16 @@ enyo
 		var shipmentRelease = enyo.clone(this.obj.ShipmentDetail[0]);
 		delete shipmentRelease.itemNumber;
 		delete shipmentRelease.entityName;
-		shipmentRelease.carrierId =this.$.carrier.getValue();
+		shipmentRelease.carrierId =this.$.carrier.getIndex();
 		shipmentRelease.plates = this.$.plate.getValue();
 		shipmentRelease.driver = this.$.driver.getValue();
-		shipmentRelease.dateTime = utils.dateTimeOut(new Date("" + this.$.releaseDate.getValue() + " " + this.$.releaseTime.getValue()));
+		shipmentRelease.dateTime = new Date("" + this.$.releaseDate.getValue() + " " + this.$.releaseTime.getValue());
 		
-		if(!this.obj.ShipmentRelease){
-		    this.obj.ShipmentRelease = [];
+		if(!this.obj.ShipmentDetail[0].ShipmentRelease){	
+		    this.obj.ShipmentDetail[0].ShipmentRelease = [];
 		}
-		this.obj.ShipmentRelease.push(shipmentRelease);
-		return shipmentRelease;
+		this.obj.ShipmentDetail[0].ShipmentRelease.push(shipmentRelease);
+		return this.obj;
 	    },
 	    readCounter : 0,
 	    readCallBack : function() {

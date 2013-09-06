@@ -15,6 +15,9 @@
  */
 package com.tramex.sisoprega.dto;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Shipment detail data model.
  *  
@@ -42,7 +45,20 @@ public class ShipmentDetail {
   private long itemNumber;
   private long qualityId;
   private Shipment shipment;
+  private Set<ShipmentRelease> shipmentRelease;
   
+  
+  
+  public void addShipmentRelease(ShipmentRelease release){
+    if(shipmentRelease == null)
+      shipmentRelease = new HashSet<ShipmentRelease>();
+    
+    shipmentRelease.add(release);
+    
+    if(release.getShipmentDetail() != this)
+      release.setShipmentDetail(this);
+    
+  }
   
   /**
    * @return the shipmentDetailId
@@ -169,6 +185,16 @@ public class ShipmentDetail {
    */
   public void setShipment(Shipment shipment) {
     this.shipment = shipment;
+  }
+
+
+  public Set<ShipmentRelease> getShipmentRelease() {
+    return shipmentRelease;
+  }
+
+
+  public void setShipmentRelease(Set<ShipmentRelease> shipmentRelease) {
+    this.shipmentRelease = shipmentRelease;
   }
 
 
