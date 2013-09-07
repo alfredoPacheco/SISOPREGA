@@ -14,6 +14,18 @@ enyo
 		entityName : "Sale",
 		createKindName : "operations.sales.form",
 	    },
+	    getSalesWithShipments:function(){
+		
+		var result = enyo.clone(this.arrObj);
+		for(var i=0;i<result.length;i++){
+		    var ship = crudShipment.getBySaleID(result[i].saleId);
+		    if(ship.length>0){
+			result[i].arrToShipDetailed=ship;
+		    }
+		}
+		return result;
+		
+	    },
 	    adapterToIn : function(entityObj) {
 		if (entityObj) {
 		    entityObj = this.inherited(arguments);
@@ -33,8 +45,9 @@ enyo
 			    entityObj.SaleDetail[i].aveWeight = Number(entityObj.SaleDetail[i].weight)/
 			    					Number(entityObj.SaleDetail[i].heads);
 			}
+			entityObj.totalAvgWeight =  Number(entityObj.totalWeight) / Number(entityObj.totalHeads);
 		    }
-		    entityObj.totalAvgWeight = Number(entityObj.totalHeads) / Number(entityObj.totalWeight);
+		    
 		    return entityObj;
 		}
 		return null;

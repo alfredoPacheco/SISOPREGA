@@ -180,7 +180,8 @@ enyo.kind(
                             flex : 1,
                             maxState : false,
                             // arrData : cacheSales.readData(),
-                            onShipment : "showShipment"
+                            onShipment : "showShipment",
+                            onUpdateView: "on_update_sales_view"
                           },
                           {
                             name : "shipment",
@@ -268,6 +269,11 @@ enyo.kind(
     },
     inventory_select : function(inSender, inEvent) {
       this.$.popup_map.openAtCenter();
+    },
+    on_update_sales_view:function(updateShipments){
+	if(updateShipments){
+	    this.$.shipment.loadAutocompletes();
+	}
     },
     programShipment_click : function() {
 	this.$.popup_shipments.close();

@@ -9,7 +9,8 @@ enyo
 	    arrSelectedItems : {},
 	    events : {
 		onSelect : "",
-		onShipment : ""
+		onShipment : "",
+		onUpdateView: ""
 	    },
 	    components : [
 		    {
@@ -199,18 +200,19 @@ enyo
 		    this.$.lblSalesAverage.setContent(utils.formatNumberThousands(objData.totalAvgWeight));
 		    this.$.lblSalesClient.setContent(objData.customer);
 		    this.$.chkSalesShip.iPos = inIndex;
+		    
 		    if (objData.arrToShipDetailed) {
 			var strShipDescription = "";
 			var totalHeadsProgrammed = 0;
 			for ( var i = 0; i < objData.arrToShipDetailed.length; i++) {
-			    if (objData.arrToShipDetailed[i].shipProgramDateTime) {
+			    if (objData.arrToShipDetailed[i].dateTimeProgrammed) {
 				totalHeadsProgrammed += Number(objData.arrToShipDetailed[i].heads);
 				strShipDescription += "("
 					+ objData.arrToShipDetailed[i].heads
 					+ " / "
 					+ objData.arrToShipDetailed[i].weight
 					+ ") para "
-					+ objData.arrToShipDetailed[i].shipProgramDateTime
+					+ objData.arrToShipDetailed[i].dateTimeProgrammed
 						.toLocaleDateString()
 					+ "<br />";
 			    }
@@ -255,7 +257,8 @@ enyo
 		this.$.lblSalesSumWeight.setContent("Peso<br />"
 			+ utils.formatNumberThousands(iWeight.toFixed(2)));
 		var avg = null;
-		if (avg = (iAve / this.arrData.length)) {
+		//if (avg = (iAve / this.arrData.length)) {
+		if (avg = (iWeight / iHeads)) {
 		    this.$.lblSumAveWeight.setContent("Peso Prom.<br />"
 			    + utils.formatNumberThousands(avg.toFixed(2)));
 		} else {
@@ -308,25 +311,29 @@ enyo
 			this.$.scroller.getBoundaries().bottom, 0);
 	    },
 	    ready : function() {
-		this.updateView();
-	    },
+		this.updateView();		
+	    },	    
 	    updateView : function() {
 		crudSale.get(this, "readCallBack");
+		crudShipment.get(this, "readCallBack");
 	    },
 	    readCounter : 0,
 	    readCallBack : function() {
 		this.readCounter++;
-		if (this.readCounter == 1) {
+		if (this.readCounter == 2) {
 		    this.readCounter = 0;
 		    this.loadAutocompletes();
 		}
 	    },
 	    loadAutocompletes : function() {
 		this.arrSelectedItems = {};
-		this.arrData = crudSale.arrObj;
+		this.arrData = crudSale.getSalesWithShipments();
 		// this.iHeads=null;
 		// this.iWeight=null;
 		this.$.listSales.render();
 		this.updateSummary();
-	    }
+		this.doUpdateView(this.updateSales);
+		this.updateSales =false;
+	    },
+	    updateSales:true,
 	});

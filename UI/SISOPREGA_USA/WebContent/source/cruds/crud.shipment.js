@@ -30,6 +30,16 @@ enyo
 		}
 		return result;
 	    },
+	    getBySaleID : function(iSaleID) {
+		var programmedShips = this.getProgrammedShipments();
+		var result = [];
+		for ( var i = 0; i < programmedShips.length; i++) {
+		    if (programmedShips[i].saleId == iSaleID) {
+			result.push(programmedShips[i]);
+		    }
+		}
+		return result;
+	    },
 	    adapterToOut : function(entityObj) {
 		if (entityObj.dateTimeProgrammed) {
 		    entityObj.dateTimeProgrammed = utils

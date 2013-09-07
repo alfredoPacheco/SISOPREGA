@@ -155,7 +155,7 @@ enyo.kind({
 	    this.doDeleteShipProgrammed(this.arrData[inIndex]);
 	},
 	ready : function() {
-	    this.updateView();
+	    //this.updateView(); //Has been disabled because it must be updated when admin.sales already has done it.
 	},
 	updateView : function() {
 	    crudShipment.get(this, "readCallBack");
