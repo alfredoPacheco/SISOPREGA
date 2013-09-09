@@ -270,7 +270,7 @@ enyo.kind(
     inventory_select : function(inSender, inEvent) {
       this.$.popup_map.openAtCenter();
     },
-    on_update_sales_view:function(updateShipments){
+    on_update_sales_view:function(sender, updateShipments){
 	if(updateShipments){
 	    this.$.shipment.loadAutocompletes();
 	}
@@ -278,8 +278,8 @@ enyo.kind(
     programShipment_click : function() {
 	this.$.popup_shipments.close();
 	this.$.sales.arrToShip = {};
-	this.$.sales.updateView();
-	this.$.shipment.updateView();
+	this.$.sales.updateSales = true;
+	this.$.sales.updateView();	
 	this.$.shipment.moveToBottom();
     },
     cancelShipment_click : function() {

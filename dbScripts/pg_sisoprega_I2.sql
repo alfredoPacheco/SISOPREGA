@@ -227,8 +227,10 @@ CREATE TABLE ctrl_shipment_detail(
 	heads        		integer NOT NULL,
 	weight       		decimal(12,4) NOT NULL,
 	sale_id  		integer NOT NULL REFERENCES ctrl_sale(sale_id),
+	sale_detail_id 		integer NOT NULL REFERENCES ctrl_sale_detail(record_id),
 	item_number		integer not null,
-	quality_id		integer NOT NULL REFERENCES cat_cattle_quality(quality_id)
+	quality_id		integer NOT NULL REFERENCES cat_cattle_quality(quality_id),
+	barnyard_id 		integer NOT NULL REFERENCES cat_barnyard(barnyard_id)
 );
 
 GRANT ALL ON ctrl_shipment_detail TO sisoprega;

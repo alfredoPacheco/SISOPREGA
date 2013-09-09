@@ -1441,7 +1441,13 @@
 			</basic>
 			<basic name="saleId">
 				<column name="sale_id" />
-			</basic>			
+			</basic>
+			<basic name="penId">
+				<column name="barnyard_id" />
+			</basic>
+			<basic name="saleDetailId">
+				<column name="sale_detail_id" />
+			</basic>				
 			<many-to-one name="shipment" fetch="LAZY" optional="false">
 				<join-column name="shipment_id" referenced-column-name="shipment_id"
 					nullable="false" />

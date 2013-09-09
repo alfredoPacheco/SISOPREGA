@@ -42,8 +42,10 @@ public class ShipmentDetail {
   private long heads;
   private double weight;
   private long saleId;
+  private long saleDetailId;
   private long itemNumber;
   private long qualityId;
+  private long penId;
   private Shipment shipment;
   private Set<ShipmentRelease> shipmentRelease;
   
@@ -198,9 +200,25 @@ public class ShipmentDetail {
   }
 
 
+  public long getSaleDetailId() {
+    return saleDetailId;
+  }
+
+  public void setSaleDetailId(long saleDetailId) {
+    this.saleDetailId = saleDetailId;
+  }
+
+  public long getPenId() {
+    return penId;
+  }
+
+  public void setPenId(long penId) {
+    this.penId = penId;
+  }
+
   @Override
   public String toString() {
     return "shipmentDetailId:" + shipmentDetailId + ";inventoryId:" + inventoryId + ";qualityId:" + qualityId +
-        ";heads:" + heads + ";weight:" + weight + ";saleId:" + saleId + ";itemNumber:" + itemNumber + ";";
+        ";heads:" + heads + ";weight:" + weight + ";saleId:" + saleId + ";itemNumber:" + itemNumber + ";saleDetailId:" + saleDetailId + ";penId:" + penId + ";";
   }  
 }

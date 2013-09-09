@@ -303,13 +303,13 @@ enyo.kind({
 	    this.$.detail_weight.setContent(utils.formatNumberThousands(this.arrToShipDetailed[inIndex].weight) + " lb");
 	    this.totalHC += Number(this.arrToShipDetailed[inIndex].heads);
 	    this.totalWeight += Number(this.arrToShipDetailed[inIndex].weight);
-	    if(this.arrToShipDetailed[inIndex].shipProgramDateTime){
+	    if(this.arrToShipDetailed[inIndex].dateTimeProgrammed){
 		this.$.chkToShip.hide();
 		this.$.split_button.hide();
 		this.$.rowItem.setSwipeable(false);
-		this.$.lblAlreadyProgrammed.setContent("Programado para " + this.arrToShipDetailed[inIndex].shipProgramDateTime.toLocaleDateString() +
-			" " + this.arrToShipDetailed[inIndex].shipProgramDateTime.toLocaleTimeString().substring(0,5) +
-			"<br />Transporte: " + this.arrToShipDetailed[inIndex].carrierId);
+		this.$.lblAlreadyProgrammed.setContent("Programado para " + this.arrToShipDetailed[inIndex].dateTimeProgrammed.toLocaleDateString() +
+			" " + this.arrToShipDetailed[inIndex].dateTimeProgrammed.toLocaleTimeString().substring(0,5) +
+			"<br />Transporte: " + crudCarrier.getByID(this.arrToShipDetailed[inIndex].carrierIdProgrammed).carrierName);
 		this.$.lblAlreadyProgrammed.show();
 		
 	    }else if(this.arrToShipDetailed[inIndex].checked) {
@@ -326,6 +326,8 @@ enyo.kind({
 	this.arrSales = arr;
 	this.arrToShipDetailed = [];
 	this.itemNumber= 0;
+	var salesAlreadyProgrammed={};
+	
 	for(var i = 0; i<this.arrSales.length;i++){
 	    if(this.arrSales[i].arrToShipDetailed){
 		for(var k=0;k<this.arrSales[i].arrToShipDetailed.length;k++){
@@ -333,6 +335,16 @@ enyo.kind({
 		    objShipmentDetailed.itemNumber = this.itemNumber++;
 		    objShipmentDetailed.checked = false;
 		    this.arrToShipDetailed.push(objShipmentDetailed);
+		    salesAlreadyProgrammed[objShipmentDetailed.saleDetailId] = "";
+		}
+		for(var j=0;j<this.arrSales[i].SaleDetail.length;j++){		    
+		    var objShipmentDetailed = enyo.clone(this.arrSales[i].SaleDetail[j]);
+		    if(!(objShipmentDetailed.saleDetailId in salesAlreadyProgrammed)){
+			objShipmentDetailed.customerId = this.arrSales[i].customerId;
+			objShipmentDetailed.saleId = this.arrSales[i].saleId;
+			objShipmentDetailed.itemNumber = this.itemNumber++;
+			this.arrToShipDetailed.push(objShipmentDetailed);
+		    }
 		}
 	    }else{	
 		for(var j=0;j<this.arrSales[i].SaleDetail.length;j++){
@@ -362,11 +374,13 @@ enyo.kind({
     		    carrierId : 		this.arrToShipDetailed[i].carrierId,
     		    shipProgramDateTime :	this.arrToShipDetailed[i].shipProgramDateTime,
     		    saleId:			this.arrToShipDetailed[i].saleId,
+    		    saleDetailId:		this.arrToShipDetailed[i].saleDetailId,
     		    inventoryId:		this.arrToShipDetailed[i].inventoryId,
     		    itemNumber:			this.arrToShipDetailed[i].itemNumber,
+    		    penId:			this.arrToShipDetailed[i].penId,
     	    	};
     	    	arrToShip.push(obj);
-    	    	this.setShipToSale(this.arrToShipDetailed[i]);
+    	    	//this.setShipToSale(this.arrToShipDetailed[i]);
 //    	    	if(!cacheShip.createData(obj,this,"setShipToSale",this.arrToShipDetailed[i])){
 //    	    	    return;
 //    	    	}
@@ -443,6 +457,8 @@ enyo.kind({
 	    child.itemNumber = obj.itemNumber;
 	    child.qualityId = obj.qualityId;
 	    child.saleId = obj.saleId;
+	    child.saleDetailId = obj.saleDetailId;
+	    child.penId = obj.penId,
 	    child.weight = obj.totalWeight;
 	    
 	    objShip.ShipmentDetail.push(child);

@@ -21,6 +21,7 @@ enyo
 		    if (detail = this.arrObj[i].ShipmentDetail) {
 			for ( var j = 0; j < detail.length; j++) {
 			    detail[j].dateTimeProgrammed = this.arrObj[i].dateTimeProgrammed;
+			    detail[j].customerId = this.arrObj[i].customerId;
 			    detail[j].customer = this.arrObj[i].customer;
 			    detail[j].carrierIdProgrammed = this.arrObj[i].carrierIdProgrammed;
 			    detail[j].shipmentId = this.arrObj[i].shipmentId;
