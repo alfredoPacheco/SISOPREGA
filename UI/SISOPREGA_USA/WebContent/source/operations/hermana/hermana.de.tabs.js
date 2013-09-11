@@ -261,7 +261,7 @@ enyo
                 name : "tabGastos",
                 className : "tab",
                 showing : false,
-                height : "285px",
+                height : "270px",
                 components : [
                       {
                         kind : "HFlexBox",
