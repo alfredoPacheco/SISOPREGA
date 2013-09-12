@@ -15,9 +15,6 @@
  */
 package com.tramex.sisoprega.dto;
 
-import java.util.HashSet;
-import java.util.Set;
-
 /**
  * Shipment detail data model.
  *  
@@ -44,23 +41,8 @@ public class ShipmentDetail {
   private long saleId;
   private long saleDetailId;
   private long itemNumber;
-  private long qualityId;
-  private long penId;
+ 
   private Shipment shipment;
-  private Set<ShipmentRelease> shipmentRelease;
-  
-  
-  
-  public void addShipmentRelease(ShipmentRelease release){
-    if(shipmentRelease == null)
-      shipmentRelease = new HashSet<ShipmentRelease>();
-    
-    shipmentRelease.add(release);
-    
-    if(release.getShipmentDetail() != this)
-      release.setShipmentDetail(this);
-    
-  }
   
   /**
    * @return the shipmentDetailId
@@ -157,23 +139,6 @@ public class ShipmentDetail {
     this.itemNumber = itemNumber;
   }
 
-
-  /**
-   * @return the qualityId
-   */
-  public long getQualityId() {
-    return qualityId;
-  }
-
-
-  /**
-   * @param qualityId the qualityId to set
-   */
-  public void setQualityId(long qualityId) {
-    this.qualityId = qualityId;
-  }
-
-
   /**
    * @return the shipment
    */
@@ -190,15 +155,7 @@ public class ShipmentDetail {
   }
 
 
-  public Set<ShipmentRelease> getShipmentRelease() {
-    return shipmentRelease;
-  }
-
-
-  public void setShipmentRelease(Set<ShipmentRelease> shipmentRelease) {
-    this.shipmentRelease = shipmentRelease;
-  }
-
+  
 
   public long getSaleDetailId() {
     return saleDetailId;
@@ -208,17 +165,9 @@ public class ShipmentDetail {
     this.saleDetailId = saleDetailId;
   }
 
-  public long getPenId() {
-    return penId;
-  }
-
-  public void setPenId(long penId) {
-    this.penId = penId;
-  }
-
   @Override
   public String toString() {
-    return "shipmentDetailId:" + shipmentDetailId + ";inventoryId:" + inventoryId + ";qualityId:" + qualityId +
-        ";heads:" + heads + ";weight:" + weight + ";saleId:" + saleId + ";itemNumber:" + itemNumber + ";saleDetailId:" + saleDetailId + ";penId:" + penId + ";";
+    return "shipmentDetailId:" + shipmentDetailId + ";inventoryId:" + inventoryId  +
+        ";heads:" + heads + ";weight:" + weight + ";saleId:" + saleId + ";itemNumber:" + itemNumber + ";saleDetailId:" + saleDetailId + ";";
   }  
 }

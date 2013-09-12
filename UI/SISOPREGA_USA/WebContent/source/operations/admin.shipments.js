@@ -47,9 +47,9 @@ enyo.kind({
 				    onConfirm:"onDeleteShip",
 					components: [
 						{layoutKind: enyo.HFlexLayout, align:"center", components:[
-							{name: "lblShipProgramDate",flex:1,
+							{name: "lblShipProgramDate",flex:1.5,
 							 content: ""},
-							{name: "lblShipHeads",flex:1.5,
+							{name: "lblShipHeads",flex:1,
 							 content: "", style:"text-align: right;"},	
 							{name: "lblShipWeight",flex:1.5,
 							 content: "", style:"text-align: right;"},
@@ -89,9 +89,9 @@ enyo.kind({
 		var objData;
 		if(objData=this.arrData[inIndex]){
 			this.$.lblShipProgramDate.setContent(objData.dateTimeProgrammed.toLocaleDateString()+ " " +objData.dateTimeProgrammed.toLocaleTimeString().substring(0,5));
-			this.$.lblShipHeads.setContent(utils.formatNumberThousands(objData.heads));
-			this.$.lblShipWeight.setContent(utils.formatNumberThousands(objData.weight));
-			this.$.lblShipAverage.setContent(utils.formatNumberThousands(objData.aveWeight));
+			this.$.lblShipHeads.setContent(utils.formatNumberThousands(objData.totalHeads));
+			this.$.lblShipWeight.setContent(utils.formatNumberThousands(objData.totalWeight));
+			this.$.lblShipAverage.setContent(utils.formatNumberThousands(objData.totalAvgWeight));
 			this.$.lblShipClient.setContent(objData.customer);	
 			if(inIndex % 2 == 0)inSender.$.client.$.client.applyStyle("background-color","#DFC699");
 //			if(inIndex % 2 == 0)inSender.$.client.$.client.applyStyle("background-color","#DCC190");
@@ -116,9 +116,9 @@ enyo.kind({
 	    var iAve=0;
 	    
 	    for (var j=0;j<this.arrData.length;j++) {
-		iHeads+=this.arrData[j].heads;
-		iWeight+=this.arrData[j].weight;
-		iAve+=this.arrData[j].aveWeight;
+		iHeads+=this.arrData[j].totalHeads;
+		iWeight+=this.arrData[j].totalWeight;
+		iAve+=this.arrData[j].totalAvgWeight;
 	    }
 	    
 	    this.$.lblShipSumHeads.setContent("Cabezas<br />"
@@ -170,7 +170,7 @@ enyo.kind({
 	},
 	loadAutocompletes : function() {
 	    this.arrSelectedItems = {};
-	    this.arrData = crudShipment.getProgrammedShipments();		
+	    this.arrData = crudShipment.arrObj;		
 	    this.$.listShipments.render();
 	    this.updateSummary();
 	}

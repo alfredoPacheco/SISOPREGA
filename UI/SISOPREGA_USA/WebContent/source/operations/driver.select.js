@@ -164,18 +164,16 @@ enyo
 		this.doAfterSave();
 	    },
 	    getObj:function(){
-		var shipmentRelease = enyo.clone(this.obj.ShipmentDetail[0]);
-		delete shipmentRelease.itemNumber;
-		delete shipmentRelease.entityName;
+		var shipmentRelease = {};		
 		shipmentRelease.carrierId =this.$.carrier.getIndex();
 		shipmentRelease.plates = this.$.plate.getValue();
 		shipmentRelease.driver = this.$.driver.getValue();
 		shipmentRelease.dateTime = new Date("" + this.$.releaseDate.getValue() + " " + this.$.releaseTime.getValue());
 		
-		if(!this.obj.ShipmentDetail[0].ShipmentRelease){	
-		    this.obj.ShipmentDetail[0].ShipmentRelease = [];
+		if(!this.obj.ShipmentRelease){	
+		    this.obj.ShipmentRelease = [];
 		}
-		this.obj.ShipmentDetail[0].ShipmentRelease.push(shipmentRelease);
+		this.obj.ShipmentRelease.push(shipmentRelease);
 		return this.obj;
 	    },
 	    readCounter : 0,

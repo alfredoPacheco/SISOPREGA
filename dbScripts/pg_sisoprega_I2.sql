@@ -213,7 +213,8 @@ CREATE TABLE ctrl_shipment(
 	shipment_id  		SERIAL PRIMARY KEY,
 	date_time_programed    	DATE DEFAULT current_date,
 	customer_id   		integer NOT NULL REFERENCES cat_customer(customer_id),
-	carrier_id_programed   	integer REFERENCES cat_carrier(carrier_id)
+	carrier_id_programed   	integer REFERENCES cat_carrier(carrier_id),
+	quality_id		integer NOT NULL REFERENCES cat_cattle_quality(quality_id)
 );
 
 GRANT ALL ON ctrl_shipment TO sisoprega;
@@ -228,9 +229,7 @@ CREATE TABLE ctrl_shipment_detail(
 	weight       		decimal(12,4) NOT NULL,
 	sale_id  		integer NOT NULL REFERENCES ctrl_sale(sale_id),
 	sale_detail_id 		integer NOT NULL REFERENCES ctrl_sale_detail(record_id),
-	item_number		integer not null,
-	quality_id		integer NOT NULL REFERENCES cat_cattle_quality(quality_id),
-	barnyard_id 		integer NOT NULL REFERENCES cat_barnyard(barnyard_id)
+	item_number		integer not null	
 );
 
 GRANT ALL ON ctrl_shipment_detail TO sisoprega;
@@ -239,12 +238,7 @@ GRANT ALL ON ctrl_shipment_detail_shipment_detail_id_seq TO sisoprega;
 DROP TABLE IF EXISTS ctrl_shipment_release CASCADE;
 CREATE TABLE ctrl_shipment_release (
 	shipment_release_id	SERIAL PRIMARY KEY,
-	shipment_detail_id 	integer NOT NULL REFERENCES ctrl_shipment_detail(shipment_detail_id),
-	inventory_id		integer NOT NULL REFERENCES ctrl_inventory(inventory_id),
-	heads        		integer NOT NULL,
-	weight       		decimal(12,4) NOT NULL,
-	sale_id  		integer NOT NULL REFERENCES ctrl_sale(sale_id),	
-	quality_id		integer NOT NULL REFERENCES cat_cattle_quality(quality_id),
+	shipment_id	 	integer NOT NULL REFERENCES ctrl_shipment(shipment_id),
 	date_time    		DATE DEFAULT current_date,
 	carrier_id   		integer REFERENCES cat_carrier(carrier_id),
 	driver			VARCHAR(80),

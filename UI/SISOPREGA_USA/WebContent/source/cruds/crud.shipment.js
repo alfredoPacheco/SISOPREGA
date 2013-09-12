@@ -25,6 +25,7 @@ enyo
 			    detail[j].customer = this.arrObj[i].customer;
 			    detail[j].carrierIdProgrammed = this.arrObj[i].carrierIdProgrammed;
 			    detail[j].shipmentId = this.arrObj[i].shipmentId;
+			    detail[j].qualityId = this.arrObj[i].qualityId;
 			    result.push(detail[j]);
 			}
 		    }
@@ -43,18 +44,15 @@ enyo
 	    },
 	    adapterToOut : function(entityObj) {
 		if (entityObj.dateTimeProgrammed) {
-		    entityObj.dateTimeProgrammed = utils
-			    .dateTimeOut(obj.shipProgramDateTime);
-		    if (entityObj.ShipmentDetail) {
-			for ( var i = 0; i < entityObj.ShipmentDetail.length; i++) {
-			    if (entityObj.ShipmentDetail[i].ShipmentRelease) {
-				for ( var j = 0; j < entityObj.ShipmentDetail[i].ShipmentRelease.length; j++) {
-				    entityObj.ShipmentDetail[i].ShipmentRelease[j].dateTime = utils
-					    .dateTimeOut(entityObj.ShipmentDetail[i].ShipmentRelease[j].dateTime);
-				}
-			    }
+		    entityObj.dateTimeProgrammed = 
+			utils.dateTimeOut(obj.shipProgramDateTime);
+		    
+		    if (entityObj.ShipmentRelease) {
+			for ( var j = 0; j < entityObj.ShipmentRelease.length; j++) {
+			    entityObj.ShipmentRelease[j].dateTime = 
+				utils.dateTimeOut(entityObj.ShipmentRelease[j].dateTime);
 			}
-		    }
+		    }		
 		}
 		return entityObj;
 	    },
@@ -62,11 +60,11 @@ enyo
 		if (entityObj) {
 		    entityObj = this.inherited(arguments);
 
-		    entityObj.dateTimeProgrammed = utils
-			    .dateIn(entityObj.dateTimeProgrammed);
+		    entityObj.dateTimeProgrammed = utils.dateIn(entityObj.dateTimeProgrammed);
 		    entityObj.shipmentId = Number(entityObj.shipmentId);
 		    entityObj.carrierIdProgrammed = Number(entityObj.carrierIdProgrammed);
 		    entityObj.customerId = Number(entityObj.customerId);
+		    entityObj.qualityId = Number(entityObj.qualityId);
 
 		    var customer = null;
 		    if (customer = crudCustomer.getByID(entityObj.customerId)) {
@@ -83,25 +81,26 @@ enyo
 			    entityObj.ShipmentDetail[i].weight = Number(entityObj.ShipmentDetail[i].weight);
 			    entityObj.ShipmentDetail[i].inventoryId = Number(entityObj.ShipmentDetail[i].inventoryId);
 			    entityObj.ShipmentDetail[i].itemNumber = Number(entityObj.ShipmentDetail[i].itemNumber);
-			    entityObj.ShipmentDetail[i].qualityId = Number(entityObj.ShipmentDetail[i].qualityId);
 			    entityObj.ShipmentDetail[i].saleId = Number(entityObj.ShipmentDetail[i].saleId);
 			    entityObj.ShipmentDetail[i].shipmentDetailId = Number(entityObj.ShipmentDetail[i].shipmentDetailId);
 
 			    entityObj.totalHeads += entityObj.ShipmentDetail[i].heads;
 			    entityObj.totalWeight += entityObj.ShipmentDetail[i].weight;
 			    entityObj.ShipmentDetail[i].aveWeight = entityObj.ShipmentDetail[i].weight
-				    / entityObj.ShipmentDetail[i].heads;
-			    var objRelease=null;
-			    if (objRelease = entityObj.ShipmentDetail[i].ShipmentRelease) {
-				for ( var j = 0; j < objRelease.length; j++) {
-				    objRelease[j].dateTime = utils.dateIn(objRelease[j].dateTime);
-				}
-			    }
-			
+				    / entityObj.ShipmentDetail[i].heads;			    			
 			}
 		    }
-		    entityObj.totalAvgWeight = Number(entityObj.totalHeads)
-			    / Number(entityObj.totalWeight);
+		    
+		    entityObj.totalAvgWeight = Number(entityObj.totalWeight)
+		    / Number(entityObj.totalHeads);
+		    
+		    if (entityObj.ShipmentRelease) {
+			for ( var j = 0; j < entityObj.ShipmentRelease.length; j++) {
+			    entityObj.ShipmentRelease[j].dateTime = 
+				utils.dateIn(entityObj.ShipmentRelease[j].dateTime);
+			}
+		    }
+		    
 		    return entityObj;
 		}
 		return null;

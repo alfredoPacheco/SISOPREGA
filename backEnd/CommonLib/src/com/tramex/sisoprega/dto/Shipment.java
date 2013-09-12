@@ -42,7 +42,9 @@ public class Shipment {
   private Date dateTimeProgrammed = new Date();
   private long carrierIdProgrammed;
   private long customerId;
+  private long qualityId;
   private Set<ShipmentDetail> shipmentDetail;
+  private Set<ShipmentRelease> shipmentRelease;
   
   /**
    * @return the shipmentDetail
@@ -114,6 +116,25 @@ public class Shipment {
     this.customerId = customerId;
   }
   
+  public Set<ShipmentRelease> getShipmentRelease() {
+    return shipmentRelease;
+  }
+
+
+  public void setShipmentRelease(Set<ShipmentRelease> shipmentRelease) {
+    this.shipmentRelease = shipmentRelease;
+  }
+
+  public void addShipmentRelease(ShipmentRelease release){
+    if(shipmentRelease == null)
+      shipmentRelease = new HashSet<ShipmentRelease>();
+    
+    shipmentRelease.add(release);
+    
+    if(release.getShipment() != this)
+      release.setShipment(this);    
+  }
+  
   public void addShipmentDetail(ShipmentDetail detail){
     if(shipmentDetail == null)
       shipmentDetail = new HashSet<ShipmentDetail>();
@@ -125,9 +146,24 @@ public class Shipment {
     
   }
   
+  /**
+   * @return the qualityId
+   */
+  public long getQualityId() {
+    return qualityId;
+  }
+
+
+  /**
+   * @param qualityId the qualityId to set
+   */
+  public void setQualityId(long qualityId) {
+    this.qualityId = qualityId;
+  }
+  
   @Override
   public String toString() {
     return "shipmentId:" + shipmentId + ";dateTimeProgrammed:" + dateTimeProgrammed + ";carrierIdProgrammed:" + carrierIdProgrammed
-          + ";customerId:" + customerId + ";";
+        + ";qualityId:" + qualityId + ";customerId:" + customerId + ";";
   }
 }

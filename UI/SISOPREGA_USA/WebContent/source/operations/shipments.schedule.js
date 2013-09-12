@@ -303,6 +303,7 @@ enyo.kind({
 	    this.$.detail_weight.setContent(utils.formatNumberThousands(this.arrToShipDetailed[inIndex].weight) + " lb");
 	    this.totalHC += Number(this.arrToShipDetailed[inIndex].heads);
 	    this.totalWeight += Number(this.arrToShipDetailed[inIndex].weight);
+	    
 	    if(this.arrToShipDetailed[inIndex].dateTimeProgrammed){
 		this.$.chkToShip.hide();
 		this.$.split_button.hide();
@@ -326,27 +327,44 @@ enyo.kind({
 	this.arrSales = arr;
 	this.arrToShipDetailed = [];
 	this.itemNumber= 0;
-	var salesAlreadyProgrammed={};
+	
 	
 	for(var i = 0; i<this.arrSales.length;i++){
+	    var salesAlreadyProgrammed=[];
+	    //Already planned shipments:
 	    if(this.arrSales[i].arrToShipDetailed){
 		for(var k=0;k<this.arrSales[i].arrToShipDetailed.length;k++){
 		    var objShipmentDetailed = this.arrSales[i].arrToShipDetailed[k];
 		    objShipmentDetailed.itemNumber = this.itemNumber++;
 		    objShipmentDetailed.checked = false;
 		    this.arrToShipDetailed.push(objShipmentDetailed);
-		    salesAlreadyProgrammed[objShipmentDetailed.saleDetailId] = "";
+		    salesAlreadyProgrammed.push(objShipmentDetailed);
 		}
-		for(var j=0;j<this.arrSales[i].SaleDetail.length;j++){		    
-		    var objShipmentDetailed = enyo.clone(this.arrSales[i].SaleDetail[j]);
-		    if(!(objShipmentDetailed.saleDetailId in salesAlreadyProgrammed)){
+		
+		//Substract planned heads and weight from sales detail:
+		var saleDetail = enyo.clone(this.arrSales[i].SaleDetail);
+		for(var x = 0;x<salesAlreadyProgrammed.length;x++){
+		    for(var j=0;j<saleDetail.length;j++){
+			var objShipmentDetailed = saleDetail[j];			    
+			if(Number(objShipmentDetailed.saleDetailId) == Number(salesAlreadyProgrammed[x].saleDetailId)){
+			    objShipmentDetailed.heads = Number(objShipmentDetailed.heads) -Number(salesAlreadyProgrammed[x].heads);
+			    objShipmentDetailed.weight = Number(objShipmentDetailed.weight) -Number(salesAlreadyProgrammed[x].weight);
+			}
+		    }
+		}
+		
+		//Adding to list detail sales not programmed yet
+		for(var j=0;j<saleDetail.length;j++){		    
+		    var objShipmentDetailed = saleDetail[j];
+		    if(Number(objShipmentDetailed.heads) > 0){			
+			objShipmentDetailed.aveWeight = objShipmentDetailed.weight / objShipmentDetailed.heads;
 			objShipmentDetailed.customerId = this.arrSales[i].customerId;
 			objShipmentDetailed.saleId = this.arrSales[i].saleId;
 			objShipmentDetailed.itemNumber = this.itemNumber++;
 			this.arrToShipDetailed.push(objShipmentDetailed);
-		    }
+		    }		    
 		}
-	    }else{	
+	    }else{//None of those sale detail has been programmed, therefore we added all
 		for(var j=0;j<this.arrSales[i].SaleDetail.length;j++){
 		    var objShipmentDetailed = enyo.clone(this.arrSales[i].SaleDetail[j]);
 		    objShipmentDetailed.customerId = this.arrSales[i].customerId;
@@ -397,10 +415,11 @@ enyo.kind({
 	}
     },
     saveShip:function(arrShip){
-	//Ordering data by customerId
+
 	
 	var arrByBuyer={};
 	
+	//Ordering data by customerId	
 	for(var i=0;i<arrShip.length;i++){
 	    if(!(arrShip[i].customerId in arrByBuyer)){
 		arrByBuyer[arrShip[i].customerId] = [];
@@ -416,12 +435,12 @@ enyo.kind({
 		for(var j=0;j<arrByBuyer[i].length;j++){
 		    if(!(arrByBuyer[i][j].qualityId in arrDetail)){
 			arrDetail[arrByBuyer[i][j].qualityId]=[];
-			arrDetail[arrByBuyer[i][j].qualityId].totalHeads =0;
-			arrDetail[arrByBuyer[i][j].qualityId].totalWeight =0;
+//			arrDetail[arrByBuyer[i][j].qualityId].totalHeads =0;
+//			arrDetail[arrByBuyer[i][j].qualityId].totalWeight =0;
 		    }
 		    arrDetail[arrByBuyer[i][j].qualityId].push(arrByBuyer[i][j]);
-		    arrDetail[arrByBuyer[i][j].qualityId].totalHeads += Number(arrByBuyer[i][j].totalHeads);
-		    arrDetail[arrByBuyer[i][j].qualityId].totalWeight += Number(arrByBuyer[i][j].totalWeight);
+//		    arrDetail[arrByBuyer[i][j].qualityId].totalHeads += Number(arrByBuyer[i][j].totalHeads);
+//		    arrDetail[arrByBuyer[i][j].qualityId].totalWeight += Number(arrByBuyer[i][j].totalWeight);
 		}
 		objShip[i] = arrDetail;
 		arrDetail={};
@@ -443,26 +462,27 @@ enyo.kind({
 	this.readCounter = 0;
 	this.iShipTotal = shipsToSave.length;
 	for(var i=0;i<shipsToSave.length;i++){
-	    var objShip = {};
-	    var obj = enyo.clone(shipsToSave[i][0]);
 	    // Defining parent
+	    var objShip = {};
+	    var obj = enyo.clone(shipsToSave[i][0]);	    
 	    objShip.carrierIdProgrammed = Number(obj.carrierId);
 	    objShip.customerId = Number(obj.customerId);
 	    objShip.dateTimeProgrammed = obj.shipProgramDateTime;
-	    // Defining child
-	    objShip.ShipmentDetail = [];
-	    var child = {};
-	    child.heads = obj.totalHeads;
-	    child.inventoryId = obj.inventoryId;
-	    child.itemNumber = obj.itemNumber;
-	    child.qualityId = obj.qualityId;
-	    child.saleId = obj.saleId;
-	    child.saleDetailId = obj.saleDetailId;
-	    child.penId = obj.penId,
-	    child.weight = obj.totalWeight;
-	    
-	    objShip.ShipmentDetail.push(child);
-	    
+	    objShip.qualityId = obj.qualityId;
+	    for(var j=0;j<shipsToSave[i].length;j++){
+		// Defining child
+		if(!objShip.ShipmentDetail){
+		    objShip.ShipmentDetail = [];    
+		}		
+		var child = {};
+		child.heads = shipsToSave[i][j].totalHeads;
+		child.inventoryId = shipsToSave[i][j].inventoryId;
+		child.itemNumber = shipsToSave[i][j].itemNumber;	    
+		child.saleId = shipsToSave[i][j].saleId;
+		child.saleDetailId = shipsToSave[i][j].saleDetailId;
+		child.weight = shipsToSave[i][j].totalWeight;		
+		objShip.ShipmentDetail.push(child);
+	    }
 	    crudShipment.create(objShip,this,"readCallBack");
 	}
 	
