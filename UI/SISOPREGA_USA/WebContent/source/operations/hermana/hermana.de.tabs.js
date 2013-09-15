@@ -23,9 +23,9 @@ enyo
                 scrim : true,
                 components : [
                     {
-                      kind : "hermana.gastos.concepto",
+                      kind : "catalogs.expenseConcept.form",
                       name : "concepto",
-                      onAddCharge : "addNewCharge",
+                      onAdd : "addNewCharge",
                       onCancel : "closePopUp",
                       flex : 1
                     }
@@ -570,12 +570,14 @@ enyo
         chargeSelected : function() {
           if (this.$.charge.getIndex() > -1) {
             // Calculate price from formula
-            var charge = crudExpenseConcept.arrObj[this.$.charge.getIndex() - 1];
+            var charge = crudExpenseConcept.getByID(this.$.charge.getIndex());
             this.$.charge_price.setValue(this.calcularGasto(charge));
           }
         },
         calcularGasto : function(charge) {
-          var formula = charge.expenseFormula;
+          var formula = '';
+          if(charge)
+           formula = charge.expenseFormula;
           // Replace heads
           var headlessFormula = formula.replace('[cabezas]', this.summary.hc);
           
@@ -583,10 +585,14 @@ enyo
           var poundlessFormula = headlessFormula.replace('[libras]', this.summary.lbs);
           
           // Replace kilos
-          formula = poundlessFormula.replace('[kilos]', this.summary.kgs);
+          formula = poundlessFormula.replace('[kilos]', this.summary.kg);
           
           // Evaluate expresion
-          var calculated = eval(formula);
+          var calculated = null;
+          if(formula != ""){
+            calculated = eval(formula);
+          }
+          
           return calculated;
           
         },
@@ -608,12 +614,19 @@ enyo
           this.$.popNewCharge.openAtCenter();
         },
         closePopUp : function() {
-          this.$.charge.setItems(cacheCharges.getList());
-          this.$.charge.render();
+          this.$.charge.setIndex(-1);
+          this.$.charge_price.setValue(''),
           this.$.popNewCharge.close();
         },
-        addNewCharge : function() {
-          cacheCharges.addData(this.$.concepto.getCharge(), this, "closePopUp");
+        addNewCharge : function(inSender, result) {
+          this.$.charge.setItems(crudExpenseConcept.getList());
+          
+          var justCreated = result.records[0];
+          this.$.charge.setIndex(justCreated.expenseConceptId);
+          
+          this.$.popNewCharge.close();
+          cacheMan.hideScrim();
+          //cacheCharges.addData(this.$.concepto.getCharge(), this, "closePopUp");
         },
         setupCorteSelected : function() {
           if (this.$.listaCorteExpo.iSelected == undefined) {

@@ -1080,6 +1080,10 @@
 			<description>Retrieve all records from database</description>
 			<query>SELECT iExpense FROM ExpenseConcept iExpense</query>
 		</named-query>
+		<named-query name="EXPENSECONCEPT_BY_ID">
+			<description>Retrieve a unique record represented by it's ID</description>
+			<query>SELECT iExpense FROM ExpenseConcept iExpense WHERE iExpense.expenseConceptId = :Id</query>
+		</named-query>
 		<attributes>
 			<id name="expenseConceptId">
 				<column name="concept_id" />

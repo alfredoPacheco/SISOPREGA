@@ -216,13 +216,27 @@ enyo.kind(
       this.$.details.$.classAutoCompleteExpo.setItems(crudCattleQuality.getList());
       this.$.details.$.charge.setItems(crudExpenseConcept.getList());
       
+      this.resetForm();
+      
       cacheMan.hideScrim();
     },
     resetForm : function() {
-      this.$.entryNo.setValue('');
-      this.$.refNo.setValue('');
-      this.$.rancher_id.index = -1;
-      this.$.rancher_id.setValue('');
+      // TODO: Set cookied information
+      this.$.entryNo.setValue(utils.getCookie('entryNo'));
+      this.$.refNo.setValue(utils.getCookie('refNo'));
+      this.$.consignee.setValue(utils.getCookie('consignee'));
+      this.$.accountOf.setValue(utils.getCookie('accountOf'));
+      this.$.rancher_id.setIndex(-1);
+      
+      // TODO: Clean lists from tabs.
+      cacheCorte.clear();
+      this.$.details.$.listaCorte.setCortes(cacheCorte.get());
+      this.$.details.$.listaCorteExpo.setCortes(cacheCorte.getExpo());
+      this.$.details.$.chargeList.arrData=[];
+      this.$.details.$.chargeList.iSummary=0;
+      this.$.details.$.chargeList.updateList();
+      //this.$.details.clearCorteSummary();
+      
     },
     cleanPopUpContents : function() {
       if (this.$.releasesList) {
@@ -372,7 +386,7 @@ enyo.kind(
       this.closePopUp();
     },
     saveHermana : function() {
-      chacheMan.showScrim();
+      cacheMan.showScrim();
       var hermana = {
           accountOf : this.$.accountOf.getValue(),
           consignee : this.$.consignee.getValue(),
@@ -401,8 +415,18 @@ enyo.kind(
       consumingGateway.Create("Hermana", hermana, this, "createCallBack");
     },
     createCallBack : function(result){
+      // TODO: Save cache information based on data entry.
+      var entryPrefix = this.$.entryNo.getValue().substr(0,4);
+      utils.setCookie("entryNo", entryPrefix, 15);
+      
+      var refPrefix = this.$.refNo.getValue().substr(0,4);
+      utils.setCookie("refNo", refPrefix, 15);
+      utils.setCookie("consignee", this.$.consignee.getValue(), 15);
+      utils.setCookie("accountOf", this.$.accountOf.getValue(), 15);
+      utils.setCookie("expenses", this.$.details.$.chargeList.arrData, 15);
+      
       this.doSave();
-      chacheMan.hideScrim();
+      cacheMan.hideScrim();
     },
     purchaseFromCorte : function(corte) {
       

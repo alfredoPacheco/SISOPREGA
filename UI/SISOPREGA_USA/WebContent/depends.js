@@ -106,7 +106,6 @@ enyo.depends(
 	"source/operations/admin.screen.js",	
 	
 	"source/operations/hermana/cache/cache.corte.js",
-	"source/operations/hermana/cache/cache.charges.js",
 	"source/operations/hermana/hermana.de.js",
     "source/operations/hermana/hermana.corte.list.js",
     "source/operations/hermana/hermana.gastos.list.js",

@@ -225,7 +225,15 @@ enyo.kind(
       this.$.driver_kind.setObj(this.$.shipment.getSelectedShipment());
     },
     capture_hermana_click : function() {
+      cacheMan.showScrim();
       this.$.popup_add.close();
+      
+      if (!this.$.hermana_kind)
+        this.$.popup_hermana.validateComponents();
+      else
+        this.$.hermana_kind.ready();
+      
+      
       this.$.popup_hermana.openAtCenter();
     },
     onCancelPurchase : function() {
