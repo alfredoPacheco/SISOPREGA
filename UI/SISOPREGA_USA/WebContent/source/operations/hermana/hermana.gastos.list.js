@@ -88,9 +88,9 @@ enyo.kind(
     loadCharges : function(inSender, inIndex) {
       var objData;
       if (objData = this.arrData[inIndex]) {
-        this.$.charge_desc.setContent(objData.charge_desc);
-        this.$.charge_price.setContent('$' + utils.formatNumberThousands(objData.charge_price));
-        this.iSummary += Number(objData.charge_price);
+        this.$.charge_desc.setContent(objData.conceptName);
+        this.$.charge_price.setContent('$' + utils.formatNumberThousands(objData.price));
+        this.iSummary += Number(objData.price);
         return true;
       } else {
         this.updateSummary();

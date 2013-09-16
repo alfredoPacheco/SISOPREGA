@@ -221,21 +221,21 @@ enyo.kind(
       cacheMan.hideScrim();
     },
     resetForm : function() {
-      // TODO: Set cookied information
+      // Set cookied information
       this.$.entryNo.setValue(utils.getCookie('entryNo'));
       this.$.refNo.setValue(utils.getCookie('refNo'));
       this.$.consignee.setValue(utils.getCookie('consignee'));
       this.$.accountOf.setValue(utils.getCookie('accountOf'));
       this.$.rancher_id.setIndex(-1);
       
-      // TODO: Clean lists from tabs.
+      // Clean lists from tabs.
       cacheCorte.clear();
       this.$.details.$.listaCorte.setCortes(cacheCorte.get());
       this.$.details.$.listaCorteExpo.setCortes(cacheCorte.getExpo());
       this.$.details.$.chargeList.arrData=[];
       this.$.details.$.chargeList.iSummary=0;
       this.$.details.$.chargeList.updateList();
-      //this.$.details.clearCorteSummary();
+      this.$.details.resetSummaryTable();
       
     },
     cleanPopUpContents : function() {
@@ -381,6 +381,7 @@ enyo.kind(
       
       this.$.details.setReleaseIds(this.$.releasesList.selectedIds);
       this.$.details.setSummary(summary);
+      this.$.details.addCookiedCharges();
       this.$.details.updateTableContents();
       
       this.closePopUp();
@@ -415,7 +416,8 @@ enyo.kind(
       consumingGateway.Create("Hermana", hermana, this, "createCallBack");
     },
     createCallBack : function(result){
-      // TODO: Save cache information based on data entry.
+      // TODO: Evaluate result before caching and closing.
+      // Save cache information based on data entry.
       var entryPrefix = this.$.entryNo.getValue().substr(0,4);
       utils.setCookie("entryNo", entryPrefix, 15);
       
@@ -423,39 +425,18 @@ enyo.kind(
       utils.setCookie("refNo", refPrefix, 15);
       utils.setCookie("consignee", this.$.consignee.getValue(), 15);
       utils.setCookie("accountOf", this.$.accountOf.getValue(), 15);
-      utils.setCookie("expenses", this.$.details.$.chargeList.arrData, 15);
+      utils.setCookie("expenses", this.chargesIndexString(this.$.details.$.chargeList.arrData), 15);
       
       this.doSave();
       cacheMan.hideScrim();
     },
-    purchaseFromCorte : function(corte) {
-      
-      var selected = false;
-      var purchaseId = 0;
-      
-      while (!selected) {
-        var possibleId = Math.floor((Math.random() * 100) + 1);
-        var purchases = crudPurchase.get().purchased;
-        for ( var i = 0; i < purchases.length; i++) {
-          if (purchases[i].id == possibleId) break;
-        }
-        purchaseId = possibleId;
-        selected = true;
+    chargesIndexString : function(chargesArray){
+      var result = '';
+      for(var i=0;i<chargesArray.length; i++){
+        var charge = chargesArray[i];
+        result += charge.expenseConceptId + ',';
       }
-      
-      var objPurchase =
-        {
-          id : purchaseId,
-          purdate : utils.dateOut(new Date()),
-          seller : corte.rancherName,
-          cattleId : corte.cattleClassId,
-          cattleName : corte.cattleType,
-          heads : Number(corte.heads),
-          weight : Number(corte.weight),
-          aveweight : Number(corte.weight) / Number(corte.heads)
-        };
-      
-      return objPurchase;
+      return result;
     },
     closePopUp : function() {
       this.$.popMan.close();

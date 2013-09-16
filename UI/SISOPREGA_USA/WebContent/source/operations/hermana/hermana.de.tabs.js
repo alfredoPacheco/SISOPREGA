@@ -454,6 +454,35 @@ enyo
         setReleaseIds : function(releaseIds) {
           this.releaseIds = releaseIds;
         },
+        resetSummaryTable : function(){
+          var data = [];
+          var mx_dataRow = [0,0,0,0];
+          data.push(mx_dataRow);
+          
+          var rejects_dataRow = [0,0,0];
+          data.push(rejects_dataRow);
+          
+          var trade_dataRow = [0,0,0,0];
+          data.push(trade_dataRow);
+          
+          var net_dataRow = [0,0,0,0];
+          data.push(net_dataRow);
+          
+          this.$.summary.setData(data);
+          
+          var total_data = [];
+          
+          var total_deltaRow = [];
+          total_deltaRow.push(0);
+          total_data.push(total_deltaRow);
+          
+          var total_pctRow = [];
+          total_pctRow.push(0 + ' %');
+          total_data.push(total_pctRow);
+          
+          this.$.summaryTotal.setData(total_data);
+          
+        },
         updateTableContents : function() {
           var data = [];
           
@@ -598,17 +627,43 @@ enyo
         },
         addCharge : function() {
           if (this.$.charge.getIndex() > -1) {
-            this.$.chargeList.addCharge(
-              {
-                charge_desc : this.$.charge.getValue(),
-                charge_price : this.$.charge_price.getValue()
-              });
+            var charge = crudExpenseConcept.getByID(this.$.charge.getIndex());
+            charge.price = this.$.charge_price.getValue();
+            this.$.chargeList.addCharge(charge);
             this.$.charge.setIndex(-1);
             this.$.charge_price.setValue("");
             this.$.charge.setValue("");
           } else {
             cacheMan.setMessage("", "Concepto no registrado");
           }
+        },
+        addCookiedCharges : function(){
+          // Clean up charges
+          this.$.chargeList.arrData=[];
+          this.$.chargeList.iSummary=0;
+          this.$.chargeList.updateList();
+          
+          
+          var charges = this.chargesArrayFromIndexString(utils.getCookie('expenses'));
+          for(var i=0; i<charges.length; i++){
+            var charge = charges[i];
+            charge.price = this.calcularGasto(charge);
+            this.$.chargeList.addCharge(charge);
+          }
+        },
+        chargesArrayFromIndexString : function(indexString){
+          var chargesArray = [];
+          
+          var indexes = indexString.split(",");
+          for(var i=0;i<indexes.length;i++){
+            var expenseConceptId = indexes[i];
+            if(expenseConceptId != ''){
+              var charge = crudExpenseConcept.getByID(expenseConceptId);
+              chargesArray.push(charge);
+            }
+          }
+          
+          return chargesArray;
         },
         showNewCharge : function() {
           this.$.popNewCharge.openAtCenter();
@@ -626,7 +681,6 @@ enyo
           
           this.$.popNewCharge.close();
           cacheMan.hideScrim();
-          //cacheCharges.addData(this.$.concepto.getCharge(), this, "closePopUp");
         },
         setupCorteSelected : function() {
           if (this.$.listaCorteExpo.iSelected == undefined) {
