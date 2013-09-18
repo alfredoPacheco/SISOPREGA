@@ -71,9 +71,9 @@ enyo.kind(
         recordIds.push(recordId);
         var cutRecord =
           {
-            pen_id : this.cortes[recordId].pen_id,
+            barnyardId : this.cortes[recordId].barnyardId,
             pen_name : this.cortes[recordId].pen_name,
-            cattleClassId : this.cortes[recordId].cattleClassId,
+            qualityId : this.cortes[recordId].cattleClassId,
             cattleClassName : this.cortes[recordId].cattleClassName,
             heads : this.cortes[recordId].heads,
             weight : this.cortes[recordId].weight,
@@ -133,9 +133,9 @@ enyo.kind(
             // no record was found, create one.
             var cutRecord =
               {
-                pen_id : this.cortes[i].pen_id,
+                barnyardId : this.cortes[i].barnyardId,
                 pen_name : this.cortes[i].pen_name,
-                cattleClassId : this.cortes[i].cattleClassId,
+                qualityId : this.cortes[i].qualityId,
                 cattleClassName : this.cortes[i].cattleClassName,
                 heads : heads,
                 weight : weight,

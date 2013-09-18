@@ -38,6 +38,8 @@ public class HermanaCorteExportador {
   private long qualityId;
   private double purchasePrice = 0.0d;
   private Hermana hermana;
+  private double weight;
+  private double heads;
   
   /**
    * @return the hermanaCorteExportadorId
@@ -79,6 +81,34 @@ public class HermanaCorteExportador {
    */
   public void setPurchasePrice(double purchasePrice) {
     this.purchasePrice = purchasePrice;
+  }
+
+  /**
+   * @return the weight
+   */
+  public double getWeight() {
+    return weight;
+  }
+
+  /**
+   * @param weight the weight to set
+   */
+  public void setWeight(double weight) {
+    this.weight = weight;
+  }
+
+  /**
+   * @return the heads
+   */
+  public double getHeads() {
+    return heads;
+  }
+
+  /**
+   * @param heads the heads to set
+   */
+  public void setHeads(double heads) {
+    this.heads = heads;
   }
 
   /**

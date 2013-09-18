@@ -536,9 +536,9 @@ enyo
         agregarCorte : function() {
           var cutRecord =
             {
-              pen_id : this.$.penAutoComplete.getIndex(),
+              barnyardId : this.$.penAutoComplete.getIndex(),
               pen_name : this.$.penAutoComplete.getValue(),
-              cattleClassId : this.$.classAutoComplete.getIndex(),
+              qualityId : this.$.classAutoComplete.getIndex(),
               cattleClassName : this.$.classAutoComplete.getValue(),
               heads : this.$.headCount.getValue(),
               weight : this.$.weight.getValue()
@@ -643,7 +643,6 @@ enyo
           this.$.chargeList.iSummary=0;
           this.$.chargeList.updateList();
           
-          
           var charges = this.chargesArrayFromIndexString(utils.getCookie('expenses'));
           for(var i=0; i<charges.length; i++){
             var charge = charges[i];
@@ -653,6 +652,9 @@ enyo
         },
         chargesArrayFromIndexString : function(indexString){
           var chargesArray = [];
+          
+          if(indexString == null || indexString == '')
+            return chargesArray;
           
           var indexes = indexString.split(",");
           for(var i=0;i<indexes.length;i++){
