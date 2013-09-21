@@ -36,6 +36,14 @@ enyo.kind(
       }
       return null;
     },
+    isPenActiveInInventory:function(sPen){
+	for(var i=0;i<this.arrObj.length;i++){
+	    if(("" + this.arrObj[i].pen.locationId + this.arrObj[i].pen.barnyardCode) == sPen){
+		return true;
+	    }
+	}
+	return false;
+    },
     getPensList:function(){
 	var arrInventory = [];
 	var arrActivePens=[];
@@ -49,6 +57,14 @@ enyo.kind(
 	    arrActivePens.push(obj);
 	}
 	return arrActivePens;
+    },
+    getByPen:function(sPen){
+	for(var i=0;i<this.arrObj.length;i++){
+	    if(("" + this.arrObj[i].pen.locationId + this.arrObj[i].pen.barnyardCode) == sPen){
+		return this.arrObj[i];
+	    }
+	}
+	return null;
     }
   });
 var crudInventory = new crud.inventory();

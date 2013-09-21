@@ -15,7 +15,7 @@ enyo.kind({
 	} else {
 	    return false;
 	}
-    },
+    },    
     updateOccupiedBarnyards : function() {
 	this.arrObjInUse = {};
 	var arrActiveReceptions = enyo.clone(crudReception.arrObj);
@@ -101,21 +101,20 @@ enyo.kind({
 	return null;
     },
     adapterToList : function(entityObj) {
-	      var listObj =
-	        {
-	          value : 0,
-	          caption : ""
-	        };
-	      
-	      listObj.value = Number(entityObj.penId);
-	      if(entityObj.locationId == "3"){
-		  listObj.caption = "W" + entityObj.barnyardCode;
-	      }else if(entityObj.locationId == "4"){
-		  listObj.caption = "E" + entityObj.barnyardCode;
-	      } 
-	      
-	      return listObj;
-	    },
+	var listObj =
+	{
+		value : 0,
+		caption : ""
+	};
+	listObj.value = Number(entityObj.penId);
+	if(entityObj.locationId == "3"){
+	    listObj.caption = "W" + entityObj.barnyardCode;
+	}else if(entityObj.locationId == "4"){
+	    listObj.caption = "E" + entityObj.barnyardCode;
+	} 
+	
+	return listObj;
+    },
     getListUsaPens:function(){
 	var result=[];
 	for(var i=0;i<this.arrPensUsaWest.length;i++){
@@ -147,8 +146,25 @@ enyo.kind({
 	    if (this.arrPensUsaEast[i][entityIdName] == iID) {
 		return this.arrPensUsaEast[i];
 	    }
-	}	
+	}
 	return null;
+    },
+    movePen : function(objFrom, objTo, objMovement) {
+	objFrom.heads = parseInt(objFrom.heads) - parseInt(objMovement.heads);
+	objFrom.weight = parseInt(objFrom.weight) - parseInt(objMovement.weight);
+	
+	if (objTo) {
+	    objTo.heads = parseInt(objTo.heads) + parseInt(objMovement.heads);
+	    objTo.weight = parseInt(objTo.weight) + parseInt(objMovement.weight);
+	    if (this.update(objFrom))
+		if (this.update(objTo))
+		    return true;
+	} else {
+	    if (this.update(objFrom))
+		if (this.create(objMovement))
+		    return true;
+	}
+	return false;
     },
 });
 var crudPen = new crud.pen();

@@ -5,7 +5,6 @@ enyo.kind(
     readFromGateway : true,
     lastID : 0,
     isOccupied : function(by) {
-
       var arrPens = this.get();
       for ( var i = 0; i < arrPens.length; i++) {
         if (by == arrPens[i].barnyard) {
@@ -198,7 +197,7 @@ enyo.kind(
         obj.feed = objFeed;
         return true;
       }
-      alert("Error al intentar guardad el alimento");
+      alert("Error al intentar guardar el alimento");
       return false;
     },
     getByID : function(id) {

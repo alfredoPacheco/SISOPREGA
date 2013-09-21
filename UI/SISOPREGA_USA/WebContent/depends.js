@@ -16,12 +16,12 @@ enyo.depends(
 // "css/general.css",
 
 // "source/release.rejects.weight.js",
-// "source/pen.map.js",
+
 
 
 	
 // "source/utils.format.js",
-// "source/movePen.js",
+
 // "source/alimentoUS.js",
 // "source/hermana.gastos.concepto.js",
 
@@ -107,11 +107,11 @@ enyo.depends(
 	
 	"source/operations/hermana/cache/cache.corte.js",
 	"source/operations/hermana/hermana.de.js",
-    "source/operations/hermana/hermana.corte.list.js",
-    "source/operations/hermana/hermana.gastos.list.js",
-    "source/operations/hermana/hermana.de.tabs.js",
-    "source/operations/hermana/releases.list.js",
-    "source/operations/hermana/release.rejects.weight.js",
+	"source/operations/hermana/hermana.corte.list.js",
+	"source/operations/hermana/hermana.gastos.list.js",
+	"source/operations/hermana/hermana.de.tabs.js",
+	"source/operations/hermana/releases.list.js",
+	"source/operations/hermana/release.rejects.weight.js",
 	
 	"source/operations/admin.purchased.js",
 	"source/operations/operations.purchase.form.js",
@@ -119,6 +119,9 @@ enyo.depends(
 	"source/operations/shipments.schedule.js",
 	"source/operations/shipments.popup.split.js",
 	"source/operations/driver.select.js",
+	
+	"source/operations/movePen.js",
+	"source/operations/pen.map.js",
 
 	 "../SISOPREGA/source/reports/reports.main.js",
 	 "../SISOPREGA/source/reports/reports.select.js",

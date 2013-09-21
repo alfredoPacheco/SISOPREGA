@@ -232,11 +232,12 @@ enyo.kind(
       crudCattle.get(this, "readCallBack");
       crudCattleQuality.get(this, "readCallBack");
       crudPen.get(this, "readCallBack");
+      crudInventory.get(this, "readCallBack");
     },
     readCounter : 0,
     readCallBack : function() {
       this.readCounter++;
-      if (this.readCounter == 6) {
+      if (this.readCounter == 7) {
         this.readCounter = 0;
         
         this.$.btnGoBack.setShowing(!1);
