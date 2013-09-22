@@ -40,7 +40,7 @@ enyo
 		kind : enyo.Popup,
 		name : "popup_movePen",
 		width : "50%;",
-		height : "190px;",
+		height : "300px;",
 		dismissWithClick : false,
 		layoutKind : "VFlexLayout",
 		style : "overflow : hiddin; border-with:8px;",
@@ -518,7 +518,7 @@ enyo
 //			var byName = this.movingTo.name;
 			//objFrom.barnyard = byName;
 			this.$.popup_movePen.validateComponents();
-			this.$.movePen_kind.setObj(objFrom);
+			this.$.movePen_kind.setObj(objFrom, objTo);
 			this.$.popup_movePen.openAtCenter();
 		    } else {
 			cacheMan.setMessage("","actionSelected Error");

@@ -41,6 +41,16 @@ enyo
 		    }
 		}
 		return result;
+	   },
+	    getByInventoryID : function(iInventoryID) {
+		var programmedShips = this.getProgrammedShipments();
+		var result = null;
+		for ( var i = 0; i < programmedShips.length; i++) {
+		    if (programmedShips[i].inventoryId == iInventoryID) {
+			result= programmedShips[i];
+		    }
+		}
+		return result;
 	    },
 	    adapterToOut : function(entityObj) {
 		if (entityObj.dateTimeProgrammed) {

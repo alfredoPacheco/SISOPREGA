@@ -55,8 +55,8 @@ enyo.kind(
     },
     isPenActiveInInventory:function(sPen){
 	for(var i=0;i<this.arrObj.length;i++){
-	    if(("" + this.arrObj[i].pen.locationId + this.arrObj[i].pen.barnyardCode) == sPen){
-		return true;
+	    if(("" + this.arrObj[i].pen.locationId + this.arrObj[i].pen.barnyardCode) == sPen){		
+		return true;		
 	    }
 	}
 	return false;
@@ -77,7 +77,7 @@ enyo.kind(
     },
     getByPen:function(sPen){
 	for(var i=0;i<this.arrObj.length;i++){
-	    if(("" + this.arrObj[i].pen.locationId + this.arrObj[i].pen.barnyardCode) == sPen){
+	    if(("" + this.arrObj[i].pen.locationId + this.arrObj[i].pen.barnyardCode) == sPen){		
 		return this.arrObj[i];
 	    }
 	}
