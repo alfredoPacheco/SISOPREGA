@@ -397,23 +397,48 @@ enyo.kind(
           refNo : this.$.refNo.getValue(),
           HermanaCorte : [],
           HermanaCorteExportador: [],
-          HermanaExpense : []
+          HermanaExpense : [],
+          Reception: []
       };
       
+      for(var i=0; i<this.$.details.releaseIds.length; i++){
+        var receptionObj = {receptionId: this.$.details.releaseIds[i]};
+        hermana.Reception.push(receptionObj);
+      }
+      
       for(var i=0; i<this.$.details.$.listaCorte.cortes.length; i++){
-        hermana.HermanaCorte.push(this.$.details.$.listaCorte.cortes[i]);
+        var corte = this.CorteOutput(this.$.details.$.listaCorte.cortes[i]);
+        hermana.HermanaCorte.push(corte);
       }
       
       for(var i=0; i<this.$.details.$.listaCorteExpo.cortes.length; i++){
-        hermana.HermanaCorteExportador.push(this.$.details.$.listaCorteExpo.cortes[i]);
+        var corte = this.CorteOutput(this.$.details.$.listaCorteExpo.cortes[i]);
+        hermana.HermanaCorteExportador.push(corte);
       }
       
       for(var i=0; i<this.$.details.$.chargeList.arrData.length; i++){
-        hermana.HermanaExpense.push(this.$.details.$.chargeList.arrData[i]);
+        var expense = this.ExpenseOutput(this.$.details.$.chargeList.arrData[i]);
+        hermana.HermanaExpense.push(expense);
       }
       
       
       consumingGateway.Create("Hermana", hermana, this, "createCallBack");
+    },
+    CorteOutput : function(corte){
+      var output = {
+          barnyardId : corte.barnyardId,
+          heads : corte.heads,
+          qualityId : corte.qualityId,
+          weight: corte.weight
+      };
+      return output;
+    },
+    ExpenseOutput : function(expense){
+      var output = {
+          conceptId : expense.expenseConceptId,
+          amount : expense.price
+      };
+      return output;
     },
     createCallBack : function(result){
       // TODO: Evaluate result before caching and closing.

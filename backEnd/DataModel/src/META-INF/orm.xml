@@ -998,6 +998,12 @@
 					<cascade-all/>
 				</cascade>
 			</one-to-many>
+			<one-to-many name="reception" fetch="EAGER" orphan-removal="true">
+				<join-table name="ctrl_hermana_reception">
+					<join-column name="hermana_id" referenced-column-name="hermana_id" />
+					<inverse-join-column name="reception_id" referenced-column-name="reception_id" />
+				</join-table>
+			</one-to-many>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.CattleQuality">
@@ -1059,9 +1065,6 @@
 			</basic>
 			<basic name="qualityId">
 				<column name="quality_id" />
-			</basic>
-			<basic name="corteExpo">
-				<column name="corte_expo" />
 			</basic>
 			<basic name="heads">
 				<column name="heads" />

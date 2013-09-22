@@ -37,7 +37,6 @@ public class HermanaCorte {
   private long hermanaCorteId;
   private long barnyardId;
   private long qualityId;
-  private long corteExpo;
   private long heads;
   private double weight;
   private Hermana hermana;
@@ -79,18 +78,6 @@ public class HermanaCorte {
     this.qualityId = qualityId;
   }
   /**
-   * @return the corteExpo
-   */
-  public long getCorteExpo() {
-    return corteExpo;
-  }
-  /**
-   * @param corteExpo the corteExpo to set
-   */
-  public void setCorteExpo(long corteExpo) {
-    this.corteExpo = corteExpo;
-  }
-  /**
    * @return the heads
    */
   public long getHeads() {
@@ -130,7 +117,7 @@ public class HermanaCorte {
   
   @Override
   public String toString() {
-    return "corte:" + hermanaCorteId + ";barnyardId:" + barnyardId + ";qualityId:" + qualityId + ";corteExpo:" + corteExpo + ";heads:" + heads + ";weight:" + weight + ";";
+    return "corte:" + hermanaCorteId + ";barnyardId:" + barnyardId + ";qualityId:" + qualityId + ";heads:" + heads + ";weight:" + weight + ";";
   }
   
 }

@@ -30,6 +30,7 @@ import java.util.Set;
  * MM/DD/YYYY
  * ----------  ---------------------------  -------------------------------------------
  * 04/06/2013  Diego Torres                 Initial Version.
+ * 09/17/2013  Diego Torres                 Add reception reference.
  * ====================================================================================
  * </PRE>
  * 
@@ -49,6 +50,7 @@ public class Hermana {
   private Set<HermanaCorte> hermanaCorte;
   private Set<HermanaCorteExportador> hermanaCorteExportador;
   private Set<HermanaExpense> hermanaExpense;
+  private Set<Reception> reception;
 
   /**
    * @return the hermanaId
@@ -239,6 +241,27 @@ public class Hermana {
     if(hermanaExpense.getHermana()!=this)
       hermanaExpense.setHermana(this);
   }
+  
+  /**
+   * @return the reception
+   */
+  public Set<Reception> getReception() {
+    return reception;
+  }
+
+  /**
+   * @param reception the reception to set
+   */
+  public void setReception(Set<Reception> reception) {
+    this.reception = reception;
+  }
+  
+  public void addReception(Reception reception){
+    if(this.reception == null)
+      this.reception = new HashSet<Reception>();
+    
+    this.reception.add(reception);
+  }
 
   @Override
   public boolean equals(Object obj) {
@@ -247,5 +270,4 @@ public class Hermana {
     }
     return false;
   }
-
 }

@@ -244,7 +244,9 @@ public class Reception {
 
   @Override
   public String toString() {
-    long dateAllotedMilis = dateAllotted.getTime();
+    long dateAllotedMilis = 0;
+    if(dateAllotted != null)
+      dateAllotedMilis = dateAllotted.getTime();
     return "{\"cattleType\":" + cattleType + ",\"dateAllotted\":" + dateAllotedMilis + ",\"locationId\":" + locationId + ",\"zoneId\":" + zoneId
         + ",\"rancherId\":" + rancherId + ",\"receptionId\":" + receptionId + "}";
   }

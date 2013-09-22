@@ -76,8 +76,8 @@ GRANT ALL ON cat_carrier_carrier_id_seq TO sisoprega;
 DROP TABLE IF EXISTS ctrl_hermana CASCADE;
 CREATE TABLE ctrl_hermana(
 	hermana_id SERIAL PRIMARY KEY,
-	entry_no   VARCHAR(10) UNIQUE NOT NULL,
-	ref_no     VARCHAR(10) UNIQUE NOT NULL,
+	entry_no   VARCHAR(16) UNIQUE NOT NULL,
+	ref_no     VARCHAR(16) UNIQUE NOT NULL,
 	consignee  VARCHAR(80),
 	account_of VARCHAR(80),
 	rancher_id integer NOT NULL REFERENCES cat_rancher(rancher_id),
@@ -94,12 +94,16 @@ CREATE TABLE ctrl_hermana_reception(
 	reception_id integer NOT NULL REFERENCES ctrl_reception(reception_id)
 );
 
+GRANT ALL ON ctrl_hermana_reception TO sisoprega;
+
 DROP TABLE IF EXISTS ctrl_hermana_corte_exportador CASCADE;
 CREATE TABLE ctrl_hermana_corte_exportador(
 	corte_expo      SERIAL PRIMARY KEY,
-	hermana_id      integer NOT NULL REFERENCES ctrl_hermana(hermana_id),
-	quality_id      integer NOT NULL REFERENCES cat_cattle_quality(quality_id),
-	purchase_price  money NOT NULL DEFAULT 0.0
+	hermana_id  integer NOT NULL REFERENCES ctrl_hermana(hermana_id),
+	quality_id  integer NOT NULL REFERENCES cat_cattle_quality(quality_id),
+	heads       integer not null,
+	weight      decimal(12,4) not null,
+	purchase_price  decimal(10,2) NOT NULL DEFAULT 0.0
 );
 
 GRANT ALL ON ctrl_hermana_corte_exportador TO sisoprega;
@@ -111,7 +115,6 @@ CREATE TABLE ctrl_hermana_corte(
 	hermana_id  integer NOT NULL REFERENCES ctrl_hermana(hermana_id),
 	barnyard_id integer NOT NULL REFERENCES cat_barnyard(barnyard_id),
 	quality_id  integer NOT NULL REFERENCES cat_cattle_quality(quality_id),
-	corte_expo  integer NOT NULL REFERENCES ctrl_hermana_corte_exportador(corte_expo),
 	heads       integer not null,
 	weight      decimal(12,4) not null
 );
@@ -126,6 +129,9 @@ CREATE TABLE ctrl_hermana_expense(
 	hermana_id  integer NOT NULL REFERENCES ctrl_hermana(hermana_id),
 	amount      decimal(12,2) NOT NULL
 );
+
+GRANT ALL ON ctrl_hermana_expense TO sisoprega;
+GRANT ALL ON ctrl_hermana_expense_expense_id_seq TO sisoprega;
 
 DROP TABLE IF EXISTS ctrl_purchase CASCADE;
 CREATE TABLE ctrl_purchase(
