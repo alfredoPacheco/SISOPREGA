@@ -12,7 +12,8 @@ enyo.kind({
 	align : "center",
 	pack : "center",
 	height : "40px;",
-	components : [ {
+	components : [ 
+	               {
 	    content : "Fecha y Hora:",
 	    width : "166px;",
 	    style : "text-align: right;margin-right:10px;"
@@ -121,9 +122,24 @@ enyo.kind({
 	return this.obj;
     },
     save : function() {
-	cachePen.merma(this.obj,this.$.CabezaMerma.getValue());
-	cachePen.coment(this.obj,this.$.MermaComent.getValue());
-	this.doGuardar();
+	
+	var objInventory = enyo.clone(this.obj);
+	var objShrinkage={};
+	objShrinkage.dateTime = new Date("" + this.$.corteDate.getValue() + " " + this.$.corteTime.getValue());
+	objShrinkage.comment = this.$.MermaComent.getValue();
+	objShrinkage.heads= Number(this.$.CabezaMerma.getValue());
+	objShrinkage.weight= Number(objInventory.weight) / Number(objInventory.heads) * objShrinkage.heads;	
+	
+	if(!objInventory.Shrinkage){
+	    objInventory.Shrinkage = [];	    
+	}
+	
+	objInventory.Shrinkage.push(objShrinkage);
+	
+	objInventory.heads = objInventory.heads - objShrinkage.heads;
+	objInventory.weight = objInventory.weight - objShrinkage.weight;
+	
+	crudInventory.update(objInventory, this, "doGuardar");	
 	//alert (this.$.CabezaMerma.getValue()); //Cabezas por restar
 //	this.obj.feed.quantity = this.$.CabezaMerma.getValue();
 //	var dateAux = new Date("" + this.$.corteDate.getValue() + " "
@@ -134,7 +150,6 @@ enyo.kind({
 //	}
 
     },
-
     cancel : function() {
 
     }

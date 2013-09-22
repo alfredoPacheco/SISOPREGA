@@ -15,6 +15,9 @@
  */
 package com.tramex.sisoprega.dto;
 
+import java.util.HashSet;
+import java.util.Set;
+
 
 /**
  * USAGE COMMENT HERE
@@ -42,6 +45,7 @@ public class Inventory {
   private long heads;
   private double weight;
   private long feed;
+  private Set<Shrinkage> shrinkage;
   /**
    * @return the inventoryId
    */
@@ -126,4 +130,29 @@ public class Inventory {
   public void setFeed(long feed) {
     this.feed = feed;
   }
+  /**
+   * @return the shrinkage
+   */
+  public Set<Shrinkage> getShrinkage() {
+    return shrinkage;
+  }
+  /**
+   * @param shrinkage the shrinkage to set
+   */
+  public void setShrinkage(Set<Shrinkage> shrinkage) {
+    this.shrinkage = shrinkage;
+  }
+  
+  public void addShrinkage(Shrinkage objShrinkage){
+    if(shrinkage == null)
+      shrinkage = new HashSet<Shrinkage>();
+
+    
+    shrinkage.add(objShrinkage);
+    
+    if(objShrinkage.getInventory() != this)
+      objShrinkage.setInventory(this);
+    
+  }
+  
 }

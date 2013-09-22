@@ -25,7 +25,7 @@ enyo.depends(
 // "source/alimentoUS.js",
 // "source/hermana.gastos.concepto.js",
 
-// "source/corte.js",
+
 
 	"../SISOPREGA/css/transitions.css",
 
@@ -121,6 +121,7 @@ enyo.depends(
 	"source/operations/driver.select.js",
 	
 	"source/operations/movePen.js",
+	"source/operations/corte.js",
 	"source/operations/pen.map.js",
 
 	 "../SISOPREGA/source/reports/reports.main.js",

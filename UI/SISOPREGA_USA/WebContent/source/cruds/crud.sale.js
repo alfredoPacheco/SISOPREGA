@@ -52,8 +52,7 @@ enyo
 		}
 		return null;
 	    },
-	    adapterToOut : function(entityObj) {
-		console.debug(entityObj);
+	    adapterToOut : function(entityObj) {		
 		return entityObj;
 	    },
 	});

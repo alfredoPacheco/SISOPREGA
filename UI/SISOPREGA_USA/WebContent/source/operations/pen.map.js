@@ -2,7 +2,7 @@ enyo
 	.kind({
 	    name : "pen.map",
 	    arrOptions : [ {
-		caption : "Mover Corral",
+		caption : "Mover Ganado",
 		value : 1
 	    }, {
 		caption : "Alimento",

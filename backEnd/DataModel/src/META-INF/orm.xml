@@ -1264,6 +1264,13 @@
 			<basic name="feed">
 				<column name="feed" />
 			</basic>
+			<one-to-many name="shrinkage" fetch="EAGER"
+				mapped-by="inventory" target-entity="com.tramex.sisoprega.dto.Shrinkage"
+				orphan-removal="true">				
+				<cascade>
+					<cascade-all />
+				</cascade>
+			</one-to-many>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.Sale">
@@ -1323,7 +1330,7 @@
 			<many-to-one name="sale" fetch="LAZY" optional="false">
 				<join-column name="sale_id" referenced-column-name="sale_id"
 					nullable="false" />					
-			</many-to-one>			
+			</many-to-one>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.Carrier">
@@ -1411,10 +1418,10 @@
 			</basic>
 			<basic name="carrierIdProgrammed">
 				<column name="carrier_id_programed" />
-			</basic>
+			</basic>			
 			<basic name="dateTimeProgrammed">
 				<column name="date_time_programed" />
-				<temporal>DATE</temporal>
+				<temporal>TIMESTAMP</temporal>
 			</basic>
 			<basic name="qualityId">
 				<column name="quality_id" />
@@ -1474,11 +1481,11 @@
 			</id>			
 			<basic name="carrierId">
 				<column name="carrier_id" />
-			</basic>
+			</basic>			
 			<basic name="dateTime">
 				<column name="date_time" />
-				<temporal>DATE</temporal>
-			</basic>			
+				<temporal>TIMESTAMP</temporal>
+			</basic>		
 			<basic name="driver">
 				<column name="driver" />
 			</basic>
@@ -1489,6 +1496,39 @@
 				<join-column name="shipment_id" referenced-column-name="shipment_id"
 					nullable="false" />
 			</many-to-one>			
+		</attributes>
+	</entity>
+	<entity class="com.tramex.sisoprega.dto.Shrinkage">
+		<table name="ctrl_shrinkage" />
+		<named-query name="SHRINKAGE_BY_ID">
+			<description>Retrieve a single record of Shrinkage by its record id</description>
+			<query>SELECT iShrinkage FROM Shrinkage iShrinkage WHERE iShrinkage.shrinkageId = :Id</query>
+		</named-query>
+		<named-query name="ALL_SHRINKAGES">
+			<query>SELECT iShrinkage FROM Shrinkage iShrinkage</query>
+		</named-query>
+		<attributes>
+			<id name="shrinkageId">
+				<column name="shrinkage_id" />
+				<generated-value strategy="IDENTITY" />
+			</id>	
+			<basic name="dateTime">
+				<column name="date_time" />
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="heads">
+				<column name="heads" />
+			</basic>
+			<basic name="weight">
+				<column name="weight" />
+			</basic>			
+			<basic name="comment">
+				<column name="comment" />
+			</basic>
+			<many-to-one name="inventory" fetch="LAZY" optional="false">
+				<join-column name="inventory_id" referenced-column-name="inventory_id"
+					nullable="false" />
+			</many-to-one>		
 		</attributes>
 	</entity>
 </entity-mappings>
