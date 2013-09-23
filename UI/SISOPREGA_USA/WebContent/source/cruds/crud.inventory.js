@@ -32,9 +32,34 @@ enyo.kind(
         entityObj.pen = crudPen.getByID(entityObj.penId);
         
         entityObj.aveweight = Number(entityObj.heads) / Number(entityObj.weight);
+        
+        if(arrAux = entityObj.Shrinkage){
+            for(var i=0;i<arrAux.length;i++){
+        	arrAux[i].dateTime = utils.dateIn(arrAux[i].dateTime);
+        	arrAux[i].heads = Number(arrAux[i].heads);
+        	arrAux[i].weight = Number(arrAux[i].weight);
+        	arrAux[i].shrinkageId = Number(arrAux[i].shrinkageId);
+            }
+        }
         return entityObj;
       }
       return null;
+    },
+    adapterToOut : function(entityObj) {
+	if(arrAux = entityObj.Shrinkage){
+	    for(var i=0;i<arrAux.length;i++){
+		arrAux[i].dateTime = utils.dateTimeOut(arrAux[i].dateTime);		
+	    }
+	}
+	return entityObj;
+    },
+    isPenActiveInInventory:function(sPen){
+	for(var i=0;i<this.arrObj.length;i++){
+	    if(("" + this.arrObj[i].pen.locationId + this.arrObj[i].pen.barnyardCode) == sPen){		
+		return true;		
+	    }
+	}
+	return false;
     },
     getPensList:function(){
 	var arrInventory = [];
@@ -49,6 +74,14 @@ enyo.kind(
 	    arrActivePens.push(obj);
 	}
 	return arrActivePens;
+    },
+    getByPen:function(sPen){
+	for(var i=0;i<this.arrObj.length;i++){
+	    if(("" + this.arrObj[i].pen.locationId + this.arrObj[i].pen.barnyardCode) == sPen){		
+		return this.arrObj[i];
+	    }
+	}
+	return null;
     }
   });
 var crudInventory = new crud.inventory();

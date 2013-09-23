@@ -2,7 +2,7 @@ enyo
 	.kind({
 	    name : "pen.map",
 	    arrOptions : [ {
-		caption : "Mover Corral",
+		caption : "Mover Ganado",
 		value : 1
 	    }, {
 		caption : "Alimento",
@@ -40,7 +40,7 @@ enyo
 		kind : enyo.Popup,
 		name : "popup_movePen",
 		width : "50%;",
-		height : "190px;",
+		height : "300px;",
 		dismissWithClick : false,
 		layoutKind : "VFlexLayout",
 		style : "overflow : hiddin; border-with:8px;",
@@ -127,68 +127,67 @@ enyo
 
 	    }
 
-	    ],
-	    ready : function() {
+	    ],	    
+	    initializeCells:function(){
 		this.last = this.$.cells;
 		// this.addRow(true);
 		this.addRow();
 		this.addRowHeader();
-		this.createCells("4A", 1, 4, "50px", "50px", 1);
+		this.createCells("3A", 1, 4, "50px", "50px", 1);
 		this.splitRow();
-		this.createCells("3A", 1, 8, "50px", "50px", 1);
+		this.createCells("4A", 1, 8, "50px", "50px", 1);
 		this.splitRow();
-		this.createCells("3A", 9, 6, "50px", "50px", 1);
-		this.createCells("3A", 15, 1, "100px", "50px", 1);
+		this.createCells("4A", 9, 6, "50px", "50px", 1);
+		this.createCells("4A", 15, 1, "100px", "50px", 1);
 
 		this.addRow(true);
-		this.createCells("4B", 1, 2, "100px", "50px", 2);
+		this.createCells("3B", 1, 2, "100px", "50px", 2);
 		this.splitRow();
-		this.createCells("3B", 1, 4, "100px", "50px", 6);
+		this.createCells("4B", 1, 4, "100px", "50px", 6);
 		this.splitRow();
-		this.createCells("3B", 25, 1, "100px", "50px", 2);
-		this.createCells("3B", 27, 3, "100px", "50px", 2);
+		this.createCells("4B", 25, 1, "100px", "50px", 2);
+		this.createCells("4B", 27, 3, "100px", "50px", 2);
 
 		this.addRow();
-		this.createCells("4B", -12, 6, "33.33px", "25px");
+		this.createCells("3B", -12, 6, "33.33px", "25px");
 		this.splitRow();
-		this.createCells("3B", 2, 12, "33.33px", "25px");
+		this.createCells("4B", 2, 12, "33.33px", "25px");
 		this.splitRow();
-		this.createCells("3B", 26, 4, "100px", "25px");
+		this.createCells("4B", 26, 4, "100px", "25px");
 
 		this.addRow(true);
-		this.createCells("4C", 1, 6, "33.33px", "25px");
+		this.createCells("3C", 1, 6, "33.33px", "25px");
 		this.splitRow();
-		this.createCells("3C", 1, 12, "33.33px", "25px");
+		this.createCells("4C", 1, 12, "33.33px", "25px");
 		this.splitRow();
-		this.createCells("3C", 25, 3, "100px", "25px");
-		this.createCells("3C", 31, 2, "50px", "25px");
+		this.createCells("4C", 25, 3, "100px", "25px");
+		this.createCells("4C", 31, 2, "50px", "25px");
 
 		this.addRow();
-		this.createCells("4C", 2, 4, "50px", "50px");
+		this.createCells("3C", 2, 4, "50px", "50px");
 		this.splitRow();
-		this.createCells("3C", 2, 2, "50px", "50px");
-		this.createCells("3C", 8, 2, "50px", "50px");
-		this.createCells("3C", 14, 3, "50px", "50px");
-		this.createCells("3C", 22, 1, "50px", "50px");
+		this.createCells("4C", 2, 2, "50px", "50px");
+		this.createCells("4C", 8, 2, "50px", "50px");
+		this.createCells("4C", 14, 3, "50px", "50px");
+		this.createCells("4C", 22, 1, "50px", "50px");
 		this.splitRow();
-		this.createCells("3C", 26, 3, "100px", "50px");
-		this.createCells("3C", 32, 2, "50px", "50px");
+		this.createCells("4C", 26, 3, "100px", "50px");
+		this.createCells("4C", 32, 2, "50px", "50px");
 
 		this.addRow(true);
-		this.createCells("4D", 1, 4, "50px", "50px");
+		this.createCells("3D", 1, 4, "50px", "50px");
 		this.splitRow();
 
-		this.createCells("3D", 1, 8, "50px", "50px");
+		this.createCells("4D", 1, 8, "50px", "50px");
 		this.splitRow();
-		this.createCells("3D", 17, 8, "50px", "50px");
+		this.createCells("4D", 17, 8, "50px", "50px");
 
 		this.addRow();
-		this.createCells("4D", 2, 4, "50px", "50px");
+		this.createCells("3D", 2, 4, "50px", "50px");
 		this.splitRow();
-		this.createCells("3D", 2, 8, "50px", "50px");
+		this.createCells("4D", 2, 8, "50px", "50px");
 		this.splitRow();
-		this.createCells("3D", 18, 4, "100px", "50px");
-
+		this.createCells("4D", 18, 4, "100px", "50px");
 	    },
 	    addRow : function(bDiv) {
 		if (bDiv) {
@@ -253,77 +252,13 @@ enyo
 			.createComponent(
 				{
 				    kind : "IconButton",
-				    onclick : "refreshMap",
-				    icon : "../SISOPREGA/images/command-menu/menu-icon-music-repeat.png",
+				    onclick : "updateView",
+				    icon : "../SISOPREGA_WEB_LIB/images/command-menu/menu-icon-music-repeat.png",
 				    style : "height:23px; width:45px; padding:0;margin:0px",
 				}, {
 				    owner : this
 				});
-	    },
-	    refreshMap : function() {
-		for ( var i = 0, a; (a = this.$.cells.children[i]); i++) {
-		    for ( var j = 0, b; (b = a.children[j]); j++) {
-			if (b.bBY == true) {
-			    this.$[b.name].removeClass("selectCell");
-			    if (cachePen.isOccupied(b.name)) {
-				this.$[b.name].occupied = 1;
-				this.$[b.name].applyStyle("background-color",
-					this.sColorOccupied);
-
-			    } else {
-				this.$[b.name].occupied = 0;
-				this.$[b.name].applyStyle("background-color",
-					this.sColorFree);
-			    }
-			}
-		    }
-		}
-	    },
-	    createCells : function(sLetter, iStart, iNumber, sWidth, sHeight,
-		    iStep) {
-		// this.createCells("1E",5,6,"50px","50px");
-		objBarn = this.last;
-		var sColor;
-		for ( var i = 0; i < iNumber; i++) {
-		    var iOccupied;
-		    if (cachePen.isOccupied(sLetter + Math.abs(iStart))) {
-			iOccupied = 1;
-			sColor = this.sColorOccupied;
-		    } else {
-			iOccupied = 0;
-			sColor = this.sColorFree;
-		    }
-		    objBarn.createComponent({
-			kind : enyo.Control,
-			className : "byCell",
-			style : "width:" + sWidth + ";height:" + sHeight
-				+ ";align:left" + ";background-color:" + sColor
-				+ ";",
-			name : sLetter + Math.abs(iStart),
-			occupied : iOccupied,
-			bBY : true,
-			content : sLetter.substr(1) + Math.abs(iStart),
-			onclick : "cellClick",
-			onmousehold : "cellHold",
-		    }, {
-			owner : this
-		    });
-		    iStep = iStep ? iStep : 2;
-		    iStart = iStart + iStep;
-		}
-	    },
-	    cellOver : function(inSender, inEvent) {
-		if (inSender.occupied != 0 && inSender.occupied != 2) {
-		    this
-			    .highLightReception(cacheBy.inUse()[inSender.name].reception_id);
-		}
-	    },
-	    highLightReception : function(iRecID) {
-		this.arrByMOver = cachePen.getBYbyRecID(iRecID);
-		for (sKey in this.arrByMOver) {
-		    this.$[sKey].addClass("selectCell");
-		}
-	    },
+	    },	    
 	    cellOut : function() {
 		for (sKey in this.arrByMOver) {
 		    this.$[sKey].removeClass("selectCell");
@@ -377,58 +312,12 @@ enyo
 		    // .applyStyle(
 		    // "background-color",
 		    // cacheReceptions
-		    // .getByID(cachePen
+		    // .getByID(crudPen
 		    // .getRecIDbyBY(this.objSelected.name)).color);
 		    break;
 
 		}
-	    },
-	    actionSelected : function(inSender, inEvent) {
-		switch (inEvent.value) {
-		case 1:
-		    this.movingPen = true;
-		    this.$.toolbar.applyStyle("background-color", "#800000");
-		    this.$.lblInfo.setContent("Seleccione el corral destino");
-		    this.$.btnCancelMoving.show();
-		    break;
-		case 2:
-		    this.$.popup_alimentoUS.validateComponents();
-		    this.$.alimento_kind.setObj(cachePen
-			    .getByBarnyard(this.objSelected.name));
-		    this.$.popup_alimentoUS.openAtCenter();
-		    break;
-		case 3:
-		    this.$.popup_corte.validateComponents();
-		    this.$.corte_kind.setObj(cachePen
-			    .getByBarnyard(this.objSelected.name));
-		    this.$.popup_corte.openAtCenter();
-		    break;
-		case 4:
-
-		    var objFrom = enyo.clone(cachePen
-			    .getByBarnyard(this.movingFrom.name));
-		    var objTo = cachePen.getByBarnyard(this.movingTo.name);
-		    if (objTo && objFrom) {
-			if (objFrom.cattleName != objTo.cattleName) {
-			    cacheMan.setMessage("","No es posible mezclar clases de ganado en un corral");
-			    break;
-			}
-		    }
-		    if (objFrom) {
-			var byName = this.movingTo.name;
-//			objFrom.barnyard = [];
-//			objFrom.barnyard[byName] = byName;
-			objFrom.barnyard = byName;
-			this.$.popup_movePen.validateComponents();
-			this.$.movePen_kind.setObj(objFrom);
-			this.$.popup_movePen.openAtCenter();
-		    } else {
-			cacheMan.setMessage("","actionSelected Error");
-		    }
-
-		    break;
-		}
-	    },
+	    },	    
 	    cellHold : function(inSender, inEvent) {
 		inEvent.stopPropagation();
 		this.objSelected = inSender;
@@ -468,44 +357,14 @@ enyo
 	    },
 	    clearDesc : function() {
 		_objMainHeader.setContent("");
-	    },
-	    setDesc : function(sBY) {
-		_objMainHeader.applyStyle("font-size","12px");
-		var obj = cachePen.getByBarnyard(sBY);
-		if (obj) {
-		    var dateAux = "";
-		    if (obj.feed.dateAndTime) {
-			dateAux = obj.feed.dateAndTime.toLocaleString();
-		    }
-		    this.$.lblInfo.setContent("Ganado: " + obj.heads + " "
-			    + obj.cattleName  + " Peso: " + obj.weight + " Lb"
-			    + "<br /> Almento: " + dateAux + " "
-			    + obj.feed.quantity + " Lb");
-		} else
-		    this.$.lblInfo.setContent("");
-	    },
+	    },	    
 	    cancelMoving : function() {
 		this.movingPen = false;
 		this.$.popup_movePen.close();
 		this.$.toolbar.applyStyle("background-color", null);
 		this.$.btnCancelMoving.hide();
 		this.setDesc(this.movingFrom.name);
-	    },
-	    saveMoving : function() {
-		var movingFrom = cachePen.getByBarnyard(this.movingFrom.name);
-		var movingTo = cachePen.getByBarnyard(this.movingTo.name);
-		var objMovement = this.$.movePen_kind.getObj();
-		if (cachePen.movePen(movingFrom, movingTo, objMovement)) {
-		    this.movingPen = false;
-		    this.$.popup_movePen.close();
-		    this.refreshMap();
-		    this.$.toolbar.applyStyle("background-color", null);
-		    this.$.btnCancelMoving.hide();
-		    this.setDesc(this.movingTo.name);
-		} else {
-		    cacheMan.setMessage("","saveMoving Error");
-		}
-	    },
+	    },	    
 	    cancelFeed : function() {
 		this.$.popup_alimentoUS.close();
 	    },
@@ -521,5 +380,193 @@ enyo
 		this.$.popup_corte.close();
 		this.refreshMap();
 		this.setDesc(this.objSelected.name);
-	    }
+	    },
+	    cellOver : function(inSender, inEvent) {
+		if (inSender.occupied != 0 && inSender.occupied != 2) {
+		    this.highLightReception(cacheBy.inUse()[inSender.name].reception_id);
+		}
+	    },	    
+	    readCount:0,
+	    
+	    //Below all functions that interact with crudPen: TODO
+	    
+	    ready : function() {
+		this.initializeCells();
+		this.updateView();		
+	    },	    
+	    updateView : function() {
+		crudInventory.get(this, "readCallBack");
+		cacheMan.showScrim();
+	    },
+	    readCounter : 0,
+	    readCallBack : function() {
+		this.readCounter++;
+		if (this.readCounter == 1) {
+		    this.readCounter = 0;
+		    this.movingPen = false;
+		    this.$.toolbar.applyStyle("background-color", null);
+		    this.$.btnCancelMoving.hide();
+		    if(this.movingTo) this.setDesc(this.movingTo.name);
+		    this.refreshMap();
+		    cacheMan.hideScrim();
+		}
+	    },
+	    createCells : function(sLetter, iStart, iNumber, sWidth, sHeight,
+		    iStep) {
+		// this.createCells("1E",5,6,"50px","50px");
+		objBarn = this.last;		
+		for ( var i = 0; i < iNumber; i++) {		    
+		    objBarn.createComponent({
+			kind : enyo.Control,
+			className : "byCell",
+			style : "width:" + sWidth + ";height:" + sHeight
+				+ ";align:left" + ";background-color:" + this.sColorFree
+				+ ";",
+			name : sLetter + Math.abs(iStart),
+			occupied : 0,
+			bBY : true,
+			content : sLetter.substr(1) + Math.abs(iStart),
+			onclick : "cellClick",
+			onmousehold : "cellHold",
+		    }, {
+			owner : this
+		    });
+		    iStep = iStep ? iStep : 2;
+		    iStart = iStart + iStep;
+		}
+	    },
+	    refreshMap : function() {
+		for ( var i = 0, a; (a = this.$.cells.children[i]); i++) {
+		    for ( var j = 0, b; (b = a.children[j]); j++) {
+			if (b.bBY == true) {
+			    this.$[b.name].removeClass("selectCell");
+			    if (crudInventory.isPenActiveInInventory(b.name)) {
+				this.$[b.name].occupied = 1;
+				this.$[b.name].applyStyle("background-color",
+					this.sColorOccupied);
+
+			    } else {
+				this.$[b.name].occupied = 0;
+				this.$[b.name].applyStyle("background-color",
+					this.sColorFree);
+			    }
+			}
+		    }
+		}
+	    },
+	    setDesc : function(sBY) {
+		_objMainHeader.applyStyle("font-size","12px");
+		var obj = crudInventory.getByPen(sBY);
+		if (obj) {
+//		    var dateAux = "";
+//		    if (obj.feed.dateAndTime) { TODO SHOW FEED INFORMATION WHEN FEED ENTITY IS READY
+//			dateAux = obj.feed.dateAndTime.toLocaleString();
+//		    }
+		    this.$.lblInfo.setContent("Ganado: " + obj.heads + " "
+			    + crudCattleQuality.getByID(obj.qualityId).qualityName  + " Peso: " + obj.weight + " Lb"
+			    + "<br /> Almento: "); //+ dateAux + " "
+			    //+ obj.feed.quantity + " Lb");
+		} else
+		    this.$.lblInfo.setContent("");
+	    },
+	    highLightReception : function(iRecID) {
+		this.arrByMOver = crudPen.getBYbyRecID(iRecID);
+		for (sKey in this.arrByMOver) {
+		    this.$[sKey].addClass("selectCell");
+		}
+	    },
+	    actionSelected : function(inSender, inEvent) {
+		switch (inEvent.value) {
+		case 1:
+		    this.movingPen = true;
+		    this.$.toolbar.applyStyle("background-color", "#800000");
+		    this.$.lblInfo.setContent("Seleccione el corral destino");
+		    this.$.btnCancelMoving.show();
+		    break;
+		case 2:
+		    this.$.popup_alimentoUS.validateComponents();
+		    this.$.alimento_kind.setObj(crudInventory
+			    .getByPen(this.objSelected.name));
+		    this.$.popup_alimentoUS.openAtCenter();
+		    break;
+		case 3:
+		    this.$.popup_corte.validateComponents();
+		    this.$.corte_kind.setObj(crudInventory
+			    .getByPen(this.objSelected.name));
+		    this.$.popup_corte.openAtCenter();
+		    break;
+		case 4: //Move cattle of pen		    
+		    var objFrom = crudInventory.getByPen(this.movingFrom.name);
+		    if(objFrom)
+			objFrom = enyo.clone(objFrom);
+		    var objTo = crudInventory.getByPen(this.movingTo.name);
+		    if(objTo)
+			objTo = enyo.clone(objTo);
+		    
+		    if (objTo && objFrom) {
+			if (objFrom.qualityId != objTo.qualityId) {
+			    cacheMan.setMessage("","No es posible mezclar clases de ganado en un corral");
+			    break;
+			}
+		    }
+		    
+		    if(!objTo){
+			objTo = crudPen.getByBarnyard(this.movingTo.name);
+		    }
+		    
+		    if (objFrom) {
+//			var byName = this.movingTo.name;
+			//objFrom.barnyard = byName;
+			this.$.popup_movePen.validateComponents();
+			this.$.movePen_kind.setObj(objFrom, objTo);
+			this.$.popup_movePen.openAtCenter();
+		    } else {
+			cacheMan.setMessage("","actionSelected Error");
+		    }
+
+		    break;
+		}
+	    },	    
+	    saveMoving : function() {
+		var isMovingToOccupied = true;
+		var arrObjectsToSend = [];
+		
+		var movingFrom = crudInventory.getByPen(this.movingFrom.name);
+		var movingTo = crudInventory.getByPen(this.movingTo.name);
+		
+		if(!movingTo){
+		    movingTo = crudPen.getByBarnyard(this.movingTo.name);
+		    isMovingToOccupied = false;
+		}		
+		
+		var objMovement = this.$.movePen_kind.getObj();
+		
+		movingFrom.heads = Number(movingFrom.heads) - Number(objMovement.heads);
+		movingFrom.weight = Number(movingFrom.weight) - Number(objMovement.weight);
+		    
+		if(isMovingToOccupied){		    
+		    
+		    movingTo.heads = Number(movingTo.heads) + Number(objMovement.heads);
+		    movingTo.weight = Number(movingTo.weight) + Number(objMovement.weight);		    
+		    
+
+		}else{
+		    var objNewInventory=enyo.clone(movingFrom);
+		    delete objNewInventory.inventoryId;
+		    objNewInventory.heads = Number(objMovement.heads);
+		    objNewInventory.weight = Number(objMovement.weight);		    
+		    objNewInventory.pen = movingTo;
+		    objNewInventory.penId = movingTo.penId;
+		    movingTo = objNewInventory;
+		}		
+		
+		this.$.popup_movePen.close();		
+		
+		arrObjectsToSend.push(crudInventory.adapterToOut(movingFrom));
+		arrObjectsToSend.push(crudInventory.adapterToOut(movingTo));		
+		consumingGateway.Save("Inventory",arrObjectsToSend, this, "updateView");
+		cacheMan.showScrim();			    
+		
+		
+	    },
 	});

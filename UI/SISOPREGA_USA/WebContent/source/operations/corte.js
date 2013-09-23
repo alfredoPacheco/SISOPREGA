@@ -1,5 +1,5 @@
 enyo.kind({
-    name : "movePen",
+    name : "corte",
     kind : enyo.VFlexBox,
     obj : {},
     events : {
@@ -12,13 +12,14 @@ enyo.kind({
 	align : "center",
 	pack : "center",
 	height : "40px;",
-	components : [ {
+	components : [ 
+	               {
 	    content : "Fecha y Hora:",
-	    width : "160px;",
+	    width : "166px;",
 	    style : "text-align: right;margin-right:10px;"
 	}, {
 	    kind : "ToolInput",
-	    name : "moveDate",
+	    name : "corteDate",
 	    hint : "mes/dia/año",
 	    // width : "103px;",
 	    flex : 1,
@@ -35,7 +36,7 @@ enyo.kind({
 	// },
 	{
 	    kind : "ToolInput",
-	    name : "moveTime",
+	    name : "corteTime",
 	    // width : "103px;",
 	    hint : "HH:MM",
 	    flex : 1,
@@ -49,17 +50,33 @@ enyo.kind({
 	pack : "center",
 	height : "40px;",
 	components : [ {
-	    content : "Cantidad de cabezas:",
-	    width : "160px;",
+	    content : "Cabezas Mermadas:",
+	    width : "166px;",
 	    style : "text-align: right;margin-right:10px;"
 	}, {
 	    kind : "ToolInput",
-	    name : "totalHC",
-	    hint : '',
+	    name : "CabezaMerma",
+	    hint : 'Cabezas Mermadas',
 	    flex : 1,
 	// style:"max-width: 500px;"
-	}, ]
+	}]
     }, {
+	kind : enyo.HFlexBox,
+	align : "center",
+	pack : "center",
+	height : "40px;",
+	components : [ {
+	    content : "Comentario:",
+	    width : "166px;",
+	    style : "text-align: right;margin-right:10px;",
+		
+	},{
+	    kind : "ToolInput",
+	    name : "MermaComent",
+	    hint : 'Comentario',
+	    flex : 1,
+	}]
+    },{
 	kind : enyo.HFlexBox,
 	align : "center",
 	height : "40px;",
@@ -76,14 +93,14 @@ enyo.kind({
 	    caption : "Cancel",
 	    onclick : "doCancel",
 	    style : "background-color: #DABD8B;min-width:70px;"
-	}, ]
+	},]
     }
     // ]},
     ],
     ready : function() {
-	this.$.moveDate.setValue(utils.dateOut(new Date()));
-	this.$.moveDate.$.input.applyStyle("text-align", "left");
-	this.$.moveTime.setValue(new Date().toLocaleTimeString()
+	this.$.corteDate.setValue(utils.dateOut(new Date()));
+	this.$.corteDate.$.input.applyStyle("text-align", "left");
+	this.$.corteTime.setValue(new Date().toLocaleTimeString()
 		.substring(0, 5));
     },
     applyMask : function(inSender) {
@@ -98,17 +115,43 @@ enyo.kind({
 	    j(document.getElementById(_id)).mask('99:99');
 	});
     },
-    setObj : function (objt){
-	this.obj = objt; 
+    setObj : function(objt) {
+	this.obj = objt;
     },
-    getObj : function (){
+    getObj : function() {
 	return this.obj;
     },
-    save : function (){
-	var aux = parseFloat(this.obj.weight) / parseInt(this.obj.heads);
-	this.obj.heads = parseInt(this.$.totalHC.getValue());
-	this.obj.weight = aux * this.obj.heads;
-	this.doGuardar();
+    save : function() {
+	
+	var objInventory = enyo.clone(this.obj);
+	var objShrinkage={};
+	objShrinkage.dateTime = new Date("" + this.$.corteDate.getValue() + " " + this.$.corteTime.getValue());
+	objShrinkage.comment = this.$.MermaComent.getValue();
+	objShrinkage.heads= Number(this.$.CabezaMerma.getValue());
+	objShrinkage.weight= Number(objInventory.weight) / Number(objInventory.heads) * objShrinkage.heads;	
+	
+	if(!objInventory.Shrinkage){
+	    objInventory.Shrinkage = [];	    
+	}
+	
+	objInventory.Shrinkage.push(objShrinkage);
+	
+	objInventory.heads = objInventory.heads - objShrinkage.heads;
+	objInventory.weight = objInventory.weight - objShrinkage.weight;
+	
+	crudInventory.update(objInventory, this, "doGuardar");	
+	//alert (this.$.CabezaMerma.getValue()); //Cabezas por restar
+//	this.obj.feed.quantity = this.$.CabezaMerma.getValue();
+//	var dateAux = new Date("" + this.$.corteDate.getValue() + " "
+//		+ this.$.corteTime.getValue());
+//	this.obj.feed.dateAndTime = dateAux;
+//	if (cachePen.addFeed(this.obj, this.obj.feed)) {
+//	    this.doGuardar();
+//	}
+
+    },
+    cancel : function() {
+
     }
-    
+
 });

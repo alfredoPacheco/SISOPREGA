@@ -217,7 +217,7 @@ GRANT ALL ON vw_importable TO sisoprega;
 DROP TABLE IF EXISTS ctrl_shipment CASCADE;
 CREATE TABLE ctrl_shipment(
 	shipment_id  		SERIAL PRIMARY KEY,
-	date_time_programed    	DATE DEFAULT current_date,
+	date_time_programed    	timestamp without time zone NOT NULL DEFAULT now(),
 	customer_id   		integer NOT NULL REFERENCES cat_customer(customer_id),
 	carrier_id_programed   	integer REFERENCES cat_carrier(carrier_id),
 	quality_id		integer NOT NULL REFERENCES cat_cattle_quality(quality_id)
@@ -245,7 +245,7 @@ DROP TABLE IF EXISTS ctrl_shipment_release CASCADE;
 CREATE TABLE ctrl_shipment_release (
 	shipment_release_id	SERIAL PRIMARY KEY,
 	shipment_id	 	integer NOT NULL REFERENCES ctrl_shipment(shipment_id),
-	date_time    		DATE DEFAULT current_date,
+	date_time    		timestamp without time zone NOT NULL DEFAULT now(),
 	carrier_id   		integer REFERENCES cat_carrier(carrier_id),
 	driver			VARCHAR(80),
 	plates			VARCHAR(20)
@@ -253,3 +253,17 @@ CREATE TABLE ctrl_shipment_release (
 
 GRANT ALL ON ctrl_shipment_release TO sisoprega;
 GRANT ALL ON ctrl_shipment_release_shipment_release_id_seq TO sisoprega;
+
+
+DROP TABLE IF EXISTS ctrl_shrinkage CASCADE;
+CREATE TABLE ctrl_shrinkage(
+	shrinkage_id  		SERIAL PRIMARY KEY,
+	date_time    		timestamp without time zone NOT NULL DEFAULT now(),
+	inventory_id 		integer NOT NULL REFERENCES ctrl_inventory(inventory_id),	
+	heads 			integer NOT NULL DEFAULT 0,
+	weight 			decimal(12,4) not null,	
+	comment			varchar(100)
+);
+
+GRANT ALL ON ctrl_shrinkage TO sisoprega;
+GRANT ALL ON ctrl_shrinkage_shrinkage_id_seq TO sisoprega;
