@@ -63,6 +63,7 @@ enyo.depends(
 	"source/cruds/crud.customer.js",
 	"source/cruds/crud.cattleQuality.js",
 	"source/cruds/crud.purchase.js",
+	"source/cruds/crud.hermana.js",
 	"source/cruds/crud.sale.js",
 	"source/cruds/crud.inventory.js",
 	"source/cruds/crud.released.js",

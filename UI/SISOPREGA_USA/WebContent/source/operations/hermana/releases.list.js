@@ -8,7 +8,7 @@ enyo.kind(
     selectedCattleType : 0,
     selectedCattleName : "",
     selectedReleases : 0,
-    selectedIds : [],
+    selectedReceptions : [],
     events :
       {
         onCancel : "",
@@ -135,7 +135,6 @@ enyo.kind(
       } else {
         cacheMan.hideScrim();
         cacheMan.setMessage("",'No hay inspecciones liberadas para este exportador, intente más tarde.');
-        this.$.doCancel();
       }
     },
     setupReleaseRow : function(inSender, inIndex) {
@@ -150,7 +149,7 @@ enyo.kind(
         this.$.rejectsWeight.listIndex = inIndex;
         
         // If filtered with this record as selected
-        if (this.selectedIds && this.selectedIds[0] == objRelease.receptionId) 
+        if (this.selectedReceptions.length > 0 && this.selectedReceptions[0].receptionId == objRelease.receptionId) 
           this.$.rejectsWeight.setSelected(true);
         
         return true;
@@ -161,8 +160,8 @@ enyo.kind(
       if (this.selectedCattleType == 0 && !this.$.rejectsWeight.isSelected()) {
         this.selectedCattleType = this.releases[inEvent.rowIndex].cattleType;
         this.selectedCattleName = this.releases[inEvent.rowIndex].cattleName;
-        this.selectedIds = [];
-        this.selectedIds.push(this.releases[inEvent.rowIndex].receptionId);
+        this.selectedReceptions = [];
+        this.selectedReceptions.push(this.releases[inEvent.rowIndex]);
         // Filter list
         this.loadReleases(this.selectedCattleType);
         this.$.rejectsWeight.setSelected(true);
@@ -176,24 +175,24 @@ enyo.kind(
       this.$.rejectsWeight.setSelected(!this.$.rejectsWeight.isSelected());
       
       if (this.$.rejectsWeight.isSelected()) {
-        this.selectedIds.push(this.releases[inEvent.rowIndex].receptionId);
+        this.selectedReceptions.push(this.releases[inEvent.rowIndex].receptionId);
       } else {
-        for ( var i = 0; i < this.selectedIds.length; i++) {
-          if (this.selectedIds[i] == this.releases[inEvent.rowIndex].receptionId) {
-            this.selectedIds.splice(i, 1);
+        for ( var i = 0; i < this.selectedReceptions.length; i++) {
+          if (this.selectedReceptions[i].receptionId == this.releases[inEvent.rowIndex].receptionId) {
+            this.selectedReceptions.splice(i, 1);
             break;
           }
         }
       }
       
-      if (this.selectedIds.length == 0) {
+      if (this.selectedReceptions.length == 0) {
         this.selectedCattleType = 0;
         this.selectedCattleName = '';
         this.loadReleases();
       }
     },
     setupCutSelection : function(inSender) {
-      if (this.selectedIds.length == 0) {
+      if (this.selectedReceptions.length == 0) {
 	  cacheMan.setMessage("","Usted no ha seleccionado ningún lote para cortar, seleccione uno o más elementos de la lista posterior e intente nuevamente.");
         return false;
       }

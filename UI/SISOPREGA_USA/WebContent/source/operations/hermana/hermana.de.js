@@ -348,9 +348,8 @@ enyo.kind(
       
       var releaseObj = null;
       
-      for ( var selectionIndex = 0; selectionIndex < this.$.releasesList.selectedIds.length; selectionIndex++) {
-        var selectedId = this.$.releasesList.selectedIds[selectionIndex];
-        releaseObj = crudReleased.getByID(selectedId);
+      for ( var selectionIndex = 0; selectionIndex < this.$.releasesList.selectedReceptions.length; selectionIndex++) {
+        releaseObj = this.$.releasesList.selectedReceptions[selectionIndex];
         
         summary.hc += Number(releaseObj.heads);
         summary.kg += Number(releaseObj.weight);
@@ -379,7 +378,7 @@ enyo.kind(
       this.$.details.$.listaCorte.setCortes(cacheCorte.get());
       this.$.details.$.listaCorteExpo.setCortes(cacheCorte.getExpo());
       
-      this.$.details.setReleaseIds(this.$.releasesList.selectedIds);
+      this.$.details.setReleased(this.$.releasesList.selectedReceptions);
       this.$.details.setSummary(summary);
       this.$.details.addCookiedCharges();
       this.$.details.updateTableContents();
@@ -401,9 +400,8 @@ enyo.kind(
           Reception: []
       };
       
-      for(var i=0; i<this.$.details.releaseIds.length; i++){
-        var receptionObj = {receptionId: this.$.details.releaseIds[i]};
-        hermana.Reception.push(receptionObj);
+      for(var i=0; i<this.$.details.released.length; i++){
+        hermana.Reception.push(this.$.details.released[i]);
       }
       
       for(var i=0; i<this.$.details.$.listaCorte.cortes.length; i++){
@@ -443,6 +441,12 @@ enyo.kind(
     createCallBack : function(result){
       // TODO: Evaluate result before caching and closing.
       // Save cache information based on data entry.
+      if(result.exceptionId != '0'){
+        alert('Se ha encontrado un error al intentar grabar los datos, revise la captura ');
+        cacheMan.hideScrim();
+        return false;
+      }
+      
       var entryPrefix = this.$.entryNo.getValue().substr(0,4);
       utils.setCookie("entryNo", entryPrefix, 15);
       

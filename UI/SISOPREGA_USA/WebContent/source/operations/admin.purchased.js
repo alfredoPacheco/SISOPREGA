@@ -195,8 +195,17 @@ enyo
           
         },
         updateView : function() {
-          crudSeller.get(this, "readCallBack");
-          crudPurchase.get(this, "readCallBack");
+          crudSeller.get(this, "loadCatalogs");
+          crudRancher.get(this, "loadCatalogs");
+          crudEnterpriseRancher.get(this, "loadCatalogs");
+        },
+        loadCatalogs : function(){
+          this.readCounter++;
+          if(this.readCounter == 3){
+            this.readCounter = 0;
+            crudPurchase.get(this, "readCallBack");
+            crudHermana.get(this, "readCallBack");
+          }
         },
         ready : function() {
           this.updateView();
@@ -212,7 +221,10 @@ enyo
         },
         loadListContent : function() {
           // groups by sellerId into this.arrData
-          this.groupBySeller(crudPurchase.arrObj);
+          var purchased = crudPurchase.arrObj;
+          var imported = crudHermana.arrObj;
+          var purchases = purchased.concat(imported);
+          this.groupBySeller(purchases);
           this.$.listPurchased.render();
           this.updateSummary();
         },
@@ -239,20 +251,42 @@ enyo
         },
         groupBySeller : function(purchaseArray) {
           for ( var i = 0; i < purchaseArray.length; i++) {
-            var sellerId = purchaseArray[i].sellerId;
+            var sellerId = '';
+            if(purchaseArray[i].entityName == 'Hermana'){
+              sellerId = 'Rancher-' + purchaseArray[i].rancherId;
+            }else{
+              sellerId = 'Seller-' + purchaseArray[i].sellerId;
+            }
+            
             if (!this.sellerIsSummarized(sellerId)) this.arrData.push(this.sellerSummary(purchaseArray, sellerId));
           }
         },
         sellerSummary : function(purchaseArray, sellerId) {
           var heads = 0;
           var weight = 0;
+          var sellerName = '';
           for ( var i = 0; i < purchaseArray.length; i++) {
-            if (purchaseArray[i].sellerId == sellerId) {
-              heads += Number(this.calculateTotalHeads(purchaseArray[i].PurchaseDetail));
-              weight += Number(this.calculateTotalWeight(purchaseArray[i].PurchaseDetail));
+            var iSellerId = '';
+            var detailRecords = [];
+            var auxSellerName = '';
+            if(purchaseArray[i].entityName == 'Hermana'){
+              iSellerId = 'Rancher-' + purchaseArray[i].rancherId;
+              detailRecords = purchaseArray[i].HermanaCorte;
+              auxSellerName = purchaseArray[i].seller;
+            }else{
+              iSellerId = 'Seller-' + purchaseArray[i].sellerId;
+              detailRecords = purchaseArray[i].PurchaseDetail;
+              auxSellerName = crudSeller.getByID(purchaseArray[i].sellerId).sellerName;
+            }
+            
+            if (iSellerId == sellerId) {
+              heads += Number(this.calculateTotalHeads(detailRecords));
+              weight += Number(this.calculateTotalWeight(detailRecords));
+              sellerName = auxSellerName;
             }
           }
-          var sellerName = crudSeller.getByID(sellerId).sellerName;
+          
+          
           var objResult =
             {
               sellerId : sellerId,

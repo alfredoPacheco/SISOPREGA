@@ -957,6 +957,10 @@
 	<!-- **************************************************************************** -->
 	<entity class="com.tramex.sisoprega.dto.Hermana">
 		<table name="ctrl_hermana" />
+		<named-query name="ALL_HERMANAS">
+			<description>Retrieves all records from database</description>
+			<query>SELECT iHermana FROM Hermana iHermana WHERE iHermana.deWhen >= current_date</query>
+		</named-query>
 		<attributes>
 			<id name="hermanaId">
 				<column name="hermana_id" />
