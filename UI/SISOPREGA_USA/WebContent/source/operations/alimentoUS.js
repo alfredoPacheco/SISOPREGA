@@ -14,7 +14,7 @@ enyo.kind({
 	height : "40px;",
 	components : [ {
 	    content : "Fecha y Hora:",
-	    width : "166px;",
+	    width : "180px;",
 	    style : "text-align: right;margin-right:10px;"
 	}, {
 	    kind : "ToolInput",
@@ -50,11 +50,13 @@ enyo.kind({
 	height : "40px;",
 	components : [ {
 	    content : "Cantidad de Alimento:",
-	    width : "166px;",
+	    width : "180px;",
 	    style : "text-align: right;margin-right:10px;"
 	}, {
-	    kind : "ToolInput",
-	    name : "feedQtyPorcentage",
+	    kind : "controls.numberBox",
+	    inputKind:"ToolInput",
+	    name : "feedQty",
+	    height:"35px",
 	    hint : '',
 	    flex : 1,
 	// style:"max-width: 500px;"
@@ -68,7 +70,12 @@ enyo.kind({
 	align : "center",
 	height : "40px;",
 	style : "font-size:14px;",
-	components : [ {
+	components : [{
+	    kind : enyo.Button,
+	    caption : "1.5% del peso en corral",
+	    onclick : "setDefaultPortion",
+	    style : "background-color: #DABD8B;min-width:170px;"
+	}, {
 	    kind : enyo.Spacer
 	}, {
 	    kind : enyo.Button,
@@ -104,29 +111,43 @@ enyo.kind({
     },
     setObj : function(objt) {
 	this.obj = objt;
-	this.calculateFeedQty();
+	this.setDefaultPortion();
     },
     getObj : function() {
 	return this.obj;
     },
-    save : function() {
-	this.obj.feed.quantity = Number(this.$.feedQtyPorcentage.getValue());
-	var dateAux = new Date("" + this.$.feedDate.getValue() + " "
-		+ this.$.feedTime.getValue());
-	this.obj.feed.dateAndTime = dateAux;
-	if (cachePen.addFeed(this.obj, this.obj.feed)) {
-	    this.doGuardar();
+    validateForm : function() {
+	var sError = "";
+	var qty = Number(this.$.feedQty.getValue().replace(",",""));
+	if (!qty || qty <= 0 || qty == '') {
+	    sError = "Verifique la cantidad.";
 	}
-
+	if (sError != "") {
+	    cacheMan.setMessage("", sError);
+	    return false;
+	}
+	return true;
     },
-    calculateFeedQty : function() {
-	this.$.feedQtyPorcentage.setValue(utils
-		.formatNumberThousands(this.obj.weight * .015));
-
-    },
-
+    save : function() {
+	if(this.validateForm()){
+	    var objFeed = {};
+	    objFeed.dateTime = new Date("" + this.$.feedDate.getValue() + " "
+			+ this.$.feedTime.getValue());
+	    objFeed.quantity = Number(this.$.feedQty.getValue().replace(",",""));
+	    if(!this.obj.FeedUS){
+		this.obj.FeedUS = [];
+	    }
+	    
+	    this.obj.FeedUS.push(objFeed);
+	    
+	    crudInventory.update(this.obj,this,"doGuardar");    
+	}
+	
+    },    
     cancel : function() {
 
+    },
+    setDefaultPortion:function(){
+	this.$.feedQty.setValue(utils.formatNumberThousands(this.obj.weight * .015));
     }
-
 });

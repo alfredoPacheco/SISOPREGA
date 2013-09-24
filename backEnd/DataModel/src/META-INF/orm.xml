@@ -1274,6 +1274,13 @@
 					<cascade-all />
 				</cascade>
 			</one-to-many>
+			<one-to-many name="feedUS" fetch="EAGER"
+				mapped-by="inventory" target-entity="com.tramex.sisoprega.dto.FeedUS"
+				orphan-removal="true">				
+				<cascade>
+					<cascade-all />
+				</cascade>
+			</one-to-many>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.Sale">
@@ -1527,6 +1534,33 @@
 			</basic>			
 			<basic name="comment">
 				<column name="comment" />
+			</basic>
+			<many-to-one name="inventory" fetch="LAZY" optional="false">
+				<join-column name="inventory_id" referenced-column-name="inventory_id"
+					nullable="false" />
+			</many-to-one>		
+		</attributes>
+	</entity>
+	<entity class="com.tramex.sisoprega.dto.FeedUS">
+		<table name="ctrl_feed_us" />
+		<named-query name="FEED_US_BY_ID">
+			<description>Retrieve a single record of Feed US by its record id</description>
+			<query>SELECT iFeedUS FROM FeedUS iFeedUS WHERE iFeedUS.feedUSId = :Id</query>
+		</named-query>
+		<named-query name="ALL_FEED_US">
+			<query>SELECT iFeedUS FROM FeedUS iFeedUS</query>
+		</named-query>
+		<attributes>
+			<id name="feedUSId">
+				<column name="feed_us_id" />
+				<generated-value strategy="IDENTITY" />
+			</id>	
+			<basic name="dateTime">
+				<column name="date_time" />
+				<temporal>TIMESTAMP</temporal>
+			</basic>			
+			<basic name="quantity">
+				<column name="quantity" />
 			</basic>
 			<many-to-one name="inventory" fetch="LAZY" optional="false">
 				<join-column name="inventory_id" referenced-column-name="inventory_id"

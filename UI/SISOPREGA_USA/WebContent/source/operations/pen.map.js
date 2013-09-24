@@ -56,7 +56,7 @@ enyo
 		kind : enyo.Popup,
 		name : "popup_alimentoUS",
 		width : "50%;",
-		height : "190px;",
+		height : "140px;",
 		dismissWithClick : false,
 		layoutKind : "VFlexLayout",
 		style : "overflow : hiddin; border-with:8px;",
@@ -453,19 +453,20 @@ enyo
 			}
 		    }
 		}
+		_objMainHeader.applyStyle("font-size","15px");
 	    },
 	    setDesc : function(sBY) {
 		_objMainHeader.applyStyle("font-size","12px");
-		var obj = crudInventory.getByPen(sBY);
-		if (obj) {
-//		    var dateAux = "";
-//		    if (obj.feed.dateAndTime) { TODO SHOW FEED INFORMATION WHEN FEED ENTITY IS READY
-//			dateAux = obj.feed.dateAndTime.toLocaleString();
-//		    }
-		    this.$.lblInfo.setContent("Ganado: " + obj.heads + " "
-			    + crudCattleQuality.getByID(obj.qualityId).qualityName  + " Peso: " + obj.weight + " Lb"
-			    + "<br /> Almento: "); //+ dateAux + " "
-			    //+ obj.feed.quantity + " Lb");
+		var objInventory = crudInventory.getByPen(sBY);
+		if (objInventory) {
+		    var objFeed = {dateTime:"",quantity:""};
+		    if(objInventory.FeedUS){objFeed=objInventory.FeedUS[objInventory.FeedUS.length-1];}
+		    
+		    
+		    this.$.lblInfo.setContent("Ganado: " + objInventory.heads + " "
+			    + crudCattleQuality.getByID(objInventory.qualityId).qualityName  + " Peso: " + objInventory.weight + " Lb"
+			    + "<br /> Almento: " + objFeed.dateTime.toLocaleString() + " " +
+			    objFeed.quantity + " Lb");
 		} else
 		    this.$.lblInfo.setContent("");
 	    },

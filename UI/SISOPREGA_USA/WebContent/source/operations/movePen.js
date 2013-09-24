@@ -183,9 +183,11 @@ enyo
 			.setContent(crudPen.getByID(objTo.penId).barnyardCode);
 		this.$.lblHeadsInPen.setContent(objFrom.heads);
 		var headsProgrammed = Number(crudShipment
-			.getByInventoryID(objFrom.inventoryId).heads);
+			.getByInventoryID(objFrom.inventoryId));
 		if (!headsProgrammed)
 		    headsProgrammed = 0;
+		else
+		    headsProgrammed = headsProgrammed.heads;
 		this.$.lblHeadsProgrammed.setContent(headsProgrammed);
 		this.$.lblHeadsMobile.setContent(Number(objFrom.heads)
 			- headsProgrammed);
