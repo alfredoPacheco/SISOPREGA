@@ -8,7 +8,7 @@ enyo
             onAddClass : ""
           },
         summary : null,
-        releaseIds : [],
+        released : [],
         cattleClassName : "",
         components : [
               {
@@ -451,8 +451,8 @@ enyo
         setSummary : function(summaryObj) {
           this.summary = summaryObj;
         },
-        setReleaseIds : function(releaseIds) {
-          this.releaseIds = releaseIds;
+        setReleased : function(released){
+          this.released = released;
         },
         resetSummaryTable : function(){
           var data = [];

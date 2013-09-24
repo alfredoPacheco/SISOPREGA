@@ -1,14 +1,8 @@
 package com.tramex.sisoprega.proxy.bean;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 
-import com.tramex.sisoprega.datamodel.DataModelException;
 import com.tramex.sisoprega.dto.Inventory;
 import com.tramex.sisoprega.dto.Purchase;
 import com.tramex.sisoprega.dto.PurchaseDetail;
@@ -17,19 +11,19 @@ import com.tramex.sisoprega.gateway.GatewayRecord;
 import com.tramex.sisoprega.gateway.request.CreateRequest;
 import com.tramex.sisoprega.gateway.response.ReadResponse;
 import com.tramex.sisoprega.proxy.Cruddable;
-import com.tramex.sisoprega.proxy.common.BaseBean;
+import com.tramex.sisoprega.proxy.common.BaseInventory;
 
 /**
  * Session Bean implementation class PurchaseBean
  */
 @Stateless
 @RolesAllowed({ "sisoprega_admin", "mx_usr", "us_usr", "rancher", "agency" })
-public class PurchaseBean extends BaseBean implements Cruddable {
-
-  ReadResponse response = new ReadResponse();
+public class PurchaseBean extends BaseInventory implements Cruddable {
   
   @Override
   public ReadResponse Create(CreateRequest request) {
+    ReadResponse response = new ReadResponse();
+    
     // Use purchase to create inventory
     try {
       GatewayRecord record = request.getParentRecord();
@@ -77,30 +71,6 @@ public class PurchaseBean extends BaseBean implements Cruddable {
     }
 
     return response;
-  }
-
-  /**
-   * Retrieve inventory record based on cattle type, quality and date
-   * 
-   * @param cattleType
-   * @param qualityId
-   * @param date
-   * @return
-   * @throws DataModelException
-   */
-  private Inventory getInventoryRecord(long cattleType, long qualityId, long penId, Date date) throws DataModelException {
-    Map<String, Object> parameters = new HashMap<String, Object>();
-    parameters.put("cattleType", cattleType);
-    parameters.put("qualityId", qualityId);
-    parameters.put("penId", penId);
-    List<Inventory> inventoryRecord = dataModel
-        .readDataModelList("INVENTORY_UNIQUE_RECORD", parameters, Inventory.class);
-
-    if (inventoryRecord != null && !inventoryRecord.isEmpty()) {
-      return inventoryRecord.get(0);
-    } else {
-      return null;
-    }
   }
 
 }

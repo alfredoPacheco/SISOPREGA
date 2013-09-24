@@ -93,7 +93,7 @@ enyo.kind(
         var recordIds = [];
         recordIds.push(i);
 
-        var cattleClassId = this.cortes[i].cattleClassId;
+        var cattleClassId = this.cortes[i].qualityId;
         var heads = Number(this.cortes[i].heads);
         var weight = Number(this.cortes[i].weight);
 
