@@ -205,6 +205,7 @@ enyo
             this.readCounter = 0;
             crudPurchase.get(this, "readCallBack");
             crudHermana.get(this, "readCallBack");
+            crudInventory.get(this, "readCallBack");
           }
         },
         ready : function() {
@@ -213,7 +214,7 @@ enyo
         readCounter : 0,
         readCallBack : function() {
           this.readCounter++;
-          if (this.readCounter == 2) {
+          if (this.readCounter == 3) {
             this.readCounter = 0;
             this.calculateInventory();
             this.loadListContent ();
@@ -230,16 +231,16 @@ enyo
         },
         calculateInventory : function(useFirstListItem){
           // Add inventory record.
-          if(!crudInventory.getDataLoaded()){
+          if(!crudInventory.getDataLoaded() || !crudPurchase.getDataLoaded() || !crudHermana.getDataLoaded()){
             var milis = ((Math.random() * 1000) + 500);
             setTimeout(this.calculateInventory, milis);
           }
-          
+
           var objInventory = {
               sellerId : 0,
               sellerName : 'Inv. ELLLC @ STT',
-              heads : crudInventory.getObjSummary().heads - crudPurchase.getObjSummary().heads,
-              weight : crudInventory.getObjSummary().weight - crudPurchase.getObjSummary().weight
+              heads : crudInventory.getObjSummary().heads - crudPurchase.getObjSummary().heads - crudHermana.getObjSummary().heads,
+              weight : crudInventory.getObjSummary().weight - crudPurchase.getObjSummary().weight - crudHermana.getObjSummary().weight
           };
           
           if(useFirstListItem){

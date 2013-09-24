@@ -21,7 +21,7 @@ enyo.kind(
         }
       }
       objSummary.heads = heads;
-      objSummary.weigth = weight;
+      objSummary.weight = weight;
       
       this.setObjSummary(objSummary);
       
