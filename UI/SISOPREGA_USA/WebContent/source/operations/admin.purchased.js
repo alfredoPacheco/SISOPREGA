@@ -285,8 +285,7 @@ enyo
               sellerName = auxSellerName;
             }
           }
-          
-          
+
           var objResult =
             {
               sellerId : sellerId,
