@@ -189,29 +189,34 @@ enyo
         buttonUp : function(inSender, inEvent) {
           inSender.setClassName("enyo-button");
         },
+        validateAdd:function(){ //function to override if necessary validate the item to be added.
+          return true;   
+        },
         addDetailItem : function() {
-          var newObject =
-            {
-              fields : []
-            };
-          
-          var detailFields = this.$.detailFields.children;
-          for ( var i = detailFields.length-1; i >= 0; i--) {
-            if (detailFields[i].hasOwnProperty("bindTo")) {
-              newObject.fields[i] = detailFields[i].getValue();
-              newObject[detailFields[i].bindTo] = this.getValueFromControl(detailFields[i]);
-              if(detailFields[i].kind == 'controls.autocomplete')
-                this.setValueForControl(detailFields[i], -1);
-              else
-                this.setValueForControl(detailFields[i], '');
-            } 
-          }
-          
-          detailFields[0].setFocus();
-          
-          this.arrDetail.push(newObject);
-          this.updateList();
-          this.$.detailScroller.scrollTo(this.$.detailScroller.getBoundaries().bottom, 0);
+            if(this.validateAdd()){
+        	var newObject =
+                {
+                  fields : {}
+                };
+              
+              var detailFields = this.$.detailFields.children;
+              for ( var i = detailFields.length-1; i >= 0; i--) {
+                if (detailFields[i].hasOwnProperty("bindTo")) {
+                  newObject.fields[i] = detailFields[i].getValue();
+                  newObject[detailFields[i].bindTo] = this.getValueFromControl(detailFields[i]);
+                  if(detailFields[i].kind == 'controls.autocomplete')
+                    this.setValueForControl(detailFields[i], -1);
+                  else
+                    this.setValueForControl(detailFields[i], '');
+                } 
+              }
+              
+              detailFields[0].setFocus();
+              
+              this.arrDetail.push(newObject);
+              this.updateList();
+              this.$.detailScroller.scrollTo(this.$.detailScroller.getBoundaries().bottom, 0);	
+            }
         },
         getEntity : function() {
           var objEntity = this.inherited(arguments);
@@ -232,11 +237,20 @@ enyo
         setupRow : function(inSender, inIndex) {
           if (objItem = this.arrDetail[inIndex]) {
             this.$.detail_number.setContent(inIndex + 1);
-            for ( var i = 0; i < objItem.fields.length; i++) {
-              if (this.$["detailItem" + i] !== undefined) {
-                this.$["detailItem" + i].content = objItem.fields[i];
-              }
+            var i = 0;
+            for(var field in objItem.fields){
+        	if(objItem.fields.hasOwnProperty(field)){
+        	    if (this.$["detailItem" + i] !== undefined) {
+                        this.$["detailItem" + i].content = objItem.fields[field];
+                        i++;
+        	    }    
+        	}        	
             }
+//            for ( var i = 0; i < objItem.fields.length; i++) {        	
+//              if (this.$["detailItem" + i] !== undefined) {
+//                this.$["detailItem" + i].content = objItem.fields[i];
+//              }
+//            }
             return true;
           }
         },

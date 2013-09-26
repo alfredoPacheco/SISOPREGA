@@ -8,6 +8,7 @@ enyo
 	    allItems : [],
 	    sColorWithOutIndex : "teal",
 	    sColorWithIndex : "black",
+	    usingFilter:false,
 	    published : {
 		hint : "",
 		index : -1,
@@ -21,7 +22,8 @@ enyo
 	    },
 	    events : {
 		"onSelectItem" : "",
-		"onEnter" : ""
+		"onEnter" : "",
+		"onChangeValue" :""
 	    },
 	    getValue : function() {
 		return this.$.textField.getValue();
@@ -103,7 +105,6 @@ enyo
 			onkeyup : "key_up",
 			onkeydown : "key_down",
 			onblur : "lostFocus",
-			onchange : "on_change",
 			flex : 1
 		    }, {
 			style : "background-color:#DABD8B;margin: 0px 0px 0px 3px;",
@@ -168,9 +169,11 @@ enyo
 	    },
 	    useFilter:function(){
 		this.$.drop_down.setItems(this.filter);
+		this.usingFilter=true;
 	    },
 	    useAllItems:function(){
 		this.$.drop_down.setItems(this.allItems);
+		this.usingFilter=false;
 	    },
 	    click_button : function(inSender, inEvent) {
 		if (this.$.drop_down.isOpen)
@@ -229,8 +232,7 @@ enyo
 		default:
 		    // console.info(inEvent.keyCode);
 		}
-		this.$.drop_down.close();
-
+		this.$.drop_down.close();		
 		return true;
 	    },
 	    selectDown : function() {
@@ -333,6 +335,7 @@ enyo
 		} else {
 		    this.$.drop_down.close();
 		}
+		this.doChangeValue();
 	    },
 	    findItem : function(criteria) {
 		var result = [];
@@ -389,11 +392,19 @@ enyo
 		}
 	    },
 	    getItemSelected:function(){
-		for ( var i = 0; i < this.allItems.length; i++) {
-		    if (this.allItems[i].value == this.getIndex()) {
-			return this.allItems[i];
+		if(this.usingFilter){
+		    for ( var i = 0; i < this.filter.length; i++) {
+			if (this.filter[i].value == this.getIndex()) {
+			    return this.filter[i];
+			}
 		    }
-		}
+		}else{
+		    for ( var i = 0; i < this.allItems.length; i++) {
+			if (this.allItems[i].value == this.getIndex()) {
+			    return this.allItems[i];
+			}
+		    }    
+		}		
 	    },
 	    clear : function() {
 		this.$.textField.setValue("");

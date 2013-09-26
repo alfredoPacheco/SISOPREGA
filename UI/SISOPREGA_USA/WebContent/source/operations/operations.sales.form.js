@@ -119,24 +119,42 @@ enyo.kind(
               width : "150px;",
               style : "margin-right: 15px;",
               bindTo : "penId",
-              belongsTo : "SaleDetail"
+              belongsTo : "SaleDetail",
+              onSelectItem : "pen_select",
+              onEnter:"pen_enter",
+              onChangeValue:"pen_change"
             },
             {
-              kind : "ToolInput",
+                width : "90px;",
+                style : "margin-right: 15px;",
+                allowHtml:true,
+                content:"Disponibles:"
+            },
+            {
+                width : "80px;",
+                style : "text-align:left",
+                content:"123.3",
+                name:"qtyAvailable"
+            },
+            {
+              kind:"controls.numberBox",
+              inputKind: "ToolInput",
               name : "cabezas",
               hint : 'Cabezas',
               width : "125px;",
+              height : "35px",
               style : "margin-right: 15px;",
               bindTo : "heads",
               belongsTo : "SaleDetail",
-              textAlign : "right"
-            
+              textAlign : "right"            
             },
             {
-                kind : "ToolInput",
+        	kind:"controls.numberBox",
+                inputKind: "ToolInput",
                 name : "peso",
                 hint : 'Peso',
                 width : "125px;",
+                height : "35px",
                 style : "margin-right: 15px;",
                 bindTo : "weight",
                 belongsTo : "SaleDetail",
@@ -173,6 +191,27 @@ enyo.kind(
       this.$.cattleQuality.setItems(crudCattleQuality.getList());
       this.afterLoad();
     },
+    validateAdd:function(){ //function to override if necessary validate the item to be added.
+	var sError = "";
+	if(this.$.qtyAvailable.getContent() != ""){
+	    var headsAvailable =Number(this.$.qtyAvailable.getContent());
+	    if (headsAvailable < Number(this.$.cabezas.getValue())){
+		sError = "Error. Cantidad de cabezas superior a las disponibles.";		
+	    }
+	}
+	for(var i=0;i<this.arrDetail.length;i++){
+	    if(this.arrDetail[i].penId == this.$.pen.getItemSelected().value){
+		sError = "Error. El corral que intenta agregar ya se encuentra en la lista.";
+		break;
+	    }
+	}
+	if(sError != ""){
+	    cacheMan.setMessage("",sError);
+	    return false;    
+	}
+	return true;
+	   
+      },
     showCustomerForm : function(){
       if (this.$.customerForm) {
         this.$.customerForm.destroy();
@@ -213,6 +252,19 @@ enyo.kind(
      this.$.pen.setFilter(filter);
      this.$.pen.clear();
      this.$.pen.useFilter();
+    },
+    pen_select : function(inSender) {
+	var itemSelected = inSender.getItemSelected();
+	if(itemSelected && itemSelected.object){	    
+	    this.$.qtyAvailable.setContent(itemSelected.object.heads);    
+	}else{
+	    this.$.qtyAvailable.setContent("");
+	}	
+    },
+    pen_change:function(inSender){
+	if(inSender.index < 0){
+	    this.$.qtyAvailable.setContent("");
+	}
     },
     beforeSave : function(obj) {
 	var items = crudInventory.getPensList();	     
