@@ -51,7 +51,7 @@ enyo.kind(
                   },
                   {
                     name : 'btnOpen',
-                    onclick : "open",
+                    onclick : "showOpenHermana",
                     icon : "images/search.png"
                   }
             ]
@@ -245,6 +245,9 @@ enyo.kind(
       if (this.$.cattleClass) {
         this.$.cattleClass.destroy();
       }
+      if(this.$.hermanaList){
+        this.$.hermanaList.destroy();
+      }
     },
     validateSelectedRancher : function() {
       var rancherId = this.$.rancher_id.getIndex();
@@ -264,6 +267,36 @@ enyo.kind(
       cacheCorte.selectedRancherName = rancherName;
       
       return true;
+    },
+    showOpenHermana : function () {
+      this.cleanPopUpContents();
+      cacheMan.showScrim();
+      crudHermana.getAll(this, "hermanaListRead");      
+    },
+    hermanaListRead : function(result){
+      if(result.exceptionId != 0) {
+        alert('No se encontraron registros de importación');
+        cacheMan.hideScrim();
+        return false;
+      }
+        
+      this.$.popMan.createComponent(
+        {
+          kind : "hermana.list",
+          name : 'hermanaList',
+          entity: crudHermana,
+          flex : 1
+        },
+        {
+          owner : this
+        });
+      
+      this.$.popMan.validateComponents();
+      this.$.hermanaList.setItems(crudHermana.getCatalogsList());
+      
+      this.$.popMan.render();
+      this.$.popMan.openAtCenter();
+      cacheMan.hideScrim();
     },
     showAvailReleases : function() {
       if (this.validateSelectedRancher()) {
@@ -439,7 +472,6 @@ enyo.kind(
       return output;
     },
     createCallBack : function(result){
-      // TODO: Evaluate result before caching and closing.
       // Save cache information based on data entry.
       if(result.exceptionId != '0'){
         alert('Se ha encontrado un error al intentar grabar los datos, revise la captura ');

@@ -87,6 +87,7 @@ enyo.kind(
           },
           {
             kind : enyo.HFlexBox,
+            style : "background-color:#F3DEBA;",
             components : [
                   {
                     kind : "Button",
