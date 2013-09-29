@@ -21,7 +21,6 @@ enyo.depends(
 	 
 	"../SISOPREGA/source/global/global.utils.js",
 	"../SISOPREGA/source/global/cache.js",
-//	"../SISOPREGA/source/cruds/crud.cattle.js",
 	
 	"../SISOPREGA/source/cruds/crud.inspectionForecast.js",
 	"../SISOPREGA/source/cruds/crud.location.js",
@@ -95,6 +94,7 @@ enyo.depends(
 	"source/operations/movePen.js",
 	"source/operations/corte.js",
 	"source/operations/pen.map.js",
+	"source/operations/alimentoUS.js",
 
 	 "../SISOPREGA/source/reports/reports.main.js",
 	 "../SISOPREGA/source/reports/reports.select.js",

@@ -46,6 +46,7 @@ public class Inventory {
   private double weight;
   private long feed;
   private Set<Shrinkage> shrinkage;
+  private Set<FeedUS> feedUS;
   /**
    * @return the inventoryId
    */
@@ -152,6 +153,29 @@ public class Inventory {
     
     if(objShrinkage.getInventory() != this)
       objShrinkage.setInventory(this);
+    
+  }
+  /**
+   * @return the feedUS
+   */
+  public Set<FeedUS> getFeedUS() {
+    return feedUS;
+  }
+  /**
+   * @param feedUS the feedUS to set
+   */
+  public void setFeedUS(Set<FeedUS> feedUS) {
+    this.feedUS = feedUS;
+  }
+  
+  public void addFeedUS(FeedUS objFeedUS){
+    if(feedUS == null)
+      feedUS = new HashSet<FeedUS>();
+    
+    feedUS.add(objFeedUS);
+    
+    if(objFeedUS.getInventory() != this)
+      objFeedUS.setInventory(this);
     
   }
   

@@ -41,12 +41,25 @@ enyo.kind(
         	arrAux[i].shrinkageId = Number(arrAux[i].shrinkageId);
             }
         }
+        
+        if(arrAux = entityObj.FeedUS){
+            for(var i=0;i<arrAux.length;i++){
+        	arrAux[i].dateTime = utils.dateIn(arrAux[i].dateTime);
+        	arrAux[i].quantity = Number(arrAux[i].quantity);
+        	arrAux[i].feedUSId = Number(arrAux[i].feedUSId);
+            }
+        }
         return entityObj;
       }
       return null;
     },
     adapterToOut : function(entityObj) {
 	if(arrAux = entityObj.Shrinkage){
+	    for(var i=0;i<arrAux.length;i++){
+		arrAux[i].dateTime = utils.dateTimeOut(arrAux[i].dateTime);		
+	    }
+	}
+	if(arrAux = entityObj.FeedUS){
 	    for(var i=0;i<arrAux.length;i++){
 		arrAux[i].dateTime = utils.dateTimeOut(arrAux[i].dateTime);		
 	    }

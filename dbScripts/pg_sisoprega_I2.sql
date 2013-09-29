@@ -267,3 +267,14 @@ CREATE TABLE ctrl_shrinkage(
 
 GRANT ALL ON ctrl_shrinkage TO sisoprega;
 GRANT ALL ON ctrl_shrinkage_shrinkage_id_seq TO sisoprega;
+
+DROP TABLE IF EXISTS ctrl_feed_us CASCADE;
+CREATE TABLE ctrl_feed_us(
+	feed_us_id  		SERIAL PRIMARY KEY,
+	date_time    		timestamp without time zone NOT NULL DEFAULT now(),
+	inventory_id 		integer NOT NULL REFERENCES ctrl_inventory(inventory_id),
+	quantity		decimal(12,4) not null DEFAULT 0
+);
+
+GRANT ALL ON ctrl_feed_us TO sisoprega;
+GRANT ALL ON ctrl_feed_us_feed_us_id_seq TO sisoprega;
