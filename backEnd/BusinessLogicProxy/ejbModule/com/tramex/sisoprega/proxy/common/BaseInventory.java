@@ -54,5 +54,18 @@ public abstract class BaseInventory extends BaseBean {
       return null;
     }
   }
+  
+  protected Inventory getInventoryRecordById(long id) throws DataModelException {
+    Map<String, Object> parameters = new HashMap<String, Object>();
+    parameters.put("Id", id);    
+    List<Inventory> inventoryRecord = dataModel
+        .readDataModelList("INVENTORY_BY_ID", parameters, Inventory.class);
+
+    if (inventoryRecord != null && !inventoryRecord.isEmpty()) {
+      return inventoryRecord.get(0);
+    } else {
+      return null;
+    }
+  }
 
 }

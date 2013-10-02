@@ -55,6 +55,21 @@ enyo
 	    adapterToOut : function(entityObj) {		
 		return entityObj;
 	    },
+	    getQtyByInventoryID : function(iInventoryID) {
+		var sales = enyo.clone(this.arrObj);
+		var result = 0;
+		for ( var i = 0; i < sales.length; i++) {
+		    if(sales[i].SaleDetail){			
+			for(var j = 0; j< sales[i].SaleDetail.length;j++){
+			    var detail =  sales[i].SaleDetail[j];
+			    if(Number(detail.inventoryId) == Number(iInventoryID)){
+				result += Number(detail.heads);
+			    }
+			}
+		    }		    
+		}
+		return result;
+	    },
 	});
 
 var crudSale = new crud.sale();

@@ -15,6 +15,7 @@
  */
 package com.tramex.sisoprega.dto;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -30,6 +31,7 @@ import java.util.Set;
  * MM/DD/YYYY
  * ----------  ---------------------------  -------------------------------------------
  * Aug 4, 2013     Diego Torres                 Initial Version.
+ * 09/28/2013   Alfredo Pacheco             Fields added for controlling heads in pen
  * ====================================================================================
  * </PRE>
  * 
@@ -45,6 +47,15 @@ public class Inventory {
   private long heads;
   private double weight;
   private long feed;
+  private long availableToSell;
+  private long sold;
+  private long availableToProgramShip;
+  private long programmedToShip;
+  private long availableToShip;
+  private long shipped;
+  private Date cycleCompleted = null;
+  
+  
   private Set<Shrinkage> shrinkage;
   private Set<FeedUS> feedUS;
   /**
@@ -177,6 +188,90 @@ public class Inventory {
     if(objFeedUS.getInventory() != this)
       objFeedUS.setInventory(this);
     
+  }
+  /**
+   * @return the availableToSell
+   */
+  public long getAvailableToSell() {
+    return availableToSell;
+  }
+  /**
+   * @param availableToSell the availableToSell to set
+   */
+  public void setAvailableToSell(long availableToSell) {
+    this.availableToSell = availableToSell;
+  }
+  /**
+   * @return the sold
+   */
+  public long getSold() {
+    return sold;
+  }
+  /**
+   * @param sold the sold to set
+   */
+  public void setSold(long sold) {
+    this.sold = sold;
+  }
+  /**
+   * @return the availableToProgramShip
+   */
+  public long getAvailableToProgramShip() {
+    return availableToProgramShip;
+  }
+  /**
+   * @param availableToProgramShip the availableToProgramShip to set
+   */
+  public void setAvailableToProgramShip(long availableToProgramShip) {
+    this.availableToProgramShip = availableToProgramShip;
+  }
+  /**
+   * @return the programmedToShip
+   */
+  public long getProgrammedToShip() {
+    return programmedToShip;
+  }
+  /**
+   * @param programmedToShip the programmedToShip to set
+   */
+  public void setProgrammedToShip(long programmedToShip) {
+    this.programmedToShip = programmedToShip;
+  }
+  /**
+   * @return the availableToShip
+   */
+  public long getAvailableToShip() {
+    return availableToShip;
+  }
+  /**
+   * @param availableToShip the availableToShip to set
+   */
+  public void setAvailableToShip(long availableToShip) {
+    this.availableToShip = availableToShip;
+  }
+  /**
+   * @return the shipped
+   */
+  public long getShipped() {
+    return shipped;
+  }
+  /**
+   * @param shipped the shipped to set
+   */
+  public void setShipped(long shipped) {
+    this.shipped = shipped;
+  }
+  /**
+   * @return the cycleCompleted
+   */
+  public Date getCycleCompleted() {
+    return cycleCompleted;
+  }
+  /**
+   * @param cycleCompleted the cycleCompleted to set
+   */
+  public void setCycleCompleted(Date cycleCompleted) {
+    this.cycleCompleted = cycleCompleted;
   }
   
 }

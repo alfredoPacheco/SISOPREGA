@@ -458,7 +458,7 @@ enyo.kind({
 		}
 	    }
 	}
-	
+	arrObjectsToSend=[];
 	this.readCounter = 0;
 	this.iShipTotal = shipsToSave.length;
 	for(var i=0;i<shipsToSave.length;i++){
@@ -483,8 +483,12 @@ enyo.kind({
 		child.weight = shipsToSave[i][j].totalWeight;		
 		objShip.ShipmentDetail.push(child);
 	    }
-	    crudShipment.create(objShip,this,"readCallBack");
+	    //crudShipment.create(objShip,this,"readCallBack");
+	    arrObjectsToSend.push(crudShipment.adapterToOut(objShip));    
 	}
+	
+	consumingGateway.Save("Shipment",arrObjectsToSend, this, "finishRead");
+	
 	
 //	for(var y =0;y<objShip[client][cattle].length;y++){
 //	    var obj=null;

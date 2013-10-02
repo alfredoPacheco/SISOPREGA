@@ -566,8 +566,6 @@ enyo
 		arrObjectsToSend.push(crudInventory.adapterToOut(movingFrom));
 		arrObjectsToSend.push(crudInventory.adapterToOut(movingTo));		
 		consumingGateway.Save("Inventory",arrObjectsToSend, this, "updateView");
-		cacheMan.showScrim();			    
-		
-		
+		cacheMan.showScrim();
 	    },
 	});

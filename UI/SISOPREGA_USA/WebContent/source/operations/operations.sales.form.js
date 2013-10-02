@@ -123,19 +123,16 @@ enyo.kind(
               onSelectItem : "pen_select",
               onEnter:"pen_enter",
               onChangeValue:"pen_change"
-            },
+            },            
             {
-                width : "90px;",
-                style : "margin-right: 15px;",
-                allowHtml:true,
-                content:"Disponibles:"
-            },
-            {
-                width : "80px;",
-                style : "text-align:left",
-                content:"123.3",
+                kind : enyo.Button,
+                caption : "Disponibles: 0",
+                onclick : "",
+                style : "margin-right: 15px;background-color: #DABD8B;",
+                allowHtml:true,       
+                width : "130px;",
                 name:"qtyAvailable"
-            },
+              },            
             {
               kind:"controls.numberBox",
               inputKind: "ToolInput",
@@ -193,8 +190,9 @@ enyo.kind(
     },
     validateAdd:function(){ //function to override if necessary validate the item to be added.
 	var sError = "";
-	if(this.$.qtyAvailable.getContent() != ""){
-	    var headsAvailable =Number(this.$.qtyAvailable.getContent());
+	if(this.$.qtyAvailable.getCaption() != ""){
+	    var arrSplit = this.$.qtyAvailable.getCaption().split(":");	    
+	    var headsAvailable =Number(arrSplit[1]);
 	    if (headsAvailable < Number(this.$.cabezas.getValue())){
 		sError = "Error. Cantidad de cabezas superior a las disponibles.";		
 	    }
@@ -207,7 +205,7 @@ enyo.kind(
 	}
 	if(sError != ""){
 	    cacheMan.setMessage("",sError);
-	    return false;    
+	    return false;
 	}
 	return true;
 	   
@@ -252,18 +250,20 @@ enyo.kind(
      this.$.pen.setFilter(filter);
      this.$.pen.clear();
      this.$.pen.useFilter();
+     this.$.qtyAvailable.setCaption("Disponibles: 0");
     },
     pen_select : function(inSender) {
 	var itemSelected = inSender.getItemSelected();
-	if(itemSelected && itemSelected.object){	    
-	    this.$.qtyAvailable.setContent(itemSelected.object.heads);    
+	if(itemSelected && itemSelected.object){
+	    var qtyAvailable = itemSelected.object.availableToSell;	   
+	    this.$.qtyAvailable.setCaption("Disponibles: " + qtyAvailable);    
 	}else{
-	    this.$.qtyAvailable.setContent("");
-	}	
+	    this.$.qtyAvailable.setCaption("Disponibles: 0");
+	}
     },
     pen_change:function(inSender){
 	if(inSender.index < 0){
-	    this.$.qtyAvailable.setContent("");
+	    this.$.qtyAvailable.setContent("Disponibles: 0");
 	}
     },
     beforeSave : function(obj) {

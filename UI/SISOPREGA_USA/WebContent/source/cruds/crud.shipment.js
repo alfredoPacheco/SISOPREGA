@@ -42,12 +42,12 @@ enyo
 		}
 		return result;
 	   },
-	    getByInventoryID : function(iInventoryID) {
+	    getQtyByInventoryID : function(iInventoryID) {
 		var programmedShips = this.getProgrammedShipments();
-		var result = null;
+		var result = 0;
 		for ( var i = 0; i < programmedShips.length; i++) {
 		    if (programmedShips[i].inventoryId == iInventoryID) {
-			result= programmedShips[i];
+			result += Number(programmedShips[i].heads);
 		    }
 		}
 		return result;

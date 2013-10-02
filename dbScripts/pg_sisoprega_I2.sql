@@ -159,14 +159,22 @@ GRANT ALL ON ctrl_purchase_detail_record_id_seq TO sisoprega;
 
 DROP TABLE IF EXISTS ctrl_inventory CASCADE;
 CREATE TABLE ctrl_inventory(
-	inventory_id SERIAL PRIMARY KEY,
-	cattype_id   integer NOT NULL REFERENCES cat_cattle_type(cattype_id),
-	quality_id   integer NOT NULL REFERENCES cat_cattle_quality(quality_id),
-	barnyard_id  integer UNIQUE NOT NULL REFERENCES cat_barnyard(barnyard_id),
-	heads integer NOT NULL DEFAULT 0,
-	weight decimal(12,4) not null,
-	feed integer NOT NULL DEFAULT 0,
+	inventory_id 			SERIAL PRIMARY KEY,
+	cattype_id   			integer NOT NULL REFERENCES cat_cattle_type(cattype_id),
+	quality_id   			integer NOT NULL REFERENCES cat_cattle_quality(quality_id),
+	barnyard_id  			integer UNIQUE NOT NULL REFERENCES cat_barnyard(barnyard_id),
+	heads 				integer NOT NULL DEFAULT 0,
+	weight 				decimal(12,4) not null,
+	feed 				integer NOT NULL DEFAULT 0,
+	available_to_sell		integer NOT NULL DEFAULT 0,
+	sold				integer NOT NULL DEFAULT 0,
+	available_to_program_ship	integer NOT NULL DEFAULT 0,
+	programmed_to_ship		integer NOT NULL DEFAULT 0,
+	available_to_ship		integer NOT NULL DEFAULT 0,
+	shipped				integer NOT NULL DEFAULT 0,
+	cycle_completed			DATE,
 	UNIQUE (barnyard_id)
+	
 );
 
 GRANT ALL ON ctrl_inventory TO sisoprega;

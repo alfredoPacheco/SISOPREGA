@@ -1246,7 +1246,7 @@
 			<query>SELECT iInventory FROM Inventory iInventory WHERE iInventory.inventoryId = :Id</query>
 		</named-query>
 		<named-query name="ALL_INVENTORYS">
-			<query>SELECT iInventory FROM Inventory iInventory</query>
+			<query>SELECT iInventory FROM Inventory iInventory WHERE iInventory.cycleCompleted is null</query>
 		</named-query>
 		<attributes>
 			<id name="inventoryId">
@@ -1270,6 +1270,28 @@
 			</basic>
 			<basic name="feed">
 				<column name="feed" />
+			</basic>
+			<basic name="availableToSell">
+				<column name="available_to_sell" />
+			</basic>
+			<basic name="sold">
+				<column name="sold" />
+			</basic>
+			<basic name="availableToProgramShip">
+				<column name="available_to_program_ship" />
+			</basic>
+			<basic name="programmedToShip">
+				<column name="programmed_to_ship" />
+			</basic>
+			<basic name="availableToShip">
+				<column name="available_to_ship" />
+			</basic>
+			<basic name="shipped">
+				<column name="shipped" />
+			</basic>
+			<basic name="cycleCompleted">
+				<column name="cycle_completed" />
+				<temporal>DATE</temporal>
 			</basic>
 			<one-to-many name="shrinkage" fetch="EAGER"
 				mapped-by="inventory" target-entity="com.tramex.sisoprega.dto.Shrinkage"

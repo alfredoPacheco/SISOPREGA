@@ -37,14 +37,17 @@ public class PurchaseBean extends BaseInventory implements Cruddable {
 
         long heads = detail.getHeads();
         double weight = detail.getWeight();
+        long availableToSell = heads;
 
         if (inventory != null) {
           // Update inventory record
           heads += inventory.getHeads();
           weight += inventory.getWeight();
-
+          availableToSell += inventory.getAvailableToSell();
+          
           inventory.setHeads(heads);
           inventory.setWeight(weight);
+          inventory.setAvailableToSell(availableToSell);
 
           dataModel.updateDataModel(inventory);
         } else {
@@ -55,6 +58,7 @@ public class PurchaseBean extends BaseInventory implements Cruddable {
           inventory.setQualityId(detail.getQualityId());
           inventory.setPenId(detail.getPenId());
           inventory.setWeight(detail.getWeight());
+          inventory.setAvailableToSell(availableToSell);
 
           dataModel.createDataModel(inventory);
         }
