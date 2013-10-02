@@ -961,6 +961,11 @@
 			<description>Retrieves all records from database</description>
 			<query>SELECT iHermana FROM Hermana iHermana WHERE iHermana.deWhen >= current_date</query>
 		</named-query>
+		<named-query name="ACTIVE_HERMANAS">
+			<description>Retrieve all active records of imported cattle from database</description>
+			<!-- TODO: Avoid to retrieve already paid hermanas to exporters -->
+			<query>SELECT iHermana FROM Hermana iHermana</query>
+		</named-query>
 		<attributes>
 			<id name="hermanaId">
 				<column name="hermana_id" />

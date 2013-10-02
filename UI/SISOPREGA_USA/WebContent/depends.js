@@ -1,31 +1,5 @@
 // JavaScript Document
 enyo.depends(
-
-// "../SISOPREGA/source/cache.ranchers.js",
-// "../SISOPREGA/source/controls.reportViewer.js",
-
-// "../SISOPREGA/source/cache.receptions.js",
-// "../SISOPREGA/source/cache.cattle.js",
-
-// "../SISOPREGA/source/cache.barnyards.js",
-
-// "../SISOPREGA/source/controls.multiselect.js",
-// "../SISOPREGA/source/cache.inspection.forecast.js",
-// "../SISOPREGA/source/cache.feed.js",
-// "css/controls.css",
-// "css/general.css",
-
-// "source/release.rejects.weight.js",
-
-
-
-	
-// "source/utils.format.js",
-
-// "source/hermana.gastos.concepto.js",
-
-
-
 	"../SISOPREGA/css/transitions.css",
 
 	"../SISOPREGA/source/supers/forms.simple.js",
@@ -47,7 +21,6 @@ enyo.depends(
 	 
 	"../SISOPREGA/source/global/global.utils.js",
 	"../SISOPREGA/source/global/cache.js",
-//	"../SISOPREGA/source/cruds/crud.cattle.js",
 	
 	"../SISOPREGA/source/cruds/crud.inspectionForecast.js",
 	"../SISOPREGA/source/cruds/crud.location.js",
@@ -71,13 +44,10 @@ enyo.depends(
 	
 	"source/trash/cache.sales.price.js",
 	"source/trash/cache.sales.js",
-	"source/trash/cache.cattle.quality.js",
 	"source/trash/cache.drivers.js",
-	"source/trash/cache.inventory.js",
 	"source/trash/cache.pen.js",
 	"source/trash/cache.providers.js",
 	"source/trash/cache.purchased.js",
-	"source/trash/cache.releases.js",
 	"source/trash/cache.shipments.js",
 	
 	"source/catalogs/catalogs.customer.form.js",
@@ -107,6 +77,7 @@ enyo.depends(
 	
 	"source/operations/hermana/cache/cache.corte.js",
 	"source/operations/hermana/hermana.de.js",
+	"source/operations/hermana/hermana.list.js",
 	"source/operations/hermana/hermana.corte.list.js",
 	"source/operations/hermana/hermana.gastos.list.js",
 	"source/operations/hermana/hermana.de.tabs.js",
