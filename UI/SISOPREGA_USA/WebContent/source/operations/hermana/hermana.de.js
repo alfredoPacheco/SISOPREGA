@@ -271,32 +271,62 @@ enyo.kind(
     showOpenHermana : function () {
       this.cleanPopUpContents();
       cacheMan.showScrim();
-      crudHermana.getAll(this, "hermanaListRead");      
+      crudHermana.getAll(this, "hermanaListRead");
     },
     hermanaListRead : function(result){
-      if(result.exceptionId != 0) {
+      
+      if(result.exceptionId != 0){
         alert('No se encontraron registros de importación');
         cacheMan.hideScrim();
         return false;
       }
-        
+      
       this.$.popMan.createComponent(
-        {
-          kind : "hermana.list",
-          name : 'hermanaList',
-          entity: crudHermana,
-          flex : 1
-        },
-        {
-          owner : this
-        });
+          {
+            kind : "hermana.list",
+            name : 'hermanaList',
+            entity: crudHermana,
+            flex : 1,
+            onSelected: "openHermana"
+          },
+          {
+            owner : this
+          });
+        
+        this.$.popMan.validateComponents();
+        this.$.hermanaList.setItems(crudHermana.getCatalogsList());
+        
+        this.$.popMan.render();
+        this.$.popMan.openAtCenter();
+        cacheMan.hideScrim();
+    },
+    openHermana: function(sender, selectedItem){
+      // Fill up hermana form
+      this.$.accountOf.setValue(selectedItem.accountOf);
+      this.$.refNo.setValue(selectedItem.refNo);
+      this.$.consignee.setValue(selectedItem.consignee);
+      this.$.rancher_id.setIndex(selectedItem.rancherId);
+      this.$.entryNo.setValue(selectedItem.entryNo);
       
-      this.$.popMan.validateComponents();
-      this.$.hermanaList.setItems(crudHermana.getCatalogsList());
+      this.$.details.resetSummaryTable();
+      this.setupReleases(selectedItem.Reception);
       
-      this.$.popMan.render();
-      this.$.popMan.openAtCenter();
-      cacheMan.hideScrim();
+      cacheCorte.cortes = selectedItem.HermanaCorte;
+      cacheCorte.cortesExpo = selectedItem.HermanaCorteExportador;
+      this.$.details.$.chargeList.arrData=selectedItem.HermanaExpense;
+      
+      this.$.details.$.listaCorte.loadCortes(cacheCorte.cortes);
+      this.$.details.$.listaCorteExpo.loadCortes(cacheCorte.cortesExpo);
+
+      this.$.details.setCattleClass(selectedItem.cattleClass, selectedItem.cattleClassName);
+      for(var i=0;i<cacheCorte.cortes.length; i++){
+        this.$.details.calculateSummaryFromCorte(cacheCorte.cortes[i]);
+      }
+      
+      this.$.details.$.chargeList.iSummary=0;
+      this.$.details.$.chargeList.updateList();
+      
+      this.closePopUp();
     },
     showAvailReleases : function() {
       if (this.validateSelectedRancher()) {
@@ -357,7 +387,13 @@ enyo.kind(
       this.closePopUp();
       this.$.rancher_id.$.textField.forceFocus();
     },
-    setupReleaseSelection : function() {
+    setupReleseSelection : function(){
+      this.setupReleases(this.$.releasesList.selectedReceptions);
+      this.$.details.addCookiedCharges();
+      
+      this.closePopUp();
+    },
+    setupReleases : function(releasesArray) {
       var summary =
         {
           hc : 0,
@@ -381,8 +417,8 @@ enyo.kind(
       
       var releaseObj = null;
       
-      for ( var selectionIndex = 0; selectionIndex < this.$.releasesList.selectedReceptions.length; selectionIndex++) {
-        releaseObj = this.$.releasesList.selectedReceptions[selectionIndex];
+      for ( var selectionIndex = 0; selectionIndex < releasesArray.length; selectionIndex++) {
+        releaseObj = releasesArray[selectionIndex];
         
         summary.hc += Number(releaseObj.heads);
         summary.kg += Number(releaseObj.weight);
@@ -411,12 +447,10 @@ enyo.kind(
       this.$.details.$.listaCorte.setCortes(cacheCorte.get());
       this.$.details.$.listaCorteExpo.setCortes(cacheCorte.getExpo());
       
-      this.$.details.setReleased(this.$.releasesList.selectedReceptions);
+      this.$.details.setReleased(releasesArray);
       this.$.details.setSummary(summary);
-      this.$.details.addCookiedCharges();
       this.$.details.updateTableContents();
       
-      this.closePopUp();
     },
     saveHermana : function() {
       cacheMan.showScrim();
