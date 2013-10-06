@@ -305,8 +305,11 @@ enyo.kind(
       this.$.inventory.updateView();
     },
     deleteShipProgrammed : function(inSender, shipment) {
-      cacheShip.removeShipProgrammed(shipment);
-      this.$.shipment.updateList();
-      this.$.sales.updateView();
+      crudShipment.remove(shipment, this,"afterDeleteShip");	      
+    },
+    afterDeleteShip:function(){	
+	this.$.sales.updateSales = true;
+	this.$.sales.updateView();
+	this.$.inventory.updateView();
     }
   });
