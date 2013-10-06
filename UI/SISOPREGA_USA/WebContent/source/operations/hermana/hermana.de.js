@@ -3,6 +3,7 @@ enyo.kind(
     name : "hermana.de",
     kind : enyo.VFlexBox,
     selectedCattleId : 0,
+    hermanaId : 0,
     style : "background-color:#DABD8B;font-size:15px;",
     align : "left",
     events :
@@ -236,6 +237,7 @@ enyo.kind(
       this.$.details.$.chargeList.iSummary=0;
       this.$.details.$.chargeList.updateList();
       this.$.details.resetSummaryTable();
+      this.hermanaId = 0;
       
     },
     cleanPopUpContents : function() {
@@ -302,6 +304,7 @@ enyo.kind(
     },
     openHermana: function(sender, selectedItem){
       // Fill up hermana form
+      this.hermanaId = selectedItem.hermanaId;
       this.$.accountOf.setValue(selectedItem.accountOf);
       this.$.refNo.setValue(selectedItem.refNo);
       this.$.consignee.setValue(selectedItem.consignee);
@@ -486,8 +489,12 @@ enyo.kind(
         hermana.HermanaExpense.push(expense);
       }
       
-      
-      consumingGateway.Create("Hermana", hermana, this, "createCallBack");
+      if(this.hermanaId == 0){
+        consumingGateway.Create("Hermana", hermana, this, "createCallBack");
+      } else {
+        hermana.hermanaId = this.hermanaId;
+        consumingGateway.Update("Hermana", hermana, this, "createCallBack");
+      }
     },
     CorteOutput : function(corte){
       var output = {

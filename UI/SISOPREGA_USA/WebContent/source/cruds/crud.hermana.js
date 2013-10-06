@@ -58,6 +58,7 @@ enyo.kind(
             entityObj.HermanaExpense[i].conceptName = conceptName;
           }
           entityObj.HermanaExpense[i].price = entityObj.HermanaExpense[i].amount;
+          entityObj.HermanaExpense[i].expenseConceptId = entityObj.HermanaExpense[i].conceptId;
         }
         
         for ( var i = 0; i < entityObj.Reception.length; i++) {

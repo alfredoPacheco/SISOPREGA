@@ -966,6 +966,10 @@
 			<!-- TODO: Avoid to retrieve already paid hermanas to exporters -->
 			<query>SELECT iHermana FROM Hermana iHermana</query>
 		</named-query>
+		<named-query name="HERMANA_BY_ID">
+			<description>Retrieve a single hermana record by its Id</description>
+			<query>SELECT iHermana FROM Hermana iHermana WHERE iHermana.hermanaId = :Id</query>
+		</named-query>
 		<attributes>
 			<id name="hermanaId">
 				<column name="hermana_id" />
