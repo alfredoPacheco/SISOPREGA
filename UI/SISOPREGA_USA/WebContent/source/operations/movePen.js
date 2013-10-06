@@ -57,21 +57,6 @@ enyo
 		pack : "center",
 		height : "40px;",
 		components : [ {
-		    content : "Programadas a embarcar:",
-		    width : "200px;",
-		    style : "text-align: right;margin-right:10px;"
-		}, {
-		    name : 'lblHeadsProgrammed',
-		    style : "color:black",
-		    flex : 1,
-		    content : ""
-		}, ]
-	    }, {
-		kind : enyo.HFlexBox,
-		align : "center",
-		pack : "center",
-		height : "40px;",
-		components : [ {
 		    content : "Disponibles para mover",
 		    width : "200px;",
 		    style : "text-align: right;margin-right:10px;"
@@ -181,11 +166,8 @@ enyo
 			.setContent(crudPen.getByID(objFrom.penId).barnyardCode);
 		this.$.lblPenTo
 			.setContent(crudPen.getByID(objTo.penId).barnyardCode);
-		this.$.lblHeadsInPen.setContent(objFrom.heads);
-		var headsProgrammed = crudShipment.getByInventoryID(objFrom.inventoryId);		
-		this.$.lblHeadsProgrammed.setContent(headsProgrammed);
-		this.$.lblHeadsMobile.setContent(Number(objFrom.heads)
-			- headsProgrammed);
+		this.$.lblHeadsInPen.setContent(objFrom.heads);		
+		this.$.lblHeadsMobile.setContent(objFrom.availableToSell);
 		this.$.totalHC.setValue("0");
 	    },
 	    getObj : function() {
@@ -195,13 +177,13 @@ enyo
 		var sError = "";
 		var headsToMove = Number(this.$.totalHC.getValue());
 		var availableToMove = Number(this.$.lblHeadsMobile.getContent());
-		if (!headsToMove || headsToMove < 1 || headsToMove == '') {
+		if (!headsToMove || headsToMove < 1 || headsToMove == '' || headsToMove <= 0) {
 		    sError = "Verifique la cantidad.";
 		}
 		if (headsToMove > availableToMove) {
 		    sError = "La cantidad deseada a mover no puede ser mayor a las cabezas disponibles.";
 		}
-
+		
 		if (sError != "") {
 		    cacheMan.setMessage("", sError);
 		    return false;

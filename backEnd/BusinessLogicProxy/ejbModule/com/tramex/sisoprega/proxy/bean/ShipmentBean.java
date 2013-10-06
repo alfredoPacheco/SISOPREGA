@@ -96,8 +96,11 @@ public class ShipmentBean extends BaseInventory implements Cruddable {
 
                 inventory.setAvailableToShip(inventory.getAvailableToShip() - headsShipped);
                 inventory.setShipped(inventory.getShipped() + headsShipped);
-                inventory.setHeads(inventory.getHeads() - headsShipped);
-
+                long headsLeft = inventory.getHeads() - headsShipped;                
+                inventory.setWeight(inventory.getWeight()/inventory.getHeads()*headsLeft);
+                inventory.setFeed(inventory.getFeed()/inventory.getHeads()*headsLeft);
+                inventory.setHeads(headsLeft);
+                
                 if (inventory.getHeads() <= 0) {
                   inventory.setCycleCompleted(new Date());
                 }
@@ -155,7 +158,10 @@ public class ShipmentBean extends BaseInventory implements Cruddable {
               long headsAffected = detail.getHeads();
               //inventory.setAvailableToShip(inventory.getAvailableToShip() + headsAffected);
               inventory.setShipped(inventory.getShipped() - headsAffected);
-              inventory.setHeads(inventory.getHeads() + headsAffected);
+              long headsLeft = inventory.getHeads() + headsAffected;
+              inventory.setWeight(inventory.getWeight()/inventory.getHeads()*headsLeft);
+              inventory.setFeed(inventory.getFeed()/inventory.getHeads()*headsLeft);
+              inventory.setHeads(headsLeft);
               
               inventory.setAvailableToProgramShip(inventory.getAvailableToProgramShip() + headsAffected);
               inventory.setProgrammedToShip(inventory.getProgrammedToShip() - headsAffected);

@@ -166,7 +166,8 @@ public class PresentorBean {
 
       if (!transactionResponse.getError().getExceptionId().equals("0")) {
         log.severe("An exception has occured during transaction processing.");
-        throw new Exception(transactionResponse.getError().getExceptionDescription());
+        response.setError(transactionResponse.getError());
+        return response;        
       } else {
         log.fine("Transaction succesfully executed, building response.");
         for (GatewayRecord responseRecord : transactionResponse.getParentRecord()) {

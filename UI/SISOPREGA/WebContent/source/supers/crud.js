@@ -83,6 +83,11 @@ enyo.kind(
       this.callbackMethod = callbackMethod;
       consumingGateway.Update(objEntity.entityName || this.entityName, outerObj, this, "updateCallBack");
     },
+    save : function(arrObjEntities, callbackObject, callbackMethod){
+	this.callbackObject = callbackObject;
+	this.callbackMethod = callbackMethod;
+	consumingGateway.Save(this.entityName,arrObjEntities, this, "saveCallBack");
+    },
     remove : function(entity, callbackObject, callbackMethod) {
       var removableId = entity[this.entityIdName()];
       var filterDef =

@@ -543,21 +543,22 @@ enyo
 		var objMovement = this.$.movePen_kind.getObj();
 		
 		movingFrom.heads = Number(movingFrom.heads) - Number(objMovement.heads);
-		movingFrom.weight = Number(movingFrom.weight) - Number(objMovement.weight);
 		    
-		if(isMovingToOccupied){		    
+		if(isMovingToOccupied){
 		    
 		    movingTo.heads = Number(movingTo.heads) + Number(objMovement.heads);
-		    movingTo.weight = Number(movingTo.weight) + Number(objMovement.weight);		    
-		    
+		    movingTo.weight = Number(movingTo.weight) + Number(objMovement.weight);
+		    movingTo.availableToSell = Number(movingTo.availableToSell) + Number(objMovement.heads);
 
 		}else{
 		    var objNewInventory=enyo.clone(movingFrom);
 		    delete objNewInventory.inventoryId;
 		    objNewInventory.heads = Number(objMovement.heads);
-		    objNewInventory.weight = Number(objMovement.weight);		    
+		    objNewInventory.weight = Number(objMovement.weight);
 		    objNewInventory.pen = movingTo;
 		    objNewInventory.penId = movingTo.penId;
+		    objNewInventory.availableToSell= objNewInventory.heads;
+		    objNewInventory.feed = Number(objMovement.feed);
 		    movingTo = objNewInventory;
 		}		
 		
@@ -565,7 +566,7 @@ enyo
 		
 		arrObjectsToSend.push(crudInventory.adapterToOut(movingFrom));
 		arrObjectsToSend.push(crudInventory.adapterToOut(movingTo));		
-		consumingGateway.Save("Inventory",arrObjectsToSend, this, "updateView");
+		crudInventory.save(arrObjectsToSend, this, "updateView");
 		cacheMan.showScrim();
 	    },
 	});
