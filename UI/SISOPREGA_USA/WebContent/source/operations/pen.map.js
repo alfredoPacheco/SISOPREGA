@@ -32,6 +32,7 @@ enyo
 	    movingFrom : null,
 	    movingTo : null,
 	    className : "mapBG",
+	    sColorToolbarFont:"#FFFF00",
 	    create : function() {
 		this.inherited(arguments);
 	    },
@@ -108,14 +109,75 @@ enyo
 		pack : "center",
 		align : "center",
 		components : [ {
-		    kind : "VFlexBox",
+		    kind : "HFlexBox",
 		    name : "lblInfo",
 		    style : "color : white;",
 		    pack : "center",
 		    align : "center",
 		    allowHtml : true,
 		    flex : 1,
-		    content : ""
+		    components:[
+                        {
+                            content : "Ganado:",
+                            style : "text-align: right;margin-right:10px;"
+                        }, {
+                            kind : "ToolInput",                            
+                            name : "lblQuality",
+                            hint : '',
+                            width: "200px",
+                            disabled:true ,
+                            style:"text-align:center"
+                            
+                        },
+                        {
+                            kind : "ToolInput",                            
+                            name : "lblQuantity",                            
+                            hint : '',
+                            width: "120px",
+                            disabled:true,
+                            style:"text-align:right"
+                        },
+                         {
+                            kind : "ToolInput",                            
+                            name : "lblWeight",                            
+                            hint : '',
+                            width: "120px",
+                            disabled:true,
+                            style:"text-align:right"
+                        },                         
+                        {
+                            content : "Ultimo Alimento:",
+                            width : "110px",
+                            style : "text-align: right;margin-right:10px;"
+                        }, 
+                        {
+                            kind : "ToolInput",                            
+                            name : "lblLastFeedDate",                            
+                            hint : '',
+                            width: "160px",
+                            disabled:true,
+                            style:"text-align:right"
+                        },{
+                            kind : "ToolInput",                            
+                            name : "lblLastFeed",                            
+                            hint : '',
+                            width: "100px",
+                            disabled:true,
+                            style:"text-align:center"
+                        },{
+                            content : "Total Alimento:",
+                            width : "100px",
+                            style : "text-align: right;margin-right:10px;"
+                        }, {
+                            kind : "ToolInput",                            
+                            name : "lblTotalFeed",                            
+                            hint : '',
+                            width: "120px",
+                            disabled:true,
+                            style:"text-align:right"
+                        },
+		                
+		                ],		    
 		}, {
 		    kind : enyo.Button,
 		    onclick : "cancelMoving",
@@ -370,16 +432,18 @@ enyo
 	    },
 	    saveFeed : function() {
 		this.$.popup_alimentoUS.close();
-		this.refreshMap();
-		this.setDesc(this.objSelected.name);
+		this.movingTo(this.objSelected);
+		cacheMan.showScrim();
+		this.updateView();
 	    },
 	    cancelCorte : function() {
 		this.$.popup_corte.close();
 	    },
 	    saveCorte : function() {
 		this.$.popup_corte.close();
-		this.refreshMap();
-		this.setDesc(this.objSelected.name);
+		this.movingTo(this.objSelected);
+		cacheMan.showScrim();
+		this.updateView();
 	    },
 	    cellOver : function(inSender, inEvent) {
 		if (inSender.occupied != 0 && inSender.occupied != 2) {
@@ -391,11 +455,41 @@ enyo
 	    //Below all functions that interact with crudPen: TODO
 	    
 	    ready : function() {
+		this.$.lblQuality.$.input.applyStyle("color",this.sColorToolbarFont);
+		this.$.lblQuality.$.input.applyStyle("opacity","1");
+		this.$.lblQuality.$.input.applyStyle("-webkit-text-fill-color",this.sColorToolbarFont);
+		this.$.lblQuality.$.input.applyStyle("text-align","center");
+		
+		this.$.lblQuantity.$.input.applyStyle("color",this.sColorToolbarFont);
+		this.$.lblQuantity.$.input.applyStyle("opacity","1");
+		this.$.lblQuantity.$.input.applyStyle("-webkit-text-fill-color",this.sColorToolbarFont);
+		this.$.lblQuantity.$.input.applyStyle("text-align","right");
+		
+		this.$.lblWeight.$.input.applyStyle("color",this.sColorToolbarFont);
+		this.$.lblWeight.$.input.applyStyle("opacity","1");
+		this.$.lblWeight.$.input.applyStyle("-webkit-text-fill-color",this.sColorToolbarFont);
+		this.$.lblWeight.$.input.applyStyle("text-align","right");
+		
+		this.$.lblLastFeedDate.$.input.applyStyle("color",this.sColorToolbarFont);
+		this.$.lblLastFeedDate.$.input.applyStyle("opacity","1");
+		this.$.lblLastFeedDate.$.input.applyStyle("-webkit-text-fill-color",this.sColorToolbarFont);
+		this.$.lblLastFeedDate.$.input.applyStyle("text-align","center");
+		
+		this.$.lblLastFeed.$.input.applyStyle("color",this.sColorToolbarFont);
+		this.$.lblLastFeed.$.input.applyStyle("opacity","1");
+		this.$.lblLastFeed.$.input.applyStyle("-webkit-text-fill-color",this.sColorToolbarFont);
+		this.$.lblLastFeed.$.input.applyStyle("text-align","right");
+		
+		this.$.lblTotalFeed.$.input.applyStyle("color",this.sColorToolbarFont);
+		this.$.lblTotalFeed.$.input.applyStyle("opacity","1");
+		this.$.lblTotalFeed.$.input.applyStyle("-webkit-text-fill-color",this.sColorToolbarFont);
+		this.$.lblTotalFeed.$.input.applyStyle("text-align","right");
+		
 		this.initializeCells();
 		this.updateView();		
 	    },	    
 	    updateView : function() {
-		crudInventory.get(this, "readCallBack");
+		crudInventory.get(this, "readCallBack");		
 		cacheMan.showScrim();
 	    },
 	    readCounter : 0,
@@ -462,11 +556,13 @@ enyo
 		    var objFeed = {dateTime:"",quantity:""};
 		    if(objInventory.FeedUS){objFeed=objInventory.FeedUS[objInventory.FeedUS.length-1];}
 		    
+		    this.$.lblQuality.setValue(crudCattleQuality.getByID(objInventory.qualityId).qualityName);
+		    this.$.lblQuantity.setValue(objInventory.heads);
+		    this.$.lblWeight.setValue(objInventory.weight + " Lb");
+		    this.$.lblLastFeedDate.setValue(objFeed.dateTime.toLocaleString());
+		    this.$.lblLastFeed.setValue(objFeed.quantity);
+		    this.$.lblTotalFeed.setValue(objInventory.feed);
 		    
-		    this.$.lblInfo.setContent("Ganado: " + objInventory.heads + " "
-			    + crudCattleQuality.getByID(objInventory.qualityId).qualityName  + " Peso: " + objInventory.weight + " Lb"
-			    + "<br /> Almento: " + objFeed.dateTime.toLocaleString() + " " +
-			    objFeed.quantity + " Lb");
 		} else
 		    this.$.lblInfo.setContent("");
 	    },

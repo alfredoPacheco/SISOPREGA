@@ -165,15 +165,14 @@ CREATE TABLE ctrl_inventory(
 	barnyard_id  			integer UNIQUE NOT NULL REFERENCES cat_barnyard(barnyard_id),
 	heads 				integer NOT NULL DEFAULT 0,
 	weight 				decimal(12,4) not null,
-	feed 				integer NOT NULL DEFAULT 0,
+	feed 				decimal(12,4) NOT NULL DEFAULT 0,
 	available_to_sell		integer NOT NULL DEFAULT 0,
 	sold				integer NOT NULL DEFAULT 0,
 	available_to_program_ship	integer NOT NULL DEFAULT 0,
 	programmed_to_ship		integer NOT NULL DEFAULT 0,
 	available_to_ship		integer NOT NULL DEFAULT 0,
 	shipped				integer NOT NULL DEFAULT 0,
-	cycle_completed			DATE,
-	UNIQUE (barnyard_id)
+	cycle_completed			DATE
 	
 );
 

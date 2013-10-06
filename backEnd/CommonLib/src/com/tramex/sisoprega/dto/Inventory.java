@@ -46,7 +46,7 @@ public class Inventory {
   private long penId;
   private long heads;
   private double weight;
-  private long feed;
+  private double feed;
   private long availableToSell;
   private long sold;
   private long availableToProgramShip;
@@ -133,13 +133,13 @@ public class Inventory {
   /**
    * @return the feed
    */
-  public long getFeed() {
+  public double getFeed() {
     return feed;
   }
   /**
    * @param feed the feed to set
    */
-  public void setFeed(long feed) {
+  public void setFeed(double feed) {
     this.feed = feed;
   }
   /**

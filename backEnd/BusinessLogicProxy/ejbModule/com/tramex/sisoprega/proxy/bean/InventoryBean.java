@@ -6,10 +6,12 @@ package com.tramex.sisoprega.proxy.bean;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 
+import com.tramex.sisoprega.dto.FeedUS;
 import com.tramex.sisoprega.dto.Inventory;
 import com.tramex.sisoprega.gateway.GatewayError;
 import com.tramex.sisoprega.gateway.GatewayRecord;
@@ -85,6 +87,13 @@ public ReadResponse Update(CreateRequest request) {
         
         if(entity.getHeads() <= 0){
           entity.setCycleCompleted(new Date());          
+        }
+        
+        Set<FeedUS> feedUS = entity.getFeedUS();
+        for(FeedUS fus : feedUS){
+          if(fus.getFeedUSId() == 0){
+            entity.setFeed(fus.getQuantity() + inventory.getFeed());
+          }
         }
         
         dataModel.updateDataModel(entity);
