@@ -285,3 +285,16 @@ CREATE TABLE ctrl_feed_us(
 
 GRANT ALL ON ctrl_feed_us TO sisoprega;
 GRANT ALL ON ctrl_feed_us_feed_us_id_seq TO sisoprega;
+
+
+DROP TABLE IF EXISTS cat_carrier_contact CASCADE;
+CREATE TABLE cat_carrier_contact(
+	carrier_contact_id	SERIAL PRIMARY KEY,
+	carrier_id 		integer NOT NULL REFERENCES cat_carrier(carrier_id),
+	name			varchar(50),
+	phone			varchar(20)
+
+);
+
+GRANT ALL ON cat_carrier_contact TO sisoprega;
+GRANT ALL ON cat_carrier_contact_carrier_contact_id_seq TO sisoprega;

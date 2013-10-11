@@ -95,6 +95,25 @@ enyo.kind(
 	    }
 	}
 	return null;
-    }
+    },
+    getCallBack : function(resultArray) {
+	this.arrObj = [];
+	for ( var i = 0; i < resultArray.records.length; i++) {
+	    var objAux = resultArray.records[i];
+	    var innerModelObj = this.adapterToIn(objAux);
+	    if (innerModelObj != null) this.arrObj.push(innerModelObj);
+	}
+	
+	for(var i=0;i<this.arrObj.length;i++){
+	    if(this.arrObj[i].FeedUS){
+		this.arrObj[i].FeedUS.sort(function(a,b){return a.feedUSId >b.feedUSId;});
+	    }
+	}
+	
+	if (this.callbackObject != null) {
+	    var milis = ((Math.random() * 1000) + 500);
+	    setTimeout(this.callbackObject[this.callbackMethod](resultArray), milis);
+	}
+    },
   });
 var crudInventory = new crud.inventory();
