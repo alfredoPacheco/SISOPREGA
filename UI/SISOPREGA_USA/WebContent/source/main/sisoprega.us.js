@@ -302,16 +302,18 @@ enyo.kind(
           // this.addGoBackAction("catCattle");
           _objMainHeader.setContent('Clientes');
           this.$.mainPane.selectViewByName("customersList_kind");
+          this.$.customersList_kind.reset();
           break;
         case 'Transportistas':
           // this.addGoBackAction("catCattle");
           _objMainHeader.setContent('Transportistas');
-          this.$.mainPane.selectViewByName("driversList_kind");
+          this.$.mainPane.selectViewByName("driversList_kind");          
           break;
         case 'Proveedores':
           // this.addGoBackAction("catCattle");
           _objMainHeader.setContent('Proveedores');
           this.$.mainPane.selectViewByName("providersList_kind");
+          this.$.providersList_kind.reset();
           break;
         case 'Usuarios':
           // this.addGoBackAction("catCattle");
@@ -321,9 +323,9 @@ enyo.kind(
         case 'Conceptos de Gastos':
           // this.addGoBackAction("catCattle");
           _objMainHeader.setContent('Conceptos de gasto (Hermana)');
-          this.$.mainPane.validateView("expenseConceptsList");
-          this.$.expenseConceptsList.reset();
+          this.$.mainPane.validateView("expenseConceptsList");          
           this.$.mainPane.selectViewByName("expenseConceptsList");
+          this.$.expenseConceptsList.reset();
           break;
       }
       // enyo.$.sisoprega_btnGoBack.setShowing(1);

@@ -15,6 +15,9 @@
  */
 package com.tramex.sisoprega.dto;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * US carrier data model.
  * 
@@ -42,6 +45,8 @@ public class Carrier {
   private String addressState;
   private String zipCode;
   private String phone;
+  
+  private Set<CarrierContact> carrierContact;
 
   /**
    * @return the carrierId
@@ -161,6 +166,32 @@ public class Carrier {
    */
   public void setPhone(String phone) {
     this.phone = phone;
+  }
+
+  /**
+   * @return the carrierContact
+   */
+  public Set<CarrierContact> getCarrierContact() {
+    return carrierContact;
+  }
+
+  /**
+   * @param carrierContact the carrierContact to set
+   */
+  public void setCarrierContact(Set<CarrierContact> carrierContact) {
+    this.carrierContact = carrierContact;
+  }
+  
+  public void addCarrierContact(CarrierContact objCarrierContact){
+    if(carrierContact == null)
+      carrierContact = new HashSet<CarrierContact>();
+
+    
+    carrierContact.add(objCarrierContact);
+    
+    if(objCarrierContact.getCarrier() != this)
+      objCarrierContact.setCarrier(this);
+    
   }
 
   @Override

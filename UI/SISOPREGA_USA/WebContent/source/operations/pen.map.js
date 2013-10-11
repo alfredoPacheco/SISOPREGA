@@ -124,7 +124,7 @@ enyo
                             kind : "ToolInput",                            
                             name : "lblQuality",
                             hint : '',
-                            width: "200px",
+                            width: "170px",
                             disabled:true ,
                             style:"text-align:center"
                             
@@ -133,7 +133,7 @@ enyo
                             kind : "ToolInput",                            
                             name : "lblQuantity",                            
                             hint : '',
-                            width: "120px",
+                            width: "90px",
                             disabled:true,
                             style:"text-align:right"
                         },
@@ -141,7 +141,7 @@ enyo
                             kind : "ToolInput",                            
                             name : "lblWeight",                            
                             hint : '',
-                            width: "120px",
+                            width: "110px",
                             disabled:true,
                             style:"text-align:right"
                         },                         
@@ -161,7 +161,7 @@ enyo
                             kind : "ToolInput",                            
                             name : "lblLastFeed",                            
                             hint : '',
-                            width: "100px",
+                            width: "90px",
                             disabled:true,
                             style:"text-align:center"
                         },{
@@ -172,7 +172,7 @@ enyo
                             kind : "ToolInput",                            
                             name : "lblTotalFeed",                            
                             hint : '',
-                            width: "120px",
+                            width: "90px",
                             disabled:true,
                             style:"text-align:right"
                         },
@@ -432,7 +432,7 @@ enyo
 	    },
 	    saveFeed : function() {
 		this.$.popup_alimentoUS.close();
-		this.movingTo(this.objSelected);
+		this.movingTo = this.objSelected;
 		cacheMan.showScrim();
 		this.updateView();
 	    },
@@ -459,31 +459,37 @@ enyo
 		this.$.lblQuality.$.input.applyStyle("opacity","1");
 		this.$.lblQuality.$.input.applyStyle("-webkit-text-fill-color",this.sColorToolbarFont);
 		this.$.lblQuality.$.input.applyStyle("text-align","center");
+		this.$.lblQuality.$.input.applyStyle("font-size","13px");
 		
 		this.$.lblQuantity.$.input.applyStyle("color",this.sColorToolbarFont);
 		this.$.lblQuantity.$.input.applyStyle("opacity","1");
 		this.$.lblQuantity.$.input.applyStyle("-webkit-text-fill-color",this.sColorToolbarFont);
 		this.$.lblQuantity.$.input.applyStyle("text-align","right");
+		this.$.lblQuantity.$.input.applyStyle("font-size","13px");
 		
 		this.$.lblWeight.$.input.applyStyle("color",this.sColorToolbarFont);
 		this.$.lblWeight.$.input.applyStyle("opacity","1");
 		this.$.lblWeight.$.input.applyStyle("-webkit-text-fill-color",this.sColorToolbarFont);
 		this.$.lblWeight.$.input.applyStyle("text-align","right");
+		this.$.lblWeight.$.input.applyStyle("font-size","13px");
 		
 		this.$.lblLastFeedDate.$.input.applyStyle("color",this.sColorToolbarFont);
 		this.$.lblLastFeedDate.$.input.applyStyle("opacity","1");
 		this.$.lblLastFeedDate.$.input.applyStyle("-webkit-text-fill-color",this.sColorToolbarFont);
 		this.$.lblLastFeedDate.$.input.applyStyle("text-align","center");
+		this.$.lblLastFeedDate.$.input.applyStyle("font-size","13px");
 		
 		this.$.lblLastFeed.$.input.applyStyle("color",this.sColorToolbarFont);
 		this.$.lblLastFeed.$.input.applyStyle("opacity","1");
 		this.$.lblLastFeed.$.input.applyStyle("-webkit-text-fill-color",this.sColorToolbarFont);
 		this.$.lblLastFeed.$.input.applyStyle("text-align","right");
+		this.$.lblLastFeed.$.input.applyStyle("font-size","13px");
 		
 		this.$.lblTotalFeed.$.input.applyStyle("color",this.sColorToolbarFont);
 		this.$.lblTotalFeed.$.input.applyStyle("opacity","1");
 		this.$.lblTotalFeed.$.input.applyStyle("-webkit-text-fill-color",this.sColorToolbarFont);
 		this.$.lblTotalFeed.$.input.applyStyle("text-align","right");
+		this.$.lblTotalFeed.$.input.applyStyle("font-size","13px");
 		
 		this.initializeCells();
 		this.updateView();		

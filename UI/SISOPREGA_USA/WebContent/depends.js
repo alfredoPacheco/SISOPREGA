@@ -54,8 +54,9 @@ enyo.depends(
 	"source/catalogs/catalogs.seller.form.js",
 	
 	"source/catalogs/catalogs.drivers.list.js",
-	"source/catalogs/catalogs.drivers.create.js",	
-	"source/catalogs/catalogs.drivers.contacts.js",
+	//"source/catalogs/catalogs.drivers.create.js",	
+	
+	"source/catalogs/catalogs.carrier.contacts.js",
 	"source/catalogs/catalogs.cattle.js",
 	
 	"source/catalogs/catalogs.carrier.form.js",

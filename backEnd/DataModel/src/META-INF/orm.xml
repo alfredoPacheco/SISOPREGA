@@ -1414,6 +1414,40 @@
 			<basic name="city">
 				<column name="city" length="80" />
 			</basic>
+			<one-to-many name="carrierContact" fetch="EAGER" mapped-by="carrier" 
+				target-entity="com.tramex.sisoprega.dto.CarrierContact"	orphan-removal="true">
+				<order-by>contactName ASC</order-by>
+				<cascade>
+					<cascade-all />
+				</cascade>
+			</one-to-many>
+		</attributes>
+	</entity>
+	<entity class="com.tramex.sisoprega.dto.CarrierContact">
+		<table name="cat_carrier_contact" />
+		<named-query name="CARRIER_CONTACT_BY_ID">
+			<description>Retrieve a single carrierContact record by it's ID</description>
+			<query>SELECT iCarrierContact FROM CarrierContact iCarrierContact WHERE iCarrierContact.carrierContactId = :Id</query>
+		</named-query>
+		<named-query name="ALL_CARRIER_CONTACTS">
+			<description>Retrieve all carrier contacts records from database.</description>
+			<query>SELECT iCarrierContact FROM CarrierContact iCarrierContact</query>
+		</named-query>
+		<attributes>
+			<id name="carrierContactId">
+				<column name="carrier_contact_id" />
+				<generated-value strategy="IDENTITY" />
+			</id>
+			<basic name="contactName">
+				<column name="name" />
+			</basic>
+			<basic name="phone">
+				<column name="phone" length="20" />
+			</basic>
+			<many-to-one name="carrier" fetch="LAZY" optional="false">
+				<join-column name="carrier_id" referenced-column-name="carrier_id"
+					nullable="false" />
+			</many-to-one>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.Released">
