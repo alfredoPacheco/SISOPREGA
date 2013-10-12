@@ -176,7 +176,12 @@ enyo
             this.$.lblPurSeller.setContent(objData.sellerName);
             this.$.lblPurHeads.setContent(utils.formatNumberThousands(objData.heads));
             this.$.lblPurWeight.setContent(utils.formatNumberThousands(objData.weight));
-            this.$.lblPurAveWeight.setContent(utils.formatNumberThousands(objData.weight / objData.heads));
+            if(objData.heads <= 0){
+              this.$.lblPurAveWeight.setContent("-");
+            }else{
+              this.$.lblPurAveWeight.setContent(utils.formatNumberThousands(objData.weight / objData.heads));
+            }
+            
             return true;
           }
         },
@@ -186,8 +191,8 @@ enyo
                 
           this.$.lblPurSumHeads.setContent("Cabezas<br />" + utils.formatNumberThousands(iFotHeads.toFixed(2)));
           this.$.lblPurSumWeight.setContent("Peso<br />" + utils.formatNumberThousands(iFotWeight.toFixed(2)));
-          var avg = null;
-          if (avg = (iFotWeight / iFotHeads)) {
+          var avg = iFotWeight / iFotHeads;
+          if (iFotHeads > 0) {
             this.$.lblSumAveWeight.setContent("Peso Prom.<br />" + utils.formatNumberThousands(avg.toFixed(2)));
           } else {
             this.$.lblSumAveWeight.setContent("Peso Prom.<br />0.00");
@@ -236,11 +241,21 @@ enyo
             setTimeout(this.calculateInventory, milis);
           }
 
+          var headsSummary = 0;
+          if(crudInventory.getObjSummary().heads > 0) {
+            headsSummary = crudInventory.getObjSummary().heads - crudPurchase.getObjSummary().heads - crudHermana.getObjSummary().heads;
+          }
+          
+          var weightSummary = 0;
+          if(crudInventory.getObjSummary().weight > 0){
+            weightSummary = crudInventory.getObjSummary().weight - crudPurchase.getObjSummary().weight - crudHermana.getObjSummary().weight;
+          }
+          
           var objInventory = {
               sellerId : 0,
               sellerName : 'Inv. ELLLC @ STT',
-              heads : crudInventory.getObjSummary().heads - crudPurchase.getObjSummary().heads - crudHermana.getObjSummary().heads,
-              weight : crudInventory.getObjSummary().weight - crudPurchase.getObjSummary().weight - crudHermana.getObjSummary().weight
+              heads : headsSummary,
+              weight : weightSummary
           };
           
           if(useFirstListItem){

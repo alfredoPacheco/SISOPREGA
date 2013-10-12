@@ -4,6 +4,7 @@ enyo.kind(
     kind : enyo.VFlexBox,
     selectedCattleId : 0,
     hermanaId : 0,
+    deWhen : null,
     style : "background-color:#DABD8B;font-size:15px;",
     align : "left",
     events :
@@ -305,6 +306,7 @@ enyo.kind(
     openHermana: function(sender, selectedItem){
       // Fill up hermana form
       this.hermanaId = selectedItem.hermanaId;
+      this.deWhen = utils.dateIn(selectedItem.deWhen);
       this.$.accountOf.setValue(selectedItem.accountOf);
       this.$.refNo.setValue(selectedItem.refNo);
       this.$.consignee.setValue(selectedItem.consignee);
@@ -390,7 +392,7 @@ enyo.kind(
       this.closePopUp();
       this.$.rancher_id.$.textField.forceFocus();
     },
-    setupReleseSelection : function(){
+    setupReleaseSelection : function(){
       this.setupReleases(this.$.releasesList.selectedReceptions);
       this.$.details.addCookiedCharges();
       
@@ -493,6 +495,7 @@ enyo.kind(
         consumingGateway.Create("Hermana", hermana, this, "createCallBack");
       } else {
         hermana.hermanaId = this.hermanaId;
+        hermana.deWhen = utils.dateOut(this.deWhen);
         consumingGateway.Update("Hermana", hermana, this, "createCallBack");
       }
     },
