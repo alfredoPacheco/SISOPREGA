@@ -34,9 +34,9 @@ enyo.kind(
             style : "background:#333;min-height:10px;height:45px;",
             components : [
                   {
-                    name : 'btnPrint',
-                    onclick : "printHermana",
-                    icon : "images/print.png"
+                    name : 'btnOpen',
+                    onclick : "showOpenHermana",
+                    icon : "images/search.png"
                   },
                   {
                     name : 'btnSave',
@@ -44,17 +44,22 @@ enyo.kind(
                     icon : "images/save.png"
                   },
                   {
-                    name : 'btnClear',
-                    onclick : "resetForm",
-                    icon : "images/clear.png"
+                    name : 'btnPrint',
+                    onclick : "printHermana",
+                    icon : "images/print.png"
+                  },
+                  {
+                    name : 'btnSend',
+                    onclick : "open",
+                    icon : "images/envelope.png",
                   },
                   {
                     fit : true
                   },
                   {
-                    name : 'btnOpen',
-                    onclick : "showOpenHermana",
-                    icon : "images/search.png"
+                    name : 'btnClear',
+                    onclick : "resetForm",
+                    icon : "images/clear.png"
                   }
             ]
           },
@@ -234,8 +239,8 @@ enyo.kind(
       cacheCorte.clear();
       this.$.details.$.listaCorte.setCortes(cacheCorte.get());
       this.$.details.$.listaCorteExpo.setCortes(cacheCorte.getExpo());
-      this.$.details.$.chargeList.arrData=[];
-      this.$.details.$.chargeList.iSummary=0;
+      this.$.details.$.chargeList.arrData = [];
+      this.$.details.$.chargeList.iSummary = 0;
       this.$.details.$.chargeList.updateList();
       this.$.details.resetSummaryTable();
       this.hermanaId = 0;
@@ -248,7 +253,7 @@ enyo.kind(
       if (this.$.cattleClass) {
         this.$.cattleClass.destroy();
       }
-      if(this.$.hermanaList){
+      if (this.$.hermanaList) {
         this.$.hermanaList.destroy();
       }
     },
@@ -257,12 +262,13 @@ enyo.kind(
       var rancherName = this.$.rancher_id.getValue();
       
       if (rancherId == -1 && rancherName == '') {
-	  cacheMan.setMessage("","Seleccione primero un exportador de la lista");
+        cacheMan.setMessage("", "Seleccione primero un exportador de la lista");
         return false;
       }
       
       if (rancherId == -1 && rancherName != '') {
-	  cacheMan.setMessage("","El exportador que usted ha capturado (" + rancherName + ") no se encuentra en la lista, por favor seleccione un exportador válido");
+        cacheMan.setMessage("", "El exportador que usted ha capturado (" + rancherName
+            + ") no se encuentra en la lista, por favor seleccione un exportador válido");
         return false;
       }
       
@@ -271,39 +277,39 @@ enyo.kind(
       
       return true;
     },
-    showOpenHermana : function () {
+    showOpenHermana : function() {
       this.cleanPopUpContents();
       cacheMan.showScrim();
       crudHermana.getAll(this, "hermanaListRead");
     },
-    hermanaListRead : function(result){
+    hermanaListRead : function(result) {
       
-      if(result.exceptionId != 0){
+      if (result.exceptionId != 0) {
         alert('No se encontraron registros de importación');
         cacheMan.hideScrim();
         return false;
       }
       
       this.$.popMan.createComponent(
-          {
-            kind : "hermana.list",
-            name : 'hermanaList',
-            entity: crudHermana,
-            flex : 1,
-            onSelected: "openHermana"
-          },
-          {
-            owner : this
-          });
-        
-        this.$.popMan.validateComponents();
-        this.$.hermanaList.setItems(crudHermana.getCatalogsList());
-        
-        this.$.popMan.render();
-        this.$.popMan.openAtCenter();
-        cacheMan.hideScrim();
+        {
+          kind : "hermana.list",
+          name : 'hermanaList',
+          entity : crudHermana,
+          flex : 1,
+          onSelected : "openHermana"
+        },
+        {
+          owner : this
+        });
+      
+      this.$.popMan.validateComponents();
+      this.$.hermanaList.setItems(crudHermana.getCatalogsList());
+      
+      this.$.popMan.render();
+      this.$.popMan.openAtCenter();
+      cacheMan.hideScrim();
     },
-    openHermana: function(sender, selectedItem){
+    openHermana : function(sender, selectedItem) {
       // Fill up hermana form
       this.hermanaId = selectedItem.hermanaId;
       this.deWhen = utils.dateIn(selectedItem.deWhen);
@@ -318,17 +324,17 @@ enyo.kind(
       
       cacheCorte.cortes = selectedItem.HermanaCorte;
       cacheCorte.cortesExpo = selectedItem.HermanaCorteExportador;
-      this.$.details.$.chargeList.arrData=selectedItem.HermanaExpense;
+      this.$.details.$.chargeList.arrData = selectedItem.HermanaExpense;
       
       this.$.details.$.listaCorte.loadCortes(cacheCorte.cortes);
       this.$.details.$.listaCorteExpo.loadCortes(cacheCorte.cortesExpo);
-
+      
       this.$.details.setCattleClass(selectedItem.cattleClass, selectedItem.cattleClassName);
-      for(var i=0;i<cacheCorte.cortes.length; i++){
+      for ( var i = 0; i < cacheCorte.cortes.length; i++) {
         this.$.details.calculateSummaryFromCorte(cacheCorte.cortes[i]);
       }
       
-      this.$.details.$.chargeList.iSummary=0;
+      this.$.details.$.chargeList.iSummary = 0;
       this.$.details.$.chargeList.updateList();
       
       this.closePopUp();
@@ -392,7 +398,7 @@ enyo.kind(
       this.closePopUp();
       this.$.rancher_id.$.textField.forceFocus();
     },
-    setupReleaseSelection : function(){
+    setupReleaseSelection : function() {
       this.setupReleases(this.$.releasesList.selectedReceptions);
       this.$.details.addCookiedCharges();
       
@@ -459,7 +465,8 @@ enyo.kind(
     },
     saveHermana : function() {
       cacheMan.showScrim();
-      var hermana = {
+      var hermana =
+        {
           accountOf : this.$.accountOf.getValue(),
           consignee : this.$.consignee.getValue(),
           entryNo : this.$.entryNo.getValue(),
@@ -467,31 +474,31 @@ enyo.kind(
           rancherId : this.$.rancher_id.getIndex(),
           refNo : this.$.refNo.getValue(),
           HermanaCorte : [],
-          HermanaCorteExportador: [],
+          HermanaCorteExportador : [],
           HermanaExpense : [],
-          Reception: []
-      };
+          Reception : []
+        };
       
-      for(var i=0; i<this.$.details.released.length; i++){
+      for ( var i = 0; i < this.$.details.released.length; i++) {
         hermana.Reception.push(this.$.details.released[i]);
       }
       
-      for(var i=0; i<this.$.details.$.listaCorte.cortes.length; i++){
+      for ( var i = 0; i < this.$.details.$.listaCorte.cortes.length; i++) {
         var corte = this.CorteOutput(this.$.details.$.listaCorte.cortes[i]);
         hermana.HermanaCorte.push(corte);
       }
       
-      for(var i=0; i<this.$.details.$.listaCorteExpo.cortes.length; i++){
+      for ( var i = 0; i < this.$.details.$.listaCorteExpo.cortes.length; i++) {
         var corte = this.CorteOutput(this.$.details.$.listaCorteExpo.cortes[i]);
         hermana.HermanaCorteExportador.push(corte);
       }
       
-      for(var i=0; i<this.$.details.$.chargeList.arrData.length; i++){
+      for ( var i = 0; i < this.$.details.$.chargeList.arrData.length; i++) {
         var expense = this.ExpenseOutput(this.$.details.$.chargeList.arrData[i]);
         hermana.HermanaExpense.push(expense);
       }
       
-      if(this.hermanaId == 0){
+      if (this.hermanaId == 0) {
         consumingGateway.Create("Hermana", hermana, this, "createCallBack");
       } else {
         hermana.hermanaId = this.hermanaId;
@@ -499,34 +506,36 @@ enyo.kind(
         consumingGateway.Update("Hermana", hermana, this, "createCallBack");
       }
     },
-    CorteOutput : function(corte){
-      var output = {
+    CorteOutput : function(corte) {
+      var output =
+        {
           barnyardId : corte.barnyardId,
           heads : corte.heads,
           qualityId : corte.qualityId,
-          weight: corte.weight
-      };
+          weight : corte.weight
+        };
       return output;
     },
-    ExpenseOutput : function(expense){
-      var output = {
+    ExpenseOutput : function(expense) {
+      var output =
+        {
           conceptId : expense.expenseConceptId,
           amount : expense.price
-      };
+        };
       return output;
     },
-    createCallBack : function(result){
+    createCallBack : function(result) {
       // Save cache information based on data entry.
-      if(result.exceptionId != '0'){
+      if (result.exceptionId != '0') {
         alert('Se ha encontrado un error al intentar grabar los datos, revise la captura ');
         cacheMan.hideScrim();
         return false;
       }
       
-      var entryPrefix = this.$.entryNo.getValue().substr(0,4);
+      var entryPrefix = this.$.entryNo.getValue().substr(0, 4);
       utils.setCookie("entryNo", entryPrefix, 15);
       
-      var refPrefix = this.$.refNo.getValue().substr(0,4);
+      var refPrefix = this.$.refNo.getValue().substr(0, 4);
       utils.setCookie("refNo", refPrefix, 15);
       utils.setCookie("consignee", this.$.consignee.getValue(), 15);
       utils.setCookie("accountOf", this.$.accountOf.getValue(), 15);
@@ -535,9 +544,9 @@ enyo.kind(
       this.doSave();
       cacheMan.hideScrim();
     },
-    chargesIndexString : function(chargesArray){
+    chargesIndexString : function(chargesArray) {
       var result = '';
-      for(var i=0;i<chargesArray.length; i++){
+      for ( var i = 0; i < chargesArray.length; i++) {
         var charge = chargesArray[i];
         result += charge.expenseConceptId + ',';
       }

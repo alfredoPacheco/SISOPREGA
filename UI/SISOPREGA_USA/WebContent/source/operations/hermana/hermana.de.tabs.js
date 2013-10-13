@@ -164,38 +164,6 @@ enyo
                 height : "285px",
                 components : [
                       {
-                        kind : "Toolbar",
-                        name : "ExpoToolBar",
-                        align : "left",
-                        pack : "left",
-                        style : "background-color:transparent;-webkit-border-image:none;min-height:10px;height:45px;",
-                        components : [
-                              {
-                                name : 'btnPrint',
-                                onclick : "printHermana",
-                                icon : "images/print.png",
-                              },
-                              {
-                                name : 'btnSave',
-                                onclick : "saveHermana",
-                                icon : "images/save.png",
-                              },
-                              {
-                                name : 'btnCancel',
-                                onclick : "resetForm",
-                                icon : "images/clear.png",
-                              },
-                              {
-                                fit : true,
-                              },
-                              {
-                                name : 'btnSend',
-                                onclick : "open",
-                                icon : "images/envelope.png",
-                              }
-                        ]
-                      },
-                      {
                         kind : "HFlexBox",
                         align : "stretch",
                         height : "35px",
