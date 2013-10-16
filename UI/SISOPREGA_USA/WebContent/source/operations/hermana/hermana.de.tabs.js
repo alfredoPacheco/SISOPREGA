@@ -81,6 +81,7 @@ enyo
                 className : "tab",
                 showing : true,
                 height : "285px",
+                style: "border: 1px solid;padding-top: 10px;",
                 components : [
                       {
                         kind : "HFlexBox",
@@ -162,6 +163,7 @@ enyo
                 className : "tab",
                 showing : false,
                 height : "285px",
+                style: "border: 1px solid;padding-top: 10px;",
                 components : [
                       {
                         kind : "HFlexBox",
@@ -228,8 +230,9 @@ enyo
                 kind : "VFlexBox",
                 name : "tabGastos",
                 className : "tab",
-                showing : false,
-                height : "270px",
+                showing : false,                
+                height : "285px",
+                style: "border: 1px solid;padding-top: 10px;",
                 components : [
                       {
                         kind : "HFlexBox",
@@ -283,6 +286,7 @@ enyo
                 className : "tab",
                 showing : false,
                 height : "285px",
+                style: "border: 1px solid;padding-top: 10px;font-size:14px;",
                 components : [
                       {
                         kind : "maklesoft.DataTable",
