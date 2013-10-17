@@ -171,7 +171,7 @@ enyo.kind(
                     lazy : true
                   },
                   {
-                    kind : "catalogs.drivers.list",
+                    kind : "catalogs.carrier.list",
                     name : "driversList_kind",
                     lazy : true
                   },
@@ -186,6 +186,18 @@ enyo.kind(
                     name: "expenseConceptsList",
                     entity: crudExpenseConcept,
                     lazy : true
+                  },
+                  {
+                      kind:"forms.list",
+                      name: "userList",
+                      entity:crudUser,
+                      lazy:true
+                  },
+                  {
+                      kind:"forms.list",
+                      name: "qualityList",
+                      entity:crudCattleQuality,
+                      lazy:true
                   }
             ]
           },
@@ -293,10 +305,11 @@ enyo.kind(
           _objMainHeader.setContent('Lista de Inspección');
           this.$.mainPane.selectViewByName("inspection_kind");
           break;
-        case 'Clases':
-          // this.addGoBackAction("catCattle");
-          // _objMainHeader.setContent('Programación de Embarques');
-          // this.$.mainPane.selectViewByName("shipments_kind");
+        case 'Clases':            
+            _objMainHeader.setContent('Calidades de Ganado');
+            this.$.mainPane.validateView("qualityList");          
+            this.$.mainPane.selectViewByName("qualityList");
+            this.$.qualityList.reset();
           break;
         case 'Clientes':
           // this.addGoBackAction("catCattle");
@@ -315,11 +328,6 @@ enyo.kind(
           this.$.mainPane.selectViewByName("providersList_kind");
           this.$.providersList_kind.reset();
           break;
-        case 'Usuarios':
-          // this.addGoBackAction("catCattle");
-          // _objMainHeader.setContent('Elegrir Transportista');
-          // this.$.mainPane.selectViewByName("driverSelect_kind");
-          break;
         case 'Conceptos de Gastos':
           // this.addGoBackAction("catCattle");
           _objMainHeader.setContent('Conceptos de gasto (Hermana)');
@@ -327,6 +335,13 @@ enyo.kind(
           this.$.mainPane.selectViewByName("expenseConceptsList");
           this.$.expenseConceptsList.reset();
           break;
+        case 'Usuarios':
+            // this.addGoBackAction("catCattle");
+            _objMainHeader.setContent('Usuarios');
+            this.$.mainPane.validateView("userList");          
+            this.$.mainPane.selectViewByName("userList");
+            this.$.userList.reset();
+            break;
       }
       // enyo.$.sisoprega_btnGoBack.setShowing(1);
     },

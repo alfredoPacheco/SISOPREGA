@@ -1,5 +1,5 @@
 enyo.kind({
-    name : "catalogs.drivers.list",
+    name : "catalogs.carrier.list",
     kind : enyo.VFlexBox,
     iSelected : null,
     arrList : [],

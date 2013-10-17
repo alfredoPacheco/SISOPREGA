@@ -149,7 +149,7 @@ enyo.kind({
 
             var className = typeof this.cellClass == "function" ? this.cellClass(rowIndex, colIndex, data) : this.cellClass;
             var cellConfig = {
-                kind: "HFlexBox", name: "cell_" + rowIndex + "_" + colIndex, onclick: "cellClick", ondblclick: "cellDblclick", onmousehold: "cellMouseheld", className: className, components: [{kind: "BasicInput", value: data, disabled: !this.editable, rowIndex: rowIndex, colIndex: colIndex, name: "input_" + rowIndex + "_" + colIndex, flex: 1, style: "width: 100%; padding: 0px 10px 0px 10px", hint: "", onchange: "inputChanged"}]
+                kind: "HFlexBox", name: "cell_" + rowIndex + "_" + colIndex, onclick: "cellClick", ondblclick: "cellDblclick", onmousehold: "cellMouseheld", className: className, components: [{kind: "BasicInput", value: data, disabled: !this.editable, rowIndex: rowIndex, colIndex: colIndex, name: "input_" + rowIndex + "_" + colIndex, flex: 1, style: "width: 90%;", hint: "", onchange: "inputChanged"}]
             };
 
             if (((this.selectionMode == maklesoft.DataTable.SelectionMode.SINGLE_COLUMN || this.selectionMode == maklesoft.DataTable.SelectionMode.MULTI_COLUMN) && this.$.selection.isSelected(colIndex)) ||

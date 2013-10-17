@@ -35,25 +35,25 @@ package com.tramex.sisoprega.dto;
  * 
  */
 public class CattleQuality {
-  private long qualityId;
+  private long cattleQualityId;
   private String qualityName;
   private double minWeight;
   private double maxWeight;
   private boolean forHorses = false;
 
   /**
-   * @return the qualityId
+   * @return the cattleQualityId
    */
-  public long getQualityId() {
-    return qualityId;
+  public long getCattleQualityId() {
+    return cattleQualityId;
   }
 
   /**
-   * @param qualityId
-   *          the qualityId to set
+   * @param cattleQualityId
+   *          the cattleQualityId to set
    */
-  public void setQualityId(long qualityId) {
-    this.qualityId = qualityId;
+  public void setCattleQualityId(long qualityId) {
+    this.cattleQualityId = qualityId;
   }
 
   /**
@@ -117,6 +117,6 @@ public class CattleQuality {
 
   @Override
   public String toString() {
-    return "qualityId:" + qualityId + ";qualityName:" + qualityName + ";minWeight:" + minWeight + ";maxWeight:" + maxWeight + ";isForHorses:" + forHorses + ";";
+    return "qualityId:" + cattleQualityId + ";qualityName:" + qualityName + ";minWeight:" + minWeight + ";maxWeight:" + maxWeight + ";isForHorses:" + forHorses + ";";
   }
 }

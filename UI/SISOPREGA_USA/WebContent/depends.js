@@ -15,6 +15,7 @@ enyo.depends(
 	"../SISOPREGA/source/controls/controls.autocomplete.js",
 	"../SISOPREGA/source/controls/controls.dateMask.js",
 	"../SISOPREGA/source/controls/controls.phoneBox.js",
+	"../SISOPREGA/source/controls/controls.bindedField.js",
 	
 	"source/controls/controls.Table.js",
 	"source/controls/controls.DataTable.js",
@@ -29,6 +30,7 @@ enyo.depends(
 	"../SISOPREGA/source/cruds/crud.reception.js",
 	"../SISOPREGA/source/cruds/crud.rancher.js",
 	"../SISOPREGA/source/cruds/crud.enterpriseRancher.js",
+	"../SISOPREGA/source/cruds/crud.user.js",	
 	
 	"source/cruds/crud.seller.js",
 	"source/cruds/crud.carrier.js",
@@ -50,14 +52,15 @@ enyo.depends(
 	"source/trash/cache.purchased.js",
 	"source/trash/cache.shipments.js",
 	
+	"../SISOPREGA/source/userAdmin/useradmin.user.form.js",
 	"source/catalogs/catalogs.customer.form.js",
 	"source/catalogs/catalogs.seller.form.js",
 	
-	"source/catalogs/catalogs.drivers.list.js",
-	//"source/catalogs/catalogs.drivers.create.js",	
+	"source/catalogs/catalogs.carrier.list.js",
 	
 	"source/catalogs/catalogs.carrier.contacts.js",
 	"source/catalogs/catalogs.cattle.js",
+	"source/catalogs/catalogs.quality.form.js",
 	
 	"source/catalogs/catalogs.carrier.form.js",
 	"source/catalogs/catalogs.expenseConcept.form.js",

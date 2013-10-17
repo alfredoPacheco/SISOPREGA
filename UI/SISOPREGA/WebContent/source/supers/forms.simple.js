@@ -227,11 +227,13 @@ enyo.kind(
     },
     getValueFromControl : function(control) {
       if (control) {
-        switch (control.kind) {
+        switch (control.kindName) {
           case "controls.autocomplete":
             return control.getIndex();
-          case "Control":
+          case "enyo.Control":
             return control.getContent();
+          case "enyo.CheckBox":
+            return control.getChecked();              
           case "controls.bindedField":
           default:
             return control.getValue();
@@ -240,12 +242,15 @@ enyo.kind(
     },
     setValueForControl : function(control, value) {
       if (control && value !== undefined && value !== null) {
-        switch (control.kind) {
+        switch (control.kindName) {
           case "controls.autocomplete":
             control.setIndex(value);
             break;
-          case "Control":
+          case "enyo.Control":
             control.setContent(value);
+            break;
+          case "enyo.CheckBox":
+            control.setChecked(String(value)=='true');
             break;
           case "controls.dateMask":
             if (!this.bUpdatingMode) {
