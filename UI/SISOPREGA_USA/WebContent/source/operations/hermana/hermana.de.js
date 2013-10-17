@@ -27,6 +27,36 @@ enyo.kind(
             scrim : true
           },
           {
+            kind : enyo.Popup,
+            name : "popup_print",
+            width : "45%;",
+            height : "45%;",
+            dismissWithClick : true,
+            layoutKind : "VFlexLayout",
+            style : "overflow: hidden;border-width: 8px;",
+            scrim : true,
+            components : [
+                {
+                  kind : enyo.Button,
+                  caption : "Exportador",
+                  onclick : "printExportador",
+                  style : "margin-right: 15px;background-color: #DABD8B;",
+                  allowHtml : true,
+                  width : "130px;",
+                  name : "printExportadorButton"
+                },
+                {
+                  kind : enyo.Button,
+                  caption : "Agencia",
+                  onclick : "printAgencia",
+                  style : "margin-right: 15px;background-color: #DABD8B;",
+                  allowHtml : true,
+                  width : "130px;",
+                  name : "printAgenciaButton"
+                },
+            ]
+          },
+          {
             kind : "Toolbar",
             name : "HermanaToolBar",
             align : "left",
@@ -226,6 +256,21 @@ enyo.kind(
       this.resetForm();
       
       cacheMan.hideScrim();
+    },
+    printHermana : function(){
+      if(this.hermanaId){
+        this.$.popup_print.openAtCenter();
+      } else {
+        alert('Los datos de este registro de importación no han sido grabados en la base de datos aún.');
+      }
+    },
+    printExportador : function(){
+      this.$.popup_print.close();
+      utils.openReport('/ReportingGateway/Hermana?Id=' + this.hermanaId);
+    },
+    printAgencia : function(){
+      this.$.popup_print.close();
+      utils.openReport('/ReportingGateway/Hermana_agencia?Id=' + this.hermanaId);
     },
     resetForm : function() {
       // Set cookied information

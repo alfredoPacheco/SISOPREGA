@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Hermana" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="cc561293-8dd9-458d-9b7f-502e197be9ec">
+	<property name="ireport.zoom" value="1.2100000000000009"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="113"/>
+	<parameter name="hermana_id" class="java.lang.Long">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String">
+		<defaultValueExpression><![CDATA[".\\"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+de_when, entry_no, ref_no, consignee, account_of, hermana.hermana_id, rancher.rancher_name, SUM(fees.amount) as fees
+FROM ctrl_hermana hermana
+INNER JOIN vw_rancher rancher ON hermana.rancher_id = rancher.rancher_id
+LEFT JOIN ctrl_hermana_expense fees ON hermana.hermana_id = fees.hermana_id
+GROUP BY de_when, entry_no, ref_no, consignee, account_of, hermana.hermana_id, rancher.rancher_name;]]>
+	</queryString>
+	<field name="de_when" class="java.sql.Timestamp"/>
+	<field name="entry_no" class="java.lang.String"/>
+	<field name="ref_no" class="java.lang.String"/>
+	<field name="consignee" class="java.lang.String"/>
+	<field name="account_of" class="java.lang.String"/>
+	<field name="hermana_id" class="java.lang.Integer"/>
+	<field name="rancher_name" class="java.lang.String"/>
+	<field name="fees" class="java.math.BigDecimal"/>
+	<filterExpression><![CDATA[$F{hermana_id}==$P{hermana_id}]]></filterExpression>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="35" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="5694899e-fa71-405c-a604-225977b2996c" x="74" y="0" width="428" height="20"/>
+				<textElement textAlignment="Center">
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[FORMATO DE REPORTE DE CORTE DE IMPORTACIÓN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="9dbd35fe-a4f3-4620-aa2c-7ab02f84316b" x="74" y="20" width="428" height="15"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[(HERMANA)]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="11" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="414" splitType="Stretch">
+			<textField pattern="MMMMM dd, yyyy">
+				<reportElement uuid="b7eaafe6-68c0-40c4-9b23-1212b809588d" x="74" y="0" width="152" height="20"/>
+				<textElement>
+					<font size="10" isUnderline="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{de_when}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="e1c2cd59-d653-46b8-85dc-44aa1853e81b" x="160" y="20" width="342" height="20"/>
+				<textElement>
+					<font isUnderline="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{rancher_name}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="12fccaf6-3fa3-4fd1-996a-fd85aceccd4c" x="0" y="0" width="74" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha (Date):]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="5eebad2d-6509-494d-8603-3eb0a9cd97af" x="296" y="0" width="70" height="20"/>
+				<textElement>
+					<font isUnderline="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ref_no}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="c5204ce6-b4c0-42da-b86d-38313254b32e" x="236" y="0" width="60" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Reference #]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="6872f8b1-a5db-443e-a159-cb0ffbcf8017" x="491" y="0" width="78" height="20"/>
+				<textElement>
+					<font isUnderline="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{entry_no}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="493bf126-bfe5-4c6e-9cd2-a62f506c8fae" x="450" y="0" width="41" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Entry No]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="12fccaf6-3fa3-4fd1-996a-fd85aceccd4c" x="0" y="20" width="160" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Vendedor (Shipper):]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="517d74ce-7438-4539-8eea-c98a6b123d34" x="160" y="40" width="342" height="1"/>
+			</line>
+			<staticText>
+				<reportElement uuid="12fccaf6-3fa3-4fd1-996a-fd85aceccd4c" x="0" y="40" width="160" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Consignee:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="73820e54-2e45-4d6f-abd0-917c618364d6" x="160" y="40" width="342" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{consignee}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="583f095c-457d-4251-9dd7-ea44f5485f3b" x="160" y="60" width="342" height="1"/>
+			</line>
+			<staticText>
+				<reportElement uuid="12fccaf6-3fa3-4fd1-996a-fd85aceccd4c" x="0" y="61" width="160" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cobrar A (For the account of) :]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="70fdfa83-460e-4288-beec-25fdec779829" x="160" y="61" width="342" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{account_of}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="2b6e9741-fa6f-41b5-8fc6-8c5b76c4872f" x="160" y="81" width="342" height="1"/>
+			</line>
+			<staticText>
+				<reportElement uuid="3123c0e0-0664-486d-bf1b-6f9d4ae933e2" x="0" y="81" width="160" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fees:]]></text>
+			</staticText>
+			<textField pattern="¤ #,##0.00">
+				<reportElement uuid="5042b282-41d0-402d-8a38-47e9e55eb69d" x="160" y="82" width="100" height="19"/>
+				<textElement>
+					<font isBold="true" isUnderline="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fees}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement uuid="8d2f4599-9dcf-47a4-8717-0d744d1ca715" positionType="Float" x="0" y="113" width="569" height="139"/>
+				<subreportParameter name="hermana_id">
+					<subreportParameterExpression><![CDATA[$P{hermana_id}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "Hermana_subreport_mx_summary.jasper"]]></subreportExpression>
+			</subreport>
+			<line>
+				<reportElement uuid="ccabcc81-4b8e-4957-a789-ec04bbebd3cd" x="0" y="105" width="569" height="1"/>
+			</line>
+			<line>
+				<reportElement uuid="ccabcc81-4b8e-4957-a789-ec04bbebd3cd" x="0" y="265" width="569" height="1"/>
+			</line>
+			<subreport>
+				<reportElement uuid="761920c5-954a-42a4-9865-234572f70ec8" x="0" y="266" width="360" height="138"/>
+				<subreportParameter name="hermana_id">
+					<subreportParameterExpression><![CDATA[$P{hermana_id}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "Hermana_subreport1.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement uuid="3143fbaa-36fb-4164-bd1a-840041cd7f8d" x="360" y="265" width="209" height="139"/>
+				<subreportParameter name="hermana_id">
+					<subreportParameterExpression><![CDATA[$P{hermana_id}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "Hermana_subreport_fees.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</columnHeader>
+	<pageFooter>
+		<band height="16">
+			<textField>
+				<reportElement uuid="e3439bc5-1e66-4c0d-a451-056bdc49e232" x="402" y="0" width="167" height="14"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA['Página' + $V{PAGE_NUMBER} + 'de' + $V{PAGE_COUNT}]]></textFieldExpression>
+			</textField>
+			<textField pattern="MMMMM dd, yyyy">
+				<reportElement uuid="9bc0e4b9-3082-4f51-9931-b060716534c0" x="74" y="0" width="162" height="14"/>
+				<textElement>
+					<font size="8" isUnderline="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="f2ceb981-2db0-4410-83a4-be2566f52d6a" x="0" y="0" width="74" height="14"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Reporte impreso el:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="9dc7c6e7-e58e-4bc9-8e45-818c6394445a" x="236" y="0" width="166" height="14"/>
+				<textElement textAlignment="Center">
+					<font fontName="Courier New" size="10"/>
+				</textElement>
+				<text><![CDATA[Formato: HE-V1.0]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+</jasperReport>

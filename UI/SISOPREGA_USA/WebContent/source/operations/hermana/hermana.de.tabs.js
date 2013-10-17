@@ -365,7 +365,7 @@ enyo
         },
         tabClicked : function(inSender, inEvent) {
           
-          if(!this.summary && inSender.tab == 3){
+          if (!this.summary && inSender.tab == 3) {
             alert('No se han capturado datos del corte de ganado aún');
             return false;
           }
@@ -423,21 +423,29 @@ enyo
         setSummary : function(summaryObj) {
           this.summary = summaryObj;
         },
-        setReleased : function(released){
+        setReleased : function(released) {
           this.released = released;
         },
-        resetSummaryTable : function(){
+        resetSummaryTable : function() {
           var data = [];
-          var mx_dataRow = [0,0,0,0];
+          var mx_dataRow = [
+              0, 0, 0, 0
+          ];
           data.push(mx_dataRow);
           
-          var rejects_dataRow = [0,0,0];
+          var rejects_dataRow = [
+              0, 0, 0
+          ];
           data.push(rejects_dataRow);
           
-          var trade_dataRow = [0,0,0,0];
+          var trade_dataRow = [
+              0, 0, 0, 0
+          ];
           data.push(trade_dataRow);
           
-          var net_dataRow = [0,0,0,0];
+          var net_dataRow = [
+              0, 0, 0, 0
+          ];
           data.push(net_dataRow);
           
           this.$.summary.setData(data);
@@ -577,8 +585,7 @@ enyo
         },
         calcularGasto : function(charge) {
           var formula = '';
-          if(charge)
-           formula = charge.expenseFormula;
+          if (charge) formula = charge.expenseFormula;
           // Replace heads
           var headlessFormula = formula.replace('[cabezas]', this.summary.hc);
           
@@ -590,7 +597,7 @@ enyo
           
           // Evaluate expresion
           var calculated = null;
-          if(formula != ""){
+          if (formula != "") {
             calculated = eval(formula);
           }
           
@@ -609,29 +616,28 @@ enyo
             cacheMan.setMessage("", "Concepto no registrado");
           }
         },
-        addCookiedCharges : function(){
+        addCookiedCharges : function() {
           // Clean up charges
-          this.$.chargeList.arrData=[];
-          this.$.chargeList.iSummary=0;
+          this.$.chargeList.arrData = [];
+          this.$.chargeList.iSummary = 0;
           this.$.chargeList.updateList();
           
           var charges = this.chargesArrayFromIndexString(utils.getCookie('expenses'));
-          for(var i=0; i<charges.length; i++){
+          for ( var i = 0; i < charges.length; i++) {
             var charge = charges[i];
             charge.price = this.calcularGasto(charge);
             this.$.chargeList.addCharge(charge);
           }
         },
-        chargesArrayFromIndexString : function(indexString){
+        chargesArrayFromIndexString : function(indexString) {
           var chargesArray = [];
           
-          if(indexString == null || indexString == '')
-            return chargesArray;
+          if (indexString == null || indexString == '') return chargesArray;
           
           var indexes = indexString.split(",");
-          for(var i=0;i<indexes.length;i++){
+          for ( var i = 0; i < indexes.length; i++) {
             var expenseConceptId = indexes[i];
-            if(expenseConceptId != ''){
+            if (expenseConceptId != '') {
               var charge = crudExpenseConcept.getByID(expenseConceptId);
               chargesArray.push(charge);
             }
@@ -644,8 +650,7 @@ enyo
         },
         closePopUp : function() {
           this.$.charge.setIndex(-1);
-          this.$.charge_price.setValue(''),
-          this.$.popNewCharge.close();
+          this.$.charge_price.setValue(''), this.$.popNewCharge.close();
         },
         addNewCharge : function(inSender, result) {
           this.$.charge.setItems(crudExpenseConcept.getList());
