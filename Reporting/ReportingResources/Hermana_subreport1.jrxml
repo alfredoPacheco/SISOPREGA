@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Hermana_subreport1" language="groovy" pageWidth="360" pageHeight="802" columnWidth="360" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="44896558-9d27-4667-9bce-07c717746073">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="table_head" mode="Opaque" backcolor="#CCCCFF">
+		<box leftPadding="0">
+			<pen lineWidth="0.0" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_row">
+		<box leftPadding="5">
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<parameter name="hermana_id" class="java.lang.Long"/>
+	<queryString>
+		<![CDATA[SELECT corte.hermana_id, quality.quality_name,
+SUM(corte.heads) as heads, SUM(corte.weight) as weight,
+SUM(corte.weight)/SUM(corte.heads) as avg
+FROM ctrl_hermana_corte_exportador corte
+INNER JOIN cat_cattle_quality quality ON corte.quality_id = quality.quality_id
+GROUP BY corte.hermana_id, quality.quality_name]]>
+	</queryString>
+	<field name="hermana_id" class="java.lang.Integer"/>
+	<field name="quality_name" class="java.lang.String"/>
+	<field name="heads" class="java.lang.Long"/>
+	<field name="weight" class="java.math.BigDecimal"/>
+	<field name="avg" class="java.math.BigDecimal"/>
+	<filterExpression><![CDATA[$F{hermana_id}==$P{hermana_id}]]></filterExpression>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="31">
+			<staticText>
+				<reportElement uuid="ef2eb523-5e9a-4ad5-9972-8938df1e12d1" style="table_head" x="2" y="0" width="353" height="28"/>
+				<textElement textAlignment="Center">
+					<font size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CORTE]]></text>
+			</staticText>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="32" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="a0892c53-3297-4a40-b08a-9daaa587e8ff" style="table_head" x="2" y="0" width="100" height="31" backcolor="#CCCCFF"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Clases
+Class]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="e1117498-f044-44b4-adc9-624224d90797" style="table_head" x="102" y="0" width="53" height="31"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cabezas
+Heads]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cf0cdd96-ff06-4bbf-89fc-9b832fa455e4" style="table_head" x="155" y="0" width="100" height="31"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Peso
+Weight]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="16bdb139-d32c-4efc-aafa-840f520d6ab8" style="table_head" x="255" y="0" width="100" height="31"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Promedio
+Average]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField pattern="#,##0;-#,##0">
+				<reportElement uuid="adcdd92f-55f2-46ea-8560-6d04ba9400f4" style="table_row" x="2" y="0" width="100" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{quality_name}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement uuid="be96a182-fa77-4ea2-92c7-c13286245ec1" style="table_row" x="102" y="0" width="53" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{heads}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement uuid="1d007789-87ef-4ecf-a4b4-e71b9aaad098" style="table_row" x="155" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{weight}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement uuid="aa6d09dd-818f-4a5c-8556-5a25ad9f529e" style="table_row" x="255" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{avg}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

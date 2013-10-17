@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Hermana_subreport_mx_summary" language="groovy" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="dd484943-9d48-4723-b5bf-d9ad9edea4b4">
+	<property name="ireport.zoom" value="2.357947691000003"/>
+	<property name="ireport.x" value="311"/>
+	<property name="ireport.y" value="0"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#CCCCFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<parameter name="hermana_id" class="java.lang.Long"/>
+	<queryString>
+		<![CDATA[SELECT chr.hermana_id, ct.cattype_name as cattle_type, SUM(rh.hc) as heads, SUM(rh.weight) as weight,
+SUM(rh.weight) * 2.2046 as pounds, (SUM(rh.weight) * 2.2046)/SUM(rh.hc) as avg_pounds,
+COALESCE(SUM(ir.hc),0) AS rejects, SUM(inspection.weight) as rejects_weight,
+SUM(rh.hc) - COALESCE(SUM(ir.hc),0) as net_heads, SUM(rh.weight) - SUM(inspection.weight) as net_weight,
+(SUM(rh.weight) - SUM(inspection.weight)) * 2.2046 as net_pounds,
+((SUM(rh.weight) - SUM(inspection.weight)) * 2.2046)/(SUM(rh.hc)-COALESCE(SUM(ir.hc),0)) as net_avg,
+SUM(expo.heads) AS imported_heads, SUM(expo.weight) as imported_pounds,
+SUM(expo.weight)/2.2046 as imported_kilos,  SUM(expo.weight)/SUM(expo.heads) as imported_avg,
+SUM(expo.weight) - ((SUM(rh.weight) - SUM(inspection.weight))*2.2046) as delta_weight,
+(SUM(expo.weight) - ((SUM(rh.weight) - SUM(inspection.weight))*2.2046))/((SUM(rh.weight) - SUM(inspection.weight))*2.2046) as delta_pct
+FROM ctrl_hermana_reception chr
+INNER JOIN ctrl_reception_headcount rh ON chr.reception_id = rh.reception_id
+INNER JOIN ctrl_reception reception ON chr.reception_id = reception.reception_id
+INNER JOIN cat_cattle_type ct ON reception.cattle_type = ct.cattype_id
+INNER JOIN ctrl_inspection inspection ON rh.reception_id = inspection.reception_id
+LEFT JOIN ctrl_inspection_result ir ON inspection.inspection_id = ir.inspection_id
+INNER JOIN ctrl_hermana_corte_exportador expo ON expo.hermana_id = chr.hermana_id
+GROUP BY chr.hermana_id, ct.cattype_name;]]>
+	</queryString>
+	<field name="hermana_id" class="java.lang.Integer"/>
+	<field name="cattle_type" class="java.lang.String"/>
+	<field name="heads" class="java.lang.Long"/>
+	<field name="weight" class="java.math.BigDecimal"/>
+	<field name="pounds" class="java.math.BigDecimal"/>
+	<field name="avg_pounds" class="java.math.BigDecimal"/>
+	<field name="rejects" class="java.lang.Long"/>
+	<field name="rejects_weight" class="java.math.BigDecimal"/>
+	<field name="net_heads" class="java.lang.Long"/>
+	<field name="net_weight" class="java.math.BigDecimal"/>
+	<field name="net_pounds" class="java.math.BigDecimal"/>
+	<field name="net_avg" class="java.math.BigDecimal"/>
+	<field name="imported_heads" class="java.lang.Long"/>
+	<field name="imported_pounds" class="java.math.BigDecimal"/>
+	<field name="imported_kilos" class="java.math.BigDecimal"/>
+	<field name="imported_avg" class="java.math.BigDecimal"/>
+	<field name="delta_weight" class="java.math.BigDecimal"/>
+	<field name="delta_pct" class="java.math.BigDecimal"/>
+	<filterExpression><![CDATA[$F{hermana_id}==$P{hermana_id}]]></filterExpression>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="339" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="9074a639-a221-45e4-968f-fe7de230267e" style="table_TH" x="167" y="16" width="69" height="15"/>
+				<textElement textAlignment="Center">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cabezas]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="9074a639-a221-45e4-968f-fe7de230267e" style="table_TH" x="236" y="16" width="216" height="15"/>
+				<textElement textAlignment="Center">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Peso (Kgs)                        Peso (Lbs)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="9074a639-a221-45e4-968f-fe7de230267e" style="table_TH" x="459" y="16" width="80" height="15"/>
+				<textElement textAlignment="Center">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Prom. Lbs]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="0685c885-7efa-46fa-a671-046baed08a27" style="table_CH" x="5" y="31" width="148" height="14"/>
+				<textElement textAlignment="Right">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Llegada al lado Mexicano]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="0685c885-7efa-46fa-a671-046baed08a27" style="table_CH" x="5" y="45" width="148" height="14"/>
+				<textElement textAlignment="Right">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ganado Rechazado]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="0685c885-7efa-46fa-a671-046baed08a27" style="table_CH" x="5" y="59" width="148" height="31"/>
+				<textElement textAlignment="Right">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Peso Neto descontando
+desechos]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="0685c885-7efa-46fa-a671-046baed08a27" style="table_CH" x="5" y="90" width="148" height="14"/>
+				<textElement textAlignment="Right">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Peso en USA]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="3b8a2e91-7b58-4adc-955b-8171499706c8" style="table_CH" x="167" y="0" width="285" height="16"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cattle_type}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="0685c885-7efa-46fa-a671-046baed08a27" x="167" y="115" width="162" height="15"/>
+				<textElement textAlignment="Right">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Aumento o Merma]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="0685c885-7efa-46fa-a671-046baed08a27" x="167" y="130" width="162" height="15"/>
+				<textElement textAlignment="Right">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Porcentaje]]></text>
+			</staticText>
+			<textField pattern="#,##0;-#,##0">
+				<reportElement uuid="2c853315-6720-4964-9b51-cc0d6c570194" x="167" y="31" width="69" height="14"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{heads}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement uuid="eb21d944-d7ff-40b2-b0a5-c8e2d26f54b5" x="236" y="31" width="108" height="14"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{weight}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement uuid="73080254-cf57-4fd1-a73b-48288f2dde52" x="344" y="31" width="108" height="14"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{pounds}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement uuid="1b8534ea-0214-4895-8266-1fb880c6d6fc" x="459" y="31" width="80" height="14"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{avg_pounds}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0;-#,##0">
+				<reportElement uuid="118d52be-a2c1-48af-9528-192bded8b9eb" x="167" y="45" width="69" height="14"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{rejects}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement uuid="c1759481-1763-4150-9b21-bc3abfbfca49" x="236" y="45" width="108" height="14"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{rejects_weight}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0;-#,##0">
+				<reportElement uuid="eac1f53a-569e-4241-afeb-24325b7aa66d" x="167" y="59" width="69" height="31"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{net_heads}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement uuid="a7d0950f-412a-4aef-9ce8-8be97944fd48" x="236" y="59" width="108" height="31"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{net_weight}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement uuid="16f16349-f6d8-4f15-b387-90df61bd2ba0" x="344" y="59" width="108" height="31"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{net_pounds}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement uuid="cdbd8e57-b969-4415-83a1-271dca8522e9" x="459" y="59" width="80" height="31"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{net_avg}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0;-#,##0">
+				<reportElement uuid="f06802c6-fedc-49c8-9bf8-d386c89da340" x="167" y="90" width="69" height="14"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{imported_heads}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement uuid="487e64f5-0f17-4701-9eaf-05f3a2d0a64a" x="236" y="90" width="108" height="14"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{imported_kilos}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement uuid="aada8d33-63e5-4081-8673-d8b2bb51b867" x="344" y="90" width="108" height="14"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{imported_pounds}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement uuid="4b41a701-b69f-42fd-8ff3-87ca708dda67" x="459" y="90" width="80" height="14"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{imported_avg}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="cb81c8e6-9e6d-4440-9040-38eb55ce7fba" x="165" y="108" width="287" height="1"/>
+			</line>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement uuid="95cde738-64a2-4bb9-863a-2a6b878cf915" x="344" y="115" width="108" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{delta_weight}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00 %">
+				<reportElement uuid="1211bbae-3161-4f17-951a-664fcbdcc9c3" x="344" y="130" width="108" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{delta_pct}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+</jasperReport>
