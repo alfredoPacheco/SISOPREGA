@@ -1021,16 +1021,16 @@
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.CattleQuality">
 		<table name="cat_cattle_quality" />
-		<named-query name="CATTLE_QUALITY_BY_ID">
+		<named-query name="CATTLEQUALITY_BY_ID">
 			<description>Retrieves a single cattle quality record based on its unique id</description>
-			<query>SELECT cq FROM CattleQuality cq WHERE cq.qualityId = :Id</query>
+			<query>SELECT cq FROM CattleQuality cq WHERE cq.cattleQualityId = :Id</query>
 		</named-query>
 		<named-query name="ALL_CATTLEQUALITYS">
 			<description>Retrieves all records from database</description>
 			<query>SELECT cq FROM CattleQuality cq ORDER BY cq.qualityName</query>
 		</named-query>
 		<attributes>
-			<id name="qualityId">
+			<id name="cattleQualityId">
 				<column name="quality_id" />
 				<generated-value strategy="IDENTITY" />
 			</id>

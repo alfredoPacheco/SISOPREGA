@@ -14,7 +14,7 @@ enyo.kind(
     kind : "crud",
     published : {
 	entityName : "CattleQuality",
-	createKindName : "catalogs.cattleQuality.form",
+	createKindName : "catalogs.quality.form",
     },
     adapterToList : function(entityObj) {
 	var listObj = {
@@ -22,7 +22,7 @@ enyo.kind(
 	    caption : ""
 	};
 	
-	listObj.value = Number(entityObj.qualityId);
+	listObj.value = Number(entityObj.cattleQualityId);
 	listObj.caption = entityObj.qualityName;
 
 	return listObj;
@@ -35,14 +35,14 @@ enyo.kind(
 	for ( var i = 0; i < arrAdapterList.length; i++) {
 	    var obj = arrAdapterList[i];
 	    obj.importantInfo = "" + arrAdapterList[i].qualityName;
-	    obj.secundaryInfo = "" + arrAdapterList[i].forHorses;
+	    obj.secundaryInfo = (String(arrAdapterList[i].forHorses) == "true" ? "Equino":"");
 	    result.push(obj);
 	}
 	return result;
     },
     getByID : function(iID) {
 	for ( var i = 0; i < this.arrObj.length; i++) {
-	    if (Number(this.arrObj[i]["qualityId"]) == Number(iID)) {
+	    if (Number(this.arrObj[i]["cattleQualityId"]) == Number(iID)) {
 		return this.arrObj[i];
 	    }
 	}
