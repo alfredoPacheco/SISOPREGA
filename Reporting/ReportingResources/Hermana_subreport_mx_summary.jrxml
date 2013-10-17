@@ -25,24 +25,24 @@
 	</style>
 	<parameter name="hermana_id" class="java.lang.Long"/>
 	<queryString>
-		<![CDATA[SELECT chr.hermana_id, ct.cattype_name as cattle_type, SUM(rh.hc) as heads, SUM(rh.weight) as weight,
-SUM(rh.weight) * 2.2046 as pounds, (SUM(rh.weight) * 2.2046)/SUM(rh.hc) as avg_pounds,
+		<![CDATA[SELECT chr.hermana_id, ct.cattype_name as cattle_type, rh.hc as heads, rh.weight as weight,
+rh.weight * 2.2046 as pounds, (rh.weight * 2.2046)/rh.hc as avg_pounds,
 COALESCE(SUM(ir.hc),0) AS rejects, SUM(inspection.weight) as rejects_weight,
-SUM(rh.hc) - COALESCE(SUM(ir.hc),0) as net_heads, SUM(rh.weight) - SUM(inspection.weight) as net_weight,
-(SUM(rh.weight) - SUM(inspection.weight)) * 2.2046 as net_pounds,
-((SUM(rh.weight) - SUM(inspection.weight)) * 2.2046)/(SUM(rh.hc)-COALESCE(SUM(ir.hc),0)) as net_avg,
+rh.hc - COALESCE(SUM(ir.hc),0) as net_heads, rh.weight - SUM(inspection.weight) as net_weight,
+(rh.weight - SUM(inspection.weight)) * 2.2046 as net_pounds,
+((rh.weight - SUM(inspection.weight)) * 2.2046)/(rh.hc-COALESCE(SUM(ir.hc),0)) as net_avg,
 SUM(expo.heads) AS imported_heads, SUM(expo.weight) as imported_pounds,
 SUM(expo.weight)/2.2046 as imported_kilos,  SUM(expo.weight)/SUM(expo.heads) as imported_avg,
-SUM(expo.weight) - ((SUM(rh.weight) - SUM(inspection.weight))*2.2046) as delta_weight,
-(SUM(expo.weight) - ((SUM(rh.weight) - SUM(inspection.weight))*2.2046))/((SUM(rh.weight) - SUM(inspection.weight))*2.2046) as delta_pct
+SUM(expo.weight) - ((rh.weight - SUM(inspection.weight))*2.2046) as delta_weight,
+(SUM(expo.weight) - (((rh.weight - SUM(inspection.weight))*2.2046)))/(((rh.weight - SUM(inspection.weight)))*2.2046) as delta_pct
 FROM ctrl_hermana_reception chr
-INNER JOIN ctrl_reception_headcount rh ON chr.reception_id = rh.reception_id
 INNER JOIN ctrl_reception reception ON chr.reception_id = reception.reception_id
+INNER JOIN ctrl_reception_headcount rh ON reception.reception_id = rh.reception_id
 INNER JOIN cat_cattle_type ct ON reception.cattle_type = ct.cattype_id
-INNER JOIN ctrl_inspection inspection ON rh.reception_id = inspection.reception_id
+INNER JOIN ctrl_inspection inspection ON reception.reception_id = inspection.reception_id
 LEFT JOIN ctrl_inspection_result ir ON inspection.inspection_id = ir.inspection_id
 INNER JOIN ctrl_hermana_corte_exportador expo ON expo.hermana_id = chr.hermana_id
-GROUP BY chr.hermana_id, ct.cattype_name;]]>
+GROUP BY chr.hermana_id, ct.cattype_name, rh.hc, rh.weight;]]>
 	</queryString>
 	<field name="hermana_id" class="java.lang.Integer"/>
 	<field name="cattle_type" class="java.lang.String"/>

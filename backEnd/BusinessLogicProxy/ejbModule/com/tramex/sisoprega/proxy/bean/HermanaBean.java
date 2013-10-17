@@ -121,10 +121,12 @@ public class HermanaBean extends BaseInventory implements Cruddable {
         // Include receptions in the response.
         for(Hermana hermana : results){
           Set<Reception> receptions = hermana.getReception();
-          log.info("Got [" + receptions.size() + "] receptions");
+          log.fine("Got [" + receptions.size() + "] receptions");
           for(Reception reception : receptions){
-            log.info(reception.getInspection().size() + " inspections.");
-            log.info(reception.getReceptionHeadcount().size() + " headcounts.");
+            int inspections = reception.getInspection().size();
+            int headcounts = reception.getReceptionHeadcount().size(); 
+            log.fine(inspections + " inspections.");
+            log.fine( headcounts + " headcounts.");
           }
         }
         response.setParentRecord(getRecordsFromList(results,Hermana.class));

@@ -19,7 +19,8 @@ public class PdfHermana extends BasePdfReport implements Reporteable {
 
   @Override
   public void setParameters(Map<String, Object> parameters) throws Exception {
-    long lHermanaId = (Long) parameters.get("HermanaId");
+    String sHermanaId = (String) parameters.get("HermanaId");
+    long lHermanaId = Long.parseLong(sHermanaId);
     this.parameters.put("hermana_id", lHermanaId);
     String subReportDir = "com/tramex/sisoprega/communication/ejb/reports/jasper/";
     this.parameters.put("SUBREPORT_DIR", subReportDir);

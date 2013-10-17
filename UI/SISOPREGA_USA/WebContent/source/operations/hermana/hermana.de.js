@@ -29,31 +29,31 @@ enyo.kind(
           {
             kind : enyo.Popup,
             name : "popup_print",
-            width : "45%;",
-            height : "45%;",
+            width : "270px",
+            height : "80px",
             dismissWithClick : true,
             layoutKind : "VFlexLayout",
             style : "overflow: hidden;border-width: 8px;",
             scrim : true,
             components : [
-                {
-                  kind : enyo.Button,
-                  caption : "Exportador",
-                  onclick : "printExportador",
-                  style : "margin-right: 15px;background-color: #DABD8B;",
-                  allowHtml : true,
-                  width : "130px;",
-                  name : "printExportadorButton"
-                },
-                {
-                  kind : enyo.Button,
-                  caption : "Agencia",
-                  onclick : "printAgencia",
-                  style : "margin-right: 15px;background-color: #DABD8B;",
-                  allowHtml : true,
-                  width : "130px;",
-                  name : "printAgenciaButton"
-                },
+                  {
+                    kind : enyo.Button,
+                    caption : "Exportador",
+                    onclick : "printExportador",
+                    flex : 1,
+                    style : "display: table-cell;vertical-align: middle;height: 35px;margin-right: 15px;background-color: #DABD8B;",
+                    width : "130px;",
+                    name : "printExportadorButton"
+                  },
+                  {
+                    kind : enyo.Button,
+                    caption : "Agencia",
+                    onclick : "printAgencia",
+                    flex : 1,
+                    style : "display: table-cell;vertical-align: middle;height: 35px;margin-right: 15px;background-color: #DABD8B;",
+                    width : "130px;",
+                    name : "printAgenciaButton"
+                  },
             ]
           },
           {
@@ -80,7 +80,7 @@ enyo.kind(
                   },
                   {
                     name : 'btnSend',
-                    onclick : "open",
+                    onclick : "sendSMS",
                     icon : "images/envelope.png",
                   },
                   {
@@ -257,20 +257,29 @@ enyo.kind(
       
       cacheMan.hideScrim();
     },
-    printHermana : function(){
-      if(this.hermanaId){
+    printHermana : function() {
+      if (this.hermanaId) {
         this.$.popup_print.openAtCenter();
       } else {
         alert('Los datos de este registro de importación no han sido grabados en la base de datos aún.');
       }
     },
-    printExportador : function(){
+    printExportador : function() {
       this.$.popup_print.close();
       utils.openReport('/ReportingGateway/Hermana?Id=' + this.hermanaId);
     },
-    printAgencia : function(){
+    printAgencia : function() {
       this.$.popup_print.close();
       utils.openReport('/ReportingGateway/Hermana_agencia?Id=' + this.hermanaId);
+    },
+    sendSMS : function() {
+      // Send report
+      if (this.hermanaId) {
+        var reportName = 'Hermana?HermanaId=' + this.hermanaId;
+        consumingGateway.SendReport(this.$.rancher_id.getIndex(), reportName);
+      } else {
+        alert('Los datos de este registro de importación no han sido grabados en la base de datos aún.');
+      }
     },
     resetForm : function() {
       // Set cookied information

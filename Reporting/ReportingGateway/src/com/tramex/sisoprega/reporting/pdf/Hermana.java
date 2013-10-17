@@ -52,7 +52,7 @@ public class Hermana extends BaseReportServlet {
     Map<String, Object> params = new HashMap<String, Object>();
     String hermanaId = request.getParameter("Id");
     log.fine("hermanaId: [" + hermanaId + "]");
-    params.put("HermanaId", Long.parseLong(hermanaId));
+    params.put("HermanaId", hermanaId);
 
     reporteHermana.setReportName("Hermana");
     reporteHermana.setParameters(params);

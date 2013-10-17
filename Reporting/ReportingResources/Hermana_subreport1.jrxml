@@ -94,7 +94,7 @@ Average]]></text>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{quality_name}]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0.00;-#,##0.00">
+			<textField pattern="#,##0;-#,##0">
 				<reportElement uuid="be96a182-fa77-4ea2-92c7-c13286245ec1" style="table_row" x="102" y="0" width="53" height="20"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$F{heads}]]></textFieldExpression>
