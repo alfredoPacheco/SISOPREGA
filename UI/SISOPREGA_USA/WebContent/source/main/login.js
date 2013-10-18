@@ -136,7 +136,6 @@ enyo.kind(
           cacheMan.mainView = 'mainAgency';
         }
         
-        cacheMan.hideScrim();
         if(isAdmin || isAgency)
           objRef.doSucess();
         else

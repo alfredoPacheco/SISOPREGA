@@ -182,22 +182,22 @@ enyo.kind(
                     lazy : true
                   },
                   {
-                    kind: "forms.list",
-                    name: "expenseConceptsList",
-                    entity: crudExpenseConcept,
+                    kind : "forms.list",
+                    name : "expenseConceptsList",
+                    entity : crudExpenseConcept,
                     lazy : true
                   },
                   {
-                      kind:"forms.list",
-                      name: "userList",
-                      entity:crudUser,
-                      lazy:true
+                    kind : "forms.list",
+                    name : "userList",
+                    entity : crudUser,
+                    lazy : true
                   },
                   {
-                      kind:"forms.list",
-                      name: "qualityList",
-                      entity:crudCattleQuality,
-                      lazy:true
+                    kind : "forms.list",
+                    name : "qualityList",
+                    entity : crudCattleQuality,
+                    lazy : true
                   }
             ]
           },
@@ -305,11 +305,11 @@ enyo.kind(
           _objMainHeader.setContent('Lista de Inspección');
           this.$.mainPane.selectViewByName("inspection_kind");
           break;
-        case 'Clases':            
-            _objMainHeader.setContent('Calidades de Ganado');
-            this.$.mainPane.validateView("qualityList");          
-            this.$.mainPane.selectViewByName("qualityList");
-            this.$.qualityList.reset();
+        case 'Clases':
+          _objMainHeader.setContent('Calidades de Ganado');
+          this.$.mainPane.validateView("qualityList");
+          this.$.mainPane.selectViewByName("qualityList");
+          this.$.qualityList.reset();
           break;
         case 'Clientes':
           // this.addGoBackAction("catCattle");
@@ -320,7 +320,7 @@ enyo.kind(
         case 'Transportistas':
           // this.addGoBackAction("catCattle");
           _objMainHeader.setContent('Transportistas');
-          this.$.mainPane.selectViewByName("driversList_kind");          
+          this.$.mainPane.selectViewByName("driversList_kind");
           break;
         case 'Proveedores':
           // this.addGoBackAction("catCattle");
@@ -331,17 +331,17 @@ enyo.kind(
         case 'Conceptos de Gastos':
           // this.addGoBackAction("catCattle");
           _objMainHeader.setContent('Conceptos de gasto (Hermana)');
-          this.$.mainPane.validateView("expenseConceptsList");          
+          this.$.mainPane.validateView("expenseConceptsList");
           this.$.mainPane.selectViewByName("expenseConceptsList");
           this.$.expenseConceptsList.reset();
           break;
         case 'Usuarios':
-            // this.addGoBackAction("catCattle");
-            _objMainHeader.setContent('Usuarios');
-            this.$.mainPane.validateView("userList");          
-            this.$.mainPane.selectViewByName("userList");
-            this.$.userList.reset();
-            break;
+          // this.addGoBackAction("catCattle");
+          _objMainHeader.setContent('Usuarios');
+          this.$.mainPane.validateView("userList");
+          this.$.mainPane.selectViewByName("userList");
+          this.$.userList.reset();
+          break;
       }
       // enyo.$.sisoprega_btnGoBack.setShowing(1);
     },

@@ -9,6 +9,7 @@ enyo
           {
             onSelect : "",
             onSale : "",
+            onLoadCompleted : "",
           },
         components : [
               {
@@ -383,6 +384,7 @@ enyo
           if (this.readCounter == 1) {
             this.readCounter = 0;
             this.loadAutocompletes();
+            this.doLoadCompleted();
           }
         },
         loadAutocompletes : function() {
