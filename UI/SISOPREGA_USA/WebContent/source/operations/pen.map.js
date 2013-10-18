@@ -117,12 +117,19 @@ enyo
 		    allowHtml : true,
 		    flex : 1,
 		    components:[
+                        
+                        {
+                            content : "Seleccione el corral destino",                            
+                            name:"lblMovingComment",
+                            style : "text-align: right;margin-right:10px;"
+                        },
                         {
                             content : "Ganado:",
+                            name:"lblCattle",
                             style : "text-align: right;margin-right:10px;"
                         }, {
                             kind : "ToolInput",                            
-                            name : "lblQuality",
+                            name : "txtQuality",
                             hint : '',
                             width: "170px",
                             disabled:true ,
@@ -131,7 +138,7 @@ enyo
                         },
                         {
                             kind : "ToolInput",                            
-                            name : "lblQuantity",                            
+                            name : "txtQuantity",                            
                             hint : '',
                             width: "90px",
                             disabled:true,
@@ -139,7 +146,7 @@ enyo
                         },
                          {
                             kind : "ToolInput",                            
-                            name : "lblWeight",                            
+                            name : "txtWeight",
                             hint : '',
                             width: "110px",
                             disabled:true,
@@ -147,30 +154,32 @@ enyo
                         },                         
                         {
                             content : "Ultimo Alimento:",
+                            name:"lblLastFeed",
                             width : "110px",
                             style : "text-align: right;margin-right:10px;"
                         }, 
                         {
                             kind : "ToolInput",                            
-                            name : "lblLastFeedDate",                            
+                            name : "txtLastFeedDate",                            
                             hint : '',
                             width: "160px",
                             disabled:true,
                             style:"text-align:right"
                         },{
                             kind : "ToolInput",                            
-                            name : "lblLastFeed",                            
+                            name : "txtLastFeed",                            
                             hint : '',
                             width: "90px",
                             disabled:true,
                             style:"text-align:center"
                         },{
                             content : "Total Alimento:",
+                            name:"lblTotalFeed",
                             width : "100px",
                             style : "text-align: right;margin-right:10px;"
                         }, {
                             kind : "ToolInput",                            
-                            name : "lblTotalFeed",                            
+                            name : "txtTotalFeed",                            
                             hint : '',
                             width: "90px",
                             disabled:true,
@@ -423,8 +432,7 @@ enyo
 	    cancelMoving : function() {
 		this.movingPen = false;
 		this.$.popup_movePen.close();
-		this.$.toolbar.applyStyle("background-color", null);
-		this.$.btnCancelMoving.hide();
+		this.showInputs();		
 		this.setDesc(this.movingFrom.name);
 	    },	    
 	    cancelFeed : function() {
@@ -452,44 +460,44 @@ enyo
 	    },	    
 	    readCount:0,
 	    
-	    //Below all functions that interact with crudPen: TODO
+	    //Below all functions that interact with crudPen:
 	    
 	    ready : function() {
-		this.$.lblQuality.$.input.applyStyle("color",this.sColorToolbarFont);
-		this.$.lblQuality.$.input.applyStyle("opacity","1");
-		this.$.lblQuality.$.input.applyStyle("-webkit-text-fill-color",this.sColorToolbarFont);
-		this.$.lblQuality.$.input.applyStyle("text-align","center");
-		this.$.lblQuality.$.input.applyStyle("font-size","13px");
+		this.$.txtQuality.$.input.applyStyle("color",this.sColorToolbarFont);
+		this.$.txtQuality.$.input.applyStyle("opacity","1");
+		this.$.txtQuality.$.input.applyStyle("-webkit-text-fill-color",this.sColorToolbarFont);
+		this.$.txtQuality.$.input.applyStyle("text-align","center");
+		this.$.txtQuality.$.input.applyStyle("font-size","13px");
 		
-		this.$.lblQuantity.$.input.applyStyle("color",this.sColorToolbarFont);
-		this.$.lblQuantity.$.input.applyStyle("opacity","1");
-		this.$.lblQuantity.$.input.applyStyle("-webkit-text-fill-color",this.sColorToolbarFont);
-		this.$.lblQuantity.$.input.applyStyle("text-align","right");
-		this.$.lblQuantity.$.input.applyStyle("font-size","13px");
+		this.$.txtQuantity.$.input.applyStyle("color",this.sColorToolbarFont);
+		this.$.txtQuantity.$.input.applyStyle("opacity","1");
+		this.$.txtQuantity.$.input.applyStyle("-webkit-text-fill-color",this.sColorToolbarFont);
+		this.$.txtQuantity.$.input.applyStyle("text-align","right");
+		this.$.txtQuantity.$.input.applyStyle("font-size","13px");
 		
-		this.$.lblWeight.$.input.applyStyle("color",this.sColorToolbarFont);
-		this.$.lblWeight.$.input.applyStyle("opacity","1");
-		this.$.lblWeight.$.input.applyStyle("-webkit-text-fill-color",this.sColorToolbarFont);
-		this.$.lblWeight.$.input.applyStyle("text-align","right");
-		this.$.lblWeight.$.input.applyStyle("font-size","13px");
+		this.$.txtWeight.$.input.applyStyle("color",this.sColorToolbarFont);
+		this.$.txtWeight.$.input.applyStyle("opacity","1");
+		this.$.txtWeight.$.input.applyStyle("-webkit-text-fill-color",this.sColorToolbarFont);
+		this.$.txtWeight.$.input.applyStyle("text-align","right");
+		this.$.txtWeight.$.input.applyStyle("font-size","13px");
 		
-		this.$.lblLastFeedDate.$.input.applyStyle("color",this.sColorToolbarFont);
-		this.$.lblLastFeedDate.$.input.applyStyle("opacity","1");
-		this.$.lblLastFeedDate.$.input.applyStyle("-webkit-text-fill-color",this.sColorToolbarFont);
-		this.$.lblLastFeedDate.$.input.applyStyle("text-align","center");
-		this.$.lblLastFeedDate.$.input.applyStyle("font-size","13px");
+		this.$.txtLastFeedDate.$.input.applyStyle("color",this.sColorToolbarFont);
+		this.$.txtLastFeedDate.$.input.applyStyle("opacity","1");
+		this.$.txtLastFeedDate.$.input.applyStyle("-webkit-text-fill-color",this.sColorToolbarFont);
+		this.$.txtLastFeedDate.$.input.applyStyle("text-align","center");
+		this.$.txtLastFeedDate.$.input.applyStyle("font-size","13px");
 		
-		this.$.lblLastFeed.$.input.applyStyle("color",this.sColorToolbarFont);
-		this.$.lblLastFeed.$.input.applyStyle("opacity","1");
-		this.$.lblLastFeed.$.input.applyStyle("-webkit-text-fill-color",this.sColorToolbarFont);
-		this.$.lblLastFeed.$.input.applyStyle("text-align","right");
-		this.$.lblLastFeed.$.input.applyStyle("font-size","13px");
+		this.$.txtLastFeed.$.input.applyStyle("color",this.sColorToolbarFont);
+		this.$.txtLastFeed.$.input.applyStyle("opacity","1");
+		this.$.txtLastFeed.$.input.applyStyle("-webkit-text-fill-color",this.sColorToolbarFont);
+		this.$.txtLastFeed.$.input.applyStyle("text-align","right");
+		this.$.txtLastFeed.$.input.applyStyle("font-size","13px");
 		
-		this.$.lblTotalFeed.$.input.applyStyle("color",this.sColorToolbarFont);
-		this.$.lblTotalFeed.$.input.applyStyle("opacity","1");
-		this.$.lblTotalFeed.$.input.applyStyle("-webkit-text-fill-color",this.sColorToolbarFont);
-		this.$.lblTotalFeed.$.input.applyStyle("text-align","right");
-		this.$.lblTotalFeed.$.input.applyStyle("font-size","13px");
+		this.$.txtTotalFeed.$.input.applyStyle("color",this.sColorToolbarFont);
+		this.$.txtTotalFeed.$.input.applyStyle("opacity","1");
+		this.$.txtTotalFeed.$.input.applyStyle("-webkit-text-fill-color",this.sColorToolbarFont);
+		this.$.txtTotalFeed.$.input.applyStyle("text-align","right");
+		this.$.txtTotalFeed.$.input.applyStyle("font-size","13px");
 		
 		this.initializeCells();
 		this.updateView();		
@@ -504,8 +512,7 @@ enyo
 		if (this.readCounter == 1) {
 		    this.readCounter = 0;
 		    this.movingPen = false;
-		    this.$.toolbar.applyStyle("background-color", null);
-		    this.$.btnCancelMoving.hide();
+		    this.showInputs();
 		    if(this.movingTo) this.setDesc(this.movingTo.name);
 		    this.refreshMap();
 		    cacheMan.hideScrim();
@@ -562,12 +569,12 @@ enyo
 		    var objFeed = {dateTime:"",quantity:""};
 		    if(objInventory.FeedUS){objFeed=objInventory.FeedUS[objInventory.FeedUS.length-1];}
 		    
-		    this.$.lblQuality.setValue(crudCattleQuality.getByID(objInventory.qualityId).qualityName);
-		    this.$.lblQuantity.setValue(objInventory.heads);
-		    this.$.lblWeight.setValue(objInventory.weight + " Lb");
-		    this.$.lblLastFeedDate.setValue(objFeed.dateTime.toLocaleString());
-		    this.$.lblLastFeed.setValue(objFeed.quantity);
-		    this.$.lblTotalFeed.setValue(objInventory.feed);
+		    this.$.txtQuality.setValue(crudCattleQuality.getByID(objInventory.qualityId).qualityName);
+		    this.$.txtQuantity.setValue(objInventory.heads);
+		    this.$.txtWeight.setValue(objInventory.weight + " Lb");
+		    this.$.txtLastFeedDate.setValue(objFeed.dateTime.toLocaleString());
+		    this.$.txtLastFeed.setValue(objFeed.quantity);
+		    this.$.txtTotalFeed.setValue(objInventory.feed);
 		    
 		} else
 		    this.$.lblInfo.setContent("");
@@ -578,13 +585,42 @@ enyo
 		    this.$[sKey].addClass("selectCell");
 		}
 	    },
+	    hideInputs:function(){
+		this.$.toolbar.applyStyle("background-color", "#800000");
+
+		this.$.txtQuality.hide();
+		this.$.txtQuantity.hide();
+		this.$.txtWeight.hide();
+		this.$.txtLastFeedDate.hide();
+		this.$.txtLastFeed.hide();
+		this.$.txtTotalFeed.hide();
+		this.$.lblCattle.hide();
+		this.$.lblLastFeed.hide();
+		this.$.lblTotalFeed.hide();		    
+		    
+		this.$.lblMovingComment.show();
+		
+		this.$.btnCancelMoving.show();
+	    },
+	    showInputs:function(){
+		this.$.txtQuality.show();
+		this.$.txtQuantity.show();
+		this.$.txtWeight.show();
+		this.$.txtLastFeedDate.show();
+		this.$.txtLastFeed.show();
+		this.$.txtTotalFeed.show();
+		this.$.lblCattle.show();
+		this.$.lblLastFeed.show();
+		this.$.lblTotalFeed.show();
+		this.$.lblMovingComment.hide();
+		this.$.toolbar.applyStyle("background-color", null);		
+		this.$.btnCancelMoving.hide();
+	    },
 	    actionSelected : function(inSender, inEvent) {
 		switch (inEvent.value) {
 		case 1:
 		    this.movingPen = true;
-		    this.$.toolbar.applyStyle("background-color", "#800000");
-		    this.$.lblInfo.setContent("Seleccione el corral destino");
-		    this.$.btnCancelMoving.show();
+		    this.hideInputs();
 		    break;
 		case 2:
 		    this.$.popup_alimentoUS.validateComponents();
