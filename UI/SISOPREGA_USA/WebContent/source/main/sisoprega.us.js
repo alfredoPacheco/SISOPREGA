@@ -135,24 +135,9 @@ enyo.kind(
                     lazy : true
                   },
                   {
-                    kind : "Scroller",
-                    name : "reports_kind",
-                    lazy : true,
-                    layoutKind : "VFlexLayout",
-                    components : [
-                        {
-                          kind : "reports.main",
-                          name : "reportsMain",
-                          style : "min-height:377px;",
-                          components : [
-                              {
-                                kind : "reports.us.select",
-                                flex : 1,
-                                style : "margin-top: 43px;"
-                              }
-                          ]
-                        }
-                    ]
+                      kind : "reports.main",
+                      name : "reportsMain",
+                      lazy : true
                   },
                   {
                     kind : "operations.pen.map",
@@ -292,8 +277,7 @@ enyo.kind(
         case 'Reportes':
           // this.addGoBackAction("receptionsMap");
           _objMainHeader.setContent('Reportes');
-          this.$.mainPane.selectViewByName("reports_kind");
-          this.$.reportsMain.$.reportsPane.selectViewByIndex(0);
+          this.$.mainPane.selectViewByName("reportsMain");          
           break;
         case 'Mapa Mexicano':
           // this.addGoBackAction("reports");

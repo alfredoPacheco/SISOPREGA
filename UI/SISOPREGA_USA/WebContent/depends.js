@@ -32,6 +32,7 @@ enyo.depends(
 	"../SISOPREGA/source/cruds/crud.enterpriseRancher.js",
 	"../SISOPREGA/source/cruds/crud.user.js",	
 	
+	"source/cruds/r.reports.us.js",
 	"source/cruds/crud.seller.js",
 	"source/cruds/crud.carrier.js",
 	"source/cruds/crud.customer.js",
@@ -104,7 +105,10 @@ enyo.depends(
 	 "../SISOPREGA/source/reports/reports.select.js",
 	 "../SISOPREGA/source/reports/reports.filter.js",
 	 "../SISOPREGA/source/reports/reports.filter.by_date.js",
+	 "source/catalogs/reports.main.js",
+	 "source/catalogs/reports.list.js",
 	 "source/reports.us.select.js",
+	 
 	
 	"source/main/us.gateway.ws.js", 
 	"source/main/main.agency.js",
