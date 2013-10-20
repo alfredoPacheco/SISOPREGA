@@ -7,7 +7,8 @@ enyo
         events :
           {
             onSelect : "",
-            onPurchase : ""
+            onPurchase : "",
+            onLoadCompleted : ""
           },
         ready : function() {
         },
@@ -233,6 +234,7 @@ enyo
           this.groupBySeller(purchases);
           this.$.listPurchased.render();
           this.updateSummary();
+          this.doLoadCompleted();
         },
         calculateInventory : function(useFirstListItem){
           // Add inventory record.

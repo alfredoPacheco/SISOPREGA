@@ -152,7 +152,8 @@ enyo.kind(
                           maxState : false,
                           arrData : [],
                           onSale : "showSale",
-                          onSelect : "inventory_select"
+                          onSelect : "inventory_select",
+                          onLoadCompleted : "columnsLoadCompleted"
                         }
                     ]
                   },
@@ -166,7 +167,9 @@ enyo.kind(
                           flex : 1,
                           maxState : false,
                           // arrData : crudPurchase.get(),
-                          onPurchase : "showPurchase"
+                          onPurchase : "showPurchase",
+                          onLoadCompleted : "columnsLoadCompleted"
+                          
                         }
                     ]
                   },
@@ -181,7 +184,8 @@ enyo.kind(
                             maxState : false,
                             // arrData : cacheSales.readData(),
                             onShipment : "showShipment",
-                            onUpdateView: "on_update_sales_view"
+                            onUpdateView : "on_update_sales_view",
+                            onLoadCompleted : "columnsLoadCompleted"
                           },
                           {
                             name : "shipment",
@@ -190,13 +194,25 @@ enyo.kind(
                             maxState : false,
                             arrData : cacheShip.readData(),
                             onSelectedShipment : "showSelectShipment",
-                            onDeleteShipProgrammed : "deleteShipProgrammed"
+                            onDeleteShipProgrammed : "deleteShipProgrammed",
+                            onLoadCompleted : "columnsLoadCompleted"
                           }
                     ]
                   },
             ]
           }
     ],
+    iColumnsLoaded : 0,
+    columnsLoadCompleted : function(){
+      this.iColumnsLoaded++;
+      // counter for column group loads, each column group has a 
+      // "LoadCompleted" event that reports to this method
+      // Counter: inventory, purchases, sales, shipments
+      if(this.iColumnsLoaded==4){
+        this.iColumnsLoaded == 0;
+        cacheMan.hideScrim();
+      }
+    },
     showSale : function() {
       cacheMan.showScrim();
       
@@ -211,14 +227,14 @@ enyo.kind(
       this.$.popup_add.openAtCenter();
     },
     showShipment : function() {
-	this.$.popup_shipments.validateComponents();
-	if (this.$.sales.getSelectedItems().length > 0) {
-	    this.$.shipments_kind.setArrShipment(this.$.sales.getSelectedItems());
-	    this.$.popup_shipments.openAtCenter();
-	    this.$.shipments_kind.updateList();
-	} else {
-	    cacheMan.setMessage("","No hay registros seleccionados.");
-	}
+      this.$.popup_shipments.validateComponents();
+      if (this.$.sales.getSelectedItems().length > 0) {
+        this.$.shipments_kind.setArrShipment(this.$.sales.getSelectedItems());
+        this.$.popup_shipments.openAtCenter();
+        this.$.shipments_kind.updateList();
+      } else {
+        cacheMan.setMessage("", "No hay registros seleccionados.");
+      }
     },
     showSelectShipment : function(arrShipment) {
       this.$.popup_driver.openAtCenter();
@@ -232,7 +248,6 @@ enyo.kind(
         this.$.popup_hermana.validateComponents();
       else
         this.$.hermana_kind.ready();
-      
       
       this.$.popup_hermana.openAtCenter();
     },
@@ -278,17 +293,17 @@ enyo.kind(
     inventory_select : function(inSender, inEvent) {
       this.$.popup_map.openAtCenter();
     },
-    on_update_sales_view:function(sender, updateShipments){
-	if(updateShipments){
-	    this.$.shipment.loadAutocompletes();
-	}
+    on_update_sales_view : function(sender, updateShipments) {
+      if (updateShipments) {
+        this.$.shipment.loadAutocompletes();
+      }
     },
     programShipment_click : function() {
-	this.$.popup_shipments.close();
-	this.$.sales.arrToShip = {};
-	this.$.sales.updateSales = true;
-	this.$.sales.updateView();	
-	this.$.shipment.moveToBottom();
+      this.$.popup_shipments.close();
+      this.$.sales.arrToShip = {};
+      this.$.sales.updateSales = true;
+      this.$.sales.updateView();
+      this.$.shipment.moveToBottom();
     },
     cancelShipment_click : function() {
       this.$.popup_shipments.close();
@@ -305,11 +320,11 @@ enyo.kind(
       this.$.inventory.updateView();
     },
     deleteShipProgrammed : function(inSender, shipment) {
-      crudShipment.remove(shipment, this,"afterDeleteShip");	      
+      crudShipment.remove(shipment, this, "afterDeleteShip");
     },
-    afterDeleteShip:function(){	
-	this.$.sales.updateSales = true;
-	this.$.sales.updateView();
-	this.$.inventory.updateView();
+    afterDeleteShip : function() {
+      this.$.sales.updateSales = true;
+      this.$.sales.updateView();
+      this.$.inventory.updateView();
     }
   });
