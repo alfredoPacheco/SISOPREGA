@@ -4,6 +4,7 @@ enyo
 	    kind : enyo.VFlexBox,
 	    reportSelected:null,
 	    _gobackStack:[],
+	    _navigatingBack:false,
 	    components : [ {
 	            kind : "Toolbar",
 	            name : "tbHeaderReports",
@@ -13,7 +14,8 @@ enyo
 	                  {
 	                    name : 'btnGoBack',
 	                    icon : "../SISOPREGA_WEB_LIB/images/command-menu/menu-icon-back.png",
-	                    onclick : "goBack"
+	                    onclick : "goBack",
+	                    showing: false	                    
 	                  },
 	                  {
 	                    kind : "VFlexBox",
@@ -30,6 +32,7 @@ enyo
 		flex : 1,
 		name : "reportsPane",
 		transitionKind : "enyo.transitions.LeftRightFlyin",
+		onSelectView: "selectView",
 		components : [ {
 		    kind : "reports.list",
 		    name : "reportsList",
@@ -38,11 +41,13 @@ enyo
 		}, {
 		    kind : "reports.filter",
 		    name : "filter",
-		    onGetReport : "showReportFiltered"
+		    onGetReport : "showReportFiltered",
+		    label: ""
 		}, {
 		    kind : "reports.filter.by_date",
 		    name : "filterByDate",
-		    onGetReport : "showReportFilteredByDate"
+		    onGetReport : "showReportFilteredByDate",
+		    label: ""
 		}]
 	    }, ],
 	    ready:function(){
@@ -56,9 +61,11 @@ enyo
 		    utils.openReport(report.reportUrl);
 		    break;
 		case "filter":
+		    this.$.filter.label = report.reportTitle;
 		    this.$.reportsPane.selectViewByName('filter');
 		    break;
 		case "filterByDate":
+		    this.$.filterByDate.label = report.reportTitle;
 		    this.$.reportsPane.selectViewByName('filterByDate');
 		    break;		   
 		}
@@ -82,11 +89,11 @@ enyo
 			+ parameters.end_date);
 	    },
 	    goBack : function() {
-		_navigatingBack = true;
+		this._navigatingBack = true;
 		if (this._gobackStack.length > 0) {
 		    var objGB = this._gobackStack.pop();
 		    objGB.paneMan.selectViewByName(objGB.paneName);
-		    _navigatingBack = false;
+		    this._navigatingBack = false;
 		    this.$.lblTitle.setContent(objGB.caption);
 		    if (objGB.cbObj) {
 			objGB.cbObj[objGB.cbMethod]();
@@ -105,7 +112,7 @@ enyo
 		if (inView.name == inPreviousView.name) {
 		    return;
 		}
-		if (_navigatingBack == false) {
+		if (this._navigatingBack == false) {
 		    this._gobackStack.push({
 			caption : inPreviousView.label,
 			paneMan : inPreviousView.parent,
@@ -113,13 +120,11 @@ enyo
 		    });
 		}
 		this.$.lblTitle.setContent(inView.label);
-		if (this._gobackStack.length == 0) {
-		    _goBackButton.setShowing(!1);		    
-		} else {
-		    _goBackButton.setShowing(1);
-		}
+		
 		if (inView.name == "reportsList") {
-		    inView.reset();
+		    this.$.btnGoBack.hide();
+		} else {		
+		    this.$.btnGoBack.show();
 		}		
 	    }
 	});
