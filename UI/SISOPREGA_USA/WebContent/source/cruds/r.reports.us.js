@@ -44,12 +44,6 @@ enyo.kind({
 	reportType: "filter"
 	
     },{
-	importantInfo : "Lado US - Proforma",
-	secundaryInfo : "",
-	reportUrl: "Proforma",
-	reportTitle:"Proforma",
-	reportType: "filter"
-    },{
 	importantInfo : "Lado US - Ventas",
 	secundaryInfo : "",
 	reportUrl: "Ventas",

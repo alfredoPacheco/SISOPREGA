@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Inventory_subreport_sold" language="groovy" pageWidth="405" pageHeight="752" whenNoDataType="NoDataSection" columnWidth="405" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="aa972eef-f520-4384-9e66-1b1c6a3227b4">
+	<property name="ireport.zoom" value="1.7715610000000015"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT customer.customer_name as buyer,
+SUM(detail.heads) as heads, SUM(detail.weight) as weight,
+SUM(detail.weight)/SUM(detail.heads) as average
+FROM ctrl_sale sale
+INNER JOIN cat_customer customer ON sale.customer_id = customer.customer_id
+INNER JOIN ctrl_sale_detail detail ON sale.sale_id = detail.sale_id
+WHERE sale.sale_date >= CURRENT_DATE
+GROUP BY customer.customer_name]]>
+	</queryString>
+	<field name="buyer" class="java.lang.String"/>
+	<field name="heads" class="java.lang.Long"/>
+	<field name="weight" class="java.math.BigDecimal"/>
+	<field name="average" class="java.math.BigDecimal"/>
+	<variable name="heads_1" class="java.lang.Long" resetType="Group" resetGroup="sold_group" calculation="Sum">
+		<variableExpression><![CDATA[$F{heads}]]></variableExpression>
+	</variable>
+	<variable name="weight_1" class="java.math.BigDecimal" resetType="Group" resetGroup="sold_group" calculation="Sum">
+		<variableExpression><![CDATA[$F{weight}]]></variableExpression>
+	</variable>
+	<variable name="average_1" class="java.math.BigDecimal" resetType="Group" resetGroup="sold_group" calculation="Average">
+		<variableExpression><![CDATA[$F{average}]]></variableExpression>
+	</variable>
+	<group name="sold_group">
+		<groupExpression><![CDATA['Sold Group']]></groupExpression>
+		<groupFooter>
+			<band height="25">
+				<line>
+					<reportElement uuid="f947848e-2b34-4c83-843c-ead9c62ada19" x="214" y="0" width="183" height="1"/>
+				</line>
+				<line>
+					<reportElement uuid="43290cc1-0182-451e-990e-48fb9ea39434" x="214" y="3" width="183" height="1"/>
+				</line>
+				<textField>
+					<reportElement uuid="17ec7b6d-a4e2-449d-a5d7-67b932f99c12" x="214" y="4" width="51" height="20"/>
+					<textElement textAlignment="Right"/>
+					<textFieldExpression><![CDATA[$V{heads_1}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement uuid="e2aa8712-03fb-42f0-8675-10de926d04e6" x="265" y="4" width="61" height="20"/>
+					<textElement textAlignment="Right"/>
+					<textFieldExpression><![CDATA[$V{weight_1}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement uuid="399ec5ea-06a2-4368-8745-42ffcc11fafc" x="326" y="4" width="71" height="20"/>
+					<textElement textAlignment="Right"/>
+					<textFieldExpression><![CDATA[$V{average_1}]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement uuid="0d238d11-4c65-4c2b-98b9-eaf43798d265" x="214" y="24" width="183" height="1"/>
+					<graphicElement>
+						<pen lineWidth="2.0"/>
+					</graphicElement>
+				</line>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="21" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="2222158c-785c-400f-a73b-1f6d0402811a" x="0" y="0" width="214" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Buyer]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="5a4290dd-d53f-4a7d-952b-c20a01e5bab8" x="214" y="0" width="51" height="20"/>
+				<textElement>
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Head]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="633cb6e6-b283-4cf7-b206-ecba97059418" x="265" y="0" width="61" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Pay Weight]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="2b96c75b-c53b-4416-8a47-755da733e7f9" x="326" y="0" width="71" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Avg. Weight]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="08fc48e5-3cf1-437f-b914-e0995aaaf66f" x="0" y="20" width="397" height="1"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement uuid="ab1eeefc-fd48-43a6-a04a-293842bfd3c9" x="0" y="0" width="214" height="20"/>
+				<textElement>
+					<font fontName="Serif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{buyer}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="eeed17bd-1fa2-4625-8cb3-a1a0e9b94da1" x="214" y="0" width="51" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Serif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{heads}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="fd7e8737-8d84-44e2-9401-c95b0fb6b545" x="265" y="0" width="61" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{weight}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="5c39ed5b-916f-43ae-840e-6147edf9ba4e" x="326" y="0" width="71" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{average}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<noData>
+		<band height="50">
+			<staticText>
+				<reportElement uuid="4c2433f5-5355-442c-81f3-9da959197e94" x="0" y="17" width="405" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Serif"/>
+				</textElement>
+				<text><![CDATA[NO SALES FOUND FOR TODAY]]></text>
+			</staticText>
+		</band>
+	</noData>
+</jasperReport>
