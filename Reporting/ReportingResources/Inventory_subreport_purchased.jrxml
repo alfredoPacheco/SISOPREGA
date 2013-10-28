@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Inventory_subreport_purchased" language="groovy" pageWidth="412" pageHeight="752" whenNoDataType="NoDataSection" columnWidth="412" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="d3b35cae-708e-401b-880e-bb5d41ddf316">
+	<property name="ireport.zoom" value="1.7715610000000013"/>
+	<property name="ireport.x" value="46"/>
+	<property name="ireport.y" value="0"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT seller, SUM(heads) as heads, SUM(weight) as weight, SUM(weight)/SUM(heads) as average
+FROM vw_purchased
+WHERE purchase_date >= CURRENT_DATE
+GROUP BY seller;]]>
+	</queryString>
+	<field name="seller" class="java.lang.String"/>
+	<field name="heads" class="java.math.BigDecimal"/>
+	<field name="weight" class="java.math.BigDecimal"/>
+	<field name="average" class="java.math.BigDecimal"/>
+	<variable name="heads_1" class="java.math.BigDecimal" resetType="Group" resetGroup="purchased_summary" calculation="Sum">
+		<variableExpression><![CDATA[$F{heads}]]></variableExpression>
+	</variable>
+	<variable name="weight_1" class="java.math.BigDecimal" resetType="Group" resetGroup="purchased_summary" calculation="Sum">
+		<variableExpression><![CDATA[$F{weight}]]></variableExpression>
+	</variable>
+	<variable name="average_1" class="java.math.BigDecimal" resetType="Group" resetGroup="purchased_summary" calculation="Average">
+		<variableExpression><![CDATA[$F{average}]]></variableExpression>
+	</variable>
+	<group name="purchased_summary">
+		<groupExpression><![CDATA['Purchased Summary']]></groupExpression>
+		<groupFooter>
+			<band height="28">
+				<line>
+					<reportElement uuid="c7534dd3-6d22-4d75-8326-5c4825d4b511" x="140" y="0" width="262" height="1"/>
+				</line>
+				<line>
+					<reportElement uuid="c7534dd3-6d22-4d75-8326-5c4825d4b511" x="140" y="3" width="262" height="1"/>
+				</line>
+				<textField pattern="#,##0;-#,##0">
+					<reportElement uuid="bfe9e78b-a753-4249-ab62-189c8d553652" x="214" y="4" width="51" height="20"/>
+					<textElement/>
+					<textFieldExpression><![CDATA[$V{heads_1}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00;-#,##0.00">
+					<reportElement uuid="d49d95e3-9923-4edf-a4cd-078519f45b77" x="265" y="4" width="66" height="20"/>
+					<textElement/>
+					<textFieldExpression><![CDATA[$V{weight_1}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00;-#,##0.00">
+					<reportElement uuid="d58df3ab-ded8-405d-b850-c97c2294930c" x="331" y="4" width="71" height="20"/>
+					<textElement/>
+					<textFieldExpression><![CDATA[$V{average_1}]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement uuid="05d878b1-703d-4b8c-bd08-db118b71d397" x="140" y="26" width="262" height="1"/>
+					<graphicElement>
+						<pen lineWidth="2.0"/>
+					</graphicElement>
+				</line>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement uuid="c0c35a2d-ce71-4bbd-aad5-1a1dd1c679bd" x="0" y="0" width="214" height="20"/>
+				<textElement>
+					<font fontName="Serif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{seller}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0;-#,##0">
+				<reportElement uuid="9dfd50ed-5d1f-48eb-88e3-2f4a373e0d80" x="214" y="0" width="51" height="20"/>
+				<textElement>
+					<font fontName="Serif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{heads}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement uuid="5dbf7b61-f686-4652-817a-464bb328c068" x="265" y="0" width="66" height="20"/>
+				<textElement>
+					<font fontName="Serif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{weight}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement uuid="6a977995-d983-4d4d-ba7e-cc27b6645d61" x="331" y="0" width="71" height="20"/>
+				<textElement>
+					<font fontName="Serif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{average}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<noData>
+		<band height="104">
+			<staticText>
+				<reportElement uuid="40243f55-6377-46bb-bc40-801bf18c5aab" x="0" y="42" width="412" height="23"/>
+				<textElement textAlignment="Center">
+					<font fontName="Serif"/>
+				</textElement>
+				<text><![CDATA[NO PURCHASES FOUND TODAY]]></text>
+			</staticText>
+		</band>
+	</noData>
+</jasperReport>

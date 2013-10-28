@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Inventory" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a69a2669-0ca7-49e8-88a1-cc4802537646">
+	<property name="ireport.zoom" value="1.2100000000000024"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Users\\torredie\\Documents\\projects\\gitRepos\\SISOPREGA\\Reporting\\ReportingResources\\"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+array_to_string(array_agg(pens.barnyard_code),',') AS pen, quality.quality_name,
+SUM(inventory.heads) as inventory_heads, purchased.heads as purchased_heads, sold_detail.heads as sold_heads,
+SUM(inventory.weight) as inventory_weight, purchased.weight as purchased_weight, sold_detail.weight as sold_weight,
+SUM(feed.quantity) as feed_quantity
+FROM ctrl_inventory inventory
+INNER JOIN cat_barnyard pens ON inventory.barnyard_id = pens.barnyard_id
+INNER JOIN cat_cattle_quality quality ON inventory.quality_id = quality.quality_id
+LEFT JOIN vw_purchased purchased ON quality.quality_name = purchased.quality_name AND purchase_date >= CURRENT_DATE
+LEFT JOIN ctrl_sale sold ON sold.sale_date >= CURRENT_DATE
+LEFT JOIN ctrl_sale_detail sold_detail ON inventory.quality_id = sold_detail.quality_id and sold.sale_id = sold_detail.sale_id
+LEFT JOIN ctrl_feed_us feed ON inventory.inventory_id = feed.inventory_id
+GROUP BY quality.quality_name, purchased.heads, purchased.weight, sold_detail.heads, sold_detail.weight;]]>
+	</queryString>
+	<field name="pen" class="java.lang.String"/>
+	<field name="quality_name" class="java.lang.String"/>
+	<field name="inventory_heads" class="java.lang.Long"/>
+	<field name="purchased_heads" class="java.lang.Long"/>
+	<field name="sold_heads" class="java.lang.Integer"/>
+	<field name="inventory_weight" class="java.math.BigDecimal"/>
+	<field name="purchased_weight" class="java.math.BigDecimal"/>
+	<field name="sold_weight" class="java.math.BigDecimal"/>
+	<field name="feed_quantity" class="java.math.BigDecimal"/>
+	<variable name="inventory_heads_1" class="java.lang.Long" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{inventory_heads}]]></variableExpression>
+	</variable>
+	<variable name="inventory_weight_1" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{inventory_weight}]]></variableExpression>
+	</variable>
+	<variable name="inventory_weight_2" class="java.math.BigDecimal" resetType="Column" calculation="Average">
+		<variableExpression><![CDATA[$F{inventory_weight}]]></variableExpression>
+	</variable>
+	<variable name="feed_quantity_1" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{feed_quantity}]]></variableExpression>
+	</variable>
+	<group name="sold_group">
+		<groupExpression><![CDATA['Sold Group']]></groupExpression>
+		<groupFooter>
+			<band height="79">
+				<staticText>
+					<reportElement uuid="5cf22348-95dd-4660-9f04-de098ccab175" x="0" y="0" width="341" height="20"/>
+					<textElement textAlignment="Center">
+						<font fontName="Serif" size="14" isBold="true"/>
+					</textElement>
+					<text><![CDATA[CATTLE SOLD]]></text>
+				</staticText>
+				<subreport>
+					<reportElement uuid="69db911a-d00f-428a-9645-44819280c966" x="0" y="20" width="572" height="59"/>
+					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "Inventory_subreport_sold.jasper"]]></subreportExpression>
+				</subreport>
+			</band>
+		</groupFooter>
+	</group>
+	<group name="purchased_group">
+		<groupExpression><![CDATA['Purchased']]></groupExpression>
+		<groupFooter>
+			<band height="61">
+				<staticText>
+					<reportElement uuid="5cf22348-95dd-4660-9f04-de098ccab175" x="0" y="0" width="170" height="20"/>
+					<textElement>
+						<font fontName="Serif" size="14" isBold="true"/>
+					</textElement>
+					<text><![CDATA[CATTLE PURCHASED ON ]]></text>
+				</staticText>
+				<textField pattern="MMMMM dd, yyyy">
+					<reportElement uuid="95403352-838a-4aa1-a392-fae089ea5e55" x="169" y="0" width="162" height="20"/>
+					<textElement>
+						<font fontName="Serif" size="14" isBold="true" isUnderline="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[new Date()]]></textFieldExpression>
+				</textField>
+				<subreport>
+					<reportElement uuid="ee990084-3879-40f0-9e32-2cc768214fe3" x="0" y="20" width="572" height="41"/>
+					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "Inventory_subreport_purchased.jasper"]]></subreportExpression>
+				</subreport>
+			</band>
+		</groupFooter>
+	</group>
+	<group name="inventory_group">
+		<groupExpression><![CDATA['Inventory']]></groupExpression>
+		<groupFooter>
+			<band height="27">
+				<textField pattern="#,##0;-#,##0">
+					<reportElement uuid="a2a2f2e0-c34b-4c2f-89b5-27d282ae9d92" x="214" y="4" width="51" height="20"/>
+					<textElement textAlignment="Right"/>
+					<textFieldExpression><![CDATA[$V{inventory_heads_1}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00;-#,##0.00">
+					<reportElement uuid="98ff7343-0325-44e8-a3c9-da4eaa5de84b" x="265" y="4" width="66" height="20"/>
+					<textElement textAlignment="Right"/>
+					<textFieldExpression><![CDATA[$V{inventory_weight_1}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00;-#,##0.00">
+					<reportElement uuid="25181a35-fa12-41b1-ad93-87d2ab9625c8" x="331" y="4" width="71" height="20"/>
+					<textElement textAlignment="Right"/>
+					<textFieldExpression><![CDATA[$V{inventory_weight_2}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00;-#,##0.00" isBlankWhenNull="true">
+					<reportElement uuid="d72a4fda-b1d9-46d9-a9b1-2f44f4415064" x="402" y="4" width="71" height="20"/>
+					<textElement textAlignment="Center"/>
+					<textFieldExpression><![CDATA[$V{feed_quantity_1}]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement uuid="0f8004c1-2981-4559-95b6-b09f6da85dbf" x="214" y="24" width="259" height="1"/>
+					<graphicElement>
+						<pen lineWidth="2.0"/>
+					</graphicElement>
+				</line>
+				<line>
+					<reportElement uuid="048877a8-6c4f-4af6-b4a6-52bb2f08e0ab" x="214" y="1" width="259" height="1"/>
+				</line>
+				<line>
+					<reportElement uuid="048877a8-6c4f-4af6-b4a6-52bb2f08e0ab" x="214" y="3" width="259" height="1"/>
+				</line>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="21" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="5cf22348-95dd-4660-9f04-de098ccab175" x="10" y="0" width="128" height="20"/>
+				<textElement>
+					<font fontName="Serif" size="14"/>
+				</textElement>
+				<text><![CDATA[Inventory Of Cattle]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="5cf22348-95dd-4660-9f04-de098ccab175" x="138" y="0" width="272" height="35"/>
+				<textElement textAlignment="Center">
+					<font fontName="Serif" size="18" isBold="true"/>
+				</textElement>
+				<text><![CDATA[EASTMANN LIVESTOCK, LLC]]></text>
+			</staticText>
+			<textField pattern="MM/dd/yyyy">
+				<reportElement uuid="95403352-838a-4aa1-a392-fae089ea5e55" x="410" y="0" width="66" height="20"/>
+				<textElement>
+					<font fontName="Serif" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="1fbe7db3-08a6-476b-b9f0-7168cce07557" x="476" y="0" width="73" height="20"/>
+				<textElement>
+					<font fontName="Serif" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[' / Page #' + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="21" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="417c59ab-de4b-4a1d-9a62-0ac9c8f1abf2" x="44" y="0" width="70" height="20"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Pen #]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="eba9e671-cc1b-4be9-8a0b-506805ac48e6" x="114" y="0" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Class]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="165b37e3-9c80-4792-abdb-b3e9a1d22e12" x="214" y="0" width="51" height="20"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Heads]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a8567d5b-a0e5-4b45-80e7-d209446049f6" x="265" y="0" width="66" height="20"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Pay Weight]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="aba70a9e-a2b5-4307-9c12-25289d6985a6" x="331" y="0" width="71" height="20"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Avg. Weight]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d6730c79-ef28-4a07-b294-ab114963b44d" x="402" y="0" width="71" height="20"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Feed @ STT]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="e4725e69-d809-4b1a-a1fb-46b7a974306b" x="44" y="20" width="429" height="1"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="fc28edb4-0368-4c38-92d6-e881dd3f5b57" x="44" y="0" width="70" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{pen}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="5742ba34-8420-49e0-b3dc-faf5ea96a28b" x="114" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{quality_name}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0;-#,##0">
+				<reportElement uuid="25e32944-843d-48de-b65b-17b880040e85" x="214" y="0" width="51" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{inventory_heads}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement uuid="64ea5a0e-d572-4111-8675-7be877d56e70" x="265" y="0" width="66" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{inventory_weight}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement uuid="edc24e48-520b-4cc3-a3df-9b43c9c9518a" x="331" y="0" width="71" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{inventory_weight}/$F{inventory_heads}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00" isBlankWhenNull="true">
+				<reportElement uuid="a151be2e-b6e9-44ac-abe4-f7a06baed24f" x="402" y="0" width="71" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{feed_quantity}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>
