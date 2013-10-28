@@ -41,8 +41,7 @@ enyo.kind({
 	secundaryInfo : "",
 	reportUrl: "hermana",
 	reportTitle:"Hermana",
-	reportType: "filter"
-	
+	reportType: "direct"
     },{
 	importantInfo : "Lado US - Ventas",
 	secundaryInfo : "",
