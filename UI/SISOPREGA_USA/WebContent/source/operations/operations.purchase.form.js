@@ -178,6 +178,17 @@ enyo
 			break;
 		    }
 		}
+		if(this.$.purchDate.getValue()==""){
+		    sError="Error. El campo fecha es requerido.";
+		}
+		else{
+		    if(new Date() - this.$.purchDate.getDate() < 0){
+			sError="Error. No se permite escribir fechas futuras.";
+		    }
+		    if(new Date()> 589208875){
+			sError="Error. No se permiten fechas anteriores a 7 dias.";
+		    }
+		}
 		if (sError != "") {
 		    cacheMan.setMessage("", sError);
 		    return false;
@@ -234,6 +245,23 @@ enyo
 		this.$.pen.setFilter(filter);
 		this.$.pen.clear();
 		this.$.pen.useFilter();
-	    },
-	    
+	    },	    
+	    beforeSave:function(obj){
+		this.errorMessage = "";
+		if(this.$.purchDate.getValue()==""){
+		    this.errorMessage="Error. El campo fecha es requerido.";
+		}
+		else{
+		    if(new Date() - new Date(this.$.purchDate.getValue()) < 0){
+			this.errorMessage="Error. No se permite escribir fechas futuras.";
+		    }
+		    if(new Date() - new Date(this.$.purchDate.getValue()) > 676787584){
+			this.errorMessage="Error. No se permiten fechas anteriores a 7 dias.";
+		    }
+		}
+		if (this.errorMessage != "") {
+		    return false;
+		}
+		return true;
+	    }
 	});
