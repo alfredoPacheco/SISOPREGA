@@ -572,32 +572,6 @@
 			</basic>
 		</attributes>
 	</entity>
-<!-- 	<entity class="com.tramex.sisoprega.dto.MeasurementUnitEquivalence"> -->
-<!-- 		<table name="cat_measurement_unit_equivalence" /> -->
-<!-- 		<named-query name="CAT_MEASUREMENTUNITEQUIVALENCE_BY_ID"> -->
-<!-- 			<description>Retrieves a single catMeasurementUnitEquivalence record by ID</description> -->
-<!-- 			<query>SELECT MeaUnEq FROM MeasurementUnitEquivalence MeaUnEq WHERE MeaUnEq.measurementUnitEquivalenceId = :Id</query> -->
-<!-- 		</named-query> -->
-<!-- 		<named-query name="EQUIVALENCE_BY_UNIT_ID"> -->
-<!-- 			<description>Retrieves the equivalence of a given unit id</description> -->
-<!-- 			<query>SELECT equivalence FROM MeasurementUnitEquivalence equivalence WHERE equivalence.unitSrc = :unitId</query> -->
-<!-- 		</named-query> -->
-<!-- 		<attributes> -->
-<!-- 			<id name="measurementUnitEquivalenceId"> -->
-<!-- 				<column name="equivalence_id" /> -->
-<!-- 				<generated-value strategy="IDENTITY" /> -->
-<!-- 			</id> -->
-<!-- 			<basic name="equivalence"> -->
-<!-- 				<column name="equivalence" /> -->
-<!-- 			</basic> -->
-<!-- 			<basic name="unitDest"> -->
-<!-- 				<column name="unit_dest" /> -->
-<!-- 			</basic> -->
-<!-- 			<basic name="unitSrc"> -->
-<!-- 				<column name="unit_src" /> -->
-<!-- 			</basic> -->
-<!-- 		</attributes> -->
-<!-- 	</entity> -->
 	<entity class="com.tramex.sisoprega.dto.Reception">
 		<table name="ctrl_reception" />
 		<named-query name="RECEPTION_BY_ID">
