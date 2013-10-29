@@ -58,10 +58,31 @@ enyo.kind(
         } else {
           arrList.push(listObject);
         }
-      }
-      
+      }      
       return arrList;
-      
+    },
+    adapterToIn : function(entityObj) {
+	if (entityObj) {
+	    entityObj = this.inherited(arguments);
+	    entityObj.maxWeight=Number(entityObj.maxWeight);
+	    entityObj.minWeight= Number(entityObj.minWeight);
+	    if(entityObj.forHorses.toLowerCase()=="true")
+		entityObj.forHorses=true;
+	    else{
+		entityObj.forHorses=false;
+	    }
+	    return entityObj;
+	}
+	return null;
+    },
+    getHorseQualitiesList:function(){
+	var result=[];
+	for(var i=0;i<this.arrObj.length;i++){
+	    if(this.arrObj[i].forHorses){
+		result.push(this.adapterToList(this.arrObj[i]));
+	    }
+	}
+	return result;
     }
   });
 var crudCattleQuality = new crud.cattleQuality();

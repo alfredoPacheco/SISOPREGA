@@ -8,6 +8,13 @@ enyo
         detailNumber : 0,
         openOnce:false,
         style : "background-color:#DABD8B;font-size:15px;",
+        events :
+        {
+          onAdd : "",
+          onUpdate : "",
+          onCancel : "",
+          onAfterLoad : ""
+        },
         components : [
               {
                 kind : enyo.VFlexBox,
@@ -230,8 +237,12 @@ enyo
           objEntity[this.$.detailFields.children[0].belongsTo] = detail;
           return objEntity;
         },
-        delDetailItem : function(inSender, inIndex) {
+        onDeleteItem:function(){
+		
+	},
+        delDetailItem : function(inSender, inIndex) {            
           this.arrDetail.splice(inIndex, 1);
+          this.onDeleteItem();
           this.updateList();
         },
         setupRow : function(inSender, inIndex) {

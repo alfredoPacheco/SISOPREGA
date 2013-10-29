@@ -18,7 +18,8 @@ enyo
 		highLighted : true,
 		width : null,
 		height : "50px",
-		inputKind : "Input"
+		inputKind : "Input",
+		disabled:false
 	    },
 	    events : {
 		"onSelectItem" : "",
@@ -53,6 +54,15 @@ enyo
 	    },
 	    hintChanged : function(inOldValue) {
 		this.$.textField.setHint(this.getHint());
+	    },
+	    disabledChanged:function(inOldValue){
+		if(this.disabled){
+		    this.$.btnIcon.hide();
+		    document.getElementById(this.$.textField.$.input.id).disabled = true;
+		}else{
+		    this.$.btnIcon.show();
+		    document.getElementById(this.$.textField.$.input.id).disabled = false;
+		}
 	    },
 	    indexChanged : function(inOldValue) {
 		if (this.items.length > 0) {

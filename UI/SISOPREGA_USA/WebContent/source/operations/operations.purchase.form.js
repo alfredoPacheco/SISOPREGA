@@ -87,7 +87,8 @@ enyo
 							name : "cattleType",
 							width : "200px;",
 							height : "35px;",
-							bindTo : "cattleTypeId"
+							bindTo : "cattleTypeId",
+							onSelectItem : "on_select_cattleType"
 						    } ]
 					} ], {
 				    owner : this
@@ -159,7 +160,7 @@ enyo
 		this.$.cattleType.setItems(crudCattle.getCattleTypeList());
 		this.$.cattleType.setIndex(1); // Default value: Novillos
 		this.$.pen.setItems(crudPen.getListUsaPens());
-		this.$.cattleQuality.setItems(crudCattleQuality.getList());
+		this.on_select_cattleType();
 		this.afterLoad();
 	    },
 	    validateAdd : function() { // function to override if necessary
@@ -178,22 +179,20 @@ enyo
 			break;
 		    }
 		}
-		if(this.$.purchDate.getValue()==""){
-		    sError="Error. El campo fecha es requerido.";
-		}
-		else{
-		    if(new Date() - this.$.purchDate.getDate() < 0){
-			sError="Error. No se permite escribir fechas futuras.";
-		    }
-		    if(new Date()> 589208875){
-			sError="Error. No se permiten fechas anteriores a 7 dias.";
-		    }
-		}
+		
 		if (sError != "") {
 		    cacheMan.setMessage("", sError);
 		    return false;
 		}
+		
+		this.$.cattleType.setDisabled(true);
+		
+		
 		return true;
+	    },
+	    onDeleteItem:function(){
+		if(this.arrDetail.length == 0)
+		    this.$.cattleType.setDisabled(false);
 	    },
 	    showSellerForm : function() {
 		if (this.$.sellerForm) {
@@ -246,6 +245,13 @@ enyo
 		this.$.pen.clear();
 		this.$.pen.useFilter();
 	    },	    
+	    on_select_cattleType:function(inSender){
+		if(this.$.cattleType.getValue()=="Caballos"){
+		    this.$.cattleQuality.setItems(crudCattleQuality.getHorseQualitiesList());
+		}else{
+		    this.$.cattleQuality.setItems(crudCattleQuality.getList());
+		}
+	    },
 	    beforeSave:function(obj){
 		this.errorMessage = "";
 		if(this.$.purchDate.getValue()==""){
