@@ -149,7 +149,6 @@ enyo.kind(
                           name : "inventory",
                           kind : "admin.inventory",
                           flex : 1,
-                          maxState : false,
                           arrData : [],
                           onSale : "showSale",
                           onSelect : "inventory_select",
@@ -158,14 +157,14 @@ enyo.kind(
                     ]
                   },
                   {
-                    peekWidth : "30%",
+//                    peekWidth : "30%",
                     flex : .3,
+                    dragAnywhere:true,
                     components : [
                         {
                           name : "purchased",
                           kind : "admin.purchased",
                           flex : 1,
-                          maxState : false,
                           // arrData : crudPurchase.get(),
                           onPurchase : "showPurchase",
                           onLoadCompleted : "columnsLoadCompleted"
@@ -174,14 +173,13 @@ enyo.kind(
                     ]
                   },
                   {
-                    peekWidth : "60%",
+//                    peekWidth : "60%",
                     flex : .3,
                     components : [
                           {
                             name : "sales",
                             kind : "admin.sales",
                             flex : 1,
-                            maxState : false,
                             // arrData : cacheSales.readData(),
                             onShipment : "showShipment",
                             onUpdateView : "on_update_sales_view",
@@ -191,7 +189,6 @@ enyo.kind(
                             name : "shipment",
                             kind : "admin.shipments",
                             flex : 1,
-                            maxState : false,
                             arrData : cacheShip.readData(),
                             onSelectedShipment : "showSelectShipment",
                             onDeleteShipProgrammed : "deleteShipProgrammed",

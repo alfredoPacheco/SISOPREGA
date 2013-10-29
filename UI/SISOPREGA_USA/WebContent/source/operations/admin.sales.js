@@ -36,7 +36,7 @@ enyo
               {// HEADER:
                 kind : "HFlexBox",
                 className : "listFirst",
-                style : "font-size:13px;background-color:#DABD8B;border-bottom-style: solid;border-bottom-color: black;padding: 0px 10px;border-width: 1px;",
+                style : "font-size:12px;background-color:#DABD8B;border-bottom-style: solid;border-bottom-color: black;padding: 0px 10px;border-width: 1px;",
                 height : "30px",
                 align : "center",
                 pack : "start",
@@ -78,7 +78,7 @@ enyo
                       components : [
                           {
                             kind : enyo.Item,
-                            style : "font-size:14px;",
+                            style : "font-size:12px;",
                             components : [
                                   {
                                     layoutKind : enyo.HFlexLayout,

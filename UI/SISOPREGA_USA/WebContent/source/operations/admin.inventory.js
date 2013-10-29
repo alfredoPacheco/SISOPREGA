@@ -36,22 +36,22 @@ enyo
               {// HEADER:
                 kind : "HFlexBox",
                 className : "listFirst",
-                style : "font-size:13px;background-color:#DABD8B;border-bottom-style: solid;border-bottom-color: black;padding: 0px 10px;border-width: 1px;",
+                style : "font-size:12px;background-color:#DABD8B;border-bottom-style: solid;border-bottom-color: black;padding: 0px 10px;border-width: 1px;",
                 height : "30px",
                 align : "center",
                 pack : "start",
                 components : [
                       {
                         content : 'Tipo',
-                        flex : 1.5
+                        flex : .8
                       },
                       {
                         content : 'Clase',
-                        flex : 1
+                        flex : .8
                       },
                       {
                         content : 'Cabezas',
-                        flex : 1,
+                        flex : .5,
                         style : "text-align: right;"
                       },
                       {
@@ -66,7 +66,7 @@ enyo
                       },
                       {
                         content : 'Alimento',
-                        flex : .9,
+                        flex : 1,
                         style : "text-align: right;"
                       },
                 ]
@@ -82,7 +82,7 @@ enyo
                       components : [
                           {
                             kind : enyo.Item,
-                            style : "font-size: 14px;",
+                            style : "font-size: 12px;",
                             onclick : "doSelect",
                             components : [
                                   {
@@ -90,17 +90,17 @@ enyo
                                     components : [
                                           {
                                             name : "lblInvType",
-                                            flex : 1.5,
+                                            flex : .8,
                                             content : ""
                                           },
                                           {
                                             name : "lblInvClass",
-                                            flex : 1,
+                                            flex : .8,
                                             content : "Novillos"
                                           },
                                           {
                                             name : "lblInvHeads",
-                                            flex : 1,
+                                            flex : .5,
                                             content : "",
                                             style : "text-align: right;"
                                           },
@@ -118,7 +118,7 @@ enyo
                                           },
                                           {
                                             name : "lblInvFeed",
-                                            flex : .9,
+                                            flex : 1,
                                             content : "",
                                             style : "text-align: right;"
                                           },
