@@ -7,16 +7,19 @@ enyo.kind(
     cancelSelection:false,
     listIndex : 0,
     components :
-      [
-        {kind:"Spacer"},
-        {
-          kind : "Input",
-          name : "weightInput",
-          style : "width:80px;",
-          onclick:"cancelCheckBox"
-        },
+      [{
+	    kind : "controls.numberBox",
+	    inputKind:"ToolInput",
+	    name : "weightInput",
+	    height:"35px",
+	    hint : '',
+	    width:"40px",
+	    onclick:"cancelCheckBox",
+	    style:"text-align:right;"
+	},
         {
           kind : "IconButton",
+          style:"padding:0px;height:0px;margin-top:10px;border:0px;background-color:#482400;",
           name : "weightButton",
           icon : "images/save.png",
           onclick: "saveRejectedWeight"
@@ -24,7 +27,8 @@ enyo.kind(
         {
           kind : "CheckBox",
           name : "checkBoxSelected",
-          onChange : "cancelCheckBoxEvent"
+          onChange : "cancelCheckBoxEvent",
+          style:"margin-left:50px;margin-top: 1px;"
         } ],
         saveRejectedWeight : function(){
           // TODO: Save using web service.
@@ -53,5 +57,8 @@ enyo.kind(
         cancelCheckBoxEvent : function(){
           this.cancelCheckBox();
           this.doSelected();
+        },
+        ready:function(){
+            this.$.weightInput.$.textField.$.input.applyStyle("text-align","right");
         }
   });
