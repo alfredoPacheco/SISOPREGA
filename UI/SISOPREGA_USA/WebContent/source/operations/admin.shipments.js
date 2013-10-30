@@ -73,6 +73,7 @@ enyo
                             style : "font-size:12px;",
                             confirmCaption : "Eliminar",
                             onConfirm : "onDeleteShip",
+                            name:"rowItem",
                             components : [
                                   {
                                     layoutKind : enyo.HFlexLayout,
@@ -209,6 +210,7 @@ enyo
               this.$.lblShipReleased.show();
               this.$.lblShipReleased.setContent("Liberado el " + objData.ShipmentRelease[0].dateTime.toLocaleString());
               this.$.lblShipAverage.applyStyle("margin-right", "47px");
+              this.$.rowItem.setSwipeable(false);
             } else {
               this.$.lblShipReleased.hide();
               this.$.btnRelease.show();
