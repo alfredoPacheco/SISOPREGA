@@ -236,8 +236,6 @@ enyo
 		for(var j=0;j< allPens.length; j++){
 		    if(!occupied.hasOwnProperty(allPens[j].value)){
 			filter.push(allPens[j]);
-		    }else{
-			console.log(allPens[j] + " " + occupied[allPens[j]]);
 		    }
 		}
 		

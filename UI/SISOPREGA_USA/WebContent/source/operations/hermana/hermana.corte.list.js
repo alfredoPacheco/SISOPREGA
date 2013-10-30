@@ -41,24 +41,24 @@ enyo.kind(
           components :
             [
               {
+                content : "Clase",
+                style : "width:150px;text-align:left;margin-left: 15px;"
+              },
+              {
                 content : "Corral",
                 style : "width:150px;text-align:center;"
               },
               {
-                content : "Clase",
-                style : "width:150px;text-align:center;"
-              },
-              {
                 content : "Cabezas",
-                style : "width:150px;text-align:center;"
+                style : "width:150px;text-align:right;"
               },
               {
                 content : "Peso",
-                style : "width:150px;text-align:center;"
+                style : "width:150px;text-align:right;"
               },
               {
                 content : "Promedio",
-                style : "width:150px;text-align:center;"
+                style : "width:150px;text-align:right;"
               } ]
         },
         {
@@ -90,28 +90,28 @@ enyo.kind(
                       components :
                         [
                           {
-                            name : "listCorral",
+                            name : "listClase",
                             style : "width:150px;text-align:left;",
                             content : ""
                           },
                           {
-                            name : "listClase",
+                            name : "listCorral",
                             style : "width:150px;text-align:center;",
                             content : ""
                           },
                           {
                             name : "listCabezas",
-                            style : "width:150px;text-align:center;",
+                            style : "width:150px;text-align:right;",
                             content : ""
                           },
                           {
                             name : "listPeso",
-                            style : "width:150px;text-align:center;",
+                            style : "width:150px;text-align:right;",
                             content : ""
                           },
                           {
                             name : "listPromedio",
-                            style : "width:150px;text-align:center;",
+                            style : "width:150px;text-align:right;",
                             content : ""
                           } ]
                     } ]
