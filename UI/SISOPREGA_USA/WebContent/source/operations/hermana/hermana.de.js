@@ -199,7 +199,7 @@ enyo.kind(
                                   },
                                   {
                                     kind : enyo.IconButton,
-                                    icon : "images/search.png",
+                                    icon : "images/toolbar-icon-multiselect.png",
                                     onclick : "showAvailReleases",
                                     height : "23px",
                                     width : "23px",
