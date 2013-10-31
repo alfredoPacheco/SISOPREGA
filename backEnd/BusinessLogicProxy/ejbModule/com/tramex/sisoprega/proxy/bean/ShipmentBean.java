@@ -51,7 +51,7 @@ public class ShipmentBean extends BaseInventory implements Cruddable {
 
           dataModel.updateDataModel(inventory);
         } else {
-          // TODO throw exception because the inventory was not found.
+          this.log.severe("Iventory was not found for update in Shipment Bean.");
         }
       }
 
@@ -110,7 +110,7 @@ public class ShipmentBean extends BaseInventory implements Cruddable {
                 }
 
               } else {
-                // TODO throw exception because the inventory was not found.
+                this.log.severe("Iventory was not found for update in Shipment Bean.");
               }
             }
           }
@@ -175,7 +175,7 @@ public class ShipmentBean extends BaseInventory implements Cruddable {
               }
               dataModel.updateDataModel(inventory);
             } else {
-              // TODO throw exception because the inventory was not found.
+              this.log.severe("Iventory was not found for update in Shipment Bean.");
             }
           }
         } else {
@@ -189,7 +189,7 @@ public class ShipmentBean extends BaseInventory implements Cruddable {
               inventory.setAvailableToShip(inventory.getAvailableToShip() - headsAffected);
               dataModel.updateDataModel(inventory);
             } else {
-              // TODO throw exception because the inventory was not found.
+              this.log.severe("Iventory was not found for update in Shipment Bean.");
             }
           }
         }

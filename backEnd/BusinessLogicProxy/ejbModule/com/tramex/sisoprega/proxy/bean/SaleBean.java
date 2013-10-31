@@ -46,7 +46,7 @@ public class SaleBean extends BaseInventory implements Cruddable {
 
           dataModel.updateDataModel(inventory);
         }else{
-          //TODO throw exception because the inventory was not found.
+          this.log.severe("Iventory was not found for update in Sale Bean.");
         }
       }
       
