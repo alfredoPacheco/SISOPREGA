@@ -209,7 +209,7 @@ CREATE OR REPLACE VIEW vw_importable AS
 SELECT 
 reception.reception_id, reception.rancher_id, reception.cattle_type, cattle.cattype_name as cattle_name,
 detail.hc, detail.weight,
-SUM(rejects.hc) as rejects_hc, SUM(rejects.weight) as rejects_weight
+SUM(rejects.hc) as rejects_hc, inspection.weight as rejects_weight
 FROM ctrl_reception reception
 INNER JOIN cat_cattle_type cattle ON reception.cattle_type = cattle.cattype_id 
 INNER JOIN ctrl_reception_headcount detail ON reception.reception_id = detail.reception_id
@@ -217,7 +217,7 @@ INNER JOIN ctrl_inspection inspection ON reception.reception_id = inspection.rec
 LEFT JOIN ctrl_inspection_result rejects ON inspection.inspection_id = rejects.inspection_id
 LEFT JOIN ctrl_hermana_reception hermana ON reception.reception_id = hermana.reception_id
 WHERE  hermana.hermana_id IS NULL
-GROUP BY reception.reception_id, reception.rancher_id, reception.cattle_type, cattle_name, detail.hc, detail.weight, hermana.hermana_id;
+GROUP BY reception.reception_id, reception.rancher_id, reception.cattle_type, cattle_name, detail.hc, detail.weight, inspection.weight, hermana.hermana_id;
 
 GRANT ALL ON vw_importable TO sisoprega;
 
