@@ -87,15 +87,18 @@ enyo.kind(
     },
     loadCharges : function(inSender, inIndex) {
       var objData;
-      if (objData = this.arrData[inIndex]) {
-        this.$.charge_desc.setContent(objData.conceptName);
-        this.$.charge_price.setContent('$' + utils.formatNumberThousands(objData.price));
-        this.iSummary += Number(objData.price);
-        return true;
-      } else {
-        this.updateSummary();
-        return false;
+      if(this.arrData !== undefined){
+    	if (objData = this.arrData[inIndex]) {
+          this.$.charge_desc.setContent(objData.conceptName);
+          this.$.charge_price.setContent('$' + utils.formatNumberThousands(objData.price));
+          this.iSummary += Number(objData.price);
+          return true;
+        } else {
+          this.updateSummary();
+          return false;
+        }
       }
+      
     },
     updateSummary : function() {
       this.$.charge_summary.setContent('$' + utils.formatNumberThousands(this.iSummary));
