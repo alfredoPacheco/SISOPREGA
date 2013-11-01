@@ -225,7 +225,7 @@ enyo
 		}
 	    },
 	    setupCutSelection : function(inSender) {
-		if (this.selectedReceptions.length == 0) {
+		if (this.selectedReceptions.length == 0 || this.selectedReceptions[0].heads === undefined) {
 		    cacheMan
 			    .setMessage(
 				    "",
