@@ -1,4 +1,5 @@
 .enyo-menuitem {
+	
 }
 
 /*
@@ -25,7 +26,7 @@
 
 .enyo-menuitem-caption {
 	text-overflow: ellipsis;
-	white-space:nowrap;
+	white-space: nowrap;
 	overflow: hidden;
 	padding: 2px 0;
 }
@@ -34,8 +35,8 @@
 	padding: 2px 8px;
 }
 
-.enyo-menuitem-arrow.enyo-button-depressed,
-.enyo-menuitem-arrow.enyo-button-down {
+.enyo-menuitem-arrow.enyo-button-depressed,.enyo-menuitem-arrow.enyo-button-down
+	{
 	background: url(../images/menuitem-arrow.png) center -24px;
 }
 
@@ -51,7 +52,7 @@
 
 .enyo-menucheckitem-caption {
 	text-overflow: ellipsis;
-	white-space:nowrap;
+	white-space: nowrap;
 	overflow: hidden;
 	padding: 2px 34px 2px 0;
 }

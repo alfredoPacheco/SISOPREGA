@@ -11,13 +11,12 @@
 	background-position-y: -50px;
 }
 
-.enyo-slider {
-	/* 
+.enyo-slider { /* 
 	FIXME: why in the heck does this work to properly position the progress
 	div inside this one?
 	*/
 	padding: 1px 0;
-	position:relative;
+	position: relative;
 }
 
 .enyo-slider-progress {
@@ -25,7 +24,7 @@
 	border-width: 0px 4px;
 	-webkit-border-image: url(../images/slider.png) 0 4 0 4 repeat repeat;
 	margin: 22px 25px 21px;
-	position:relative;
+	position: relative;
 }
 
 .enyo-slider-inner {

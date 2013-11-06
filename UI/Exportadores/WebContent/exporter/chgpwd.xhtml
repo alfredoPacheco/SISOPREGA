@@ -8,28 +8,39 @@
 
 <ui:composition template="template.xhtml">
 	<ui:define name="content">
-	    <h:form id="changePasswordForm" styleClass="dataForm">
-	    	<h1>Cambiar mi Contraseña: <u>#{request.remoteUser}</u></h1>
-	    	<br/><br/>
-	    	<h:outputLabel value="Contraseña actual" for="password"/>
-	    	<h:inputSecret id="password" value="#{changePasswordBean.password}">
-	    		<f:validateRequired />
-	    		<f:validator validatorId="sisoprega.currentPasswordValidator"/>
-	    	</h:inputSecret> 
-	    	<h:message style="margin-left:15px;color:red;" for="password" id="passwordError" lang="es" /> <br/>
-	    	<h:outputLabel value="Nueva Contraseña" for="new_password"/>
-	    	<h:inputSecret id="new_password" value="#{changePasswordBean.newPassword}">
-	    		<f:validateRequired/>
-	    	</h:inputSecret>
-	    	<h:message style="margin-left:15px;color:red;" for="new_password" id="new_passwordError" lang="es" /><br/>
-	    	<h:outputLabel value="Confirmar Contraseña" for="confirm_password"/>
-	    	<h:inputSecret id="confirm_password">
-	    		<f:validateRequired/>
-	    		<f:validator validatorId="sisoprega.confirmPasswordValidator"/>
-	    	</h:inputSecret>
-	    	<h:message style="margin-left:15px;color:red;" for="confirm_password" id="confirm_passwordError" lang="es" /> <br/>
-	    	<h:commandButton styleClass="blueFormSubmit" value="Actualizar" action="#{changePasswordBean.changePassword}"/>
-	    </h:form>
+		<h:form id="changePasswordForm" styleClass="dataForm">
+			<h1>
+				Cambiar mi Contraseña: <u>#{request.remoteUser}</u>
+			</h1>
+			<br />
+			<br />
+			<h:outputLabel value="Contraseña actual" for="password" />
+			<h:inputSecret id="password" value="#{changePasswordBean.password}">
+				<f:validateRequired />
+				<f:validator validatorId="sisoprega.currentPasswordValidator" />
+			</h:inputSecret>
+			<h:message style="margin-left:15px;color:red;" for="password"
+				id="passwordError" lang="es" />
+			<br />
+			<h:outputLabel value="Nueva Contraseña" for="new_password" />
+			<h:inputSecret id="new_password"
+				value="#{changePasswordBean.newPassword}">
+				<f:validateRequired />
+			</h:inputSecret>
+			<h:message style="margin-left:15px;color:red;" for="new_password"
+				id="new_passwordError" lang="es" />
+			<br />
+			<h:outputLabel value="Confirmar Contraseña" for="confirm_password" />
+			<h:inputSecret id="confirm_password">
+				<f:validateRequired />
+				<f:validator validatorId="sisoprega.confirmPasswordValidator" />
+			</h:inputSecret>
+			<h:message style="margin-left:15px;color:red;" for="confirm_password"
+				id="confirm_passwordError" lang="es" />
+			<br />
+			<h:commandButton styleClass="blueFormSubmit" value="Actualizar"
+				action="#{changePasswordBean.changePassword}" />
+		</h:form>
 	</ui:define>
 </ui:composition>
 </html>

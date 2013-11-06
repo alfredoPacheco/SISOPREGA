@@ -4,10 +4,10 @@
 	padding: 8px;
 }
 
-.enyo-held {
-	/*background-color: gray;*/
+.enyo-held { /*background-color: gray;*/
 	/* fancy... can we get away with this or do we need to use images? */
-	background: -webkit-gradient(linear, left top, left bottom, from(#555), to(#888));
+	background: -webkit-gradient(linear, left top, left bottom, from(#555),
+		to(#888) );
 	border-top-color: #555;
 }
 

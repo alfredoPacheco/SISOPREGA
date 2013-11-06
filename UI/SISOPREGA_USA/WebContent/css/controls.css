@@ -3,81 +3,84 @@
 }
 
 .maklesoft-datatable .maklesoft-datatable-cell {
-    border: solid 1px;
-    min-width: 40px;
+	border: solid 1px;
+	min-width: 40px;
 }
 
 .maklesoft-datatable td {
-    padding: 0px;
-    margin: 0px;
-    max-width: none;
+	padding: 0px;
+	margin: 0px;
+	max-width: none;
 }
 
 /*
 Selected cell
 */
-.maklesoft-datatable .maklesoft-datatable-cell.maklesoft-datatable-selected {
-    background-color: Orange;
+.maklesoft-datatable .maklesoft-datatable-cell.maklesoft-datatable-selected
+	{
+	background-color: Orange;
 }
 
 .maklesoft-datatable .maklesoft-datatable-cell input {
-    background-color: Transparent;
-    border: none;
+	background-color: Transparent;
+	border: none;
 }
 
 /*
 Cell with a number in it
 */
-.maklesoft-datatable .maklesoft-datatable-cell .maklesoft-datatable-number input {
-    text-align: right;
+.maklesoft-datatable .maklesoft-datatable-cell .maklesoft-datatable-number input
+	{
+	text-align: right;
 }
 
 /*
 row numbers
 */
 .maklesoft-datatable .maklesoft-datatable-rownumber {
-    text-align: center;
-    width: 40px;
+	text-align: center;
+	width: 40px;
 }
 
 /*
 row names
 */
 .maklesoft-datatable .maklesoft-datatable-rowname {
-    text-align: right;
-    padding : 5px;
+	text-align: right;
+	padding: 5px;
 }
 
 /*
 column names
 */
 .maklesoft-datatable .maklesoft-datatable-colname {
-    text-align: center;
+	text-align: center;
 }
 
 /*
 Row with an odd row number
 */
 .maklesoft-datatable .maklesoft-datatable-odd {
-    background-color: #eee;
+	background-color: #eee;
 }
 
 /*
 Selected row
 */
-.maklesoft-datatable .maklesoft-datatable-selected .maklesoft-datatable-cell {
-    background-color: Orange;
+.maklesoft-datatable .maklesoft-datatable-selected .maklesoft-datatable-cell
+	{
+	background-color: Orange;
 }
 
 /*
 Startpoint for range selection
 */
-.maklesoft-datatable .maklesoft-datatable-rangeselection .maklesoft-datatable-cell {
-    background-color: Lime;
+.maklesoft-datatable .maklesoft-datatable-rangeselection .maklesoft-datatable-cell
+	{
+	background-color: Lime;
 }
 
-.tab {
-	/*background: #482400;*/
+.tab { /*background: #482400;*/
 	border: 10px solid;
 	padding: 6px;
 	margin: 0;

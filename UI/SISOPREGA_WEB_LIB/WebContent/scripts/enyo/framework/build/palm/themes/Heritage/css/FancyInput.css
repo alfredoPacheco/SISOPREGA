@@ -1,4 +1,4 @@
-﻿/* FIXME: this is an invisible form of enyo-roundy-shadow and should be defined elsewhere? */
+/* FIXME: this is an invisible form of enyo-roundy-shadow and should be defined elsewhere? */
 .enyo-fancy-input {
 	background-color: transparent;
 	border: 14px solid transparent;
@@ -19,18 +19,17 @@
 	display: block;
 }
 
-
 /* 
 FIXME: change the following selectors that rely on nesting; instead apply classes directly
 
 FIXME: we almost always want some padding on a enyo-item, except when it's surrounding 
 		a fancy-input.... so we special case that here, non-ideal 
 */
-.enyo-item > .enyo-fancy-input {
+.enyo-item>.enyo-fancy-input {
 	margin: -8px;
 }
 
-.rounded.enyo-first > .enyo-flat-shadow {
+.rounded.enyo-first>.enyo-flat-shadow {
 	padding-bottom: 11px;
 	border-width: 14px 14px 3px 14px;
 	border-image: url(../images/roundy-shadow-top.png) 14 14 3 14;
@@ -38,7 +37,7 @@ FIXME: we almost always want some padding on a enyo-item, except when it's surro
 	-moz-border-image: url(../images/roundy-shadow-top.png) 14 14 3 14;
 }
 
-.rounded.enyo-last > .enyo-flat-shadow {
+.rounded.enyo-last>.enyo-flat-shadow {
 	padding-top: 11px;
 	border-width: 3px 14px 14px 14px;
 	border-image: url(../images/roundy-shadow-bottom.png) 3 14 14 14;
@@ -46,13 +45,12 @@ FIXME: we almost always want some padding on a enyo-item, except when it's surro
 	-moz-border-image: url(../images/roundy-shadow-bottom.png) 3 14 14 14;
 }
 
-.rounded.enyo-single > .enyo-flat-shadow {
+.rounded.enyo-single>.enyo-flat-shadow {
 	border-width: 14px 14px 14px 14px;
 	border-image: url(../images/roundy-shadow.png) 14 14;
 	-webkit-border-image: url(../images/roundy-shadow.png) 14 14;
 	-moz-border-image: url(../images/roundy-shadow.png) 14 14;
 }
-
 
 /* deprecated */
 .enyo-flat-shadow {
@@ -70,8 +68,8 @@ FIXME: we almost always want some padding on a enyo-item, except when it's surro
 	border-image: url(../images/roundy-shadow-top.png) 14 14 3 14;
 	-webkit-border-image: url(../images/roundy-shadow-top.png) 14 14 3 14;
 	-moz-border-image: url(../images/roundy-shadow-top.png) 14 14 3 14;
-}	
-		
+}
+
 .enyo-roundy-shadow-top-inner {
 	margin: -14px -14px -3px -14px;
 }
@@ -90,7 +88,6 @@ FIXME: we almost always want some padding on a enyo-item, except when it's surro
 }
 
 /**/
-
 .enyo-fancy-right-input {
 	border: none;
 	outline: none;

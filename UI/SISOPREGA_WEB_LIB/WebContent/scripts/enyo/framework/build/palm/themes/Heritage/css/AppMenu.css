@@ -3,7 +3,8 @@
 	position: fixed;
 	font-size: 18px;
 	border-width: 30px 28px 35px 28px;
-	-webkit-border-image: url(../images/system-menu-background.png) 30 28 35 28 stretch stretch;
+	-webkit-border-image: url(../images/system-menu-background.png) 30 28 35
+		28 stretch stretch;
 	color: white;
 	top: -2px;
 	left: 4px;
@@ -14,7 +15,6 @@
 	margin: -9px -20px;
 }
 
-
 /*
 	App menu item styling strategy; apply a border image with top and bottom border.
 	Apply row styling to all menu controls, e.g. top, middle, bottom, single
@@ -24,11 +24,13 @@
 	NOTE: this menu-bottom is dynamically calculated by the Menu
 */
 .enyo-appmenu .enyo-item {
-	-webkit-border-image: url(../images/system-menu-item-divider.png) 1 0 1 0 stretch;
+	-webkit-border-image: url(../images/system-menu-item-divider.png) 1 0 1
+		0 stretch;
 	border-bottom: 0px;
 }
 
-.enyo-appmenu .enyo-item.enyo-first, .enyo-appmenu .enyo-item.enyo-single {
+.enyo-appmenu .enyo-item.enyo-first,.enyo-appmenu .enyo-item.enyo-single
+	{
 	border-top: 0;
 }
 
@@ -40,6 +42,7 @@
 	border-bottom: 2px;
 }
 
-.enyo-appmenu .enyo-item.enyo-has-items.enyo-menu-last, .enyo-appmenu .enyo-item.has-items.collapsed.enyo-menu-last {
+.enyo-appmenu .enyo-item.enyo-has-items.enyo-menu-last,.enyo-appmenu .enyo-item.has-items.collapsed.enyo-menu-last
+	{
 	border-bottom: 0px;
 }

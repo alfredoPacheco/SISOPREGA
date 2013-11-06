@@ -969,26 +969,33 @@
 				<column name="de_when" />
 				<temporal>TIMESTAMP</temporal>
 			</basic>
-			<one-to-many name="hermanaCorte" fetch="EAGER"
-			mapped-by="hermana" target-entity="com.tramex.sisoprega.dto.HermanaCorte" orphan-removal="true">
+			<one-to-many name="hermanaCorte" fetch="EAGER" mapped-by="hermana"
+				target-entity="com.tramex.sisoprega.dto.HermanaCorte"
+				orphan-removal="true">
 				<cascade>
-					<cascade-all/>
+					<cascade-all />
 				</cascade>
 			</one-to-many>
-			<one-to-many name="hermanaCorteExportador" fetch="EAGER" mapped-by="hermana" target-entity="com.tramex.sisoprega.dto.HermanaCorteExportador" orphan-removal="true">
+			<one-to-many name="hermanaCorteExportador" fetch="EAGER"
+				mapped-by="hermana" target-entity="com.tramex.sisoprega.dto.HermanaCorteExportador"
+				orphan-removal="true">
 				<cascade>
-					<cascade-all/>
+					<cascade-all />
 				</cascade>
 			</one-to-many>
-			<one-to-many name="hermanaExpense" fetch="EAGER" mapped-by="hermana" target-entity="com.tramex.sisoprega.dto.HermanaExpense" orphan-removal="true">
+			<one-to-many name="hermanaExpense" fetch="EAGER"
+				mapped-by="hermana" target-entity="com.tramex.sisoprega.dto.HermanaExpense"
+				orphan-removal="true">
 				<cascade>
-					<cascade-all/>
+					<cascade-all />
 				</cascade>
 			</one-to-many>
-			<one-to-many name="reception" fetch="EAGER" orphan-removal="true">
+			<one-to-many name="reception" fetch="EAGER"
+				orphan-removal="true">
 				<join-table name="ctrl_hermana_reception">
 					<join-column name="hermana_id" referenced-column-name="hermana_id" />
-					<inverse-join-column name="reception_id" referenced-column-name="reception_id" />
+					<inverse-join-column name="reception_id"
+						referenced-column-name="reception_id" />
 				</join-table>
 			</one-to-many>
 		</attributes>
@@ -1036,7 +1043,8 @@
 				<column name="purchase_price" />
 			</basic>
 			<many-to-one name="hermana" fetch="LAZY" optional="false">
-				<join-column name="hermana_id" referenced-column-name="hermana_id" nullable="false"/>
+				<join-column name="hermana_id" referenced-column-name="hermana_id"
+					nullable="false" />
 			</many-to-one>
 		</attributes>
 	</entity>
@@ -1060,7 +1068,8 @@
 				<column name="weight" />
 			</basic>
 			<many-to-one name="hermana" fetch="LAZY" optional="false">
-				<join-column name="hermana_id" referenced-column-name="hermana_id" nullable="false"/>
+				<join-column name="hermana_id" referenced-column-name="hermana_id"
+					nullable="false" />
 			</many-to-one>
 		</attributes>
 	</entity>
@@ -1098,7 +1107,8 @@
 				<column name="concept_id" />
 			</basic>
 			<many-to-one name="hermana" fetch="LAZY" optional="false">
-				<join-column name="hermana_id" referenced-column-name="hermana_id" nullable="false"/>
+				<join-column name="hermana_id" referenced-column-name="hermana_id"
+					nullable="false" />
 			</many-to-one>
 		</attributes>
 	</entity>
@@ -1240,7 +1250,7 @@
 				<column name="cattype_id" />
 			</basic>
 			<basic name="penId">
-				<column name="barnyard_id" unique="true"/>
+				<column name="barnyard_id" unique="true" />
 			</basic>
 			<basic name="qualityId">
 				<column name="quality_id" />
@@ -1276,16 +1286,14 @@
 				<column name="cycle_completed" />
 				<temporal>DATE</temporal>
 			</basic>
-			<one-to-many name="shrinkage" fetch="EAGER"
-				mapped-by="inventory" target-entity="com.tramex.sisoprega.dto.Shrinkage"
-				orphan-removal="true">				
+			<one-to-many name="shrinkage" fetch="EAGER" mapped-by="inventory"
+				target-entity="com.tramex.sisoprega.dto.Shrinkage" orphan-removal="true">
 				<cascade>
 					<cascade-all />
 				</cascade>
 			</one-to-many>
-			<one-to-many name="feedUS" fetch="EAGER"
-				mapped-by="inventory" target-entity="com.tramex.sisoprega.dto.FeedUS"
-				orphan-removal="true">				
+			<one-to-many name="feedUS" fetch="EAGER" mapped-by="inventory"
+				target-entity="com.tramex.sisoprega.dto.FeedUS" orphan-removal="true">
 				<cascade>
 					<cascade-all />
 				</cascade>
@@ -1317,9 +1325,8 @@
 				<column name="sale_date" />
 				<temporal>DATE</temporal>
 			</basic>
-			<one-to-many name="saleDetail" fetch="EAGER"
-				mapped-by="sale" target-entity="com.tramex.sisoprega.dto.SaleDetail"
-				orphan-removal="true">
+			<one-to-many name="saleDetail" fetch="EAGER" mapped-by="sale"
+				target-entity="com.tramex.sisoprega.dto.SaleDetail" orphan-removal="true">
 				<order-by>sale_seq ASC</order-by>
 				<cascade>
 					<cascade-all />
@@ -1348,7 +1355,7 @@
 			</basic>
 			<many-to-one name="sale" fetch="LAZY" optional="false">
 				<join-column name="sale_id" referenced-column-name="sale_id"
-					nullable="false" />					
+					nullable="false" />
 			</many-to-one>
 		</attributes>
 	</entity>
@@ -1388,8 +1395,9 @@
 			<basic name="city">
 				<column name="city" length="80" />
 			</basic>
-			<one-to-many name="carrierContact" fetch="EAGER" mapped-by="carrier" 
-				target-entity="com.tramex.sisoprega.dto.CarrierContact"	orphan-removal="true">
+			<one-to-many name="carrierContact" fetch="EAGER"
+				mapped-by="carrier" target-entity="com.tramex.sisoprega.dto.CarrierContact"
+				orphan-removal="true">
 				<order-by>contactName ASC</order-by>
 				<cascade>
 					<cascade-all />
@@ -1425,29 +1433,33 @@
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.Released">
-		<table name="vw_importable"><unique-constraint><column-name>reception_id</column-name></unique-constraint></table>
+		<table name="vw_importable">
+			<unique-constraint>
+				<column-name>reception_id</column-name>
+			</unique-constraint>
+		</table>
 		<named-query name="ALL_RELEASEDS">
 			<description>Retrieve all release records from database.</description>
 			<query>SELECT iReleased FROM Released iReleased</query>
 		</named-query>
 		<attributes>
 			<id name="receptionId">
-				<column name="reception_id"/>
+				<column name="reception_id" />
 			</id>
 			<basic name="rancherId">
-				<column name="rancher_id"/>
+				<column name="rancher_id" />
 			</basic>
 			<basic name="cattleType">
-				<column name="cattle_type"/>
+				<column name="cattle_type" />
 			</basic>
 			<basic name="cattleName">
-				<column name="cattle_name"/>
+				<column name="cattle_name" />
 			</basic>
 			<basic name="heads">
-				<column name="hc"/>
+				<column name="hc" />
 			</basic>
 			<basic name="rejects_heads">
-				<column name="rejects_hc"/>
+				<column name="rejects_hc" />
 			</basic>
 		</attributes>
 	</entity>
@@ -1471,7 +1483,7 @@
 			</basic>
 			<basic name="carrierIdProgrammed">
 				<column name="carrier_id_programed" />
-			</basic>			
+			</basic>
 			<basic name="dateTimeProgrammed">
 				<column name="date_time_programed" />
 				<temporal>TIMESTAMP</temporal>
@@ -1479,15 +1491,17 @@
 			<basic name="qualityId">
 				<column name="quality_id" />
 			</basic>
-			<one-to-many name="shipmentDetail" fetch="EAGER" mapped-by="shipment" 
-				target-entity="com.tramex.sisoprega.dto.ShipmentDetail"	orphan-removal="true">
+			<one-to-many name="shipmentDetail" fetch="EAGER"
+				mapped-by="shipment" target-entity="com.tramex.sisoprega.dto.ShipmentDetail"
+				orphan-removal="true">
 				<order-by>itemNumber ASC</order-by>
 				<cascade>
 					<cascade-all />
 				</cascade>
 			</one-to-many>
-			<one-to-many name="shipmentRelease" fetch="EAGER" mapped-by="shipment" 
-				target-entity="com.tramex.sisoprega.dto.ShipmentRelease" orphan-removal="true">				
+			<one-to-many name="shipmentRelease" fetch="EAGER"
+				mapped-by="shipment" target-entity="com.tramex.sisoprega.dto.ShipmentRelease"
+				orphan-removal="true">
 				<cascade>
 					<cascade-all />
 				</cascade>
@@ -1512,17 +1526,17 @@
 			</basic>
 			<basic name="itemNumber">
 				<column name="item_number" />
-			</basic>			
+			</basic>
 			<basic name="saleId">
 				<column name="sale_id" />
-			</basic>			
+			</basic>
 			<basic name="saleDetailId">
 				<column name="sale_detail_id" />
-			</basic>				
+			</basic>
 			<many-to-one name="shipment" fetch="LAZY" optional="false">
 				<join-column name="shipment_id" referenced-column-name="shipment_id"
 					nullable="false" />
-			</many-to-one>				
+			</many-to-one>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.ShipmentRelease">
@@ -1531,14 +1545,14 @@
 			<id name="shipmentReleaseId">
 				<column name="shipment_release_id" />
 				<generated-value strategy="IDENTITY" />
-			</id>			
+			</id>
 			<basic name="carrierId">
 				<column name="carrier_id" />
-			</basic>			
+			</basic>
 			<basic name="dateTime">
 				<column name="date_time" />
 				<temporal>TIMESTAMP</temporal>
-			</basic>		
+			</basic>
 			<basic name="driver">
 				<column name="driver" />
 			</basic>
@@ -1548,7 +1562,7 @@
 			<many-to-one name="shipment" fetch="LAZY" optional="false">
 				<join-column name="shipment_id" referenced-column-name="shipment_id"
 					nullable="false" />
-			</many-to-one>			
+			</many-to-one>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.Shrinkage">
@@ -1564,7 +1578,7 @@
 			<id name="shrinkageId">
 				<column name="shrinkage_id" />
 				<generated-value strategy="IDENTITY" />
-			</id>	
+			</id>
 			<basic name="dateTime">
 				<column name="date_time" />
 				<temporal>TIMESTAMP</temporal>
@@ -1574,14 +1588,14 @@
 			</basic>
 			<basic name="weight">
 				<column name="weight" />
-			</basic>			
+			</basic>
 			<basic name="comment">
 				<column name="comment" />
 			</basic>
 			<many-to-one name="inventory" fetch="LAZY" optional="false">
 				<join-column name="inventory_id" referenced-column-name="inventory_id"
 					nullable="false" />
-			</many-to-one>		
+			</many-to-one>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.FeedUS">
@@ -1597,18 +1611,18 @@
 			<id name="feedUSId">
 				<column name="feed_us_id" />
 				<generated-value strategy="IDENTITY" />
-			</id>	
+			</id>
 			<basic name="dateTime">
 				<column name="date_time" />
 				<temporal>TIMESTAMP</temporal>
-			</basic>			
+			</basic>
 			<basic name="quantity">
 				<column name="quantity" />
 			</basic>
 			<many-to-one name="inventory" fetch="LAZY" optional="false">
 				<join-column name="inventory_id" referenced-column-name="inventory_id"
 					nullable="false" />
-			</many-to-one>		
+			</many-to-one>
 		</attributes>
 	</entity>
 </entity-mappings>

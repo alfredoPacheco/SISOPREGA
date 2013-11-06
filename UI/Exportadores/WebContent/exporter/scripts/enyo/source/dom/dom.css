@@ -32,14 +32,12 @@ body.webkitOverflowScrolling {
 }
 
 /* reset */
-
 button {
 	font-size: inherit;
 	font-family: inherit;
 }
 
 /* user selection */
-
 .enyo-unselectable {
 	cursor: default;
 	-ms-user-select: none;
@@ -48,7 +46,7 @@ button {
 	user-select: none;
 }
 
-.enyo-unselectable::selection, .enyo-unselectable ::selection {
+.enyo-unselectable::selection,.enyo-unselectable ::selection {
 	color: transparent;
 }
 
@@ -60,13 +58,12 @@ button {
 	user-select: text;
 }
 
-.enyo-selectable::selection, .enyo-selectable ::selection {
+.enyo-selectable::selection,.enyo-selectable ::selection {
 	background: #3297FD;
 	color: #FFF;
 }
 
 /* layout */
-
 body .enyo-fit {
 	position: absolute;
 	left: 0;
@@ -86,7 +83,6 @@ body .enyo-fit {
 }
 
 /* compositing */
-
 .enyo-composite {
 	-webkit-transform: translateZ(0);
 	-moz-transform: translateZ(0);

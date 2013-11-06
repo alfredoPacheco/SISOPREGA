@@ -11,8 +11,8 @@
 }
 
 .fastAnimate {
+	
 }
-
 
 .transitioner2 {
 	-webkit-transform: scale(0);
@@ -29,12 +29,13 @@
 .enyo-button-cherry {
 	color: white;
 	background-color: #5f0712;
-	width:95%;
+	width: 95%;
 }
+
 .enyo-button-option {
 	color: white;
 	background-color: #5f0712;
-	width:90%;
+	width: 90%;
 }
 
 /* INICIO Estilo para botones de menu principal */
@@ -46,28 +47,34 @@
 	padding: 4px 4px;
 	min-width: 14px;
 	min-height: 20px;
-	-webkit-border-image: url(../../SISOPREGA_WEB_LIB/scripts/enyo/framework/build/palm/themes/Onyx/images/button-up.png) 4 4 4 4 stretch stretch;
+	-webkit-border-image:
+		url(../../SISOPREGA_WEB_LIB/scripts/enyo/framework/build/palm/themes/Onyx/images/button-up.png)
+		4 4 4 4 stretch stretch;
 	border-width: 4px;
 	border-radius: 5px;
 	margin: 3px;
 	color: #292929;
 	/*background-color: #5f0712;*/
-	
-	background-repeat:no-repeat;
-	background-position:center center; 
+	background-repeat: no-repeat;
+	background-position: center center;
 }
 
-.menuButton.enyo-button-down, .menuButton.enyo-button-depressed {
-	-webkit-border-image: url(../../SISOPREGA_WEB_LIB/scripts/enyo/framework/build/palm/themes/Onyx/images/button-down.png) 4 4 4 4 stretch stretch;
+.menuButton.enyo-button-down,.menuButton.enyo-button-depressed {
+	-webkit-border-image:
+		url(../../SISOPREGA_WEB_LIB/scripts/enyo/framework/build/palm/themes/Onyx/images/button-down.png)
+		4 4 4 4 stretch stretch;
 }
 
-@media (-webkit-min-device-pixel-ratio:1.5) {
+@media ( -webkit-min-device-pixel-ratio :1.5) {
 	.menuButton {
-		-webkit-border-image: url(../../SISOPREGA_WEB_LIB/scripts/enyo/framework/build/palm/themes/Onyx/images-1.5/button-up.png) 6 6 6 6 stretch stretch;
+		-webkit-border-image:
+			url(../../SISOPREGA_WEB_LIB/scripts/enyo/framework/build/palm/themes/Onyx/images-1.5/button-up.png)
+			6 6 6 6 stretch stretch;
 	}
-	
-	.menuButton.enyo-button-down, .enyo-button.enyo-button-depressed {
-		-webkit-border-image: url(../../SISOPREGA_WEB_LIB/scripts/enyo/framework/build/palm/themes/Onyx/images-1.5/button-down.png) 6 6 6 6 stretch stretch;
+	.menuButton.enyo-button-down,.enyo-button.enyo-button-depressed {
+		-webkit-border-image:
+			url(../../SISOPREGA_WEB_LIB/scripts/enyo/framework/build/palm/themes/Onyx/images-1.5/button-down.png)
+			6 6 6 6 stretch stretch;
 	}
 }
 
@@ -77,6 +84,7 @@
 }
 
 .enyo-button-natural-width {
+	
 }
 
 .enyo-button-standard-width {
@@ -88,60 +96,54 @@
 }
 
 /* light button (often cancel) */
-
 .enyo-button-light {
-	background-color: rgba(255,255,255,0.8);
+	background-color: rgba(255, 255, 255, 0.8);
 	color: #292929;
 }
 
 /* dark button */
-
 .enyo-button-dark {
 	color: white;
-	background-color: rgba(23,23,23,0.5);
+	background-color: rgba(23, 23, 23, 0.5);
 }
 
 /* affirmative (green) */
-
 .enyo-button-affirmative {
 	color: white;
 	background-color: #2aa100;
 }
 
 /* negative (red) */
-
 .enyo-button-negative {
 	color: white;
 	background-color: #be0003;
 }
 
 /* blue */
-
 .enyo-button-blue {
 	color: white;
 	background-color: #2071bb;
 }
 
 /* gray */
-
 .enyo-button-gray {
 	color: white;
 	background-color: #4b4b4b;
 }
 
-
 /* FIN Estilo para botones de menu principal */
-
 .enyo-button-optiondark {
 	color: white;
-	background-color: rgba(23,23,23,0.5);
-	width:95%;
+	background-color: rgba(23, 23, 23, 0.5);
+	width: 95%;
 }
+
 .enyo-button-cat {
 	color: white;
 	background-color: #5f0712;
-	width:90%;
+	width: 90%;
 }
+
 .fadedOut {
 	opacity: 0;
 	-webkit-transition-property: opacity;
@@ -167,98 +169,118 @@
 .scaleIn {
 	-webkit-transform: scale(1);
 }
-.selectCell{
+
+.selectCell {
 	background-image: url(../../SISOPREGA_WEB_LIB/images/flat-shadow.png);
-	background-size:cover;
-	font-style:normal;
+	background-size: cover;
+	font-style: normal;
 }
-.customBYcell{
-	box-sizing: border-box;																								
-	border-color:black;
+
+.customBYcell {
+	box-sizing: border-box;
+	border-color: black;
 	border-width: 1px;
 	border-style: dashed;
-	align:left;
+	align: left;
 }
-.customBYcellZone{
-	box-sizing: border-box;																								
-	border-color:black;
+
+.customBYcellZone {
+	box-sizing: border-box;
+	border-color: black;
 	border-width: 1px;
 	border-style: dashed;
-	align:left;
-	font-size:20px;
-	background-color:#CCC	
+	align: left;
+	font-size: 20px;
+	background-color: #CCC
 }
-.customBYCellDesc{
-	box-sizing: border-box;																								
-	border-color:black;
+
+.customBYCellDesc {
+	box-sizing: border-box;
+	border-color: black;
 	border-width: 1px;
 	border-style: dashed;
-	align:left;
-	font-size:17px;
-	background-color:#CCC	
+	align: left;
+	font-size: 17px;
+	background-color: #CCC
 }
-.byCell{
-	border-color:black;
+
+.byCell {
+	border-color: black;
 	border-width: 1px;
 	border-style: solid;
 	/*font-weight: bold;*/
 	box-sizing: border-box;
 }
-.woodBG{
+
+.woodBG {
 	background-image: url(../../SISOPREGA_WEB_LIB/images/bg-body.png);
 	background-repeat: repeat no-repeat;
-	background-color:#1E1C1B;
+	background-color: #1E1C1B;
 }
-.buttonsBG{
-	background-color:#DABD8B;
+
+.buttonsBG {
+	background-color: #DABD8B;
 }
-.listBG{
-	background-color:#DABD8B;
+
+.listBG {
+	background-color: #DABD8B;
 }
-.formBG{
-	background-color:#DABD8B;
+
+.formBG {
+	background-color: #DABD8B;
 }
-.mapBG{	
-	font-size:13px;
+
+.mapBG {
+	font-size: 13px;
 }
-.loginBG{	
-	background-color:#1E1C1B; 
+
+.loginBG {
+	background-color: #1E1C1B;
 	background-image: url(../../SISOPREGA_WEB_LIB/images/bg-body.png);
-	background-repeat: repeat no-repeat;	
+	background-repeat: repeat no-repeat;
 }
-.loginHeader{
+
+.loginHeader {
+	
 }
-.headerMain{		
+
+.headerMain {
+	
 }
-.listFirst{
-	font-style:
-	text-overflow: ellipsis; 
+
+.listFirst {
+	font-style: text-overflow:   ellipsis;
 	overflow: hidden;
 	white-space: nowrap;
-	color:#5F0712;
+	color: #5F0712;
 }
-.listSecond{
+
+.listSecond {
 	font-size: 15px;
-	color:#1E1C1B;
+	color: #1E1C1B;
 }
-.headerLbl{
-	font-size: 20px;	
-	text-align:center;
-	vertical-align:central;
+
+.headerLbl {
+	font-size: 20px;
+	text-align: center;
+	vertical-align: central;
 }
-.headerLblRec{
-	font-size: 0.55em;	
-	text-align:center;
-	vertical-align:central;
+
+.headerLblRec {
+	font-size: 0.55em;
+	text-align: center;
+	vertical-align: central;
 }
-.listRow{
-	font-size:13px;
-	height:40px;
+
+.listRow {
+	font-size: 13px;
+	height: 40px;
 }
+
 .selectedListRow {
-	font-size:13px;
-	background-color:brown;
-	//color:#DABD8B;
-	color:#EBCE9C;
-	height:40px;
+	font-size: 13px;
+	background-color: brown; //
+	color: #DABD8B;
+	color: #EBCE9C;
+	height: 40px;
 }

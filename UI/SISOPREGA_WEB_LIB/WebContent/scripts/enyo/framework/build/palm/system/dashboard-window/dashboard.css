@@ -1,21 +1,20 @@
 /* Dashboard module */
-
 body {
-	font-family: Prelude, 'Prelude Medium', 'Segoe UI', Arial, Helvetica, sans-serif;
+	font-family: Prelude, 'Prelude Medium', 'Segoe UI', Arial, Helvetica,
+		sans-serif;
 	margin: 0;
-	background:transparent;
+	background: transparent;
 }
 
 .dashboard-notification-module {
 	height: 50px;
 	display: -webkit-box;
 	/*background-color:#F9D;*/
-/*	-webkit-box-orient: horizontal;
+	/*	-webkit-box-orient: horizontal;
 	-webkit-box-align: stretch;*/
 }
 
 /* individual targets */
-
 .palm-dashboard-icon-container {
 	width: 50px;
 	margin-right: 4px;
@@ -29,7 +28,6 @@ body {
 	-webkit-box-orient: vertical;
 	-webkit-box-pack: center;
 	-webkit-box-flex: 1;
-	
 	background: url(images/notification-divider.png) left top no-repeat;
 	color: #FFF;
 	margin-top: -1px;
@@ -41,38 +39,37 @@ body {
 	min-height: 53px;
 }
 
-.palm-dashboard-text-container > div {
+.palm-dashboard-text-container>div {
 	padding-left: 21px;
-	padding-right:10px;
+	padding-right: 10px;
 }
 
-.layer-0 > .palm-dashboard-text-container {
+.layer-0>.palm-dashboard-text-container {
 	left: -4px;
-	background:none;
+	background: none;
 }
 
 .layer-1 {
-	position:absolute;
-	left:58px;
+	position: absolute;
+	left: 58px;
 }
 
 .layer-2 {
-	position:absolute;
+	position: absolute;
 	-webkit-transition: left 0.2s ease;
-	left:70px;
+	left: 70px;
 }
 
 .dashboard-layer {
-	overflow:hidden;
+	overflow: hidden;
 }
 
-
 /* items within the containers */
-
 .palm-dashboard-icon {
 	width: 48px;
 	height: 48px;
-	background: url(images/notification-large-info.png) center center no-repeat;
+	background: url(images/notification-large-info.png) center center
+		no-repeat;
 }
 
 .palm-dashboard-icon.alert {
@@ -83,18 +80,19 @@ body {
 	position: absolute;
 	right: -3px;
 	top: -3px;
-
 	line-height: 24px;
 	font-weight: bold;
 	height: 28px;
-	-webkit-border-image: url(images/dashboard-newitem-badge.png) 0 12 28 12 repeat stretch;
+	-webkit-border-image: url(images/dashboard-newitem-badge.png) 0 12 28 12
+		repeat stretch;
 	-webkit-box-sizing: border-box;
 	border-width: 0px 12px 0px 12px;
 }
 
-.palm-dashboard-icon-container:active .dashboard-newitem,
-.palm-dashboard-icon-container.selected .dashboard-newitem {
-	-webkit-border-image: url(images/dashboard-newitem-badge.png) 28 12 0 12 repeat stretch;
+.palm-dashboard-icon-container:active .dashboard-newitem,.palm-dashboard-icon-container.selected .dashboard-newitem
+	{
+	-webkit-border-image: url(images/dashboard-newitem-badge.png) 28 12 0 12
+		repeat stretch;
 }
 
 .dashboard-count-label {
@@ -103,8 +101,7 @@ body {
 	color: #FFF;
 }
 
-.dashboard-title,
-.palm-dashboard-text {
+.dashboard-title,.palm-dashboard-text {
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -120,48 +117,43 @@ body {
 }
 
 /* single version of the notification */
-
 .single .dashboard-newitem {
 	display: none;
 }
-
 
 .enyo-swipeableitem {
 	padding: 0px;
 	border: none;
 }
 
-
 .swipe-shadow {
-	position: absolute; 
-	width: 500px; 
+	position: absolute;
+	width: 500px;
 	background: url(images/repeatable-db-swipe-bg.png) repeat-x;
 	height: 52px;
 }
 
 .swipe-shadow.left {
-	left: -500px; 
+	left: -500px;
 }
+
 .swipe-shadow.right {
 	left: 320px;
-	width:700px;
+	width: 700px;
 }
 
 .swipe-highlight {
-	width:1px;
-	height:52px;
-	position: absolute; 
+	width: 1px;
+	height: 52px;
+	position: absolute;
 	background: url(images/menu-dropdown-swipe-highlight.png)
 }
 
 .swipe-highlight.left {
-	left:0px;
+	left: 0px;
 	margin-left: -1px;
 }
 
 .swipe-highlight.right {
-	left:320px;
+	left: 320px;
 }
-
-
-

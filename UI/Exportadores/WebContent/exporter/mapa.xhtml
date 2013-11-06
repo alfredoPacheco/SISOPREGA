@@ -7,11 +7,11 @@
 	xmlns:f="http://java.sun.com/jsf/core">
 <ui:composition template="template.xhtml">
 	<ui:define name="content">
-		<div id="loading"/>
+		<div id="loading" />
 		<div id="penMapWrapper">
-		<script src="scripts/enyo/enyo.js"></script>
-		<script src="scripts/package.js"></script>
-		<script>
+			<script src="scripts/enyo/enyo.js"></script>
+			<script src="scripts/package.js"></script>
+			<script>
 		var receptions = #{receptionBean.receptions};
 	    document.onselectstart = function() {
 		  return false;

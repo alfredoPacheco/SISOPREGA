@@ -1,25 +1,28 @@
-.divider{
+.divider {
 	min-width: 3px;
 	border-width: 0px;
 	background: url(divider.png) left top repeat-x;
 	background-size: 6px 4px;
 	margin-left: 6px;
-	width:100%;
-	height:5px;
-	margin-bottom:5px;
+	width: 100%;
+	height: 5px;
+	margin-bottom: 5px;
 }
-.logOutBG{
-	cursor:pointer;	
+
+.logOutBG {
+	cursor: pointer;
 }
-.occupiedCell{
-	border-color:black;
+
+.occupiedCell {
+	border-color: black;
 	border-width: 1px;
 	border-style: solid;
 	/*font-weight: bold;*/
 	box-sizing: border-box;
-	background-color: white;	
+	background-color: white;
 }
-.bymBG{
+
+.bymBG {
 	background-color: #d8d8d8;
 }
 
@@ -27,20 +30,25 @@
 	border: 2px solid lightblue;
 	padding: 4px;
 }
+
 .fittable-sample-b {
 	background-color: #F1FFF1;
 }
+
 .fittable-sample-mtb {
 	margin-top: 3px;
 	margin-bottom: 3px;
 }
+
 .fittable-sample-mlr {
 	margin-left: 6px;
 	margin-right: 6px;
 }
+
 .fittable-sample-o {
 	border-color: orange;
 }
+
 .fittable-sample-height {
 	height: 140px;
 }
@@ -50,27 +58,27 @@
 }
 
 .fittable-sample-shadow {
-	box-shadow: -6px 0px 6px rgba(0,0,0,0.3);
-	-moz-box-shadow: -6px 0px 6px rgba(0,0,0,0.3);
-	-webkit-box-shadow: -6px 0px 6px rgba(0,0,0,0.3);
+	box-shadow: -6px 0px 6px rgba(0, 0, 0, 0.3);
+	-moz-box-shadow: -6px 0px 6px rgba(0, 0, 0, 0.3);
+	-webkit-box-shadow: -6px 0px 6px rgba(0, 0, 0, 0.3);
 }
 
 .fittable-sample-shadow2 {
-	box-shadow: 6px 6px 6px rgba(0,0,0,0.3);
-	-moz-box-shadow: 6px 6px 6px rgba(0,0,0,0.3);
-	-webkit-box-shadow: 6px 6px 6px rgba(0,0,0,0.3);
+	box-shadow: 6px 6px 6px rgba(0, 0, 0, 0.3);
+	-moz-box-shadow: 6px 6px 6px rgba(0, 0, 0, 0.3);
+	-webkit-box-shadow: 6px 6px 6px rgba(0, 0, 0, 0.3);
 }
 
 .fittable-sample-shadow3 {
-	box-shadow: 0 -6px 6px rgba(0,0,0,0.3);
-	-moz-box-shadow: 0 -6px 6px rgba(0,0,0,0.3);
-	-webkit-box-shadow: 0 -6px 6px rgba(0,0,0,0.3);
+	box-shadow: 0 -6px 6px rgba(0, 0, 0, 0.3);
+	-moz-box-shadow: 0 -6px 6px rgba(0, 0, 0, 0.3);
+	-webkit-box-shadow: 0 -6px 6px rgba(0, 0, 0, 0.3);
 }
 
 .fittable-sample-shadow4 {
-	box-shadow: 6px 0px 6px rgba(0,0,0,0.3);
-	-moz-box-shadow: 6px 0px 6px rgba(0,0,0,0.3);
-	-webkit-box-shadow: 6px 0px 6px rgba(0,0,0,0.3);
+	box-shadow: 6px 0px 6px rgba(0, 0, 0, 0.3);
+	-moz-box-shadow: 6px 0px 6px rgba(0, 0, 0, 0.3);
+	-webkit-box-shadow: 6px 0px 6px rgba(0, 0, 0, 0.3);
 }
 
 .fittable-sample-boxable {
@@ -79,7 +87,7 @@
 	border: 0.2em solid beige;
 }
 
-.fittable-sample-boxable > * {
+.fittable-sample-boxable>* {
 	border: 0.1em dotted orange;
 	padding: 0.5em;
 }

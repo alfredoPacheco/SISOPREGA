@@ -1,4 +1,4 @@
-﻿.enyo-input {
+.enyo-input {
 	border-width: 14px;
 	border-style: solid;
 	border-color: transparent;
@@ -31,8 +31,7 @@
 FIXME: we almost always want some padding on a enyo-item, except when it's surrounding 
 		a fancy-input.... so we special case that here, non-ideal 
 */
-
-.enyo-item > .enyo-input {
+.enyo-item>.enyo-input {
 	margin: -8px;
 }
 

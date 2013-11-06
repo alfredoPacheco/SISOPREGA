@@ -11,6 +11,6 @@
 	overflow: hidden;
 }
 
-.enyo-toolbar *  {
+.enyo-toolbar * {
 	pointer-events: auto;
 }

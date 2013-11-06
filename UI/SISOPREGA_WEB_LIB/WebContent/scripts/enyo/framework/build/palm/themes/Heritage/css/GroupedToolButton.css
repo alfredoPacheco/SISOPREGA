@@ -13,7 +13,6 @@
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	
 }
 
 .enyo-grouped-toolbutton.enyo-first {
@@ -31,7 +30,8 @@
 .enyo-grouped-toolbutton.enyo-single {
 	padding: 0px 14px 0px 14px;
 	border-width: 0px 23px 0px 23px;
-	-webkit-border-image: url(../images/grouped-toolbutton.png) 750 23 200 23;
+	-webkit-border-image: url(../images/grouped-toolbutton.png) 750 23 200
+		23;
 }
 
 .enyo-grouped-toolbutton.enyo-last {
@@ -50,7 +50,8 @@
 }
 
 .enyo-grouped-toolbutton.enyo-single.enyo-button-down {
-	-webkit-border-image: url(../images/grouped-toolbutton.png) 800 23 150 23;
+	-webkit-border-image: url(../images/grouped-toolbutton.png) 800 23 150
+		23;
 }
 
 .enyo-grouped-toolbutton.enyo-last.enyo-button-down {
@@ -67,7 +68,8 @@
 }
 
 .enyo-grouped-toolbutton.enyo-single.enyo-button-depressed {
-	-webkit-border-image: url(../images/grouped-toolbutton.png) 850 23 100 23;
+	-webkit-border-image: url(../images/grouped-toolbutton.png) 850 23 100
+		23;
 }
 
 .enyo-grouped-toolbutton.enyo-last.enyo-button-depressed {
@@ -75,19 +77,23 @@
 }
 
 /* depressed + down */
-.enyo-grouped-toolbutton.enyo-first.enyo-button-depressed.enyo-button-down {
+.enyo-grouped-toolbutton.enyo-first.enyo-button-depressed.enyo-button-down
+	{
 	-webkit-border-image: url(../images/grouped-toolbutton.png) 150 1 800 23;
 }
 
-.enyo-grouped-toolbutton.enyo-middle.enyo-button-depressed.enyo-button-down {
+.enyo-grouped-toolbutton.enyo-middle.enyo-button-depressed.enyo-button-down
+	{
 	-webkit-border-image: url(../images/grouped-toolbutton.png) 400 1 550 1;
 }
 
-.enyo-grouped-toolbutton.enyo-single.enyo-button-depressed.enyo-button-down {
+.enyo-grouped-toolbutton.enyo-single.enyo-button-depressed.enyo-button-down
+	{
 	-webkit-border-image: url(../images/grouped-toolbutton.png) 900 23 50 23;
 }
 
-.enyo-grouped-toolbutton.enyo-last.enyo-button-depressed.enyo-button-down {
+.enyo-grouped-toolbutton.enyo-last.enyo-button-depressed.enyo-button-down
+	{
 	-webkit-border-image: url(../images/grouped-toolbutton.png) 650 23 300 1;
 }
 
