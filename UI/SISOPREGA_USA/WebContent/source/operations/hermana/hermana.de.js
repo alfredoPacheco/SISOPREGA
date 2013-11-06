@@ -261,7 +261,7 @@ enyo.kind(
       if (this.hermanaId) {
         this.$.popup_print.openAtCenter();
       } else {
-        alert('Los datos de este registro de importación no han sido grabados en la base de datos aún.');
+        cacheMan.setMessage('', 'Los datos de este registro de importación no han sido grabados en la base de datos aún.');
       }
     },
     printExportador : function() {
@@ -278,7 +278,7 @@ enyo.kind(
         var reportName = 'Hermana?HermanaId=' + this.hermanaId;
         consumingGateway.SendReport(this.$.rancher_id.getIndex(), reportName);
       } else {
-        alert('Los datos de este registro de importación no han sido grabados en la base de datos aún.');
+    	cacheMan.setMessage('', 'Los datos de este registro de importación no han sido grabados en la base de datos aún.');
       }
     },
     resetForm : function() {
@@ -339,7 +339,7 @@ enyo.kind(
     hermanaListRead : function(result) {
       
       if (result.exceptionId != 0) {
-        alert('No se encontraron registros de importación');
+    	cacheMan.setMessage('', 'No se encontraron registros de importación');
         cacheMan.hideScrim();
         return false;
       }
@@ -581,7 +581,7 @@ enyo.kind(
     createCallBack : function(result) {
       // Save cache information based on data entry.
       if (result.exceptionId != '0') {
-        alert('Se ha encontrado un error al intentar grabar los datos, revise la captura ');
+    	cacheMan.setMessage('', 'Se ha encontrado un error al intentar grabar los datos, revise la captura ');
         cacheMan.hideScrim();
         return false;
       }
