@@ -88,17 +88,6 @@ enyo
                         components : [
                               {
                                 kind : "controls.autocomplete",
-                                name : "penAutoComplete",
-                                hint : "Corral",
-                                inputKind : "ToolInput",
-                                flex : 1,
-                                contentPack : "end",
-                                onEnter : "emularTabulacionConEnter",
-                                height : "35px",
-                                width : "200px"
-                              },
-                              {
-                                kind : "controls.autocomplete",
                                 name : "classAutoComplete",
                                 hint : "Clase",
                                 inputKind : "ToolInput",
@@ -106,15 +95,29 @@ enyo
                                 contentPack : "end",
                                 onEnter : "emularTabulacionConEnter",
                                 height : "35px",
-                                width : "300px"
+                                width : "300px",
+                                style:"margin-left:5px;",
+                                onSelectItem : "clase_select"
                               },
                               {
-                                kind : enyo.IconButton,
-                                icon : "../SISOPREGA_WEB_LIB/images/menu-icon-new.png",
-                                onclick : "doAddClass",
-                                height : "23px",
-                                width : "23px",
-                                style : "padding: 2px;margin-top: 0px;background-color: #DABD8B;"
+                                  kind : enyo.IconButton,
+                                  icon : "../SISOPREGA_WEB_LIB/images/menu-icon-new.png",
+                                  onclick : "doAddClass",
+                                  height : "23px",
+                                  width : "32px",
+                                  style : "padding: 2px;margin-top: 0px;background-color: #DABD8B;margin-left:1px;"
+                                },
+                                {
+                                kind : "controls.autocomplete",
+                                name : "penAutoComplete",
+                                hint : "Corral",
+                                inputKind : "ToolInput",
+                                flex : 1,
+                                contentPack : "end",
+                                onEnter : "emularTabulacionConEnter",
+                                height : "35px",
+                                width : "200px",
+                                style:"margin-left:10px;"
                               },
                               {
                                 kind : "ToolInput",
@@ -122,7 +125,8 @@ enyo
                                 style : "width:20%",
                                 hint : "Cabezas",
                                 height : "35px",
-                                width : "200px"
+                                width : "200px",
+                                style:"margin-left:10px;"
                               },
                               {
                                 kind : "ToolInput",
@@ -130,23 +134,24 @@ enyo
                                 style : "width:20%",
                                 hint : "Peso",
                                 height : "35px",
-                                width : "200px"
+                                width : "200px",
+                                style:"margin-left:10px;"
                               },
                               {
                                 kind : enyo.IconButton,
                                 icon : "../SISOPREGA_WEB_LIB/images/menu-icon-new.png",
                                 className : "enyo-button-affirmative",
                                 onclick : "agregarCorte",
-                                height : "23px",
+                                height : "22px",
                                 width : "23px",
-                                style : "padding: 2px;margin-top: 0px;"
+                                style : "padding: 2px;margin-top: 0px;margin-right:5px;margin-left:10px;"
                               }
                         ]
                       },
                       {
                         kind : "HFlexBox",
                         name : "detailDescription",
-                        style : "font-size:13px;",
+                        style : "font-size:13px;margin-left: 9px;",
                         height : "17px"
                       },
                       {
@@ -171,6 +176,16 @@ enyo
                         height : "35px",
                         components : [
                               {
+                                kind : "controls.autocomplete",
+                                name : "classAutoCompleteExpo",
+                                inputKind : "ToolInput",
+                                hint : "Clase",
+                                flex : 1,
+                                contentPack : "end",
+                                onEnter : "emularTabulacionConEnter",
+                                height : "35px"
+                              },
+                              {
                                 kind : "ToolInput",
                                 name : "lblCorralExpo",
                                 flex : 1,
@@ -178,16 +193,6 @@ enyo
                                 hint : "",
                                 height : "35px",
                                 disabled : true
-                              },
-                              {
-                                kind : "controls.autocomplete",
-                                name : "classAutoCompleteExpo",
-                                inputKind : "ToolInput",
-                                hint : "clase",
-                                flex : 1,
-                                contentPack : "end",
-                                onEnter : "emularTabulacionConEnter",
-                                height : "35px"
                               },
                               {
                                 kind : "ToolInput",
@@ -211,9 +216,8 @@ enyo
                                 kind : enyo.IconButton,
                                 icon : "../SISOPREGA_WEB_LIB/images/menu-icon-new.png",
                                 className : "enyo-button-affirmative",
-                                onclick : "reClassify",
-                                height : "20px",
-                                style : "padding: 2px;margin-top: 0px;width: 23px;height: 23px;"
+                                onclick : "reClassify",                                
+                                style : "padding: 2px;margin-top: 0px;width: 23px;height: 22px;"
                               }
                         ]
                       },
@@ -252,7 +256,7 @@ enyo
                                 kind : enyo.IconButton,
                                 icon : "../SISOPREGA_WEB_LIB/images/menu-icon-new.png",
                                 onclick : "showNewCharge",
-                                height : "23px",
+                                height : "22px",
                                 width : "23px",
                                 style : "padding: 2px;margin-top:0px;background-color: #DABD8B;"
                               },
@@ -267,7 +271,7 @@ enyo
                                 icon : "../SISOPREGA_WEB_LIB/images/menu-icon-new.png",
                                 className : "enyo-button-affirmative",
                                 onclick : "addCharge",
-                                height : "23px",
+                                height : "22px",
                                 width : "23px",
                                 style : "padding: 2px;margin-top:0px;"
                               }
@@ -719,5 +723,27 @@ enyo
           
           this.$.listaCorteExpo.setCortes(cacheCorte.getExpo());
           
-        }
+        },
+        clase_select : function(inSender) {
+		var filter = [];
+		var occupied = {};
+		var allPens = enyo.clone(crudPen.getListUsaPens());
+		var items = crudInventory.getPensList();
+		for (var i = 0; i < items.length; i++) {
+		    occupied[items[i].value] = items[i];
+		    if (items[i].object.qualityId == this.$.classAutoComplete.getIndex()) {
+			filter.push(items[i]);
+		    }
+		}
+		
+		for(var j=0;j< allPens.length; j++){
+		    if(!occupied.hasOwnProperty(allPens[j].value)){
+			filter.push(allPens[j]);
+		    }
+		}
+		
+		this.$.penAutoComplete.setFilter(filter);
+		this.$.penAutoComplete.clear();
+		this.$.penAutoComplete.useFilter();
+	    }
       });

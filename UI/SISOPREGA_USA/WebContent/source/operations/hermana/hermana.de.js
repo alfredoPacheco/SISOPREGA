@@ -199,7 +199,7 @@ enyo.kind(
                                   },
                                   {
                                     kind : enyo.IconButton,
-                                    icon : "images/search.png",
+                                    icon : "images/toolbar-icon-multiselect.png",
                                     onclick : "showAvailReleases",
                                     height : "23px",
                                     width : "23px",
@@ -421,7 +421,7 @@ enyo.kind(
       this.cleanPopUpContents();
       this.$.popMan.createComponent(
         {
-          kind : "catalogs.cattle",
+          kind : "catalogs.quality.form",
           name : 'cattleClass',
           onCancel : "cancelCattle",
           onAdd : "addCattle",
@@ -440,7 +440,7 @@ enyo.kind(
       this.closePopUp();
     },
     addCattle : function() {
-      
+      cacheMan.hideScrim();
       if (this.selectedCattleId != 0)
         this.$.details.setCattleClass(this.selectedCattleId);
       else

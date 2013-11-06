@@ -157,9 +157,9 @@ enyo.kind(
                     ]
                   },
                   {
-//                    peekWidth : "30%",
+                    peekWidth : "30%",
                     flex : .3,
-                    dragAnywhere:true,
+//                    dragAnywhere:true,
                     components : [
                         {
                           name : "purchased",
@@ -173,7 +173,7 @@ enyo.kind(
                     ]
                   },
                   {
-//                    peekWidth : "60%",
+                    peekWidth : "60%",
                     flex : .3,
                     components : [
                           {

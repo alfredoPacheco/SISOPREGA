@@ -103,8 +103,11 @@ public class ShipmentBean extends BaseInventory implements Cruddable {
                 
                 if (inventory.getHeads() <= 0) {
                   inventory.setCycleCompleted(new Date());
-                }
+                 
+//                    dataModel.deleteDataModel(inventory, getLoggedUser());                  
+                }else{
                 dataModel.updateDataModel(inventory);
+                }
 
               } else {
                 // TODO throw exception because the inventory was not found.

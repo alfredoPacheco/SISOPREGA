@@ -117,7 +117,7 @@ enyo
 			onblur : "lostFocus",
 			flex : 1
 		    }, {
-			style : "background-color:#DABD8B;margin: 0px 0px 0px 3px;",
+			style : "background-color:#DABD8B;margin: 0px 0px 0px -2px;",
 			kind : "IconButton",
 			icon : "../SISOPREGA_WEB_LIB/images/icon-arrows-down.png",
 			onclick : "click_button",

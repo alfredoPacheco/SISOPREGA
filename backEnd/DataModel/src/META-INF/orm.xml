@@ -1300,7 +1300,7 @@
 		</named-query>
 		<named-query name="ALL_SALES">
 			<description>Retrieve all sales records from database.</description>
-			<query>SELECT iSale FROM Sale iSale WHERE iSale.saleDate = current_date</query>
+			<query>SELECT iSale FROM Sale iSale inner join iSale.saleDetail iSaleDetail, Inventory iInventory  WHERE iSale.saleDate = current_date OR (iSaleDetail.inventoryId = iInventory.inventoryId AND iInventory.availableToProgramShip > 0)</query>
 		</named-query>
 		<attributes>
 			<id name="saleId">

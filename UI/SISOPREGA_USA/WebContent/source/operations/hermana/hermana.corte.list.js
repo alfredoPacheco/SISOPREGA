@@ -10,8 +10,27 @@ enyo.kind(
     cortes : [],
     iSelected : -1,
     isForExporter : false,
+    identifier:0,
     components :
-      [
+      [{
+	        kind : enyo.Popup,
+	        name : "popup_split",
+	        width : "330px",
+	        height : "120px",
+	        dismissWithClick : true,
+	        layoutKind : "VFlexLayout",
+	        style : "overflow: hidden;border-width: 8px;",
+	        scrim : true,          
+	        components :
+	          [
+	            {
+	              kind : "shipments.popup.split",
+	              name : "split_kind",
+	              flex : 1,
+	              onAccept : "on_accept_split",
+	              onCancel : "on_cancel_split"
+	            } ]
+	      },
         {
             kind : "HFlexBox",
     	className : "listFirst",
@@ -22,24 +41,24 @@ enyo.kind(
           components :
             [
               {
+                content : "Clase",
+                style : "width:150px;text-align:left;margin-left: 15px;"
+              },
+              {
                 content : "Corral",
                 style : "width:150px;text-align:center;"
               },
               {
-                content : "Clase",
-                style : "width:150px;text-align:center;"
-              },
-              {
                 content : "Cabezas",
-                style : "width:150px;text-align:center;"
+                style : "width:150px;text-align:right;"
               },
               {
                 content : "Peso",
-                style : "width:150px;text-align:center;"
+                style : "width:150px;text-align:right;"
               },
               {
                 content : "Promedio",
-                style : "width:150px;text-align:center;"
+                style : "width:150px;text-align:right;"
               } ]
         },
         {
@@ -62,6 +81,7 @@ enyo.kind(
                       kind : enyo.SwipeableItem,
                       name : "rowContainer",
                       onConfirm : "dropCorte",
+                      onmousehold: "on_hold_item",
                       layoutKind : enyo.HFlexLayout,
                       tapHighlight : true,
                       className : "listBG",
@@ -70,28 +90,28 @@ enyo.kind(
                       components :
                         [
                           {
-                            name : "listCorral",
+                            name : "listClase",
                             style : "width:150px;text-align:left;",
                             content : ""
                           },
                           {
-                            name : "listClase",
+                            name : "listCorral",
                             style : "width:150px;text-align:center;",
                             content : ""
                           },
                           {
                             name : "listCabezas",
-                            style : "width:150px;text-align:center;",
+                            style : "width:150px;text-align:right;",
                             content : ""
                           },
                           {
                             name : "listPeso",
-                            style : "width:150px;text-align:center;",
+                            style : "width:150px;text-align:right;",
                             content : ""
                           },
                           {
                             name : "listPromedio",
-                            style : "width:150px;text-align:center;",
+                            style : "width:150px;text-align:right;",
                             content : ""
                           } ]
                     } ]
@@ -154,18 +174,58 @@ enyo.kind(
     dropCorte : function(inSender, inIndex) {
 
       if (this.isForExporter)
-        cacheCorte.removeExpo(inIndex);
+	  cacheCorte.removeExpo(this.resetItem(null, inIndex));
       else
-        cacheCorte.remove(inIndex);
+	  cacheCorte.remove(inIndex);
 
       this.iSelected = -1;
       this.loadCortes();
 
       this.doRemoveCorte();
     },
+    resetItem:function(inSender, inIndex){	
+	var len = this.cortes.length;
+	var firstFound = -1;
+	var itemInIndex = this.cortes[inIndex];
+	for (var i=0;i<len;i++){
+	    if(this.cortes[i].hasOwnProperty("identifier")){
+		if(this.cortes[i].identifier == itemInIndex.identifier){
+		    if(firstFound > -1){
+			this.cortes[firstFound].heads += Number(this.cortes[i].heads);
+			this.cortes[firstFound].weight += Number(this.cortes[i].weight);
+			this.cortes.splice(i,1);			
+			i--;
+			len--;
+		    }else{
+			firstFound = i;
+		    }
+		}
+	    }
+	}
+	return firstFound;
+    },  
     selectCorte : function(inSender, inEvent) {
       this.iSelected = inEvent.rowIndex;
       this.loadCortes();
       this.doCorteSelected();
-    }
+    },
+    on_hold_item:function(inSender, inEvent){
+	this.$.popup_split.validateComponents();
+	var objCorte = this.cortes[inEvent.rowIndex];
+	objCorte.aveWeight = objCorte.weight / objCorte.heads;
+	
+	if(!objCorte.hasOwnProperty("identifier")){
+	    objCorte.identifier = this.identifier++;
+	}
+	this.$.split_kind.setObjToSplit(objCorte);
+	this.$.popup_split.openAtCenter();
+    },
+    on_accept_split:function(inSender, objNew){
+	this.$.popup_split.close();
+	this.cortes.push(objNew);
+	this.loadCortes();
+    },
+    on_cancel_split:function(){
+	this.$.popup_split.close();
+    },
   });
