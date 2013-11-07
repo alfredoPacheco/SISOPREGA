@@ -43,25 +43,6 @@ enyo.kind(
           },
           {
             kind : enyo.Popup,
-            name : "popup_add",
-            width : "343px;",
-            height : "70px;",
-            dismissWithClick : true,
-            layoutKind : "VFlexLayout",
-            style : "overflow: hidden;border-width: 8px;",
-            scrim : true,
-            components : [
-                {
-                  kind : "admin.addCattle",
-                  name : "addCattle_kind",
-                  onBuyCattle : "buy_cattle_click",
-                  onCaptureHermana : "capture_hermana_click",
-                  flex : 1
-                }
-            ]
-          },
-          {
-            kind : enyo.Popup,
             name : "popup_purchases",
             width : "85%;",
             height : "85%;",
@@ -166,9 +147,10 @@ enyo.kind(
                           kind : "admin.purchased",
                           flex : 1,
                           // arrData : crudPurchase.get(),
-                          onPurchase : "showPurchase",
                           onLoadCompleted : "columnsLoadCompleted",
-                          onAferUpdatePurchase:"after_update_purchase_list"
+                          onAferUpdatePurchase:"after_update_purchase_list",
+                          onBuyCattle : "buy_cattle_click",
+                          onCaptureHermana : "capture_hermana_click",
                           
                         }
                     ]
@@ -220,10 +202,6 @@ enyo.kind(
         this.$.sales_form.ready();
       
     },
-    showPurchase : function() {
-      this.$.popup_add.validateComponents();
-      this.$.popup_add.openAtCenter();
-    },
     showShipment : function() {
       this.$.popup_shipments.validateComponents();
       if (this.$.sales.getSelectedItems().length > 0) {
@@ -240,7 +218,6 @@ enyo.kind(
     },
     capture_hermana_click : function() {
       cacheMan.showScrim();
-      this.$.popup_add.close();
       
       if (!this.$.hermana_kind)
         this.$.popup_hermana.validateComponents();
@@ -283,7 +260,6 @@ enyo.kind(
       this.$.popup_sales.openAtCenter();
     },
     buy_cattle_click : function() {
-      this.$.popup_add.close();
       cacheMan.showScrim();
       
       if (!this.$.purchase_form)
