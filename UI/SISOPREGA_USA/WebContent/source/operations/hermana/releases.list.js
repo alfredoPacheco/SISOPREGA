@@ -237,14 +237,14 @@ enyo
 		  this.selectedCattleName = '';
 		  this.loadReleases();
 		}
-	  },
-	  setupCutSelection : function(inSender) {
-		if (this.selectedReceptions.length == 0) {
-		  cacheMan
-			  .setMessage(
-				  "",
-				  "Usted no ha seleccionado ningún lote para cortar, seleccione uno o más elementos de la lista posterior e intente nuevamente.");
-		  return false;
+	    },
+	    setupCutSelection : function(inSender) {
+		if (this.selectedReceptions.length == 0 || this.selectedReceptions[0].heads === undefined) {
+		    cacheMan
+			    .setMessage(
+				    "",
+				    "Usted no ha seleccionado ningún lote para cortar, seleccione uno o más elementos de la lista posterior e intente nuevamente.");
+		    return false;
 		}
 
 		this.doResolveSelected();

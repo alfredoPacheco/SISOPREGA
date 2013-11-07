@@ -299,6 +299,8 @@ enyo.kind(
       this.$.details.resetSummaryTable();
       this.hermanaId = 0;
       
+      this.$.details.$.detailDescription.setContent("");
+      
     },
     cleanPopUpContents : function() {
       if (this.$.releasesList) {

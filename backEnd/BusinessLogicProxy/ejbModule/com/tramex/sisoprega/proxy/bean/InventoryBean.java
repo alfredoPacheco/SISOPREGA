@@ -71,7 +71,9 @@ public ReadResponse Update(CreateRequest request) {
       } else {
         
         Inventory inventory = getInventoryRecordById(entity.getInventoryId());
-         
+        if(inventory == null){
+          this.log.severe("Inventory was not found.");
+        }
         long want_to_move = inventory.getHeads() - entity.getHeads();
         
         if(inventory.getAvailableToSell() < want_to_move){

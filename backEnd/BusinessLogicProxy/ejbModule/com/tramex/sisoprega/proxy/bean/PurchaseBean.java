@@ -33,37 +33,10 @@ public class PurchaseBean extends BaseInventory implements Cruddable {
 
       // Add purchase to inventory
       for (PurchaseDetail detail : entity.getPurchaseDetail()) {
-        Inventory inventory = getInventoryRecord(entity.getCattleTypeId(), detail.getQualityId(), detail.getPenId(), entity.getPurchaseDate());
+        Inventory inventory = getInventoryRecord(detail.getPenId());
 
-        long heads = detail.getHeads();
-        double weight = detail.getWeight();
-        long availableToSell = heads;
-
-        if (inventory != null) {
-          // Update inventory record
-          heads += inventory.getHeads();
-          weight += inventory.getWeight();
-          availableToSell += inventory.getAvailableToSell();
-          
-          inventory.setHeads(heads);
-          inventory.setWeight(weight);
-          inventory.setAvailableToSell(availableToSell);
-
-          dataModel.updateDataModel(inventory);
-        } else {
-          // Create inventory Record
-          inventory = new Inventory();
-          inventory.setCattypeId(entity.getCattleTypeId());
-          inventory.setHeads(detail.getHeads());
-          inventory.setQualityId(detail.getQualityId());
-          inventory.setPenId(detail.getPenId());
-          inventory.setWeight(detail.getWeight());
-          inventory.setAvailableToSell(availableToSell);
-
-          dataModel.createDataModel(inventory);
-        }
+        addToInventory(inventory, detail.getHeads(), detail.getWeight(), detail.getQualityId(), detail.getPenId(), entity.getCattleTypeId());
       }
-      
       // Create purchase
       response = super.Create(request);
     } catch (Exception e) {

@@ -1231,8 +1231,8 @@
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.Inventory">
 		<table name="ctrl_inventory" />
-		<named-query name="INVENTORY_UNIQUE_RECORD">
-			<query>SELECT iInventory FROM Inventory iInventory WHERE iInventory.cattypeId = :cattleType AND iInventory.qualityId = :qualityId AND iInventory.penId = :penId AND iInventory.cycleCompleted is null</query>
+		<named-query name="INVENTORY_BY_PENID">
+			<query>SELECT iInventory FROM Inventory iInventory WHERE iInventory.penId = :penId AND iInventory.cycleCompleted is null</query>
 		</named-query>
 		<named-query name="INVENTORY_BY_ID">
 			<description>Retrieve a single record of Inventory by its record id</description>
@@ -1308,7 +1308,7 @@
 		</named-query>
 		<named-query name="ALL_SALES">
 			<description>Retrieve all sales records from database.</description>
-			<query>SELECT iSale FROM Sale iSale inner join iSale.saleDetail iSaleDetail, Inventory iInventory  WHERE iSale.saleDate = current_date OR (iSaleDetail.inventoryId = iInventory.inventoryId AND iInventory.availableToProgramShip > 0)</query>
+			<query>SELECT iSale FROM Sale iSale inner join iSale.saleDetail iSaleDetail, Inventory iInventory  WHERE  iSaleDetail.inventoryId = iInventory.inventoryId AND (iSale.saleDate = current_date OR iInventory.availableToProgramShip > 0)</query>
 		</named-query>
 		<attributes>
 			<id name="saleId">

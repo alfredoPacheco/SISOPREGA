@@ -167,7 +167,8 @@ enyo.kind(
                           flex : 1,
                           // arrData : crudPurchase.get(),
                           onPurchase : "showPurchase",
-                          onLoadCompleted : "columnsLoadCompleted"
+                          onLoadCompleted : "columnsLoadCompleted",
+                          onAferUpdatePurchase:"after_update_purchase_list"
                           
                         }
                     ]
@@ -271,7 +272,9 @@ enyo.kind(
       }
       if (this.$.popup_hermana) {
         this.$.popup_hermana.close();
-      }
+      }      
+    },
+    after_update_purchase_list:function(){
       this.$.inventory.updateView();
       cacheMan.hideScrim();
     },

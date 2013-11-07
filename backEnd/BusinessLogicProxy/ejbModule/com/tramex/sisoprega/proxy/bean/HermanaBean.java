@@ -46,35 +46,9 @@ public class HermanaBean extends BaseInventory implements Cruddable {
 
       // Add purchase to inventory
       for (HermanaCorte detail : entity.getHermanaCorte()) {
-        Inventory inventory = getInventoryRecord(cattleType, detail.getQualityId(), detail.getBarnyardId(), entity.getDeWhen());
+        Inventory inventory = getInventoryRecord(detail.getBarnyardId());
 
-        long heads = detail.getHeads();
-        double weight = detail.getWeight();
-        long availableToSell = heads;
-
-        if (inventory != null) {
-          // Update inventory record
-          heads += inventory.getHeads();
-          weight += inventory.getWeight();
-          availableToSell += inventory.getAvailableToSell();
-
-          inventory.setHeads(heads);
-          inventory.setWeight(weight);
-          inventory.setAvailableToSell(availableToSell);
-
-          dataModel.updateDataModel(inventory);
-        } else {
-          // Create inventory Record
-          inventory = new Inventory();
-          inventory.setCattypeId(cattleType);
-          inventory.setHeads(detail.getHeads());
-          inventory.setQualityId(detail.getQualityId());
-          inventory.setPenId(detail.getBarnyardId());
-          inventory.setWeight(detail.getWeight());
-          inventory.setAvailableToSell(availableToSell);
-
-          dataModel.createDataModel(inventory);
-        }
+        addToInventory(inventory, detail.getHeads(), detail.getWeight(), detail.getQualityId(), detail.getBarnyardId(), cattleType);
       }
 
       // Create purchase
@@ -237,7 +211,7 @@ public class HermanaBean extends BaseInventory implements Cruddable {
     }
 
     // Add inventory Record with new detail
-    Inventory inventory = getInventoryRecord(cattleType, updated.getQualityId(), updated.getBarnyardId(), deWhen);
+    Inventory inventory = getInventoryRecord(updated.getBarnyardId());
     if (inventory != null) {
       long updatedHeads = inventory.getHeads() + updated.getHeads();
       double updatedWeight = inventory.getWeight() + updated.getWeight();
@@ -273,7 +247,7 @@ public class HermanaBean extends BaseInventory implements Cruddable {
     // Remove previous record heads from inventory
     long delta = detail.getHeads();
     double deltaWeight = detail.getWeight();
-    Inventory inventory = getInventoryRecord(cattleType, detail.getQualityId(), detail.getBarnyardId(), entity.getDeWhen());
+    Inventory inventory = getInventoryRecord(detail.getBarnyardId());
     if (inventory != null) {
       if (inventory.getAvailableToSell() - delta < 0 && inventory.getWeight() - deltaWeight < 0) {
         log.warning("Tryal for removing more heads than available.");
@@ -303,7 +277,7 @@ public class HermanaBean extends BaseInventory implements Cruddable {
       if (detail.getQualityId() == updated.getQualityId() && detail.getBarnyardId() == updated.getBarnyardId()) {
         long delta = updated.getHeads() - detail.getHeads();
         double deltaWeight = updated.getWeight() - detail.getWeight();
-        Inventory inventory = getInventoryRecord(cattleType, detail.getQualityId(), detail.getBarnyardId(), entity.getDeWhen());
+        Inventory inventory = getInventoryRecord(detail.getBarnyardId());
         if (inventory != null) {
           if (inventory.getAvailableToSell() + delta < 0) {
             log.warning("Tryal for removing more heads than available.");
