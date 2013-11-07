@@ -370,7 +370,7 @@ enyo
         tabClicked : function(inSender, inEvent) {
           
           if (!this.summary && inSender.tab == 3) {
-        	cacheMan.setMessage('No se han capturado datos del corte de ganado aún');
+        	cacheMan.setMessage('', 'No se han capturado datos del corte de ganado aún');
             return false;
           }
           
