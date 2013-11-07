@@ -279,6 +279,7 @@ enyo.kind(
       cacheMan.hideScrim();
     },
     saleFormReady : function() {
+      this.$.sales_form.cancel();
       this.$.popup_sales.openAtCenter();
     },
     buy_cattle_click : function() {
