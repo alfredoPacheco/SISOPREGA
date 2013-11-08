@@ -175,9 +175,11 @@ enyo.kind(
 
       if (this.isForExporter)
 	  cacheCorte.removeExpo(this.resetItem(null, inIndex));
-      else
-	  cacheCorte.remove(inIndex);
-
+      else{
+    	cacheCorte.remove(inIndex);
+        this.parent.parent.$.listaCorteExpo.cortes = this.cortes;
+      }
+	  
       this.iSelected = -1;
       this.loadCortes();
 
