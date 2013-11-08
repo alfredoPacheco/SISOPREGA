@@ -206,18 +206,23 @@ GRANT ALL ON ctrl_sale_detail TO sisoprega;
 GRANT ALL ON ctrl_sale_detail_record_id_seq TO sisoprega;
 
 CREATE OR REPLACE VIEW vw_importable AS
-SELECT 
-reception.reception_id, reception.rancher_id, reception.cattle_type, cattle.cattype_name as cattle_name,
-detail.hc, detail.weight,
-SUM(rejects.hc) as rejects_hc, inspection.weight as rejects_weight
-FROM ctrl_reception reception
-INNER JOIN cat_cattle_type cattle ON reception.cattle_type = cattle.cattype_id 
-INNER JOIN ctrl_reception_headcount detail ON reception.reception_id = detail.reception_id
-INNER JOIN ctrl_inspection inspection ON reception.reception_id = inspection.reception_id
-LEFT JOIN ctrl_inspection_result rejects ON inspection.inspection_id = rejects.inspection_id
-LEFT JOIN ctrl_hermana_reception hermana ON reception.reception_id = hermana.reception_id
-WHERE  hermana.hermana_id IS NULL
-GROUP BY reception.reception_id, reception.rancher_id, reception.cattle_type, cattle_name, detail.hc, detail.weight, inspection.weight, hermana.hermana_id;
+SELECT reception.reception_id, 
+    reception.rancher_id, 
+    reception.cattle_type, 
+    cattle.cattype_name AS cattle_name, 
+    detail.hc, 
+    detail.weight, 
+    sum(rejects.hc) AS rejects_hc, 
+    sum(rejects.weight) AS rejects_weight
+   FROM ctrl_reception reception
+   JOIN cat_cattle_type cattle ON reception.cattle_type = cattle.cattype_id
+   JOIN ctrl_reception_headcount detail ON reception.reception_id = detail.reception_id
+   JOIN ctrl_inspection inspection ON reception.reception_id = inspection.reception_id
+   LEFT JOIN ctrl_inspection_result rejects ON inspection.inspection_id = rejects.inspection_id
+   LEFT JOIN ctrl_hermana_reception hermana ON reception.reception_id = hermana.reception_id
+   LEFT JOIN ctrl_reception_barnyard r_by ON reception.reception_id = r_by.reception_id 
+  WHERE hermana.hermana_id IS NULL AND r_by.barnyard_id IS NULL
+  GROUP BY reception.reception_id, reception.rancher_id, reception.cattle_type, cattle.cattype_name, detail.hc, detail.weight, hermana.hermana_id;
 
 GRANT ALL ON vw_importable TO sisoprega;
 
