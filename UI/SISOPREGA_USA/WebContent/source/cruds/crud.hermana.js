@@ -51,15 +51,18 @@ enyo.kind(
           corte.cattleClassName = crudCattleQuality.getByID(corte.qualityId).qualityName;
         }
         
-        for(var i=0; i < entityObj.HermanaExpense.length; i++){
-          var expenseConcept = crudExpenseConcept.getByID(entityObj.HermanaExpense[i].conceptId);
-          if(expenseConcept){
-            var conceptName = crudExpenseConcept.getByID(entityObj.HermanaExpense[i].conceptId).conceptName;
-            entityObj.HermanaExpense[i].conceptName = conceptName;
-          }
-          entityObj.HermanaExpense[i].price = entityObj.HermanaExpense[i].amount;
-          entityObj.HermanaExpense[i].expenseConceptId = entityObj.HermanaExpense[i].conceptId;
+        if(entityObj.HermanaExpense){
+          for(var i=0; i < entityObj.HermanaExpense.length; i++){
+            var expenseConcept = crudExpenseConcept.getByID(entityObj.HermanaExpense[i].conceptId);
+            if(expenseConcept){
+              var conceptName = crudExpenseConcept.getByID(entityObj.HermanaExpense[i].conceptId).conceptName;
+              entityObj.HermanaExpense[i].conceptName = conceptName;
+            }
+            entityObj.HermanaExpense[i].price = entityObj.HermanaExpense[i].amount;
+            entityObj.HermanaExpense[i].expenseConceptId = entityObj.HermanaExpense[i].conceptId;
+          }  
         }
+        
         
         for ( var i = 0; i < entityObj.Reception.length; i++) {
           var cattleName = crudCattle.getCattleTypeById(entityObj.Reception[i].cattleType).cattypeName;

@@ -45,21 +45,21 @@ enyo.kind({
     },{
 	importantInfo : "Lado US - Ventas",
 	secundaryInfo : "",
-	reportUrl: "Ventas",
+	reportUrl: "/ReportingGateway/Sales",
 	reportTitle:"Ventas",
-	reportType: "filter"
+	reportType: "filterByDate"
     },{
 	importantInfo : "Lado US - Compras",
 	secundaryInfo : "",
-	reportUrl: "Compras",
+	reportUrl: "/ReportingGateway/Purchase",
 	reportTitle:"Compras",
-	reportType: "filter"
+	reportType: "filterByDate"
     },{
 	importantInfo : "Lado US - Inventario",
 	secundaryInfo : "",
-	reportUrl: "Inventario",
+	reportUrl: "/ReportingGateway/Inventory",
 	reportTitle:"Inventario",
-	reportType: "filter"
+	reportType: "filterByDate"
     }],    
 });
 var rReportsUS = new r.reports.us();

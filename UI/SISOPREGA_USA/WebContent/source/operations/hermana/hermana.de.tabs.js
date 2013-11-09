@@ -590,14 +590,25 @@ enyo
         calcularGasto : function(charge) {
           var formula = '';
           if (charge) formula = charge.expenseFormula;
-          // Replace heads
-          var headlessFormula = formula.replace('[cabezas]', this.summary.hc);
+          // Replace arrived to Mexico
+          formula = formula.replace('[cabezas]', this.summary.hc);
+          formula = formula.replace('[libras]', this.summary.lbs);
+          formula = formula.replace('[kilos]', this.summary.kg);
           
-          // Replace pounds
-          var poundlessFormula = headlessFormula.replace('[libras]', this.summary.lbs);
+          //Replace rejects
+          formula = formula.replace('[cabezasRechazos]', this.summary.rejects_hc);
+          formula = formula.replace('[librasRechazos]', this.summary.rejects_lbs);
+          formula = formula.replace('[kilosRechazos]', this.summary.rejects_kgs);
           
-          // Replace kilos
-          formula = poundlessFormula.replace('[kilos]', this.summary.kg);
+          //Replace cross left over
+          formula = formula.replace('[cabezasCruce]', this.summary.trade_hc);
+          formula = formula.replace('[librasCruce]', this.summary.trade_lbs);
+          formula = formula.replace('[kilosCruce]', this.summary.trade_kgs);
+          
+          //Replace net
+          formula = formula.replace('[cabezasNeto]', this.summary.net_hc);
+          formula = formula.replace('[librasNeto]', this.summary.net_lbs);
+          formula = formula.replace('[kilosNeto]', this.summary.net_kg);
           
           // Evaluate expresion
           var calculated = null;

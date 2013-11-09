@@ -300,6 +300,8 @@ enyo.kind(
       this.hermanaId = 0;
       
       this.$.details.$.detailDescription.setContent("");
+      this.$.details.setSummary(null);
+      this.$.details.tabClicked(this.$.details.$.btnCorte);
       
     },
     cleanPopUpContents : function() {
