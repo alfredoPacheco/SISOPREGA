@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="exportacion" language="groovy" pageWidth="612" pageHeight="792" whenNoDataType="NoDataSection" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="88d2cc3c-beff-4dd7-85c6-d967dfda7cf7">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="2"/>
+	<parameter name="CUS_FROM_DATE" class="java.util.Date">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="CUS_TO_DATE" class="java.util.Date">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="CUS_RANCHER_ID" class="java.lang.Long"/>
+	<queryString>
+		<![CDATA[SELECT date(de_when) as expo_date, rancher.rancher_id, rancher_name, entry_no, ref_no,
+consignee, account_of, cattype_name as cattle_type, quality.quality_name,
+SUM(heads) as heads, SUM(weight) as pounds, SUM(weight)/2.2046 as kilos,
+SUM(weight)/SUM(heads) as avg_pounds, (SUM(weight)/2.2046)/SUM(heads) as avg_kilos
+FROM ctrl_hermana hermana
+INNER JOIN vw_rancher rancher ON hermana.rancher_id = rancher.rancher_id
+INNER JOIN ctrl_hermana_reception chr ON chr.hermana_id = hermana.hermana_id
+INNER JOIN ctrl_reception reception ON chr.reception_id=reception.reception_id
+INNER JOIN cat_cattle_type cattle ON reception.cattle_type=cattype_id
+INNER JOIN ctrl_hermana_corte_exportador corte ON hermana.hermana_id = corte.hermana_id
+INNER JOIN cat_cattle_quality quality ON corte.quality_id = quality.quality_id
+GROUP BY date(de_when), rancher.rancher_id, rancher_name, entry_no, ref_no,
+consignee, account_of, cattype_name, quality.quality_name
+ORDER BY expo_date, entry_no, quality.quality_name;]]>
+	</queryString>
+	<field name="expo_date" class="java.sql.Date"/>
+	<field name="rancher_id" class="java.lang.Integer"/>
+	<field name="rancher_name" class="java.lang.String"/>
+	<field name="entry_no" class="java.lang.String"/>
+	<field name="ref_no" class="java.lang.String"/>
+	<field name="consignee" class="java.lang.String"/>
+	<field name="account_of" class="java.lang.String"/>
+	<field name="cattle_type" class="java.lang.String"/>
+	<field name="quality_name" class="java.lang.String"/>
+	<field name="heads" class="java.lang.Long"/>
+	<field name="pounds" class="java.math.BigDecimal"/>
+	<field name="kilos" class="java.math.BigDecimal"/>
+	<field name="avg_pounds" class="java.math.BigDecimal"/>
+	<field name="avg_kilos" class="java.math.BigDecimal"/>
+	<variable name="heads_1" class="java.lang.Long" resetType="Group" resetGroup="hermana_group" calculation="Sum">
+		<variableExpression><![CDATA[$F{heads}]]></variableExpression>
+	</variable>
+	<variable name="kilos_1" class="java.math.BigDecimal" resetType="Group" resetGroup="hermana_group" calculation="Sum">
+		<variableExpression><![CDATA[$F{kilos}]]></variableExpression>
+	</variable>
+	<variable name="pounds_1" class="java.math.BigDecimal" resetType="Group" resetGroup="hermana_group" calculation="Sum">
+		<variableExpression><![CDATA[$F{pounds}]]></variableExpression>
+	</variable>
+	<variable name="avg_pounds_1" class="java.math.BigDecimal" resetType="Group" resetGroup="hermana_group" calculation="Average">
+		<variableExpression><![CDATA[$F{avg_pounds}]]></variableExpression>
+	</variable>
+	<variable name="heads_2" class="java.lang.Long" resetType="Group" resetGroup="fecha_expo_group" calculation="Sum">
+		<variableExpression><![CDATA[$F{heads}]]></variableExpression>
+	</variable>
+	<variable name="heads_3" class="java.lang.Long" calculation="Sum">
+		<variableExpression><![CDATA[$F{heads}]]></variableExpression>
+	</variable>
+	<variable name="kilos_2" class="java.math.BigDecimal" resetType="Group" resetGroup="fecha_expo_group" calculation="Sum">
+		<variableExpression><![CDATA[$F{kilos}]]></variableExpression>
+	</variable>
+	<variable name="kilos_3" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{kilos}]]></variableExpression>
+	</variable>
+	<variable name="pounds_2" class="java.math.BigDecimal" resetType="Group" resetGroup="fecha_expo_group" calculation="Sum">
+		<variableExpression><![CDATA[$F{pounds}]]></variableExpression>
+	</variable>
+	<variable name="pounds_3" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{pounds}]]></variableExpression>
+	</variable>
+	<variable name="avg_pounds_2" class="java.math.BigDecimal" resetType="Group" resetGroup="fecha_expo_group" calculation="Average">
+		<variableExpression><![CDATA[$F{avg_pounds}]]></variableExpression>
+	</variable>
+	<variable name="avg_pounds_3" class="java.math.BigDecimal" calculation="Average">
+		<variableExpression><![CDATA[$F{avg_pounds}]]></variableExpression>
+	</variable>
+	<filterExpression><![CDATA[$F{expo_date}>=$P{CUS_FROM_DATE}
+&& $F{expo_date}<=$P{CUS_TO_DATE}
+&& $F{rancher_id} == $P{CUS_RANCHER_ID}]]></filterExpression>
+	<group name="fecha_expo_group">
+		<groupExpression><![CDATA[$F{expo_date}]]></groupExpression>
+		<groupHeader>
+			<band height="23">
+				<rectangle>
+					<reportElement uuid="4ab00f62-7223-4c63-a66e-fb621c47516e" x="0" y="0" width="572" height="20" backcolor="#CCCCFF"/>
+				</rectangle>
+				<textField pattern="MMMMM dd, yyyy">
+					<reportElement uuid="18a6dd6c-9a60-451b-8ea3-3de4cd65a7bc" x="91" y="0" width="231" height="20"/>
+					<textElement/>
+					<textFieldExpression><![CDATA[$F{expo_date}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="910f8ba8-b33f-4a45-ae27-0536e58a537f" x="0" y="0" width="89" height="20"/>
+					<textElement textAlignment="Right"/>
+					<text><![CDATA[FECHA EXPO:]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="39">
+				<textField pattern="#,##0;-#,##0">
+					<reportElement uuid="bf3a9e61-77af-40d7-93c9-93fca97b69a8" x="127" y="17" width="100" height="20"/>
+					<textElement textAlignment="Center"/>
+					<textFieldExpression><![CDATA[$V{heads_2}]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement uuid="802aa983-2538-4f7c-ad1e-c28957634f61" x="120" y="4" width="407" height="1"/>
+				</line>
+				<line>
+					<reportElement uuid="802aa983-2538-4f7c-ad1e-c28957634f61" x="120" y="8" width="407" height="1"/>
+				</line>
+				<textField pattern="#,##0.00;-#,##0.00">
+					<reportElement uuid="1e68ddce-1f53-4a1f-b645-7e786be138ea" x="227" y="17" width="100" height="20"/>
+					<textElement textAlignment="Center"/>
+					<textFieldExpression><![CDATA[$V{kilos_2}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00;-#,##0.00">
+					<reportElement uuid="9b0fe9c3-5f2c-4338-bd4b-5c346d5181c7" x="327" y="17" width="100" height="20"/>
+					<textElement textAlignment="Center"/>
+					<textFieldExpression><![CDATA[$V{pounds_2}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00;-#,##0.00">
+					<reportElement uuid="f4b53a4c-6280-46d9-a75d-1ab4b8fd6b1d" x="427" y="17" width="100" height="20"/>
+					<textElement textAlignment="Center"/>
+					<textFieldExpression><![CDATA[$V{avg_pounds_2}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<group name="hermana_group">
+		<groupExpression><![CDATA[$F{entry_no}]]></groupExpression>
+		<groupHeader>
+			<band height="70">
+				<rectangle>
+					<reportElement uuid="61707d4f-c17f-4302-8c35-3ad1a7619aee" x="27" y="0" width="246" height="20" backcolor="#666666"/>
+				</rectangle>
+				<staticText>
+					<reportElement uuid="fecd11b4-cd1b-4c44-8046-6e493d05336c" x="27" y="0" width="77" height="20" forecolor="#FFFFFF"/>
+					<textElement textAlignment="Right"/>
+					<text><![CDATA[REGISTRO:]]></text>
+				</staticText>
+				<textField>
+					<reportElement uuid="31a0c568-3575-4706-bfb4-ec301b9fbb95" x="104" y="0" width="169" height="20" forecolor="#FFFFFF"/>
+					<textElement/>
+					<textFieldExpression><![CDATA[' ' + $F{entry_no} + ' / ' + $F{ref_no}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement uuid="88775d4a-ff27-4ee8-933c-2f545998b060" x="104" y="20" width="107" height="20"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{cattle_type}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="31c02875-284a-4280-a946-aae96984e506" x="27" y="50" width="100" height="20"/>
+					<textElement/>
+					<text><![CDATA[Clase]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="79f284b8-6e4a-48ce-a3da-69e4f51b1b07" x="127" y="50" width="100" height="20"/>
+					<textElement textAlignment="Center">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Cabezas]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="6a2fda53-ae85-4402-a7e5-7e369669a7cd" x="227" y="50" width="100" height="20"/>
+					<textElement textAlignment="Center">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Kilos]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="e7864377-6b0a-4f19-871b-d81c978bee03" x="327" y="50" width="100" height="20"/>
+					<textElement textAlignment="Center">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Libras]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="deca57e2-1c3c-45fc-bb85-7f42724e6475" x="427" y="50" width="100" height="20"/>
+					<textElement textAlignment="Center">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Libras Prom.]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="34">
+				<textField pattern="#,##0;-#,##0">
+					<reportElement uuid="dc716bc4-a5ab-4b82-8ef8-9941e1ce1626" x="127" y="11" width="100" height="20"/>
+					<textElement textAlignment="Center"/>
+					<textFieldExpression><![CDATA[$V{heads_1}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00;-#,##0.00">
+					<reportElement uuid="6dc55aa4-a47d-4dfd-b22f-92425702e518" x="227" y="11" width="100" height="20"/>
+					<textElement textAlignment="Center"/>
+					<textFieldExpression><![CDATA[$V{kilos_1}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00;-#,##0.00">
+					<reportElement uuid="ca5a66df-4baa-49ba-9feb-36f4fb6e4481" x="327" y="11" width="100" height="20"/>
+					<textElement textAlignment="Center"/>
+					<textFieldExpression><![CDATA[$V{pounds_1}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00;-#,##0.00">
+					<reportElement uuid="7c30a941-a772-452e-9f60-1d750388c7df" x="427" y="11" width="100" height="20"/>
+					<textElement textAlignment="Center"/>
+					<textFieldExpression><![CDATA[$V{avg_pounds_1}]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement uuid="802aa983-2538-4f7c-ad1e-c28957634f61" x="120" y="5" width="407" height="1"/>
+				</line>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="41" splitType="Stretch">
+			<textField>
+				<reportElement uuid="d9c85cbd-6459-49ec-bf6f-85e0336d3e70" x="189" y="20" width="383" height="20"/>
+				<textElement>
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{rancher_name}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="928fc84d-e646-4f5b-85ce-228e1223b073" x="89" y="20" width="100" height="20"/>
+				<textElement>
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Exportador:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d3e0bda2-bc25-42a0-8e11-5a5b755eba25" x="0" y="0" width="572" height="20"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[REPORTE DE EXPORTACIÓN DE GANADO]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement uuid="c1b1880f-33ee-4ccf-824d-d98695a9bea8" x="27" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{quality_name}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0;-#,##0">
+				<reportElement uuid="f059bba9-c107-4156-82b9-eda03a82712d" x="127" y="0" width="100" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{heads}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement uuid="ca7e4ac6-7beb-49f4-9398-56f0138c2b60" x="227" y="0" width="100" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{kilos}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement uuid="59bfae46-19a5-42e3-bad3-3257750c6513" x="327" y="0" width="100" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{pounds}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement uuid="15c84e02-d895-44e2-9d25-7321bf5ad122" x="427" y="0" width="100" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{avg_pounds}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch">
+			<line>
+				<reportElement uuid="802aa983-2538-4f7c-ad1e-c28957634f61" x="120" y="0" width="407" height="1"/>
+			</line>
+			<line>
+				<reportElement uuid="802aa983-2538-4f7c-ad1e-c28957634f61" x="120" y="5" width="407" height="1"/>
+			</line>
+			<line>
+				<reportElement uuid="802aa983-2538-4f7c-ad1e-c28957634f61" x="120" y="10" width="407" height="1"/>
+			</line>
+			<textField pattern="#,##0;-#,##0">
+				<reportElement uuid="f095c215-77f7-4385-a5a6-eaf27dc24ea9" x="120" y="14" width="100" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$V{heads_3}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement uuid="6345d630-2440-4516-8a34-13dac22ea6a5" x="222" y="14" width="105" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$V{kilos_3}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement uuid="73013ae9-9e98-4b1e-af85-12478efca206" x="327" y="14" width="100" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$V{pounds_3}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement uuid="2d75c22b-7329-4907-a2e9-678c70f768fb" x="427" y="14" width="100" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$V{avg_pounds_3}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+	<noData>
+		<band height="118">
+			<textField>
+				<reportElement uuid="e2b0319a-10fb-4f35-bcd3-8ab099c28344" x="204" y="63" width="123" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{CUS_TO_DATE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="4e642151-0a77-4713-8dc7-d9ceef020343" x="204" y="43" width="123" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{CUS_FROM_DATE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="bc949fd6-7366-4053-aa0f-1d676e43dba6" x="204" y="83" width="123" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{CUS_RANCHER_ID}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="8b73996f-c6c9-43dc-bbf2-99dc786d6a1c" x="4" y="0" width="568" height="32"/>
+				<textElement/>
+				<text><![CDATA[NO SE ENCONTRARON DATOS PARA EL REPORTE DE EXPORTACIÓN DE GANADO CON LOS SIGUIENTES PARÁMETROS:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f54da3b4-f86e-4b53-808e-008f8ff319bc" x="104" y="43" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[FROM DATE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f54da3b4-f86e-4b53-808e-008f8ff319bc" x="104" y="63" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[TO DATE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f54da3b4-f86e-4b53-808e-008f8ff319bc" x="104" y="83" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[RANCHER ID]]></text>
+			</staticText>
+		</band>
+	</noData>
+</jasperReport>

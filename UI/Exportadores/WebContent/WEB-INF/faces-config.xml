@@ -77,6 +77,17 @@
 		</managed-property>
 	</managed-bean>
 	<managed-bean>
+		<description>Handles the requests to download Exports pdf report.</description>
+		<managed-bean-name>expo</managed-bean-name>
+		<managed-bean-class>com.tramex.sisoprega.exporter.cross.reporting.ExpoReportBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+		<managed-property>
+			<property-name>filterBean</property-name>
+			<property-class>com.tramex.sisoprega.exporter.cross.FilterBean</property-class>
+			<value>#{filterBean}</value>
+		</managed-property>
+	</managed-bean>
+	<managed-bean>
 		<description>handle requests for rancher profile changes.</description>
 		<managed-bean-name>rancherBean</managed-bean-name>
 		<managed-bean-class>com.tramex.sisoprega.exporter.cross.RancherBean</managed-bean-class>

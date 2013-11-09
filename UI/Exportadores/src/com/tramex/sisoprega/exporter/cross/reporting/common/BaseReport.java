@@ -3,6 +3,8 @@ package com.tramex.sisoprega.exporter.cross.reporting.common;
 import java.io.BufferedOutputStream;
 import java.io.Closeable;
 import java.io.IOException;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -52,7 +54,7 @@ public abstract class BaseReport {
       response.reset();
       response.setHeader("Content-Type", "application/pdf");
       response.setHeader("Content-Length", String.valueOf(reportBytes.length));
-      response.setHeader("Content-disposition","attachment; filename=" + reporteable.getReportName() + ".pdf");
+      response.setHeader("Content-disposition", "attachment; filename=" + reporteable.getReportName() + ".pdf");
       output = new BufferedOutputStream(response.getOutputStream());
 
       // Write file contents to response.
@@ -74,15 +76,32 @@ public abstract class BaseReport {
   }
 
   protected abstract void setReporteable();
-  
-  protected Map<String, Object> getParameters(){
+
+  protected Map<String, Object> getParameters() {
     Map<String, Object> params = new HashMap<String, Object>();
-    log.fine("read from filterBean.getFromDate():" + getFilterBean().getFromDate());
-    params.put("fromDate", getFilterBean().getFromDate());
-    params.put("toDate", getFilterBean().getToDate());
+
+    Calendar calFrom = Calendar.getInstance();
+    calFrom.setTime(getFilterBean().getFromDate());
+    calFrom.set(Calendar.HOUR_OF_DAY, 0);
+    calFrom.set(Calendar.MINUTE, 0);
+    calFrom.add(Calendar.DATE, 1);
+
+    Date fromDate = calFrom.getTime();
+
+    params.put("fromDate", fromDate);
+
+    Calendar calTo = Calendar.getInstance();
+    calTo.setTime(getFilterBean().getToDate());
+    calTo.set(Calendar.HOUR_OF_DAY, 23);
+    calTo.set(Calendar.MINUTE, 59);
+    calTo.add(Calendar.DATE, 1);
+
+    Date toDate = calTo.getTime();
+
+    params.put("toDate", toDate);
     return params;
   }
-  
+
   // Helpers (can be refactored to public utility class)
   // ----------------------------------------
 
