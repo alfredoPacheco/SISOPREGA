@@ -3,10 +3,10 @@
 	<property name="ireport.zoom" value="1.7715610000000015"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	<queryString language="SQL">
+	<queryString>
 		<![CDATA[SELECT customer.customer_name as buyer,
 SUM(detail.heads) as heads, SUM(detail.weight) as weight,
-SUM(detail.weight)/SUM(detail.heads) as average
+CASE WHEN SUM(detail.heads)=0 THEN 0 ELSE SUM(detail.weight)/SUM(detail.heads) END as average
 FROM ctrl_sale sale
 INNER JOIN cat_customer customer ON sale.customer_id = customer.customer_id
 INNER JOIN ctrl_sale_detail detail ON sale.sale_id = detail.sale_id
