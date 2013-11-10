@@ -640,8 +640,10 @@ enyo
           var charges = this.chargesArrayFromIndexString(utils.getCookie('expenses'));
           for ( var i = 0; i < charges.length; i++) {
             var charge = charges[i];
-            charge.price = this.calcularGasto(charge);
-            this.$.chargeList.addCharge(charge);
+            if(charge){
+              charge.price = this.calcularGasto(charge);
+              this.$.chargeList.addCharge(charge);  
+            }
           }
         },
         chargesArrayFromIndexString : function(indexString) {

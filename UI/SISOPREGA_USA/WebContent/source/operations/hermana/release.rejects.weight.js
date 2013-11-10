@@ -19,7 +19,6 @@ enyo
 			height : "35px",
 			hint : '',
 			width : "40px",
-			onclick : "cancelCheckBox",
 			style : "text-align:right;"
 		  },
 		  {
@@ -32,7 +31,7 @@ enyo
 		  {
 			kind : "CheckBox",
 			name : "checkBoxSelected",
-			onChange : "cancelCheckBoxEvent",
+			onclick : "cancelCheckBoxEvent",
 			style : "margin-left:50px;margin-top: 1px;"
 		  } ],
 	  saveRejectedWeight : function() {
@@ -63,7 +62,6 @@ enyo
 		if (result.exceptionId == 0) {
 		  //cacheMan.setMessage("",
 			//  'El registro de peso de rechazos ha sido grabado exitosamente.');
-		  this.cancelCheckBox();
 		  this.doSaved();
 		  cacheMan.hideScrim();
 		} else {
@@ -85,7 +83,7 @@ enyo
 	  },
 	  setSelected : function(isSelected) {
 		this.$.checkBoxSelected.setChecked(isSelected);
-		this.doSelected();
+		//this.doSelected();
 	  },
 	  isSelected : function() {
 		return this.$.checkBoxSelected.getChecked();
@@ -95,9 +93,9 @@ enyo
 		  this.$.checkBoxSelected.setChecked(!this.$.checkBoxSelected
 			  .getChecked());
 	  },
-	  cancelCheckBoxEvent : function() {
-		this.cancelCheckBox();
-		this.doSelected();
+	  cancelCheckBoxEvent : function(inSender, inEvent) {
+		//this.cancelCheckBox();
+		this.doSelected(inEvent);
 	  },
 	  ready : function() {
 		this.$.weightInput.$.textField.$.input

@@ -26,7 +26,7 @@ enyo
 			  name : "title",
 			  content : "Lotes inspeccionados del exportador: {EXPORTADOR SELECCIONADO}",
 			  flex : 1,
-			  onclick : "doSelect",
+			  //onclick : "doSelect",
 			  style : "padding:0px;color:white;font-size:15px;"
 			} ]
 		  },
@@ -70,7 +70,6 @@ enyo
 			  kind : enyo.VirtualRepeater,
 			  name : "releasesList",
 			  onSetupRow : "setupReleaseRow",
-			  onclick : "selectRelease",
 			  // style : "background-color:#F3DEBA;",
 			  components : [
 			  {
@@ -99,8 +98,10 @@ enyo
 					{
 					  name : "rejectsWeight",
 					  style : "width:230px;color:#5F0712;margin-left:80px;",
-					  kind : "release.rejects.weight"
-					} ]
+					  kind : "release.rejects.weight",
+					  onSelected : "selectRelease"
+					},
+					]
 			  } ]
 			} ]
 		  },
@@ -198,31 +199,30 @@ enyo
 		return false;
 	  },
 	  selectRelease : function(inSender, inEvent) {
-		if (this.selectedCattleType == 0 && !this.$.rejectsWeight.isSelected()) {
+		if (this.selectedCattleType == 0 && this.$.rejectsWeight.isSelected()) {
 		  this.selectedCattleType = this.releases[inEvent.rowIndex].cattleType;
 		  this.selectedCattleName = this.releases[inEvent.rowIndex].cattleName;
 		  this.selectedReceptions = [];
 		  this.selectedReceptions.push(this.releases[inEvent.rowIndex]);
 		  // Filter list
 		  this.loadReleases(this.selectedCattleType);
-		  this.$.rejectsWeight.setSelected(true);
 		  return true;
 		}
-		if (this.selectedCattleType != this.releases[inEvent.rowIndex].cattleType
-			&& !this.$.rejectsWeight.isSelected()) {
-		  cacheMan
-			  .setMessage(
-				  "",
-				  'No se pueden seleccionar dos tipos de ganado diferente, previamente usted ha seleccionado '
-					  + this.selectedCattleName);
-		  return false;
-		}
+//		if (this.selectedCattleType != this.releases[inEvent.rowIndex].cattleType
+//			&& !this.$.rejectsWeight.isSelected()) {
+//		  cacheMan
+//			  .setMessage(
+//				  "",
+//				  'No se pueden seleccionar dos tipos de ganado diferente, previamente usted ha seleccionado '
+//					  + this.selectedCattleName);
+//		  return false;
+//		}
 
-		this.$.rejectsWeight.setSelected(!this.$.rejectsWeight.isSelected());
+		//this.$.rejectsWeight.setSelected(!this.$.rejectsWeight.isSelected());
 
 		if (this.$.rejectsWeight.isSelected()) {
 		  this.selectedReceptions
-			  .push(this.releases[inEvent.rowIndex].receptionId);
+			  .push(this.releases[inEvent.rowIndex]);
 		} else {
 		  for ( var i = 0; i < this.selectedReceptions.length; i++) {
 			if (this.selectedReceptions[i].receptionId == this.releases[inEvent.rowIndex].receptionId) {
