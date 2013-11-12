@@ -92,9 +92,11 @@ public ReadResponse Update(CreateRequest request) {
         }
         
         Set<FeedUS> feedUS = entity.getFeedUS();
-        for(FeedUS fus : feedUS){
-          if(fus.getFeedUSId() == 0){
-            entity.setFeed(fus.getQuantity() + inventory.getFeed());
+        if(feedUS !=null){
+          for(FeedUS fus : feedUS){
+            if(fus.getFeedUSId() == 0){
+              entity.setFeed(fus.getQuantity() + inventory.getFeed());
+            }
           }
         }
         

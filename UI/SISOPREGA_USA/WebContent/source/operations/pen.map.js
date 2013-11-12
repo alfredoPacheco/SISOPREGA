@@ -693,17 +693,17 @@ enyo
 		    delete objNewInventory.inventoryId;
 		    objNewInventory.heads = Number(objMovement.heads);
 		    objNewInventory.weight = Number(objMovement.weight);
-		    objNewInventory.pen = movingTo;
+		    //objNewInventory.pen = movingTo;
 		    objNewInventory.penId = movingTo.penId;
 		    objNewInventory.availableToSell= objNewInventory.heads;
 		    objNewInventory.feed = Number(objMovement.feed);
 		    movingTo = objNewInventory;
-		}		
+		}
 		
-		this.$.popup_movePen.close();		
+		this.$.popup_movePen.close();
 		
 		arrObjectsToSend.push(crudInventory.adapterToOut(movingFrom));
-		arrObjectsToSend.push(crudInventory.adapterToOut(movingTo));		
+		arrObjectsToSend.push(crudInventory.adapterToOut(movingTo));
 		crudInventory.save(arrObjectsToSend, this, "updateView");
 		cacheMan.showScrim();
 	    },
