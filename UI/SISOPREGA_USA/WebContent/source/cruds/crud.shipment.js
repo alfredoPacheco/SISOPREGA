@@ -47,7 +47,7 @@ enyo
 	  adapterToOut : function(entityObj) {
 		if (entityObj.dateTimeProgrammed) {
 		  entityObj.dateTimeProgrammed = utils
-			  .dateTimeOut(obj.shipProgramDateTime);
+			  .dateTimeOut(entityObj.dateTimeProgrammed);
 
 		  if (entityObj.ShipmentRelease) {
 			for ( var j = 0; j < entityObj.ShipmentRelease.length; j++) {
