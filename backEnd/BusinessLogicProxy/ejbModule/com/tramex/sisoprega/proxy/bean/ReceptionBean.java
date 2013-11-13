@@ -132,7 +132,7 @@ public class ReceptionBean extends BaseBean implements Cruddable {
               inspection.setInspectionDate(new Date());
               inspection.setComments("Ganado liberado sin defectos");
               // inspection weight is basically the rejects total weight
-              //inspection.setWeight(getWeight(entity));
+              // inspection.setWeight(getWeight(entity));
               entity.addInspection(inspection);
             }
           }
@@ -153,10 +153,21 @@ public class ReceptionBean extends BaseBean implements Cruddable {
           updatedRecordList.add(entity);
 
           if (!hasPen(entity)) {
-            // Send inspection confirmation
-            log.info("Sending inspection confirmation to exporter [" + entity.getRancherId() + "]");
-            String reportName = "GanadoInspeccionado?Id=" + entity.getRancherId() + formatReportDateRange();
-            msgBean.sendReport(entity.getRancherId(), reportName);
+            if (entity.getInspection().size() == 0) {
+              // Send inspection confirmation
+              log.info("Sending inspection confirmation to exporter [" + entity.getRancherId() + "], with inspection size: [" + entity.getInspection().size() + "]");
+              String reportName = "GanadoInspeccionado?Id=" + entity.getRancherId() + formatReportDateRange();
+              msgBean.sendReport(entity.getRancherId(), reportName);
+            } else {
+              Inspection inspection = entity.getInspection().iterator().next();
+              double weight = inspection.getWeight();
+              if(weight==0){
+                log.info("Sending inspection confirmation to exporter [" + entity.getRancherId() + "], with weight:[" + weight + "]");
+                String reportName = "GanadoInspeccionado?Id=" + entity.getRancherId() + formatReportDateRange();
+                msgBean.sendReport(entity.getRancherId(), reportName);
+              }
+            }
+
           }
 
           response.setParentRecord(getRecordsFromList(updatedRecordList, type));
