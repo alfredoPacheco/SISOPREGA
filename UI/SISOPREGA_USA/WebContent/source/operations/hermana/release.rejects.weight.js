@@ -60,9 +60,7 @@ enyo
 	  },
 	  saveCallBack : function(result) {
 		if (result.exceptionId == 0) {
-		  //cacheMan.setMessage("",
-			//  'El registro de peso de rechazos ha sido grabado exitosamente.');
-		  this.doSaved();
+		  this.doSaved(this.rejectedRecord, this.$.weightInput.getValue());
 		  cacheMan.hideScrim();
 		} else {
 		  cacheMan.hideScrim();
@@ -83,7 +81,6 @@ enyo
 	  },
 	  setSelected : function(isSelected) {
 		this.$.checkBoxSelected.setChecked(isSelected);
-		//this.doSelected();
 	  },
 	  isSelected : function() {
 		return this.$.checkBoxSelected.getChecked();
@@ -94,7 +91,6 @@ enyo
 			  .getChecked());
 	  },
 	  cancelCheckBoxEvent : function(inSender, inEvent) {
-		//this.cancelCheckBox();
 		this.doSelected(inEvent);
 	  },
 	  ready : function() {

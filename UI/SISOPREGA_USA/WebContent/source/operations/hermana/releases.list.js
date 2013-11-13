@@ -99,7 +99,8 @@ enyo
 					  name : "rejectsWeight",
 					  style : "width:230px;color:#5F0712;margin-left:80px;",
 					  kind : "release.rejects.weight",
-					  onSelected : "selectRelease"
+					  onSelected : "selectRelease",
+					  onSaved : "updateRejectWeight"
 					},
 					]
 			  } ]
@@ -136,6 +137,14 @@ enyo
 		  },
 
 	  ],
+	  updateRejectWeight : function(iSender, receptionId, weight){
+		for(var i=0;i<crudReleased.arrObj.length; i++){
+		  if(crudReleased.arrObj[i].receptionId == receptionId){
+			crudReleased.arrObj[i].rejects_weight = weight;
+			break;
+		  }
+		}
+	  },
 	  setRancher : function(rancherId, rancherName) {
 		cacheMan.showScrim();
 		this.rancher_id = rancherId;
@@ -208,17 +217,6 @@ enyo
 		  this.loadReleases(this.selectedCattleType);
 		  return true;
 		}
-//		if (this.selectedCattleType != this.releases[inEvent.rowIndex].cattleType
-//			&& !this.$.rejectsWeight.isSelected()) {
-//		  cacheMan
-//			  .setMessage(
-//				  "",
-//				  'No se pueden seleccionar dos tipos de ganado diferente, previamente usted ha seleccionado '
-//					  + this.selectedCattleName);
-//		  return false;
-//		}
-
-		//this.$.rejectsWeight.setSelected(!this.$.rejectsWeight.isSelected());
 
 		if (this.$.rejectsWeight.isSelected()) {
 		  this.selectedReceptions
