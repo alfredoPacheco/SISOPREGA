@@ -16,7 +16,8 @@ enyo.kind({
     },
     events : {
 	// "onSelectItem" : "",
-	"onEnter" : ""
+	"onEnter" : "",
+	onInput : ""
     },
     getValue : function() {
 	return this.$.textField.getValue();
@@ -83,8 +84,10 @@ enyo.kind({
 	switch (true) {
 	case (x == 8): // backspace
 	case (x >= 46 && x <= 57): // numbers
-	    return;
+	    this.doInput(inSender, inEvent, keyPressed);
+		return;
 	}
 	inSender.setValue(inSender.value.slice(0,-1));
+	
     }
 });
