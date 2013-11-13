@@ -289,7 +289,7 @@ enyo
                 name : "tabSummary",
                 className : "tab",
                 showing : false,
-                height : "285px",
+                height : "300px",
                 style: "border: 1px solid;padding-top: 10px;font-size:14px;",
                 components : [
                       {
@@ -300,7 +300,7 @@ enyo
                         selectionMode : maklesoft.DataTable.SelectionMode.NONE,
                         editable : false,
                         columnNames : [
-                            "cabezas", "Peso (Kgs)", "Peso (Lbs)", "Prom Lbs"
+                            "Cabezas", "Peso (Kg)", "Peso (Lb)", "Prom Lb"
                         ],
                         showColumnNames : true,
                         showRowNumbers : true,
@@ -318,15 +318,11 @@ enyo
                       {
                         kind : "HFlexBox",
                         components : [
-                              {
-                                kind : "Spacer"
-                              },
-                              {
-                                kind : "Spacer"
-                              },
+                                      {width:"473px"},
                               {
                                 kind : "maklesoft.DataTable",
                                 name : "summaryTotal",
+                                width:"270px",
                                 rowCount : 2,
                                 colCount : 2,
                                 selectionMode : maklesoft.DataTable.SelectionMode.NONE,
@@ -343,10 +339,8 @@ enyo
                                   }
                                   return className;
                                 }
-                              },
-                              {
-                                kind : "Spacer"
                               }
+                              
                         ]
                       }
                 ]
