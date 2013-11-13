@@ -449,7 +449,7 @@ enyo
 	    },
 	    saveCorte : function() {
 		this.$.popup_corte.close();
-		this.movingTo(this.objSelected);
+		this.movingTo =this.objSelected;
 		cacheMan.showScrim();
 		this.updateView();
 	    },
