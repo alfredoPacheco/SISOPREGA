@@ -172,7 +172,7 @@
 
 .selectCell {
 	background-image: url(../../SISOPREGA_WEB_LIB/images/flat-shadow.png);
-	background-size: cover;
+	background-size: 100% 100%;
 	font-style: normal;
 }
 
