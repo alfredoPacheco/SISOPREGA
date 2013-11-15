@@ -13,8 +13,8 @@ import com.tramex.sisoprega.reporting.Reporteable;
  * Session Bean implementation class PdfHermana
  */
 @Stateless
-@DeclareRoles({ "us_usr", "rancher" })
-@RolesAllowed({ "us_usr", "rancher" })
+@DeclareRoles({ "us_usr", "rancher", "agency" })
+@RolesAllowed({ "us_usr", "rancher", "agency" })
 public class PdfHermana extends BasePdfReport implements Reporteable {
 
   @Override

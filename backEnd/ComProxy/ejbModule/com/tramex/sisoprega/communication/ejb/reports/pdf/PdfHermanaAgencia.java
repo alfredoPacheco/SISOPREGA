@@ -26,8 +26,8 @@ import javax.ejb.Stateless;
  * 
  */
 @Stateless
-@DeclareRoles({ "us_usr", "rancher" })
-@RolesAllowed({ "us_usr", "rancher" })
+@DeclareRoles({ "us_usr", "agency" })
+@RolesAllowed({ "us_usr", "agency" })
 public class PdfHermanaAgencia extends PdfHermana {
 
 }

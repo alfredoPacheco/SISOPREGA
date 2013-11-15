@@ -13,5 +13,9 @@
 		<role-name>rancher</role-name>
 		<group-name>rancher</group-name>
 	</security-role-mapping>
+	<security-role-mapping>
+		<role-name>agency</role-name>
+		<group-name>agency</group-name>
+	</security-role-mapping>
 	<enterprise-beans />
 </sun-ejb-jar>
