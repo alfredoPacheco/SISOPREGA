@@ -172,7 +172,7 @@ enyo.kind(
                             name : "shipment",
                             kind : "admin.shipments",
                             flex : 1,
-                            arrData : cacheShip.readData(),
+                            arrData : [],
                             onSelectedShipment : "showSelectShipment",
                             onDeleteShipProgrammed : "deleteShipProgrammed",
                             onLoadCompleted : "columnsLoadCompleted"

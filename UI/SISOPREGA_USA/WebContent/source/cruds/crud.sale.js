@@ -64,6 +64,15 @@ enyo
 		return null;
 	  },
 	  adapterToOut : function(entityObj) {
+		if(entityObj){
+		  if(entityObj.SaleDetail){
+			for(var i=0;i<entityObj.SaleDetail.length;i++){
+			  entityObj.SaleDetail[i].heads = Number(entityObj.SaleDetail[i].heads);
+			  entityObj.SaleDetail[i].weight = Number(entityObj.SaleDetail[i].weight.replace(",",""));
+			}
+		  }
+		  
+		}
 		return entityObj;
 	  },
 	  

@@ -45,14 +45,6 @@ enyo.depends(
 	"source/cruds/crud.shipment.js",
 	"source/cruds/crud.expenseConcept.js",	
 
-	"source/trash/cache.sales.price.js",
-	"source/trash/cache.sales.js",
-	"source/trash/cache.drivers.js",
-	"source/trash/cache.pen.js",
-	"source/trash/cache.providers.js",
-	"source/trash/cache.purchased.js",
-	"source/trash/cache.shipments.js",
-	
 	"../SISOPREGA/source/userAdmin/useradmin.user.form.js",
 	"source/catalogs/catalogs.customer.form.js",
 	"source/catalogs/catalogs.seller.form.js",
@@ -68,11 +60,6 @@ enyo.depends(
 	
 	 "../SISOPREGA/source/operations/inspection.forecast.js",
 	 "../SISOPREGA/source/operations/operations.pen.map.js",
-	
-	"source/operationsTrash/shipments.js",
-	"source/operationsTrash/sales.purchase.list.js",
-	"source/operationsTrash/sales.price.assignment.js",
-	"source/operationsTrash/sales.screen.js",
 	
 	"source/operations/admin.inventory.js",
 	"source/operations/admin.sales.js",
