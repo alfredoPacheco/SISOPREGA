@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Purchase" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="47eec311-8aad-42c3-ab68-bc3471ee142f">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Purchase" language="groovy" pageWidth="612" pageHeight="792" whenNoDataType="NoDataSection" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="47eec311-8aad-42c3-ab68-bc3471ee142f">
 	<property name="ireport.zoom" value="1.2100000000000006"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
@@ -349,4 +349,43 @@ ORDER BY purchase_date, seller, cattype_name, quality_name]]>
 			</textField>
 		</band>
 	</summary>
+	<noData>
+		<band height="61">
+			<staticText>
+				<reportElement uuid="18784514-7121-4ab0-8904-162e932b75ad" x="0" y="0" width="572" height="20"/>
+				<textElement/>
+				<text><![CDATA[No hay datos disponibles para el filtro seleccionado:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="078f04a5-0021-4d45-972c-4f1a07062aa5" x="0" y="20" width="22" height="20"/>
+				<textElement/>
+				<text><![CDATA[Del:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="078f04a5-0021-4d45-972c-4f1a07062aa5" x="133" y="20" width="22" height="20"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[al:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="3bec32c0-660a-4377-8d01-b05a24a79e69" x="22" y="20" width="111" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{FROM_DATE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="f3182314-be60-4ec8-82f5-5b4352f2b82f" x="155" y="20" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{TO_DATE}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="075c5494-86a0-4a7a-850b-2dfe22fcc96f" x="0" y="40" width="38" height="20"/>
+				<textElement/>
+				<text><![CDATA[Seller:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="f9b64a68-5d2c-4c77-a6b8-dab0d0cbfa41" x="38" y="40" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{SELLER_TYPE} + '/' + $P{SELLER_ID}]]></textFieldExpression>
+			</textField>
+		</band>
+	</noData>
 </jasperReport>

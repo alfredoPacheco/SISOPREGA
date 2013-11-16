@@ -1,5 +1,6 @@
 package com.tramex.sisoprega.communication.ejb.reports.pdf;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
 
@@ -21,8 +22,22 @@ public class PdfPurchase extends BasePdfReport implements Reporteable {
     Date toDate = (Date) parameters.get("TO_DATE");
     Long sellerId = (Long) parameters.get("SELLER_ID");
     String sellerType = (String) parameters.get("SELLER_TYPE");
-    this.parameters.put("FROM_DATE", fromDate);
-    this.parameters.put("TO_DATE", toDate);
+    
+    Calendar cal = Calendar.getInstance();
+    cal.setTime(fromDate);
+    cal.set(Calendar.HOUR, 0);
+    cal.set(Calendar.MINUTE, 0);
+    
+    Calendar cal2 = Calendar.getInstance();
+    cal2.setTime(toDate);
+    cal2.set(Calendar.HOUR, 23);
+    cal2.set(Calendar.MINUTE, 59);
+    
+    if(sellerId == null)
+      sellerId = 0L;
+    
+    this.parameters.put("FROM_DATE", cal.getTime());
+    this.parameters.put("TO_DATE", cal2.getTime());
     this.parameters.put("SELLER_ID", sellerId);
     this.parameters.put("SELLER_TYPE", sellerType);
   }
