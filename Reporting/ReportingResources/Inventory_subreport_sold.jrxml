@@ -36,17 +36,17 @@ GROUP BY customer.customer_name]]>
 				<line>
 					<reportElement uuid="43290cc1-0182-451e-990e-48fb9ea39434" x="214" y="3" width="183" height="1"/>
 				</line>
-				<textField>
+				<textField pattern="#,##0;-#,##0">
 					<reportElement uuid="17ec7b6d-a4e2-449d-a5d7-67b932f99c12" x="214" y="4" width="51" height="20"/>
 					<textElement textAlignment="Right"/>
 					<textFieldExpression><![CDATA[$V{heads_1}]]></textFieldExpression>
 				</textField>
-				<textField>
+				<textField pattern="#,##0.00;-#,##0.00">
 					<reportElement uuid="e2aa8712-03fb-42f0-8675-10de926d04e6" x="265" y="4" width="61" height="20"/>
 					<textElement textAlignment="Right"/>
 					<textFieldExpression><![CDATA[$V{weight_1}]]></textFieldExpression>
 				</textField>
-				<textField>
+				<textField pattern="#,##0.00;-#,##0.00">
 					<reportElement uuid="399ec5ea-06a2-4368-8745-42ffcc11fafc" x="326" y="4" width="71" height="20"/>
 					<textElement textAlignment="Right"/>
 					<textFieldExpression><![CDATA[$V{average_1}]]></textFieldExpression>
@@ -107,19 +107,19 @@ GROUP BY customer.customer_name]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{buyer}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="#,##0;-#,##0">
 				<reportElement uuid="eeed17bd-1fa2-4625-8cb3-a1a0e9b94da1" x="214" y="0" width="51" height="20"/>
 				<textElement textAlignment="Right">
 					<font fontName="Serif"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{heads}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="#,##0.00;-#,##0.00">
 				<reportElement uuid="fd7e8737-8d84-44e2-9401-c95b0fb6b545" x="265" y="0" width="61" height="20"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA[$F{weight}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="#,##0.00;-#,##0.00">
 				<reportElement uuid="5c39ed5b-916f-43ae-840e-6147edf9ba4e" x="326" y="0" width="71" height="20"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA[$F{average}]]></textFieldExpression>
