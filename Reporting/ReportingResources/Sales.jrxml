@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Sales" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="7d9e9829-742d-4b79-b830-7a046f7b4122">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Sales" language="groovy" pageWidth="612" pageHeight="792" whenNoDataType="NoDataSection" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="7d9e9829-742d-4b79-b830-7a046f7b4122">
 	<property name="ireport.zoom" value="1.2100000000000029"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<style name="row_header" style="border_cell" mode="Opaque" forecolor="#000000" backcolor="#CCCCFF"/>
-	<style name="border_cell" mode="Transparent" forecolor="#000000">
+	<style name="border_cell" mode="Transparent" forecolor="#000000" radius="0">
 		<pen lineWidth="0.5" lineColor="#000000"/>
 		<box leftPadding="5">
 			<topPen lineWidth="0.5" lineColor="#000000"/>
@@ -349,19 +349,19 @@ ORDER BY cust.customer_name, quality.quality_name;]]>
 			<staticText>
 				<reportElement uuid="2987f31a-b52f-49a4-845f-b0b04b20387a" x="253" y="16" width="88" height="20"/>
 				<textElement textAlignment="Right"/>
-				<text><![CDATA[Haste la fecha:]]></text>
+				<text><![CDATA[Hasta la fecha:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement uuid="2987f31a-b52f-49a4-845f-b0b04b20387a" x="0" y="36" width="259" height="20"/>
 				<textElement textAlignment="Right"/>
 				<text><![CDATA[Identificador de cliente:]]></text>
 			</staticText>
-			<textField pattern="MMMMM dd, yyyy">
+			<textField>
 				<reportElement uuid="925ee35b-6fa5-4ffc-8482-9ced7bb99f9a" x="88" y="16" width="165" height="20"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{FROM_DATE}]]></textFieldExpression>
 			</textField>
-			<textField pattern="MMMMM dd, yyyy">
+			<textField>
 				<reportElement uuid="db328daf-c5a9-4591-bba3-b10d9e7451f6" x="341" y="16" width="171" height="20"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{TO_DATE}]]></textFieldExpression>
