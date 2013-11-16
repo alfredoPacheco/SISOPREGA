@@ -601,6 +601,7 @@ enyo.kind(
       
       this.doSave();
       cacheMan.hideScrim();
+      alert('El registro de hermana ha sido grabado con éxito en la base de datos.');
     },
     chargesIndexString : function(chargesArray) {
       var result = '';

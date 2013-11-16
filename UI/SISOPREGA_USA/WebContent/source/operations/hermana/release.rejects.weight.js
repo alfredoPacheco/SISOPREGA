@@ -62,6 +62,7 @@ enyo
 		if (result.exceptionId == 0) {
 		  this.doSaved(this.rejectedRecord, this.$.weightInput.getValue());
 		  cacheMan.hideScrim();
+		  alert('El peso de los rechazos ha sido grabado con éxito en la base de datos.');
 		} else {
 		  cacheMan.hideScrim();
 		  cacheMan.setMessage("",
