@@ -1477,7 +1477,7 @@
 		</named-query>
 		<named-query name="ALL_SHIPMENTS">
 			<description>Retrieve all shipment records from database.</description>
-			<query>SELECT iShipment FROM Shipment iShipment ORDER BY iShipment.dateTimeProgrammed DESC</query>
+			<query>SELECT iShipment FROM Shipment iShipment left join iShipment.shipmentRelease iRelease WHERE iShipment.dateTimeProgrammed >= current_date OR iRelease.dateTime >= current_date OR iRelease is null ORDER BY iShipment.dateTimeProgrammed DESC</query>
 		</named-query>
 		<attributes>
 			<id name="shipmentId">
