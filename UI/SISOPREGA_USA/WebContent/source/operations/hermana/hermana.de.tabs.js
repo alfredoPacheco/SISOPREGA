@@ -373,6 +373,8 @@ enyo
 		  break;
 		case 2:
 		  this.showCorteExportador();
+		  this.$.lblCorralExpo.applyStyle("visibility", "hidden");
+		  this.$.listaCorteExpo.$.control2.applyStyle("visibility","hidden")
 		  break;
 		case 3:
 		  this.showGastos();
