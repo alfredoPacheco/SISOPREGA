@@ -283,10 +283,13 @@ enyo
 			cattypeId = objData[i].cattypeId;
 			qualityId = objData[i].qualityId;
 
-			var salesByInventory = this.getSalesByInventoryID(objData[i].inventoryId);
+			var salesByInventory = this
+				.getSalesByInventoryID(objData[i].inventoryId);
 			for ( var j = 0; j < salesByInventory.length; j++) {
-			  var sale =  salesByInventory[j];
-			  strSales += "" + sale.saleDate.toLocaleDateString() + " " + sale.customer + " " + sale.heads + "/" + sale.weight + "<br />";
+			  var sale = salesByInventory[j];
+			  strSales += "" + sale.saleDate.toLocaleDateString() + " "
+				  + sale.customer + " " + sale.heads + "/" + sale.weight
+				  + "<br />";
 			}
 		  }
 		  this.$.lblInvDescBuyer.setContent(strSales);
@@ -317,7 +320,7 @@ enyo
 			  .formatNumberThousands(totalWeight));
 		  this.$.lblInvInvAverage.setContent(utils
 			  .formatNumberThousands(totalWeight / totalHeads));
-		  this.$.lblInvFeed.setContent(totalFeed);
+		  this.$.lblInvFeed.setContent(utils.formatNumberThousands(totalFeed));
 		  this.$.lblInvBarnyards.setContent(strBarnyards);
 
 		  if (inIndex % 2 == 0)
@@ -406,11 +409,12 @@ enyo
 			for ( var j = 0; j < sale.SaleDetail.length; j++) {
 			  var detail = sale.SaleDetail[j];
 			  if (Number(detail.inventoryId) == Number(iInventoryID)) {
-				var obj={
-					customer:sale.customer,
-					saleDate:sale.saleDate,
-					heads: sale.SaleDetail[j].heads,
-					weight: sale.SaleDetail[j].weight
+				var obj =
+				{
+				  customer : sale.customer,
+				  saleDate : sale.saleDate,
+				  heads : sale.SaleDetail[j].heads,
+				  weight : sale.SaleDetail[j].weight
 				};
 				result.push(obj);
 			  }
