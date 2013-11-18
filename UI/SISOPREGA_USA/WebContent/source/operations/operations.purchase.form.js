@@ -187,6 +187,18 @@ enyo.kind(
 			break;
 		  }
 		}
+		
+		var occupiedPens = crudInventory.getPensList();
+		for ( var i = 0; i < occupiedPens.length; i++) {
+		  var isPenOccupied = this.$.pen.getIndex() == Number(occupiedPens[i].value);
+		  var isSameQuality = occupiedPens[i].object.qualityId == this.$.cattleQuality.getIndex();
+		  if(isPenOccupied && !isSameQuality){
+			var cattleQuality = crudCattleQuality.getByID(occupiedPens[i].object.qualityId);
+			sError = "Error. El corral " + occupiedPens[i].caption + " ya está ocupado con ganado de clase " + cattleQuality.qualityName;
+			break;
+		  }
+		}
+		
 
 		if (sError != "") {
 		  cacheMan.setMessage("", sError);

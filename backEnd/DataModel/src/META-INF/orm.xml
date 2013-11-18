@@ -1314,7 +1314,7 @@
 		</named-query>
 		<named-query name="ALL_SALES">
 			<description>Retrieve all sales records from database.</description>
-			<query>SELECT iSale FROM Sale iSale inner join iSale.saleDetail iSaleDetail, Inventory iInventory  WHERE  iSaleDetail.inventoryId = iInventory.inventoryId AND (iSale.saleDate = current_date OR iInventory.availableToProgramShip > 0)</query>
+			<query>SELECT distinct iSale FROM Sale iSale inner join iSale.saleDetail iSaleDetail, Inventory iInventory  WHERE  iSaleDetail.inventoryId = iInventory.inventoryId AND (iSale.saleDate = current_date OR iInventory.availableToProgramShip > 0)</query>
 		</named-query>
 		<attributes>
 			<id name="saleId">

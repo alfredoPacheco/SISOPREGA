@@ -89,7 +89,8 @@ enyo
 			name : "cattleType",
 			width : "200px;",
 			height : "35px;",
-			bindTo : "cattleTypeId"
+			bindTo : "cattleTypeId",
+			onSelectItem : "cattleSelected"
 		  } ]
 		} ],
 		{
@@ -237,6 +238,15 @@ enyo
 	  },
 	  cancelCreateCustomer : function() {
 		this.$.addCustomerDialog.close();
+	  },
+	  cattleSelected : function(inSender){
+		var filter = [];
+		if(inSender.getIndex()==3){
+		  filter = crudCattleQuality.getHorseQualitiesList();
+		} else {
+		  filter = crudCattleQuality.getList();
+		}
+		this.$.cattleQuality.setItems(filter);
 	  },
 	  clase_select : function(inSender) {
 		var filter = [];
