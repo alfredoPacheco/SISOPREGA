@@ -40,6 +40,7 @@ public class HermanaCorteExportador {
   private Hermana hermana;
   private double weight;
   private double heads;
+  private long cutSeq;
   
   /**
    * @return the hermanaCorteExportadorId
@@ -109,6 +110,20 @@ public class HermanaCorteExportador {
    */
   public void setHeads(double heads) {
     this.heads = heads;
+  }
+
+  /**
+   * @return the cutSeq
+   */
+  public long getCutSeq() {
+    return cutSeq;
+  }
+
+  /**
+   * @param cutSeq the cutSeq to set
+   */
+  public void setCutSeq(long cutSeq) {
+    this.cutSeq = cutSeq;
   }
 
   /**

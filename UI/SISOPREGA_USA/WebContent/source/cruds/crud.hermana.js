@@ -15,12 +15,17 @@ enyo.kind(
           heads : 0,
           weight : 0
         };
-      for ( var i = 0; i < this.arrObj.length; i++) {
-        for ( var j = 0; j < this.arrObj[i].HermanaCorte.length; j++) {
-          heads += Number(this.arrObj[i].HermanaCorte[j].heads);
-          weight += Number(this.arrObj[i].HermanaCorte[j].weight);
+      if(this.arrObj){
+    	for ( var i = 0; i < this.arrObj.length; i++) {
+    	  if(this.arrObj[i].HermanaCorte){
+    		for ( var j = 0; j < this.arrObj[i].HermanaCorte.length; j++) {
+              heads += Number(this.arrObj[i].HermanaCorte[j].heads);
+              weight += Number(this.arrObj[i].HermanaCorte[j].weight);
+            }
+    	  }
         }
       }
+      
       objSummary.heads = heads;
       objSummary.weight = weight;
       
@@ -40,15 +45,19 @@ enyo.kind(
         entityObj.purchaseDate = utils.dateIn(entityObj.deWhen);
         entityObj.aveweight = Number(entityObj.totalHeads) / Number(entityObj.totalWeight);
         
-        for ( var i = 0; i < entityObj.HermanaCorte.length; i++) {
-          var corte = entityObj.HermanaCorte[i];
-          corte.pen_name = crudPen.getByID(corte.barnyardId).barnyardCode;
-          corte.cattleClassName = crudCattleQuality.getByID(corte.qualityId).qualityName;
+        if(entityObj.HermanaCorte){
+          for ( var i = 0; i < entityObj.HermanaCorte.length; i++) {
+            var corte = entityObj.HermanaCorte[i];
+            corte.pen_name = crudPen.getByID(corte.barnyardId).barnyardCode;
+            corte.cattleClassName = crudCattleQuality.getByID(corte.qualityId).qualityName;
+          }  
         }
         
-        for ( var i = 0; i < entityObj.HermanaCorteExportador.length; i++) {
-          var corte = entityObj.HermanaCorteExportador[i];
-          corte.cattleClassName = crudCattleQuality.getByID(corte.qualityId).qualityName;
+        if(entityObj.HermanaCorteExportador){
+          for ( var i = 0; i < entityObj.HermanaCorteExportador.length; i++) {
+            var corte = entityObj.HermanaCorteExportador[i];
+            corte.cattleClassName = crudCattleQuality.getByID(corte.qualityId).qualityName;
+          }  
         }
         
         if(entityObj.HermanaExpense){

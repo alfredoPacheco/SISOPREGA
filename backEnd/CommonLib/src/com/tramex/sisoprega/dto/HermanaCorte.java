@@ -40,6 +40,7 @@ public class HermanaCorte {
   private long heads;
   private double weight;
   private Hermana hermana;
+  private long cutSeq;
   
   /**
    * @return the hermanaCorteId
@@ -107,6 +108,18 @@ public class HermanaCorte {
    */
   public Hermana getHermana() {
     return hermana;
+  }
+  /**
+   * @return the cutSeq
+   */
+  public long getCutSeq() {
+    return cutSeq;
+  }
+  /**
+   * @param cutSeq the cutSeq to set
+   */
+  public void setCutSeq(long cutSeq) {
+    this.cutSeq = cutSeq;
   }
   /**
    * @param hermana the hermana to set

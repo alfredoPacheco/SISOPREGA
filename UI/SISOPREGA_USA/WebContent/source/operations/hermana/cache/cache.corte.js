@@ -6,20 +6,64 @@ enyo.kind(
     selectedRancherId : -1,
     selectedRancherName : "",
     selectedCattleType : "",
+    secuencia : 0,
     add : function(corteObj) {
       corteObj.rancherId = this.selectedRancherId;
       corteObj.rancherName = this.selectedRancherName;
       corteObj.cattleType = this.selectedCattleType;
+      corteObj.cutSeq = this.secuencia++;
       this.cortes.push(corteObj);
+      this.cortesExpo.push(enyo.clone(corteObj));
       
       // Summarize for exporter
-      this.corteNaturalSummarization();
+      //this.corteNaturalSummarization();
     },
     get : function() {
       return this.cortes;
     },
     getExpo : function() {
-      return this.cortesExpo;
+      var grouping = {};
+      var result = [];
+      var sort=0;
+      for(var i=0;i<this.cortesExpo.length;i++){
+    	var objCorte = this.cortesExpo[i];
+    	if(grouping.hasOwnProperty(objCorte.qualityId)){
+    	  grouping[objCorte.qualityId].heads += Number(objCorte.heads);
+    	  grouping[objCorte.qualityId].weight += Number(objCorte.weight);    	  
+    	  grouping[objCorte.qualityId].recordIds.push(objCorte.cutSeq);
+    	  grouping[objCorte.qualityId].sort = sort++;
+    	}else{
+    	  grouping[objCorte.qualityId]={
+    		  cattleClassName: objCorte.cattleClassName,
+    		  recordIds:[objCorte.cutSeq], 
+    		  heads: Number(objCorte.heads), 
+    		  qualityId: Number(objCorte.qualityId),
+    		  weight: Number(objCorte.weight),
+    		  sort:sort++
+    	  };
+    	  if(objCorte.hasOwnProperty("identifier"))
+    		grouping[objCorte.qualityId].identifier = objCorte.identifier;
+    	}
+      }
+      
+      for(obj in grouping){
+    	if(grouping.hasOwnProperty(obj)){
+    	  result.push(grouping[obj]);
+    	}
+      }
+      result.sort(function(a,b){return a.sort > b.sort;});
+      return result;
+    },
+    getExpoCortesByGrouppedItem:function(objGroup){
+      var result = [];
+      for(var i=0;i<objGroup.recordIds.length;i++){
+    	for(var j=0;j<this.cortesExpo.length;j++){
+    	  if(this.cortesExpo[j].cutSeq == objGroup.recordIds[i]){
+    		result.push(this.cortesExpo[j]);
+    	  }
+    	}
+      }
+      return result;
     },
     remove : function(index) {
       var removedRecord = this.cortes[index];
@@ -52,39 +96,39 @@ enyo.kind(
       
     },
     removeExpo : function(index) {
-      if (this.cortesExpo[index].recordIds) {
-        if (this.cortesExpo[index].recordIds.length == 1) {
-          var recordId = this.cortesExpo[index].recordIds[0];
-          if (this.cortes[recordId].cattleClassId == this.cortesExpo[index].cattleClassId) {
-            cacheMan.setMessage("", "El registro es igual al registro original, ningun valor puede ser reiniciado");
-            return false;
+      
+      var objCorteExpoSelected = this.getExpo()[index]; 
+      var arrCorteOriginal = cacheCorte.cortes;
+      
+      
+      if (objCorteExpoSelected.recordIds) {
+        if (objCorteExpoSelected.recordIds.length == 1) {
+          var recordId = objCorteExpoSelected.recordIds[0];
+          for(var i=0;i<arrCorteOriginal.length;i++){
+        	if(arrCorteOriginal[i].cutSeq == recordId){
+        	  if(arrCorteOriginal[i].qualityId == objCorteExpoSelected.qualityId){
+                cacheMan.setMessage("", "El registro es igual al registro original, ningun valor puede ser reiniciado");
+                return false;
+              }
+        	}
           }
         }
         
         // create a record with each one of it's recordIds.
-        var recordsToSplit = this.cortesExpo[index].recordIds;
-        this.cortesExpo.splice(index, 1);
+        var recordsToSplit = objCorteExpoSelected.recordIds;
         
         for ( var i = 0; i < recordsToSplit.length; i++) {
-          var recordIds = [];
-          var recordId = recordsToSplit[i];
-          recordIds.push(recordId);
-          var cutRecord =
-            {
-              barnyardId : this.cortes[recordId].barnyardId,
-              pen_name : this.cortes[recordId].pen_name,
-              qualityId : this.cortes[recordId].cattleClassId,
-              cattleClassName : this.cortes[recordId].cattleClassName,
-              heads : this.cortes[recordId].heads,
-              weight : this.cortes[recordId].weight,
-              recordIds : recordIds
-            };
-          
-          this.cortesExpo.push(cutRecord);
+          for(var j=0;j<arrCorteOriginal.length;j++){
+        	for(var x=0;x<this.cortesExpo.length;x++){
+        	  if(recordsToSplit[i] == arrCorteOriginal[j].cutSeq && this.cortesExpo[x].cutSeq == recordsToSplit[i]){
+        		this.cortesExpo[x].qualityId = arrCorteOriginal[j].qualityId;
+        		this.cortesExpo[x].cattleClassName = arrCorteOriginal[j].cattleClassName;
+        	  }  
+        	}
+          }
         }
-      } else {
-        this.cortesExpo.splice(index, 1);
       }
+      
       
     },
     clear : function() {
@@ -94,33 +138,47 @@ enyo.kind(
     corteNaturalSummarization : function() {
       for ( var i = 0; i < this.cortes.length; i++) {
         
-        var recordIds = [];
-        recordIds.push(i);
-        
-        var cattleClassId = this.cortes[i].qualityId;
+        var qualityId = this.cortes[i].qualityId;
+        var cutSeq = this.cortes[i].cutSeq;
         var heads = Number(this.cortes[i].heads);
         var weight = Number(this.cortes[i].weight);
+        
+        var recordIds = [];
+        recordIds.push(cutSeq);
         
         var summarized = false;
         
         for ( var j = 0; j < this.cortesExpo.length; j++) {
-          if (this.cortesExpo[j].recordIds) {
-            for ( var k = 0; k < this.cortesExpo[j].recordIds.length; k++) {
-              summarized = this.cortesExpo[j].recordIds[k] == i;
-              
-              if (summarized) break;
-            }
+          if(this.cortesExpo[j].qualityId == qualityId){
+        	if(!this.cortesExpo[j].recordIds){
+        	  	this.cortesExpo[j].recordIds = [];
+        	}
+        	this.cortesExpo[j].recordIds.push(cutSeq);
+        	summarized = true;
           }
-          
-          if (summarized) break;
         }
+          
+        
+        
+          
+//          
+//          if (this.cortesExpo[j].recordIds) {
+//            for ( var k = 0; k < this.cortesExpo[j].recordIds.length; k++) {
+//              summarized = this.cortesExpo[j].recordIds[k] == i;
+//              
+//              if (summarized) break;
+//            }
+//          }
+//          
+//          if (summarized) break;
+//        }
         
         if (!summarized) { // not summarized yet
         
           // find a record where it can be summarized
           var summarizeIn = -1;
           for ( var summarizeInIndex = 0; summarizeInIndex < this.cortesExpo.length; summarizeInIndex++) {
-            if (this.cortesExpo[summarizeInIndex].cattleClassId == cattleClassId) {
+            if (this.cortesExpo[summarizeInIndex].qualityId == qualityId) {
               summarizeIn = summarizeInIndex;
               break;
             }
@@ -131,6 +189,9 @@ enyo.kind(
             this.cortesExpo[summarizeIn].pen_name += ", " + this.cortes[i].pen_name;
             this.cortesExpo[summarizeIn].heads = Number(this.cortesExpo[summarizeIn].heads) + heads;
             this.cortesExpo[summarizeIn].weight = Number(this.cortesExpo[summarizeIn].weight) + weight;
+            if(!this.cortesExpo[summarizeIn].recordIds){
+              this.cortesExpo[summarizeIn].recordIds = [];
+            }
             this.cortesExpo[summarizeIn].recordIds.push(i);
           } else {
             

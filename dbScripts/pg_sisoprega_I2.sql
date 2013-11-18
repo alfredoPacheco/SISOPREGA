@@ -103,6 +103,7 @@ CREATE TABLE ctrl_hermana_corte_exportador(
 	quality_id  integer NOT NULL REFERENCES cat_cattle_quality(quality_id),
 	heads       integer not null,
 	weight      decimal(12,4) not null,
+	cut_seq     integer NOT NULL,
 	purchase_price  decimal(10,2) NOT NULL DEFAULT 0.0
 );
 
@@ -116,7 +117,8 @@ CREATE TABLE ctrl_hermana_corte(
 	barnyard_id integer NOT NULL REFERENCES cat_barnyard(barnyard_id),
 	quality_id  integer NOT NULL REFERENCES cat_cattle_quality(quality_id),
 	heads       integer not null,
-	weight      decimal(12,4) not null
+	weight      decimal(12,4) not null,
+	cut_seq     integer NOT NULL
 );
 
 GRANT ALL ON ctrl_hermana_corte TO sisoprega;
@@ -213,7 +215,7 @@ SELECT reception.reception_id,
     detail.hc, 
     detail.weight, 
     sum(rejects.hc) AS rejects_hc, 
-    sum(rejects.weight) AS rejects_weight
+    sum(inspection.weight) AS rejects_weight
    FROM ctrl_reception reception
    JOIN cat_cattle_type cattle ON reception.cattle_type = cattle.cattype_id
    JOIN ctrl_reception_headcount detail ON reception.reception_id = detail.reception_id

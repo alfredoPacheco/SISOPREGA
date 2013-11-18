@@ -170,11 +170,15 @@ enyo
 	  },
 	  dropCorte : function(inSender, inIndex) {
 
-		if (this.isForExporter)
-		  cacheCorte.removeExpo(this.resetItem(null, inIndex));
+		if (this.isForExporter){
+		  cacheCorte.removeExpo(inIndex);
+			this.cortes = cacheCorte.getExpo();
+		} 
 		else {
 		  cacheCorte.remove(inIndex);
-		  this.parent.parent.$.listaCorteExpo.cortes = this.cortes;
+		  //this.parent.parent.$.listaCorteExpo.cortes = enyo.clone(this.cortes);
+		  cacheCorte.cortesExpo = enyo.clone(this.cortes);
+		  this.parent.parent.$.listaCorteExpo.loadCortes(cacheCorte.cortesExpo);
 		}
 
 		this.iSelected = -1;
@@ -223,8 +227,29 @@ enyo
 	  },
 	  on_accept_split : function(inSender, objNew) {
 		this.$.popup_split.close();
-		this.cortes.push(objNew);
-		this.loadCortes();
+		var cortesExpoByGrouped = cacheCorte.getExpoCortesByGrouppedItem(objNew);
+		
+		var headsToSplit = Number(objNew.heads);
+		var weightToSplit = Number(objNew.weight);
+		
+		for(var i=0;i<cortesExpoByGrouped.length;i++){
+		  if((cortesExpoByGrouped[i].heads - headsToSplit) > 0){
+			cortesExpoByGrouped[i].heads =cortesExpoByGrouped[i].heads - headsToSplit;
+			cortesExpoByGrouped[i].weight =cortesExpoByGrouped[i].weight - weightToSplit;
+			objNew.cutSeq = cortesExpoByGrouped[i].cutSeq;
+			break;
+		  }else{
+			headsToSplit = headsToSplit - cortesExpoByGrouped[i].heads;
+			objNew.cutSeq = cortesExpoByGrouped[i].cutSeq;
+			cortesExpoByGrouped[i].heads = 0;
+		  }
+		}
+		
+		objNew.qualityId = -1;
+		objNew.cattleClassName = "";
+		cacheCorte.cortesExpo.push(objNew);
+//		this.cortes.push(objNew);
+		this.loadCortes(cacheCorte.getExpo());
 	  },
 	  on_cancel_split : function() {
 		this.$.popup_split.close();

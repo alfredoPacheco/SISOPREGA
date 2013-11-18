@@ -1042,6 +1042,9 @@
 			<basic name="purchasePrice">
 				<column name="purchase_price" />
 			</basic>
+			<basic name="cutSeq">
+				<column name="cut_seq"/>
+			</basic>
 			<many-to-one name="hermana" fetch="LAZY" optional="false">
 				<join-column name="hermana_id" referenced-column-name="hermana_id"
 					nullable="false" />
@@ -1066,6 +1069,9 @@
 			</basic>
 			<basic name="weight">
 				<column name="weight" />
+			</basic>
+			<basic name="cutSeq">
+				<column name="cut_seq"/>
 			</basic>
 			<many-to-one name="hermana" fetch="LAZY" optional="false">
 				<join-column name="hermana_id" referenced-column-name="hermana_id"

@@ -82,6 +82,8 @@ enyo.kind(
           }
     ],
     addCharge : function(arrData) {
+      if(!this.arrData)
+    	this.arrData = [];
       this.arrData.push(arrData);
       this.updateList();
     },
