@@ -1,4 +1,5 @@
-enyo.kind(
+enyo
+	.kind(
 	{
 	  name : "operations.purchase.form",
 	  kind : "forms.masterDetail",
@@ -29,7 +30,7 @@ enyo.kind(
 		  height : "40px;",
 		  components : [
 		  {
-			content : "Fecha:",
+			content : "Date:",
 			width : "80px;",
 			style : "text-align: right;margin-right:5px;"
 		  },
@@ -43,7 +44,7 @@ enyo.kind(
 			bindTo : "purchaseDate"
 		  },
 		  {
-			content : 'mes/dia/año',
+			content : 'mm/dd/yyyy',
 			className : "listFirst",
 			style : "background-color:#DABD8B;margin-left:2px;font-size:12px;",
 			width : "80px;"
@@ -55,7 +56,7 @@ enyo.kind(
 		  height : "40px;",
 		  components : [
 		  {
-			content : "Proveedor:",
+			content : "Supplier:",
 			width : "80px;",
 			style : "text-align: right;margin-right:5px;"
 		  },
@@ -76,7 +77,7 @@ enyo.kind(
 			style : "padding: 2px;margin-top: 3px;background-color: #DABD8B;"
 		  },
 		  {
-			content : "Ganado:",
+			content : "Cattle:",
 			width : "80px;",
 			style : "text-align: right;margin-right:5px;"
 		  },
@@ -99,7 +100,7 @@ enyo.kind(
 		  inputKind : "ToolInput",
 		  height : "35px;",
 		  name : "cattleQuality",
-		  hint : 'Clase',
+		  hint : 'Class',
 		  width : "200px;",
 		  style : "margin-right: 15px;",
 		  bindTo : "qualityId",
@@ -111,7 +112,7 @@ enyo.kind(
 		  inputKind : "ToolInput",
 		  height : "35px;",
 		  name : "pen",
-		  hint : "Corral",
+		  hint : "Pen",
 		  width : "150px;",
 		  style : "margin-right: 15px;",
 		  bindTo : "penId",
@@ -121,7 +122,7 @@ enyo.kind(
 		  kind : "controls.numberBox",
 		  inputKind : "ToolInput",
 		  name : "cabezas",
-		  hint : 'Cabezas',
+		  hint : 'Heads',
 		  width : "125px;",
 		  height : "35px",
 		  style : "margin-right: 15px;",
@@ -134,7 +135,7 @@ enyo.kind(
 		  kind : "controls.numberBox",
 		  inputKind : "ToolInput",
 		  name : "peso",
-		  hint : 'Peso',
+		  hint : 'Weight',
 		  width : "125px;",
 		  height : "35px",
 		  style : "margin-right: 15px;",
@@ -179,26 +180,29 @@ enyo.kind(
 		if (this.$.cattleQuality.getIndex() == -1
 			|| this.$.pen.getIndex() == -1 || this.$.cabezas.getValue() == ""
 			|| this.$.peso.getValue() == "") {
-		  sError = "Error. Verifique que todos los campos tengan un valor.";
+		  sError = "Error. Verify that all fields have a value.";
 		}
 		for ( var i = 0; i < this.arrDetail.length; i++) {
 		  if (this.arrDetail[i].penId == this.$.pen.getItemSelected().value) {
-			sError = "Error. El corral que intenta agregar ya se encuentra en la lista.";
+			sError = "Error. The pen you are trying to add is already in the list.";
 			break;
 		  }
 		}
-		
+
 		var occupiedPens = crudInventory.getPensList();
 		for ( var i = 0; i < occupiedPens.length; i++) {
 		  var isPenOccupied = this.$.pen.getIndex() == Number(occupiedPens[i].value);
-		  var isSameQuality = occupiedPens[i].object.qualityId == this.$.cattleQuality.getIndex();
-		  if(isPenOccupied && !isSameQuality){
-			var cattleQuality = crudCattleQuality.getByID(occupiedPens[i].object.qualityId);
-			sError = "Error. El corral " + occupiedPens[i].caption + " ya está ocupado con ganado de clase " + cattleQuality.qualityName;
+		  var isSameQuality = occupiedPens[i].object.qualityId == this.$.cattleQuality
+			  .getIndex();
+		  if (isPenOccupied && !isSameQuality) {
+			var cattleQuality = crudCattleQuality
+				.getByID(occupiedPens[i].object.qualityId);
+			sError = "Error. The Pen " + occupiedPens[i].caption
+				+ " is already occupied by cattle class "
+				+ cattleQuality.qualityName;
 			break;
 		  }
 		}
-		
 
 		if (sError != "") {
 		  cacheMan.setMessage("", sError);
@@ -275,13 +279,13 @@ enyo.kind(
 	  beforeSave : function(obj) {
 		this.errorMessage = "";
 		if (this.$.purchDate.getValue() == "") {
-		  this.errorMessage = "Error. El campo fecha es requerido.";
+		  this.errorMessage = "Error. Date field is required.";
 		} else {
 		  if (new Date() - new Date(this.$.purchDate.getValue()) < 0) {
-			this.errorMessage = "Error. No se permite escribir fechas futuras.";
+			this.errorMessage = "Error. You are not allowed to purchase on future dates.";
 		  }
 		  if (new Date() - new Date(this.$.purchDate.getValue()) > 676787584) {
-			this.errorMessage = "Error. No se permiten fechas anteriores a 7 dias.";
+			this.errorMessage = "Error. You are not allowed to purchase on dates previous to one week.";
 		  }
 		}
 		if (this.errorMessage != "") {

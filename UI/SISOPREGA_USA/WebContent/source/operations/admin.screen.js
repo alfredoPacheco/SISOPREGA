@@ -140,13 +140,11 @@ enyo.kind(
                   {
                     peekWidth : "30%",
                     flex : .3,
-//                    dragAnywhere:true,
                     components : [
                         {
                           name : "purchased",
                           kind : "admin.purchased",
                           flex : 1,
-                          // arrData : crudPurchase.get(),
                           onLoadCompleted : "columnsLoadCompleted",
                           onAferUpdatePurchase:"after_update_purchase_list",
                           onBuyCattle : "buy_cattle_click",
@@ -163,7 +161,6 @@ enyo.kind(
                             name : "sales",
                             kind : "admin.sales",
                             flex : 1,
-                            // arrData : cacheSales.readData(),
                             onShipment : "showShipment",
                             onUpdateView : "on_update_sales_view",
                             onLoadCompleted : "columnsLoadCompleted"
@@ -209,7 +206,7 @@ enyo.kind(
         this.$.popup_shipments.openAtCenter();
         this.$.shipments_kind.updateList();
       } else {
-        cacheMan.setMessage("", "No hay registros seleccionados.");
+        cacheMan.setMessage("", "No selected records.");
       }
     },
     showSelectShipment : function(arrShipment) {

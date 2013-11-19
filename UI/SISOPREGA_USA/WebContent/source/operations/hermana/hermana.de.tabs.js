@@ -39,7 +39,7 @@ enyo
 				  kind : "TabButton",
 				  name : "btnCorte",
 				  tab : 1,
-				  content : "Corte",
+				  content : "Cut",
 				  onclick : "tabClicked",
 				  height : "30px",
 				  style : "-webkit-border-image: none;color: white;background-color: chocolate;border-style: solid;border-width: 1px 1px 0px 1px;border-color: #333;border-radius: 30px 10px 0px 0px;font-size:15px;padding: 5px 0px 0px 0px;"
@@ -49,7 +49,7 @@ enyo
 				  kind : "TabButton",
 				  name : "btnCorteExportador",
 				  tab : 2,
-				  content : "Corte Exportador",
+				  content : "Exporter Cut",
 				  onclick : "tabClicked",
 				  height : "30px",
 				  style : "-webkit-border-image: none;color: white;background-color: chocolate;border-style: solid;border-width: 1px 1px 0px 1px;border-color: #333;border-radius: 30px 10px 0px 0px;font-size:15px;padding: 5px 0px 0px 0px;"
@@ -58,7 +58,7 @@ enyo
 				  kind : "TabButton",
 				  name : "btnGastos",
 				  tab : 3,
-				  content : "Gastos",
+				  content : "Expenses",
 				  onclick : "tabClicked",
 				  height : "30px",
 				  style : "-webkit-border-image: none;color: white;background-color: chocolate;border-style: solid;border-width: 1px 1px 0px 1px;border-color: #333;border-radius: 30px 10px 0px 0px;font-size:15px;padding: 5px 0px 0px 0px;"
@@ -67,7 +67,7 @@ enyo
 				  kind : "TabButton",
 				  name : "btnSummary",
 				  tab : 4,
-				  content : "Resumen",
+				  content : "Summary",
 				  onclick : "tabClicked",
 				  height : "30px",
 				  style : "-webkit-border-image: none;color: white;background-color: chocolate;border-style: solid;border-width: 1px 1px 0px 1px;border-color: #333;border-radius: 30px 10px 0px 0px;font-size:15px;padding: 5px 0px 0px 0px;"
@@ -87,7 +87,7 @@ enyo
 					  {
 						kind : "controls.autocomplete",
 						name : "classAutoComplete",
-						hint : "Clase",
+						hint : "Class",
 						inputKind : "ToolInput",
 						flex : 1,
 						contentPack : "end",
@@ -108,7 +108,7 @@ enyo
 					  {
 						kind : "controls.autocomplete",
 						name : "penAutoComplete",
-						hint : "Corral",
+						hint : "Pen",
 						inputKind : "ToolInput",
 						flex : 1,
 						contentPack : "end",
@@ -121,7 +121,7 @@ enyo
 						kind : "ToolInput",
 						name : "headCount",
 						style : "width:20%",
-						hint : "Cabezas",
+						hint : "Heads",
 						height : "35px",
 						width : "200px",
 						style : "margin-left:10px;"
@@ -130,7 +130,7 @@ enyo
 						kind : "ToolInput",
 						name : "weight",
 						style : "width:20%",
-						hint : "Peso",
+						hint : "Weight",
 						height : "35px",
 						width : "200px",
 						style : "margin-left:10px;"
@@ -175,7 +175,7 @@ enyo
 						kind : "controls.autocomplete",
 						name : "classAutoCompleteExpo",
 						inputKind : "ToolInput",
-						hint : "Clase",
+						hint : "Class",
 						flex : 1,
 						contentPack : "end",
 						onEnter : "emularTabulacionConEnter",
@@ -238,7 +238,7 @@ enyo
 					  {
 						kind : "controls.autocomplete",
 						name : "charge",
-						hint : "Concepto",
+						hint : "Concept",
 						inputKind : "ToolInput",
 						flex : .4,
 						contentPack : "end",
@@ -257,7 +257,7 @@ enyo
 					  {
 						kind : "ToolInput",
 						name : "charge_price",
-						hint : "Monto",
+						hint : "Amount",
 						height : "35px"
 					  },
 					  {
@@ -291,12 +291,12 @@ enyo
 				  colCount : 5,
 				  selectionMode : maklesoft.DataTable.SelectionMode.NONE,
 				  editable : false,
-				  columnNames : [ "Cabezas", "Peso (Kg)", "Peso (Lb)",
-					  "Prom Lb" ],
+				  columnNames : [ "Heads", "Weight (Kg)", "Weight (Lb)",
+					  "Avg Pounds" ],
 				  showColumnNames : true,
 				  showRowNumbers : true,
-				  rowNames : [ "Llegada en México", "Rechazos",
-					  "Cruce descontando desechos", "Peso Neto" ],
+				  rowNames : [ "Mexico Arrival", "Rejects",
+					  "Imported after rejects", "Net Weight" ],
 				  cellClass : function(rowIndex, colIndex, data) {
 					var className = "maklesoft-datatable-cell";
 					if (typeof data == "number") {
@@ -321,7 +321,7 @@ enyo
 					editable : false,
 					showColumnNames : false,
 					showRowNumbers : true,
-					rowNames : [ "Aumento", "Porcentaje" ],
+					rowNames : [ "Increase", "Percentage" ],
 					cellClass : function(rowIndex, colIndex, data) {
 					  var className = "maklesoft-datatable-cell";
 					  if (typeof data == "number") {
@@ -335,7 +335,7 @@ enyo
 				} ]
 		  } ],
 	  ready : function() {
-		this.$.listaCorteExpo.$.rowContainer.setConfirmCaption("Reestablecer");
+		this.$.listaCorteExpo.$.rowContainer.setConfirmCaption("Restore");
 		this.$.listaCorteExpo.isForExporter = true;
 		this.tabClicked(this.$.btnCorte);
 
@@ -356,7 +356,7 @@ enyo
 
 		if (!this.summary && inSender.tab == 3) {
 		  cacheMan.setMessage('',
-			  'No se han capturado datos del corte de ganado aún');
+			  'There is no cut record selected yet.');
 		  return false;
 		}
 
@@ -374,7 +374,7 @@ enyo
 		case 2:
 		  this.showCorteExportador();
 		  this.$.lblCorralExpo.applyStyle("visibility", "hidden");
-		  this.$.listaCorteExpo.$.control2.applyStyle("visibility","hidden")
+		  this.$.listaCorteExpo.$.control2.applyStyle("visibility","hidden");
 		  break;
 		case 3:
 		  this.showGastos();
@@ -496,10 +496,10 @@ enyo
 		this.$.summaryTotal.setData(total_data);
 
 		var corteDelta = this.summary.trade_hc - this.summary.net_hc;
-		var detailDescription = "Cortando "
+		var detailDescription = "Cutting "
 			+ utils.formatNumberThousands(this.summary.trade_hc) + " "
 			+ this.cattleClassName + ", "
-			+ utils.formatNumberThousands(corteDelta) + " por cortar";
+			+ utils.formatNumberThousands(corteDelta) + " to cut.";
 
 		this.$.detailDescription.setContent(detailDescription);
 	  },
@@ -581,24 +581,24 @@ enyo
 		if (charge)
 		  formula = charge.expenseFormula;
 		// Replace arrived to Mexico
-		formula = formula.replace('[cabezas]', this.summary.hc);
-		formula = formula.replace('[libras]', this.summary.lbs);
+		formula = formula.replace('[heads]', this.summary.hc);
+		formula = formula.replace('[pounds]', this.summary.lbs);
 		formula = formula.replace('[kilos]', this.summary.kg);
 
 		// Replace rejects
-		formula = formula.replace('[cabezasRechazos]', this.summary.rejects_hc);
-		formula = formula.replace('[librasRechazos]', this.summary.rejects_lbs);
-		formula = formula.replace('[kilosRechazos]', this.summary.rejects_kgs);
+		formula = formula.replace('[rejectHeads]', this.summary.rejects_hc);
+		formula = formula.replace('[rejectPounds]', this.summary.rejects_lbs);
+		formula = formula.replace('[rejectKilos]', this.summary.rejects_kgs);
 
 		// Replace cross left over
-		formula = formula.replace('[cabezasCruce]', this.summary.trade_hc);
-		formula = formula.replace('[librasCruce]', this.summary.trade_lbs);
-		formula = formula.replace('[kilosCruce]', this.summary.trade_kgs);
+		formula = formula.replace('[importedHeads]', this.summary.trade_hc);
+		formula = formula.replace('[importedPounds]', this.summary.trade_lbs);
+		formula = formula.replace('[importedKilos]', this.summary.trade_kgs);
 
 		// Replace net
-		formula = formula.replace('[cabezasNeto]', this.summary.net_hc);
-		formula = formula.replace('[librasNeto]', this.summary.net_lbs);
-		formula = formula.replace('[kilosNeto]', this.summary.net_kg);
+		formula = formula.replace('[netHeads]', this.summary.net_hc);
+		formula = formula.replace('[netPounds]', this.summary.net_lbs);
+		formula = formula.replace('[netKilos]', this.summary.net_kg);
 
 		// Evaluate expresion
 		var calculated = null;
@@ -618,7 +618,7 @@ enyo
 		  this.$.charge_price.setValue("");
 		  this.$.charge.setValue("");
 		} else {
-		  cacheMan.setMessage("", "Concepto no registrado");
+		  cacheMan.setMessage("", "Unknown expense concept.");
 		}
 	  },
 	  addCookiedCharges : function() {
@@ -683,17 +683,17 @@ enyo
 		var cortes = this.$.listaCorteExpo.cortes;
 		var selectedCorte = cortes[this.$.listaCorteExpo.iSelected];
 
-		this.$.lblCorralExpo.setValue("Corral: " + selectedCorte.pen_name);
-		this.$.lblHeadsExpo.setValue("Cabezas: "
+		this.$.lblCorralExpo.setValue("Pen: " + selectedCorte.pen_name);
+		this.$.lblHeadsExpo.setValue("Heads: "
 			+ utils.formatNumberThousands(selectedCorte.heads));
-		this.$.lblWeightExpo.setValue("Peso: "
+		this.$.lblWeightExpo.setValue("Weight: "
 			+ utils.formatNumberThousands(selectedCorte.weight) + " lbs.");
 		this.$.classAutoCompleteExpo.setIndex(selectedCorte.qualityId);
 	  },
 	  reClassify : function() {
 		if (this.$.listaCorteExpo.iSelected == -1) {
 		  cacheMan.setMessage("",
-			  "No hay registro seleccionado para re clasificación");
+			  "There is no a selected record for reclassification");
 		  return false;
 		}
 
@@ -725,46 +725,6 @@ enyo
 			}
 		  }
 		}
-
-		// // Find a row where it can be re classified.
-		// var cortes = cacheCorte.getExpo();
-		// var reclassifiedInRecord = false;
-		// for ( var corteIdx = 0; corteIdx < cortes.length; corteIdx++) {
-		// if (selectedIdx != corteIdx &&
-		// this.$.classAutoCompleteExpo.getIndex() ==
-		// cortes[corteIdx].qualityId) {
-		// // found record, merge and delete
-		// cacheCorte.cortesExpo[corteIdx].pen_name ='';
-		// cacheCorte.cortesExpo[corteIdx].heads =
-		// Number(cacheCorte.cortesExpo[corteIdx].heads) +
-		// Number(selectedCorteExpo.heads);
-		// cacheCorte.cortesExpo[corteIdx].weight =
-		// Number(cacheCorte.cortesExpo[corteIdx].weight) +
-		// Number(selectedCorteExpo.weight);
-		//              
-		// if(selectedCorteExpo.recordIds){
-		// for ( var rIdx = 0; rIdx < selectedCorteExpo.recordIds.length;
-		// rIdx++) {
-		// cacheCorte.cortesExpo[corteIdx].recordIds.push(selectedCorteExpo.recordIds[rIdx]);
-		// }
-		// }
-		//              
-		// reclassifiedInRecord = true;
-		//              
-		// this.$.listaCorteExpo.iSelected = -1;
-		// cacheCorte.cortesExpo.splice(selectedIdx, 1);
-		//              
-		// break;
-		// }
-		// }
-		//          
-		// if (!reclassifiedInRecord) {
-		// // no record found for classification, reclassify in own record
-		// cacheCorte.cortesExpo[selectedIdx].qualityId =
-		// this.$.classAutoCompleteExpo.getIndex();
-		// cacheCorte.cortesExpo[selectedIdx].cattleClassName =
-		// this.$.classAutoCompleteExpo.getValue();
-		// }
 
 		this.$.listaCorteExpo.setCortes(cacheCorte.getExpo());
 

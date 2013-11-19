@@ -18,7 +18,7 @@ enyo
 			components : [
 			{
 			  kind : "VFlexBox",
-			  content : "Inventario",
+			  content : "Inventory",
 			  flex : .17,
 			  onclick : "doSelect",
 			  style : "padding:0px;color:white;font-size:15px;"
@@ -29,7 +29,7 @@ enyo
 			},
 			{
 			  kind : "Button",
-			  caption : "Vender",
+			  caption : "Sale",
 			  onclick : "doSale"
 			} ]
 		  },
@@ -42,30 +42,30 @@ enyo
 			pack : "start",
 			components : [
 			{
-			  content : 'Tipo',
+			  content : 'Type',
 			  flex : .8
 			},
 			{
-			  content : 'Clase',
+			  content : 'Class',
 			  flex : .8
 			},
 			{
-			  content : 'Cabezas',
+			  content : 'Heads',
 			  flex : .5,
 			  style : "text-align: right;"
 			},
 			{
-			  content : 'Peso',
+			  content : 'Weight',
 			  flex : 1,
 			  style : "text-align: right;"
 			},
 			{
-			  content : 'Promedio',
+			  content : 'Average',
 			  flex : 1,
 			  style : "text-align: right;"
 			},
 			{
-			  content : 'Alimento',
+			  content : 'Feed',
 			  flex : 1,
 			  style : "text-align: right;"
 			}, ]
@@ -95,7 +95,7 @@ enyo
 					  {
 						name : "lblInvClass",
 						flex : .8,
-						content : "Novillos"
+						content : "Steers"
 					  },
 					  {
 						name : "lblInvHeads",
@@ -215,7 +215,7 @@ enyo
 			components : [
 			{
 			  kind : "VFlexBox",
-			  content : "Inventario Final",
+			  content : "Final Inventory",
 			  flex : 1.5,
 			  style : "color:white;margin:0;font-size:15px;"
 			},
@@ -339,21 +339,21 @@ enyo
 		var iSold = 0;
 		var iSoldAve = 0;
 
-		this.$.lblInvSumHeadClass.setContent("Cabezas<br />"
+		this.$.lblInvSumHeadClass.setContent("Heads<br />"
 			+ utils.formatNumberThousands(iHeads));
-		this.$.lblInvSumWeight.setContent("Peso<br />"
+		this.$.lblInvSumWeight.setContent("Weight<br />"
 			+ utils.formatNumberThousands(iSumWeight));
-		this.$.lblInvSumAvgWeight.setContent("Peso Prom.<br />"
+		this.$.lblInvSumAvgWeight.setContent("Average<br />"
 			+ utils.formatNumberThousands(iSumAve.toFixed(2)));
-		this.$.lblInvSumFeed.setContent("Alimento<br />"
+		this.$.lblInvSumFeed.setContent("Feed<br />"
 			+ utils.formatNumberThousands(iSumFeed.toFixed(2)));
 
-		this.$.lblPurSumInvHeads.setContent("Cabezas<br />"
+		this.$.lblPurSumInvHeads.setContent("Heads<br />"
 			+ utils.formatNumberThousands(iHeads - iSold));
-		this.$.lblPurSumInvWeight.setContent("Peso<br />"
+		this.$.lblPurSumInvWeight.setContent("Weight<br />"
 			+ utils.formatNumberThousands((iSumWeight - iSoldAve).toFixed(2)));
 		this.$.lblSumInvAveWight
-			.setContent("Peso Prom.<br />"
+			.setContent("Average<br />"
 				+ utils
 					.formatNumberThousands(((iSumWeight - iSoldAve) / (iHeads - iSold))
 						.toFixed(2)));

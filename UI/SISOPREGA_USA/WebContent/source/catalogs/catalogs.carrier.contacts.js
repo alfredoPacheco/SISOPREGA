@@ -22,14 +22,14 @@ enyo
 				{
 				    kind : "ToolInput",
 				    name : "contact",
-				    hint : 'Contacto',
+				    hint : 'Contact',
 				    flex : 1
 				// style : "margin-right: 15px;"
 				},
 				{
 				    kind : "ToolInput",
 				    name : "phone",
-				    hint : "Telefono",
+				    hint : "Telephone",
 				    width : "150px;",
 				    onfocus : "applyMask"
 				// style : "margin-right: 15px;"
@@ -76,7 +76,7 @@ enyo
 								name : "btnCancel",
 								className : "enyo-button-negative",
 								flex : 1,
-								caption : "Cancelar",
+								caption : "Cancel",
 								onclick : "cancel_click"
 							    } ]
 						} ]
@@ -87,10 +87,7 @@ enyo
 			kind : enyo.Scroller,
 			name : "detailScroller",
 			flex : 1,
-			// className : "listBG",
 			style : "background-color: #482400;",
-			// style:"background-image:url('images/images
-			// (3).jpg');background-repeat:repeat;margin-top: 5px;",
 			components : [ {
 			    kind : enyo.VirtualRepeater,
 			    name : "list",
@@ -122,17 +119,14 @@ enyo
 		    }, {
 			layoutKind : "HFlexLayout",
 			align : "center",
-			// style : "border-top-style:
-			// solid;border-top-color:#482400;border-top-width:5px;",
 			components : [ {
 			    kind : enyo.Spacer
 			}, {
 			    kind : "Button",
 			    name : "ok_button",
 			    className : "enyo-button-affirmative",
-			    caption : "Cerrar",
+			    caption : "Close",
 			    onclick : "ok_click",
-			    // flex:1
 			    width : "120px;"
 			} ]
 		    } ],
@@ -150,7 +144,7 @@ enyo
 		    crudCarrier.update(this.obj, this, "updateList");
 		    this.$.detailScroller.scrollToBottom();
 		} else
-		    cacheMan.setMessage("", "Verifique campos.");
+		    cacheMan.setMessage("", "Please check on data entry.");
 	    },
 	    deleteItem : function(inSender, inIndex) {
 		this.obj.CarrierContact.splice(inIndex,1);
@@ -184,8 +178,6 @@ enyo
 		}
 	    },	    
 	    ready : function() {
-		// this.$.weight.$.input.applyStyle("text-align", "right");
-		// this.$.btnSave.hide();
 		this.$.contact.setFocusClassName(null);
 		this.$.phone.setFocusClassName(null);
 		this.updateList();

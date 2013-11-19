@@ -10,9 +10,6 @@ enyo.kind({
 	width : "80%;",
 	height : "80%;",
 	dismissWithClick : false,
-	// showHideMode : "transition",
-	// openClassName : "zoomFadeIn",
-	// className : "transitioner2",
 	layoutKind : "VFlexLayout",
 	style : "overflow: hidden;border-width: 8px;",
 	scrim : true,
@@ -31,9 +28,6 @@ enyo.kind({
 	width : "80%",
 	height : "80%",
 	dismissWithClick : false,
-	// showHideMode : "transition",
-	// openClassName : "zoomFadeIn",
-	// className : "transitioner2",
 	layoutKind : "VFlexLayout",
 	style : "overflow: hidden;	border-width: 8px;",
 	scrim : true,
@@ -81,7 +75,7 @@ enyo.kind({
 			kind : enyo.Button,
 			name : "edit_button",
 			onclick : "edit_click",
-			caption : "Editar",
+			caption : "Edit",
 			showing : false,
 			style : "min-width:95px;"
 
@@ -89,7 +83,7 @@ enyo.kind({
 			kind : enyo.Button,
 			name : "contacts_button",
 			onclick : "contacts_click",
-			caption : "Contactos",
+			caption : "Contacts",
 			showing : false,
 			style : "min-width:95px;"
 
@@ -114,13 +108,13 @@ enyo.kind({
 		    align : "left",
 		    onkeyup : "key_up",
 		    flex : 1,
-		    hint : "Filtro",
+		    hint : "Filter",
 		    changeOnInput : true
 		}, {
 		    kind : "Button",
 		    name : "btnClearFilter",
 		    className : "enyo-button-negative",
-		    caption : "Remover Filtro",
+		    caption : "Clear Filter",
 		    onclick : "clearFilter",
 		    width : "115px;"
 		} ]
@@ -129,7 +123,7 @@ enyo.kind({
 		components : [ {
 		    kind : "enyo.IconButton",
 		    style : "",
-		    label : "Nuevo",
+		    label : "New",
 		    onclick : "add_click"
 		} ]
 	    }
@@ -143,9 +137,6 @@ enyo.kind({
 	if (this.arrList[inEvent.rowIndex]) {
 	    this.iSelected = inEvent.rowIndex;
 	    this.updateList();
-	    // this.$.popupEdit.validateComponents();
-	    // this.$.carrierFormKind.setObj(this.arrList[this.iSelected]);
-	    // this.$.popupEdit.openAtCenter();
 	}
     },
     getSelected : function() {

@@ -36,7 +36,7 @@ enyo
                         name : "detailFields"
                       },
                       {
-                        content : '<button type="button" style="border: 0;background-color: transparent;margin: 0px;padding: 0px;color: #292929;font-size: 16px;">Agregar</button>',
+                        content : '<button type="button" style="border: 0;background-color: transparent;margin: 0px;padding: 0px;color: #292929;font-size: 16px;">Add</button>',
                         allowHtml : true,
                         onclick : "addDetailItem",
                         onmousedown : "buttonDown",
@@ -113,13 +113,13 @@ enyo
                             },
                             {
                               kind : enyo.Button,
-                              caption : "Guardar",
+                              caption : "Save",
                               onclick : "addEntity",
                               style : "background-color: #DABD8B;"
                             },
                             {
                               kind : enyo.Button,
-                              caption : "Cacelar",
+                              caption : "Cancel",
                               onclick : "cancel",
                               style : "background-color: #DABD8B;"
                             }
@@ -257,11 +257,6 @@ enyo
         	    }    
         	}        	
             }
-//            for ( var i = 0; i < objItem.fields.length; i++) {        	
-//              if (this.$["detailItem" + i] !== undefined) {
-//                this.$["detailItem" + i].content = objItem.fields[i];
-//              }
-//            }
             return true;
           }
         },

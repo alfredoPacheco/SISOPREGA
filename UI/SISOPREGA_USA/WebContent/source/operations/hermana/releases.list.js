@@ -24,9 +24,9 @@ enyo
 			{
 			  kind : "VFlexBox",
 			  name : "title",
-			  content : "Lotes inspeccionados del exportador: {EXPORTADOR SELECCIONADO}",
+			  content : "Inspected cattle for exporter: {SELECTED EXPORTER}",
 			  flex : 1,
-			  //onclick : "doSelect",
+			  // onclick : "doSelect",
 			  style : "padding:0px;color:white;font-size:15px;"
 			} ]
 		  },
@@ -41,19 +41,19 @@ enyo
 			name : "header",
 			components : [
 			{
-			  content : "Ganado",
+			  content : "Cattle",
 			  style : "width:150px;text-align:left;margin-left:20px;"
 			},
 			{
-			  content : "Cabezas",
+			  content : "Heads",
 			  style : "width:100px;text-align:right;"
 			},
 			{
-			  content : "Rechazos",
+			  content : "Rejects",
 			  style : "width:150px;text-align:right;"
 			},
 			{
-			  content : "Peso de Rechazos",
+			  content : "Rejects Weight",
 			  style : "width:200px;text-align:right;"
 			} ]
 		  },
@@ -70,13 +70,10 @@ enyo
 			  kind : enyo.VirtualRepeater,
 			  name : "releasesList",
 			  onSetupRow : "setupReleaseRow",
-			  // style : "background-color:#F3DEBA;",
 			  components : [
 			  {
 				kind : enyo.RowItem,
 				layoutKind : enyo.HFlexLayout,
-				// style : "font-size:13px;",
-				// tapHighlight : true,
 				align : "center",
 				pack : "start",
 				height : "40px",
@@ -101,8 +98,7 @@ enyo
 					  kind : "release.rejects.weight",
 					  onSelected : "selectRelease",
 					  onSaved : "updateRejectWeight"
-					},
-					]
+					}, ]
 			  } ]
 			} ]
 		  },
@@ -123,13 +119,13 @@ enyo
 			  },
 			  {
 				kind : enyo.Button,
-				caption : "Cortar Selección",
+				caption : "Cut Selection",
 				onclick : "setupCutSelection",
 				style : "background-color: #DABD8B;"
 			  },
 			  {
 				kind : enyo.Button,
-				caption : "Cacelar",
+				caption : "Cancel",
 				onclick : "doCancel",
 				style : "background-color: #DABD8B;"
 			  } ]
@@ -137,9 +133,9 @@ enyo
 		  },
 
 	  ],
-	  updateRejectWeight : function(iSender, receptionId, weight){
-		for(var i=0;i<crudReleased.arrObj.length; i++){
-		  if(crudReleased.arrObj[i].receptionId == receptionId){
+	  updateRejectWeight : function(iSender, receptionId, weight) {
+		for ( var i = 0; i < crudReleased.arrObj.length; i++) {
+		  if (crudReleased.arrObj[i].receptionId == receptionId) {
 			crudReleased.arrObj[i].rejects_weight = weight;
 			break;
 		  }
@@ -149,8 +145,7 @@ enyo
 		cacheMan.showScrim();
 		this.rancher_id = rancherId;
 		this.rancher_name = rancherName;
-		this.$.title.content = "Lotes inspeccionados del exportador: "
-			+ rancherName;
+		this.$.title.content = "Inspected cattle for exporter: " + rancherName;
 		crudReleased.get(this, "readCallBack");
 	  },
 	  readCallBack : function() {
@@ -177,9 +172,8 @@ enyo
 		  cacheMan.hideScrim();
 		} else {
 		  cacheMan.hideScrim();
-		  cacheMan
-			  .setMessage("",
-				  'No hay inspecciones liberadas para este exportador, intente más tarde.');
+		  cacheMan.setMessage("",
+			  'No released cattle found for exporter, please try again later.');
 		}
 	  },
 	  setupReleaseRow : function(inSender, inIndex) {
@@ -188,13 +182,13 @@ enyo
 		  this.$.cattle.setContent(objRelease.cattleName);
 		  this.$.heads.setContent(objRelease.heads);
 		  this.$.rejects.setContent(objRelease.rejects_heads);
-		  if(objRelease.rejects_heads == 0){
+		  if (objRelease.rejects_heads == 0) {
 			this.$.rejectsWeight.hideEditors();
-		  }else{
+		  } else {
 			this.$.rejectsWeight.setWeight(objRelease.rejects_weight);
 			this.$.rejectsWeight.setRejectedRecord(objRelease.receptionId);
 		  }
-		  
+
 		  this.$.rejectsWeight.cancelSelection = true;
 		  this.$.rejectsWeight.listIndex = inIndex;
 
@@ -219,8 +213,7 @@ enyo
 		}
 
 		if (this.$.rejectsWeight.isSelected()) {
-		  this.selectedReceptions
-			  .push(this.releases[inEvent.rowIndex]);
+		  this.selectedReceptions.push(this.releases[inEvent.rowIndex]);
 		} else {
 		  for ( var i = 0; i < this.selectedReceptions.length; i++) {
 			if (this.selectedReceptions[i].receptionId == this.releases[inEvent.rowIndex].receptionId) {
@@ -235,14 +228,15 @@ enyo
 		  this.selectedCattleName = '';
 		  this.loadReleases();
 		}
-	    },
-	    setupCutSelection : function(inSender) {
-		if (this.selectedReceptions.length == 0 || this.selectedReceptions[0].heads === undefined) {
-		    cacheMan
-			    .setMessage(
-				    "",
-				    "Usted no ha seleccionado ningún lote para cortar, seleccione uno o más elementos de la lista posterior e intente nuevamente.");
-		    return false;
+	  },
+	  setupCutSelection : function(inSender) {
+		if (this.selectedReceptions.length == 0
+			|| this.selectedReceptions[0].heads === undefined) {
+		  cacheMan
+			  .setMessage(
+				  "",
+				  "You have not selected any record for cut, please select one or more records from the list and try again.");
+		  return false;
 		}
 
 		this.doResolveSelected();

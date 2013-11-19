@@ -51,13 +51,13 @@ enyo.kind({
 	    pack : "center",
 	    height : "40px;",
 	    components : [ {
-		content : "Fecha y Hora:",
+		content : "Date/Time:",
 		width : "110px;",
 		style : "text-align: right;margin-right: 5px;"
 	    }, {
 		kind : "ToolInput",
 		name : "programDate",
-		hint : "mes/dia/año",
+		hint : "mm/dd/yyyy",
 		// width : "103px;",
 		flex : 1,
 		height : "35px;",
@@ -78,7 +78,7 @@ enyo.kind({
 	    align : "center",
 	    height : "40px;",
 	    components : [ {
-		content : "Transportista:",
+		content : "Freighter:",
 		width : "110px",
 		style : "text-align: right;margin-right: 5px;"
 	    }, {
@@ -107,27 +107,27 @@ enyo.kind({
 	pack : "start",
 	components : [
                 {
-                    content : 'Cliente',
+                    content : 'Client',
                     // className : "listSecond",
                     style : "width:150px;margin-right:15px;margin-left:89px;",
                 },
 		{
-		    content : 'Clase',
+		    content : 'Class',
 		    // className : "listSecond",
 		    style : "width:150px;margin-right:15px;",
 		}, {
-		    content : "Corral",
+		    content : "Pen",
 		    // className : "listSecond",
 		    style : "width:100px;margin-right:15px;"
 		}, {
-		    content : 'Cantidad',
+		    content : 'Heads',
 		    // className : "listSecond",
 		    style : "width:100px;margin-right:15px;"
 		}, {
-		    content : "Peso",
+		    content : "Weight",
 		    style : "width:100px;"
 		}, {
-		    content : "Programar",
+		    content : "Schedule",
 		    style : "width:70px;margin-left:102px;"
 		} ]
     },
@@ -155,7 +155,7 @@ enyo.kind({
 		className : "listBG",
     		name : "rowItem",
     		onConfirm : "resetItem",
-    		confirmCaption:"Reestablecer",
+    		confirmCaption:"Restore",
 		components : [
 			{
 			    name : 'detail_number',
@@ -192,7 +192,7 @@ enyo.kind({
 					kind : enyo.Button,
 					name : "split_button",
 					onclick : "split_click",
-					caption : "Dividir",
+					caption : "Split",
 					style : "min-width:50px;margin-top:-2px;padding: 0px 9px;min-height:22px;background-color: #DABD8B;",
 					width:"70px"
 				}, 
@@ -220,7 +220,7 @@ enyo.kind({
 		style : "font-size:14px;",
 		components : [
 				{
-					content : "Total Cabezas:",
+					content : "Total Heads:",
 				},
 				{
 					content : '0',
@@ -230,7 +230,7 @@ enyo.kind({
 					width : "60px;"
 				},
 				{
-					content : "Total Peso:",
+					content : "Total Weight:",
 				},
 				{
 					content : '0',
@@ -254,12 +254,12 @@ enyo.kind({
 		kind : enyo.Spacer
 	    }, {
 		kind : enyo.Button,
-		caption : "Programar Envío",
+		caption : "Schedule Shipment",
 		onclick : "program_click",
 		style : "background-color: #DABD8B;"
 	    }, {
 		kind : enyo.Button,
-		caption : "Cancelar",
+		caption : "Cancel",
 		onclick : "cancel_click",
 		style : "background-color: #DABD8B;"
 	    } ]
@@ -308,9 +308,9 @@ enyo.kind({
 		this.$.chkToShip.hide();
 		this.$.split_button.hide();
 		this.$.rowItem.setSwipeable(false);
-		this.$.lblAlreadyProgrammed.setContent("Programado para " + this.arrToShipDetailed[inIndex].dateTimeProgrammed.toLocaleDateString() +
+		this.$.lblAlreadyProgrammed.setContent("Scheduled for " + this.arrToShipDetailed[inIndex].dateTimeProgrammed.toLocaleDateString() +
 			" " + this.arrToShipDetailed[inIndex].dateTimeProgrammed.toLocaleTimeString().substring(0,5) +
-			"<br />Transporte: " + crudCarrier.getByID(this.arrToShipDetailed[inIndex].carrierIdProgrammed).carrierName);
+			"<br />Freight: " + crudCarrier.getByID(this.arrToShipDetailed[inIndex].carrierIdProgrammed).carrierName);
 		this.$.lblAlreadyProgrammed.show();
 		
 	    }else if(this.arrToShipDetailed[inIndex].checked) {
@@ -411,7 +411,7 @@ enyo.kind({
 	if(arrToShip.length){
 	    this.saveShip(arrToShip);    
 	}else{
-	    cacheMan.setMessage("","Nada seleccionado.");
+	    cacheMan.setMessage("","None Selected.");
 	}
     },
     saveShip:function(arrShip){
@@ -605,7 +605,7 @@ enyo.kind({
 	    }
 	}
 	if (weight > 50000) {
-	    this.$.warning.setContent("Usted esta programando un embarque superior a 50,000 lb");
+	    this.$.warning.setContent("You are about to schedule a shipment higher than 50K pounds");
 	} else {
 	    this.$.warning.setContent("");
 	}

@@ -13,7 +13,7 @@ enyo.kind({
 	    components : [ {
 		kind : "Input",
 		name : "quality_name",
-		hint : "Nombre de Calidad",
+		hint : "Cattle Class Name",
 		inputClassName : "blankInput",
 		focusClassName : "darkFocus",
 		bindTo : "qualityName"
@@ -21,14 +21,14 @@ enyo.kind({
 		kind : enyo.Item,
 		layoutKind : "HFlexLayout",
 		components : [ {
-		    content : "Peso Mínimo",
+		    content : "Min Weight",
 		    width:"110px",
 		    style : "margin-right:5px;"
 		}, {
 		    kind : "controls.numberBox",
 		    inputKind : "ToolInput",
 		    name : "min_weight",
-		    hint : "Peso Mínimo",
+		    hint : "Min Weight",
 		    height : "35px;",
 		    bindTo : "minWeight"
 		}, ]
@@ -36,14 +36,14 @@ enyo.kind({
 		kind : enyo.Item,
 		layoutKind : "HFlexLayout",
 		components : [ {
-		    content : "Peso Máximo",
+		    content : "Max Weight",
 		    width:"110px",
 		    style : "margin-right:5px;"
 		}, {
 		    kind : "controls.numberBox",
 		    inputKind : "ToolInput",
 		    name : "maxWeight",
-		    hint : "Peso Máximo",
+		    hint : "Max Weight",
 		    height : "35px;",
 		    bindTo : "maxWeight"
 		}, ]
@@ -54,9 +54,9 @@ enyo.kind({
 		    kind : enyo.CheckBox,
 		    name : "for_horses",
 		    bindTo : "forHorses",
-		    caption : "Equino"
+		    caption : "Equine"
 		}, {
-		    content : "Equino",
+		    content : "Equine",
 		    style : "margin-left:5px;"
 		} ]
 	    }, ]

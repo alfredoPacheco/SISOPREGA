@@ -14,9 +14,6 @@ enyo.kind(
       corteObj.cutSeq = this.secuencia++;
       this.cortes.push(corteObj);
       this.cortesExpo.push(enyo.clone(corteObj));
-      
-      // Summarize for exporter
-      //this.corteNaturalSummarization();
     },
     get : function() {
       return this.cortes;
@@ -107,7 +104,7 @@ enyo.kind(
           for(var i=0;i<arrCorteOriginal.length;i++){
         	if(arrCorteOriginal[i].cutSeq == recordId){
         	  if(arrCorteOriginal[i].qualityId == objCorteExpoSelected.qualityId){
-                cacheMan.setMessage("", "El registro es igual al registro original, ningun valor puede ser reiniciado");
+                cacheMan.setMessage("", "No value can be restored, because the current record is just like the original one.");
                 return false;
               }
         	}
@@ -157,21 +154,6 @@ enyo.kind(
         	summarized = true;
           }
         }
-          
-        
-        
-          
-//          
-//          if (this.cortesExpo[j].recordIds) {
-//            for ( var k = 0; k < this.cortesExpo[j].recordIds.length; k++) {
-//              summarized = this.cortesExpo[j].recordIds[k] == i;
-//              
-//              if (summarized) break;
-//            }
-//          }
-//          
-//          if (summarized) break;
-//        }
         
         if (!summarized) { // not summarized yet
         

@@ -2,63 +2,63 @@ enyo.kind({
     name : "r.reports.us",
     kind : enyo.Object,
     arrObj : [ {
-	importantInfo : "Lado Mexicano - Recepciones",
-	secundaryInfo : "Muestra cantidades de cabezas y peso del ganado recibido filtrado por fechas y ganadero, si no especifica el ganadero se obtiene informacion de todos.",
+	importantInfo : "Mexico - Arrivals",
+	secundaryInfo : "Show heads and weight of arrivals at Mexico stock corrals, if you don't specify an exporter, you will receive global information.",
 	reportUrl: "/ReportingGateway/GanadoRecibido",
-	reportTitle:"Reporte de Recepciones",
+	reportTitle:"Receptions",
 	reportType: "filter"
 	
     },{
-	importantInfo : "Lado Mexicano - Inspecciones",
-	secundaryInfo : "Muestra informacion de rechazos, en las fechas y ganadero especificados, si no se indica ganadero se obtiene informacion de todos.",
+	importantInfo : "Mexico - Inspections",
+	secundaryInfo : "Show rejects information given an exporter and date range, if you don't specify an exporter, you will receive global information.",
 	reportUrl: "/ReportingGateway/InspeccionGanado",
-	reportTitle:"Reporte de Inspección",
+	reportTitle:"Inspection",
 	reportType: "filter"
 	
     },{
-	importantInfo : "Lado Mexicano - Alimento",
-	secundaryInfo : "Resumen de alimento entregado, filtrado por fechas y ganadero, si no se especifica ganadero se obtiene informacion de todos.",
+	importantInfo : "Mexico - Feeding",
+	secundaryInfo : "Food delivery summary, you can filter by date and exporter, if you don't specify an exporter, you will receive global information.",
 	reportUrl: "/ReportingGateway/ReporteAlimento",
-	reportTitle:"Reporte de Alimento",
+	reportTitle:"Feeding on Mexico",
 	reportType: "filter"
 	
     },{
-	importantInfo : "Lado Mexicano - Recepciones Activas",
-	secundaryInfo : "Ganado que se actualmente se encuentra en los corrales del lado Mexicano.",
+	importantInfo : "Mexico - Current state",
+	secundaryInfo : "Gives an status of current state of Mexico stock corrals.",
 	reportUrl: "/ReportingGateway/GanadoActivoCorrales",
-	reportTitle:"Reporte de Recepciones Activas",
+	reportTitle:"Active received cattle in Mexico",
 	reportType: "direct"
 	
     },{
-	importantInfo : "Lado Mexicano - Lista de Cruce",
-	secundaryInfo : "Muestra el orden en que cruzará ganado, (o cruzó si se especifican fechas pasadas)",
+	importantInfo : "Mexico - Cross List",
+	secundaryInfo : "Shows the typed list of inspection.",
 	reportUrl: "/ReportingGateway/ListaInspeccionHistorica",
-	reportTitle:"Reporte de Lista de Cruce",
+	reportTitle:"Crossing List",
 	reportType: "filterByDate"
 	
     },{
-	importantInfo : "Lado US - Hermana",
+	importantInfo : "USA - Hermana",
 	secundaryInfo : "",
 	reportUrl: "hermana",
 	reportTitle:"Hermana",
 	reportType: "direct"
     },{
-	importantInfo : "Lado US - Ventas",
+	importantInfo : "USA - Sales",
 	secundaryInfo : "",
 	reportUrl: "/ReportingGateway/Sales",
-	reportTitle:"Ventas",
+	reportTitle:"Sales",
 	reportType: "filterByDate"
     },{
-	importantInfo : "Lado US - Compras",
+	importantInfo : "USA - Purchases",
 	secundaryInfo : "",
 	reportUrl: "/ReportingGateway/Purchase",
-	reportTitle:"Compras",
+	reportTitle:"Purchases",
 	reportType: "filterByDate"
     },{
-	importantInfo : "Lado US - Inventario",
+	importantInfo : "USA - Inventory",
 	secundaryInfo : "",
 	reportUrl: "/ReportingGateway/Inventory",
-	reportTitle:"Inventario",
+	reportTitle:"Inventory",
 	reportType: "filterByDate"
     }],    
 });

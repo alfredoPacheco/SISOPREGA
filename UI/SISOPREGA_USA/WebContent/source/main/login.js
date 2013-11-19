@@ -56,7 +56,7 @@ enyo.kind(
                           {
                             kind : "Input",
                             name : "user",
-                            hint : "Usuario",
+                            hint : "User",
                             selectAllOnFocus : true,
                             onkeydown : "key_down",
                             onfocus : "on_focus",
@@ -65,7 +65,7 @@ enyo.kind(
                           {
                             kind : "PasswordInput",
                             name : "password",
-                            hint : "Contraseña",
+                            hint : "Password",
                             selectAllOnFocus : true,
                             onkeydown : "key_down",
                             onfocus : "on_focus",
@@ -88,7 +88,7 @@ enyo.kind(
                 className : "enyo-button-affirmative",
                 style : "background-color:#5f0712",
                 flex : 1,
-                caption : "Entrar",
+                caption : "Login",
                 onclick : "checkLogIn",
                 isDefault : "true"
               }, ]

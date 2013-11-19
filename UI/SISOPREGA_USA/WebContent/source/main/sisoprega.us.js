@@ -38,46 +38,46 @@ enyo.kind(
                     width : "300px",
                     components : [
                           {
-                            caption : "Inicio",
+                            caption : "Home",
                             onclick : "open_view"
                           },
                           {
-                            caption : "Reportes",
+                            caption : "Reports",
                             onclick : "open_view"
                           },
                           {
-                            caption : "Mapa Mexicano",
+                            caption : "Mexican Map",
                             onclick : "open_view"
                           },
                           {
-                            caption : "Lista de Inspección",
+                            caption : "Inspection List",
                             onclick : "open_view"
                           },
                           {
-                            caption : "Catálogos",
+                            caption : "Catalogs",
                             components : [
                                   {
-                                    caption : "Clases",
+                                    caption : "Classes",
                                     onclick : "open_view"
                                   },
                                   {
-                                    caption : "Clientes",
+                                    caption : "Clients",
                                     onclick : "open_view"
                                   },
                                   {
-                                    caption : "Transportistas",
+                                    caption : "Freighters",
                                     onclick : "open_view"
                                   },
                                   {
-                                    caption : "Proveedores",
+                                    caption : "Suppliers",
                                     onclick : "open_view"
                                   },
                                   {
-                                    caption : "Usuarios",
+                                    caption : "Users",
                                     onclick : "open_view"
                                   },
                                   {
-                                    caption : "Conceptos de Gastos",
+                                    caption : "Expense Concepts",
                                     onclick : "open_view"
                                   },
                             ]
@@ -101,7 +101,7 @@ enyo.kind(
                     allowHtml : true,
                     flex : 1,
                     style : "color:#FFF;border:none;font-size:15px; text-align:center;min-width:150px;",
-                    content : "Menu Principal"
+                    content : "Main Menu"
                   },
                   {
                     name : 'btnLogOut',
@@ -215,7 +215,7 @@ enyo.kind(
     },
     goBack : function() {
       cacheMan.goBack();
-      if (_objMainHeader.getContent() == "Menu Principal") {
+      if (_objMainHeader.getContent() == "Main Menu") {
         this.$.btnGoBack.setShowing(!1);
         _objMainHeader.applyStyle("font-size", "15px");
       } else {
@@ -243,7 +243,7 @@ enyo.kind(
       }
     },
     noAccess : function() {
-      cacheMan.setMessage("", "Usuario o contraseña incorrecta.");
+      cacheMan.setMessage("", "Incorrect user name or password.");
     },
     logOut : function() {
       consumingGateway.LogOut();
@@ -268,59 +268,58 @@ enyo.kind(
         view = InSender.caption;
       }
       switch (view) {
-        case 'Inicio':
+        case 'Home':
           // this.addGoBackAction("receptionsMap");
-          _objMainHeader.setContent('Administración');
+          _objMainHeader.setContent('Administration Home');
           this.$.mainPane.selectViewByName("mainAdmin");
           break;
-        case 'Reportes':
+        case 'Reports':
           // this.addGoBackAction("receptionsMap");
-          _objMainHeader.setContent('Reportes');
+          _objMainHeader.setContent('Reports');
           this.$.mainPane.selectViewByName("reportsMain");          
           break;
-        case 'Mapa Mexicano':
-          // this.addGoBackAction("reports");
-          _objMainHeader.setContent('Corrales México');
+        case 'Mexican Map':
+          _objMainHeader.setContent('Mexican Pens');
           this.$.mainPane.selectViewByName("mexMap_kind");
           break;
-        case 'Lista de Inspección':
+        case 'Inspection List':
           // this.addGoBackAction("catRanchers");
-          _objMainHeader.setContent('Lista de Inspección');
+          _objMainHeader.setContent('Inspection List');
           this.$.mainPane.selectViewByName("inspection_kind");
           break;
-        case 'Clases':
-          _objMainHeader.setContent('Calidades de Ganado');
+        case 'Classes':
+          _objMainHeader.setContent('Cattle Classes');
           this.$.mainPane.validateView("qualityList");
           this.$.mainPane.selectViewByName("qualityList");
           this.$.qualityList.reset();
           break;
-        case 'Clientes':
+        case 'Clients':
           // this.addGoBackAction("catCattle");
-          _objMainHeader.setContent('Clientes');
+          _objMainHeader.setContent('Clients');
           this.$.mainPane.selectViewByName("customersList_kind");
           this.$.customersList_kind.reset();
           break;
-        case 'Transportistas':
+        case 'Freighters':
           // this.addGoBackAction("catCattle");
-          _objMainHeader.setContent('Transportistas');
+          _objMainHeader.setContent('Freighters');
           this.$.mainPane.selectViewByName("driversList_kind");
           break;
-        case 'Proveedores':
+        case 'Suppliers':
           // this.addGoBackAction("catCattle");
-          _objMainHeader.setContent('Proveedores');
+          _objMainHeader.setContent('Suppliers');
           this.$.mainPane.selectViewByName("providersList_kind");
           this.$.providersList_kind.reset();
           break;
-        case 'Conceptos de Gastos':
+        case 'Expense Concepts':
           // this.addGoBackAction("catCattle");
-          _objMainHeader.setContent('Conceptos de gasto (Hermana)');
+          _objMainHeader.setContent('Expense Concepts (Hermana)');
           this.$.mainPane.validateView("expenseConceptsList");
           this.$.mainPane.selectViewByName("expenseConceptsList");
           this.$.expenseConceptsList.reset();
           break;
-        case 'Usuarios':
+        case 'Users':
           // this.addGoBackAction("catCattle");
-          _objMainHeader.setContent('Usuarios');
+          _objMainHeader.setContent('Users');
           this.$.mainPane.validateView("userList");
           this.$.mainPane.selectViewByName("userList");
           this.$.userList.reset();

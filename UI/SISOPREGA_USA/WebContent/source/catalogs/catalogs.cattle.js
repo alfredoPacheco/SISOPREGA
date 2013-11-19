@@ -19,19 +19,19 @@ enyo.kind(
               {
                 name : "className",
                 kind : "Input",
-                hint : "Clase"
+                hint : "Class"
               },
               {
                 name : "minWeight",
                 kind : "Input",
                 inputType : "number",
-                hint : "Peso Mínimo"
+                hint : "Min Weight"
               },
               {
                 name : "maxWeight",
                 kind : "Input",
                 inputType : "number",
-                hint : "Peso Máximo"
+                hint : "Max Weight"
               },
               {
                 layoutKind : enyo.HFlexLayout,
@@ -39,7 +39,7 @@ enyo.kind(
                 components :
                   [
                     {
-                      content : "Novillos",
+                      content : "Steers",
                       className : "enyo-label",
                       flex : 1
                     },
@@ -54,7 +54,7 @@ enyo.kind(
                 components :
                   [
                     {
-                      content : "Vaquillas",
+                      content : "Heifers",
                       className : "enyo-label",
                       flex : 1
                     },
@@ -69,7 +69,7 @@ enyo.kind(
                 components :
                   [
                     {
-                      content : "Caballos",
+                      content : "Horses",
                       className : "enyo-label",
                       flex : 1
                     },
@@ -92,7 +92,7 @@ enyo.kind(
                             kind : "Button",
                             name : "btnAdd",
                             className : "enyo-button-affirmative",
-                            caption : "Crear",
+                            caption : "Create",
                             onclick : "add",
                             flex : 1
                           },
@@ -101,7 +101,7 @@ enyo.kind(
                             name : "btnCancel",
                             className : "enyo-button-negative",
                             flex : 1,
-                            caption : "Cancelar",
+                            caption : "Cancel",
                             onclick : "doCancel"
                           } ]
                     } ]
@@ -121,7 +121,7 @@ enyo.kind(
                             name : "btnUpdate",
                             className : "enyo-button-affirmative",
                             flex : 1,
-                            caption : "Actualizar",
+                            caption : "Update",
                             onclick : "update"
                           },
                           {
@@ -129,7 +129,7 @@ enyo.kind(
                             name : "btnCancel",
                             className : "enyo-button-negative",
                             flex : 1,
-                            caption : "Cancelar",
+                            caption : "Cancel",
                             onclick : "doCancel"
                           }, ]
                     } ]
@@ -163,7 +163,7 @@ enyo.kind(
         };
 
       if(newCattleClass.cattle_types.length==0){
-        cacheMan.setMessage("","Seleccione el tipo de ganado compatible con esta clasificación.");
+        cacheMan.setMessage("","Please select the cattle type that is compatible with this classification.");
         return false;
       }
       

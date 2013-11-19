@@ -4,20 +4,20 @@ enyo
 	  name : "pen.map",
 	  arrOptions : [
 	  {
-		caption : "Mover Ganado",
+		caption : "Move Cattle",
 		value : 1
 	  },
 	  {
-		caption : "Alimento",
+		caption : "Feed",
 		value : 2
 	  },
 	  {
-		caption : "Merma",
+		caption : "Adjustment",
 		value : 3
 	  } ],
 	  arrMovingPen : [
 	  {
-		caption : "Mover aqui",
+		caption : "Move here",
 		value : 4
 	  }, ],
 	  style : "background-color:#DABD8B;",
@@ -133,12 +133,12 @@ enyo
 		  components : [
 
 		  {
-			content : "Seleccione el corral destino",
+			content : "Select destination pen",
 			name : "lblMovingComment",
 			style : "text-align: right;margin-right:10px;"
 		  },
 		  {
-			content : "Ganado:",
+			content : "Cattle:",
 			name : "lblCattle",
 			style : "text-align: right;margin-right:10px;"
 		  },
@@ -168,7 +168,7 @@ enyo
 			style : "text-align:right"
 		  },
 		  {
-			content : "Ultimo Alimento:",
+			content : "Last feed:",
 			name : "lblLastFeed",
 			width : "110px",
 			style : "text-align: right;margin-right:10px;"
@@ -190,7 +190,7 @@ enyo
 			style : "text-align:center"
 		  },
 		  {
-			content : "Total Alimento:",
+			content : "Feed Total:",
 			name : "lblTotalFeed",
 			width : "100px",
 			style : "text-align: right;margin-right:10px;"
@@ -210,7 +210,7 @@ enyo
 		  kind : enyo.Button,
 		  onclick : "cancelMoving",
 		  name : "btnCancelMoving",
-		  caption : "Cancelar",
+		  caption : "Cancel",
 		  showing : false
 
 		} ],
@@ -373,7 +373,7 @@ enyo
 		pen.addClass("selectCell");
 		pen.applyStyle("background-color",this.sColorSelectOccupied);		
 	  },
-	  highLightMoveToPen : function(pen) { //TODO
+	  highLightMoveToPen : function(pen) { 
 		for(prop in this.arrSelectedMoveTo){
 		  if(this.arrSelectedMoveTo.hasOwnProperty(prop)){			
 			this.arrSelectedMoveTo[prop].applyStyle("background-color", this.sColorFree);
@@ -427,12 +427,6 @@ enyo
 		case 3:// Deseleccionar corral ocupado, 3= corral con recepcion
 		  // y seleccionado.
 		  this.objSelected.occupied = 1;
-		  // this.objSelected
-		  // .applyStyle(
-		  // "background-color",
-		  // cacheReceptions
-		  // .getByID(crudPen
-		  // .getRecIDbyBY(this.objSelected.name)).color);
 		  break;
 
 		}
@@ -711,7 +705,7 @@ enyo
 		  if (objTo && objFrom) {
 			if (objFrom.qualityId != objTo.qualityId) {
 			  cacheMan.setMessage("",
-				  "No es posible mezclar clases de ganado en un corral");
+				  "Mixing cattle classes in one pen is not allowed.");
 			  break;
 			}
 		  }

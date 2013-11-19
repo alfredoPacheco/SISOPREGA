@@ -24,7 +24,7 @@ enyo.kind(
                     allowHtml : true,
                     flex : 1,
                     style : "color:#FFF;border:none;font-size:15px; text-align:center;min-width:150px;",
-                    content : "Reportes"
+                    content : "Reports"
                   }
             
             ]
@@ -40,7 +40,7 @@ enyo.kind(
                     kind : "reports.list",
                     name : "reportsList",
                     onSelectItem : "openReport",
-                    label : "Reportes"
+                    label : "Reports"
                   },
                   {
                     kind : "reports.filter",
@@ -89,7 +89,7 @@ enyo.kind(
     showHermanaList : function(result){
       if (result.exceptionId != 0) {
         cacheMan.hideScrim();
-        cacheMan.setMessage('No se encontraron registros de importación');
+        cacheMan.setMessage('No imported records where found.');
         return false;
       }
       
@@ -106,8 +106,6 @@ enyo.kind(
       switch (report.reportType) {
         case "direct":
           if (report.reportTitle == 'Hermana') {
-            // TODO: Setup hermana popUp
-            //alert('open hermana list for reports');
             cacheMan.showScrim();
             crudHermana.getAll(this, "showHermanaList");
           } else {

@@ -28,7 +28,7 @@ enyo
                       },
                       {
                         kind : "Button",
-                        caption : "Programar Embarque",
+                        caption : "Shipping Program",
                         onclick : "doShipment"
                       }
                 ]
@@ -42,21 +42,21 @@ enyo
                 pack : "start",
                 components : [
                       {
-                        content : 'Fecha',
+                        content : 'Date',
                         flex : 1
                       },
                       {
-                        content : 'Cabezas',
+                        content : 'Heads',
                         flex : 1.5,
                         style : "text-align: right;"
                       },
                       {
-                        content : 'Peso',
+                        content : 'Weight',
                         flex : 1.5,
                         style : "text-align: right;"
                       },
                       {
-                        content : 'Promedio',
+                        content : 'Average',
                         flex : 1.5,
                         style : "text-align: right;margin-right:17px;"
                       },
@@ -199,10 +199,6 @@ enyo
               },
         ],
         loadSales : function(inSender, inIndex) {
-          /*
-           * { SaleDetail : [ { avgWeight : 32.3, cattleQualityId : 16, heads : 23, penId : 228 } ], cattleQualityId : 2, totalHeads:23,
-           * totalWeight:228, totalAvgWeight:12.2, saleDate : "07/28/2013", saleId : 0, customerId : 1 }
-           */
 
           var objData;
           if (objData = this.arrData[inIndex]) {
@@ -240,8 +236,6 @@ enyo
             }
             
             if (inIndex % 2 == 0) inSender.$.client.$.client.applyStyle("background-color", "#DFC699");
-            // if(inIndex % 2 ==
-            // 0)inSender.$.client.$.client.applyStyle("background-color","#DCC190");
             return true;
           } else {
             return false;
@@ -257,47 +251,21 @@ enyo
             iWeight += this.arrData[j].totalWeight;
             iAve += this.arrData[j].aveWeight;
           }
-          this.$.lblSalesSumHeads.setContent("Cabezas<br />" + utils.formatNumberThousands(iHeads.toFixed(2)));
-          this.$.lblSalesSumWeight.setContent("Peso<br />" + utils.formatNumberThousands(iWeight.toFixed(2)));
+          this.$.lblSalesSumHeads.setContent("Heads<br />" + utils.formatNumberThousands(iHeads.toFixed(2)));
+          this.$.lblSalesSumWeight.setContent("Weight<br />" + utils.formatNumberThousands(iWeight.toFixed(2)));
           var avg = null;
-          // if (avg = (iAve / this.arrData.length)) {
           if (avg = (iWeight / iHeads)) {
-            this.$.lblSumAveWeight.setContent("Peso Prom.<br />" + utils.formatNumberThousands(avg.toFixed(2)));
+            this.$.lblSumAveWeight.setContent("Average<br />" + utils.formatNumberThousands(avg.toFixed(2)));
           } else {
-            this.$.lblSumAveWeight.setContent("Peso Prom.<br />0.00");
+            this.$.lblSumAveWeight.setContent("Average<br />0.00");
           }
         },
-        // calculateTotals : function() {
-        // var hc = 0;
-        // var weight = 0;
-        // var len = this.arrData.length;
-        // for ( var i = 0; i < len; i++) {
-        // if (!this.arrData[i].shipProgramDateTime &&
-        // this.arrData[i].checked) {
-        // hc += this.arrData[i].totalHeads;
-        // weight += this.arrData[i].totalWeight;
-        // }
-        // }
-        // if (weight > 50000) {
-        // this.$.lblSalesShipment.addClass("redAlert");
-        // } else {
-        // this.$.lblSalesShipment.removeClass("redAlert");
-        // }
-        // if (weight == 0) {
-        // this.$.lblSalesShipment.setContent("Cabezas - Peso");
-        // } else {
-        // this.$.lblSalesShipment.setContent(utils.formatNumberThousands(hc)
-        // + "/"
-        // + utils.formatNumberThousands(weight));
-        // }
-        // },
         checkBox_click : function(inSender, inEvent) {
           this.arrData[inEvent.rowIndex].checked = inSender.checked;
           if (inSender.checked)
             this.arrSelectedItems[this.arrData[inEvent.rowIndex].saleId] = this.arrData[inEvent.rowIndex];
           else
             delete this.arrSelectedItems[this.arrData[inEvent.rowIndex].saleId];
-          // this.calculateTotals();
         },
         getSelectedItems : function() {
           var response = [];
@@ -330,8 +298,6 @@ enyo
         loadAutocompletes : function() {
           this.arrSelectedItems = {};
           this.arrData = crudSale.getSalesWithShipments();
-          // this.iHeads=null;
-          // this.iWeight=null;
           this.$.listSales.render();
           this.updateSummary();
           this.doUpdateView(this.updateSales);

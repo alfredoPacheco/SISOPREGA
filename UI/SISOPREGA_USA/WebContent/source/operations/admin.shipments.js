@@ -34,21 +34,21 @@ enyo
                 pack : "start",
                 components : [
                       {
-                        content : 'Fecha programada',
+                        content : 'Program Date',
                         flex : 1
                       },
                       {
-                        content : 'Cabezas',
+                        content : 'Heads',
                         flex : 1.5,
                         style : "text-align: right;"
                       },
                       {
-                        content : 'Peso',
+                        content : 'Weight',
                         flex : 1.5,
                         style : "text-align: right;"
                       },
                       {
-                        content : 'Promedio',
+                        content : 'Average',
                         flex : 1.5,
                         style : "text-align: right;margin-right:13px;"
                       },
@@ -125,7 +125,7 @@ enyo
                                             name : "lblShipReleased",
                                             flex : 1,
                                             style : "color:gray;font-size:0.85em;text-align:right;",
-                                            content : "Liberado",
+                                            content : "Released",
                                             showing : false
                                           }
                                     ]
@@ -204,11 +204,10 @@ enyo
             this.$.lblShipAverage.setContent(utils.formatNumberThousands(objData.totalAvgWeight));
             this.$.lblShipClient.setContent(objData.customer);
             if (inIndex % 2 == 0) inSender.$.client.$.client.applyStyle("background-color", "#DFC699");
-// if(inIndex % 2 == 0)inSender.$.client.$.client.applyStyle("background-color","#DCC190");
             if (objData.hasOwnProperty("ShipmentRelease")) {
               this.$.btnRelease.hide();
               this.$.lblShipReleased.show();
-              this.$.lblShipReleased.setContent("Liberado el " + objData.ShipmentRelease[0].dateTime.toLocaleString());
+              this.$.lblShipReleased.setContent("Released on " + objData.ShipmentRelease[0].dateTime.toLocaleString());
               this.$.lblShipAverage.applyStyle("margin-right", "47px");
               this.$.rowItem.setSwipeable(false);
             } else {
@@ -232,20 +231,18 @@ enyo
             iAve += this.arrData[j].totalAvgWeight;
           }
           
-          this.$.lblShipSumHeads.setContent("Cabezas<br />" + utils.formatNumberThousands(iHeads.toFixed(2)));
-          this.$.lblShipSumWeight.setContent("Peso<br />" + utils.formatNumberThousands(iWeight.toFixed(2)));
+          this.$.lblShipSumHeads.setContent("Heads<br />" + utils.formatNumberThousands(iHeads.toFixed(2)));
+          this.$.lblShipSumWeight.setContent("Weight<br />" + utils.formatNumberThousands(iWeight.toFixed(2)));
           var avg = null;
           if (avg = (iAve / this.arrData.length)) {
-            this.$.lblShipSumAveWeight.setContent("Peso Prom.<br />" + utils.formatNumberThousands(avg.toFixed(2)));
+            this.$.lblShipSumAveWeight.setContent("Average<br />" + utils.formatNumberThousands(avg.toFixed(2)));
           } else {
-            this.$.lblShipSumAveWeight.setContent("Peso Prom.<br />0.00");
+            this.$.lblShipSumAveWeight.setContent("Average<br />0.00");
           }
         },
         ready : function() {
           this.updateSummary();
           this.doLoadCompleted();
-          // restored from duplicated ready function
-          // this.updateView(); //Has been disabled because it must be updated when admin.sales already has done it.
         },
         selectShipment : function(inSender, inEvent) {
           this.objSelectedShipment = this.arrData[inEvent.rowIndex];

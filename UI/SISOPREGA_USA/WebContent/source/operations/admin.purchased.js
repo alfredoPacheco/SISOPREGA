@@ -23,7 +23,7 @@ enyo
 			components : [
 				{
 				  kind : "VFlexBox",
-				  content : "Recibos",
+				  content : "Purchased",
 				  style : "font-size:15px;",
 				  flex : .1,
 				  onclick : "doSelect"
@@ -34,21 +34,15 @@ enyo
 				},
 				{
 				  kind : "Button",
-				  caption : "Compra",
+				  caption : "Purchase",
 				  width:"70px;",
 				  onclick : "doBuyCattle",
-//				  style : "display: table-cell;vertical-align: middle;height: 35px;"
 				},
-//				{
-//				  kind : enyo.Spacer,
-//				  flex : .1
-//				},
 				{
 				  kind : "Button",
 				  caption : "Hermana",
 				  width:"70px;",
 				  onclick : "doCaptureHermana",
-//				  style : "display: table-cell;vertical-align: middle;"
 				}
 			]
 		  },
@@ -61,21 +55,21 @@ enyo
 			pack : "start",
 			components : [
 			{
-			  content : 'Proveedor',
+			  content : '',
 			  flex : 1
 			},
 			{
-			  content : 'Cabezas',
+			  content : 'Heads',
 			  flex : 1.5,
 			  style : "text-align: right;"
 			},
 			{
-			  content : 'Peso',
+			  content : 'Weight',
 			  flex : 1.5,
 			  style : "text-align: right;"
 			},
 			{
-			  content : 'Promedio',
+			  content : 'Average',
 			  flex : 1.5,
 			  style : "text-align: right;"
 			} ]
@@ -198,16 +192,16 @@ enyo
 		var iFotHeads = crudInventory.getObjSummary().heads;
 		var iFotWeight = crudInventory.getObjSummary().weight;
 
-		this.$.lblPurSumHeads.setContent("Cabezas<br />"
+		this.$.lblPurSumHeads.setContent("Heads<br />"
 			+ utils.formatNumberThousands(iFotHeads.toFixed(2)));
-		this.$.lblPurSumWeight.setContent("Peso<br />"
+		this.$.lblPurSumWeight.setContent("Weight<br />"
 			+ utils.formatNumberThousands(iFotWeight.toFixed(2)));
 		var avg = iFotWeight / iFotHeads;
 		if (iFotHeads > 0) {
-		  this.$.lblSumAveWeight.setContent("Peso Prom.<br />"
+		  this.$.lblSumAveWeight.setContent("Average<br />"
 			  + utils.formatNumberThousands(avg.toFixed(2)));
 		} else {
-		  this.$.lblSumAveWeight.setContent("Peso Prom.<br />0.00");
+		  this.$.lblSumAveWeight.setContent("Average<br />0.00");
 		}
 
 	  },

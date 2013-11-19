@@ -14,49 +14,49 @@ enyo
 		    components : [ {
 			kind : "Input",
 			name : "seller_name",
-			hint : "Razon Social",
+			hint : "Company Name",
 			inputClassName : "blankInput",
 			focusClassName : "darkFocus",
 			bindTo : "sellerName"
 		    }, {
 			kind : "Input",
 			name : "address_one",
-			hint : "Calle y Número",
+			hint : "Address One",
 			inputClassName : "blankInput",
 			focusClassName : "darkFocus",
 			bindTo : "addressOne"
 		    }, {
 			kind : "Input",
 			name : "address_two",
-			hint : "Colonia",
+			hint : "Address Two",
 			inputClassName : "blankInput",
 			focusClassName : "darkFocus",
 			bindTo : "addressTwo"
 		    }, {
 			kind : "Input",
 			name : "city",
-			hint : "Ciudad",
+			hint : "City",
 			inputClassName : "blankInput",
 			focusClassName : "darkFocus",
 			bindTo : "city"
 		    }, {
 			kind : "Input",
 			name : "state",
-			hint : "Estado",
+			hint : "State",
 			inputClassName : "blankInput",
 			focusClassName : "darkFocus",
 			bindTo : "addressState"
 		    }, {
 			kind : "Input",
 			name : "zip_code",
-			hint : "Código Postal",
+			hint : "Zip Code",
 			inputClassName : "blankInput",
 			focusClassName : "darkFocus",
 			bindTo : "zipCode"
 		    }, {
 			kind : "controls.phoneBox",
 			name : "phone_number",
-			hint : "Telefono",
+			hint : "Telephone",
 			bindTo : "phone"
 		    }, {
 			kind : "Input",
@@ -74,7 +74,7 @@ enyo
 	    beforeSave : function(obj) {
 		var email = this.$.email_add.getValue();
 		if (email != '' && !/\S+@\S+\.\S+/.test(email)) {
-		    this.errorMessage = "El formato de correo electrónico no es reconocido (correo@servidor.ext).";
+		    this.errorMessage = "Unknown email format (email@server.ext).";
 		    return false;
 		}
 		return true;

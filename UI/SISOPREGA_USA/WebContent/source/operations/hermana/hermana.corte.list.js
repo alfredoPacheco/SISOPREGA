@@ -40,23 +40,23 @@ enyo
 			pack : "start",
 			components : [
 			{
-			  content : "Clase",
+			  content : "Class",
 			  style : "width:150px;text-align:left;margin-left: 15px;"
 			},
 			{
-			  content : "Corral",
+			  content : "Pen",
 			  style : "width:150px;text-align:center;"
 			},
 			{
-			  content : "Cabezas",
+			  content : "Heads",
 			  style : "width:150px;text-align:right;"
 			},
 			{
-			  content : "Peso",
+			  content : "Weight",
 			  style : "width:150px;text-align:right;"
 			},
 			{
-			  content : "Promedio",
+			  content : "Average",
 			  style : "width:150px;text-align:right;"
 			} ]
 		  },
@@ -124,13 +124,13 @@ enyo
 			  {
 				kind : "enyo.IconButton",
 				style : "width:150px;",
-				label : "Eliminar",
+				label : "Remove",
 				onclick : "onEliminar"
 			  },
 			  {
 				kind : "enyo.IconButton",
 				style : "width:150px;",
-				label : "Cancelar",
+				label : "Cancel",
 				onclick : "onCancel"
 			  }, ]
 			}
@@ -176,7 +176,6 @@ enyo
 		} 
 		else {
 		  cacheCorte.remove(inIndex);
-		  //this.parent.parent.$.listaCorteExpo.cortes = enyo.clone(this.cortes);
 		  cacheCorte.cortesExpo = enyo.clone(this.cortes);
 		  this.parent.parent.$.listaCorteExpo.loadCortes(cacheCorte.cortesExpo);
 		}
@@ -248,7 +247,6 @@ enyo
 		objNew.qualityId = -1;
 		objNew.cattleClassName = "";
 		cacheCorte.cortesExpo.push(objNew);
-//		this.cortes.push(objNew);
 		this.loadCortes(cacheCorte.getExpo());
 	  },
 	  on_cancel_split : function() {

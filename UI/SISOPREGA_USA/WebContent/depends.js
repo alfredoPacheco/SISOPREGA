@@ -93,8 +93,6 @@ enyo.depends(
 	 "../SISOPREGA/source/reports/reports.filter.by_date.js",
 	 "source/catalogs/reports.main.js",
 	 "source/catalogs/reports.list.js",
-	 "source/reports.us.select.js",
-	 
 	
 	"source/main/us.gateway.ws.js", 
 	"source/main/main.agency.js",

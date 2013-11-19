@@ -16,7 +16,7 @@ enyo.kind(
                   {
                     kind : "Input",
                     name : "concept_name",
-                    hint : "Concepto de Gasto",
+                    hint : "Expense Concept Name",
                     inputClassName : "blankInput",
                     focusClassName : "darkFocus",
                     bindTo : "conceptName"
@@ -24,7 +24,7 @@ enyo.kind(
                   {
                     kind : "Input",
                     name : "formula",
-                    hint : "Fórmula",
+                    hint : "Formula",
                     inputClassName : "blankInput",
                     focusClassName : "darkFocus",
                     bindTo : "expenseFormula"

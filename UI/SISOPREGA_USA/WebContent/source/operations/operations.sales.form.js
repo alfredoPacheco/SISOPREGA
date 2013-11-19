@@ -32,7 +32,7 @@ enyo
 		  height : "40px;",
 		  components : [
 		  {
-			content : "Fecha:",
+			content : "Date:",
 			width : "80px;",
 			style : "text-align: right;margin-right:5px;"
 		  },
@@ -46,7 +46,7 @@ enyo
 			bindTo : "saleDate"
 		  },
 		  {
-			content : 'mes/dia/año',
+			content : 'mm/dd/yyyy',
 			className : "listFirst",
 			style : "background-color:#DABD8B;margin-left:2px;font-size:12px;",
 			width : "80px;"
@@ -58,7 +58,7 @@ enyo
 		  height : "40px;",
 		  components : [
 		  {
-			content : "Cliente:",
+			content : "Client:",
 			width : "80px;",
 			style : "text-align: right;margin-right:5px;"
 		  },
@@ -79,7 +79,7 @@ enyo
 			style : "padding: 2px;margin-top: 3px;background-color: #DABD8B;"
 		  },
 		  {
-			content : "Ganado:",
+			content : "Cattle:",
 			width : "80px;",
 			style : "text-align: right;margin-right:5px;"
 		  },
@@ -102,7 +102,7 @@ enyo
 		  inputKind : "ToolInput",
 		  height : "35px;",
 		  name : "cattleQuality",
-		  hint : 'Clase',
+		  hint : 'Class',
 		  width : "200px;",
 		  style : "margin-right: 15px;",
 		  bindTo : "qualityId",
@@ -114,7 +114,7 @@ enyo
 		  inputKind : "ToolInput",
 		  height : "35px;",
 		  name : "pen",
-		  hint : "Corral",
+		  hint : "Pen",
 		  width : "150px;",
 		  style : "margin-right: 15px;",
 		  bindTo : "penId",
@@ -125,7 +125,7 @@ enyo
 		},
 		{
 		  kind : enyo.Button,
-		  caption : "Disponibles: 0",
+		  caption : "Available: 0",
 		  onclick : "",
 		  style : "margin-right: 15px;background-color: #DABD8B;",
 		  allowHtml : true,
@@ -136,7 +136,7 @@ enyo
 		  kind : "controls.numberBox",
 		  inputKind : "ToolInput",
 		  name : "cabezas",
-		  hint : 'Cabezas',
+		  hint : 'Heads',
 		  width : "125px;",
 		  height : "35px",
 		  style : "margin-right: 15px;",
@@ -149,7 +149,7 @@ enyo
 		  kind : "controls.numberBox",
 		  inputKind : "ToolInput",
 		  name : "peso",
-		  hint : 'Peso',
+		  hint : 'weight',
 		  width : "125px;",
 		  height : "35px",
 		  style : "margin-right: 15px;",
@@ -194,12 +194,12 @@ enyo
 		  var arrSplit = this.$.qtyAvailable.getCaption().split(":");
 		  var headsAvailable = Number(arrSplit[1]);
 		  if (headsAvailable < Number(this.$.cabezas.getValue())) {
-			sError = "Error. Cantidad de cabezas superior a las disponibles.";
+			sError = "Error. Heads quantity is higher than available heads.";
 		  }
 		}
 		for ( var i = 0; i < this.arrDetail.length; i++) {
 		  if (this.arrDetail[i].penId == this.$.pen.getItemSelected().value) {
-			sError = "Error. El corral que intenta agregar ya se encuentra en la lista.";
+			sError = "Error. The pen is already in the list.";
 			break;
 		  }
 		}
@@ -262,7 +262,7 @@ enyo
 		if(filter.length>0){
 		  this.$.pen.setIndex(filter[0].value);
 		}else{
-		  	this.$.qtyAvailable.setCaption("Disponibles: 0");
+		  	this.$.qtyAvailable.setCaption("Available: 0");
 		}
 		this.$.cabezas.setValue("");
 		this.$.peso.setValue("");
@@ -272,14 +272,14 @@ enyo
 		var itemSelected = inSender.getItemSelected();
 		if (itemSelected && itemSelected.object) {
 		  var qtyAvailable = itemSelected.object.availableToSell;
-		  this.$.qtyAvailable.setCaption("Disponibles: " + qtyAvailable);
+		  this.$.qtyAvailable.setCaption("Available: " + qtyAvailable);
 		} else {
-		  this.$.qtyAvailable.setCaption("Disponibles: 0");
+		  this.$.qtyAvailable.setCaption("Available: 0");
 		}
 	  },
 	  pen_change : function(inSender) {
 		if (inSender.index < 0) {
-		  this.$.qtyAvailable.setContent("Disponibles: 0");
+		  this.$.qtyAvailable.setContent("Available: 0");
 		  this.$.cabezas.setValue("");
 		  this.$.peso.setValue("");
 		}

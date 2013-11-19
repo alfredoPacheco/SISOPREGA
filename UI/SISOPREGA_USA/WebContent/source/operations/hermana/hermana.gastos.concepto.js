@@ -19,7 +19,7 @@ enyo.kind({
 			components : [ {
 				kind : "HFlexBox",
 				components:[
-					{kind : "Input",name : "charge_desc",hint : "Concepto",flex:.7}, 
+					{kind : "Input",name : "charge_desc",hint : "Concept",flex:.7}, 
 					]}
 		]},
 		{
@@ -29,7 +29,7 @@ enyo.kind({
 				kind : "Button",
 				name : "btnAdd",
 				className : "enyo-button-affirmative",
-				caption : "Crear",
+				caption : "Create",
 				onclick : "doAddCharge"
 			}, ]
 		}, {
@@ -43,14 +43,14 @@ enyo.kind({
 					name : "btnUpdate",
 					className : "enyo-button-affirmative",
 					flex : 1,
-					caption : "Actualizar",
+					caption : "Update",
 					onclick : "updateRancher"
 				}, {
 					kind : "Button",
 					name : "btnCancel",
 					className : "enyo-button-negative",
 					flex : 1,
-					caption : "Cancelar",
+					caption : "Cancel",
 					onclick : "doCancel"
 				} ]
 			} ]

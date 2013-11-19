@@ -15,7 +15,7 @@ enyo
 		pack : "center",
 		height : "40px;",
 		components : [ {
-		    content : "Moviendo de:",
+		    content : "Moving from:",
 		    width : "200px;",
 		    style : "text-align: right;margin-right:10px;"
 		}, {
@@ -24,7 +24,7 @@ enyo
 		    width : "80px",
 		    content : ""
 		}, {
-		    content : "a:",
+		    content : "to:",
 		    width : "13px;",
 		    style : "text-align: right;margin-right:10px;"
 		}, {
@@ -42,7 +42,7 @@ enyo
 		pack : "center",
 		height : "40px;",
 		components : [ {
-		    content : "Cabezas en corral:",
+		    content : "Heads on Pen:",
 		    width : "200px;",
 		    style : "text-align: right;margin-right:10px;"
 		}, {
@@ -57,7 +57,7 @@ enyo
 		pack : "center",
 		height : "40px;",
 		components : [ {
-		    content : "Disponibles para mover",
+		    content : "Available to move",
 		    width : "200px;",
 		    style : "text-align: right;margin-right:10px;"
 		}, {
@@ -72,13 +72,13 @@ enyo
 		pack : "center",
 		height : "40px;",
 		components : [ {
-		    content : "Fecha y Hora:",
+		    content : "Date/Time:",
 		    width : "200px;",
 		    style : "text-align: right;margin-right:10px;"
 		}, {
 		    kind : "ToolInput",
 		    name : "moveDate",
-		    hint : "mes/dia/año",
+		    hint : "mm/dd/yyyy",
 		    // width : "103px;",
 		    flex : 1,
 		    height : "35px;",
@@ -108,7 +108,7 @@ enyo
 		pack : "center",
 		height : "40px;",
 		components : [ {
-		    content : "Cabezas a mover:",
+		    content : "Heads to Move:",
 		    width : "200px;",
 		    style : "text-align: right;margin-right:10px;"
 		}, {
@@ -129,7 +129,7 @@ enyo
 		    kind : enyo.Spacer
 		}, {
 		    kind : enyo.Button,
-		    caption : "Guardar",
+		    caption : "Save",
 		    onclick : "save",
 		    style : "background-color: #DABD8B;min-width:70px;"
 		}, {
@@ -178,10 +178,10 @@ enyo
 		var headsToMove = Number(this.$.totalHC.getValue());
 		var availableToMove = Number(this.$.lblHeadsMobile.getContent());
 		if (!headsToMove || headsToMove < 1 || headsToMove == '' || headsToMove <= 0) {
-		    sError = "Verifique la cantidad.";
+		    sError = "Verify the heads quantity.";
 		}
 		if (headsToMove > availableToMove) {
-		    sError = "La cantidad deseada a mover no puede ser mayor a las cabezas disponibles.";
+		    sError = "The amount of heads you want to move can't be greater than available heads.";
 		}
 		
 		if (sError != "") {

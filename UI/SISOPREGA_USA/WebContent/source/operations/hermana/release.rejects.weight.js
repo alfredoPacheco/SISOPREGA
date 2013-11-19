@@ -54,7 +54,7 @@ enyo
 		} else {
 		  cacheMan.hideScrim();
 		  cacheMan.setMessage("",
-			  'No se pudo leer el registro de inspección de los rechazos. '
+			  'Unable to read the reject inspection record. '
 				  + result.exceptionDescription);
 		}
 	  },
@@ -62,11 +62,11 @@ enyo
 		if (result.exceptionId == 0) {
 		  this.doSaved(this.rejectedRecord, this.$.weightInput.getValue());
 		  cacheMan.hideScrim();
-		  alert('El peso de los rechazos ha sido grabado con éxito en la base de datos.');
+		  alert("Reject's weight has been successfully saved on the database.");
 		} else {
 		  cacheMan.hideScrim();
 		  cacheMan.setMessage("",
-			  'No se pudo actualizar el registro de peso de rechazos. '
+			  "Unable to update the reject's weight on the database. "
 				  + result.exceptionDescription);
 		}
 	  },

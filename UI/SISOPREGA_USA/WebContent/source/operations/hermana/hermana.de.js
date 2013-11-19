@@ -38,7 +38,7 @@ enyo.kind(
             components : [
                   {
                     kind : enyo.Button,
-                    caption : "Exportador",
+                    caption : "Exporter",
                     onclick : "printExportador",
                     flex : 1,
                     style : "display: table-cell;vertical-align: middle;height: 35px;margin-right: 15px;background-color: #DABD8B;",
@@ -47,7 +47,7 @@ enyo.kind(
                   },
                   {
                     kind : enyo.Button,
-                    caption : "Agencia",
+                    caption : "Agency",
                     onclick : "printAgencia",
                     flex : 1,
                     style : "display: table-cell;vertical-align: middle;height: 35px;margin-right: 15px;background-color: #DABD8B;",
@@ -142,7 +142,7 @@ enyo.kind(
                             style : "margin-bottom: 8px;",
                             components : [
                                   {
-                                    content : "Consignatario",
+                                    content : "Consignee",
                                     width : "95px",
                                     style : "text-align: right;margin-right:5px;"
                                   },
@@ -163,7 +163,7 @@ enyo.kind(
                             style : "margin-bottom: 8px;",
                             components : [
                                   {
-                                    content : "Cobrar A",
+                                    content : "Account of",
                                     width : "95px",
                                     style : "text-align: right;margin-right:5px;"
                                   },
@@ -184,7 +184,7 @@ enyo.kind(
                             style : "margin-bottom: 8px;",
                             components : [
                                   {
-                                    content : "Exportador:",
+                                    content : "Exporter:",
                                     width : "95px;",
                                     style : "text-align: right;margin-right:5px;"
                                   },
@@ -261,7 +261,7 @@ enyo.kind(
       if (this.hermanaId) {
         this.$.popup_print.openAtCenter();
       } else {
-        cacheMan.setMessage('', 'Los datos de este registro de importación no han sido grabados en la base de datos aún.');
+        cacheMan.setMessage('', 'This record has not been saved on the database yet.');
       }
     },
     printExportador : function() {
@@ -278,7 +278,7 @@ enyo.kind(
         var reportName = 'Hermana?HermanaId=' + this.hermanaId;
         consumingGateway.SendReport(this.$.rancher_id.getIndex(), reportName);
       } else {
-    	cacheMan.setMessage('', 'Los datos de este registro de importación no han sido grabados en la base de datos aún.');
+    	cacheMan.setMessage('', 'This record has not been saved on database yet.');
       }
     },
     resetForm : function() {
@@ -320,13 +320,13 @@ enyo.kind(
       var rancherName = this.$.rancher_id.getValue();
       
       if (rancherId == -1 && rancherName == '') {
-        cacheMan.setMessage("", "Seleccione primero un exportador de la lista");
+        cacheMan.setMessage("", "Please select an exporter from the list.");
         return false;
       }
       
       if (rancherId == -1 && rancherName != '') {
-        cacheMan.setMessage("", "El exportador que usted ha capturado (" + rancherName
-            + ") no se encuentra en la lista, por favor seleccione un exportador válido");
+        cacheMan.setMessage("", "The typed exporter (" + rancherName
+            + ") is not in the list, please select a valid exporter from the list.");
         return false;
       }
       
@@ -343,7 +343,7 @@ enyo.kind(
     hermanaListRead : function(result) {
       
       if (result.exceptionId != 0) {
-    	cacheMan.setMessage('', 'No se encontraron registros de importación');
+    	cacheMan.setMessage('', 'There are no imported records on database.');
         cacheMan.hideScrim();
         return false;
       }
@@ -585,7 +585,7 @@ enyo.kind(
     createCallBack : function(result) {
       // Save cache information based on data entry.
       if (result.exceptionId != '0') {
-    	cacheMan.setMessage('', 'Se ha encontrado un error al intentar grabar los datos, revise la captura ');
+    	cacheMan.setMessage('', 'An error has occurred during save process, please check your input.');
         cacheMan.hideScrim();
         return false;
       }
@@ -601,7 +601,7 @@ enyo.kind(
       
       this.doSave();
       cacheMan.hideScrim();
-      alert('El registro de hermana ha sido grabado con éxito en la base de datos.');
+      alert('Hermana record has been successfully saved on database.');
     },
     chargesIndexString : function(chargesArray) {
       var result = '';

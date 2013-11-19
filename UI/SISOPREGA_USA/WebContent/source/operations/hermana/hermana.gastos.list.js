@@ -14,11 +14,11 @@ enyo.kind(
             pack : "start",
             components : [
                   {
-                    content : "Concepto",
+                    content : "Concept",
                     style : "width:700px;margin-right:15px;margin-left:14px;",
                   },
                   {
-                    content : "Monto",
+                    content : "Amount",
                     style : "width:200px;margin-right:15px;text-align:center;",
                   }
             ]
