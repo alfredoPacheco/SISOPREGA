@@ -18,7 +18,7 @@ enyo
                 components : [
                     {
                       kind : "VFlexBox",
-                      content : "Embarques",
+                      content : "Shipments",
                       onclick : "doSelect",
                       flex : .3,
                       style : "color:white;font-size:15px;"
@@ -34,7 +34,7 @@ enyo
                 pack : "start",
                 components : [
                       {
-                        content : 'Program Date',
+                        content : 'Scheduled Date',
                         flex : 1
                       },
                       {

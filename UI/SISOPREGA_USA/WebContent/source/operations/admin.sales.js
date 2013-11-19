@@ -21,14 +21,14 @@ enyo
                 components : [
                       {
                         kind : "VFlexBox",
-                        content : "Ventas",
+                        content : "Sales",
                         onclick : "doSelect",
                         flex : 1,
                         style : "color:white;font-size:15px;"
                       },
                       {
                         kind : "Button",
-                        caption : "Shipping Program",
+                        caption : "Schedule Shipment",
                         onclick : "doShipment"
                       }
                 ]
