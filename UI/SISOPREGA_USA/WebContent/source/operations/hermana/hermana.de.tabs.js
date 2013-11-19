@@ -504,6 +504,26 @@ enyo
 		this.$.detailDescription.setContent(detailDescription);
 	  },
 	  agregarCorte : function() {
+		var sError = "";
+		var occupiedPens = crudInventory.getPensList();
+		for ( var i = 0; i < occupiedPens.length; i++) {
+		  var isPenOccupied = this.$.penAutoComplete.getIndex() == Number(occupiedPens[i].value);
+		  var isSameQuality = occupiedPens[i].object.qualityId == this.$.classAutoComplete.getIndex();
+		  if (isPenOccupied && !isSameQuality) {
+			var cattleQuality = crudCattleQuality
+				.getByID(occupiedPens[i].object.qualityId);
+			sError = "Error. The Pen " + occupiedPens[i].caption
+				+ " is already occupied by cattle class "
+				+ cattleQuality.qualityName;
+			break;
+		  }
+		}
+		
+		if(sError != ""){
+		  cacheMan.setMessage("",sError);
+		  return;
+		}
+		
 		var cutRecord =
 		{
 		  barnyardId : this.$.penAutoComplete.getIndex(),
