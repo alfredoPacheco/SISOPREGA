@@ -551,6 +551,9 @@ enyo.kind(
         hermana.HermanaCorteExportador.push(corte);
       }
       
+      if(!this.$.details.$.chargeList.arrData)
+    	this.$.details.$.chargeList.arrData = [];
+      
       for ( var i = 0; i < this.$.details.$.chargeList.arrData.length; i++) {
         var expense = this.ExpenseOutput(this.$.details.$.chargeList.arrData[i]);
         hermana.HermanaExpense.push(expense);
