@@ -33,6 +33,7 @@ enyo.kind(
             style : "overflow: hidden;border-width: 8px;",
             scrim : true,
             onClose : "on_popup_map_close",
+            onOpen:"on_popup_map_open",
             components : [
                 {
                   kind : "pen.map",
@@ -50,17 +51,36 @@ enyo.kind(
             layoutKind : "VFlexLayout",
             style : "overflow: hidden;border-width: 8px;",
             scrim : true,
+            onClose:"savePurchaseGroup",
             components : [
                 {
-                  kind : "operations.purchase.form",
-                  name : "purchase_form",
-                  onAdd : "savePurchaseGroup",
-                  onAfterLoad : "purchaseFormReady",
-                  onCancel : "onCancelPurchase",
+                  kind : "forms.list",
+                  name : "purchase_list",
+                  entity : crudPurchase,
                   flex : 1
                 }
             ]
           },
+//          {
+//            kind : enyo.Popup,
+//            name : "popup_purchases",
+//            width : "85%;",
+//            height : "85%;",
+//            dismissWithClick : true,
+//            layoutKind : "VFlexLayout",
+//            style : "overflow: hidden;border-width: 8px;",
+//            scrim : true,
+//            components : [
+//                {
+//                  kind : "operations.purchase.form",
+//                  name : "purchase_form",
+//                  onAdd : "savePurchaseGroup",
+//                  onAfterLoad : "purchaseFormReady",
+//                  onCancel : "onCancelPurchase",
+//                  flex : 1
+//                }
+//            ]
+//          },
           {
             kind : enyo.Popup,
             name : "popup_hermana",
@@ -227,7 +247,7 @@ enyo.kind(
       this.$.popup_purchases.close();
     },
     purchaseFormReady : function() {
-      this.$.popup_purchases.openAtCenter();
+      this.$.popup_purchases.openAtCenter();      
     },
     on_sale : function() {
       this.$.popup_sales.close();
@@ -241,9 +261,6 @@ enyo.kind(
     },
     savePurchaseGroup : function() {
       this.$.purchased.updateView();
-      if (this.$.popup_purchases) {
-        this.$.popup_purchases.close();
-      }
       if (this.$.popup_hermana) {
         this.$.popup_hermana.close();
       }      
@@ -257,12 +274,14 @@ enyo.kind(
       this.$.popup_sales.openAtCenter();
     },
     buy_cattle_click : function() {
-      cacheMan.showScrim();
+      //cacheMan.showScrim();
       
       if (!this.$.purchase_form)
         this.$.popup_purchases.validateComponents();
-      else
-        this.$.purchase_form.ready();
+      
+      this.$.popup_purchases.openAtCenter();
+      this.$.purchase_list.reset();
+      this.$.purchase_list.$.formPopUp.validateComponents();
     },
     inventory_select : function(inSender, inEvent) {
       this.$.popup_map.openAtCenter();
@@ -292,6 +311,9 @@ enyo.kind(
     },
     on_popup_map_close : function() {
       this.$.inventory.updateView();
+    },
+    on_popup_map_open:function(){
+      this.$.map_kind.updateView();
     },
     deleteShipProgrammed : function(inSender, shipment) {
       crudShipment.remove(shipment, this, "afterDeleteShip");

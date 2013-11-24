@@ -58,10 +58,16 @@ enyo
 	    disabledChanged:function(inOldValue){
 		if(this.disabled){
 		    this.$.btnIcon.hide();
-		    document.getElementById(this.$.textField.$.input.id).disabled = true;
+		    try{
+		      document.getElementById(this.$.textField.$.input.id).disabled = true;  
+		    }catch(e){};
+		    
 		}else{
 		    this.$.btnIcon.show();
-		    document.getElementById(this.$.textField.$.input.id).disabled = false;
+		    try{
+		      document.getElementById(this.$.textField.$.input.id).disabled = false;  
+		    }catch(e){};
+		    
 		}
 	    },
 	    indexChanged : function(inOldValue) {

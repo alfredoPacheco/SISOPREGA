@@ -292,5 +292,53 @@ enyo
 		  return false;
 		}
 		return true;
-	  }
+	  },
+	  setEntity : function(entity, bUpdatingMode) {
+	      if (bUpdatingMode) {
+	        this.toggleUpdate();
+	        this.resetValues();
+	      } else {
+	        this.toggleAdd();
+	      }
+	      
+	      if (entity) {
+	        var controls = this.$;
+	        for ( var i in controls) {
+	          if (controls[i].hasOwnProperty("belongsTo")) {
+	            if (entity[controls[i].belongsTo]) this.setValueForControl(controls[i], entity[controls[i].belongsTo][0][controls[i].bindTo]);
+	          } else if (controls[i].hasOwnProperty("bindTo")) {
+	            this.setValueForControl(controls[i], entity[controls[i].bindTo]);
+	          }
+	        }
+	        this.updatingEntityId = entity[this.entityKind.entityIdName()];
+	      
+	        if(entity.PurchaseDetail){
+	          this.arrDetail  = [];
+	          for(var i=0; i<entity.PurchaseDetail.length;i++){
+	        	var obj = {
+	        		heads:entity.PurchaseDetail[i].heads,
+	        		penId:entity.PurchaseDetail[i].penId,
+	        		qualityId:entity.PurchaseDetail[i].qualityId,
+	        		weight:entity.PurchaseDetail[i].weight,
+	        		fields:{
+	        		  0:crudCattleQuality.getByID(entity.PurchaseDetail[i].qualityId).qualityName,
+	        		  1:crudPen.adapterToList(crudPen.getByID(entity.PurchaseDetail[i].penId)).caption,
+	        		  2:entity.PurchaseDetail[i].heads,
+	        		  3:entity.PurchaseDetail[i].weight
+	        		}
+	        	};
+	        	this.arrDetail.push(obj);
+	          }
+	          this.updateList();
+              this.$.detailScroller.scrollTo(this.$.detailScroller.getBoundaries().bottom, 0);
+	        }
+	      }
+	      this.$.cattleType.setDisabled(!(this.arrDetail.length == 0));
+	    },
+	    toggleUpdate:function(){
+	      this.$.saveButton.setCaption("Update");
+	    },
+	    toggleAdd:function(){
+	      this.$.saveButton.setCaption("Create");
+	    }
 	});
