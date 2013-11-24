@@ -114,8 +114,9 @@ enyo
                             {
                               kind : enyo.Button,
                               caption : "Save",
-                              onclick : "addEntity",
-                              style : "background-color: #DABD8B;"
+                              onclick : "save",
+                              style : "background-color: #DABD8B;",
+                              name:"saveButton"
                             },
                             {
                               kind : enyo.Button,
@@ -275,5 +276,13 @@ enyo
           this.arrDetail = [];
           this.updateList();
           this.inherited(arguments);
+        },
+        save:function(){
+          var mode = this.$.saveButton.getCaption();
+          if(mode=="Save" || mode=="Create"){
+        	this.addEntity();
+          }else{
+        	this.updateEntity();
+          }
         }
       });
