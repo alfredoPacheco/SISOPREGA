@@ -40,6 +40,7 @@ import java.util.Set;
 public class Shipment {
   private long shipmentId;
   private Date dateTimeProgrammed = new Date();
+  private Date recordWhen = new Date();
   private long carrierIdProgrammed;
   private long customerId;
   private long qualityId;
@@ -86,6 +87,23 @@ public class Shipment {
    */
   public void setDateTimeProgrammed(Date dateTimeProgrammed) {
     this.dateTimeProgrammed = dateTimeProgrammed;
+  }
+
+  /**
+   * @return the recordWhen
+   */
+  public Date getRecordWhen() {
+    return recordWhen;
+  }
+
+  /**
+   * @param recordWhen the recordWhen to set
+   */
+  public void setRecordWhen(Date recordWhen) {
+    if(recordWhen == null)
+      this.recordWhen = new Date();
+    else
+      this.recordWhen = recordWhen;
   }
 
   /**

@@ -234,7 +234,8 @@ CREATE TABLE ctrl_shipment(
 	date_time_programed    	timestamp without time zone NOT NULL DEFAULT now(),
 	customer_id   		integer NOT NULL REFERENCES cat_customer(customer_id),
 	carrier_id_programed   	integer REFERENCES cat_carrier(carrier_id),
-	quality_id		integer NOT NULL REFERENCES cat_cattle_quality(quality_id)
+	quality_id		integer NOT NULL REFERENCES cat_cattle_quality(quality_id),
+	record_when		timestamp NOT NULL DEFAULT now()
 );
 
 GRANT ALL ON ctrl_shipment TO sisoprega;

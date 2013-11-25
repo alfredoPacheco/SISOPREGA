@@ -1,6 +1,10 @@
 package com.tramex.sisoprega.proxy.bean;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.security.RolesAllowed;
@@ -69,6 +73,61 @@ public class ShipmentBean extends BaseInventory implements Cruddable {
   }
 
   @Override
+  public ReadResponse Read(ReadRequest request) {
+    log.entering(this.getClass().getCanonicalName(), "ReadResponse Read(ReadRequest)");
+
+    ReadResponse response = new ReadResponse();
+    try {
+      String id = request.getFilter().getFieldValue("id");
+      String queryName = request.getFilter().getEntity().toUpperCase();
+
+      Map<String, Object> parameters = new HashMap<String, Object>();
+
+      if (id != null) {
+        parameters.put("Id", Long.parseLong(id));
+        queryName += "_BY_ID";
+      } else {
+        queryName = "ALL_" + queryName + "S";
+        Calendar calFrom = Calendar.getInstance();
+        calFrom.setTime(new Date());
+        calFrom.set(Calendar.HOUR, 0);
+        calFrom.set(Calendar.MINUTE, 0);
+        parameters.put("fromTs", calFrom.getTime());
+        log.info("fromTs: [" + calFrom.getTime() + "]");
+        
+        Calendar calTo = Calendar.getInstance();
+        calTo.setTime(new Date());
+        calTo.set(Calendar.HOUR, 23);
+        calTo.set(Calendar.MINUTE, 59);
+        parameters.put("toTs", calTo.getTime());
+        log.info("toTs: [" + calTo.getTime() + "]");
+        
+      }
+      log.fine("Executing query [" + queryName + "]");
+
+      List<Shipment> results = dataModel.readDataModelList(queryName, parameters, Shipment.class);
+      if (results.isEmpty()) {
+        log.info("Query resulted in empty list [" + queryName + "] by []");
+        response.setError(new GatewayError("VAL02", "No se encontraron datos para el filtro seleccionado", "entity: ["
+            + request.getFilter().getEntity() + "]"));
+      } else {
+        log.info("Records from query: [" + results.size() + "]");
+        response.setParentRecord(getRecordsFromList(results, Shipment.class));
+        response.setError(new GatewayError("0", "SUCCESS", "Read"));
+      }
+
+    } catch (Exception e) {
+      this.log.severe("Exception found while reading [" + request + "]");
+      this.log.throwing(this.getClass().getCanonicalName(), "ReadResponse Read(ReadRequest)", e);
+
+      response.setError(new GatewayError("DB02", "Error al leer datos", "entity: [" + request.getFilter().getEntity() + "]"));
+    }
+
+    log.exiting(this.getClass().getCanonicalName(), "ReadResponse Read(ReadRequest)");
+    return response;
+  }
+
+  @Override
   public ReadResponse Update(CreateRequest request) {
     this.log.entering(this.getClass().getCanonicalName(), "ReadResponse Create(CreateRequest)");
 
@@ -96,17 +155,17 @@ public class ShipmentBean extends BaseInventory implements Cruddable {
 
                 inventory.setAvailableToShip(inventory.getAvailableToShip() - headsShipped);
                 inventory.setShipped(inventory.getShipped() + headsShipped);
-                long headsLeft = inventory.getHeads() - headsShipped;                
-                inventory.setWeight(inventory.getWeight()/inventory.getHeads()*headsLeft);
-                inventory.setFeed(inventory.getFeed()/inventory.getHeads()*headsLeft);
+                long headsLeft = inventory.getHeads() - headsShipped;
+                inventory.setWeight(inventory.getWeight() / inventory.getHeads() * headsLeft);
+                inventory.setFeed(inventory.getFeed() / inventory.getHeads() * headsLeft);
                 inventory.setHeads(headsLeft);
-                
+
                 if (inventory.getHeads() <= 0) {
                   inventory.setCycleCompleted(new Date());
-                 
-//                    dataModel.deleteDataModel(inventory, getLoggedUser());                  
-                }else{
-                dataModel.updateDataModel(inventory);
+
+                  // dataModel.deleteDataModel(inventory, getLoggedUser());
+                } else {
+                  dataModel.updateDataModel(inventory);
                 }
 
               } else {
@@ -154,22 +213,24 @@ public class ShipmentBean extends BaseInventory implements Cruddable {
 
         Shipment shipment = (Shipment) dataModel.readSingleDataModel(queryName, idName, Long.parseLong(id), type);
 
-        if (shipment.getShipmentRelease().size() > 0) { //Already shipped
+        if (shipment.getShipmentRelease().size() > 0) { // Already shipped
           for (ShipmentDetail detail : shipment.getShipmentDetail()) {
             Inventory inventory = getInventoryRecordById(detail.getInventoryId());
             if (inventory != null) {
               long headsAffected = detail.getHeads();
-              //inventory.setAvailableToShip(inventory.getAvailableToShip() + headsAffected);
+              // inventory.setAvailableToShip(inventory.getAvailableToShip() +
+              // headsAffected);
               inventory.setShipped(inventory.getShipped() - headsAffected);
               long headsLeft = inventory.getHeads() + headsAffected;
-              inventory.setWeight(inventory.getWeight()/inventory.getHeads()*headsLeft);
-              inventory.setFeed(inventory.getFeed()/inventory.getHeads()*headsLeft);
+              inventory.setWeight(inventory.getWeight() / inventory.getHeads() * headsLeft);
+              inventory.setFeed(inventory.getFeed() / inventory.getHeads() * headsLeft);
               inventory.setHeads(headsLeft);
-              
+
               inventory.setAvailableToProgramShip(inventory.getAvailableToProgramShip() + headsAffected);
               inventory.setProgrammedToShip(inventory.getProgrammedToShip() - headsAffected);
-              //inventory.setAvailableToShip(inventory.getAvailableToShip() - headsAffected);
-              
+              // inventory.setAvailableToShip(inventory.getAvailableToShip() -
+              // headsAffected);
+
               if (inventory.getHeads() > 0) {
                 inventory.setCycleCompleted(null);
               }
