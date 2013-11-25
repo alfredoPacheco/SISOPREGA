@@ -182,7 +182,7 @@ enyo
 			this.$.lblPurAveWeight.setContent("-");
 		  } else {
 			this.$.lblPurAveWeight.setContent(utils
-				.formatNumberThousands(objData.weight / objData.heads));
+				.formatNumberThousands((objData.weight / objData.heads).toFixed(1)));
 		  }
 
 		  return true;
@@ -193,15 +193,15 @@ enyo
 		var iFotWeight = crudInventory.getObjSummary().weight;
 
 		this.$.lblPurSumHeads.setContent("Heads<br />"
-			+ utils.formatNumberThousands(iFotHeads.toFixed(2)));
+			+ utils.formatNumberThousands(iFotHeads));
 		this.$.lblPurSumWeight.setContent("Weight<br />"
-			+ utils.formatNumberThousands(iFotWeight.toFixed(2)));
+			+ utils.formatNumberThousands(iFotWeight.toFixed(1)));
 		var avg = iFotWeight / iFotHeads;
 		if (iFotHeads > 0) {
 		  this.$.lblSumAveWeight.setContent("Average<br />"
-			  + utils.formatNumberThousands(avg.toFixed(2)));
+			  + utils.formatNumberThousands(avg.toFixed(1)));
 		} else {
-		  this.$.lblSumAveWeight.setContent("Average<br />0.00");
+		  this.$.lblSumAveWeight.setContent("Average<br />0.0");
 		}
 
 	  },

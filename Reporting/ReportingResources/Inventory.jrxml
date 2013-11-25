@@ -19,6 +19,7 @@ LEFT JOIN vw_purchased purchased ON quality.quality_name = purchased.quality_nam
 LEFT JOIN ctrl_sale sold ON sold.sale_date >= CURRENT_DATE
 LEFT JOIN ctrl_sale_detail sold_detail ON inventory.quality_id = sold_detail.quality_id and sold.sale_id = sold_detail.sale_id
 LEFT JOIN ctrl_feed_us feed ON inventory.inventory_id = feed.inventory_id
+WHERE inventory.heads > 0
 GROUP BY quality.quality_name, purchased.heads, purchased.weight, sold_detail.heads, sold_detail.weight;]]>
 	</queryString>
 	<field name="pen" class="java.lang.String"/>
@@ -41,6 +42,18 @@ GROUP BY quality.quality_name, purchased.heads, purchased.weight, sold_detail.he
 	</variable>
 	<variable name="feed_quantity_1" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
 		<variableExpression><![CDATA[$F{feed_quantity}]]></variableExpression>
+	</variable>
+	<variable name="inventory_heads_2" class="java.lang.Long" calculation="Sum">
+		<variableExpression><![CDATA[$F{inventory_heads}]]></variableExpression>
+	</variable>
+	<variable name="inventory_weight_3" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{inventory_weight}]]></variableExpression>
+	</variable>
+	<variable name="sold_weight_1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{sold_weight}]]></variableExpression>
+	</variable>
+	<variable name="sold_heads_1" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{sold_heads}]]></variableExpression>
 	</variable>
 	<group name="sold_group">
 		<groupExpression><![CDATA['Sold Group']]></groupExpression>
@@ -101,10 +114,10 @@ GROUP BY quality.quality_name, purchased.heads, purchased.weight, sold_detail.he
 					<textElement textAlignment="Right"/>
 					<textFieldExpression><![CDATA[$V{inventory_weight_1}]]></textFieldExpression>
 				</textField>
-				<textField pattern="#,##0.00;-#,##0.00">
+				<textField pattern="#,##0.0;-#,##0.0">
 					<reportElement uuid="25181a35-fa12-41b1-ad93-87d2ab9625c8" x="331" y="4" width="71" height="20"/>
 					<textElement textAlignment="Right"/>
-					<textFieldExpression><![CDATA[$V{inventory_weight_2}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$V{inventory_weight_2}/$V{inventory_heads_1}]]></textFieldExpression>
 				</textField>
 				<textField pattern="#,##0.00;-#,##0.00" isBlankWhenNull="true">
 					<reportElement uuid="d72a4fda-b1d9-46d9-a9b1-2f44f4415064" x="402" y="4" width="71" height="20"/>
@@ -235,7 +248,7 @@ GROUP BY quality.quality_name, purchased.heads, purchased.weight, sold_detail.he
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA[$F{inventory_weight}]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0.00;-#,##0.00">
+			<textField pattern="#,##0.0;-#,##0.0">
 				<reportElement uuid="edc24e48-520b-4cc3-a3df-9b43c9c9518a" x="331" y="0" width="71" height="20"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA[$F{inventory_weight}/$F{inventory_heads}]]></textFieldExpression>
@@ -247,4 +260,36 @@ GROUP BY quality.quality_name, purchased.heads, purchased.weight, sold_detail.he
 			</textField>
 		</band>
 	</detail>
+	<summary>
+		<band height="64">
+			<textField pattern="#,##0;-#,##0">
+				<reportElement uuid="575c9fa3-8115-4507-8a71-6e69fba81e9b" x="265" y="13" width="51" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$V{inventory_heads_2}-$V{sold_heads_1}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="cd043eff-3c83-4582-8114-fc0b9b72e1ef" x="37" y="13" width="152" height="20"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[ENDING INVENTORY]]></text>
+			</staticText>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement uuid="871c55de-be3c-4e01-9dbc-697d6586fcfb" x="316" y="13" width="66" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$V{inventory_weight_3}-$V{sold_weight_1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.0;-#,##0.0">
+				<reportElement uuid="501acca0-a2ad-408d-b726-cd46c58459cb" x="382" y="13" width="71" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[($V{inventory_weight_3}-$V{sold_weight_1})/($V{inventory_heads_2}-$V{sold_heads_1})]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="bfe89bf8-5bc0-4069-b431-0c7b164dce76" x="37" y="12" width="436" height="1"/>
+			</line>
+			<line>
+				<reportElement uuid="bfe89bf8-5bc0-4069-b431-0c7b164dce76" x="37" y="8" width="436" height="1"/>
+			</line>
+		</band>
+	</summary>
 </jasperReport>

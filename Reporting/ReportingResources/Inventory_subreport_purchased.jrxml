@@ -42,7 +42,7 @@ GROUP BY seller;]]>
 					<textElement/>
 					<textFieldExpression><![CDATA[$V{weight_1}]]></textFieldExpression>
 				</textField>
-				<textField pattern="#,##0.00;-#,##0.00">
+				<textField pattern="#,##0.0;-#,##0.0">
 					<reportElement uuid="d58df3ab-ded8-405d-b850-c97c2294930c" x="331" y="4" width="71" height="20"/>
 					<textElement/>
 					<textFieldExpression><![CDATA[$V{average_1}]]></textFieldExpression>
@@ -82,7 +82,7 @@ GROUP BY seller;]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{weight}]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0.00;-#,##0.00">
+			<textField pattern="#,##0.0;-#,##0.0">
 				<reportElement uuid="6a977995-d983-4d4d-ba7e-cc27b6645d61" x="331" y="0" width="71" height="20"/>
 				<textElement>
 					<font fontName="Serif"/>

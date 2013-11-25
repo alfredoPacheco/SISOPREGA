@@ -46,7 +46,7 @@ GROUP BY customer.customer_name]]>
 					<textElement textAlignment="Right"/>
 					<textFieldExpression><![CDATA[$V{weight_1}]]></textFieldExpression>
 				</textField>
-				<textField pattern="#,##0.00;-#,##0.00">
+				<textField pattern="#,##0.0;-#,##0.0">
 					<reportElement uuid="399ec5ea-06a2-4368-8745-42ffcc11fafc" x="326" y="4" width="71" height="20"/>
 					<textElement textAlignment="Right"/>
 					<textFieldExpression><![CDATA[$V{average_1}]]></textFieldExpression>
@@ -119,7 +119,7 @@ GROUP BY customer.customer_name]]>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA[$F{weight}]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0.00;-#,##0.00">
+			<textField pattern="#,##0.0;-#,##0.0">
 				<reportElement uuid="5c39ed5b-916f-43ae-840e-6147edf9ba4e" x="326" y="0" width="71" height="20"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA[$F{average}]]></textFieldExpression>

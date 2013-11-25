@@ -319,7 +319,7 @@ enyo
 		  this.$.lblInvWeight.setContent(utils
 			  .formatNumberThousands(totalWeight));
 		  this.$.lblInvInvAverage.setContent(utils
-			  .formatNumberThousands(totalWeight / totalHeads));
+			  .formatNumberThousands((totalWeight / totalHeads).toFixed(1)));
 		  this.$.lblInvFeed.setContent(utils.formatNumberThousands(totalFeed));
 		  this.$.lblInvBarnyards.setContent(strBarnyards);
 
@@ -344,19 +344,19 @@ enyo
 		this.$.lblInvSumWeight.setContent("Weight<br />"
 			+ utils.formatNumberThousands(iSumWeight));
 		this.$.lblInvSumAvgWeight.setContent("Average<br />"
-			+ utils.formatNumberThousands(iSumAve.toFixed(2)));
+			+ utils.formatNumberThousands(iSumAve.toFixed(1)));
 		this.$.lblInvSumFeed.setContent("Feed<br />"
-			+ utils.formatNumberThousands(iSumFeed.toFixed(2)));
+			+ utils.formatNumberThousands(iSumFeed.toFixed(1)));
 
 		this.$.lblPurSumInvHeads.setContent("Heads<br />"
 			+ utils.formatNumberThousands(iHeads - iSold));
 		this.$.lblPurSumInvWeight.setContent("Weight<br />"
-			+ utils.formatNumberThousands((iSumWeight - iSoldAve).toFixed(2)));
+			+ utils.formatNumberThousands((iSumWeight - iSoldAve).toFixed(1)));
 		this.$.lblSumInvAveWight
 			.setContent("Average<br />"
 				+ utils
 					.formatNumberThousands(((iSumWeight - iSoldAve) / (iHeads - iSold))
-						.toFixed(2)));
+						.toFixed(1)));
 	  },
 	  setListContent : function(arrInventory) {
 		var result = [];
