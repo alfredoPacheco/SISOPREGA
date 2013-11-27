@@ -1477,7 +1477,7 @@
 		</named-query>
 		<named-query name="ALL_SHIPMENTS">
 			<description>Retrieve all shipment records from database.</description>
-			<query>SELECT iShipment FROM Shipment iShipment ORDER BY iShipment.dateTimeProgrammed DESC</query>
+			<query>SELECT DISTINCT iShipment FROM Shipment iShipment LEFT JOIN iShipment.shipmentRelease iShipmentRelease WHERE iShipment.dateTimeProgrammed BETWEEN :fromTs AND :toTs OR iShipment.recordWhen BETWEEN :fromTs AND :toTs OR iShipmentRelease.dateTime BETWEEN :fromTs AND :toTs ORDER BY iShipment.dateTimeProgrammed DESC</query>
 		</named-query>
 		<attributes>
 			<id name="shipmentId">
@@ -1496,6 +1496,14 @@
 			</basic>
 			<basic name="qualityId">
 				<column name="quality_id" />
+			</basic>
+			<basic name="dateTimeProgrammed">
+				<column name="date_time_programed" />
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="recordWhen">
+				<column name="record_when"/>
+				<temporal>TIMESTAMP</temporal>
 			</basic>
 			<one-to-many name="shipmentDetail" fetch="EAGER"
 				mapped-by="shipment" target-entity="com.tramex.sisoprega.dto.ShipmentDetail"

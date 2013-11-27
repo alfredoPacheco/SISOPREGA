@@ -4,7 +4,12 @@
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<queryString>
-		<![CDATA[SELECT seller, SUM(heads) as heads, SUM(weight) as weight, CASE WHEN SUM(heads)=0 THEN 0 ELSE SUM(weight)/SUM(heads) END as average
+		<![CDATA[SELECT 'Inv ELLLC @ STT' AS seller, SUM(inventory.heads) - (SELECT CASE WHEN sum(heads) IS NULL THEN 0 ELSE SUM(heads) END from vw_purchased where purchase_date>=current_date) as heads,
+sum(inventory.weight) - (SELECT CASE WHEN SUM(weight) IS NULL THEN 0 ELSE SUM(weight) END from vw_purchased where purchase_date>=current_date) as weight,
+(sum(inventory.weight) - (SELECT CASE WHEN SUM(weight) IS NULL THEN 0 ELSE SUM(weight) END from vw_purchased where purchase_date>=current_date))/(SUM(inventory.heads) - (SELECT CASE WHEN sum(heads) IS NULL THEN 0 ELSE SUM(heads) END from vw_purchased where purchase_date>=current_date)) as average
+FROM ctrl_inventory inventory
+UNION ALL
+SELECT seller, SUM(heads) as heads, SUM(weight) as weight, CASE WHEN SUM(heads)=0 THEN 0 ELSE SUM(weight)/SUM(heads) END as average
 FROM vw_purchased
 WHERE purchase_date >= CURRENT_DATE
 GROUP BY seller;]]>
@@ -42,7 +47,7 @@ GROUP BY seller;]]>
 					<textElement/>
 					<textFieldExpression><![CDATA[$V{weight_1}]]></textFieldExpression>
 				</textField>
-				<textField pattern="#,##0.00;-#,##0.00">
+				<textField pattern="#,##0.0;-#,##0.0">
 					<reportElement uuid="d58df3ab-ded8-405d-b850-c97c2294930c" x="331" y="4" width="71" height="20"/>
 					<textElement/>
 					<textFieldExpression><![CDATA[$V{average_1}]]></textFieldExpression>
@@ -82,7 +87,7 @@ GROUP BY seller;]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{weight}]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0.00;-#,##0.00">
+			<textField pattern="#,##0.0;-#,##0.0">
 				<reportElement uuid="6a977995-d983-4d4d-ba7e-cc27b6645d61" x="331" y="0" width="71" height="20"/>
 				<textElement>
 					<font fontName="Serif"/>

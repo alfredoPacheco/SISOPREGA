@@ -205,7 +205,7 @@ enyo
             this.$.lblSalesDate.setContent(utils.dateOut(objData.saleDate));
             this.$.lblSalesHeads.setContent(utils.formatNumberThousands(objData.totalHeads));
             this.$.lblSalesWeight.setContent(utils.formatNumberThousands(objData.totalWeight));
-            this.$.lblSalesAverage.setContent(utils.formatNumberThousands(objData.totalAvgWeight));
+            this.$.lblSalesAverage.setContent(utils.formatNumberThousands(objData.totalAvgWeight.toFixed(1)));
             this.$.lblSalesClient.setContent(objData.customer);
             this.$.chkSalesShip.iPos = inIndex;
             
@@ -251,13 +251,13 @@ enyo
             iWeight += this.arrData[j].totalWeight;
             iAve += this.arrData[j].aveWeight;
           }
-          this.$.lblSalesSumHeads.setContent("Heads<br />" + utils.formatNumberThousands(iHeads.toFixed(2)));
-          this.$.lblSalesSumWeight.setContent("Weight<br />" + utils.formatNumberThousands(iWeight.toFixed(2)));
+          this.$.lblSalesSumHeads.setContent("Heads<br />" + utils.formatNumberThousands(iHeads.toFixed(0)));
+          this.$.lblSalesSumWeight.setContent("Weight<br />" + utils.formatNumberThousands(iWeight.toFixed(1)));
           var avg = null;
           if (avg = (iWeight / iHeads)) {
-            this.$.lblSumAveWeight.setContent("Average<br />" + utils.formatNumberThousands(avg.toFixed(2)));
+            this.$.lblSumAveWeight.setContent("Average<br />" + utils.formatNumberThousands(avg.toFixed(1)));
           } else {
-            this.$.lblSumAveWeight.setContent("Average<br />0.00");
+            this.$.lblSumAveWeight.setContent("Average<br />0.0");
           }
         },
         checkBox_click : function(inSender, inEvent) {

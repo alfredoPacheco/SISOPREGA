@@ -119,7 +119,7 @@ ORDER BY purchase_date, seller, cattype_name, quality_name]]>
 					<textElement textAlignment="Right"/>
 					<text><![CDATA[Peso (lbs.): ]]></text>
 				</staticText>
-				<textField pattern="#,##0.00;-#,##0.00">
+				<textField pattern="#,##0.0;-#,##0.0">
 					<reportElement uuid="65470bfd-7de1-459c-8ee8-6f3ef1e52584" x="335" y="20" width="79" height="20"/>
 					<textElement/>
 					<textFieldExpression><![CDATA[$V{weight_2}]]></textFieldExpression>
@@ -194,7 +194,7 @@ ORDER BY purchase_date, seller, cattype_name, quality_name]]>
 					<textElement textAlignment="Right"/>
 					<text><![CDATA[Peso Prom.: ]]></text>
 				</staticText>
-				<textField pattern="#,##0.00;-#,##0.00">
+				<textField pattern="#,##0.0;-#,##0.0">
 					<reportElement uuid="9e5066ac-21e7-4a2c-a6c3-ddc51a637d4b" x="368" y="20" width="100" height="20" forecolor="#FFFFFF"/>
 					<textElement/>
 					<textFieldExpression><![CDATA[$V{weight_4}]]></textFieldExpression>
@@ -340,7 +340,7 @@ ORDER BY purchase_date, seller, cattype_name, quality_name]]>
 				</textElement>
 				<text><![CDATA[Peso Prom.: ]]></text>
 			</staticText>
-			<textField pattern="#,##0.00;-#,##0.00">
+			<textField pattern="#,##0.0;-#,##0.0">
 				<reportElement uuid="37789e89-a366-4747-9440-d45771500830" x="306" y="20" width="108" height="20"/>
 				<textElement>
 					<font isBold="true" isUnderline="true"/>

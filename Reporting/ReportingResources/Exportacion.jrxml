@@ -121,7 +121,7 @@ ORDER BY expo_date, entry_no, quality.quality_name;]]>
 					<textElement textAlignment="Center"/>
 					<textFieldExpression><![CDATA[$V{pounds_2}]]></textFieldExpression>
 				</textField>
-				<textField pattern="#,##0.00;-#,##0.00">
+				<textField pattern="#,##0.0;-#,##0.0">
 					<reportElement uuid="f4b53a4c-6280-46d9-a75d-1ab4b8fd6b1d" x="427" y="17" width="100" height="20"/>
 					<textElement textAlignment="Center"/>
 					<textFieldExpression><![CDATA[$V{avg_pounds_2}]]></textFieldExpression>
@@ -205,7 +205,7 @@ ORDER BY expo_date, entry_no, quality.quality_name;]]>
 					<textElement textAlignment="Center"/>
 					<textFieldExpression><![CDATA[$V{pounds_1}]]></textFieldExpression>
 				</textField>
-				<textField pattern="#,##0.00;-#,##0.00">
+				<textField pattern="#,##0.0;-#,##0.0">
 					<reportElement uuid="7c30a941-a772-452e-9f60-1d750388c7df" x="427" y="11" width="100" height="20"/>
 					<textElement textAlignment="Center"/>
 					<textFieldExpression><![CDATA[$V{avg_pounds_1}]]></textFieldExpression>
@@ -269,7 +269,7 @@ ORDER BY expo_date, entry_no, quality.quality_name;]]>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{pounds}]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0.00;-#,##0.00">
+			<textField pattern="#,##0.0;-#,##0.0">
 				<reportElement uuid="15c84e02-d895-44e2-9d25-7321bf5ad122" x="427" y="0" width="100" height="20"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{avg_pounds}]]></textFieldExpression>
@@ -305,7 +305,7 @@ ORDER BY expo_date, entry_no, quality.quality_name;]]>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$V{pounds_3}]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0.00;-#,##0.00">
+			<textField pattern="#,##0.0;-#,##0.0">
 				<reportElement uuid="2d75c22b-7329-4907-a2e9-678c70f768fb" x="427" y="14" width="100" height="20"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$V{avg_pounds_3}]]></textFieldExpression>

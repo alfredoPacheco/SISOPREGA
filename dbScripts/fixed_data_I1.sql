@@ -370,6 +370,20 @@ INSERT INTO cat_barnyard(barnyard_code, zone_id) VALUES('C19', 4);
 INSERT INTO cat_barnyard(barnyard_code, zone_id) VALUES('C21', 4);
 INSERT INTO cat_barnyard(barnyard_code, zone_id) VALUES('C23', 4);
 
+INSERT INTO cat_barnyard(barnyard_code, zone_id) VALUES('C2', 4);
+INSERT INTO cat_barnyard(barnyard_code, zone_id) VALUES('C4', 4);
+INSERT INTO cat_barnyard(barnyard_code, zone_id) VALUES('C8', 4);
+INSERT INTO cat_barnyard(barnyard_code, zone_id) VALUES('C10', 4);
+INSERT INTO cat_barnyard(barnyard_code, zone_id) VALUES('C14', 4);
+INSERT INTO cat_barnyard(barnyard_code, zone_id) VALUES('C16', 4);
+INSERT INTO cat_barnyard(barnyard_code, zone_id) VALUES('C18', 4);
+INSERT INTO cat_barnyard(barnyard_code, zone_id) VALUES('C22', 4);
+INSERT INTO cat_barnyard(barnyard_code, zone_id) VALUES('C26', 4);
+INSERT INTO cat_barnyard(barnyard_code, zone_id) VALUES('C28', 4);
+INSERT INTO cat_barnyard(barnyard_code, zone_id) VALUES('C30', 4);
+INSERT INTO cat_barnyard(barnyard_code, zone_id) VALUES('C32', 4);
+INSERT INTO cat_barnyard(barnyard_code, zone_id) VALUES('C34', 4);
+
 INSERT INTO cat_barnyard(barnyard_code, zone_id) VALUES('C25', 4);
 INSERT INTO cat_barnyard(barnyard_code, zone_id) VALUES('C27', 4);
 INSERT INTO cat_barnyard(barnyard_code, zone_id) VALUES('C29', 4);

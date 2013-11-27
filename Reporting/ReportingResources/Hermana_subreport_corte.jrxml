@@ -107,7 +107,7 @@ Pen No]]></text>
 				<textElement/>
 				<textFieldExpression><![CDATA[$F{weight}]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0.00;-#,##0.00">
+			<textField pattern="#,##0.0;-#,##0.0">
 				<reportElement uuid="aa6d09dd-818f-4a5c-8556-5a25ad9f529e" style="table_row" x="287" y="0" width="68" height="20"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$F{avg}]]></textFieldExpression>
