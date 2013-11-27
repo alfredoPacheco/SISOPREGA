@@ -1502,7 +1502,7 @@
 				<temporal>TIMESTAMP</temporal>
 			</basic>
 			<basic name="recordWhen">
-				<column name="record_when"/>
+				<column name="record_when" />
 				<temporal>TIMESTAMP</temporal>
 			</basic>
 			<one-to-many name="shipmentDetail" fetch="EAGER"

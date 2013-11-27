@@ -121,6 +121,7 @@ enyo
 		name : "toolbar",
 		pack : "center",
 		align : "center",
+		height: "70px",
 		components : [
 		{
 		  kind : "HFlexBox",
@@ -131,11 +132,6 @@ enyo
 		  allowHtml : true,
 		  flex : 1,
 		  components : [
-		  {
-			content : "Select destination pen",
-			name : "lblMovingComment",
-			style : "text-align: right;margin-right:10px;"
-		  },
 		  {
 			kind : "VFlexBox",
 			flex : 1,
@@ -151,6 +147,7 @@ enyo
 			  name : "txtQuality",
 			  hint : '',
 			  width : "170px",
+			  height:"30px",
 			  disabled : true,
 			  style : "text-align:center"
 
@@ -165,7 +162,7 @@ enyo
 			pack : "center",
 			components : [
 			{
-			  content : "Quantity:",
+			  content : "Heads:",
 			  name : "lblQuantity",
 			  style : "text-align: left;margin-left: 4px;"
 			},
@@ -174,6 +171,7 @@ enyo
 			  name : "txtQuantity",
 			  hint : '',
 			  width : "90px",
+			  height:"30px",
 			  disabled : true,
 			  style : "text-align:right"
 			}, ]
@@ -193,9 +191,15 @@ enyo
 			  name : "txtWeight",
 			  hint : '',
 			  width : "110px",
+			  height:"30px",
 			  disabled : true,
 			  style : "text-align:right"
 			}, ]
+		  },
+		  {
+			content : "Select destination pen",
+			name : "lblMovingComment",
+			style : "text-align: right;margin-right:10px;"
 		  },
 		  {
 			kind : "VFlexBox",
@@ -212,13 +216,15 @@ enyo
 			  name : "txtAverage",
 			  hint : '',
 			  width : "110px",
+			  height:"30px",
 			  disabled : true,
 			  style : "text-align:right"
 			}, ]
 		  },
 		  {
 			kind : "VFlexBox",
-			flex : 1,
+			flex:2,
+			height:"47px",
 			pack : "center",
 			components : [
 			{
@@ -238,14 +244,17 @@ enyo
 				name : "txtLastFeedDate",
 				hint : '',
 				width : "160px",
+				height:"30px",
 				disabled : true,
-				style : "text-align:right"
+				style : "text-align:right;"
 			  },
 			  {
 				kind : "ToolInput",
 				name : "txtLastFeed",
+				height:"30px",
 				hint : '',
 				width : "90px",
+				height:"30px",
 				disabled : true,
 				style : "text-align:center"
 			  } ]
@@ -260,7 +269,7 @@ enyo
 			  content : "Feed Total:",
 			  name : "lblTotalFeed",
 			  width : "100px",
-			  style : "text-align: right;margin-right:10px;"
+			  style : "text-align: left;margin-left:4px;"
 			},
 			{
 			  kind : "ToolInput",
@@ -543,6 +552,7 @@ enyo
 		this.$.txtQuality.setValue("");
 		this.$.txtQuantity.setValue("");
 		this.$.txtWeight.setValue("");
+		this.$.txtAverage.setValue("");
 		this.$.txtLastFeedDate.setValue("");
 		this.$.txtLastFeed.setValue("");
 		this.$.txtTotalFeed.setValue("");
@@ -594,6 +604,13 @@ enyo
 			this.sColorToolbarFont);
 		this.$.txtQuantity.$.input.applyStyle("text-align", "right");
 		this.$.txtQuantity.$.input.applyStyle("font-size", "13px");
+		
+		this.$.txtAverage.$.input.applyStyle("color", this.sColorToolbarFont);
+		this.$.txtAverage.$.input.applyStyle("opacity", "1");
+		this.$.txtAverage.$.input.applyStyle("-webkit-text-fill-color",
+			this.sColorToolbarFont);
+		this.$.txtAverage.$.input.applyStyle("text-align", "right");
+		this.$.txtAverage.$.input.applyStyle("font-size", "13px");
 
 		this.$.txtWeight.$.input.applyStyle("color", this.sColorToolbarFont);
 		this.$.txtWeight.$.input.applyStyle("opacity", "1");
@@ -706,9 +723,10 @@ enyo
 			  .getByID(objInventory.qualityId).qualityName);
 		  this.$.txtQuantity.setValue(objInventory.heads);
 		  this.$.txtWeight.setValue(objInventory.weight + " Lb");
+		  this.$.txtAverage.setValue((objInventory.weight / objInventory.heads).toFixed(2) + " Lb");
 		  this.$.txtLastFeedDate.setValue(objFeed.dateTime.toLocaleString());
-		  this.$.txtLastFeed.setValue(objFeed.quantity);
-		  this.$.txtTotalFeed.setValue(objInventory.feed);
+		  this.$.txtLastFeed.setValue(objFeed.quantity + " Lb");
+		  this.$.txtTotalFeed.setValue(objInventory.feed + " Lb");
 
 		} else
 		  this.$.lblInfo.setContent("");
@@ -717,14 +735,20 @@ enyo
 		this.$.toolbar.applyStyle("background-color", "#800000");
 
 		this.$.txtQuality.hide();
+		
 		this.$.txtQuantity.hide();
 		this.$.txtWeight.hide();
+		this.$.txtAverage.hide();
 		this.$.txtLastFeedDate.hide();
 		this.$.txtLastFeed.hide();
 		this.$.txtTotalFeed.hide();
 		this.$.lblCattle.hide();
 		this.$.lblLastFeed.hide();
 		this.$.lblTotalFeed.hide();
+		
+		this.$.lblQuantity.hide();
+		this.$.lblWeight.hide();
+		this.$.lblAverage.hide();
 
 		this.$.lblMovingComment.show();
 
@@ -734,12 +758,16 @@ enyo
 		this.$.txtQuality.show();
 		this.$.txtQuantity.show();
 		this.$.txtWeight.show();
+		this.$.txtAverage.show();
 		this.$.txtLastFeedDate.show();
 		this.$.txtLastFeed.show();
 		this.$.txtTotalFeed.show();
 		this.$.lblCattle.show();
 		this.$.lblLastFeed.show();
 		this.$.lblTotalFeed.show();
+		this.$.lblQuantity.show();
+		this.$.lblWeight.show();
+		this.$.lblAverage.show();
 		this.$.lblMovingComment.hide();
 		this.$.toolbar.applyStyle("background-color", null);
 		this.$.btnCancelMoving.hide();
