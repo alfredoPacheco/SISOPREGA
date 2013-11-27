@@ -207,7 +207,8 @@ enyo
             if (objData.hasOwnProperty("ShipmentRelease")) {
               this.$.btnRelease.hide();
               this.$.lblShipReleased.show();
-              this.$.lblShipReleased.setContent("Released on " + objData.ShipmentRelease[0].dateTime.toLocaleString());
+              this.$.lblShipReleased.setContent("Released on " + objData.ShipmentRelease[0].dateTime.toLocaleDateString() +
+            	  " " + objData.ShipmentRelease[0].dateTime.toLocaleTimeString().substring(0, 5));
               this.$.lblShipAverage.applyStyle("margin-right", "47px");
               this.$.rowItem.setSwipeable(false);
             } else {

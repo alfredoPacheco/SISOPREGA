@@ -209,6 +209,17 @@ enyo
 		  cacheMan.setMessage("", sError);
 		  return false;
 		}
+		
+		var x=this.$.peso.getValue();
+		var weightRounded;
+		
+		if (x < 5 && x > 1)		  
+		  weightRounded = 5;
+		else
+		  weightRounded = Math.round(x/5.0) * 5;
+		
+		this.$.peso.setValue(weightRounded);
+		
 		return true;
 
 	  },
