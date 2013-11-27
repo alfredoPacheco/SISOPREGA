@@ -76,7 +76,9 @@ enyo
 			onclick : "showCustomerForm",
 			height : "23px",
 			width : "31px",
-			style : "padding: 2px;margin-top: 3px;background-color: #DABD8B;"
+			style : "padding: 2px;margin-top: 3px;background-color: #DABD8B;",
+			bindTo : "",
+			hint:""
 		  },
 		  {
 			content : "Cattle:",
@@ -149,7 +151,7 @@ enyo
 		  kind : "controls.numberBox",
 		  inputKind : "ToolInput",
 		  name : "peso",
-		  hint : 'weight',
+		  hint : 'Weight',
 		  width : "125px;",
 		  height : "35px",
 		  style : "margin-right: 15px;",

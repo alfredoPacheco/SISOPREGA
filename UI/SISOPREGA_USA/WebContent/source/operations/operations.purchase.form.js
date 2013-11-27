@@ -128,8 +128,8 @@ enyo
 		  style : "margin-right: 15px;",
 		  bindTo : "heads",
 		  belongsTo : "PurchaseDetail",
-		  textAlign : "right"
-
+		  textAlign : "right",
+		  onInput : "on_input"
 		},
 		{
 		  kind : "controls.numberBox",
@@ -141,7 +141,19 @@ enyo
 		  style : "margin-right: 15px;",
 		  bindTo : "weight",
 		  belongsTo : "PurchaseDetail",
-		  textAlign : "right"
+		  textAlign : "right",
+		  onInput : "on_input"
+		},
+		{
+		  kind : "ToolInput",
+		  name : "txtAvgWeight",
+		  hint : 'Average',
+		  width : "125px;",
+		  height : "35px",
+		  style : "margin-right: 15px;",
+		  textAlign : "right",
+		  bindTo : "avgWeight",
+		  belongsTo : "PurchaseDetail"
 		} ],
 		{
 		  owner : this
@@ -149,6 +161,9 @@ enyo
 	  },
 	  ready : function() {
 		this.inherited(arguments);
+		this.$.cabezas.$.textField.$.input.applyStyle("text-align", "right");
+		this.$.peso.$.textField.$.input.applyStyle("text-align", "right");
+		this.$.txtAvgWeight.$.input.applyStyle("text-align", "right");
 		crudSeller.get(this, "readCallBack");
 		crudCattle.get(this, "readCallBack");
 		crudCattleQuality.get(this, "readCallBack");
@@ -294,51 +309,63 @@ enyo
 		return true;
 	  },
 	  setEntity : function(entity, bUpdatingMode) {
-	      if (bUpdatingMode) {
-	        this.toggleUpdate();
-	        this.resetValues();
-	      } else {
-	        this.toggleAdd();
-	      }
-	      
-	      if (entity) {
-	        var controls = this.$;
-	        for ( var i in controls) {
-	          if (controls[i].hasOwnProperty("belongsTo")) {
-	            if (entity[controls[i].belongsTo]) this.setValueForControl(controls[i], entity[controls[i].belongsTo][0][controls[i].bindTo]);
-	          } else if (controls[i].hasOwnProperty("bindTo")) {
-	            this.setValueForControl(controls[i], entity[controls[i].bindTo]);
-	          }
-	        }
-	        this.updatingEntityId = entity[this.entityKind.entityIdName()];
-	      
-	        if(entity.PurchaseDetail){
-	          this.arrDetail  = [];
-	          for(var i=0; i<entity.PurchaseDetail.length;i++){
-	        	var obj = {
-	        		heads:entity.PurchaseDetail[i].heads,
-	        		penId:entity.PurchaseDetail[i].penId,
-	        		qualityId:entity.PurchaseDetail[i].qualityId,
-	        		weight:entity.PurchaseDetail[i].weight,
-	        		fields:{
-	        		  0:crudCattleQuality.getByID(entity.PurchaseDetail[i].qualityId).qualityName,
-	        		  1:crudPen.adapterToList(crudPen.getByID(entity.PurchaseDetail[i].penId)).caption,
-	        		  2:entity.PurchaseDetail[i].heads,
-	        		  3:entity.PurchaseDetail[i].weight
-	        		}
-	        	};
-	        	this.arrDetail.push(obj);
-	          }
-	          this.updateList();
-              this.$.detailScroller.scrollTo(this.$.detailScroller.getBoundaries().bottom, 0);
-	        }
-	      }
-	      this.$.cattleType.setDisabled(!(this.arrDetail.length == 0));
-	    },
-	    toggleUpdate:function(){
-	      this.$.saveButton.setCaption("Update");
-	    },
-	    toggleAdd:function(){
-	      this.$.saveButton.setCaption("Create");
-	    }
+		if (bUpdatingMode) {
+		  this.toggleUpdate();
+		  this.resetValues();
+		} else {
+		  this.toggleAdd();
+		}
+
+		if (entity) {
+		  var controls = this.$;
+		  for ( var i in controls) {
+			if (controls[i].hasOwnProperty("belongsTo")) {
+			  if (entity[controls[i].belongsTo])
+				this.setValueForControl(controls[i],
+					entity[controls[i].belongsTo][0][controls[i].bindTo]);
+			} else if (controls[i].hasOwnProperty("bindTo")) {
+			  this.setValueForControl(controls[i], entity[controls[i].bindTo]);
+			}
+		  }
+		  this.updatingEntityId = entity[this.entityKind.entityIdName()];
+
+		  if (entity.PurchaseDetail) {
+			this.arrDetail = [];
+			for ( var i = 0; i < entity.PurchaseDetail.length; i++) {
+			  var obj =
+			  {
+				heads : entity.PurchaseDetail[i].heads,
+				penId : entity.PurchaseDetail[i].penId,
+				qualityId : entity.PurchaseDetail[i].qualityId,
+				weight : entity.PurchaseDetail[i].weight,
+				fields :
+				{
+				  0 : crudCattleQuality
+					  .getByID(entity.PurchaseDetail[i].qualityId).qualityName,
+				  1 : crudPen.adapterToList(crudPen
+					  .getByID(entity.PurchaseDetail[i].penId)).caption,
+				  2 : entity.PurchaseDetail[i].heads,
+				  3 : entity.PurchaseDetail[i].weight
+				}
+			  };
+			  this.arrDetail.push(obj);
+			}
+			this.updateList();
+			this.$.detailScroller.scrollTo(this.$.detailScroller
+				.getBoundaries().bottom, 0);
+		  }
+		}
+		this.$.cattleType.setDisabled(!(this.arrDetail.length == 0));
+	  },
+	  toggleUpdate : function() {
+		this.$.saveButton.setCaption("Update");
+	  },
+	  toggleAdd : function() {
+		this.$.saveButton.setCaption("Create");
+	  },
+	  on_input : function(inSender, inEvent) {	
+		this.$.txtAvgWeight.setValue(utils.formatNumberThousands(Number(this.$.peso.getValue()) / Number(this.$.cabezas.getValue())));
+		return true;
+	  }
+
 	});

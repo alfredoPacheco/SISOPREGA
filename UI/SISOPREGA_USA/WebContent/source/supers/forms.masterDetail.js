@@ -25,7 +25,7 @@ enyo
               {
                 kind : "HFlexBox",
                 className : "listFirst",
-                style : "padding-left:100px;",
+                style : "padding-left:104px;",
                 align : "center",
                 pack : "start",
                 components : [
@@ -58,7 +58,7 @@ enyo
                 name : "detailHeader",
                 components : [
                       {// For detail_number
-                        style : "width:30px;margin-left:30px",
+                        style : "width:62px;margin-left:30px",
                       },
                 ]
               },
@@ -89,7 +89,7 @@ enyo
                                   {
                                     name : 'detail_number',
                                     className : "listSecond",
-                                    style : "width:30px;margin-left:30px;color:#5F0712",
+                                    style : "width:62px;margin-left:30px;color:#5F0712",
                                   }
                             ]
                           }
@@ -136,7 +136,7 @@ enyo
                 for ( var i = 0; i < dataFields.length; i++) {
                   if (dataFields[i].hasOwnProperty("bindTo")) {
                     var sStyle = "";
-                    sStyle += "margin-right:15px;margin-left:30px;";
+                    sStyle += "margin-left:15px;";
                     sStyle += "min-width:" + dataFields[i].width;
                     sStyle += "text-align:" + dataFields[i].textAlign || "left";
                     this.$.detailHeader.createComponent(
@@ -161,7 +161,7 @@ enyo
                       });
                   } else if (dataFields[i].hasOwnProperty("calculated")) {
                     var sStyle = "";
-                    sStyle += "margin-right:15px;margin-left:30px;";
+                    sStyle += "margin-left:15px;";
                     sStyle += "min-width:" + dataFields[i].width;
                     sStyle += "text-align:" + dataFields[i].textAlign || "left";
                     this.$.detailHeader.createComponent(
@@ -209,7 +209,8 @@ enyo
               
               var detailFields = this.$.detailFields.children;
               for ( var i = detailFields.length-1; i >= 0; i--) {
-                if (detailFields[i].hasOwnProperty("bindTo")) {
+                if (detailFields[i].hasOwnProperty("bindTo") ||
+                	detailFields[i].hasOwnProperty("calculated")) {
                   newObject.fields[i] = detailFields[i].getValue();
                   newObject[detailFields[i].bindTo] = this.getValueFromControl(detailFields[i]);
                   if(detailFields[i].kind == 'controls.autocomplete')

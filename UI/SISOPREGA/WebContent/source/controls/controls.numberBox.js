@@ -1,66 +1,70 @@
-enyo.kind({
-    name : "controls.numberBox",
-    kind : "Control",
-    flex : 1,
-    layoutKind : enyo.HFlexLayout,
-    sColorWithOutIndex : "teal",
-    sColorWithIndex : "black",
-    published : {
+enyo.kind(
+{
+  name : "controls.numberBox",
+  kind : "Control",
+  //flex:null,
+  layoutKind : enyo.HFlexLayout,
+  sColorWithOutIndex : "teal",
+  sColorWithIndex : "black",
+  published :
+  {
 	hint : "",
 	highLighted : false,
 	width : null,
 	height : "25px",
 	inputKind : "Input",
 	bindTo : null,
-	fontColor:"black"
-    },
-    events : {
+	fontColor : "black"
+  },
+  events :
+  {
 	// "onSelectItem" : "",
 	"onEnter" : "",
 	onInput : ""
-    },
-    getValue : function() {
+  },
+  getValue : function() {
 	return this.$.textField.getValue();
-    },
-    setValue : function(value) {
+  },
+  setValue : function(value) {
 	this.$.textField.setValue(value);
-    },
-    setFocus : function() {
+  },
+  setFocus : function() {
 	this.$.textField.forceFocus();
-    },
-    widthChanged : function(inOldValue) {
+  },
+  widthChanged : function(inOldValue) {
 	this.$.HFBoxContainer.applyStyle("width", this.getWidth());
-    },
-    heightChanged : function(inOldValue) {
+  },
+  heightChanged : function(inOldValue) {
 	this.$.HFBoxContainer.applyStyle("height", this.getHeight());
 	// this.$.btnIcon.applyStyle("height",this.getHeight());
-    },
-    highLightedChanged : function(inOldValue) {
+  },
+  highLightedChanged : function(inOldValue) {
 	if (this.highLighted) {
-	    this.$.textField.$.input.applyStyle("color",
-		    this.sColorWithOutIndex);
+	  this.$.textField.$.input.applyStyle("color", this.sColorWithOutIndex);
 	} else {
-	    this.$.textField.$.input.applyStyle("color", this.sColorWithIndex);
+	  this.$.textField.$.input.applyStyle("color", this.sColorWithIndex);
 	}
-    },
-    hintChanged : function(inOldValue) {
+  },
+  hintChanged : function(inOldValue) {
 	this.$.textField.setHint(this.getHint());
-    },
-    create : function() {
+  },
+  create : function() {
 	this.inherited(arguments);
-	this.createComponent({
-	    kind : enyo.HFlexBox,
-	    name : "HFBoxContainer",
-	    flex : 1,
-	    components : [ {
+	this.createComponent(
+	{
+	  kind : enyo.HFlexBox,
+	  name : "HFBoxContainer",
+	  flex : 1,
+	  components : [
+	  {
 		kind : this.inputKind,
 		name : "textField",
 		hint : "",
 		flex : 1,
-		oninput:"on_input",
-		onfocus:"on_focus",
-		onblur:"on_lost_focus"
-	    } ]
+		oninput : "on_input",
+		onfocus : "on_focus",
+		onblur : "on_lost_focus"
+	  } ]
 	});
 
 	this.hintChanged();
@@ -68,26 +72,26 @@ enyo.kind({
 	this.heightChanged();
 	this.widthChanged();
 	this.on_lost_focus();
-    },
-    on_lost_focus : function(inSender, inEvent) {
-	this.$.textField.$.input.applyStyle("color",this.getFontColor());	
-    },
-    on_focus : function(){
-	this.$.textField.$.input.applyStyle("color","black");
-    },
-    clear : function() {
+  },
+  on_lost_focus : function(inSender, inEvent) {
+	this.$.textField.$.input.applyStyle("color", this.getFontColor());
+  },
+  on_focus : function() {
+	this.$.textField.$.input.applyStyle("color", "black");
+  },
+  clear : function() {
 	this.$.textField.setValue("");
 	this.setHighLighted(false);
-    },
-    on_input : function(inSender, inEvent, keyPressed) {
-	var x = keyPressed.charCodeAt(keyPressed.length-1);
+  },
+  on_input : function(inSender, inEvent, keyPressed) {
+	var x = keyPressed.charCodeAt(keyPressed.length - 1);
 	switch (true) {
 	case (x == 8): // backspace
 	case (x >= 46 && x <= 57): // numbers
-	    this.doInput(inSender, inEvent, keyPressed);
-		return;
+	  this.doInput(inSender, inEvent, keyPressed);
+	  return;
 	}
-	inSender.setValue(inSender.value.slice(0,-1));
-	
-    }
+	inSender.setValue(inSender.value.slice(0, -1));
+
+  }
 });

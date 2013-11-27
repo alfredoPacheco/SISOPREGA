@@ -38,7 +38,7 @@ enyo
 	  movingTo : null,
 	  className : "mapBG",
 	  sColorToolbarFont : "#FFFF00",
-	  arrSelectedMoveTo: {},
+	  arrSelectedMoveTo : {},
 	  create : function() {
 		this.inherited(arguments);
 	  },
@@ -131,80 +131,146 @@ enyo
 		  allowHtml : true,
 		  flex : 1,
 		  components : [
-
 		  {
 			content : "Select destination pen",
 			name : "lblMovingComment",
 			style : "text-align: right;margin-right:10px;"
 		  },
 		  {
-			content : "Cattle:",
-			name : "lblCattle",
-			style : "text-align: right;margin-right:10px;"
-		  },
-		  {
-			kind : "ToolInput",
-			name : "txtQuality",
-			hint : '',
-			width : "170px",
-			disabled : true,
-			style : "text-align:center"
+			kind : "VFlexBox",
+			flex : 1,
+			pack : "center",
+			components : [
+			{
+			  content : "Cattle:",
+			  name : "lblCattle",
+			  style : "text-align: left;margin-left: 4px;"
+			},
+			{
+			  kind : "ToolInput",
+			  name : "txtQuality",
+			  hint : '',
+			  width : "170px",
+			  disabled : true,
+			  style : "text-align:center"
 
-		  },
-		  {
-			kind : "ToolInput",
-			name : "txtQuantity",
-			hint : '',
-			width : "90px",
-			disabled : true,
-			style : "text-align:right"
-		  },
-		  {
-			kind : "ToolInput",
-			name : "txtWeight",
-			hint : '',
-			width : "110px",
-			disabled : true,
-			style : "text-align:right"
-		  },
-		  {
-			content : "Last feed:",
-			name : "lblLastFeed",
-			width : "110px",
-			style : "text-align: right;margin-right:10px;"
-		  },
-		  {
-			kind : "ToolInput",
-			name : "txtLastFeedDate",
-			hint : '',
-			width : "160px",
-			disabled : true,
-			style : "text-align:right"
-		  },
-		  {
-			kind : "ToolInput",
-			name : "txtLastFeed",
-			hint : '',
-			width : "90px",
-			disabled : true,
-			style : "text-align:center"
-		  },
-		  {
-			content : "Feed Total:",
-			name : "lblTotalFeed",
-			width : "100px",
-			style : "text-align: right;margin-right:10px;"
-		  },
-		  {
-			kind : "ToolInput",
-			name : "txtTotalFeed",
-			hint : '',
-			width : "90px",
-			disabled : true,
-			style : "text-align:right"
+			},
+
+			]
 		  },
 
-		  ],
+		  {
+			kind : "VFlexBox",
+			flex : 1,
+			pack : "center",
+			components : [
+			{
+			  content : "Quantity:",
+			  name : "lblQuantity",
+			  style : "text-align: left;margin-left: 4px;"
+			},
+			{
+			  kind : "ToolInput",
+			  name : "txtQuantity",
+			  hint : '',
+			  width : "90px",
+			  disabled : true,
+			  style : "text-align:right"
+			}, ]
+		  },
+		  {
+			kind : "VFlexBox",
+			flex : 1,
+			pack : "center",
+			components : [
+			{
+			  content : "Weight:",
+			  name : "lblWeight",
+			  style : "text-align: left;margin-left: 4px;"
+			},
+			{
+			  kind : "ToolInput",
+			  name : "txtWeight",
+			  hint : '',
+			  width : "110px",
+			  disabled : true,
+			  style : "text-align:right"
+			}, ]
+		  },
+		  {
+			kind : "VFlexBox",
+			flex : 1,
+			pack : "center",
+			components : [
+			{
+			  content : "Average:",
+			  name : "lblAverage",
+			  style : "text-align: left;margin-left: 4px;"
+			},
+			{
+			  kind : "ToolInput",
+			  name : "txtAverage",
+			  hint : '',
+			  width : "110px",
+			  disabled : true,
+			  style : "text-align:right"
+			}, ]
+		  },
+		  {
+			kind : "VFlexBox",
+			flex : 1,
+			pack : "center",
+			components : [
+			{
+			  content : "Last feed:",
+			  name : "lblLastFeed",
+			  width : "110px",
+			  style : "text-align: left;margin-left: 4px;"
+			},
+			{
+			  kind : "HFlexBox",
+			  pack : "start",
+			  align : "start",
+			  flex : 1,
+			  components : [
+			  {
+				kind : "ToolInput",
+				name : "txtLastFeedDate",
+				hint : '',
+				width : "160px",
+				disabled : true,
+				style : "text-align:right"
+			  },
+			  {
+				kind : "ToolInput",
+				name : "txtLastFeed",
+				hint : '',
+				width : "90px",
+				disabled : true,
+				style : "text-align:center"
+			  } ]
+			}, ]
+		  },
+		  {
+			kind : "VFlexBox",
+			flex : 1,
+			pack : "center",
+			components : [
+			{
+			  content : "Feed Total:",
+			  name : "lblTotalFeed",
+			  width : "100px",
+			  style : "text-align: right;margin-right:10px;"
+			},
+			{
+			  kind : "ToolInput",
+			  name : "txtTotalFeed",
+			  hint : '',
+			  width : "90px",
+			  disabled : true,
+			  style : "text-align:right"
+			}, ]
+		  }, ],
 		},
 		{
 		  kind : enyo.Button,
@@ -362,26 +428,28 @@ enyo
 		this.arrByMOver = {};
 	  },
 	  highLightPen : function(pen) {
-		for(prop in this.arrSelectedOccupied){
-		  if(this.arrSelectedOccupied.hasOwnProperty(prop)){
+		for (prop in this.arrSelectedOccupied) {
+		  if (this.arrSelectedOccupied.hasOwnProperty(prop)) {
 			this.arrSelectedOccupied[prop].removeClass("selectCell");
-			this.arrSelectedOccupied[prop].applyStyle("background-color", this.sColorOccupied);
+			this.arrSelectedOccupied[prop].applyStyle("background-color",
+				this.sColorOccupied);
 		  }
 		}
 		this.arrSelectedOccupied = {};
 		this.arrSelectedOccupied[pen.name] = pen;
 		pen.addClass("selectCell");
-		pen.applyStyle("background-color",this.sColorSelectOccupied);		
+		pen.applyStyle("background-color", this.sColorSelectOccupied);
 	  },
-	  highLightMoveToPen : function(pen) { 
-		for(prop in this.arrSelectedMoveTo){
-		  if(this.arrSelectedMoveTo.hasOwnProperty(prop)){			
-			this.arrSelectedMoveTo[prop].applyStyle("background-color", this.sColorFree);
+	  highLightMoveToPen : function(pen) {
+		for (prop in this.arrSelectedMoveTo) {
+		  if (this.arrSelectedMoveTo.hasOwnProperty(prop)) {
+			this.arrSelectedMoveTo[prop].applyStyle("background-color",
+				this.sColorFree);
 		  }
 		}
 		this.arrSelectedMoveTo = {};
 		this.arrSelectedMoveTo[pen.name] = pen;
-		pen.applyStyle("background-color","yellow");		
+		pen.applyStyle("background-color", "yellow");
 	  },
 	  cellClick : function(inSender, inEvent) {
 		this.objSelected = inSender;
@@ -397,7 +465,7 @@ enyo
 			  this.$.options.openAtEvent(inEvent);
 			}
 		  } else {
-			
+
 			this.clearDesc();
 			inSender.occupied = 2;
 			this.refreshMap();
@@ -471,13 +539,13 @@ enyo
 		}
 	  },
 	  clearDesc : function() {
-		//_objMainHeader.setContent("");
+		// _objMainHeader.setContent("");
 		this.$.txtQuality.setValue("");
-		  this.$.txtQuantity.setValue("");
-		  this.$.txtWeight.setValue("");
-		  this.$.txtLastFeedDate.setValue("");
-		  this.$.txtLastFeed.setValue("");
-		  this.$.txtTotalFeed.setValue("");
+		this.$.txtQuantity.setValue("");
+		this.$.txtWeight.setValue("");
+		this.$.txtLastFeedDate.setValue("");
+		this.$.txtLastFeed.setValue("");
+		this.$.txtTotalFeed.setValue("");
 	  },
 	  cancelMoving : function() {
 		this.movingPen = false;
@@ -617,12 +685,12 @@ enyo
 			}
 		  }
 		}
-		//_objMainHeader.applyStyle("font-size", "15px");
-		this.arrSelectedOccupied={};
+		// _objMainHeader.applyStyle("font-size", "15px");
+		this.arrSelectedOccupied = {};
 		this.clearDesc();
 	  },
 	  setDesc : function(sBY) {
-		//_objMainHeader.applyStyle("font-size", "12px");
+		// _objMainHeader.applyStyle("font-size", "12px");
 		var objInventory = crudInventory.getByPen(sBY);
 		if (objInventory) {
 		  var objFeed =

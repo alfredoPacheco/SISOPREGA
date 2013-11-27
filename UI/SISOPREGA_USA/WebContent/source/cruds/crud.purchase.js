@@ -37,8 +37,12 @@ enyo.kind(
 		entityObj.seller = "";
 	  }
 	  entityObj.purchaseDate = utils.dateIn(entityObj.purchaseDate);
-	  entityObj.aveweight = Number(entityObj.totalHeads)
-		  / Number(entityObj.totalWeight);
+	  
+	  if(entityObj.PurchaseDetail){
+		for(var i=0;i<entityObj.PurchaseDetail.length;i++){
+		  entityObj.PurchaseDetail[i].avgWeight =(Number(entityObj.PurchaseDetail[i].weight) / Number(entityObj.PurchaseDetail[i].heads)).toFixed(2);
+		}
+	  }
 	  return entityObj;
 	}
 	return null;
