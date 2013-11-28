@@ -193,8 +193,8 @@ public class PurchaseBean extends BaseInventory implements Cruddable {
     double deltaWeight = detail.getWeight();
     Inventory inventory = getInventoryRecord(detail.getPenId());
     if (inventory != null) {
-      if (inventory.getAvailableToSell() - delta < 0 && inventory.getWeight() - deltaWeight < 0) {
-        log.warning("Tryal for removing more heads than available.");
+      if (inventory.getAvailableToSell() - delta < 0) {
+        log.warning("Attempt for removing more heads than available.");
         throw new DataModelException("No hay suficientes cabezas en el registro de inventario para completar esta operación");
       } else {
         inventory.setWeight(inventory.getWeight() - deltaWeight);

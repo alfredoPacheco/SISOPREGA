@@ -362,6 +362,8 @@ enyo
 	  },
 	  toggleAdd : function() {
 		this.$.saveButton.setCaption("Create");
+		this.$.cattleType.setDisabled(false);
+		this.$.cattleType.setIndex(1); // Default value: Novillos
 	  },
 	  on_input : function(inSender, inEvent) {	
 		this.$.txtAvgWeight.setValue(utils.formatNumberThousands(Number(this.$.peso.getValue()) / Number(this.$.cabezas.getValue())));

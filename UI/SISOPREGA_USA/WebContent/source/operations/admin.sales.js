@@ -121,7 +121,7 @@ enyo
                                     components : [
                                           {
                                             name : "lblSalesClient",
-                                            style : "font-size: 0.85em;color:#008B8B",
+                                            style : "font-size: 11px;color:#008B8B",
                                             content : "Comprador"
                                           },
                                           {
@@ -130,7 +130,7 @@ enyo
                                           {
                                             name : "lblShipProgrammed",
                                             allowHtml : true,
-                                            style : "color:gray;font-size:0.85em;text-align:right;",
+                                            style : "color:gray;font-size:11px;text-align:right;",
                                             content : ""
                                           }
                                     ]

@@ -210,7 +210,7 @@ enyo
 		  return false;
 		}
 		
-		var x=this.$.peso.getValue();
+		var x= Number(this.$.peso.getValue().replace(",",""));
 		var weightRounded;
 		
 		if (x < 5 && x > 1)		  

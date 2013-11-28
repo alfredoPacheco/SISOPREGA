@@ -57,8 +57,8 @@ enyo.kind(
 
 	for ( var i = 0; i < arrAdapterList.length; i++) {
 	  var obj = arrAdapterList[i];
-	  obj.importantInfo = "" + crudCattle.getCattleTypeById(arrAdapterList[i].cattleTypeId).cattypeName
-	  							+ " " + arrAdapterList[i].purchaseDate.toLocaleDateString();
+	  obj.importantInfo = "" + arrAdapterList[i].purchaseDate.toLocaleDateString()
+	  							+ " " + crudCattle.getCattleTypeById(arrAdapterList[i].cattleTypeId).cattypeName;
 	  obj.secundaryInfo = "" + crudSeller.getByID(arrAdapterList[i].sellerId).sellerName;
 	  result.push(obj);
 	}

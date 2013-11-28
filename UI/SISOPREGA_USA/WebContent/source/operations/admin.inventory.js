@@ -127,14 +127,14 @@ enyo
 					  components : [
 						  {
 							name : "lblInvBarnyards",
-							style : "font-size: 0.85em;color:#008B8B;text-align:left;",
+							style : "font-size: 11px;color:#008B8B;text-align:left;",
 							flex : 1,
 							content : ""
 						  },
 						  {
 							name : "lblInvDescBuyer",
 							allowHtml : true,
-							style : "font-size: 0.85em;color:#008B8B;text-align:right;",
+							style : "font-size: 11px;color:#008B8B;text-align:right;",
 							flex : 1,
 							content : ""
 						  } ]
