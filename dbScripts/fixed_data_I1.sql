@@ -422,50 +422,50 @@ INSERT INTO cat_barnyard(barnyard_code, zone_id) VALUES('D20', 4);
 INSERT INTO cat_barnyard(barnyard_code, zone_id) VALUES('D22', 4);
 INSERT INTO cat_barnyard(barnyard_code, zone_id) VALUES('D24', 4);
 
-INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('110s', 0, 125);
-INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('115s', 126, 150);
-INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('125s', 151, 175);
-INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('130s', 176, 199);
+INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('110''s', 0, 125);
+INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('115''s', 126, 150);
+INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('125''s', 151, 175);
+INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('130''s', 176, 199);
 
-INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('210s', 200, 225);
-INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('215s', 226, 250);
-INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('225s', 251, 275);
-INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('230s', 276, 299);
+INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('210''s', 200, 225);
+INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('215''s', 226, 250);
+INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('225''s', 251, 275);
+INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('230''s', 276, 299);
 
-INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('310s', 300, 325);
-INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('315s', 326, 350);
-INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('325s', 351, 375);
-INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('330s', 376, 399);
+INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('310''s', 300, 325);
+INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('315''s', 326, 350);
+INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('325''s', 351, 375);
+INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('330''s', 376, 399);
 
-INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('410s', 400, 425);
-INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('415s', 426, 450);
-INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('425s', 451, 475);
-INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('430s', 476, 499);
+INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('410''s', 400, 425);
+INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('415''s', 426, 450);
+INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('425''s', 451, 475);
+INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('430''s', 476, 499);
 
-INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('510s', 500, 525);
-INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('515s', 526, 550);
-INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('525s', 551, 575);
-INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('530s', 576, 599);
+INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('510''s', 500, 525);
+INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('515''s', 526, 550);
+INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('525''s', 551, 575);
+INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('530''s', 576, 599);
 
-INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('610s', 600, 625);
-INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('615s', 626, 650);
-INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('625s', 651, 675);
-INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('630s', 676, 699);
+INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('610''s', 600, 625);
+INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('615''s', 626, 650);
+INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('625''s', 651, 675);
+INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('630''s', 676, 699);
 
-INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('710s', 700, 725);
-INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('715s', 726, 750);
-INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('725s', 751, 775);
-INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('730s', 776, 799);
+INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('710''s', 700, 725);
+INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('715''s', 726, 750);
+INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('725''s', 751, 775);
+INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('730''s', 776, 799);
 
-INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('810s', 800, 825);
-INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('815s', 826, 850);
-INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('825s', 851, 875);
-INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('830s', 876, 899);
+INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('810''s', 800, 825);
+INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('815''s', 826, 850);
+INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('825''s', 851, 875);
+INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('830''s', 876, 899);
 
-INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('910s', 900, 925);
-INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('915s', 926, 950);
-INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('925s', 951, 975);
-INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('930s', 976, 999);
+INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('910''s', 900, 925);
+INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('915''s', 926, 950);
+INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('925''s', 951, 975);
+INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('930''s', 976, 999);
 
 INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('Feeders', 0, 0);
 INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('Feeders XB', 0, 0);
@@ -476,34 +476,34 @@ INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('Min
 INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('Micros', 0, 0);
 INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('Cuts', 0, 0);
 
-INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('Swiss 200s', 0, 200);
-INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('Swiss 300s', 201, 300);
-INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('Swiss 400s', 301, 400);
-INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('Swiss 500s', 401, 500);
-INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('Swiss 600s', 501, 600);
-INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('Swiss 700s', 701, 800);
-INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('Swiss 800s', 801, 900);
-INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('Swiss 900s', 901, 1000);
+INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('Swiss 200''s', 0, 200);
+INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('Swiss 300''s', 201, 300);
+INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('Swiss 400''s', 301, 400);
+INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('Swiss 500''s', 401, 500);
+INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('Swiss 600''s', 501, 600);
+INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('Swiss 700''s', 701, 800);
+INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('Swiss 800''s', 801, 900);
+INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('Swiss 900''s', 901, 1000);
 
-INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('Sinaloas 100s', 0, 100);
-INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('Sinaloas 200s', 101, 200);
-INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('Sinaloas 300s', 201, 300);
-INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('Sinaloas 400s', 301, 400);
-INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('Sinaloas 500s', 401, 500);
-INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('Sinaloas 600s', 501, 600);
-INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('Sinaloas 700s', 701, 800);
-INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('Sinaloas 800s', 801, 900);
-INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('Sinaloas 900s', 901, 1000);
+INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('Sinaloas 100''s', 0, 100);
+INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('Sinaloas 200''s', 101, 200);
+INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('Sinaloas 300''s', 201, 300);
+INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('Sinaloas 400''s', 301, 400);
+INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('Sinaloas 500''s', 401, 500);
+INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('Sinaloas 600''s', 501, 600);
+INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('Sinaloas 700''s', 701, 800);
+INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('Sinaloas 800''s', 801, 900);
+INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('Sinaloas 900''s', 901, 1000);
 
-INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('Plain 100s', 0, 100);
-INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('Plain 200s', 101, 200);
-INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('Plain 300s', 201, 300);
-INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('Plain 400s', 301, 400);
-INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('Plain 500s', 401, 500);
-INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('Plain 600s', 501, 600);
-INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('Plain 700s', 701, 800);
-INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('Plain 800s', 801, 900);
-INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('Plain 900s', 901, 1000);
+INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('Plain 100''s', 0, 100);
+INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('Plain 200''s', 101, 200);
+INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('Plain 300''s', 201, 300);
+INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('Plain 400''s', 301, 400);
+INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('Plain 500''s', 401, 500);
+INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('Plain 600''s', 501, 600);
+INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('Plain 700''s', 701, 800);
+INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('Plain 800''s', 801, 900);
+INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('Plain 900''s', 901, 1000);
 
 INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('Rodeos de 1', 0, 100);
 INSERT INTO cat_cattle_quality(quality_name, min_weight, max_weight) VALUES('Rodeos de 2', 101, 200);

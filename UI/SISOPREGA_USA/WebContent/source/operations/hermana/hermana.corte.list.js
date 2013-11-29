@@ -175,14 +175,12 @@ enyo
 			this.cortes = cacheCorte.getExpo();
 		} 
 		else {
-		  cacheCorte.remove(inIndex);
-		  cacheCorte.cortesExpo = enyo.clone(this.cortes);
-		  this.parent.parent.$.listaCorteExpo.loadCortes(cacheCorte.cortesExpo);
+		  cacheCorte.remove(this.cortes[inIndex]);
+		  this.cortes = cacheCorte.get();
+		  this.parent.parent.$.listaCorteExpo.loadCortes(cacheCorte.getExpo());
 		}
 
 		this.iSelected = -1;
-		this.loadCortes();
-
 		this.doRemoveCorte();
 	  },
 	  resetItem : function(inSender, inIndex) {
@@ -225,6 +223,10 @@ enyo
 		}
 	  },
 	  on_accept_split : function(inSender, objNew) {
+		// TODO: Locate previous corteExpo record to remove splitted heads.
+		
+		
+		
 		this.$.popup_split.close();
 		var cortesExpoByGrouped = cacheCorte.getExpoCortesByGrouppedItem(objNew);
 		

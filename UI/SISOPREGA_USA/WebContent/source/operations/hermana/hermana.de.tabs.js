@@ -454,8 +454,8 @@ enyo
 		var mx_dataRow = [];
 		mx_dataRow.push(utils.formatNumberThousands(this.summary.hc));
 		mx_dataRow.push(utils.formatNumberThousands(this.summary.kg));
-		mx_dataRow.push(utils.formatNumberThousands(this.summary.lbs));
-		mx_dataRow.push(utils.formatNumberThousands(this.summary.avg));
+		mx_dataRow.push(utils.formatNumberThousands(this.summary.lbs.toFixed(1)));
+		mx_dataRow.push(utils.formatNumberThousands(this.summary.avg.toFixed(1)));
 		data.push(mx_dataRow);
 
 		var rejects_dataRow = [];
@@ -464,21 +464,21 @@ enyo
 		rejects_dataRow.push(utils
 			.formatNumberThousands(this.summary.rejects_kgs));
 		rejects_dataRow.push(utils
-			.formatNumberThousands(this.summary.rejects_lbs));
+			.formatNumberThousands(this.summary.rejects_lbs.toFixed(1)));
 		data.push(rejects_dataRow);
 
 		var trade_dataRow = [];
 		trade_dataRow.push(utils.formatNumberThousands(this.summary.trade_hc));
-		trade_dataRow.push(utils.formatNumberThousands(this.summary.trade_kgs));
-		trade_dataRow.push(utils.formatNumberThousands(this.summary.trade_lbs));
-		trade_dataRow.push(utils.formatNumberThousands(this.summary.trade_avg));
+		trade_dataRow.push(utils.formatNumberThousands(this.summary.trade_kgs.toFixed(1)));
+		trade_dataRow.push(utils.formatNumberThousands(this.summary.trade_lbs.toFixed(1)));
+		trade_dataRow.push(utils.formatNumberThousands(this.summary.trade_avg.toFixed(1)));
 		data.push(trade_dataRow);
 
 		var net_dataRow = [];
 		net_dataRow.push(utils.formatNumberThousands(this.summary.net_hc));
-		net_dataRow.push(utils.formatNumberThousands(this.summary.net_kgs));
-		net_dataRow.push(utils.formatNumberThousands(this.summary.net_lbs));
-		net_dataRow.push(utils.formatNumberThousands(this.summary.net_avg));
+		net_dataRow.push(utils.formatNumberThousands(this.summary.net_kgs.toFixed(1)));
+		net_dataRow.push(utils.formatNumberThousands(this.summary.net_lbs.toFixed(1)));
+		net_dataRow.push(utils.formatNumberThousands(this.summary.net_avg.toFixed(1)));
 		data.push(net_dataRow);
 
 		this.$.summary.setData(data);
@@ -575,7 +575,7 @@ enyo
 		  this.calculateSummaryFromCorte(cortes[i]);
 		}
 		this.$.listaCorte.loadCortes();
-		this.$.listaCorteExpo.loadCortes();
+		this.$.listaCorteExpo.loadCortes(cacheCorte.getExpo());
 	  },
 	  clearCorteSummary : function() {
 		this.summary.net_hc = 0;
@@ -717,11 +717,35 @@ enyo
 		  return false;
 		}
 
+		// set the new class quality Id and name in the corteExportador cached record
+		var selectedExpoRecord = this.$.listaCorteExpo.cortes[selectedIdx];
+		// splitted records contains a "identifier" property. (find out if reclassified record contains that property)
+		  if(selectedExpoRecord.hasOwnProperty("identifier")){
+			for ( var j = 0; j < cacheCorte.cortesExpo.length; j++) {
+				if (cacheCorte.cortesExpo[j].identifier == selectedExpoRecord.identifier) {
+				  arrExpoCortesAll[j].qualityId = this.$.classAutoCompleteExpo
+					  .getIndex();
+				  arrExpoCortesAll[j].cattleClassName = this.$.classAutoCompleteExpo
+					  .getValue();
+				}
+			  }
+			
+			
+		  } else {
+			// This is a non splitted record, original sequence is used to find the cut record
+			
+		  }
+		
+		
+		for(var i=0;i<cacheCorte.cortesExpo.length;i++){
+		  
+		}
+/*
+		
 		var selectedIdx = this.$.listaCorteExpo.iSelected;
-
 		var arrExpoCorteSummarized = this.$.listaCorteExpo.cortes;
-		var arrExpoCortesAll = cacheCorte.cortesExpo;
-		var selectedCorteExpo = arrExpoCorteSummarized[selectedIdx];
+		
+		
 
 		if (selectedCorteExpo.hasOwnProperty("identifier")) {
 		  for ( var j = 0; j < arrExpoCortesAll.length; j++) {
@@ -745,7 +769,7 @@ enyo
 			}
 		  }
 		}
-
+*/
 		this.$.listaCorteExpo.setCortes(cacheCorte.getExpo());
 
 	  },

@@ -381,7 +381,17 @@ enyo.kind(
       this.setupReleases(selectedItem.Reception);
       
       cacheCorte.cortes = selectedItem.HermanaCorte;
+      
+      for(var i=0;i<selectedItem.HermanaCorteExportador.length;i++) {
+    	if(!selectedItem.HermanaCorteExportador[i].recordIds){
+    	  selectedItem.HermanaCorteExportador[i].recordIds = [];
+    	}
+    	selectedItem.HermanaCorteExportador[i].recordIds.push(selectedItem.HermanaCorteExportador[i].cutSeq);
+      }
+      
       cacheCorte.cortesExpo = selectedItem.HermanaCorteExportador;
+      
+      
       this.$.details.$.chargeList.arrData = selectedItem.HermanaExpense;
       
       this.$.details.$.listaCorte.loadCortes(cacheCorte.cortes);
