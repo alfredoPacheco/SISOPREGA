@@ -118,13 +118,13 @@ enyo
                                     components : [
                                           {
                                             name : "lblShipClient",
-                                            style : "font-size: 0.85em;color:#008B8B",
+                                            style : "font-size: 11px;color:#008B8B",
                                             content : ""
                                           },
                                           {
                                             name : "lblShipReleased",
                                             flex : 1,
-                                            style : "color:gray;font-size:0.85em;text-align:right;",
+                                            style : "color:gray;font-size:11px;text-align:right;",
                                             content : "Released",
                                             showing : false
                                           }
