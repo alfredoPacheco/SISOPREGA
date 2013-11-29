@@ -381,21 +381,13 @@ enyo.kind(
       this.setupReleases(selectedItem.Reception);
       
       cacheCorte.cortes = selectedItem.HermanaCorte;
-      
-      for(var i=0;i<selectedItem.HermanaCorteExportador.length;i++) {
-    	if(!selectedItem.HermanaCorteExportador[i].recordIds){
-    	  selectedItem.HermanaCorteExportador[i].recordIds = [];
-    	}
-    	selectedItem.HermanaCorteExportador[i].recordIds.push(selectedItem.HermanaCorteExportador[i].cutSeq);
-      }
-      
       cacheCorte.cortesExpo = selectedItem.HermanaCorteExportador;
       
       
       this.$.details.$.chargeList.arrData = selectedItem.HermanaExpense;
       
-      this.$.details.$.listaCorte.loadCortes(cacheCorte.cortes);
-      this.$.details.$.listaCorteExpo.loadCortes(cacheCorte.cortesExpo);
+      this.$.details.$.listaCorte.loadCortes(cacheCorte.get());
+      this.$.details.$.listaCorteExpo.loadCortes(cacheCorte.getExpo());
       
       this.$.details.setCattleClass(selectedItem.cattleClass, selectedItem.cattleClassName);
       for ( var i = 0; i < cacheCorte.cortes.length; i++) {
@@ -551,13 +543,13 @@ enyo.kind(
         hermana.Reception.push(this.$.details.released[i]);
       }
       
-      for ( var i = 0; i < this.$.details.$.listaCorte.cortes.length; i++) {
-        var corte = this.CorteOutput(this.$.details.$.listaCorte.cortes[i]);
+      for ( var i = 0; i < cacheCorte.cortes.length; i++) {
+        var corte = this.CorteOutput(cacheCorte.cortes[i]);
         hermana.HermanaCorte.push(corte);
       }
       
-      for ( var i = 0; i < this.$.details.$.listaCorteExpo.cortes.length; i++) {
-        var corte = this.CorteOutput(this.$.details.$.listaCorteExpo.cortes[i]);
+      for ( var i = 0; i < cacheCorte.cortesExpo.length; i++) {
+        var corte = this.CorteOutput(cacheCorte.cortesExpo[i]);
         hermana.HermanaCorteExportador.push(corte);
       }
       
@@ -583,7 +575,8 @@ enyo.kind(
           barnyardId : corte.barnyardId,
           heads : corte.heads,
           qualityId : corte.qualityId,
-          weight : corte.weight
+          weight : corte.weight,
+          cutSeq : corte.cutSeq
         };
       return output;
     },

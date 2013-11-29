@@ -87,9 +87,9 @@ enyo
 	  },
 	  getExpoCortesByGrouppedItem : function(objGroup) {
 		var result = [];
-		for ( var i = 0; i < objGroup.recordIds.length; i++) {
+		for ( var i = 0; i < objGroup.sequences.length; i++) {
 		  for ( var j = 0; j < this.cortesExpo.length; j++) {
-			if (this.cortesExpo[j].cutSeq == objGroup.recordIds[i]) {
+			if (this.cortesExpo[j].cutSeq == objGroup.sequences[i]) {
 			  result.push(this.cortesExpo[j]);
 			}
 		  }
@@ -110,43 +110,76 @@ enyo
 		// Restart Cortes Expo
 		this.cortesExpo = enyo.clone(this.cortes);
 	  },
-	  removeExpo : function(index) {
-
-		var objCorteExpoSelected = this.getExpo()[index];
-		var arrCorteOriginal = cacheCorte.cortes;
-
-		if (objCorteExpoSelected.recordIds) {
-		  if (objCorteExpoSelected.recordIds.length == 1) {
-			var recordId = objCorteExpoSelected.recordIds[0];
-			for ( var i = 0; i < arrCorteOriginal.length; i++) {
-			  if (arrCorteOriginal[i].cutSeq == recordId) {
-				if (arrCorteOriginal[i].qualityId == objCorteExpoSelected.qualityId) {
-				  cacheMan
-					  .setMessage(
-						  "",
-						  "No value can be restored, because the current record is just like the original one.");
-				  return false;
-				}
-			  }
-			}
-		  }
-
-		  // create a record with each one of it's recordIds.
-		  var recordsToSplit = objCorteExpoSelected.recordIds;
-
-		  for ( var i = 0; i < recordsToSplit.length; i++) {
-			for ( var j = 0; j < arrCorteOriginal.length; j++) {
-			  for ( var x = 0; x < this.cortesExpo.length; x++) {
-				if (recordsToSplit[i] == arrCorteOriginal[j].cutSeq
-					&& this.cortesExpo[x].cutSeq == recordsToSplit[i]) {
-				  this.cortesExpo[x].qualityId = arrCorteOriginal[j].qualityId;
-				  this.cortesExpo[x].cattleClassName = arrCorteOriginal[j].cattleClassName;
-				}
-			  }
-			}
+	  getExpoBySeqNQuality : function(seq, qualityId) {
+		for ( var i = 0; i < this.cortesExpo.length; i++) {
+		  if (this.cortesExpo[i].cutSeq == seq
+			  && this.cortesExpo[i].qualityId == qualityId) {
+			return this.cortesExpo[i];
 		  }
 		}
+		return null;
+	  },
+	  simplifyCortesExpo : function() {
+		var newArray = [];
+		for ( var i = 0; i < this.cortesExpo.length; i++) {
+		  var expoCut = enyo.clone(this.cortesExpo[i]);
 
+		  // Find out if new array already contains sequence/quality record
+		  var simplified = false;
+		  for ( var j = 0; j < newArray.length; j++) {
+			if (newArray[j].cutSeq == expoCut.cutSeq
+				&& newArray[j].qualityId == expoCut.qualityId) {
+			  simplified = true;
+			  break;
+			}
+		  }
+
+		  if (!simplified) {
+			// simplify
+			for ( var j = 0; j < this.cortesExpo.length; j++) {
+			  if (this.cortesExpo[j].cutSeq == expoCut.cutSeq
+				  && this.cortesExpo[j].qualityId == expoCut.qualityId) {
+				expoCut.heads = Number(expoCut.heads) + Number(this.cortesExpo[j].heads);
+				expoCut.weight = Number(expoCut.weight) + Number(this.cortesExpo[j].weight);
+			  }
+			}
+			expoCut.heads -= Number(this.cortesExpo[i].heads);
+			expoCut.weight -= Number(this.cortesExpo[i].weight);
+			newArray.push(expoCut);
+		  }
+		}
+		
+		// Remove 0 heads records
+		for(var i=0;i<newArray.length;i++){
+		  if(newArray[i].heads == 0){
+			newArray.splice(i, 1);
+			i--;
+		  }
+		}
+		
+		
+		this.cortesExpo = enyo.clone(newArray);
+	  },
+	  removeExpo : function(cutRemove) {
+		
+		// Restore the splitted record.
+		for(var i=0; i<cutRemove.sequences.length; i++){
+		  var corteExpo = this.getExpoBySeqNQuality(cutRemove.sequences[i], cutRemove.qualityId);
+		  var qualityId = -1;
+		  var cattleClassName = "";
+		  // Find and set original qualityId
+		  for(var j=0;j<this.cortes.length;j++){
+			if(this.cortes[j].cutSeq == cutRemove.sequences[i]){
+			  qualityId = this.cortes[j].qualityId;
+			  cattleClassName = this.cortes[j].cattleClassName;
+			  break;
+			}
+		  }
+		  corteExpo.qualityId = qualityId;
+		  corteExpo.cattleClassName = cattleClassName;
+		}
+		
+		this.simplifyCortesExpo();
 	  },
 	  clear : function() {
 		this.cortes = [];

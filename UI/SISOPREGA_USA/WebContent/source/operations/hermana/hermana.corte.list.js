@@ -171,8 +171,9 @@ enyo
 	  dropCorte : function(inSender, inIndex) {
 
 		if (this.isForExporter){
-		  cacheCorte.removeExpo(inIndex);
-			this.cortes = cacheCorte.getExpo();
+		  cacheCorte.removeExpo(this.cortes[inIndex]);
+		  this.cortes = cacheCorte.getExpo();
+		  this.loadCortes(cacheCorte.getExpo());
 		} 
 		else {
 		  cacheCorte.remove(this.cortes[inIndex]);
@@ -182,27 +183,6 @@ enyo
 
 		this.iSelected = -1;
 		this.doRemoveCorte();
-	  },
-	  resetItem : function(inSender, inIndex) {
-		var len = this.cortes.length;
-		var firstFound = -1;
-		var itemInIndex = this.cortes[inIndex];
-		for ( var i = 0; i < len; i++) {
-		  if (this.cortes[i].hasOwnProperty("identifier")) {
-			if (this.cortes[i].identifier == itemInIndex.identifier) {
-			  if (firstFound > -1) {
-				this.cortes[firstFound].heads += Number(this.cortes[i].heads);
-				this.cortes[firstFound].weight += Number(this.cortes[i].weight);
-				this.cortes.splice(i, 1);
-				i--;
-				len--;
-			  } else {
-				firstFound = i;
-			  }
-			}
-		  }
-		}
-		return firstFound;
 	  },
 	  selectCorte : function(inSender, inEvent) {
 		this.iSelected = inEvent.rowIndex;
@@ -223,33 +203,34 @@ enyo
 		}
 	  },
 	  on_accept_split : function(inSender, objNew) {
-		// TODO: Locate previous corteExpo record to remove splitted heads.
 		
-		
-		
-		this.$.popup_split.close();
-		var cortesExpoByGrouped = cacheCorte.getExpoCortesByGrouppedItem(objNew);
-		
-		var headsToSplit = Number(objNew.heads);
-		var weightToSplit = Number(objNew.weight);
-		
-		for(var i=0;i<cortesExpoByGrouped.length;i++){
-		  if((cortesExpoByGrouped[i].heads - headsToSplit) > 0){
-			cortesExpoByGrouped[i].heads =cortesExpoByGrouped[i].heads - headsToSplit;
-			cortesExpoByGrouped[i].weight =cortesExpoByGrouped[i].weight - weightToSplit;
-			objNew.cutSeq = cortesExpoByGrouped[i].cutSeq;
-			break;
-		  }else{
-			headsToSplit = headsToSplit - cortesExpoByGrouped[i].heads;
-			objNew.cutSeq = cortesExpoByGrouped[i].cutSeq;
-			cortesExpoByGrouped[i].heads = 0;
-		  }
-		}
-		
+		this.reduceSplittedHeads(inSender.objToSplit, Number(objNew.heads), Number(objNew.weight));
 		objNew.qualityId = -1;
 		objNew.cattleClassName = "";
 		cacheCorte.cortesExpo.push(objNew);
+		cacheCorte.simplifyCortesExpo();
+		
 		this.loadCortes(cacheCorte.getExpo());
+		this.$.popup_split.close();
+	  },
+	  reduceSplittedHeads : function(cutGroup, headsToSplit, weightToSplit){
+		for(var i=0;i<cutGroup.sequences.length; i++){
+		  var expoCut = cacheCorte.getExpoBySeqNQuality(cutGroup.sequences[i], cutGroup.qualityId);
+		  if(expoCut != null) {
+			if(headsToSplit > expoCut.heads){
+			  headsToSplit -= expoCut.heads;
+			  weightToSplit -= expoCut.weight;
+			  expoCut.heads == 0;
+			  expoCut.weight == 0;
+			} else {
+			  expoCut.heads -= headsToSplit;
+			  expoCut.weight -= weightToSplit;
+			  headsToSplit = 0;
+			  weightToSplit = 0;
+			  break;
+			}
+		  }
+		}
 	  },
 	  on_cancel_split : function() {
 		this.$.popup_split.close();

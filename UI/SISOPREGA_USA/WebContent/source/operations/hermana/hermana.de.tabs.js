@@ -519,6 +519,10 @@ enyo
 		  }
 		}
 		
+		if(Number(this.summary.net_hc) + Number(this.$.headCount.getValue()) > Number(this.summary.trade_hc)){
+		  sError = "Error. You are trying to cut more heads than imported.";
+		}
+		
 		if(sError != ""){
 		  cacheMan.setMessage("",sError);
 		  return;
@@ -718,60 +722,28 @@ enyo
 		}
 
 		// set the new class quality Id and name in the corteExportador cached record
-		var selectedExpoRecord = this.$.listaCorteExpo.cortes[selectedIdx];
-		// splitted records contains a "identifier" property. (find out if reclassified record contains that property)
-		  if(selectedExpoRecord.hasOwnProperty("identifier")){
-			for ( var j = 0; j < cacheCorte.cortesExpo.length; j++) {
-				if (cacheCorte.cortesExpo[j].identifier == selectedExpoRecord.identifier) {
-				  arrExpoCortesAll[j].qualityId = this.$.classAutoCompleteExpo
-					  .getIndex();
-				  arrExpoCortesAll[j].cattleClassName = this.$.classAutoCompleteExpo
-					  .getValue();
-				}
-			  }
-			
-			
-		  } else {
-			// This is a non splitted record, original sequence is used to find the cut record
-			
-		  }
-		
-		
-		for(var i=0;i<cacheCorte.cortesExpo.length;i++){
-		  
-		}
-/*
-		
 		var selectedIdx = this.$.listaCorteExpo.iSelected;
-		var arrExpoCorteSummarized = this.$.listaCorteExpo.cortes;
+		var selectedExpoRecord = this.$.listaCorteExpo.cortes[selectedIdx];
 		
-		
-
-		if (selectedCorteExpo.hasOwnProperty("identifier")) {
-		  for ( var j = 0; j < arrExpoCortesAll.length; j++) {
-			if (arrExpoCortesAll[j].identifier == selectedCorteExpo.identifier) {
-			  arrExpoCortesAll[j].qualityId = this.$.classAutoCompleteExpo
-				  .getIndex();
-			  arrExpoCortesAll[j].cattleClassName = this.$.classAutoCompleteExpo
-				  .getValue();
-			}
+		if(selectedExpoRecord.qualityId == -1) {
+		  // New record classified, set the new quality to it's expo cut sequences
+		  for(var i = 0; i<selectedExpoRecord.sequences.length; i++){
+			var expoCut = cacheCorte.getExpoBySeqNQuality(selectedExpoRecord.sequences[i], -1);
+			expoCut.qualityId = this.$.classAutoCompleteExpo.getIndex();
+			expoCut.cattleClassName = this.$.classAutoCompleteExpo.getValue();
 		  }
-
 		} else {
-		  for ( var i = 0; i < selectedCorteExpo.recordIds.length; i++) {
-			for ( var j = 0; j < arrExpoCortesAll.length; j++) {
-			  if (!arrExpoCortesAll[j].hasOwnProperty("identifier") && arrExpoCortesAll[j].cutSeq == selectedCorteExpo.recordIds[i]) {
-				arrExpoCortesAll[j].qualityId = this.$.classAutoCompleteExpo
-					.getIndex();
-				arrExpoCortesAll[j].cattleClassName = this.$.classAutoCompleteExpo
-					.getValue();
-			  }
-			}
+		  // Reclassify classified record.
+		  for(var i=0; i<selectedExpoRecord.sequences.length; i++){
+			var expoCut = cacheCorte.getExpoBySeqNQuality(selectedExpoRecord.sequences[i], selectedExpoRecord.qualityId);
+			expoCut.qualityId = this.$.classAutoCompleteExpo.getIndex();
+			expoCut.cattleClassName = this.$.classAutoCompleteExpo.getValue();
 		  }
 		}
-*/
+		
+		cacheCorte.simplifyCortesExpo();
 		this.$.listaCorteExpo.setCortes(cacheCorte.getExpo());
-
+		this.clearCorteExpoDataEntry();
 	  },
 	  clase_select : function(inSender) {
 		var filter = [];
