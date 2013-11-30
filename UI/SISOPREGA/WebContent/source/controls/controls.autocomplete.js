@@ -439,16 +439,16 @@ enyo
 		}
 	  },
 	  getItemSelected : function() {
-		if (this.usingFilter) {
-		  for ( var i = 0; i < this.filter.length; i++) {
-			if (this.filter[i].value == this.getIndex()) {
-			  return this.filter[i];
-			}
-		  }
-		} else {
+		if (!this.usingFilter || this.mouseStatus == 2) { //Not using filter, or using it but holding for all items.
 		  for ( var i = 0; i < this.allItems.length; i++) {
 			if (this.allItems[i].value == this.getIndex()) {
 			  return this.allItems[i];
+			}
+		  }
+		} else { //Using filter:
+		  for ( var i = 0; i < this.filter.length; i++) {
+			if (this.filter[i].value == this.getIndex()) {
+			  return this.filter[i];
 			}
 		  }
 		}

@@ -169,24 +169,25 @@ enyo
 		crudCattle.get(this, "readCallBack");
 		crudCattleQuality.get(this, "readCallBack");
 		crudPen.get(this, "readCallBack");
+		crudInventory.get(this,"readCallBack");
 
 		this.$.saleDate.setToday();
 	  },
 	  readCounter : 0,
 	  readCallBack : function() {
 		this.readCounter++;
-		if (this.readCounter == 4) {
-		  this.loadAutocompletes();
+		if (this.readCounter == 5) {
 		  this.readCounter = 0;
+		  this.loadAutocompletes();
 		}
 	  },
 	  loadAutocompletes : function() {
 
 		this.$.customer.setItems(crudCustomer.getList());
-		this.$.cattleType.setItems(crudCattle.getCattleTypeList());
+		this.$.cattleType.setItems(crudInventory.getActiveCattlesList());
 		this.$.cattleType.setIndex(1); // Default value: Novillos
-		this.$.pen.setItems(crudPen.getListUsaPens());
-		this.$.cattleQuality.setItems(crudCattleQuality.getList());
+		this.$.pen.setItems(crudInventory.getPensList());
+		this.$.cattleQuality.setItems(crudInventory.getActiveQualitiesList());
 		this.afterLoad();
 	  },
 	  validateAdd : function() { // function to override if necessary validate
@@ -254,16 +255,26 @@ enyo
 	  },
 	  cattleSelected : function(inSender){
 		var filter = [];
-		if(inSender.getIndex()==3){
-		  filter = crudCattleQuality.getHorseQualitiesList();
-		} else {
-		  filter = crudCattleQuality.getList();
+		var items = this.$.cattleQuality.getItems();
+		for(var i=0;i<items.length;i++){
+		  if(items[i].cattleTypeId == inSender.getIndex()){
+			filter.push(items[i]);
+		  }
 		}
-		this.$.cattleQuality.setItems(filter);
+		this.$.cattleQuality.setFilter(filter);
+		this.$.cattleQuality.clear();
+		this.$.cattleQuality.useFilter();
+		if(filter.length>0){
+		  this.$.cattleQuality.setIndex(filter[0].value);
+		}else{
+		  	this.$.qtyAvailable.setCaption("Available: 0");		  	
+		}
+		this.$.cabezas.setValue("");
+		this.$.peso.setValue("");
 	  },
 	  clase_select : function(inSender) {
 		var filter = [];
-		var items = crudInventory.getPensList();
+		var items = this.$.pen.getItems();
 		for ( var i = 0; i < items.length; i++) {
 		  if (items[i].object.qualityId == this.$.cattleQuality.getIndex()) {
 			filter.push(items[i]);
@@ -276,19 +287,32 @@ enyo
 		  this.$.pen.setIndex(filter[0].value);
 		}else{
 		  	this.$.qtyAvailable.setCaption("Available: 0");
+		  	var itemSelected = inSender.getItemSelected();
+			if (itemSelected && itemSelected.object) {
+			  this.$.cattleType.index = inSender.getItemSelected().cattleTypeId;
+			  this.$.cattleType.setValue(this.$.cattleType.getCaptionByIndex(this.$.cattleType.index));
+			}
 		}
 		this.$.cabezas.setValue("");
 		this.$.peso.setValue("");
-		
 	  },
 	  pen_select : function(inSender) {
 		var itemSelected = inSender.getItemSelected();
 		if (itemSelected && itemSelected.object) {
 		  var qtyAvailable = itemSelected.object.availableToSell;
 		  this.$.qtyAvailable.setCaption("Available: " + qtyAvailable);
+		  
+		  //Not using setter for index because we don't want to raise event after it
+		  //so we have to set value manually
+		  this.$.cattleQuality.index = itemSelected.object.qualityId;
+		  this.$.cattleQuality.setValue(this.$.cattleQuality.getCaptionByIndex(this.$.cattleQuality.index));
+		  this.$.cattleType.index = itemSelected.object.cattypeId;
+		  this.$.cattleType.setValue(this.$.cattleType.getCaptionByIndex(this.$.cattleType.index));	
+		  
 		} else {
 		  this.$.qtyAvailable.setCaption("Available: 0");
 		}
+		
 	  },
 	  pen_change : function(inSender) {
 		if (inSender.index < 0) {
