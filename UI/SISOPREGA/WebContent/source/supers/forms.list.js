@@ -69,11 +69,13 @@ enyo.kind({
 		components : [ {
 		    name : "importantInfo",
 		    className : "listFirst",
-		    content : ""
+		    content : "",
+		    allowHtml:true
 		}, {
 		    name : "secundaryInfo",
 		    className : "listSecond",
-		    content : ""
+		    content : "",
+		    allowHtml:true
 		} ]
 	    } ]
 	} ]

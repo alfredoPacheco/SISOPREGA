@@ -276,7 +276,7 @@ enyo
 		  var qualityId = 0;
 		  var strSales = "";
 		  for ( var i = 0; i < len; i++) {
-			strBarnyards += "" + objData[i].pen.barnyardCode + ", ";
+			strBarnyards += "" + crudPen.adapterToList(objData[i].pen).caption + ", ";
 			totalHeads += Number(objData[i].heads);
 			totalWeight += Number(objData[i].weight);
 			totalFeed += Number(objData[i].feed);
