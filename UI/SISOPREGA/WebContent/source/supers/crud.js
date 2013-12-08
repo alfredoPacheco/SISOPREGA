@@ -99,7 +99,7 @@ enyo.kind(
       consumingGateway.Delete(this.entityName, filterDef, this, "saveCallBack");
     },
     saveCallBack : function(resultObj) {
-      if (Number(resultObj.exceptionId) == 0) { // created or updated successfully
+      if (utils.parseToNumber(resultObj.exceptionId) == 0) { // created or updated successfully
         var milis = ((Math.random() * 1000) + 500);
         setTimeout(this.callbackObject[this.callbackMethod](resultObj), milis);
       } else {
@@ -109,7 +109,7 @@ enyo.kind(
       }
     },
     updateCallBack : function(resultObj) {
-      if (Number(resultObj.exceptionId) == 0) { // created or updated successfully
+      if (utils.parseToNumber(resultObj.exceptionId) == 0) { // created or updated successfully
         var objOld = null;
         var objNew = null;
         if (resultObj.origin == "Update") {

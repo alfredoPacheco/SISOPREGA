@@ -845,22 +845,22 @@ enyo
 
 		var objMovement = this.$.movePen_kind.getObj();
 
-		movingFrom.heads = Number(movingFrom.heads) - Number(objMovement.heads);
+		movingFrom.heads = utils.parseToNumber(movingFrom.heads) - utils.parseToNumber(objMovement.heads);
 
 		if (isMovingToOccupied) {
 
-		  movingTo.heads = Number(movingTo.heads) + Number(objMovement.heads);
-		  movingTo.weight = Number(movingTo.weight)
-			  + Number(objMovement.weight);
-		  movingTo.availableToSell = Number(movingTo.availableToSell)
-			  + Number(objMovement.heads);
+		  movingTo.heads = utils.parseToNumber(movingTo.heads) + utils.parseToNumber(objMovement.heads);
+		  movingTo.weight = utils.parseToNumber(movingTo.weight)
+			  + utils.parseToNumber(objMovement.weight);
+		  movingTo.availableToSell = utils.parseToNumber(movingTo.availableToSell)
+			  + utils.parseToNumber(objMovement.heads);
 
 		} else {
 		  var objNewInventory = enyo.clone(movingFrom);
 		  delete objNewInventory.inventoryId;
 		  delete objNewInventory.FeedUS;
-		  objNewInventory.heads = Number(objMovement.heads);
-		  objNewInventory.weight = Number(objMovement.weight);
+		  objNewInventory.heads = utils.parseToNumber(objMovement.heads);
+		  objNewInventory.weight = utils.parseToNumber(objMovement.weight);
 		  // objNewInventory.pen = movingTo;
 		  objNewInventory.penId = movingTo.penId;
 		  objNewInventory.availableToSell = objNewInventory.heads;

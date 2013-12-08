@@ -1130,7 +1130,7 @@ enyo
 		    objInspectionDetail.inspection_seq = this.objList[this.iSelected].inspection_seq || 0;
 		} else {
 		    if (this.objList.length > 0) {
-			objInspectionDetail.inspection_seq = Number(this.objList[this.objList.length - 1].inspection_seq) + 1;
+			objInspectionDetail.inspection_seq = utils.parseToNumber(this.objList[this.objList.length - 1].inspection_seq) + 1;
 		    } else {
 			objInspectionDetail.inspection_seq = 0;
 		    }
@@ -1336,7 +1336,7 @@ enyo
 			    });
 			    
 			    objForecastDetail.inspection_seq = 
-				Number(tomorrowInspection.InspectionForecastDetail[tomorrowInspection.InspectionForecastDetail.length-1].inspection_seq)+1;
+				utils.parseToNumber(tomorrowInspection.InspectionForecastDetail[tomorrowInspection.InspectionForecastDetail.length-1].inspection_seq)+1;
 			    
 			    delete objForecastDetail.inspectionForecastDetailId;
 			    

@@ -14,7 +14,7 @@ enyo.kind(
           caption : ""
         };
       
-      listObj.value = Number(entityObj.expenseConceptId);
+      listObj.value = utils.parseToNumber(entityObj.expenseConceptId);
       listObj.caption = entityObj.conceptName;
       
       return listObj;

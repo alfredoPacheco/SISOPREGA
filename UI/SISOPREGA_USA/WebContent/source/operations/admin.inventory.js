@@ -277,9 +277,9 @@ enyo
 		  var strSales = "";
 		  for ( var i = 0; i < len; i++) {
 			strBarnyards += "" + crudPen.adapterToList(objData[i].pen).caption + ", ";
-			totalHeads += Number(objData[i].heads);
-			totalWeight += Number(objData[i].weight);
-			totalFeed += Number(objData[i].feed);
+			totalHeads += utils.parseToNumber(objData[i].heads);
+			totalWeight += utils.parseToNumber(objData[i].weight);
+			totalFeed += utils.parseToNumber(objData[i].feed);
 			cattypeId = objData[i].cattypeId;
 			qualityId = objData[i].qualityId;
 
@@ -408,7 +408,7 @@ enyo
 			var sale = this.todaySales[i];
 			for ( var j = 0; j < sale.SaleDetail.length; j++) {
 			  var detail = sale.SaleDetail[j];
-			  if (Number(detail.inventoryId) == Number(iInventoryID)) {
+			  if (utils.parseToNumber(detail.inventoryId) == utils.parseToNumber(iInventoryID)) {
 				var obj =
 				{
 				  customer : sale.customer,

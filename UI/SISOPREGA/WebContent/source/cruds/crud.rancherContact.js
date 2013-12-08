@@ -26,7 +26,7 @@ enyo.kind({
 		var bDate = new Date(dateParts[2], dateParts[0]-1, dateParts[1]);
 		entityObj.birthDate = bDate;
 	    }else{
-		var numberBDate = Number(entityObj.birthDate);
+		var numberBDate = utils.parseToNumber(entityObj.birthDate);
 	        var bDate = new Date(numberBDate);
 	        entityObj.birthDate = bDate;
 	    }

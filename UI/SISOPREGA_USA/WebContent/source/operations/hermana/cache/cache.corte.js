@@ -29,21 +29,21 @@ enyo
 	  },
 	  groupByCorte : function(corte) {
 		var groupResult = enyo.clone(corte);
-		groupResult.heads = Number(groupResult.heads);
-		groupResult.weight = Number(groupResult.weight);
+		groupResult.heads = utils.parseToNumber(groupResult.heads);
+		groupResult.weight = utils.parseToNumber(groupResult.weight);
 		groupResult.pen_name = "";
 		groupResult.barnyardId = null;
 		groupResult.sequences = [];
 		for ( var i = 0; i < this.cortes.length; i++) {
 		  if (this.cortes[i].qualityId == corte.qualityId) {
-			groupResult.heads += Number(this.cortes[i].heads);
-			groupResult.weight += Number(this.cortes[i].weight);
+			groupResult.heads += utils.parseToNumber(this.cortes[i].heads);
+			groupResult.weight += utils.parseToNumber(this.cortes[i].weight);
 			groupResult.pen_name += this.cortes[i].pen_name + ', ';
 			groupResult.sequences.push(this.cortes[i].cutSeq);
 		  }
 		}
-		groupResult.heads -= Number(corte.heads);
-		groupResult.weight -= Number(corte.weight);
+		groupResult.heads -= utils.parseToNumber(corte.heads);
+		groupResult.weight -= utils.parseToNumber(corte.weight);
 		var pen_name = groupResult.pen_name.substring(0,
 			groupResult.pen_name.length - 2);
 		groupResult.pen_name = pen_name;
@@ -69,20 +69,20 @@ enyo
 	  },
 	  getGroupByCorteExpo : function(corteExpo) {
 		var groupResult = enyo.clone(corteExpo);
-		groupResult.heads = Number(groupResult.heads);
-		groupResult.weight = Number(groupResult.weight);
+		groupResult.heads = utils.parseToNumber(groupResult.heads);
+		groupResult.weight = utils.parseToNumber(groupResult.weight);
 		groupResult.pen_name = null;
 		groupResult.barnyardId = null;
 		groupResult.sequences = [];
 		for ( var i = 0; i < this.cortesExpo.length; i++) {
 		  if (this.cortesExpo[i].qualityId == corteExpo.qualityId) {
-			groupResult.heads += Number(this.cortesExpo[i].heads);
-			groupResult.weight += Number(this.cortesExpo[i].weight);
+			groupResult.heads += utils.parseToNumber(this.cortesExpo[i].heads);
+			groupResult.weight += utils.parseToNumber(this.cortesExpo[i].weight);
 			groupResult.sequences.push(this.cortesExpo[i].cutSeq);
 		  }
 		}
-		groupResult.heads -= Number(corteExpo.heads);
-		groupResult.weight -= Number(corteExpo.weight);
+		groupResult.heads -= utils.parseToNumber(corteExpo.heads);
+		groupResult.weight -= utils.parseToNumber(corteExpo.weight);
 		return groupResult;
 	  },
 	  getExpoCortesByGrouppedItem : function(objGroup) {
@@ -139,12 +139,12 @@ enyo
 			for ( var j = 0; j < this.cortesExpo.length; j++) {
 			  if (this.cortesExpo[j].cutSeq == expoCut.cutSeq
 				  && this.cortesExpo[j].qualityId == expoCut.qualityId) {
-				expoCut.heads = Number(expoCut.heads) + Number(this.cortesExpo[j].heads);
-				expoCut.weight = Number(expoCut.weight) + Number(this.cortesExpo[j].weight);
+				expoCut.heads = utils.parseToNumber(expoCut.heads) + utils.parseToNumber(this.cortesExpo[j].heads);
+				expoCut.weight = utils.parseToNumber(expoCut.weight) + utils.parseToNumber(this.cortesExpo[j].weight);
 			  }
 			}
-			expoCut.heads -= Number(this.cortesExpo[i].heads);
-			expoCut.weight -= Number(this.cortesExpo[i].weight);
+			expoCut.heads -= utils.parseToNumber(this.cortesExpo[i].heads);
+			expoCut.weight -= utils.parseToNumber(this.cortesExpo[i].weight);
 			newArray.push(expoCut);
 		  }
 		}
@@ -190,8 +190,8 @@ enyo
 
 		  var qualityId = this.cortes[i].qualityId;
 		  var cutSeq = this.cortes[i].cutSeq;
-		  var heads = Number(this.cortes[i].heads);
-		  var weight = Number(this.cortes[i].weight);
+		  var heads = utils.parseToNumber(this.cortes[i].heads);
+		  var weight = utils.parseToNumber(this.cortes[i].weight);
 
 		  var recordIds = [];
 		  recordIds.push(cutSeq);
@@ -223,9 +223,9 @@ enyo
 			  // a record was found to summarize in
 			  this.cortesExpo[summarizeIn].pen_name += ", "
 				  + this.cortes[i].pen_name;
-			  this.cortesExpo[summarizeIn].heads = Number(this.cortesExpo[summarizeIn].heads)
+			  this.cortesExpo[summarizeIn].heads = utils.parseToNumber(this.cortesExpo[summarizeIn].heads)
 				  + heads;
-			  this.cortesExpo[summarizeIn].weight = Number(this.cortesExpo[summarizeIn].weight)
+			  this.cortesExpo[summarizeIn].weight = utils.parseToNumber(this.cortesExpo[summarizeIn].weight)
 				  + weight;
 			  if (!this.cortesExpo[summarizeIn].recordIds) {
 				this.cortesExpo[summarizeIn].recordIds = [];

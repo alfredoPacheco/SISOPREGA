@@ -532,7 +532,7 @@ enyo
 		var sError = "";
 		var occupiedPens = crudInventory.getPensList();
 		for ( var i = 0; i < occupiedPens.length; i++) {
-		  var isPenOccupied = this.$.penAutoComplete.getIndex() == Number(occupiedPens[i].value);
+		  var isPenOccupied = this.$.penAutoComplete.getIndex() == utils.parseToNumber(occupiedPens[i].value);
 		  var isSameQuality = occupiedPens[i].object.qualityId == this.$.classAutoComplete.getIndex();
 		  if (isPenOccupied && !isSameQuality) {
 			var cattleQuality = crudCattleQuality
@@ -544,7 +544,7 @@ enyo
 		  }
 		}
 		
-		if(Number(this.summary.net_hc) + Number(this.$.headCount.getValue()) > Number(this.summary.trade_hc)){
+		if(utils.parseToNumber(this.summary.net_hc) + utils.parseToNumber(this.$.headCount.getValue()) > utils.parseToNumber(this.summary.trade_hc)){
 		  sError = "Error. You are trying to cut more heads than imported.";
 		}
 		
@@ -573,8 +573,8 @@ enyo
 		this.$.classAutoComplete.setFocus();
 	  },
 	  calculateSummaryFromCorte : function(cutRecord) {
-		this.summary.net_hc += Number(cutRecord.heads);
-		this.summary.net_lbs += Number(cutRecord.weight);
+		this.summary.net_hc += utils.parseToNumber(cutRecord.heads);
+		this.summary.net_lbs += utils.parseToNumber(cutRecord.weight);
 		this.summary.net_kgs += Math.floor(cutRecord.weight * 45.3592) / 100;
 		this.summary.net_avg = this.summary.net_hc == 0 ? 0 : Math
 			.floor(this.summary.net_lbs / this.summary.net_hc * 100) / 100;

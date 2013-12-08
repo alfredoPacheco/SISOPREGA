@@ -301,8 +301,8 @@ enyo.kind({
 		this.$.detail_corrales.setContent("");
 	    }
 	    this.$.detail_weight.setContent(utils.formatNumberThousands(this.arrToShipDetailed[inIndex].weight) + " lb");
-	    this.totalHC += Number(this.arrToShipDetailed[inIndex].heads);
-	    this.totalWeight += Number(this.arrToShipDetailed[inIndex].weight);
+	    this.totalHC += utils.parseToNumber(this.arrToShipDetailed[inIndex].heads);
+	    this.totalWeight += utils.parseToNumber(this.arrToShipDetailed[inIndex].weight);
 	    
 	    if(this.arrToShipDetailed[inIndex].dateTimeProgrammed){
 		this.$.chkToShip.hide();
@@ -346,9 +346,9 @@ enyo.kind({
 		for(var x = 0;x<salesAlreadyProgrammed.length;x++){
 		    for(var j=0;j<saleDetail.length;j++){
 			var objShipmentDetailed = saleDetail[j];			    
-			if(Number(objShipmentDetailed.saleDetailId) == Number(salesAlreadyProgrammed[x].saleDetailId)){
-			    objShipmentDetailed.heads = Number(objShipmentDetailed.heads) -Number(salesAlreadyProgrammed[x].heads);
-			    objShipmentDetailed.weight = Number(objShipmentDetailed.weight) -Number(salesAlreadyProgrammed[x].weight);
+			if(utils.parseToNumber(objShipmentDetailed.saleDetailId) == utils.parseToNumber(salesAlreadyProgrammed[x].saleDetailId)){
+			    objShipmentDetailed.heads = utils.parseToNumber(objShipmentDetailed.heads) -utils.parseToNumber(salesAlreadyProgrammed[x].heads);
+			    objShipmentDetailed.weight = utils.parseToNumber(objShipmentDetailed.weight) -utils.parseToNumber(salesAlreadyProgrammed[x].weight);
 			}
 		    }
 		}
@@ -356,7 +356,7 @@ enyo.kind({
 		//Adding to list detail sales not programmed yet
 		for(var j=0;j<saleDetail.length;j++){		    
 		    var objShipmentDetailed = saleDetail[j];
-		    if(Number(objShipmentDetailed.heads) > 0){			
+		    if(utils.parseToNumber(objShipmentDetailed.heads) > 0){			
 			objShipmentDetailed.aveWeight = objShipmentDetailed.weight / objShipmentDetailed.heads;
 			objShipmentDetailed.customerId = this.arrSales[i].customerId;
 			objShipmentDetailed.saleId = this.arrSales[i].saleId;
@@ -439,8 +439,8 @@ enyo.kind({
 //			arrDetail[arrByBuyer[i][j].qualityId].totalWeight =0;
 		    }
 		    arrDetail[arrByBuyer[i][j].qualityId].push(arrByBuyer[i][j]);
-//		    arrDetail[arrByBuyer[i][j].qualityId].totalHeads += Number(arrByBuyer[i][j].totalHeads);
-//		    arrDetail[arrByBuyer[i][j].qualityId].totalWeight += Number(arrByBuyer[i][j].totalWeight);
+//		    arrDetail[arrByBuyer[i][j].qualityId].totalHeads += utils.parseToNumber(arrByBuyer[i][j].totalHeads);
+//		    arrDetail[arrByBuyer[i][j].qualityId].totalWeight += utils.parseToNumber(arrByBuyer[i][j].totalWeight);
 		}
 		objShip[i] = arrDetail;
 		arrDetail={};
@@ -465,8 +465,8 @@ enyo.kind({
 	    // Defining parent
 	    var objShip = {};
 	    var obj = enyo.clone(shipsToSave[i][0]);	    
-	    objShip.carrierIdProgrammed = Number(obj.carrierId);
-	    objShip.customerId = Number(obj.customerId);
+	    objShip.carrierIdProgrammed = utils.parseToNumber(obj.carrierId);
+	    objShip.customerId = utils.parseToNumber(obj.customerId);
 	    objShip.dateTimeProgrammed = obj.shipProgramDateTime;
 	    objShip.qualityId = obj.qualityId;
 	    for(var j=0;j<shipsToSave[i].length;j++){
@@ -492,7 +492,7 @@ enyo.kind({
 	
 //	for(var y =0;y<objShip[client][cattle].length;y++){
 //	    var obj=null;
-//	    if(obj=this.getItemByItemNumber(objShip[client][cattle][y].itemNumber)){
+//	    if(obj=this.getItemByItemutils.parseToNumber(objShip[client][cattle][y].itemNumber)){
 //		obj.shipment_id = objShip[client][cattle].shipment_id;
 //	    }else{
 //		return;
@@ -578,8 +578,8 @@ enyo.kind({
 		if(this.arrToShipDetailed[i].saleDetailId == itemInIndex.saleDetailId){
 		    if(!this.arrToShipDetailed[i].hasOwnProperty("shipProgramDateTime")){
 			if(firstFound > -1){
-			    this.arrToShipDetailed[firstFound].heads += Number(this.arrToShipDetailed[i].heads);
-			    this.arrToShipDetailed[firstFound].weight += Number(this.arrToShipDetailed[i].weight);
+			    this.arrToShipDetailed[firstFound].heads += utils.parseToNumber(this.arrToShipDetailed[i].heads);
+			    this.arrToShipDetailed[firstFound].weight += utils.parseToNumber(this.arrToShipDetailed[i].weight);
 			    this.arrToShipDetailed.splice(i,1);			
 			    i--;
 			    len--;
@@ -600,8 +600,8 @@ enyo.kind({
 	var weight = 0;
 	for ( var i = 0;i<this.arrToShipDetailed.length;i++){
 	    if (!this.arrToShipDetailed[i].shipProgramDateTime && this.arrToShipDetailed[i].checked) {
-		hc += Number(this.arrToShipDetailed[i].heads);
-		weight += Number(this.arrToShipDetailed[i].weight);
+		hc += utils.parseToNumber(this.arrToShipDetailed[i].heads);
+		weight += utils.parseToNumber(this.arrToShipDetailed[i].weight);
 	    }
 	}
 	if (weight > 50000) {

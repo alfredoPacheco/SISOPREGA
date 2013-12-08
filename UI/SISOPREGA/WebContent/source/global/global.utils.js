@@ -202,6 +202,10 @@ enyo.kind(
 		+ ((expirationDays == null) ? "" : "; expires="
 			+ expirationDate.toUTCString());
 	document.cookie = cookieName + "=" + cookieValue;
+  },
+  parseToNumber:function(strNumber){
+	var toStr = "" + strNumber;
+	return Number(toStr.replace(",",""));
   }
 });
 

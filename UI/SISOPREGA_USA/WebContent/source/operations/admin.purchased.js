@@ -312,8 +312,8 @@ enyo
 		  }
 
 		  if (iSellerId == sellerId) {
-			heads += Number(this.calculateTotalHeads(detailRecords));
-			weight += Number(this.calculateTotalWeight(detailRecords));
+			heads += utils.parseToNumber(this.calculateTotalHeads(detailRecords));
+			weight += utils.parseToNumber(this.calculateTotalWeight(detailRecords));
 			sellerName = auxSellerName;
 		  }
 		}
@@ -338,7 +338,7 @@ enyo
 		if (arrDetails) {
 		  var totalHeads = 0;
 		  for ( var i = 0; i < arrDetails.length; i++) {
-			totalHeads += Number(arrDetails[i].heads);
+			totalHeads += utils.parseToNumber(arrDetails[i].heads);
 		  }
 		  return totalHeads;
 		}
@@ -348,7 +348,7 @@ enyo
 		if (arrDetails) {
 		  var totalWeight = 0;
 		  for ( var i = 0; i < arrDetails.length; i++) {
-			totalWeight += Number(arrDetails[i].weight);
+			totalWeight += utils.parseToNumber(arrDetails[i].weight);
 		  }
 		  return totalWeight;
 		}

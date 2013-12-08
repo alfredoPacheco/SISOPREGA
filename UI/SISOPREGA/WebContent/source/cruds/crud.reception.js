@@ -96,7 +96,7 @@ enyo
 		if (entityObj.FeedOrder) {
 		    for ( var i = 0; i < entityObj.FeedOrder.length; i++) {
 			entityObj.FeedOrder[i].feedDate = 
-			    new Date(Number(entityObj.FeedOrder[i].feedDate));
+			    new Date(utils.parseToNumber(entityObj.FeedOrder[i].feedDate));
 		    }
 		}
 		if (entityObj.Inspection) {
@@ -124,7 +124,7 @@ enyo
 
 				barnyard.caption = ""
 					+ barnyards[j].barnyardCode
-					+ (Number(barnyards[j].locationId) == 1 ? " [Chihuahua]"
+					+ (utils.parseToNumber(barnyards[j].locationId) == 1 ? " [Chihuahua]"
 						: " [Zona Sur]");
 				barnyard.value = barnyards[j].penId;
 				barnyard.barnyard_code = barnyards[j].barnyardCode;

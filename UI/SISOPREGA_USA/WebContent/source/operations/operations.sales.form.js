@@ -195,8 +195,8 @@ enyo
 		var sError = "";
 		if (this.$.qtyAvailable.getCaption() != "") {
 		  var arrSplit = this.$.qtyAvailable.getCaption().split(":");
-		  var headsAvailable = Number(arrSplit[1]);
-		  if (headsAvailable < Number(this.$.cabezas.getValue())) {
+		  var headsAvailable = utils.parseToNumber(arrSplit[1]);
+		  if (headsAvailable < utils.parseToNumber(this.$.cabezas.getValue())) {
 			sError = "Error. Heads quantity is higher than available heads.";
 		  }
 		}
@@ -211,7 +211,7 @@ enyo
 		  return false;
 		}
 		
-		var x= Number(this.$.peso.getValue().replace(",",""));
+		var x= utils.parseToNumber(this.$.peso.getValue());
 		var weightRounded;
 		
 		if (x < 5 && x > 1)		  
@@ -341,9 +341,9 @@ enyo
 		var objInPen = objPen.object;
 		if(objInPen !== undefined){
 		  this.$.peso.setValue(utils.formatNumberThousands(
-			    (Number(inEvent.value)*
-			    Number(objInPen.weight)/
-			    Number(objInPen.heads))));
+			    (utils.parseToNumber(inEvent.value)*
+			    utils.parseToNumber(objInPen.weight)/
+			    utils.parseToNumber(objInPen.heads))));
 		    return true;
 		}
 	    }

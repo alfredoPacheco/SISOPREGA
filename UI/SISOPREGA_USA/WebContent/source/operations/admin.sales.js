@@ -214,7 +214,7 @@ enyo
               var totalHeadsProgrammed = 0;
               for ( var i = 0; i < objData.arrToShipDetailed.length; i++) {
                 if (objData.arrToShipDetailed[i].dateTimeProgrammed) {
-                  totalHeadsProgrammed += Number(objData.arrToShipDetailed[i].heads);
+                  totalHeadsProgrammed += utils.parseToNumber(objData.arrToShipDetailed[i].heads);
                   strShipDescription += "(" + objData.arrToShipDetailed[i].heads + " / " + objData.arrToShipDetailed[i].weight + ") para "
                       + objData.arrToShipDetailed[i].dateTimeProgrammed.toLocaleDateString() + "<br />";
                 }
