@@ -251,6 +251,7 @@ enyo.kind(
 	this.$.popup_sales.close();
   },
   savePurchaseGroup : function() {
+	cacheMan.showScrim();
 	this.$.purchased.updateView();
 	if (this.$.popup_hermana) {
 	  this.$.popup_hermana.close();
