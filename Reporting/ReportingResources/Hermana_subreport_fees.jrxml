@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Hermana_subreport_fees" language="groovy" pageWidth="250" pageHeight="802" columnWidth="250" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="fb077732-2cd6-4029-9fdd-6f2c1f8300c8">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Hermana_subreport_fees" language="groovy" pageWidth="209" pageHeight="802" columnWidth="209" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="fb077732-2cd6-4029-9fdd-6f2c1f8300c8">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
@@ -32,7 +32,7 @@ GROUP BY fees.hermana_id, concept.concept_name]]>
 	<title>
 		<band height="20" splitType="Stretch">
 			<staticText>
-				<reportElement uuid="d17469e5-39da-4d9b-a914-a9d57637eaa1" style="bordered_blue" x="4" y="0" width="245" height="20"/>
+				<reportElement uuid="d17469e5-39da-4d9b-a914-a9d57637eaa1" style="bordered_blue" x="4" y="0" width="205" height="20"/>
 				<textElement textAlignment="Center">
 					<font size="14" isBold="true"/>
 				</textElement>
@@ -43,12 +43,12 @@ GROUP BY fees.hermana_id, concept.concept_name]]>
 	<detail>
 		<band height="21" splitType="Stretch">
 			<textField>
-				<reportElement uuid="b3d6ff1a-d2df-4b53-999d-5b61b4c50f47" style="bordered_blue" x="4" y="0" width="145" height="20"/>
+				<reportElement uuid="b3d6ff1a-d2df-4b53-999d-5b61b4c50f47" style="bordered_blue" x="4" y="0" width="135" height="20"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
 			</textField>
 			<textField pattern="¤ #,##0.00">
-				<reportElement uuid="1661d66a-966a-48b1-bed8-55da1df6b148" style="bordered" x="149" y="0" width="100" height="20"/>
+				<reportElement uuid="1661d66a-966a-48b1-bed8-55da1df6b148" style="bordered" x="139" y="0" width="70" height="20"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$F{amount}]]></textFieldExpression>
 			</textField>
@@ -57,14 +57,14 @@ GROUP BY fees.hermana_id, concept.concept_name]]>
 	<summary>
 		<band height="25" splitType="Stretch">
 			<textField pattern="¤ #,##0.00">
-				<reportElement uuid="6b4701d5-5188-4e99-8028-b6fd97a75c84" x="149" y="5" width="100" height="20"/>
+				<reportElement uuid="6b4701d5-5188-4e99-8028-b6fd97a75c84" x="109" y="4" width="100" height="20"/>
 				<textElement textAlignment="Center">
 					<font isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{amount_1}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement uuid="2f6c5583-c658-4e8b-bf0f-8131cc8914f6" x="6" y="4" width="243" height="1"/>
+				<reportElement uuid="2f6c5583-c658-4e8b-bf0f-8131cc8914f6" x="6" y="4" width="193" height="1"/>
 			</line>
 		</band>
 	</summary>
