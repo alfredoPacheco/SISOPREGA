@@ -858,12 +858,13 @@ enyo
 		} else {
 		  var objNewInventory = enyo.clone(movingFrom);
 		  delete objNewInventory.inventoryId;
+		  delete objNewInventory.FeedUS;
 		  objNewInventory.heads = Number(objMovement.heads);
 		  objNewInventory.weight = Number(objMovement.weight);
 		  // objNewInventory.pen = movingTo;
 		  objNewInventory.penId = movingTo.penId;
 		  objNewInventory.availableToSell = objNewInventory.heads;
-		  objNewInventory.feed = Number(objMovement.feed);
+		  objNewInventory.feed = 0;
 		  movingTo = objNewInventory;
 		}
 
