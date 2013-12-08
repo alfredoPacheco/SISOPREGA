@@ -110,7 +110,7 @@ enyo.kind({
 	if(entityObj.locationId == "3"){
 	    listObj.caption = "W" + entityObj.barnyardCode;
 	}else if(entityObj.locationId == "4"){
-	    listObj.caption = "E" + entityObj.barnyardCode;
+	    listObj.caption = entityObj.barnyardCode;
 	} 
 	
 	return listObj;
