@@ -40,6 +40,7 @@ public class PurchaseDetail {
   private long heads;
   private double weight;
   private Purchase purchase;
+  private double purchasePrice = 0.0d;
   
   /**
    * @return the purchaseDetailId
@@ -115,9 +116,21 @@ public class PurchaseDetail {
     this.purchase = purchase;
   }
   
+  /**
+   * @return the purchasePrice
+   */
+  public double getPurchasePrice() {
+    return purchasePrice;
+  }
+  /**
+   * @param purchasePrice the purchasePrice to set
+   */
+  public void setPurchasePrice(double purchasePrice) {
+    this.purchasePrice = purchasePrice;
+  }
   @Override
   public String toString() {
-    return "recordId:" + purchaseDetailId + ";penId:" + penId + ";qualityId:" + qualityId + ";heads:" + heads + ";weight:" + weight + ";";
+    return "recordId:" + purchaseDetailId + ";penId:" + penId + ";qualityId:" + qualityId + ";heads:" + heads + ";weight:" + weight + ";purchasePrice:" + purchasePrice + ";";
   }
   
 }

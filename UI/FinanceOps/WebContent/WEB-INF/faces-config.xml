@@ -10,4 +10,10 @@
 			<supported-locale>es</supported-locale>
 		</locale-config>
 	</application>
+	<managed-bean>
+		<description>Handles the logout request to invalidate session.</description>
+		<managed-bean-name>logoutBean</managed-bean-name>
+		<managed-bean-class>com.tramex.sisoprega.fs.cross.LogoutBean</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
 </faces-config>

@@ -1229,6 +1229,9 @@
 			<basic name="qualityId">
 				<column name="quality_id" />
 			</basic>
+			<basic name="purchasePrice">
+				<column name="purchase_price" />
+			</basic>
 			<many-to-one name="purchase" fetch="LAZY" optional="false">
 				<join-column name="purchase_id" referenced-column-name="purchase_id"
 					nullable="false" />
@@ -1358,6 +1361,9 @@
 			</basic>
 			<basic name="inventoryId">
 				<column name="inventory_id" />
+			</basic>
+			<basic name="salePrice">
+				<column name="sale_price" />
 			</basic>
 			<many-to-one name="sale" fetch="LAZY" optional="false">
 				<join-column name="sale_id" referenced-column-name="sale_id"

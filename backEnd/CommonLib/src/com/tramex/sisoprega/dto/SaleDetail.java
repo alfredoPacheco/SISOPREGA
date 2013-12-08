@@ -42,6 +42,7 @@ public class SaleDetail {
   private long sale_seq;
   private long inventoryId;
   private Sale sale;
+  private double salePrice = 0.0d;
   
   /**
    * @return the saleDetailId
@@ -141,9 +142,21 @@ public class SaleDetail {
   public void setInventoryId(long inventoryId) {
     this.inventoryId = inventoryId;
   }
+  /**
+   * @return the salePrice
+   */
+  public double getSalePrice() {
+    return salePrice;
+  }
+  /**
+   * @param salePrice the salePrice to set
+   */
+  public void setSalePrice(double salePrice) {
+    this.salePrice = salePrice;
+  }
   @Override
   public String toString() {
-    return "recordId:" + saleDetailId + ";penId:" + penId + ";qualityId:" + qualityId + ";heads:" + heads + ";weight:" + weight + ";sale_seq:" + sale_seq + ";inventoryId:" + inventoryId + ";";
+    return "recordId:" + saleDetailId + ";penId:" + penId + ";qualityId:" + qualityId + ";heads:" + heads + ";weight:" + weight + ";sale_seq:" + sale_seq + ";inventoryId:" + inventoryId + ";salePrice:" + salePrice + ";";
   }
   
 }
