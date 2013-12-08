@@ -136,14 +136,27 @@ enyo
 						style : "margin-left:10px;"
 					  },
 					  {
-						kind : enyo.IconButton,
-						icon : "../SISOPREGA_WEB_LIB/images/menu-icon-new.png",
-						className : "enyo-button-affirmative",
-						onclick : "agregarCorte",
-						height : "22px",
-						width : "23px",
-						style : "padding: 2px;margin-top: 0px;margin-right:5px;margin-left:10px;"
-					  } ]
+                        content : '<button type="button" style="border: 0;background-color: transparent;margin: 0px;padding: 0px;color: #292929;font-size: 16px;">Add</button>',
+                        allowHtml : true,
+                        onclick : "agregarCorte",
+                        onmousedown : "buttonDown",
+                        onmouseup : "buttonUp",
+                        onmouseout : "buttonUp",
+                        onmouseover : "buttonDown",
+                        className : "enyo-button",
+                        style : "padding: 2px;margin-top: 0px;background-color: #DABD8B;margin-left:1px;height: 24px;"
+                      }
+//					  {
+//						kind : enyo.IconButton,
+//						icon : "../SISOPREGA_WEB_LIB/images/menu-icon-new.png",
+//						className : "enyo-button-affirmative",
+//						onclick : "agregarCorte",
+//						height : "22px",
+//						width : "23px",
+//						style : "padding: 2px;margin-top: 0px;margin-right:5px;margin-left:10px;"
+//					  } 
+					  
+					  ]
 				},
 				{
 				  kind : "HFlexBox",
@@ -209,12 +222,24 @@ enyo
 						disabled : true
 					  },
 					  {
-						kind : enyo.IconButton,
-						icon : "../SISOPREGA_WEB_LIB/images/menu-icon-new.png",
-						className : "enyo-button-affirmative",
-						onclick : "reClassify",
-						style : "padding: 2px;margin-top: 0px;width: 23px;height: 22px;"
-					  } ]
+                        content : '<button type="button" style="border: 0;background-color: transparent;margin: 0px;padding: 0px;color: #292929;font-size: 16px;">Update</button>',
+                        allowHtml : true,
+                        onclick : "reClassify",
+                        onmousedown : "buttonDown",
+                        onmouseup : "buttonUp",
+                        onmouseout : "buttonUp",
+                        onmouseover : "buttonDown",
+                        className : "enyo-button",
+                        style : "padding: 2px;margin-top: 0px;background-color: #DABD8B;margin-left:1px;height: 23px;"
+                      },
+//					  {
+//						kind : enyo.IconButton,
+//						icon : "../SISOPREGA_WEB_LIB/images/menu-icon-new.png",
+//						className : "enyo-button-affirmative",
+//						onclick : "reClassify",
+//						style : "padding: 2px;margin-top: 0px;width: 23px;height: 22px;"
+//					  }
+                      ]
 				},
 				{
 				  kind : "hermana.corte.list",
@@ -545,6 +570,7 @@ enyo
 
 		this.clearCorteDataEntry();
 		this.calculateSummaryFromCorte(cutRecord);
+		this.$.classAutoComplete.setFocus();
 	  },
 	  calculateSummaryFromCorte : function(cutRecord) {
 		this.summary.net_hc += Number(cutRecord.heads);
@@ -766,5 +792,12 @@ enyo
 		this.$.penAutoComplete.setFilter(filter);
 		this.$.penAutoComplete.clear();
 		this.$.penAutoComplete.useFilter();
-	  }
+	  },buttonDown : function(inSender, inEvent) {
+        if (inEvent.which) {
+          inSender.setClassName("enyo-button enyo-button-hot enyo-button-down");
+        }
+      },
+      buttonUp : function(inSender, inEvent) {
+        inSender.setClassName("enyo-button");
+      },
 	});
