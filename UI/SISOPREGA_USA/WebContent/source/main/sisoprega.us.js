@@ -281,6 +281,7 @@ enyo.kind(
         case 'Mexican Map':
           _objMainHeader.setContent('Mexican Pens');
           this.$.mainPane.selectViewByName("mexMap_kind");
+          this.$.mexMap_kind.refreshMap();
           break;
         case 'Inspection List':
           // this.addGoBackAction("catRanchers");
