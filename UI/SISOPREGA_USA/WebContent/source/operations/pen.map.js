@@ -2,6 +2,10 @@ enyo
 	.kind(
 	{
 	  name : "pen.map",
+	  events : {
+		onBeforeUpdate:"",
+		onAfterUpdate:""
+	  },
 	  arrOptions : [
 	  {
 		caption : "Move Cattle",
@@ -121,7 +125,7 @@ enyo
 		name : "toolbar",
 		pack : "center",
 		align : "center",
-		height: "70px",
+		height : "70px",
 		components : [
 		{
 		  kind : "HFlexBox",
@@ -134,7 +138,7 @@ enyo
 		  components : [
 		  {
 			kind : "VFlexBox",
-			flex : 1,
+			flex : 1.3,
 			pack : "center",
 			components : [
 			{
@@ -147,7 +151,7 @@ enyo
 			  name : "txtQuality",
 			  hint : '',
 			  width : "170px",
-			  height:"30px",
+			  height : "30px",
 			  disabled : true,
 			  style : "text-align:center"
 
@@ -171,7 +175,7 @@ enyo
 			  name : "txtQuantity",
 			  hint : '',
 			  width : "90px",
-			  height:"30px",
+			  height : "30px",
 			  disabled : true,
 			  style : "text-align:right"
 			}, ]
@@ -191,7 +195,7 @@ enyo
 			  name : "txtWeight",
 			  hint : '',
 			  width : "110px",
-			  height:"30px",
+			  height : "30px",
 			  disabled : true,
 			  style : "text-align:right"
 			}, ]
@@ -216,15 +220,15 @@ enyo
 			  name : "txtAverage",
 			  hint : '',
 			  width : "110px",
-			  height:"30px",
+			  height : "30px",
 			  disabled : true,
 			  style : "text-align:right"
 			}, ]
 		  },
 		  {
 			kind : "VFlexBox",
-			flex:2,
-			height:"47px",
+			flex : 2,
+			height : "47px",
 			pack : "center",
 			components : [
 			{
@@ -244,17 +248,17 @@ enyo
 				name : "txtLastFeedDate",
 				hint : '',
 				width : "160px",
-				height:"30px",
+				height : "30px",
 				disabled : true,
 				style : "text-align:right;"
 			  },
 			  {
 				kind : "ToolInput",
 				name : "txtLastFeed",
-				height:"30px",
+				height : "30px",
 				hint : '',
 				width : "90px",
-				height:"30px",
+				height : "30px",
 				disabled : true,
 				style : "text-align:center"
 			  } ]
@@ -604,7 +608,7 @@ enyo
 			this.sColorToolbarFont);
 		this.$.txtQuantity.$.input.applyStyle("text-align", "right");
 		this.$.txtQuantity.$.input.applyStyle("font-size", "13px");
-		
+
 		this.$.txtAverage.$.input.applyStyle("color", this.sColorToolbarFont);
 		this.$.txtAverage.$.input.applyStyle("opacity", "1");
 		this.$.txtAverage.$.input.applyStyle("-webkit-text-fill-color",
@@ -645,6 +649,7 @@ enyo
 		this.updateView();
 	  },
 	  updateView : function() {
+		this.doBeforeUpdate();		
 		crudInventory.get(this, "readCallBack");
 		cacheMan.showScrim();
 	  },
@@ -659,6 +664,7 @@ enyo
 			this.setDesc(this.movingTo.name);
 		  this.refreshMap();
 		  cacheMan.hideScrim();
+		  this.doAfterUpdate();
 		}
 	  },
 	  createCells : function(sLetter, iStart, iNumber, sWidth, sHeight, iStep) {
@@ -723,7 +729,9 @@ enyo
 			  .getByID(objInventory.qualityId).qualityName);
 		  this.$.txtQuantity.setValue(objInventory.heads);
 		  this.$.txtWeight.setValue(objInventory.weight + " Lb");
-		  this.$.txtAverage.setValue((objInventory.weight / objInventory.heads).toFixed(2) + " Lb");
+		  this.$.txtAverage.setValue((objInventory.weight / objInventory.heads)
+			  .toFixed(2)
+			  + " Lb");
 		  this.$.txtLastFeedDate.setValue(objFeed.dateTime.toLocaleString());
 		  this.$.txtLastFeed.setValue(objFeed.quantity + " Lb");
 		  this.$.txtTotalFeed.setValue(objInventory.feed + " Lb");
@@ -735,7 +743,7 @@ enyo
 		this.$.toolbar.applyStyle("background-color", "#800000");
 
 		this.$.txtQuality.hide();
-		
+
 		this.$.txtQuantity.hide();
 		this.$.txtWeight.hide();
 		this.$.txtAverage.hide();
@@ -745,7 +753,7 @@ enyo
 		this.$.lblCattle.hide();
 		this.$.lblLastFeed.hide();
 		this.$.lblTotalFeed.hide();
-		
+
 		this.$.lblQuantity.hide();
 		this.$.lblWeight.hide();
 		this.$.lblAverage.hide();
