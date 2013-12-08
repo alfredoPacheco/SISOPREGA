@@ -491,10 +491,10 @@ enyo.kind(
       for ( var selectionIndex = 0; selectionIndex < releasesArray.length; selectionIndex++) {
         releaseObj = releasesArray[selectionIndex];
         
-        summary.hc += Number(releaseObj.heads);
-        summary.kg += Number(releaseObj.weight);
-        summary.rejects_hc += Number(releaseObj.rejects_heads);
-        summary.rejects_kgs += Number(releaseObj.rejects_weight);
+        summary.hc += utils.parseToNumber(releaseObj.heads);
+        summary.kg += utils.parseToNumber(releaseObj.weight);
+        summary.rejects_hc += utils.parseToNumber(releaseObj.rejects_heads);
+        summary.rejects_kgs += utils.parseToNumber(releaseObj.rejects_weight);
       }
       
       if (releaseObj != null) {

@@ -74,12 +74,12 @@ enyo
 	  },
 	  accept_click : function() {
 		var objNew = enyo.clone(this.objToSplit);
-		this.objToSplit.heads -= Number(this.$.txtQuantity.getValue());
-		this.objToSplit.weight -= Number(this.$.txtQuantity.getValue())
-			* Number(this.objToSplit.aveWeight);
-		objNew.heads = Number(this.$.txtQuantity.getValue());
-		objNew.weight = Number(this.objToSplit.aveWeight)
-			* Number(this.$.txtQuantity.getValue());
+		this.objToSplit.heads -= utils.parseToNumber(this.$.txtQuantity.getValue());
+		this.objToSplit.weight -= utils.parseToNumber(this.$.txtQuantity.getValue())
+			* utils.parseToNumber(this.objToSplit.aveWeight);
+		objNew.heads = utils.parseToNumber(this.$.txtQuantity.getValue());
+		objNew.weight = utils.parseToNumber(this.objToSplit.aveWeight)
+			* utils.parseToNumber(this.$.txtQuantity.getValue());
 		this.doAccept(objNew);
 	  },
 	  cancel_click : function() {
@@ -89,14 +89,14 @@ enyo
 		this.objToSplit = obj;
 	  },
 	  on_input : function(inSender, inEvent) {
-		if (isNaN(Number(inSender.value))) {
+		if (isNaN(utils.parseToNumber(inSender.value))) {
 		  return false;
 		} else {
 		  this.$.lblWeight
 			  .setContent("Aprox. Weight <br />"
 				  + utils
-					  .formatNumberThousands((Number(inSender.value)
-						  * Number(this.objToSplit.weight) / Number(this.objToSplit.heads)))
+					  .formatNumberThousands((utils.parseToNumber(inSender.value)
+						  * utils.parseToNumber(this.objToSplit.weight) / utils.parseToNumber(this.objToSplit.heads)))
 				  + " lb");
 		  return true;
 		}

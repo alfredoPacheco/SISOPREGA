@@ -19,8 +19,8 @@ enyo.kind(
     	for ( var i = 0; i < this.arrObj.length; i++) {
     	  if(this.arrObj[i].HermanaCorte){
     		for ( var j = 0; j < this.arrObj[i].HermanaCorte.length; j++) {
-              heads += Number(this.arrObj[i].HermanaCorte[j].heads);
-              weight += Number(this.arrObj[i].HermanaCorte[j].weight);
+              heads += utils.parseToNumber(this.arrObj[i].HermanaCorte[j].heads);
+              weight += utils.parseToNumber(this.arrObj[i].HermanaCorte[j].weight);
             }
     	  }
         }
@@ -43,7 +43,7 @@ enyo.kind(
         entityObj.seller = sellerName;
         
         entityObj.purchaseDate = utils.dateIn(entityObj.deWhen);
-        entityObj.aveweight = Number(entityObj.totalHeads) / Number(entityObj.totalWeight);
+        entityObj.aveweight = utils.parseToNumber(entityObj.totalHeads) / utils.parseToNumber(entityObj.totalWeight);
         
         if(entityObj.HermanaCorte){
           for ( var i = 0; i < entityObj.HermanaCorte.length; i++) {
@@ -83,8 +83,8 @@ enyo.kind(
             var heads = 0;
             var weight = 0;
             for ( var j = 0; j < entityObj.Reception[i].ReceptionHeadcount.length; j++) {
-              heads += Number(entityObj.Reception[i].ReceptionHeadcount[j].hc);
-              weight += Number(entityObj.Reception[i].ReceptionHeadcount[j].weight);
+              heads += utils.parseToNumber(entityObj.Reception[i].ReceptionHeadcount[j].hc);
+              weight += utils.parseToNumber(entityObj.Reception[i].ReceptionHeadcount[j].weight);
             }
             entityObj.Reception[i].heads = heads;
             entityObj.Reception[i].weight = weight;
@@ -99,8 +99,8 @@ enyo.kind(
             for(var j=0;j<entityObj.Reception[i].Inspection.lenght;j++){
               if(entityObj.Reception[i].Inspection[j].InspectionDetails){
                 for(var k=0;k<entityObj.Reception[i].Inspection[j].InspectionDetails.length;k++){
-                  rejects_heads += Number(entityObj.Reception[i].Inspection[j].InspectionDetails[k].hc);
-                  rejects_weight += Number(entityObj.Reception[i].Inspection[j].InspectionDetails[k].weight);
+                  rejects_heads += utils.parseToNumber(entityObj.Reception[i].Inspection[j].InspectionDetails[k].hc);
+                  rejects_weight += utils.parseToNumber(entityObj.Reception[i].Inspection[j].InspectionDetails[k].weight);
                 }
               }
             }
@@ -141,14 +141,14 @@ enyo.kind(
     hermanaHeads : function(hermana) {
       var result = 0;
       for ( var i = 0; i < hermana.HermanaCorte.length; i++) {
-        result += Number(hermana.HermanaCorte[i].heads);
+        result += utils.parseToNumber(hermana.HermanaCorte[i].heads);
       }
       return result;
     },
     hermanaWeight : function(hermana) {
       var result = 0;
       for ( var i = 0; i < hermana.HermanaCorte.length; i++) {
-        result += Number(hermana.HermanaCorte[i].weight);
+        result += utils.parseToNumber(hermana.HermanaCorte[i].weight);
       }
       return result;
     },

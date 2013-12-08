@@ -34,7 +34,7 @@ enyo.kind(
           caption : ""
         };
 
-      listObj.value = Number(entityObj.rancherId);
+      listObj.value = utils.parseToNumber(entityObj.rancherId);
       listObj.caption =  entityObj.legalName;;
 
       return listObj;

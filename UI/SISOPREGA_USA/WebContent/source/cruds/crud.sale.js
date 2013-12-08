@@ -50,13 +50,13 @@ enyo
 			entityObj.totalHeads = 0;
 			entityObj.totalWeight = 0.0;
 			for ( var i = 0; i < entityObj.SaleDetail.length; i++) {
-			  entityObj.totalHeads += Number(entityObj.SaleDetail[i].heads);
-			  entityObj.totalWeight += Number(entityObj.SaleDetail[i].weight);
-			  entityObj.SaleDetail[i].aveWeight = Number(entityObj.SaleDetail[i].weight)
-				  / Number(entityObj.SaleDetail[i].heads);
+			  entityObj.totalHeads += utils.parseToNumber(entityObj.SaleDetail[i].heads);
+			  entityObj.totalWeight += utils.parseToNumber(entityObj.SaleDetail[i].weight);
+			  entityObj.SaleDetail[i].aveWeight = utils.parseToNumber(entityObj.SaleDetail[i].weight)
+				  / utils.parseToNumber(entityObj.SaleDetail[i].heads);
 			}
-			entityObj.totalAvgWeight = Number(entityObj.totalWeight)
-				/ Number(entityObj.totalHeads);
+			entityObj.totalAvgWeight = utils.parseToNumber(entityObj.totalWeight)
+				/ utils.parseToNumber(entityObj.totalHeads);
 		  }
 
 		  return entityObj;
@@ -67,8 +67,8 @@ enyo
 		if(entityObj){
 		  if(entityObj.SaleDetail){
 			for(var i=0;i<entityObj.SaleDetail.length;i++){
-			  entityObj.SaleDetail[i].heads = Number(entityObj.SaleDetail[i].heads);
-			  entityObj.SaleDetail[i].weight = Number(entityObj.SaleDetail[i].weight.replace(",",""));
+			  entityObj.SaleDetail[i].heads = utils.parseToNumber(entityObj.SaleDetail[i].heads);
+			  entityObj.SaleDetail[i].weight = utils.parseToNumber(entityObj.SaleDetail[i].weight);
 			}
 		  }
 		  

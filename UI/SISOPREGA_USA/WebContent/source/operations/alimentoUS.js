@@ -117,7 +117,7 @@ enyo.kind(
   },
   validateForm : function() {
 	var sError = "";
-	var qty = Number(this.$.feedQty.getValue().replace(",", ""));
+	var qty = utils.parseToNumber(this.$.feedQty.getValue().replace(",", ""));
 	if (!qty || qty <= 0 || qty == '') {
 	  sError = "Verify the amount.";
 	}
@@ -132,7 +132,7 @@ enyo.kind(
 	  var objFeed = {};
 	  objFeed.dateTime = new Date("" + this.$.feedDate.getValue() + " "
 		  + this.$.feedTime.getValue());
-	  objFeed.quantity = Number(this.$.feedQty.getValue().replace(",", ""));
+	  objFeed.quantity = utils.parseToNumber(this.$.feedQty.getValue().replace(",", ""));
 	  if (!this.obj.FeedUS) {
 		this.obj.FeedUS = [];
 	  }

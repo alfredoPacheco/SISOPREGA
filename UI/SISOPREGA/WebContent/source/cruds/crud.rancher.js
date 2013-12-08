@@ -21,7 +21,7 @@ enyo.kind(
 	    if (entityObj.entityName == "Rancher") {
 		entityObj.rancher_type = 1;
 		if (entityObj.birthDate) {
-		    var numberBDate = Number(entityObj.birthDate);
+		    var numberBDate = utils.parseToNumber(entityObj.birthDate);
 		    var vDate = new Date(numberBDate);
 		    entityObj.birthDate = vDate;
 		} else {
@@ -46,7 +46,7 @@ enyo.kind(
           caption : ""
         };
       
-      listObj.value = Number(entityObj.rancherId);
+      listObj.value = utils.parseToNumber(entityObj.rancherId);
       listObj.caption = entityObj.name;
       
       return listObj;

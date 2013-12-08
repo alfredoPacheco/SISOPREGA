@@ -204,7 +204,7 @@ enyo
 	  },
 	  on_accept_split : function(inSender, objNew) {
 		
-		this.reduceSplittedHeads(inSender.objToSplit, Number(objNew.heads), Number(objNew.weight));
+		this.reduceSplittedHeads(inSender.objToSplit, utils.parseToNumber(objNew.heads), utils.parseToNumber(objNew.weight));
 		objNew.qualityId = -1;
 		objNew.cattleClassName = "";
 		cacheCorte.cortesExpo.push(objNew);

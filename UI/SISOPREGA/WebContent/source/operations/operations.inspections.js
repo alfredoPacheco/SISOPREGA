@@ -215,7 +215,7 @@ enyo
 	    },
 	    validateReject : function(objRej) {
 		var result = this.summarizeTotals();
-		iValue = Number(this.$.rejected_count.getValue());
+		iValue = utils.parseToNumber(this.$.rejected_count.getValue());
 
 		if (iValue > result.totalAccepted) {
 		    cacheMan

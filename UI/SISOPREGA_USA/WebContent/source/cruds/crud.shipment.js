@@ -64,10 +64,10 @@ enyo
 
 		  entityObj.dateTimeProgrammed = utils
 			  .dateIn(entityObj.dateTimeProgrammed);
-		  entityObj.shipmentId = Number(entityObj.shipmentId);
-		  entityObj.carrierIdProgrammed = Number(entityObj.carrierIdProgrammed);
-		  entityObj.customerId = Number(entityObj.customerId);
-		  entityObj.qualityId = Number(entityObj.qualityId);
+		  entityObj.shipmentId = utils.parseToNumber(entityObj.shipmentId);
+		  entityObj.carrierIdProgrammed = utils.parseToNumber(entityObj.carrierIdProgrammed);
+		  entityObj.customerId = utils.parseToNumber(entityObj.customerId);
+		  entityObj.qualityId = utils.parseToNumber(entityObj.qualityId);
 
 		  var customer = null;
 		  if (customer = crudCustomer.getByID(entityObj.customerId)) {
@@ -80,12 +80,12 @@ enyo
 
 		  if (entityObj.ShipmentDetail) {
 			for ( var i = 0; i < entityObj.ShipmentDetail.length; i++) {
-			  entityObj.ShipmentDetail[i].heads = Number(entityObj.ShipmentDetail[i].heads);
-			  entityObj.ShipmentDetail[i].weight = Number(entityObj.ShipmentDetail[i].weight);
-			  entityObj.ShipmentDetail[i].inventoryId = Number(entityObj.ShipmentDetail[i].inventoryId);
-			  entityObj.ShipmentDetail[i].itemNumber = Number(entityObj.ShipmentDetail[i].itemNumber);
-			  entityObj.ShipmentDetail[i].saleId = Number(entityObj.ShipmentDetail[i].saleId);
-			  entityObj.ShipmentDetail[i].shipmentDetailId = Number(entityObj.ShipmentDetail[i].shipmentDetailId);
+			  entityObj.ShipmentDetail[i].heads = utils.parseToNumber(entityObj.ShipmentDetail[i].heads);
+			  entityObj.ShipmentDetail[i].weight = utils.parseToNumber(entityObj.ShipmentDetail[i].weight);
+			  entityObj.ShipmentDetail[i].inventoryId = utils.parseToNumber(entityObj.ShipmentDetail[i].inventoryId);
+			  entityObj.ShipmentDetail[i].itemNumber = utils.parseToNumber(entityObj.ShipmentDetail[i].itemNumber);
+			  entityObj.ShipmentDetail[i].saleId = utils.parseToNumber(entityObj.ShipmentDetail[i].saleId);
+			  entityObj.ShipmentDetail[i].shipmentDetailId = utils.parseToNumber(entityObj.ShipmentDetail[i].shipmentDetailId);
 
 			  entityObj.totalHeads += entityObj.ShipmentDetail[i].heads;
 			  entityObj.totalWeight += entityObj.ShipmentDetail[i].weight;
@@ -94,8 +94,8 @@ enyo
 			}
 		  }
 
-		  entityObj.totalAvgWeight = Number(entityObj.totalWeight)
-			  / Number(entityObj.totalHeads);
+		  entityObj.totalAvgWeight = utils.parseToNumber(entityObj.totalWeight)
+			  / utils.parseToNumber(entityObj.totalHeads);
 
 		  if (entityObj.ShipmentRelease) {
 			for ( var j = 0; j < entityObj.ShipmentRelease.length; j++) {

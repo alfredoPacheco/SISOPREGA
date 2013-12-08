@@ -23,7 +23,7 @@ enyo
 		  caption : ""
 		};
 
-		listObj.value = Number(entityObj.cattleQualityId);
+		listObj.value = utils.parseToNumber(entityObj.cattleQualityId);
 		listObj.caption = entityObj.qualityName;
 
 		return listObj;
@@ -44,7 +44,7 @@ enyo
 	  },
 	  getByID : function(iID) {
 		for ( var i = 0; i < this.arrObj.length; i++) {
-		  if (Number(this.arrObj[i]["cattleQualityId"]) == Number(iID)) {
+		  if (utils.parseToNumber(this.arrObj[i]["cattleQualityId"]) == utils.parseToNumber(iID)) {
 			return this.arrObj[i];
 		  }
 		}
@@ -66,8 +66,8 @@ enyo
 	  adapterToIn : function(entityObj) {
 		if (entityObj) {
 		  entityObj = this.inherited(arguments);
-		  entityObj.maxWeight = Number(entityObj.maxWeight);
-		  entityObj.minWeight = Number(entityObj.minWeight);
+		  entityObj.maxWeight = utils.parseToNumber(entityObj.maxWeight);
+		  entityObj.minWeight = utils.parseToNumber(entityObj.minWeight);
 		  if (entityObj.forHorses.toLowerCase() == "true")
 			entityObj.forHorses = true;
 		  else {

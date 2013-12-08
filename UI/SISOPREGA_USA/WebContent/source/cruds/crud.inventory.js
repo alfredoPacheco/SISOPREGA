@@ -13,9 +13,9 @@ enyo
 		var weight = 0;
 		var feed = 0;
 		for ( var i = 0; i < this.arrObj.length; i++) {
-		  heads += Number(this.arrObj[i].heads);
-		  weight += Number(this.arrObj[i].weight);
-		  feed += Number(this.arrObj[i].feed);
+		  heads += utils.parseToNumber(this.arrObj[i].heads);
+		  weight += utils.parseToNumber(this.arrObj[i].weight);
+		  feed += utils.parseToNumber(this.arrObj[i].feed);
 		}
 
 		var objSummary =
@@ -33,23 +33,23 @@ enyo
 
 		  entityObj.pen = crudPen.getByID(entityObj.penId);
 
-		  entityObj.aveweight = Number(entityObj.heads)
-			  / Number(entityObj.weight);
+		  entityObj.aveweight = utils.parseToNumber(entityObj.heads)
+			  / utils.parseToNumber(entityObj.weight);
 
 		  if (arrAux = entityObj.Shrinkage) {
 			for ( var i = 0; i < arrAux.length; i++) {
 			  arrAux[i].dateTime = utils.dateIn(arrAux[i].dateTime);
-			  arrAux[i].heads = Number(arrAux[i].heads);
-			  arrAux[i].weight = Number(arrAux[i].weight);
-			  arrAux[i].shrinkageId = Number(arrAux[i].shrinkageId);
+			  arrAux[i].heads = utils.parseToNumber(arrAux[i].heads);
+			  arrAux[i].weight = utils.parseToNumber(arrAux[i].weight);
+			  arrAux[i].shrinkageId = utils.parseToNumber(arrAux[i].shrinkageId);
 			}
 		  }
 
 		  if (arrAux = entityObj.FeedUS) {
 			for ( var i = 0; i < arrAux.length; i++) {
 			  arrAux[i].dateTime = utils.dateIn(arrAux[i].dateTime);
-			  arrAux[i].quantity = Number(arrAux[i].quantity);
-			  arrAux[i].feedUSId = Number(arrAux[i].feedUSId);
+			  arrAux[i].quantity = utils.parseToNumber(arrAux[i].quantity);
+			  arrAux[i].feedUSId = utils.parseToNumber(arrAux[i].feedUSId);
 			}
 		  }
 		  return entityObj;
@@ -132,7 +132,7 @@ enyo
 		for ( var i = 0; i < arrInventory.length; i++) {
 		  var bAlreadyPushed = false;
 		  for ( var j = 0; j < arrActiveQualities.length; j++) {
-			if (Number(arrActiveQualities[j].value) == Number(arrInventory[i].qualityId)) {
+			if (utils.parseToNumber(arrActiveQualities[j].value) == utils.parseToNumber(arrInventory[i].qualityId)) {
 			  bAlreadyPushed = true;
 			}
 		  }
@@ -156,7 +156,7 @@ enyo
 		for ( var i = 0; i < arrInventory.length; i++) {
 		  var bAlreadyPushed = false;
 		  for ( var j = 0; j < arrActiveCattles.length; j++) {
-			if (Number(arrActiveCattles[j].value) == Number(arrInventory[i].cattypeId)) {
+			if (utils.parseToNumber(arrActiveCattles[j].value) == utils.parseToNumber(arrInventory[i].cattypeId)) {
 			  bAlreadyPushed = true;
 			}
 		  }

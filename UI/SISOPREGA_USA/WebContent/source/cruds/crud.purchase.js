@@ -18,8 +18,8 @@ enyo
 		};
 		for ( var i = 0; i < this.arrObj.length; i++) {
 		  for ( var j = 0; j < this.arrObj[i].PurchaseDetail.length; j++) {
-			heads += Number(this.arrObj[i].PurchaseDetail[j].heads);
-			weight += Number(this.arrObj[i].PurchaseDetail[j].weight);
+			heads += utils.parseToNumber(this.arrObj[i].PurchaseDetail[j].heads);
+			weight += utils.parseToNumber(this.arrObj[i].PurchaseDetail[j].weight);
 		  }
 		}
 		objSummary.heads = heads;
@@ -41,7 +41,7 @@ enyo
 
 		  if (entityObj.PurchaseDetail) {
 			for ( var i = 0; i < entityObj.PurchaseDetail.length; i++) {
-			  entityObj.PurchaseDetail[i].avgWeight = (Number(entityObj.PurchaseDetail[i].weight) / Number(entityObj.PurchaseDetail[i].heads))
+			  entityObj.PurchaseDetail[i].avgWeight = (utils.parseToNumber(entityObj.PurchaseDetail[i].weight) / utils.parseToNumber(entityObj.PurchaseDetail[i].heads))
 				  .toFixed(2);
 			}
 		  }

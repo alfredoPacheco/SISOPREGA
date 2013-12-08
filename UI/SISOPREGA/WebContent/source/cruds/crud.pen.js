@@ -106,7 +106,7 @@ enyo.kind({
 		value : 0,
 		caption : ""
 	};
-	listObj.value = Number(entityObj.penId);
+	listObj.value = utils.parseToNumber(entityObj.penId);
 	if(entityObj.locationId == "3"){
 	    listObj.caption = "W" + entityObj.barnyardCode;
 	}else if(entityObj.locationId == "4"){

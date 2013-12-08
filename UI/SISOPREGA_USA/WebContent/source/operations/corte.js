@@ -129,9 +129,9 @@ enyo.kind(
 	objShrinkage.dateTime = new Date("" + this.$.corteDate.getValue() + " "
 		+ this.$.corteTime.getValue());
 	objShrinkage.comment = this.$.MermaComent.getValue();
-	objShrinkage.heads = Number(this.$.CabezaMerma.getValue());
-	objShrinkage.weight = Number(objInventory.weight)
-		/ Number(objInventory.heads) * objShrinkage.heads;
+	objShrinkage.heads = utils.parseToNumber(this.$.CabezaMerma.getValue());
+	objShrinkage.weight = utils.parseToNumber(objInventory.weight)
+		/ utils.parseToNumber(objInventory.heads) * objShrinkage.heads;
 
 	if (!objInventory.Shrinkage) {
 	  objInventory.Shrinkage = [];

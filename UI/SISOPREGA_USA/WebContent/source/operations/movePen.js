@@ -201,8 +201,8 @@ enyo
 	  },
 	  validateForm : function() {
 		var sError = "";
-		var headsToMove = Number(this.$.totalHC.getValue());
-		var availableToMove = Number(this.$.lblHeadsMobile.getContent());
+		var headsToMove = utils.parseToNumber(this.$.totalHC.getValue());
+		var availableToMove = utils.parseToNumber(this.$.lblHeadsMobile.getContent());
 		if (!headsToMove || headsToMove < 1 || headsToMove == ''
 			|| headsToMove <= 0) {
 		  sError = "Verify the heads quantity.";
