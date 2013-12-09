@@ -1,0 +1,120 @@
+@CHARSET "UTF-8";
+.black_belt{
+	background-color: black;
+	width:790px;
+	height:20px;
+	margin-left: auto;
+	margin-right:auto;
+	color:white;
+	text-align: center;
+	font-size: small;
+	font-family:'Lucida Console', Monaco, monospace;
+	padding-top: 4px;
+}
+.gray_belt{
+	background-color: gray;
+	width:790px;
+	height:20px;
+	margin-left: auto;
+	margin-right:auto;
+}
+.drop-menu{
+	cursor: pointer;
+	display:block;
+	text-align:right;
+	/*border:1px solid #f6f0e4;*/
+	width:280px;
+	font-family:'Lucida Console', Monaco, monospace;
+}
+.drop-menu:hover .sub-menu{
+	display: inline-block;
+}
+.sub-menu{
+	display:none;
+	width:200px;
+	background:#fff;
+	padding: 10px 10px;
+	margin-left:-11px;
+	margin-top:10px;
+	/*border: 1px solid #fff;*/
+	-webkit-box-shadow: 0px 13px 25px rgba(0,0,0, 0.2);  
+    -moz-box-shadow: 0px 13px 25px rgba(0,0,0, 0.2);  
+    box-shadow: 0px 13px 25px rgba(0,0,0, 0.2);
+}
+.sub-menu li{
+	list-style-type:none;
+	display:block;
+	border-bottom: 1px dotted #eaeaea;
+	font-size: 19px;
+	height: 22px;
+	padding: 8px 0;
+}
+
+.sub-menu li:hover {
+	border-bottom: 1px dotted #bababa;
+}
+
+.sub-menu a {
+	text-decoration: none;
+	color: black;
+}
+
+#header {
+	background-image: url("../images/eastmann_banner.png");
+	background-repeat: no-repeat;
+	background-size:100% 100%;
+	width: 790px;
+	height: 150px;
+	margin-left: auto;
+	margin-right:auto;
+	
+}
+#content{
+	width: 790px;
+	min-height: 150px;
+	margin-left: auto;
+	margin-right:auto;
+	padding-top: 15px;
+}
+#header-banner {
+	background-image: url("../images/solution-industry-banner.jpg");
+	background-repeat: no-repeat;
+	background-size:100% 100%;
+	width: 790px;
+	height: 250px;
+	margin-left: auto;
+	margin-right:auto;
+	color:white;
+	font-family: Arial, Helvetica, sans-serif;
+}
+#header-banner-text {
+	margin-left:15px;
+	display: inline-block;
+	width:350px;
+}
+#header-banner-text a{
+	font-family: Arial, Helvetica, sans-serif;
+	color: white;
+}
+#app-menu {
+	background-image: url("../images/gray_gradient.png");
+	background-repeat: repeat-x;
+	width: 770px;
+	height: 22px;
+	margin-left: auto;
+	margin-right:auto;
+	padding-top: 8px;
+	padding-left: 20px;
+}
+#app-menu a{
+	font-family: Arial, Helvetica, sans-serif;
+	text-decoration: none;
+	color: black;
+	font-size:16px;
+}
+#app-menu a:hover{
+	font-family: Arial, Helvetica, sans-serif;
+	text-decoration: none;
+	color: white;
+	font-size:16px;
+}

@@ -1,53 +1,63 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
           "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:h="http://java.sun.com/jsf/html">
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html">
 <head>
-  <title><ui:insert name="title">SISOPREGA - FINANCIAL SERVICES</ui:insert></title>
+<title><ui:insert name="title">SISOPREGA - FINANCIAL SERVICES</ui:insert>
+</title>
+<link href="css/fs.css" rel="stylesheet" type="text/css" />
 </head>
-
 <body>
-
-<div id="header">
-    <ui:insert name="header">
-    	Header area.  See comments below this line in the source.
-    	<!--  include your header file or uncomment the include below and create header.xhtml in this directory -->
-    	<!-- <ui:include src="header.xhtml"/> -->
-    	<h:form>Usuario: #{request.remoteUser} | <h:commandLink
-						value="log out" action="#{logoutBean.logout}" />
-				</h:form>
-				
-				<!--  MENU HEADER ITEMS:
-				- HOME
-				- BALANCE
-				- PRICES
-				- CALENDAR
-				- TO PAY
-				- TO COLLECT
-				 -->
-				
-    </ui:insert>
-</div>
-
-
-<div id="content">
-  <ui:insert name="content">
+	<div class="black_belt" />
+	<div id="header">
+		<div class="drop-menu" style="float: right;">
+			<span style="line-height: 28px; font-size: 18px; font-weight: bold;">#{request.remoteUser}</span>
+			<span class="plus"><img src="images/down-arrow-circle-th.png"
+				height="28px;" align="top" /></span>
+			<h:form>
+				<ul class="sub-menu">
+					<li><h:commandLink value="Change Password"
+							action="#{logoutBean.logout}" /></li>
+					<li><h:commandLink value="Logout"
+							action="#{logoutBean.logout}" /></li>
+				</ul>
+			</h:form>
+		</div>
+	</div>
+	<div id="app-menu">
+		<h:link outcome="home.xhtml" id="home_menu_item">Home</h:link>&nbsp;&nbsp;<b>||</b>&nbsp;&nbsp;
+		<h:link outcome="prices.xhtml" id="balance_menu_item">Balance</h:link>&nbsp;&nbsp;<b>||</b>&nbsp;&nbsp;
+		<h:link outcome="prices.xhtml" id="prices_menu_item">Prices</h:link>&nbsp;&nbsp;<b>||</b>&nbsp;&nbsp;
+		<h:link outcome="prices.xhtml" id="calendar_menu_item">Calendar</h:link>&nbsp;&nbsp;<b>||</b>&nbsp;&nbsp;
+		<h:link outcome="prices.xhtml" id="to_pay_menu_item">To Pay</h:link>&nbsp;&nbsp;<b>||</b>&nbsp;&nbsp;
+		<h:link outcome="prices.xhtml" id="to_collect_menu_item">To Collect</h:link>
+	</div>
+	<div class="gray_belt" />
+	<div id="header-banner">
+		<div id="header-banner-text">
+			<h1>SISOPREGA - FINANCIAL SERVICES</h1>
+			<p>This tool will help in the process of monitoring collections and payments,
+			allowing us to basically manage balances, accounts payable and receivable.</p>
+			<p>Improvements and issues can be reported to <a href="mailto:inspiracode@gmail.com">inspiraCode</a>.</p>
+		</div>
+	</div>
+	<div class="black_belt" />
+	<div id="content">
+		<ui:insert name="content">
     	Content area.  See comments below this line in the source.
     	<!--  include your content file or uncomment the include below and create content.xhtml in this directory -->
-	  	<!-- <div> -->
-    	<!-- <ui:include src="content.xhtml"/> -->  
-    	<!-- </div> -->
-  </ui:insert>
-</div>
+			<!-- <div> -->
+			<!-- <ui:include src="content.xhtml"/> -->
+			<!-- </div> -->
+		</ui:insert>
+	</div>
 
-<div id="footer">
-  <ui:insert name="footer">
-    	Footer area.  See comments below this line in the source.
-    	<!--  include your header file or uncomment the include below and create footer.xhtml in this directory -->
-		<!--<ui:include src="footer.xhtml"/>  -->
-  </ui:insert>
-</div>
+	<div id="footer">
+		<div class="black_belt">
+			CopyRight 2013 &copy; Eastmann Livestock LLC. All rights reserved. | Powered by InspiraCode |.
+		</div>
+	</div>
 
 </body>
 
