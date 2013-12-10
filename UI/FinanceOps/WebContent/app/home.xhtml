@@ -4,8 +4,73 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core">
+<head />
 <ui:composition template="template.xhtml">
 	<ui:define name="content">
+		<link href="css/home.css" rel="stylesheet" type="text/css" />
+		<div id="app-log-section" class="section">
+			<div class="section-title">&Theta;&nbsp;App Log</div>
+			<div>
+				<table>
+					<tbody>
+						<tr>
+							<td>RECEIVED CATTLE @ SAN JERONIMO</td>
+						</tr>
+						<tr>
+							<td>INSPECTED CATTLE</td>
+						</tr>
+						<tr>
+							<td>IMPORTED CATTLE</td>
+						</tr>
+						<tr>
+							<td>BOUGHT CATTLE</td>
+						</tr>
+						<tr>
+							<td>SOLD CATTLE</td>
+						</tr>
+						<tr>
+							<td>SHIPPED CATTLE</td>
+						</tr>
+						<tr>
+							<td>PAID ITEMS</td>
+						</tr>
+						<tr>
+							<td>COLLECTED ITEMS</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div id="business-banner">
+			<div id="water-mark">
+				<h2>LOREM IPSUM</h2>
+				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
+					eleifend dictum tellus sed semper. Pellentesque at purus non mi
+					pharetra vehicula. Sed mi arcu, lacinia in vehicula sit amet,
+					mollis nec tortor.</p>
+			</div>
+		</div>
+		<div id="dollar-section" class="section">
+			<div class="section-title">&Theta;&nbsp;Accounts Payable Status</div>
+			<div><font class="xtitle">December 2013 Payments</font></div>
+			<br></br>
+			<div><font class="primary">Payments this month: <font class="blue">4</font></font></div>
+			<div><font class="primary">Total amount paid: <font class="blue">$400.00</font></font></div>
+			<br></br>
+			<div><font class="primary">Total of payments pending: <font class="red">2</font></font></div>
+			<div><font class="primary">Total amount pending to pay: <font class="red">$12,345.12</font></font></div>
+		</div>
+		<div id="balance-section" class="section">
+			<div  class="section-title">&Theta;&nbsp;Accounts Receivable Status</div>
+			<div><font class="xtitle">December 2013 Collections</font></div>
+			<br></br>
+			<div><font class="primary">Number of collections this month: <font class="blue">4</font></font></div>
+			<div><font class="primary">Total amount collected: <font class="blue">$400.00</font></font></div>
+			<br></br>
+			<div><font class="primary">Total collections pending: <font class="red">7</font></font></div>
+			<div><font class="primary">Pending to be collected: <font class="red">$87,321.98</font></font></div>
+		</div>
+
 		<!-- SHOW: APP LOG, US DOLLAR CHANGE, BALANCE -->
 		<!-- TO INCLUDE IN APP LOG:
 		* RECEIVED CATTLE @ SAN JERONIMO
@@ -17,8 +82,6 @@
 		* PAID ITEMS - TO RANCHERS, SELLERS AND FREIGHTERS
 		* COLLECTED ITEMS - FROM CUSTOMERS/STORES
 		 -->
-	    HOME PAGE LOADED FROM HOME.XHTML
-	    <h:link outcome="prices.xhtml">GO TO PRICES</h:link>
 	</ui:define>
 </ui:composition>
 </html>

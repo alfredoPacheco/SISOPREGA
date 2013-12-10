@@ -1,0 +1,69 @@
+@CHARSET "UTF-8";
+
+#app-log-section {
+	height: 600px;
+	border: thin solid black;
+	overflow: auto;
+	float: left;
+}
+
+#dollar-section {
+	height:200px;
+	border:thin solid black;
+	display: inline-block;
+	margin-left:2px;
+	overflow: hidden;
+}
+
+#balance-section {
+	height:200px;
+	border:thin solid black;
+	display: inline-block;
+	overflow: hidden;
+}
+
+#business-banner {
+	width: 524px;
+	height: 400px;
+	background-image: url('../images/Businessman-Working.jpg');
+	overflow: auto;
+}
+
+#water-mark {
+	background-color: red;
+	width: 450px;
+	height: 150px;
+	margin-top: 250px;
+	float: right;
+	filter: alpha(opacity =   80);
+	opacity: 0.8;
+	color: white;
+	padding-left: 15px;
+	border-radius: 10px;
+}
+
+.primary {
+	font: tahoma ;
+	color: #444;
+	font-weight: normal;
+}
+
+.blue {
+	font: tahoma ;
+	color: #12F;
+	font-size: small;
+	font-weight: normal;	
+}
+
+.red {
+	font: tahoma ;
+	color: #F00;
+	font-size: small;	
+	font-weight: normal;
+}
+
+.xtitle {
+	font: tahoma ;
+	color: #000;
+	font-weight: bold;
+}
