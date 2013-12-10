@@ -57,15 +57,15 @@
 	<div id="app-menu">
 		<h:link outcome="home.xhtml" id="home_menu_item">Home</h:link>
 		&nbsp;&nbsp;<b>||</b>&nbsp;&nbsp;
-		<h:link outcome="prices.xhtml" id="balance_menu_item">Balance</h:link>
+		<h:link outcome="balance.xhtml" id="balance_menu_item">Balance</h:link>
 		&nbsp;&nbsp;<b>||</b>&nbsp;&nbsp;
 		<h:link outcome="prices.xhtml" id="prices_menu_item">Prices</h:link>
 		&nbsp;&nbsp;<b>||</b>&nbsp;&nbsp;
-		<h:link outcome="prices.xhtml" id="calendar_menu_item">Calendar</h:link>
+		<h:link outcome="calendar.xhtml" id="calendar_menu_item">Calendar</h:link>
 		&nbsp;&nbsp;<b>||</b>&nbsp;&nbsp;
-		<h:link outcome="prices.xhtml" id="to_pay_menu_item">To Pay</h:link>
+		<h:link outcome="payments.xhtml" id="to_pay_menu_item">Payments</h:link>
 		&nbsp;&nbsp;<b>||</b>&nbsp;&nbsp;
-		<h:link outcome="prices.xhtml" id="to_collect_menu_item">To Collect</h:link>
+		<h:link outcome="collections.xhtml" id="to_collect_menu_item">Collections</h:link>
 	</div>
 	<div class="gray_belt" />
 	<div id="header-banner">
@@ -81,6 +81,7 @@
 		</div>
 	</div>
 	<div class="black_belt" />
+	<!-- TODO: add dialog for change password. -->
 	<div id="content">
 		<ui:insert name="content">
     	Content area.  See comments below this line in the source.
@@ -90,12 +91,9 @@
 			<!-- </div> -->
 		</ui:insert>
 	</div>
-
 	<div id="footer">
 		<div class="black_belt">CopyRight 2013 &copy; Eastmann Livestock
 			LLC. All rights reserved. | Powered by InspiraCode |.</div>
 	</div>
-
 </body>
-
 </html>

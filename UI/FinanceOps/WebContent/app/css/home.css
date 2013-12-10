@@ -5,6 +5,7 @@
 	border: thin solid black;
 	overflow: auto;
 	float: left;
+	margin-right:5px;
 }
 
 #dollar-section {
@@ -27,6 +28,7 @@
 	height: 400px;
 	background-image: url('../images/Businessman-Working.jpg');
 	overflow: auto;
+	margin-bottom: 5px;
 }
 
 #water-mark {
@@ -66,4 +68,29 @@
 	font: tahoma ;
 	color: #000;
 	font-weight: bold;
+}
+
+#app-log-content {
+	font-family: monospace;
+}
+
+.app-log-item {
+	cursor: pointer;
+	display: inline-block;
+	margin-top:2px;
+}
+
+.app-log-item img{
+	float:left;
+	width:60px;
+	height: 60px;
+	margin-right:2px;
+}
+
+.app-log-item :hover {
+	cursor: pointer;
+	display: inline-block;
+	margin-top:2px;
+	background-color: silver;
+	border-bottom: 1px dotted gray;
 }

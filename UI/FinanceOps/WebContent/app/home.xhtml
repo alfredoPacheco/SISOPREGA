@@ -3,42 +3,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core">
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
 <head />
 <ui:composition template="template.xhtml">
 	<ui:define name="content">
 		<link href="css/home.css" rel="stylesheet" type="text/css" />
 		<div id="app-log-section" class="section">
 			<div class="section-title">&Theta;&nbsp;App Log</div>
-			<div>
-				<table>
-					<tbody>
-						<tr>
-							<td>RECEIVED CATTLE @ SAN JERONIMO</td>
-						</tr>
-						<tr>
-							<td>INSPECTED CATTLE</td>
-						</tr>
-						<tr>
-							<td>IMPORTED CATTLE</td>
-						</tr>
-						<tr>
-							<td>BOUGHT CATTLE</td>
-						</tr>
-						<tr>
-							<td>SOLD CATTLE</td>
-						</tr>
-						<tr>
-							<td>SHIPPED CATTLE</td>
-						</tr>
-						<tr>
-							<td>PAID ITEMS</td>
-						</tr>
-						<tr>
-							<td>COLLECTED ITEMS</td>
-						</tr>
-					</tbody>
-				</table>
+			<div id="app-log-content">
+				<p:dataList var="log" value="#{appLogBean.itemList}" type="definition">
+					<div class="app-log-item" onclick="#{log.clickAction}">
+						<p:graphicImage value="#{log.iconURL}" alt="#{log.iconURL}" />
+						<b>#{log.title}</b><br/>
+						#{log.description}
+					</div>
+				</p:dataList>
 			</div>
 		</div>
 		<div id="business-banner">

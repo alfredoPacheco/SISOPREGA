@@ -16,4 +16,10 @@
 		<managed-bean-class>com.tramex.sisoprega.fs.cross.LogoutBean</managed-bean-class>
 		<managed-bean-scope>request</managed-bean-scope>
 	</managed-bean>
+	<managed-bean>
+		<description>Handles application logs to be reported in the financial services tool</description>
+		<managed-bean-name>appLogBean</managed-bean-name>
+		<managed-bean-class>com.tramex.sisoprega.fs.cross.AppLogBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
 </faces-config>
