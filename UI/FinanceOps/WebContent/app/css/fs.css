@@ -1,4 +1,3 @@
-@CHARSET "UTF-8";
 body{
 	text-align: center;
 }
@@ -25,6 +24,14 @@ body{
 	width:256px;
 	text-align: left;
 }
+
+.section img{
+	float:left;
+	width:60px;
+	height: 60px;
+	margin-right:2px;
+}
+
 .section-title{
 	width:251px;
 	background-color:#2C3539;
@@ -135,4 +142,30 @@ body{
 	text-decoration: none;
 	color: white;
 	font-size:16px;
+}
+
+.primary {
+	font-family: tahoma ;
+	color: #444;
+	font-weight: normal;
+}
+
+.blue {
+	font-family: tahoma ;
+	color: #12F;
+	font-size: small;
+	font-weight: normal;	
+}
+
+.red {
+	font-family: tahoma ;
+	color: #F00;
+	font-size: small;	
+	font-weight: normal;
+}
+
+.xtitle {
+	font-family: tahoma ;
+	color: #000;
+	font-weight: bold;
 }

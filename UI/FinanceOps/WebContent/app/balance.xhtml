@@ -4,14 +4,108 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core">
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
 
 <ui:composition template="template.xhtml">
 	<ui:define name="content">
-	    HELLO FROM BALANCE.<br/>
-	    <h:link outcome="home.xhtml">GO home</h:link>
-	    <!-- SHOW: COLLECTED, PAID, BALANCE AND ASSETS -->
+		<link href="css/balance.css" rel="stylesheet" type="text/css" />
+		<!-- SHOW: COLLECTED, PAID, BALANCE AND ASSETS -->
+		<div id="collected-container">
+			<div id="collected-section" class="section">
+				<div class="section-title">&Theta;&nbsp;Collected</div>
+				<div id="collected-content">
+					<p:dataList var="item" value="#{collectedBean.itemList}"
+						type="definition">
+						<div class="collected-item" onclick="#{item.clickAction}">
+							<p:graphicImage value="#{item.iconURL}" alt="#{item.iconURL}" />
+							<b>#{item.title}</b><br /> #{item.description}
+						</div>
+					</p:dataList>
+				</div>
+			</div>
+			<div id="collected-summary">
+				<p>Collected today:<u>$41,350.25</u></p>
+				<p>Scheduled:<u>$51,125.00</u></p>
+				<p:button title="title" value="value"/>
+			</div>
+		</div>
+
+		<div id="paid-section" class="section">
+			<div class="section-title">&Theta;&nbsp;Paid</div>
+			<div>
+				<font class="xtitle">December 2013 Collections</font>
+			</div>
+			<br></br>
+			<div>
+				<font class="primary">Number of collections this month: <font
+					class="blue">4</font></font>
+			</div>
+			<div>
+				<font class="primary">Total amount collected: <font
+					class="blue">$400.00</font></font>
+			</div>
+			<br></br>
+			<div>
+				<font class="primary">Total collections pending: <font
+					class="red">7</font></font>
+			</div>
+			<div>
+				<font class="primary">Pending to be collected: <font
+					class="red">$87,321.98</font></font>
+			</div>
+		</div>
+		<div id="right-pannel" class="section">
+			<div id="balance-section" class="section">
+				<div class="section-title">&Theta;&nbsp;Balance</div>
+				<div>
+					<font class="xtitle">December 2013 Collections</font>
+				</div>
+				<br></br>
+				<div>
+					<font class="primary">Number of collections this month: <font
+						class="blue">4</font></font>
+				</div>
+				<div>
+					<font class="primary">Total amount collected: <font
+						class="blue">$400.00</font></font>
+				</div>
+				<br></br>
+				<div>
+					<font class="primary">Total collections pending: <font
+						class="red">7</font></font>
+				</div>
+				<div>
+					<font class="primary">Pending to be collected: <font
+						class="red">$87,321.98</font></font>
+				</div>
+			</div>
+			<div id="assets-section" class="section">
+				<div class="section-title">&Theta;&nbsp;Assets</div>
+				<div>
+					<font class="xtitle">December 2013 Collections</font>
+				</div>
+				<br></br>
+				<div>
+					<font class="primary">Number of collections this month: <font
+						class="blue">4</font></font>
+				</div>
+				<div>
+					<font class="primary">Total amount collected: <font
+						class="blue">$400.00</font></font>
+				</div>
+				<br></br>
+				<div>
+					<font class="primary">Total collections pending: <font
+						class="red">7</font></font>
+				</div>
+				<div>
+					<font class="primary">Pending to be collected: <font
+						class="red">$87,321.98</font></font>
+				</div>
+			</div>
+		</div>
 	</ui:define>
-	
+
 </ui:composition>
 </html>
