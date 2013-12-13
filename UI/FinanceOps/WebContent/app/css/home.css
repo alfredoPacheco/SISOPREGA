@@ -8,7 +8,7 @@
 	margin-right:5px;
 }
 
-#dollar-section {
+#payable-section {
 	height:200px;
 	border:thin solid black;
 	display: inline-block;
@@ -16,7 +16,7 @@
 	overflow: hidden;
 }
 
-#balance-section {
+#receivable-section {
 	height:200px;
 	border:thin solid black;
 	display: inline-block;
@@ -44,32 +44,6 @@
 	border-radius: 10px;
 }
 
-.primary {
-	font: tahoma ;
-	color: #444;
-	font-weight: normal;
-}
-
-.blue {
-	font: tahoma ;
-	color: #12F;
-	font-size: small;
-	font-weight: normal;	
-}
-
-.red {
-	font: tahoma ;
-	color: #F00;
-	font-size: small;	
-	font-weight: normal;
-}
-
-.xtitle {
-	font: tahoma ;
-	color: #000;
-	font-weight: bold;
-}
-
 #app-log-content {
 	font-family: monospace;
 }
@@ -78,13 +52,6 @@
 	cursor: pointer;
 	display: inline-block;
 	margin-top:2px;
-}
-
-.app-log-item img{
-	float:left;
-	width:60px;
-	height: 60px;
-	margin-right:2px;
 }
 
 .app-log-item :hover {

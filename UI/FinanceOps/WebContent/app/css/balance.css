@@ -1,0 +1,56 @@
+@CHARSET "UTF-8";
+
+#collected-section {
+	height: 600px;
+	border: thin solid black;
+	overflow: auto;
+	display: inline-block;
+	margin-right:2px;
+} 
+
+#paid-section {
+	height: 600px;
+	border: thin solid black;
+	overflow: auto;
+	display: inline-block;
+	margin-right:2px;
+}
+
+#balance-section{
+	width:256px;
+	height: 296px;
+	overflow: auto;
+	margin-bottom: 2px;
+}
+
+#assets-section{
+	width:256px;
+	height: 296px;
+	overflow: auto;
+	margin-bottom: 2px;
+}
+
+#right-pannel {
+	height: 600px;
+	border: thin solid black;
+	overflow: auto;
+	display: inline-block;
+}
+
+#collected-content {
+	font-family: monospace;
+}
+
+.collected-item {
+	cursor: pointer;
+	display: inline-block;
+	margin-top:2px;
+}
+
+.collected-item :hover {
+	cursor: pointer;
+	display: inline-block;
+	margin-top:2px;
+	background-color: silver;
+	border-bottom: 1px dotted gray;
+}

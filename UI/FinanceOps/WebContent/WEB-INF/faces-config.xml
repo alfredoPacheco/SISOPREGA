@@ -22,4 +22,10 @@
 		<managed-bean-class>com.tramex.sisoprega.fs.cross.AppLogBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
+	<managed-bean>
+		<description>Handles the collected payments for financial services application.</description>
+		<managed-bean-name>collectedBean</managed-bean-name>
+		<managed-bean-class>com.tramex.sisoprega.fs.cross.CollectedBean</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
 </faces-config>
