@@ -336,8 +336,9 @@ enyo
 		var iSumWeight = crudInventory.getObjSummary().weight;
 		var iSumAve = iSumWeight / iHeads;
 		var iSumFeed = crudInventory.getObjSummary().feed;
-		var iSold = 0;
-		var iSoldAve = 0;
+		var objSalesSummary =crudSale.getSummary(); 
+		var iSold = objSalesSummary.iHeads;
+		var iSoldWeight = objSalesSummary.iWeight;
 
 		this.$.lblInvSumHeadClass.setContent("Heads<br />"
 			+ utils.formatNumberThousands(iHeads));
@@ -351,11 +352,11 @@ enyo
 		this.$.lblPurSumInvHeads.setContent("Heads<br />"
 			+ utils.formatNumberThousands(iHeads - iSold));
 		this.$.lblPurSumInvWeight.setContent("Weight<br />"
-			+ utils.formatNumberThousands((iSumWeight - iSoldAve).toFixed(1)));
+			+ utils.formatNumberThousands((iSumWeight - iSoldWeight).toFixed(1)));
 		this.$.lblSumInvAveWight
 			.setContent("Average<br />"
 				+ utils
-					.formatNumberThousands(((iSumWeight - iSoldAve) / (iHeads - iSold))
+					.formatNumberThousands(((iSumWeight - iSoldWeight) / (iHeads - iSold))
 						.toFixed(1)));
 	  },
 	  setListContent : function(arrInventory) {

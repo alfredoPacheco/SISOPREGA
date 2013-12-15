@@ -75,6 +75,17 @@ enyo
 		}
 		return entityObj;
 	  },
+	  getSummary:function(){
+		var objResult ={
+			iHeads : 0,
+			iWeight : 0			
+		};
+		for(var i=0;i<this.arrObj.length;i++){
+		  objResult.iHeads += utils.parseToNumber(this.arrObj[i].totalHeads);
+		  objResult.iWeight += utils.parseToNumber(this.arrObj[i].totalWeight);
+		}
+		return objResult;
+	  }
 	  
 	});
 
