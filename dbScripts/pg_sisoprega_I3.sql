@@ -1,0 +1,205 @@
+CREATE OR REPLACE VIEW vw_app_log AS
+
+select * from (
+SELECT 'RECEPTION' as Operation,
+ctrl_reception_headcount.operationdatetime as OperationTime,
+  ctrl_reception_headcount.hc as Heads,
+  ctrl_reception_headcount.weight as Weight,
+cat_cattle_type.cattype_name || ' ' ||
+  cat_measurement_unit.unit_name as Description
+FROM 
+  public.ctrl_reception_headcount,
+  public.ctrl_reception,
+  public.cat_cattle_type,
+  public.cat_measurement_unit
+WHERE
+  ctrl_reception_headcount.weight_uom = cat_measurement_unit.unit_id AND
+  ctrl_reception.reception_id = ctrl_reception_headcount.reception_id AND
+  ctrl_reception.cattle_type = cat_cattle_type.cattype_id 
+
+
+UNION ALL
+
+SELECT 'INSPECTION' as Operation,
+ ctrl_inspection_result.operationdatetime as OperationTime,
+  ctrl_inspection_result.hc as Heads,
+  0 as Weight,
+  cat_inspection_code.inspection_code_description as Description
+FROM
+  public.ctrl_inspection,
+  public.ctrl_inspection_result,
+  public.cat_inspection_code
+WHERE
+  ctrl_inspection.inspection_id = ctrl_inspection_result.inspection_id AND
+  cat_inspection_code.inspection_code_id = ctrl_inspection_result.inspection_code_id
+
+UNION ALL
+
+
+SELECT 'PURCHASE' as Operation,
+  ctrl_purchase.operationdatetime as OperationTime,
+  sum(ctrl_purchase_detail.heads) as Heads,
+  sum(ctrl_purchase_detail.weight) as Weight,
+  '' as Description
+FROM
+  public.ctrl_purchase,
+  public.ctrl_purchase_detail
+WHERE
+  ctrl_purchase.purchase_id = ctrl_purchase_detail.purchase_id
+  GROUP BY operation, ctrl_purchase.operationdatetime
+
+UNION ALL
+
+
+SELECT 'HERMANA' as Operation,
+  ctrl_hermana.de_when as OperationTime, 
+  SUM(ctrl_hermana_corte.heads) as Heads, 
+  sum(ctrl_hermana_corte.weight) as Weight,
+  '' as Description
+FROM 
+  public.ctrl_hermana, 
+  public.ctrl_hermana_corte, 
+  public.cat_cattle_quality
+WHERE 
+  ctrl_hermana_corte.hermana_id = ctrl_hermana.hermana_id AND
+  ctrl_hermana_corte.quality_id = cat_cattle_quality.quality_id
+  GROUP BY
+  ctrl_hermana.de_when
+
+UNION ALL
+
+
+SELECT 'SALE' as Operation,
+  ctrl_sale.operationdatetime as OperationTime,
+ sum(ctrl_sale_detail.heads) as Heads, 
+  sum(ctrl_sale_detail.weight) as Weight,
+   cat_cattle_type.cattype_name as Description 
+ 
+FROM 
+  public.ctrl_sale, 
+  public.ctrl_sale_detail, 
+  public.cat_cattle_type
+WHERE 
+  ctrl_sale.sale_id = ctrl_sale_detail.sale_id AND
+  cat_cattle_type.cattype_id = ctrl_sale.cattype_id
+
+  GROUP BY
+	ctrl_sale.operationdatetime, 
+   cat_cattle_type.cattype_name
+
+UNION ALL
+
+
+SELECT DISTINCT
+'SHIP SCHEDULE' as Operation,
+  ctrl_shipment.date_time_programed as OperationTime, 
+ ctrl_shipment_detail.heads as Heads, 
+  ctrl_shipment_detail.weight as Weight,
+'' as Description
+  
+FROM 
+  public.ctrl_shipment, 
+  public.ctrl_shipment_detail, 
+  public.ctrl_shipment_release
+WHERE 
+  ctrl_shipment.shipment_id = ctrl_shipment_detail.shipment_id AND
+   ctrl_shipment.shipment_id not in (
+
+SELECT ctrl_shipment_release.shipment_id FROM ctrl_shipment_release)
+
+
+UNION ALL
+
+
+SELECT 'SHIP RELEASE' as Operation,
+  ctrl_shipment.date_time_programed as OperationTime,
+ sum(ctrl_shipment_detail.heads) as Heads,
+  sum(ctrl_shipment_detail.weight) as Weight,
+  '' as Description
+FROM 
+  public.ctrl_shipment, 
+  public.ctrl_shipment_detail, 
+  public.ctrl_shipment_release
+WHERE 
+  ctrl_shipment.shipment_id = ctrl_shipment_detail.shipment_id AND
+  ctrl_shipment_release.shipment_id = ctrl_shipment.shipment_id
+GROUP BY ctrl_shipment.date_time_programed
+
+) as todayLog
+
+where OperationTime > current_date - 1
+
+ORDER BY OperationTime;
+
+GRANT ALL ON vw_app_log to sisoprega;
+
+
+
+
+
+
+CREATE OR REPLACE VIEW vw_unpriced AS
+SELECT 	detail.record_id as record_id,
+	seller.seller_id as who_id, 
+	'seller' as who_type, 
+	seller.seller_name as who_name, 
+	quality.quality_name, 
+	cattle.cattype_name, 
+	purchase.purchase_date as operation_date, 
+	array_to_string(array_agg(pens.barnyard_code),',') AS pen, 
+	SUM(detail.heads) as heads, 
+	SUM(detail.weight) as weight
+
+FROM ctrl_purchase purchase
+INNER JOIN cat_seller seller ON purchase.seller_id = seller.seller_id
+INNER JOIN cat_cattle_type cattle ON purchase.cattype_id = cattle.cattype_id
+INNER JOIN ctrl_purchase_detail detail ON purchase.purchase_id = detail.purchase_id
+INNER JOIN cat_barnyard pens ON detail.barnyard_id = pens.barnyard_id
+INNER JOIN cat_cattle_quality quality ON quality.quality_id = detail.quality_id
+GROUP BY detail.record_id, seller.seller_id, seller.seller_name, quality.quality_name, cattle.cattype_name, purchase.purchase_date
+
+UNION ALL
+
+SELECT 	detail.corte as record_id,
+	rancher.rancher_id as who_id, 
+	'rancher' as who_type, 
+	rancher.rancher_name as who_name, 
+	quality.quality_name, 
+	cattle.cattype_name, 
+	date(hermana.de_when) as operation_date,
+	array_to_string(array_agg(pens.barnyard_code),',') AS pen, 
+	SUM(detail.heads) as heads, 
+	SUM(detail.weight) as weight
+
+FROM ctrl_hermana hermana
+INNER JOIN vw_rancher rancher ON rancher.rancher_id = hermana.rancher_id
+INNER JOIN ctrl_hermana_corte detail ON detail.hermana_id = hermana.hermana_id
+INNER JOIN cat_cattle_quality quality ON quality.quality_id = detail.quality_id
+INNER JOIN ctrl_hermana_reception chr ON chr.hermana_id = hermana.hermana_id
+INNER JOIN ctrl_reception reception ON reception.reception_id = chr.reception_id
+INNER JOIN cat_cattle_type cattle ON cattle.cattype_id = reception.cattle_type
+INNER JOIN cat_barnyard pens ON detail.barnyard_id = pens.barnyard_id
+GROUP BY detail.corte, rancher.rancher_id, rancher.rancher_name, quality.quality_name, cattle.cattype_name, hermana.de_when
+
+UNION ALL
+
+SELECT 	detail.record_id as record_id, 
+	customer.customer_id as who_id, 
+	'customer' as who_type, 
+	customer.customer_name as who_name, 
+	quality.quality_name, 
+	cattle.cattype_name, 
+	sale.sale_date as operation_date, 
+	array_to_string(array_agg(pens.barnyard_code),',') AS pen, 
+	SUM(detail.heads) as heads, 
+	SUM(detail.weight) as weight
+
+FROM ctrl_sale sale
+INNER JOIN cat_customer customer ON sale.customer_id = customer.customer_id
+INNER JOIN cat_cattle_type cattle ON sale.cattype_id = cattle.cattype_id
+INNER JOIN ctrl_sale_detail detail ON sale.sale_id = detail.sale_id
+INNER JOIN cat_barnyard pens ON detail.barnyard_id = pens.barnyard_id
+INNER JOIN cat_cattle_quality quality ON quality.quality_id = detail.quality_id
+GROUP BY detail.record_id, customer.customer_id, customer.customer_name, quality.quality_name, cattle.cattype_name, sale.sale_date;
+
+GRANT ALL ON vw_unpriced to sisoprega;

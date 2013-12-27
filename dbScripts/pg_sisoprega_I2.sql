@@ -140,7 +140,8 @@ CREATE TABLE ctrl_purchase(
 	purchase_id    SERIAL PRIMARY KEY,
 	seller_id      integer NOT NULL REFERENCES cat_seller(seller_id),
 	cattype_id     integer NOT NULL REFERENCES cat_cattle_type(cattype_id),
-	purchase_date  DATE not null DEFAULT current_date
+	purchase_date  DATE not null DEFAULT current_date,
+	operationDateTime timestamp without time zone NOT NULL DEFAULT now()
 );
 
 GRANT ALL ON ctrl_purchase TO sisoprega;
@@ -187,7 +188,8 @@ CREATE TABLE ctrl_sale(
 	sale_id        	SERIAL PRIMARY KEY,
 	customer_id     integer NOT NULL REFERENCES cat_customer(customer_id),
 	cattype_id     	integer NOT NULL REFERENCES cat_cattle_type(cattype_id),
-	sale_date  	DATE not null DEFAULT current_date
+	sale_date  	DATE not null DEFAULT current_date,
+	operationDateTime timestamp without time zone NOT NULL DEFAULT now()
 );
 
 GRANT ALL ON ctrl_sale TO sisoprega;
@@ -332,72 +334,3 @@ INNER JOIN cat_cattle_type cattle ON cattle.cattype_id = reception.cattle_type
 INNER JOIN cat_barnyard pens ON detail.barnyard_id = pens.barnyard_id
 GROUP BY rancher.rancher_id, rancher.rancher_name, quality.quality_name, cattle.cattype_name, hermana.de_when;
 GRANT ALL ON vw_purchased to sisoprega;
-
-
-
-
-CREATE OR REPLACE VIEW vw_unpriced AS
-SELECT 	detail.record_id as record_id,
-	seller.seller_id as who_id, 
-	'seller' as who_type, 
-	seller.seller_name as who_name, 
-	quality.quality_name, 
-	cattle.cattype_name, 
-	purchase.purchase_date as operation_date, 
-	array_to_string(array_agg(pens.barnyard_code),',') AS pen, 
-	SUM(detail.heads) as heads, 
-	SUM(detail.weight) as weight
-
-FROM ctrl_purchase purchase
-INNER JOIN cat_seller seller ON purchase.seller_id = seller.seller_id
-INNER JOIN cat_cattle_type cattle ON purchase.cattype_id = cattle.cattype_id
-INNER JOIN ctrl_purchase_detail detail ON purchase.purchase_id = detail.purchase_id
-INNER JOIN cat_barnyard pens ON detail.barnyard_id = pens.barnyard_id
-INNER JOIN cat_cattle_quality quality ON quality.quality_id = detail.quality_id
-GROUP BY detail.record_id, seller.seller_id, seller.seller_name, quality.quality_name, cattle.cattype_name, purchase.purchase_date
-
-UNION ALL
-
-SELECT 	detail.corte as record_id,
-	rancher.rancher_id as who_id, 
-	'rancher' as who_type, 
-	rancher.rancher_name as who_name, 
-	quality.quality_name, 
-	cattle.cattype_name, 
-	date(hermana.de_when) as operation_date,
-	array_to_string(array_agg(pens.barnyard_code),',') AS pen, 
-	SUM(detail.heads) as heads, 
-	SUM(detail.weight) as weight
-
-FROM ctrl_hermana hermana
-INNER JOIN vw_rancher rancher ON rancher.rancher_id = hermana.rancher_id
-INNER JOIN ctrl_hermana_corte detail ON detail.hermana_id = hermana.hermana_id
-INNER JOIN cat_cattle_quality quality ON quality.quality_id = detail.quality_id
-INNER JOIN ctrl_hermana_reception chr ON chr.hermana_id = hermana.hermana_id
-INNER JOIN ctrl_reception reception ON reception.reception_id = chr.reception_id
-INNER JOIN cat_cattle_type cattle ON cattle.cattype_id = reception.cattle_type
-INNER JOIN cat_barnyard pens ON detail.barnyard_id = pens.barnyard_id
-GROUP BY detail.corte, rancher.rancher_id, rancher.rancher_name, quality.quality_name, cattle.cattype_name, hermana.de_when
-
-UNION ALL
-
-SELECT 	detail.record_id as record_id, 
-	customer.customer_id as who_id, 
-	'customer' as who_type, 
-	customer.customer_name as who_name, 
-	quality.quality_name, 
-	cattle.cattype_name, 
-	sale.sale_date as operation_date, 
-	array_to_string(array_agg(pens.barnyard_code),',') AS pen, 
-	SUM(detail.heads) as heads, 
-	SUM(detail.weight) as weight
-
-FROM ctrl_sale sale
-INNER JOIN cat_customer customer ON sale.customer_id = customer.customer_id
-INNER JOIN cat_cattle_type cattle ON sale.cattype_id = cattle.cattype_id
-INNER JOIN ctrl_sale_detail detail ON sale.sale_id = detail.sale_id
-INNER JOIN cat_barnyard pens ON detail.barnyard_id = pens.barnyard_id
-INNER JOIN cat_cattle_quality quality ON quality.quality_id = detail.quality_id
-GROUP BY detail.record_id, customer.customer_id, customer.customer_name, quality.quality_name, cattle.cattype_name, sale.sale_date;
-
-GRANT ALL ON vw_unpriced to sisoprega;

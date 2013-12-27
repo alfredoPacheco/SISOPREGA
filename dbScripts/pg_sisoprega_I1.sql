@@ -450,7 +450,8 @@ CREATE TABLE ctrl_reception_headcount (
   reception_id integer NOT NULL REFERENCES ctrl_reception(reception_id),
   hc integer NOT NULL,
   weight DECIMAL(12,4),
-  weight_uom integer NOT NULL REFERENCES cat_measurement_unit(unit_id)
+  weight_uom integer NOT NULL REFERENCES cat_measurement_unit(unit_id),
+  operationDateTime timestamp without time zone NOT NULL DEFAULT now()
 );
 
 GRANT ALL ON ctrl_reception_headcount TO sisoprega;
@@ -557,7 +558,8 @@ CREATE TABLE ctrl_inspection_result(
 	hc integer NOT NULL,
 	weight decimal(12,4),
 	weight_uom integer NOT NULL REFERENCES cat_measurement_unit(unit_id),
-	note varchar(100)
+	note varchar(100),
+	operationDateTime timestamp without time zone NOT NULL DEFAULT now()
 );
 
 GRANT ALL ON ctrl_inspection_result TO sisoprega;

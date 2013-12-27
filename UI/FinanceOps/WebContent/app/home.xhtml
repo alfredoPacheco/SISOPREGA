@@ -12,10 +12,14 @@
 		<div id="app-log-section" class="section">
 			<div class="section-title">&Theta;&nbsp;App Log</div>
 			<div id="app-log-content">
-				<p:dataList var="log" value="#{appLogBean.itemList}" type="definition">
-					<div class="app-log-item" onclick="#{log.clickAction}">
+				<p:dataList var="log" value="#{appLogBean.OperationsLog}" type="definition">
+				<div class="app-log-item" onclick="#{log.clickAction}">
 						<p:graphicImage value="#{log.iconURL}" alt="#{log.iconURL}" />
-						<b>#{log.title}</b><br/>
+						<b>#{log.operation}</b><br/>
+						#{log.description}
+					</div>
+					<div class="app-log-item">
+						<b>#{log.operation}</b><br/>
 						#{log.description}
 					</div>
 				</p:dataList>
