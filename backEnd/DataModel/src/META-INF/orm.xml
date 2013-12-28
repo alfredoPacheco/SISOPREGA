@@ -1043,7 +1043,7 @@
 				<column name="purchase_price" />
 			</basic>
 			<basic name="cutSeq">
-				<column name="cut_seq"/>
+				<column name="cut_seq" />
 			</basic>
 			<many-to-one name="hermana" fetch="LAZY" optional="false">
 				<join-column name="hermana_id" referenced-column-name="hermana_id"
@@ -1071,7 +1071,7 @@
 				<column name="weight" />
 			</basic>
 			<basic name="cutSeq">
-				<column name="cut_seq"/>
+				<column name="cut_seq" />
 			</basic>
 			<many-to-one name="hermana" fetch="LAZY" optional="false">
 				<join-column name="hermana_id" referenced-column-name="hermana_id"
@@ -1645,17 +1645,17 @@
 			</many-to-one>
 		</attributes>
 	</entity>
-	
-	<entity class="com.tramex.sisoprega.fs.cross.dto.AppLog">
+
+	<entity class="com.tramex.sisoprega.dto.AppLog">
 		<table name="vw_app_log" />
 		<named-query name="TODAY_APP_LOG">
 			<description>Retrieve all today important operations from database.</description>
 			<query>SELECT iAppLog FROM AppLog iAppLog</query>
 		</named-query>
 		<attributes>
-		<id name="id">
-			<generated-value/>
-		</id>
+			<id name="id">
+				<generated-value />
+			</id>
 			<basic name="operation">
 				<column name="Operation" />
 			</basic>
@@ -1674,5 +1674,5 @@
 			</basic>
 		</attributes>
 	</entity>
-	
+
 </entity-mappings>

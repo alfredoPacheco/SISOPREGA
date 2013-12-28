@@ -1,10 +1,10 @@
-package com.tramex.sisoprega.fs.cross.dto;
+package com.tramex.sisoprega.dto;
 
 import java.util.Date;
 
 public class AppLog {
 
-	private int idAppLog;
+	private int id;
 	private String operation;
 	private Date operationTime;
 	private int heads;
@@ -13,11 +13,11 @@ public class AppLog {
 	
 	
 	
-	public int getIdAppLog() {
-		return idAppLog;
+	public int getId() {
+		return id;
 	}
-	public void setIdAppLog(int idAppLog) {
-		this.idAppLog = idAppLog;
+	public void setId(int id) {
+		this.id = id;
 	}
 	public String getOperation() {
 		return operation;

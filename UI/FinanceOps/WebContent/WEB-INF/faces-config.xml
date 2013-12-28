@@ -26,6 +26,18 @@
 		<description>Handles the collected payments for financial services application.</description>
 		<managed-bean-name>collectedBean</managed-bean-name>
 		<managed-bean-class>com.tramex.sisoprega.fs.cross.CollectedBean</managed-bean-class>
-		<managed-bean-scope>request</managed-bean-scope>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<description>Handles the payments operations.</description>
+		<managed-bean-name>paidBean</managed-bean-name>
+		<managed-bean-class>com.tramex.sisoprega.fs.cross.PaidBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<description>Interfaces the operations for assets.</description>
+		<managed-bean-name>assetsBean</managed-bean-name>
+		<managed-bean-class>com.tramex.sisoprega.fs.cross.AssetsBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 </faces-config>

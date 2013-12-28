@@ -1,6 +1,5 @@
 CREATE OR REPLACE VIEW vw_app_log AS
-
-select * from (
+select ROW_NUMBER() over (order by OperationTime) as id, * from (
 SELECT 'RECEPTION' as Operation,
 ctrl_reception_headcount.operationdatetime as OperationTime,
   ctrl_reception_headcount.hc as Heads,
@@ -17,9 +16,7 @@ WHERE
   ctrl_reception.reception_id = ctrl_reception_headcount.reception_id AND
   ctrl_reception.cattle_type = cat_cattle_type.cattype_id 
 
-
 UNION ALL
-
 SELECT 'INSPECTION' as Operation,
  ctrl_inspection_result.operationdatetime as OperationTime,
   ctrl_inspection_result.hc as Heads,
@@ -126,9 +123,7 @@ WHERE
 GROUP BY ctrl_shipment.date_time_programed
 
 ) as todayLog
-
 where OperationTime > current_date - 1
-
 ORDER BY OperationTime;
 
 GRANT ALL ON vw_app_log to sisoprega;
