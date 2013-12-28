@@ -5,8 +5,18 @@ package com.tramex.sisoprega.fs.cross;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.logging.Logger;
 
+import javax.ejb.EJB;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
+
+import com.tramex.sisoprega.datamodel.DataModelException;
+import com.tramex.sisoprega.datamodel.RemoteModelable;
+import com.tramex.sisoprega.fs.cross.dto.AppLog;
 import com.tramex.sisoprega.fs.cross.dto.IconListItem;
 
 /**
@@ -50,4 +60,29 @@ public class AppLogBean implements Serializable {
     return mockArrayList;
   }
 
+  private static Logger log = Logger.getLogger(AppLogBean.class.getName());
+
+  @EJB(lookup = "java:global/DataModel/BaseDataModel")
+  private RemoteModelable dataModel;
+
+  public List<AppLog> getOperationsLog() throws DataModelException {
+    FacesContext context = FacesContext.getCurrentInstance();
+    HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+
+    String loggedinUser = request.getUserPrincipal().getName();
+    log.fine("Loading app log for user [" + loggedinUser + "]");
+
+    Map<String, Object> parameters = new HashMap<String, Object>();
+    
+    //log.fine("Looking for rancher entity");
+    List<AppLog> listAppLog = dataModel.readDataModelList("TODAY_APP_LOG", parameters, AppLog.class);
+    
+    log.fine("[" + listAppLog.size() + "] records retrieved from appLog list"); 
+    
+    
+    return listAppLog;
+    
+}
+  
+  
 }

@@ -1645,4 +1645,34 @@
 			</many-to-one>
 		</attributes>
 	</entity>
+	
+	<entity class="com.tramex.sisoprega.fs.cross.dto.AppLog">
+		<table name="vw_app_log" />
+		<named-query name="TODAY_APP_LOG">
+			<description>Retrieve all today important operations from database.</description>
+			<query>SELECT iAppLog FROM AppLog iAppLog</query>
+		</named-query>
+		<attributes>
+		<id name="id">
+			<generated-value/>
+		</id>
+			<basic name="operation">
+				<column name="Operation" />
+			</basic>
+			<basic name="operationTime">
+				<column name="OperationTime" />
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="heads">
+				<column name="Heads" />
+			</basic>
+			<basic name="weight">
+				<column name="Weight" />
+			</basic>
+			<basic name="description">
+				<column name="Description" />
+			</basic>
+		</attributes>
+	</entity>
+	
 </entity-mappings>
