@@ -43,7 +43,16 @@ public class AppLogBean implements Serializable {
     List<AppLog> appLog = getOperationsLog();
     List<IconListItem> ilis = new ArrayList<IconListItem>();
     for(AppLog aLog : appLog){
-      IconListItem ili = new IconListItem(aLog.getOperation(), aLog.getOperation(), aLog.getDescription(), "javascript(0)");
+      String iconRoot = "";
+      log.info("operation type = " + aLog.getOperation());
+      if(aLog.getOperation().equals("RECEPTION")) iconRoot = "/app/images/appLog/received.jpg";
+      if(aLog.getOperation().equals("INSPECTION")) iconRoot = "/app/images/appLog/inspected.jpg";
+      if(aLog.getOperation().equals("PURCHASE")) iconRoot = "/app/images/appLog/purchased.jpg";
+      if(aLog.getOperation().equals("HERMANA")) iconRoot = "/app/images/appLog/imported.jpg";
+      if(aLog.getOperation().equals("SALE")) iconRoot = "/app/images/appLog/sold.jpg";
+      if(aLog.getOperation().equals("SHIP SCHEDULE")) iconRoot = "/app/images/appLog/other.jpg";
+      if(aLog.getOperation().equals("SHIP RELEASE")) iconRoot = "/app/images/appLog/shipped.jpg";
+      IconListItem ili = new IconListItem(iconRoot, aLog.getOperation(), aLog.getDescription(), "javascript(0)");
       ilis.add(ili);
     }
     return ilis;

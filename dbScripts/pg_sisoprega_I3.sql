@@ -124,7 +124,7 @@ GROUP BY ctrl_shipment.date_time_programed
 
 ) as todayLog
 where OperationTime > current_date - 1
-ORDER BY OperationTime;
+ORDER BY OperationTime DESC;
 
 GRANT ALL ON vw_app_log to sisoprega;
 
