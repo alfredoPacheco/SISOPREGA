@@ -85,10 +85,10 @@
 					Balance: $1,109,288.35</font>
 				</div>
 			</div>
-			<div class="section-title">&Theta;&nbsp;Assets</div>
+			<div class="section-title">&Theta;&nbsp;Unpriced Items</div>
 			<div id="assets-section" class="section">
 				<div id="assets-content">
-					<p:dataList var="item" value="#{assetsBean.itemList}"
+					<p:dataList var="item" value="#{unpricedBean.itemList}"
 						type="definition">
 						<div class="assets-item" onclick="#{item.clickAction}">
 							<p:graphicImage value="#{item.iconURL}" alt="#{item.iconURL}" />

@@ -4,14 +4,19 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core">
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
 
 <ui:composition template="template.xhtml">
 	<ui:define name="content">
-	    HELLO FROM CALENDAR.<br/>
-	    <h:link outcome="home.xhtml">GO home</h:link>
-	    <!-- SHOW: CALENDAR, TO PAY, TO COLLECT, COLLECTED, PAID -->
+		<h:form id="calForm">
+			<p:calendar value="#{dateBean.calendarDate}" mode="inline" id="calOne" />
+		</h:form>
+
+		<br />HELLO FROM CALENDAR.<br />
+		<h:link outcome="home.xhtml">GO home</h:link>
+		<!-- SHOW: CALENDAR, TO PAY, TO COLLECT, COLLECTED, PAID -->
 	</ui:define>
-	
+
 </ui:composition>
 </html>
