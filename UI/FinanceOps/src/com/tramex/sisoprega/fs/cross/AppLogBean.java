@@ -4,6 +4,7 @@
 package com.tramex.sisoprega.fs.cross;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -43,16 +44,19 @@ public class AppLogBean implements Serializable {
     List<AppLog> appLog = getOperationsLog();
     List<IconListItem> ilis = new ArrayList<IconListItem>();
     for(AppLog aLog : appLog){
-      String iconRoot = "";
+      String sIconRoot = "";
+      String sDescription = "";
       log.info("operation type = " + aLog.getOperation());
-      if(aLog.getOperation().equals("RECEPTION")) iconRoot = "/app/images/appLog/received.jpg";
-      if(aLog.getOperation().equals("INSPECTION")) iconRoot = "/app/images/appLog/inspected.jpg";
-      if(aLog.getOperation().equals("PURCHASE")) iconRoot = "/app/images/appLog/purchased.jpg";
-      if(aLog.getOperation().equals("HERMANA")) iconRoot = "/app/images/appLog/imported.jpg";
-      if(aLog.getOperation().equals("SALE")) iconRoot = "/app/images/appLog/sold.jpg";
-      if(aLog.getOperation().equals("SHIP SCHEDULE")) iconRoot = "/app/images/appLog/other.jpg";
-      if(aLog.getOperation().equals("SHIP RELEASE")) iconRoot = "/app/images/appLog/shipped.jpg";
-      IconListItem ili = new IconListItem(iconRoot, aLog.getOperation(), aLog.getDescription(), "javascript(0)");
+      if(aLog.getOperation().equals("RECEPTION")) sIconRoot = "/app/images/appLog/received.jpg";
+      if(aLog.getOperation().equals("INSPECTION")) sIconRoot = "/app/images/appLog/inspected.jpg";
+      if(aLog.getOperation().equals("PURCHASE")) sIconRoot = "/app/images/appLog/purchased.jpg";
+      if(aLog.getOperation().equals("HERMANA")) sIconRoot = "/app/images/appLog/imported.jpg";
+      if(aLog.getOperation().equals("SALE")) sIconRoot = "/app/images/appLog/sold.jpg";
+      if(aLog.getOperation().equals("SHIP SCHEDULE")) sIconRoot = "/app/images/appLog/other.jpg";
+      if(aLog.getOperation().equals("SHIP RELEASE")) sIconRoot = "/app/images/appLog/shipped.jpg";
+      
+      sDescription =  new SimpleDateFormat("MMM dd HH:mm").format(aLog.getOperationTime()) + "<br />Heads: " + aLog.getHeads() + "<br />Weight: " + aLog.getWeight() + "<br />" + aLog.getDescription(); 
+      IconListItem ili = new IconListItem(sIconRoot, aLog.getOperation(), sDescription, "javascript(0)");
       ilis.add(ili);
     }
     return ilis;

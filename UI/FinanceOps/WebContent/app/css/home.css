@@ -1,24 +1,24 @@
 #app-log-section {
 	height: 600px;
 	border: thin solid black;
-	overflow: auto;
+	overflow-y: overlay;
 	float: left;
 	margin-right:5px;
 }
 
 #payable-section {
-	height:200px;
+	height:195px;
 	border:thin solid black;
 	display: inline-block;
-	margin-left:2px;
 	overflow: hidden;
 }
 
 #receivable-section {
-	height:200px;
+	height:195px;
 	border:thin solid black;
 	display: inline-block;
 	overflow: hidden;
+	
 }
 
 #business-banner {
