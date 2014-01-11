@@ -1,0 +1,18 @@
+.container {
+	height: 600px;
+	border: thin solid black;
+	overflow: hidden;
+	display: inline-block;
+	margin-right:2px;
+} 
+#balance-section{
+	width:256px;
+	height: 296px;
+	overflow: auto;
+	margin-bottom: 2px;
+}
+
+.balance-summary {
+	margin-bottom:5px;
+	border-bottom: thin dashed gray;
+}

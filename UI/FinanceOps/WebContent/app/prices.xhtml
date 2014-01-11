@@ -4,21 +4,67 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core">
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
 
 <ui:composition template="template.xhtml">
-	
 	<ui:define name="content">
-	    HELLO FROM PRICES.<br/>
-	    <h:link outcome="home.xhtml">GO home</h:link>
-	    <!-- SHOW: UNPRICED ITEMS, BALANCE, DOLLAR CHANGE AND APP LOG -->
-	    <!-- TO INCLUDE IN UNPRICED ITEMS:
+		<link href="css/prices.css" rel="stylesheet" type="text/css" />
+		<div id="left-panel" class="container">
+			<div class="section-title">&Theta;&nbsp;Unpriced Items</div>
+			<div id="assets-section" class="section">
+				<div id="assets-content">
+					<p:dataList var="item" value="#{unpricedBean.itemList}"
+						type="definition">
+						<div class="assets-item" onclick="#{item.clickAction}">
+							<p:graphicImage value="#{item.iconURL}" alt="#{item.iconURL}" />
+							<b>#{item.title}</b><br /> #{item.description}
+						</div>
+					</p:dataList>
+				</div>
+			</div>
+		</div>
+		<div id="mid-panel" class="container">
+			<div class="section-title">&Theta;&nbsp;Balance</div>
+			<div class="balance-summary section">
+				<img src="images/balance/week.png" alt="week balance" /> <font
+					class="primary"> From: Dec 8 2013<br /> To: Dec 14 2013<br />
+					Forecast: $44,580.35<br /> Balance: $15,350.43
+				</font>
+			</div>
+			<div class="balance-summary section">
+				<img src="images/balance/month.png" alt="mtd balance" /> <font
+					class="primary"> From: Dec 1 2013<br /> To: Dec 31 2013<br />
+					Forecast: $135,350.00<br /> Balance: $25,358.25
+				</font>
+			</div>
+			<div class="balance-summary section">
+				<img src="images/balance/year.png" alt="ytd balance" /> <font
+					class="primary"> From: Jan 1 2013<br /> To: Dec 31 2013<br />
+					Forecast: $1,458,344.85<br /> Balance: $1,109,288.35
+				</font>
+			</div>
+		</div>
+		<div id="right-panel" class="container">
+			<div class="section-title">&Theta;&nbsp;Application Log</div>
+			<div id="app-log-content">
+				<p:dataList var="log" value="#{appLogBean.itemList}" type="definition">
+				<div class="app-log-item" onclick="#{log.clickAction}">
+						<p:graphicImage value="#{log.iconURL}" alt="#{log.iconURL}" />
+						<b>#{log.title}</b><br/>
+						#{log.description}
+					</div>
+				</p:dataList>
+			</div>
+		</div>
+		<!-- SHOW: UNPRICED ITEMS, BALANCE, DOLLAR CHANGE AND APP LOG -->
+		<!-- TO INCLUDE IN UNPRICED ITEMS:
 	    * IMPORTED
 	    * PURCHASED
 	    * SOLD
 	    * OTHER SALES - LIKE WHEN SELLING A COMPUTER OR A DESK FROM OFFICE	    
 	     -->
-	    <!-- TO INCLUDE IN APP LOG:
+		<!-- TO INCLUDE IN APP LOG:
 		* RECEIVED CATTLE @ SAN JERONIMO
 		* INSPECTED CATTLE
 		* IMPORTED CATTLE
@@ -29,6 +75,6 @@
 		* COLLECTED ITEMS - FROM CUSTOMERS/STORES
 		 -->
 	</ui:define>
-	
+
 </ui:composition>
 </html>
