@@ -40,10 +40,6 @@
 	<!-- FXEXCHANGERATE.COM  EXCHANGE RATE CONVERTER END -->
 	<div class="black_belt" />
 	<div id="header">
-		<div>
-			<img src="/app/images/eastmann_black.png" alt="" />
-			<span>EASTMANN LIVESTOCK, LLC</span> 
-		</div>
 		<div class="drop-menu" style="float: right;">
 			<span style="line-height: 28px; font-size: 18px; font-weight: bold;">#{request.remoteUser}</span>
 			<span class="plus"><img src="images/down-arrow-circle-th.png"
@@ -57,6 +53,12 @@
 				</ul>
 			</h:form>
 		</div>
+		<div style="position:relative;">
+		<h:graphicImage value="/app/images/eastmann_black.png" width="177" height="119" style="position: absolute ;top: 14px;left: 20px;" />
+			
+			<div style="-webkit-box-reflect: below -12px -webkit-gradient(linear, center top, center bottom, from(transparent), to(rgba(250, 250, 250, .3)));position: absolute;left: 210px;top: 58px;font-size: 23px;">EASTMANN LIVESTOCK, LLC</div> 
+		</div>
+		
 	</div>
 	<div id="app-menu">
 		<h:link outcome="home.xhtml" id="home_menu_item">Home</h:link>
