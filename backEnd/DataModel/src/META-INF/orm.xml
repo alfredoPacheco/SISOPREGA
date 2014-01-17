@@ -1674,5 +1674,48 @@
 			</basic>
 		</attributes>
 	</entity>
+	<entity class="com.tramex.sisoprega.dto.Unpriced">
+		<table name="vw_unpriced2" />
+		<named-query name="UNPRICED">
+			<description>Retrieve all unpriced operations from tables Sales, Purchase and HermanaCorteExportador.</description>
+			<query>SELECT iUnpriced FROM Unpriced iUnpriced</query>
+		</named-query>
+		<attributes>
+			<id name="id">
+				<generated-value />
+			</id>
+			<basic name="recordId">
+				<column name="recordid" />
+			</basic>
+			<basic name="operation">
+				<column name="operation" />
+			</basic>
+			<basic name="operationTime">
+				<column name="operationtime" />
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="cattleTypeId">
+				<column name="cattletypeid" />
+			</basic>
+			<basic name="cattleTypeName">
+				<column name="cattlename" />
+			</basic>
+			<basic name="qualityId">
+				<column name="qualityid" />
+			</basic>
+			<basic name="qualityName">
+				<column name="qualityname" />
+			</basic>
+			<basic name="heads">
+				<column name="heads" />
+			</basic>
+			<basic name="weight">
+				<column name="weight" />
+			</basic>
+			<basic name="price">
+				<column name="price" />
+			</basic>
+		</attributes>
+	</entity>
 
 </entity-mappings>
