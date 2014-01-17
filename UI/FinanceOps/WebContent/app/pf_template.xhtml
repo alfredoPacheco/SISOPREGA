@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3c.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title>SISOPREGA - FINANCIAL SERVICES</title>
+	<link href="css/pf_fs.css" rel="stylesheet" type="text/css" />
+
+</h:head>
+
+<h:body>
+	<p:layout fullPage="true">
+		<p:layoutUnit position="north" size="115">
+			<div style="position: relative;">
+				<h:graphicImage value="/app/images/eastmann_black.png" height="100"
+					style="position: absolute ;left: 20px;" />
+
+				<div
+					style="-webkit-box-reflect: below -12px -webkit-gradient(linear, center top, center bottom, from(transparent), to(rgba(250, 250, 250, .3) ) ); position: absolute; left: 175px; top: 40px; font-size: 23px;">EASTMANN
+					LIVESTOCK, LLC</div>
+			</div>
+		</p:layoutUnit>
+		<p:layoutUnit position="south" size="40">
+			<div id="footer">
+				<div class="black_belt">
+					<h:outputText
+						value="CopyRight 2013 &#169; Eastmann
+					Livestock LLC. All rights reserved. | Powered by InspiraCode |." />
+				</div>
+			</div>
+		</p:layoutUnit>
+		<p:layoutUnit position="west" size="300">
+			<h:outputText value="Left content" />
+		</p:layoutUnit>
+		<p:layoutUnit position="east" size="200" collapsible="true" collapsed="true">
+			<h:outputText value="Right Content" />
+		</p:layoutUnit>
+		<p:layoutUnit position="center">
+			<h:outputText value="Center Content" />
+		</p:layoutUnit>
+	</p:layout>
+</h:body>
+
+</html>

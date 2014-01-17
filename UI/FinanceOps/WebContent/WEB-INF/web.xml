@@ -25,6 +25,10 @@
 		<param-name>javax.servlet.jsp.jstl.fmt.localizationContext</param-name>
 		<param-value>resources.application</param-value>
 	</context-param>
+	<context-param>
+		<param-name>primefaces.THEME</param-name>
+		<param-value>afterdark</param-value>
+	</context-param>
 	<listener>
 		<listener-class>com.sun.faces.config.ConfigureListener</listener-class>
 	</listener>
@@ -36,7 +40,7 @@
 		<servlet-name>Faces Servlet</servlet-name>
 		<url-pattern>*.faces</url-pattern>
 	</servlet-mapping>
-	
+
 	<login-config>
 		<auth-method>FORM</auth-method>
 		<realm-name>security</realm-name>
@@ -56,5 +60,5 @@
 			<role-name>accountant</role-name>
 		</auth-constraint>
 	</security-constraint>
-	
+
 </web-app>

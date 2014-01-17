@@ -208,7 +208,7 @@ GRANT ALL ON vw_unpriced to sisoprega;
 
 
 CREATE OR REPLACE VIEW vw_unpriced2 AS
-select ROW_NUMBER() over (order by OperationTime) as row_number, * from (
+select ROW_NUMBER() over (order by OperationTime) as Id, * from (
 SELECT 
   ctrl_purchase.purchase_id as RecordId,
   'PURCHASE' as Operation,	
