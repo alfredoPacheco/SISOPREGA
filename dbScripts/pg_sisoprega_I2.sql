@@ -118,7 +118,10 @@ CREATE TABLE ctrl_hermana_corte(
 	quality_id  integer NOT NULL REFERENCES cat_cattle_quality(quality_id),
 	heads       integer not null,
 	weight      decimal(12,4) not null,
-	cut_seq     integer NOT NULL
+	cut_seq     integer NOT NULL,
+	paid_date	DATE,
+	paid_amount	decimal(12,2) NOT NULL
+	
 );
 
 GRANT ALL ON ctrl_hermana_corte TO sisoprega;
@@ -155,7 +158,9 @@ CREATE TABLE ctrl_purchase_detail(
 	quality_id   integer NOT NULL REFERENCES cat_cattle_quality(quality_id),
 	heads        integer not null,
 	weight       decimal(12,4) not null,
-	purchase_price  decimal(10,2) NOT NULL DEFAULT 0.0
+	purchase_price  decimal(10,2) NOT NULL DEFAULT 0.0,
+	paid_date	DATE,
+	paid_amount	decimal(12,2) NOT NULL
 );
 
 GRANT ALL ON ctrl_purchase_detail TO sisoprega;
@@ -267,7 +272,10 @@ CREATE TABLE ctrl_shipment_release (
 	date_time    		timestamp without time zone NOT NULL DEFAULT now(),
 	carrier_id   		integer REFERENCES cat_carrier(carrier_id),
 	driver			VARCHAR(80),
-	plates			VARCHAR(20)
+	plates			VARCHAR(20),
+	paid_date		DATE,
+	paid_amount		decimal(12,2) NOT NULL
+	
 );
 
 GRANT ALL ON ctrl_shipment_release TO sisoprega;

@@ -1717,5 +1717,38 @@
 			</basic>
 		</attributes>
 	</entity>
-
+	<entity class="com.tramex.sisoprega.dto.Paid">
+		<table name="vw_paid" />
+		<named-query name="PAID">
+			<description>Retrieve all payments from tables ctrl_hermana_corte, ctrl_paid and ctrl_shipping_release.</description>
+			<query>SELECT iPaid FROM Paid iPaid</query>
+		</named-query>
+		<attributes>
+			<id name="id">
+				<generated-value />
+			</id>
+			<basic name="paymentClass">
+				<column name="payment_class" />
+			</basic>
+			<basic name="recordId">
+				<column name="record_id" />
+			</basic>
+			<basic name="paymentDate">
+				<column name="payment_date" />
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="amount">
+				<column name="amount" />
+			</basic>
+			<basic name="concept">
+				<column name="concept_name" />
+			</basic>
+			<basic name="description">
+				<column name="description" />
+			</basic>
+			<basic name="creditor">
+				<column name="creditor" />
+			</basic>
+		</attributes>
+	</entity>
 </entity-mappings>

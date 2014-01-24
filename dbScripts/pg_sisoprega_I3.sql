@@ -306,3 +306,104 @@ ORDER BY OperationTime ASC;
   
 
 GRANT ALL ON vw_unpriced2 to sisoprega;
+
+
+DROP TABLE IF EXISTS cat_payment_concept CASCADE;
+CREATE TABLE cat_payment_concept(
+	concept_id      	SERIAL PRIMARY KEY,
+	concept_name    	VARCHAR(80) UNIQUE NOT NULL,
+	concept_description	VARCHAR(150),
+	creditor_name		VARCHAR(250)
+);
+
+GRANT ALL ON cat_payment_concept TO sisoprega;
+GRANT ALL ON cat_payment_concept_concept_id_seq TO sisoprega;
+
+DROP TABLE IF EXISTS ctrl_paid CASCADE;
+CREATE TABLE ctrl_paid(
+	paid_id			SERIAL PRIMARY KEY,
+	paid_date		DATE not null DEFAULT current_date,
+	amount			decimal(12,2) NOT NULL,
+	concept_id		integer NOT NULL REFERENCES cat_payment_concept(concept_id)
+);
+
+GRANT ALL ON ctrl_paid TO sisoprega;
+GRANT ALL ON ctrl_paid_paid_id_seq TO sisoprega;
+
+
+
+
+
+
+CREATE OR REPLACE VIEW vw_paid AS
+select ROW_NUMBER() over (order by payment_date) as Id, * from (
+SELECT 'OTHER' as payment_class,
+  ctrl_paid.paid_id as record_id,
+  ctrl_paid.paid_date as payment_date, 
+  ctrl_paid.amount as amount,
+  cat_payment_concept.concept_name, 
+  cat_payment_concept.concept_description as description, 
+  cat_payment_concept.creditor_name as creditor
+FROM 
+  cat_payment_concept 
+  INNER JOIN ctrl_paid ON ctrl_paid.concept_id =cat_payment_concept.concept_id
+
+UNION ALL
+
+SELECT 'SHIPMENT' as payment_class,
+  ctrl_shipment_release.shipment_id as record_id,
+  ctrl_shipment_release.paid_date as payment_date, 
+  ctrl_shipment_release.paid_amount as amount, 
+  'Shipment' as concept_name,
+  ctrl_shipment_detail.heads || ' ' || 
+  cat_cattle_quality.quality_name || ' ' ||
+  cat_customer.customer_name as description,
+  cat_carrier.carrier_name as creditor
+FROM 
+  ctrl_shipment_release
+  INNER JOIN ctrl_shipment ON ctrl_shipment_release.shipment_id = ctrl_shipment.shipment_id
+  INNER JOIN ctrl_shipment_detail ON ctrl_shipment_detail.shipment_id = ctrl_shipment.shipment_id
+  INNER JOIN cat_cattle_quality ON cat_cattle_quality.quality_id = ctrl_shipment.quality_id
+  INNER JOIN cat_carrier ON cat_carrier.carrier_id = ctrl_shipment_release.carrier_id
+  INNER JOIN cat_customer ON cat_customer.customer_id = ctrl_shipment.customer_id
+
+UNION ALL
+
+SELECT 'IMPORTATION' as payment_class,
+  ctrl_hermana_corte.hermana_id as record_id,
+  ctrl_hermana_corte.paid_date as payment_date, 
+  ctrl_hermana_corte.paid_amount as amount, 
+  'Importation' as concept_name,
+  vw_rancher.rancher_name || ' ' || 
+  ctrl_hermana_corte.heads || ' ' || 
+  ctrl_hermana_corte.weight || ' ' || 
+  cat_cattle_quality.quality_name as description,
+  '' as creditor
+FROM 
+  ctrl_hermana_corte
+  INNER JOIN ctrl_hermana ON ctrl_hermana_corte.hermana_id = ctrl_hermana.hermana_id
+  INNER JOIN vw_rancher ON ctrl_hermana.rancher_id = vw_rancher.rancher_id
+  INNER JOIN cat_cattle_quality ON cat_cattle_quality.quality_id = ctrl_hermana_corte.quality_id
+
+UNION ALL
+
+SELECT 'PURCHASE' as payment_class,
+  ctrl_purchase_detail.record_id as record_id, 
+  ctrl_purchase_detail.paid_date as payment_date, 
+  ctrl_purchase_detail.paid_amount as amount, 
+  'PURCHASE' as concept_name,
+  ctrl_purchase_detail.heads || ' ' ||
+  ctrl_purchase_detail.weight || ' ' ||
+  cat_cattle_quality.quality_name as description, 
+  cat_seller.seller_name as creditor
+FROM 
+  ctrl_purchase_detail
+  INNER JOIN ctrl_purchase ON ctrl_purchase.purchase_id = ctrl_purchase_detail.purchase_id
+  INNER JOIN cat_seller ON cat_seller.seller_id = ctrl_purchase.seller_id
+  INNER JOIN cat_cattle_quality ON cat_cattle_quality.quality_id = ctrl_purchase_detail.quality_id
+
+
+) as paid
+ORDER BY payment_date ASC;
+
+GRANT ALL ON vw_paid to sisoprega;
