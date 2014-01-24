@@ -1,16 +1,127 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3c.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
 <h:head>
 	<title>SISOPREGA - FINANCIAL SERVICES</title>
-	<link href="css/pf_fs.css" rel="stylesheet" type="text/css" />
 
+	<script>
+	(function($) {
+	  $.fn.extend(
+	  {
+		tagdrop : function(options) {
+		  var defaults =
+		  {
+			tagPaddingTop : '90px',
+			tagDefaultPaddingTop : '30px',
+			bgColor : '#B1CCED',
+			bgMoverColor : '#7FB0F0',
+			textColor : '#e0e0e0',
+			textDefaultColor : '#fff'
+		  };
+		  var options = $.extend(defaults, options);
+
+		  return this.each(function() {
+			var obj = $(this);
+			var li_items = $("li", obj);
+			$("li", obj).css('background-color', options.bgColor);
+
+			li_items.mouseover(function() {
+			  $(this).animate(
+			  {
+				paddingTop : options.tagPaddingTop
+			  }, 300);
+			  $(this).css('background-color', options.bgMoverColor);
+			  $(this).css('color', options.textColor);
+			}).mouseout(
+				function() {
+				  $(this).animate(
+				  {
+					paddingTop : options.tagDefaultPaddingTop
+				  }, 500);
+				  $("li", $(this).parent()).css('background-color',
+					  options.bgColor);
+				  $("li", $(this).parent()).css('color',
+					  options.textDefaultColor);
+				});
+		  });
+		}
+	  });
+	})(jQuery);
+  </script>
+	<script type="text/javascript">
+	$(document).ready(function() {
+	  $('.menu').tagdrop(
+	  {
+		tagPaddingTop : '40px',
+		bgColor : 'rgb(1, 1, 1);',
+		bgMoverColor : 'rgb(78, 19, 19);',
+		textColor : '#e0e0e0'
+	  });
+	});
+  </script>
+	<style>
+body {
+	margin: 0;
+	padding: 0;
+}
+
+#nav li {
+	margin: 0;
+	padding: 0;
+	display: inline;
+	list-style-type: none;
+	font-size: 12px;
+}
+
+#nav a:link,#nav a:visited {
+	
+}
+
+#nav a:hover {
+	color: #fff;
+	background: #FF6A00;
+}
+
+#nav a:visited.active,#nav a:link.active {
+	background-color: #fff;
+	color: #FF6A00;
+}
+
+.menu {
+	list-style: none;
+	margin: 0;
+	float: right;
+}
+
+.menu li {
+	float: left;
+	margin: 0 auto;
+	cursor: pointer;
+	height: 30px;
+	padding: 30px 5px 5px 5px;
+	margin: 0px 3px 0px 3px;
+	-moz-border-radius: 0px 0px 10px 10px;
+	-webkit-border-radius: 0px 0px 10px 10px;
+	-moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+	-webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+	color: #FFF;
+	text-shadow: 0 -1px 1px rgba(0, 0, 0, 0.25);
+	font-family: "Lucida Grande", Lucida, Verdana, sans-serif;
+	font-size: 13px;
+	font-weight: bold;
+	text-transform: uppercase;
+}
+</style>
+
+	<link href="css/pf_fs.css" rel="stylesheet" type="text/css" />
 </h:head>
 
 <h:body>
 	<p:layout fullPage="true">
-		<p:layoutUnit position="north" size="115">
+		<p:layoutUnit position="north" size="130">
 			<div style="position: relative;">
 				<h:graphicImage value="/app/images/eastmann_black.png" height="100"
 					style="position: absolute ;left: 20px;" />
@@ -19,24 +130,70 @@
 					style="-webkit-box-reflect: below -12px -webkit-gradient(linear, center top, center bottom, from(transparent), to(rgba(250, 250, 250, .3) ) ); position: absolute; left: 175px; top: 40px; font-size: 23px;">EASTMANN
 					LIVESTOCK, LLC</div>
 			</div>
+
+
+
+			<ul class="menu">
+				<li>Home</li>
+				<li>Balance</li>
+				<li>Prices</li>
+				<li>Calendar</li>
+				<li>Payments</li>
+				<li>Collections</li>
+			</ul>
+
+
+
+			<h:form>
+				<div class="drop-menu"
+					style="position: fixed; top: 90px; right: 5px;">
+					<span
+						style="line-height: 28px; font-size: 18px; font-weight: bold;">#{request.remoteUser}</span>
+					<span class="plus"> <h:graphicImage id="btnUser"
+							library="images" name="down-arrow-circle-th.png"
+							style="top:20px;height:28px;">
+						</h:graphicImage>
+					</span>
+					<p:menu overlay="true" trigger="btnUser" my="left top"
+						at="left bottom">
+						<p:menuitem value="Change Password" url="#" icon="ui-icon-disk"
+							ajax="false" />
+						<p:menuitem value="Logout" url="#" icon="ui-icon-arrowrefresh-1-w"
+							ajax="false" />
+					</p:menu>
+				</div>
+			</h:form>
+
+
 		</p:layoutUnit>
-		<p:layoutUnit position="south" size="40">
-			<div id="footer">
-				<div class="black_belt">
+		<p:layoutUnit position="south" size="30">
+			<div id="footer"
+				style="position: fixed; bottom: 0; height: 30px; background-color: black; vertical-align: middle; left: -5px; right: -5px;">
+				<div class="black_belt"
+					style="text-align: center; top: 5px; position: relative;">
 					<h:outputText
 						value="CopyRight 2013 &#169; Eastmann
-					Livestock LLC. All rights reserved. | Powered by InspiraCode |." />
+					Livestock LLC. All rights reserved. | Powered by InspiraCode." />
 				</div>
 			</div>
 		</p:layoutUnit>
 		<p:layoutUnit position="west" size="300">
-			<h:outputText value="Left content" />
+
+
 		</p:layoutUnit>
-		<p:layoutUnit position="east" size="200" collapsible="true" collapsed="true">
-			<h:outputText value="Right Content" />
+		<p:layoutUnit position="east" size="200" collapsible="true" header="App log"
+			collapsed="true">
+				<ui:include src="appLog.xhtml" />
+			
 		</p:layoutUnit>
 		<p:layoutUnit position="center">
-			<h:outputText value="Center Content" />
+			<ui:insert name="content">
+    	Content area.  See comments below this line in the source.
+    	<!--  include your content file or uncomment the include below and create content.xhtml in this directory -->
+				<!-- <div> -->
+				<!-- <ui:include src="content.xhtml"/> -->
+				<!-- </div> -->
+			</ui:insert>
 		</p:layoutUnit>
 	</p:layout>
 </h:body>
