@@ -407,3 +407,73 @@ FROM
 ORDER BY payment_date ASC;
 
 GRANT ALL ON vw_paid to sisoprega;
+
+
+
+DROP TABLE IF EXISTS ctrl_folio CASCADE;
+CREATE TABLE ctrl_folio(
+	folio_id	      	SERIAL PRIMARY KEY,
+	folio			SERIAL
+);
+
+GRANT ALL ON ctrl_folio TO sisoprega;
+GRANT ALL ON ctrl_folio_folio_id_seq TO sisoprega;
+GRANT ALL ON ctrl_folio_folio_seq TO sisoprega;
+
+DROP TABLE IF EXISTS ctrl_collected CASCADE;
+CREATE TABLE ctrl_collected (
+	collected_id		SERIAL PRIMARY KEY,
+	folio_id		integer NOT NULL REFERENCES ctrl_folio(folio_id),		
+	collected_date		DATE not null DEFAULT current_date,
+	amount			decimal(12,2) NOT NULL,
+	description		VARCHAR(150),
+	customer_id		integer NOT NULL REFERENCES cat_customer(customer_id)
+);
+
+GRANT ALL ON ctrl_collected TO sisoprega;
+GRANT ALL ON ctrl_collected_collected_id_seq TO sisoprega;
+
+
+
+CREATE OR REPLACE VIEW vw_collected AS
+select ROW_NUMBER() over (order by folio) as Id, * from (
+SELECT 
+  'CATTLE SOLD' as sale_class,
+  ctrl_sale_detail.record_id, 
+  ctrl_folio.folio, 
+  ctrl_sale_detail.collected_date, 
+  cat_customer.customer_name as customer,
+  ctrl_sale_detail.heads || ' ' ||
+  cat_cattle_quality.quality_name as description, 
+  ctrl_sale_detail.collected_amount as amount
+FROM 
+  cat_customer
+  INNER JOIN ctrl_sale ON ctrl_sale.customer_id = cat_customer.customer_id
+  INNER JOIN ctrl_sale_detail ON ctrl_sale_detail.sale_id = ctrl_sale.sale_id
+  INNER JOIN cat_cattle_quality ON cat_cattle_quality.quality_id = ctrl_sale_detail.quality_id
+  INNER JOIN ctrl_folio ON ctrl_folio.folio_id = ctrl_sale_detail.folio_id
+
+
+UNION ALL
+
+
+SELECT 
+  'OTHER SOLD' as sale_class,
+  ctrl_collected.collected_id as record_id, 
+  ctrl_folio.folio, 
+  ctrl_collected.collected_date, 
+  cat_customer.customer_name as customer,
+  ctrl_collected.description, 
+  ctrl_collected.amount
+  
+FROM 
+  cat_customer
+  INNER JOIN  ctrl_collected ON ctrl_collected.customer_id = cat_customer.customer_id
+  INNER JOIN ctrl_folio ON ctrl_folio.folio_id = ctrl_collected.folio_id 
+ ) as collected
+ORDER BY folio ASC;
+
+
+GRANT ALL ON vw_collected to sisoprega;
+
+

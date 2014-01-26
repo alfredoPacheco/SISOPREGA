@@ -1751,4 +1751,40 @@
 			</basic>
 		</attributes>
 	</entity>
+	
+	
+	<entity class="com.tramex.sisoprega.dto.Collected">
+		<table name="vw_collected" />
+		<named-query name="COLLECTED">
+			<description>Retrieve all collected operations.</description>
+			<query>SELECT iCollected FROM Collected iCollected</query>
+		</named-query>
+		<attributes>
+			<id name="id">
+				<generated-value />
+			</id>
+			<basic name="recordId">
+				<column name="record_id" />
+			</basic>
+			<basic name="saleClass">
+				<column name="sale_class" />
+			</basic>
+			<basic name="collectedDate">
+				<column name="collected_date" />
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="folio">
+				<column name="folio" />
+			</basic>
+			<basic name="amount">
+				<column name="amount" />
+			</basic>
+			<basic name="description">
+				<column name="description" />
+			</basic>
+			<basic name="customer">
+				<column name="customer" />
+			</basic>
+		</attributes>
+	</entity>
 </entity-mappings>
