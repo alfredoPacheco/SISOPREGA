@@ -39,6 +39,10 @@ import com.tramex.sisoprega.fs.cross.dto.IconListItem;
 public class PaidBean implements Serializable {
   private static final long serialVersionUID = -5421725073091018628L;
 
+  private static Logger log = Logger.getLogger(AppLogBean.class.getName());
+
+  @EJB(lookup = "java:global/DataModel/BaseDataModel")
+  private RemoteModelable dataModel;
 //  private static final IconListItem[] mockData = {
 //      new IconListItem("images/payments/freight.png", "$750.00 sipping cattle to Hasco",
 //          "By Moving-U @ 12/8/2013 | 105 steers | plates MVU-1234", "javascript(0);"),
@@ -85,16 +89,11 @@ public List<IconListItem> getItemList() throws DataModelException {
     return ilis;
   }
 
-  private static Logger log = Logger.getLogger(AppLogBean.class.getName());
-
-  @EJB(lookup = "java:global/DataModel/BaseDataModel")
-  private RemoteModelable dataModel;
-
   public List<Paid> getOperationsLog() throws DataModelException {
     Map<String, Object> parameters = new HashMap<String, Object>();
     List<Paid> listPaid = dataModel.readDataModelList("PAID", parameters, Paid.class);
 
-    log.fine("[" + listPaid.size() + "] records retrieved from appLog list");
+    log.fine("[" + listPaid.size() + "] records retrieved from Paid list");
     return listPaid;
   }
 
