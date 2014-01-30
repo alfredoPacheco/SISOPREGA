@@ -114,6 +114,9 @@ body {
 	font-weight: bold;
 	text-transform: uppercase;
 }
+.ui-widget-header {
+background-color: rgb(78,19,19);
+}
 </style>
 
 	<link href="css/pf_fs.css" rel="stylesheet" type="text/css" />
@@ -131,18 +134,14 @@ body {
 					LIVESTOCK, LLC</div>
 			</div>
 
-
-
 			<ul class="menu">
-				<li>Home</li>
-				<li>Balance</li>
-				<li>Prices</li>
-				<li>Calendar</li>
-				<li>Payments</li>
-				<li>Collections</li>
+				<li onclick="window.location = 'pf_home.xhtml';">Home</li>
+				<li onclick="window.location = 'pf_balance.xhtml';">Balance</li>
+				<li onclick="window.location = 'pf_prices.xhtml';">Prices</li>
+				<li onclick="window.location = 'pf_calendar.xhtml';">Calendar</li>
+				<!-- <li onclick="window.location = 'pf_home.xhtml';">Payments</li>
+				<li onclick="window.location = 'pf_home.xhtml';">Collections</li> -->
 			</ul>
-
-
 
 			<h:form>
 				<div class="drop-menu"
@@ -177,18 +176,12 @@ body {
 				</div>
 			</div>
 		</p:layoutUnit>
-		<p:layoutUnit position="west" size="300">
-
-
-		</p:layoutUnit>
-		<p:layoutUnit position="east" size="200" collapsible="true" header="App log"
-			collapsed="true">
+		<p:layoutUnit position="west" size="350" header="App log">
 				<ui:include src="appLog.xhtml" />
 			
 		</p:layoutUnit>
 		<p:layoutUnit position="center">
 			<ui:insert name="content">
-    	Content area.  See comments below this line in the source.
     	<!--  include your content file or uncomment the include below and create content.xhtml in this directory -->
 				<!-- <div> -->
 				<!-- <ui:include src="content.xhtml"/> -->

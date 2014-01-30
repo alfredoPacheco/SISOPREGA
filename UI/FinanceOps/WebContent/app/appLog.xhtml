@@ -5,10 +5,10 @@
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:ui="http://java.sun.com/jsf/facelets">
 <div id="app-log-section" class="section">
-		<div id="app-log-content">
+		<div>
 			<p:dataList var="log" value="#{appLogBean.itemList}"
 				type="definition">
-				<div class="app-log-item" onclick="#{log.clickAction}">
+				<div style="clear: both;" onclick="#{log.clickAction}">
 					<p:graphicImage value="#{log.iconURL}" alt="#{log.iconURL}" />
 					<b>#{log.title}</b><br /> #{log.description}
 				</div>

@@ -120,7 +120,7 @@ CREATE TABLE ctrl_hermana_corte(
 	weight      decimal(12,4) not null,
 	cut_seq     integer NOT NULL,
 	paid_date	DATE,
-	paid_amount	decimal(12,2) NOT NULL
+	paid_amount	decimal(12,2)
 	
 );
 
@@ -132,7 +132,7 @@ CREATE TABLE ctrl_hermana_expense(
 	expense_id   SERIAL PRIMARY KEY,
     concept_id  integer NOT NULL REFERENCES cat_expense_concept(concept_id),
 	hermana_id  integer NOT NULL REFERENCES ctrl_hermana(hermana_id),
-	amount      decimal(12,2) NOT NULL
+	amount      decimal(12,2)
 );
 
 GRANT ALL ON ctrl_hermana_expense TO sisoprega;
@@ -160,7 +160,7 @@ CREATE TABLE ctrl_purchase_detail(
 	weight       decimal(12,4) not null,
 	purchase_price  decimal(10,2) NOT NULL DEFAULT 0.0,
 	paid_date	DATE,
-	paid_amount	decimal(12,2) NOT NULL
+	paid_amount	decimal(12,2)
 );
 
 GRANT ALL ON ctrl_purchase_detail TO sisoprega;
@@ -212,8 +212,8 @@ CREATE TABLE ctrl_sale_detail(
 	sale_price  		decimal(10,2) NOT NULL DEFAULT 0.0,
 	inventory_id 		integer not null,
 	collected_date		DATE,
-	collected_amount	decimal(12,2) NOT NULL,
-	folio_id		integer NOT NULL REFERENCES ctrl_folio(folio_id)
+	collected_amount	decimal(12,2),
+	folio_id		integer REFERENCES ctrl_folio(folio_id)
 	
 );
 
@@ -278,7 +278,7 @@ CREATE TABLE ctrl_shipment_release (
 	driver			VARCHAR(80),
 	plates			VARCHAR(20),
 	paid_date		DATE,
-	paid_amount		decimal(12,2) NOT NULL
+	paid_amount		decimal(12,2)
 	
 );
 

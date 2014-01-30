@@ -1,4 +1,5 @@
 #app-log-section {
+	clear:both;
 	height: 600px;
 	border: thin solid black;
 	overflow-y: overlay;
