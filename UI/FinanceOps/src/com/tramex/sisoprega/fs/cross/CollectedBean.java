@@ -39,7 +39,7 @@ import com.tramex.sisoprega.fs.cross.dto.IconListItem;
 public class CollectedBean implements Serializable {
   private static final long serialVersionUID = 7991717521741091074L;
   
-  private static Logger log = Logger.getLogger(AppLogBean.class.getName());
+  private static Logger log = Logger.getLogger(CollectedBean.class.getName());
 
   @EJB(lookup = "java:global/DataModel/BaseDataModel")
   private RemoteModelable dataModel;

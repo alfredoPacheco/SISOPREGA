@@ -1787,4 +1787,39 @@
 			</basic>
 		</attributes>
 	</entity>
+	
+	<entity class="com.tramex.sisoprega.dto.Ballance">
+		<table name="vw_ballance" />
+		<named-query name="BALLANCE">
+			<description>Retrieve all collected and paid operations.</description>
+			<query>SELECT iBallance FROM Ballance iBallance</query>
+		</named-query>
+		<attributes>
+			<id name="id">
+				<generated-value />
+			</id>
+			<basic name="operationId">
+				<column name="operation_id" />
+			</basic>
+			<basic name="transactionClass">
+				<column name="transaction_class" />
+			</basic>
+			<basic name="transactionType">
+				<column name="transaction_type" />
+			</basic>
+			<basic name="operationDate">
+				<column name="operation_date" />
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="amount">
+				<column name="amount" />
+			</basic>
+			<basic name="description">
+				<column name="description" />
+			</basic>
+			<basic name="debtorOrCreditor">
+				<column name="debtor_or_creditor" />
+			</basic>
+		</attributes>
+	</entity>
 </entity-mappings>

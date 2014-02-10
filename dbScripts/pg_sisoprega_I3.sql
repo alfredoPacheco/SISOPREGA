@@ -477,3 +477,39 @@ ORDER BY folio ASC;
 GRANT ALL ON vw_collected to sisoprega;
 
 
+CREATE OR REPLACE VIEW vw_ballance AS
+select ROW_NUMBER() over (order by operation_date) as Id, * from (
+
+SELECT 
+  'OUTCOME' AS transaction_type, 
+  vw_paid.payment_class AS transaction_class, 
+  vw_paid.record_id AS operation_id, 
+  vw_paid.payment_date AS operation_date, 
+  vw_paid.amount,
+  vw_paid.creditor AS debtor_or_creditor, 
+  vw_paid.description || ' Concepto: ' || 
+  vw_paid.concept_name AS description
+FROM
+  vw_paid
+
+UNION ALL
+
+SELECT
+  'INCOME' AS transaction_type,
+  vw_collected.sale_class AS transaction_class, 
+  vw_collected.record_id AS operaion_id,
+  vw_collected.collected_date AS operation_date, 
+  vw_collected.amount,
+  vw_collected.customer AS debtor_or_creditor,
+  vw_collected.description || ' Folio: ' || 
+  vw_collected.folio AS description 
+  
+FROM  
+  vw_collected
+) as ballance
+ORDER BY operation_date ASC;
+
+GRANT ALL ON vw_ballance to sisoprega;
+
+
+

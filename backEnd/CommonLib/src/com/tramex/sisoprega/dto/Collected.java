@@ -114,6 +114,4 @@ public class Collected {
   public void setAmount(float amount) {
     this.amount = amount;
   }
-  
-  
 }

@@ -9,6 +9,33 @@
 <ui:composition template="pf_template.xhtml">
 	<ui:define name="content">
 		Balance
+		<h:form>
+			<p:dataTable var="ballance" value="#{ballanceBean.ballanceList}">
+				<p:column headerText="Operation ID">
+					<h:outputText value="#{ballance.operationId}" />
+				</p:column>
+
+				<p:column headerText="Transaction Class">
+					<h:outputText value="#{ballance.transactionClass}" />
+				</p:column>
+
+				<p:column headerText="Transasction Type">
+					<h:outputText value="#{ballance.transactionType}" />
+				</p:column>
+				<p:column headerText="Date">
+					<h:outputText value="#{ballance.operationDate}" />
+				</p:column>
+				<p:column headerText="Person">
+					<h:outputText value="#{ballance.debtorOrCreditor}" />
+				</p:column>
+				<p:column headerText="Description">
+					<h:outputText value="#{ballance.description}" />
+				</p:column>
+				<p:column headerText="Amount">
+					<h:outputText value="#{ballance.amount}" />
+				</p:column>
+			</p:dataTable>
+		</h:form>
 	</ui:define>
 </ui:composition>
 </html>
