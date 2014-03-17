@@ -1030,7 +1030,13 @@
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.HermanaCorteExportador">
+	
+		
 		<table name="ctrl_hermana_corte_exportador" />
+		<named-query name="HERMANA_CORTE_EXPORTADOR_BY_ID">
+			<description>Retrieve a single hermana corte exportador record by its Id</description>
+			<query>SELECT iHCE FROM HermanaCorteExportador iHCE WHERE iHCE.hermanaCorteExportadorId = :Id</query>
+		</named-query>
 		<attributes>
 			<id name="hermanaCorteExportadorId">
 				<column name="corte_expo" />
@@ -1218,6 +1224,10 @@
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.PurchaseDetail">
 		<table name="ctrl_purchase_detail" />
+		<named-query name="PURCHASE_DETAIL_BY_ID">
+			<description>Retrieve a single purchase detail record by its Id</description>
+			<query>SELECT iPD FROM PurchaseDetail iPD WHERE iPD.purchaseDetailId = :Id</query>
+		</named-query>
 		<attributes>
 			<id name="purchaseDetailId">
 				<column name="record_id" />
@@ -1345,6 +1355,10 @@
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.SaleDetail">
 		<table name="ctrl_sale_detail" />
+		<named-query name="SALE_DETAIL_BY_ID">
+			<description>Retrieve a single Sale Detail record by its Id</description>
+			<query>SELECT iSD FROM SaleDetail iSD WHERE iSD.saleDetailId = :Id</query>
+		</named-query>
 		<attributes>
 			<id name="saleDetailId">
 				<column name="record_id" />

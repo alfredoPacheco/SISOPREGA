@@ -4,7 +4,6 @@
 package com.tramex.sisoprega.fs.cross;
 
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,8 +14,10 @@ import javax.ejb.EJB;
 
 import com.tramex.sisoprega.datamodel.DataModelException;
 import com.tramex.sisoprega.datamodel.RemoteModelable;
+import com.tramex.sisoprega.dto.HermanaCorteExportador;
+import com.tramex.sisoprega.dto.PurchaseDetail;
+import com.tramex.sisoprega.dto.SaleDetail;
 import com.tramex.sisoprega.dto.Unpriced;
-import com.tramex.sisoprega.fs.cross.dto.IconListItem;
 
 /**
  * USAGE COMMENT HERE
@@ -29,6 +30,7 @@ import com.tramex.sisoprega.fs.cross.dto.IconListItem;
  * MM/DD/YYYY
  * ----------  ---------------------------  -------------------------------------------
  * Dec 28, 2013     Diego Torres                 Initial Version.
+ * Mar 10, 2013     Alfredo Pacheco              Update functionality complete.
  * ====================================================================================
  * </PRE>
  * 
@@ -36,6 +38,7 @@ import com.tramex.sisoprega.fs.cross.dto.IconListItem;
  * 
  * 
  */
+
 public class UnpricedBean implements Serializable {
   private static final long serialVersionUID = -2335874382819709929L;
 
@@ -44,47 +47,104 @@ public class UnpricedBean implements Serializable {
   @EJB(lookup = "java:global/DataModel/BaseDataModel")
   private RemoteModelable dataModel;
 
-  public List<Unpriced> getUnpricedItems() throws DataModelException {
+  private Unpriced selectedItem;
+
+  /**
+   * @return the selectedItem
+   */
+  public Unpriced getSelectedItem() {
+    return selectedItem;
+  }
+
+  /**
+   * @param selectedItem
+   *          the selectedItem to set
+   */
+  public void setSelectedItem(Unpriced selectedItem) {
+    this.selectedItem = selectedItem;
+  }
+
+  public void update() {
+
+    if (this.selectedItem.getOperation().equals("HERMANA")) {
+      HermanaCorteExportador hce;
+      try {
+        hce = dataModel.readSingleDataModel("HERMANA_CORTE_EXPORTADOR_BY_ID", "Id", this.selectedItem.getRecordId(),
+            HermanaCorteExportador.class);
+        hce.setPurchasePrice(this.selectedItem.getPrice());
+        dataModel.updateDataModel(hce);
+      } catch (DataModelException e) {
+        log.severe("An error has occurred: " + e.getMessage());
+      }
+    }
+    if (this.selectedItem.getOperation().equals("PURCHASE")) {
+      PurchaseDetail pd;
+      try {
+        pd = dataModel.readSingleDataModel("PURCHASE_DETAIL_BY_ID", "Id", this.selectedItem.getRecordId(), PurchaseDetail.class);
+        pd.setPurchasePrice(this.selectedItem.getPrice());
+        dataModel.updateDataModel(pd);
+      } catch (DataModelException e) {
+        log.severe("An error has occurred: " + e.getMessage());
+      }
+    }
+    if (this.selectedItem.getOperation().equals("SALE")) {
+      SaleDetail sd;
+      log.severe("entro a if sale");
+      try {
+        sd = dataModel.readSingleDataModel("SALE_DETAIL_BY_ID", "Id", this.selectedItem.getRecordId(), SaleDetail.class);
+        sd.setSalePrice(this.selectedItem.getPrice());
+        dataModel.updateDataModel(sd);
+      } catch (DataModelException e) {
+        log.severe("An error has occurred: " + e.getMessage());
+      }
+    }
+  }
+
+  public List<Unpriced> getUnpricedImports() throws DataModelException {
     Map<String, Object> parameters = new HashMap<String, Object>();
     List<Unpriced> listUnpriced = dataModel.readDataModelList("UNPRICED", parameters, Unpriced.class);
 
-    log.fine("[" + listUnpriced.size() + "] records retrieved from Unpriced list");
-    return listUnpriced;
-  }
-  
-//  private static final IconListItem[] mockData = {
-//      new IconListItem("images/appLog/imported.jpg", "Imported 215's", "73 heifers | 215's | 15,914 pounds | 218 avg. weigh ",
-//          "javascript(alert('price me!'));"),
-//      new IconListItem("images/appLog/purchased.jpg", "Purchased 215's", "52 steers | 315's | 18,914 pounds | 312 avg. weigh ",
-//          "javascript(alert('price me!'));") };
+    log.info("[" + listUnpriced.size() + "] records retrieved from Unpriced list. Filtering by Hermanas.");
 
-  public List<IconListItem> getItemList()  throws DataModelException {
-    List<Unpriced> unpricedList = getUnpricedItems();
-    List<IconListItem> ilis = new ArrayList<IconListItem>();
-    for(Unpriced unp : unpricedList){
-      String sIconRoot = "";
-      String sDescription = "";
-      String sTitle = "";
-      
-      log.info("operation type = " + unp.getOperation());
-      if(unp.getOperation().equals("PURCHASE")) {
-        sIconRoot = "/app/images/appLog/purchased.jpg";
-        sTitle = "Purchased: " + unp.getCattleTypeName();
+    List<Unpriced> result = new ArrayList<Unpriced>();
+    for (Unpriced unpriced : listUnpriced) {
+      if (unpriced.getOperation().equals("HERMANA")) {
+        result.add(unpriced);
       }
-      if(unp.getOperation().equals("HERMANA")) {
-        sIconRoot = "/app/images/appLog/imported.jpg";
-        sTitle= "Imported: " + unp.getCattleTypeName();
-      }                      
-      if(unp.getOperation().equals("SALE")) {
-        sIconRoot = "/app/images/appLog/sold.jpg";
-        sTitle = "Sold: " + unp.getCattleTypeName();
-      }
-      
-      sDescription =  new SimpleDateFormat("MMM dd HH:mm").format(unp.getOperationTime()) + "<br />Heads: " + unp.getQualityName() + "<br />" + unp.getHeads() + "/" + unp.getWeight() + " lb<br />"; 
-      IconListItem ili = new IconListItem(sIconRoot, sTitle, sDescription, "javascript(0)");
-      ilis.add(ili);
     }
-    return ilis;
+
+    return result;
   }
 
+  public List<Unpriced> getUnpricedPurchases() throws DataModelException {
+    Map<String, Object> parameters = new HashMap<String, Object>();
+    List<Unpriced> listUnpriced = dataModel.readDataModelList("UNPRICED", parameters, Unpriced.class);
+
+    log.fine("[" + listUnpriced.size() + "] records retrieved from Unpriced list. Filtering by Purchases.");
+
+    List<Unpriced> result = new ArrayList<Unpriced>();
+    for (Unpriced unpriced : listUnpriced) {
+      if (unpriced.getOperation().equals("PURCHASE")) {
+        result.add(unpriced);
+      }
+    }
+
+    return result;
+  }
+
+  public List<Unpriced> getUnpricedSales() throws DataModelException {
+    Map<String, Object> parameters = new HashMap<String, Object>();
+    List<Unpriced> listUnpriced = dataModel.readDataModelList("UNPRICED", parameters, Unpriced.class);
+
+    log.fine("[" + listUnpriced.size() + "] records retrieved from Unpriced list. Filtering by Sales.");
+
+    List<Unpriced> result = new ArrayList<Unpriced>();
+    for (Unpriced unpriced : listUnpriced) {
+      if (unpriced.getOperation().equals("SALE")) {
+        result.add(unpriced);
+      }
+    }
+
+    return result;
+  }
 }

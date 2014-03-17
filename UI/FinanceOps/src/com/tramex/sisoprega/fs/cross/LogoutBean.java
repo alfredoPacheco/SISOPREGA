@@ -6,6 +6,7 @@ import javax.faces.context.FacesContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
+
 public class LogoutBean {
   private static Logger log = Logger.getLogger(LogoutBean.class.getName());
 

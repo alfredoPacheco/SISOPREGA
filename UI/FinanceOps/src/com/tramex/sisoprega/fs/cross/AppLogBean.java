@@ -46,7 +46,6 @@ public class AppLogBean implements Serializable {
     for(AppLog aLog : appLog){
       String sIconRoot = "";
       String sDescription = "";
-      log.info("operation type = " + aLog.getOperation());
       if(aLog.getOperation().equals("RECEPTION")) sIconRoot = "/app/images/appLog/received.jpg";
       if(aLog.getOperation().equals("INSPECTION")) sIconRoot = "/app/images/appLog/inspected.jpg";
       if(aLog.getOperation().equals("PURCHASE")) sIconRoot = "/app/images/appLog/purchased.jpg";

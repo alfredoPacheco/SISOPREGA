@@ -23,6 +23,7 @@ import java.util.Date;
  *
  * 
  */
+
 public class DateBean {
   private Date calendarDate;
 

@@ -1,14 +1,177 @@
-<!DOCTYPE html>
-
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:p="http://primefaces.org/ui">
-<head />
 <ui:composition template="pf_template.xhtml">
 	<ui:define name="content">
-		Prices
+		Imports
+		<h:form id="formImports">
+			<p:dataTable var="unpricedImport"
+				value="#{unpricedBean.unpricedImports}" id="dataTableImports">
+				<p:column headerText="ID">
+					<h:outputText value="#{unpricedImport.recordId}" />
+				</p:column>
+				<p:column headerText="Cattle Name">
+					<h:outputText value="#{unpricedImport.cattleTypeName}" />
+				</p:column>
+				<p:column headerText="Quality">
+					<h:outputText value="#{unpricedImport.qualityName}" />
+				</p:column>
+				<p:column headerText="Heads">
+					<h:outputText value="#{unpricedImport.heads}" />
+				</p:column>
+				<p:column headerText="Weight">
+					<h:outputText value="#{unpricedImport.weight}" />
+				</p:column>
+				<p:column headerText="Average">
+					<h:outputText value="#{unpricedImport.weight/unpricedImport.heads}" />
+				</p:column>
+				<p:column>
+					<p:commandButton id="btnSetImportPrice"
+						update=":formDialogImports:gridPriceImport"
+						oncomplete="PF('priceImportDialog').show()" icon="ui-icon-search"
+						title="View">
+						<f:setPropertyActionListener value="#{unpricedImport}"
+							target="#{unpricedBean.selectedItem}" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+		</h:form>
+		<p:dialog header="Price Assignment" widgetVar="priceImportDialog"
+			resizable="false" id="priceImportDlg" modal="true" appendTo="@(body)">
+			<h:form id="formDialogImports">
+				<h:panelGrid id="gridPriceImport" columns="2" cellpadding="4"
+					style="margin:0 auto;">
+					<h:outputText value="Price:" />
+					<p:inputText value="#{unpricedBean.selectedItem.price}"
+						id="txtImportPrice"></p:inputText>
+
+					<p:commandButton id="btnSaveImportPrice"
+						action="#{unpricedBean.update}" value="Save"
+						process="gridPriceImport" update=":formImports:dataTableImports"
+						oncomplete="PF('priceImportDialog').hide()">
+
+					</p:commandButton>
+					<p:commandButton id="btnCancel" value="Cancel"
+						oncomplete="PF('priceImportDialog').hide()"></p:commandButton>
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
+		
+		
+		
+		
+		Purchases
+		<h:form id="formPurchases">
+			<p:dataTable var="unpricedPurchase"
+				value="#{unpricedBean.unpricedPurchases}" id="dataTablePurchases">
+				<p:column headerText="ID">
+					<h:outputText value="#{unpricedPurchase.recordId}" />
+				</p:column>
+				<p:column headerText="Cattle Name">
+					<h:outputText value="#{unpricedPurchase.cattleTypeName}" />
+				</p:column>
+				<p:column headerText="Quality">
+					<h:outputText value="#{unpricedPurchase.qualityName}" />
+				</p:column>
+				<p:column headerText="Heads">
+					<h:outputText value="#{unpricedPurchase.heads}" />
+				</p:column>
+				<p:column headerText="Weight">
+					<h:outputText value="#{unpricedPurchase.weight}" />
+				</p:column>
+				<p:column headerText="Average">
+					<h:outputText
+						value="#{unpricedPurchase.weight/unpricedPurchase.heads}" />
+				</p:column>
+				<p:column>
+					<p:commandButton id="btnSetPurchasePrice"
+						update=":formDialogPurchases:gridPricePurchase"
+						oncomplete="PF('pricePurchaseDialog').show()"
+						icon="ui-icon-search" title="View">
+						<f:setPropertyActionListener value="#{unpricedPurchase}"
+							target="#{unpricedBean.selectedItem}" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+		</h:form>
+		<p:dialog header="Price Assignment" widgetVar="pricePurchaseDialog"
+			resizable="false" id="pricePurchaseDlg" modal="true"
+			appendTo="@(body)">
+			<h:form id="formDialogPurchases">
+				<h:panelGrid id="gridPricePurchase" columns="2" cellpadding="4"
+					style="margin:0 auto;">
+
+					<h:outputText value="Price:" />
+					<p:inputText value="#{unpricedBean.selectedItem.price}"
+						id="txtPurchasePrice"></p:inputText>
+					<f:facet name="footer">
+						<p:commandButton id="btnSavePurchasePrice"
+							action="#{unpricedBean.update}" value="Save"
+							process="gridPricePurchase"
+							update=":formPurchases:dataTablePurchases"
+							oncomplete="PF('pricePurchaseDialog').hide()"></p:commandButton>
+						<p:commandButton id="btnCancel" value="Cancel"
+							oncomplete="PF('pricePurchaseDialog').hide()"></p:commandButton>
+					</f:facet>
+
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
+
+Sales
+		<h:form id="formSales">
+			<p:dataTable var="unpricedSale" value="#{unpricedBean.unpricedSales}"
+				id="dataTableSales">
+				<p:column headerText="ID">
+					<h:outputText value="#{unpricedSale.recordId}" />
+				</p:column>
+				<p:column headerText="Cattle Name">
+					<h:outputText value="#{unpricedSale.cattleTypeName}" />
+				</p:column>
+				<p:column headerText="Quality">
+					<h:outputText value="#{unpricedSale.qualityName}" />
+				</p:column>
+				<p:column headerText="Heads">
+					<h:outputText value="#{unpricedSale.heads}" />
+				</p:column>
+				<p:column headerText="Weight">
+					<h:outputText value="#{unpricedSale.weight}" />
+				</p:column>
+				<p:column headerText="Average">
+					<h:outputText value="#{unpricedSale.weight/unpricedSale.heads}" />
+				</p:column>
+				<p:column>
+					<p:commandButton id="btnSetSalePrice"
+						update=":formDialogSales:gridPriceSale"
+						oncomplete="PF('priceSaleDialog').show()" icon="ui-icon-search"
+						title="View">
+						<f:setPropertyActionListener target="#{unpricedBean.selectedItem}"
+							value="#{unpricedSale}"></f:setPropertyActionListener>
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+		</h:form>
+		<p:dialog header="Price Assignment" widgetVar="priceSaleDialog"
+			resizable="false" id="priceSaleDlg" modal="true" appendTo="@(body)">
+			<h:form id="formDialogSales">
+				<h:panelGrid id="gridPriceSale" columns="2" cellpadding="4"
+					style="margin:0 auto;">
+					<h:outputText value="Price:" />
+					<p:inputText value="#{unpricedBean.selectedItem.price}"
+						id="txtSalePrice"></p:inputText>
+					<p:commandButton id="btnSaveSalePrice"
+						action="#{unpricedBean.update}" value="Save"
+						process="gridPriceSale" update=":formSales:dataTableSales"
+						oncomplete="PF('priceSaleDialog').hide()"></p:commandButton>
+					<p:commandButton id="btnCancel" value="Cancel"
+						oncomplete="PF('priceSaleDialog').hide()"></p:commandButton>
+
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
+
 	</ui:define>
 </ui:composition>
 </html>

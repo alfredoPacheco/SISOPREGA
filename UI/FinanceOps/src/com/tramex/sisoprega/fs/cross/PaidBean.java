@@ -36,6 +36,7 @@ import com.tramex.sisoprega.fs.cross.dto.IconListItem;
  * 
  * 
  */
+
 public class PaidBean implements Serializable {
   private static final long serialVersionUID = -5421725073091018628L;
 

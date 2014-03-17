@@ -201,24 +201,18 @@ GRANT ALL ON vw_unpriced to sisoprega;
 
 
 
-
-
-
-
-
-
 CREATE OR REPLACE VIEW vw_unpriced2 AS
 select ROW_NUMBER() over (order by OperationTime) as Id, * from (
 SELECT 
-  ctrl_purchase.purchase_id as RecordId,
+  ctrl_purchase_detail.record_id as RecordId,
   'PURCHASE' as Operation,	
   ctrl_purchase.operationdatetime as OperationTime,
   ctrl_purchase.cattype_id as CattleTypeId,
   cat_cattle_type.cattype_name as CattleName,
   ctrl_purchase_detail.quality_id as QualityId,
   cat_cattle_quality.quality_name as QualityName,
-  sum(ctrl_purchase_detail.heads) as Heads,
-  sum(ctrl_purchase_detail.weight) as Weight,
+  ctrl_purchase_detail.heads as Heads,
+  ctrl_purchase_detail.weight as Weight,
   ctrl_purchase_detail.purchase_price as Price
 FROM
   ctrl_purchase
@@ -227,29 +221,20 @@ FROM
   INNER JOIN cat_cattle_type ON cat_cattle_type.cattype_id = ctrl_purchase.cattype_id
 WHERE
   ctrl_purchase_detail.purchase_price <= 0
-GROUP BY 
-  RecordId, 
-  Operation,
-  OperationTime,
-  CattleTypeId,
-  CattleName,
-  QualityId,
-  QualityName,
-  Price
 
 UNION ALL
 
 
 SELECT 
-  ctrl_hermana.hermana_id as RecordId,
+  ctrl_hermana_corte_exportador.corte_expo as RecordId,
   'HERMANA' as Operation,
   ctrl_hermana.de_when as OperationTime, 
   cat_cattle_type.cattype_id as CattleTypeId,
   cat_cattle_type.cattype_name as CattleName,
   ctrl_hermana_corte_exportador.quality_id as QualityId,
   cat_cattle_quality.quality_name as QualityName,
-  SUM(ctrl_hermana_corte_exportador.heads) as Heads, 
-  sum(ctrl_hermana_corte_exportador.weight) as Weight,
+  ctrl_hermana_corte_exportador.heads as Heads, 
+  ctrl_hermana_corte_exportador.weight as Weight,
   ctrl_hermana_corte_exportador.purchase_price as Price
 FROM
   ctrl_hermana
@@ -260,28 +245,19 @@ FROM
   INNER JOIN cat_cattle_type ON cat_cattle_type.cattype_id = ctrl_reception.cattle_type
 WHERE 
   ctrl_hermana_corte_exportador.purchase_price <= 0
-GROUP BY
-  RecordId, 
-  Operation,
-  OperationTime,
-  CattleTypeId,
-  CattleName,
-  QualityId,
-  QualityName,
-  Price
 
 UNION ALL
 
 SELECT 
-  ctrl_sale.sale_id as RecordId,
+  ctrl_sale_detail.record_id as RecordId,
   'SALE' as Operation,
   ctrl_sale.operationdatetime as OperationTime,
   ctrl_sale.cattype_id as CattleTypeId,
   cat_cattle_type.cattype_name as CattleName,
   ctrl_sale_detail.quality_id as QualityId,
   cat_cattle_quality.quality_name as QualityName,
-  sum(ctrl_sale_detail.heads) as Heads, 
-  sum(ctrl_sale_detail.weight) as Weight,
+  ctrl_sale_detail.heads as Heads, 
+  ctrl_sale_detail.weight as Weight,
   ctrl_sale_detail.sale_price as Price
 FROM 
   ctrl_sale
@@ -290,16 +266,6 @@ FROM
   INNER JOIN cat_cattle_type ON cat_cattle_type.cattype_id = ctrl_sale.cattype_id
 WHERE 
   ctrl_sale_detail.sale_price <= 0
-
-GROUP BY
-  RecordId, 
-  Operation,
-  OperationTime,
-  CattleTypeId,
-  CattleName,
-  QualityId,
-  QualityName,
-  Price
 
 ) as unpriced
 ORDER BY OperationTime ASC;
