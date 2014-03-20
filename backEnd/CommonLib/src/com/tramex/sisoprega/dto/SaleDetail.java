@@ -15,6 +15,8 @@
  */
 package com.tramex.sisoprega.dto;
 
+import java.util.Date;
+
 /**
  * sale detail data model.
  *  
@@ -43,6 +45,8 @@ public class SaleDetail {
   private long inventoryId;
   private Sale sale;
   private double salePrice = 0.0d;
+  private Date collectedDate;
+  private double collectedAmount = 0.0d;
   
   /**
    * @return the saleDetailId
@@ -153,6 +157,30 @@ public class SaleDetail {
    */
   public void setSalePrice(double salePrice) {
     this.salePrice = salePrice;
+  }
+  /**
+   * @return the collectedDate
+   */
+  public Date getCollectedDate() {
+    return collectedDate;
+  }
+  /**
+   * @param collectedDate the collectedDate to set
+   */
+  public void setCollectedDate(Date collectedDate) {
+    this.collectedDate = collectedDate;
+  }
+  /**
+   * @return the collectedAmount
+   */
+  public double getCollectedAmount() {
+    return collectedAmount;
+  }
+  /**
+   * @param collectedAmount the collectedAmount to set
+   */
+  public void setCollectedAmount(double collectedAmount) {
+    this.collectedAmount = collectedAmount;
   }
   @Override
   public String toString() {

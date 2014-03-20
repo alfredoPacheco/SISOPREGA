@@ -1048,6 +1048,13 @@
 			<basic name="purchasePrice">
 				<column name="purchase_price" />
 			</basic>
+			<basic name="paidDate">
+				<column name="paid_date" />
+				<temporal>DATE</temporal>
+			</basic>
+			<basic name="paidAmount">
+				<column name="paid_amount" />
+			</basic>
 			<basic name="cutSeq">
 				<column name="cut_seq" />
 			</basic>
@@ -1078,6 +1085,16 @@
 			</basic>
 			<basic name="cutSeq">
 				<column name="cut_seq" />
+			</basic>
+			<basic name="purchasePrice">
+				<column name="purchase_price" />
+			</basic>
+			<basic name="paidDate">
+				<column name="paid_date" />
+				<temporal>DATE</temporal>
+			</basic>
+			<basic name="paidAmount">
+				<column name="paid_amount" />
 			</basic>
 			<many-to-one name="hermana" fetch="LAZY" optional="false">
 				<join-column name="hermana_id" referenced-column-name="hermana_id"
@@ -1242,6 +1259,13 @@
 			<basic name="purchasePrice">
 				<column name="purchase_price" />
 			</basic>
+			<basic name="paidDate">
+				<column name="paid_date" />
+				<temporal>DATE</temporal>
+			</basic>
+			<basic name="paidAmount">
+				<column name="paid_amount" />
+			</basic>
 			<many-to-one name="purchase" fetch="LAZY" optional="false">
 				<join-column name="purchase_id" referenced-column-name="purchase_id"
 					nullable="false" />
@@ -1378,6 +1402,13 @@
 			</basic>
 			<basic name="salePrice">
 				<column name="sale_price" />
+			</basic>
+			<basic name="collectedDate">
+				<column name="collected_date" />
+				<temporal>DATE</temporal>
+			</basic>
+			<basic name="collectedAmount">
+				<column name="collected_amount" />
 			</basic>
 			<many-to-one name="sale" fetch="LAZY" optional="false">
 				<join-column name="sale_id" referenced-column-name="sale_id"
@@ -1833,6 +1864,46 @@
 			</basic>
 			<basic name="debtorOrCreditor">
 				<column name="debtor_or_creditor" />
+			</basic>
+		</attributes>
+	</entity>
+	<entity class="com.tramex.sisoprega.dto.PaymentToSchedule">
+		<table name="vw_toSchedule" />
+		<named-query name="PAYMENTS_TO_SCHEDULE">
+			<description>Retrieve all payments pending for schedule.</description>
+			<query>SELECT iPS FROM PaymentToSchedule iPS</query>
+		</named-query>
+		<attributes>
+			<id name="id">
+				<generated-value />
+			</id>
+			<basic name="recordId">
+				<column name="recordid" />
+			</basic>
+			<basic name="operation">
+				<column name="operationType" />
+			</basic>
+			<basic name="who">
+				<column name="who" />
+			</basic>
+			<basic name="operationTime">
+				<column name="operationtime" />
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="description">
+				<column name="description" />
+			</basic>
+			<basic name="heads">
+				<column name="heads" />
+			</basic>
+			<basic name="weight">
+				<column name="weight" />
+			</basic>
+			<basic name="amount">
+				<column name="amount" />
+			</basic>
+			<basic name="whenToPay">
+				<temporal>TIMESTAMP</temporal>
 			</basic>
 		</attributes>
 	</entity>

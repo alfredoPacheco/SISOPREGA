@@ -15,6 +15,8 @@
  */
 package com.tramex.sisoprega.dto;
 
+import java.util.Date;
+
 /**
  * cattle purchase details data model.
  *  
@@ -41,6 +43,8 @@ public class PurchaseDetail {
   private double weight;
   private Purchase purchase;
   private double purchasePrice = 0.0d;
+  private Date paidDate;
+  private double paidAmount = 0.0d;
   
   /**
    * @return the purchaseDetailId
@@ -127,6 +131,30 @@ public class PurchaseDetail {
    */
   public void setPurchasePrice(double purchasePrice) {
     this.purchasePrice = purchasePrice;
+  }
+  /**
+   * @return the paidDate
+   */
+  public Date getPaidDate() {
+    return paidDate;
+  }
+  /**
+   * @param paidDate the paidDate to set
+   */
+  public void setPaidDate(Date paidDate) {
+    this.paidDate = paidDate;
+  }
+  /**
+   * @return the paidAmount
+   */
+  public double getPaidAmount() {
+    return paidAmount;
+  }
+  /**
+   * @param paidAmount the paidAmount to set
+   */
+  public void setPaidAmount(double paidAmount) {
+    this.paidAmount = paidAmount;
   }
   @Override
   public String toString() {

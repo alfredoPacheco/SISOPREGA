@@ -52,4 +52,10 @@
 		<managed-bean-class>com.tramex.sisoprega.fs.cross.DateBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
+	<managed-bean>
+		<description>Operations pending for schedule to pay</description>
+		<managed-bean-name>paymentsToScheduleBean</managed-bean-name>
+		<managed-bean-class>com.tramex.sisoprega.fs.cross.PaymentsToScheduleBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
 </faces-config>

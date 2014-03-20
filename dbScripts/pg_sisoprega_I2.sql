@@ -104,6 +104,8 @@ CREATE TABLE ctrl_hermana_corte_exportador(
 	heads       integer not null,
 	weight      decimal(12,4) not null,
 	cut_seq     integer NOT NULL,
+	paid_date	DATE,
+	paid_amount	decimal(12,2),
 	purchase_price  decimal(10,2) NOT NULL DEFAULT 0.0
 );
 
@@ -120,8 +122,8 @@ CREATE TABLE ctrl_hermana_corte(
 	weight      decimal(12,4) not null,
 	cut_seq     integer NOT NULL,
 	paid_date	DATE,
-	paid_amount	decimal(12,2)
-	
+	paid_amount	decimal(12,2),
+	purchase_price  decimal(10,2) NOT NULL DEFAULT 0.0	
 );
 
 GRANT ALL ON ctrl_hermana_corte TO sisoprega;

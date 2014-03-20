@@ -15,6 +15,8 @@
  */
 package com.tramex.sisoprega.dto;
 
+import java.util.Date;
+
 /**
  * data model for hermana corte records.
  *  
@@ -41,6 +43,10 @@ public class HermanaCorte {
   private double weight;
   private Hermana hermana;
   private long cutSeq;
+  private Date paidDate;
+  private double paidAmount = 0.0d;
+  private double purchasePrice = 0.0d;
+  
   
   /**
    * @return the hermanaCorteId
@@ -128,6 +134,42 @@ public class HermanaCorte {
     this.hermana = hermana;
   }
   
+  /**
+   * @return the paidDate
+   */
+  public Date getPaidDate() {
+    return paidDate;
+  }
+  /**
+   * @param paidDate the paidDate to set
+   */
+  public void setPaidDate(Date paidDate) {
+    this.paidDate = paidDate;
+  }
+  /**
+   * @return the paidAmount
+   */
+  public double getPaidAmount() {
+    return paidAmount;
+  }
+  /**
+   * @param paidAmount the paidAmount to set
+   */
+  public void setPaidAmount(double paidAmount) {
+    this.paidAmount = paidAmount;
+  }
+  /**
+   * @return the purchasePrice
+   */
+  public double getPurchasePrice() {
+    return purchasePrice;
+  }
+  /**
+   * @param purchasePrice the purchasePrice to set
+   */
+  public void setPurchasePrice(double purchasePrice) {
+    this.purchasePrice = purchasePrice;
+  }
   @Override
   public String toString() {
     return "corte:" + hermanaCorteId + ";barnyardId:" + barnyardId + ";qualityId:" + qualityId + ";heads:" + heads + ";weight:" + weight + ";";
