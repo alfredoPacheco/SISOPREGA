@@ -2,14 +2,23 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:p="http://primefaces.org/ui">
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
 <ui:composition template="pf_template.xhtml">
 	<ui:define name="content">
-		Calendar
 		
+		<h:form>
+			<pe:timeline value="#{timeLineBean.timeLineOperations}" height="250px" selectable="true" moveable="true" >
+				<p:ajax event="select" listener="#{timeLineBean.onSelect}"/>
+			</pe:timeline>
+		</h:form>
+		
+		
+		Calendar
 		<h:form id="formToSchedule">
 			<p:dataTable var="paymentToSchedule"
-				value="#{paymentsToScheduleBean.paymentsToSchedule}" id="dataTablePayments">
+				value="#{paymentsToScheduleBean.paymentsToSchedule}"
+				id="dataTablePayments">
 				<p:column headerText="ID">
 					<h:outputText value="#{paymentToSchedule.recordId}" />
 				</p:column>
@@ -32,13 +41,14 @@
 					<h:outputText value="#{paymentToSchedule.weight}" />
 				</p:column>
 				<p:column headerText="Average">
-					<h:outputText value="#{paymentToSchedule.weight/paymentToSchedule.heads}" />
+					<h:outputText
+						value="#{paymentToSchedule.weight/paymentToSchedule.heads}" />
 				</p:column>
 				<p:column>
 					<p:commandButton id="btnSetPaymentDate"
 						update=":formDialogPaymentSchedule:gridPaymentDate"
-						oncomplete="PF('paymentScheduleDialog').show()" icon="ui-icon-search"
-						title="View">
+						oncomplete="PF('paymentScheduleDialog').show()"
+						icon="ui-icon-search" title="View">
 						<f:setPropertyActionListener value="#{paymentToSchedule}"
 							target="#{paymentsToScheduleBean.selectedItem}" />
 					</p:commandButton>
@@ -51,11 +61,14 @@
 				<h:panelGrid id="gridPaymentDate" columns="2" cellpadding="4"
 					style="margin:0 auto;">
 					<h:outputText value="Schedule to:" />
-					<p:calendar value="#{paymentsToScheduleBean.selectedItem.whenToPay}" mode="popup" showOn="button" />
-					
+					<p:calendar
+						value="#{paymentsToScheduleBean.selectedItem.whenToPay}"
+						mode="popup" showOn="button" />
+
 					<p:commandButton id="btnSavePaymentSchedule"
 						action="#{paymentsToScheduleBean.update}" value="Save"
-						process="gridPaymentDate" update=":formToSchedule:dataTablePayments"
+						process="gridPaymentDate"
+						update=":formToSchedule:dataTablePayments"
 						oncomplete="PF('paymentScheduleDialog').hide()">
 
 					</p:commandButton>
@@ -64,8 +77,8 @@
 				</h:panelGrid>
 			</h:form>
 		</p:dialog>
-		
-		
+
+
 	</ui:define>
 </ui:composition>
 </html>

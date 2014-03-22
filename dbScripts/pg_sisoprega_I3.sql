@@ -553,3 +553,82 @@ WHERE
 ) as toSchedule
 ORDER BY OperationTime ASC;
 GRANT ALL ON vw_toschedule to sisoprega;
+
+
+
+
+
+
+CREATE OR REPLACE VIEW vw_timeline AS
+
+select ROW_NUMBER() over (order by OperationTime) as Id, * from (
+SELECT 
+  ctrl_purchase_detail.record_id as RecordId,
+  'PURCHASE' as OperationType,
+  cat_seller.seller_name as Who,
+  ctrl_purchase.operationdatetime as OperationTime,
+  cat_cattle_type.cattype_name || ', ' ||
+  cat_cattle_quality.quality_name as description,
+  ctrl_purchase_detail.heads as Heads,
+  ctrl_purchase_detail.weight as Weight,
+  ctrl_purchase_detail.purchase_price as Amount,
+  ctrl_purchase_detail.paid_date as WhenToPay
+FROM
+  ctrl_purchase
+  INNER JOIN ctrl_purchase_detail ON ctrl_purchase.purchase_id = ctrl_purchase_detail.purchase_id
+  INNER JOIN cat_cattle_quality ON cat_cattle_quality.quality_id = ctrl_purchase_detail.quality_id
+  INNER JOIN cat_cattle_type ON cat_cattle_type.cattype_id = ctrl_purchase.cattype_id
+  INNER JOIN cat_seller ON cat_seller.seller_id = ctrl_purchase.seller_id
+WHERE
+  ctrl_purchase_detail.paid_date is not null
+
+UNION ALL
+
+
+SELECT distinct
+  ctrl_hermana_corte_exportador.corte_expo as RecordId,
+  'HERMANA' as OperationType,
+  vw_rancher.rancher_name as Who,
+  ctrl_hermana.de_when as OperationTime, 
+  cat_cattle_type.cattype_name || ', ' ||
+  cat_cattle_quality.quality_name as description,
+  ctrl_hermana_corte_exportador.heads as Heads, 
+  ctrl_hermana_corte_exportador.weight as Weight,
+  ctrl_hermana_corte_exportador.purchase_price as Amount,
+  ctrl_hermana_corte_exportador.paid_date as WhenToPay
+FROM
+  ctrl_hermana
+  INNER JOIN ctrl_hermana_corte_exportador ON ctrl_hermana_corte_exportador.hermana_id = ctrl_hermana.hermana_id
+  INNER JOIN cat_cattle_quality ON ctrl_hermana_corte_exportador.quality_id  = cat_cattle_quality.quality_id
+  INNER JOIN ctrl_hermana_reception ON ctrl_hermana_reception.hermana_id = ctrl_hermana.hermana_id
+  INNER JOIN ctrl_reception ON ctrl_reception.reception_id =ctrl_hermana_reception.reception_id
+  INNER JOIN cat_cattle_type ON cat_cattle_type.cattype_id = ctrl_reception.cattle_type
+  INNER JOIN vw_rancher ON vw_rancher.rancher_id = ctrl_hermana.rancher_id
+WHERE 
+  ctrl_hermana_corte_exportador.paid_date is not null
+
+UNION ALL
+
+SELECT 
+  ctrl_sale_detail.record_id as RecordId,
+  'SALE' as OperationType,
+  cat_customer.customer_name as Who,
+  ctrl_sale.operationdatetime as OperationTime,
+  cat_cattle_type.cattype_name || ', ' ||
+  cat_cattle_quality.quality_name as description,
+  ctrl_sale_detail.heads as Heads, 
+  ctrl_sale_detail.weight as Weight,
+  ctrl_sale_detail.sale_price as Price,
+  ctrl_sale_detail.collected_date as WhenToPay
+FROM 
+  ctrl_sale
+  INNER JOIN ctrl_sale_detail ON ctrl_sale_detail.sale_id  = ctrl_sale.sale_id
+  INNER JOIN cat_cattle_quality ON ctrl_sale_detail.quality_id  = cat_cattle_quality.quality_id
+  INNER JOIN cat_cattle_type ON cat_cattle_type.cattype_id = ctrl_sale.cattype_id
+  INNER JOIN cat_customer ON cat_customer.customer_id = ctrl_sale.customer_id
+WHERE 
+  ctrl_sale_detail.collected_date is not null
+
+) as timeLine
+ORDER BY OperationTime ASC;
+GRANT ALL ON vw_timeline to sisoprega;
