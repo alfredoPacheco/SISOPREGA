@@ -1058,6 +1058,9 @@
 			<basic name="cutSeq">
 				<column name="cut_seq" />
 			</basic>
+			<basic name="settled">
+				<column name="is_settled" />
+			</basic>
 			<many-to-one name="hermana" fetch="LAZY" optional="false">
 				<join-column name="hermana_id" referenced-column-name="hermana_id"
 					nullable="false" />
@@ -1095,6 +1098,9 @@
 			</basic>
 			<basic name="paidAmount">
 				<column name="paid_amount" />
+			</basic>
+			<basic name="settled">
+				<column name="is_settled" />
 			</basic>
 			<many-to-one name="hermana" fetch="LAZY" optional="false">
 				<join-column name="hermana_id" referenced-column-name="hermana_id"
@@ -1266,6 +1272,9 @@
 			<basic name="paidAmount">
 				<column name="paid_amount" />
 			</basic>
+			<basic name="settled">
+				<column name="is_settled" />
+			</basic>
 			<many-to-one name="purchase" fetch="LAZY" optional="false">
 				<join-column name="purchase_id" referenced-column-name="purchase_id"
 					nullable="false" />
@@ -1409,6 +1418,9 @@
 			</basic>
 			<basic name="collectedAmount">
 				<column name="collected_amount" />
+			</basic>
+			<basic name="settled">
+				<column name="is_settled" />
 			</basic>
 			<many-to-one name="sale" fetch="LAZY" optional="false">
 				<join-column name="sale_id" referenced-column-name="sale_id"
@@ -1944,6 +1956,9 @@
 			</basic>
 			<basic name="whenToPay">
 				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="settled">
+				<column name="is_settled" />
 			</basic>
 		</attributes>
 	</entity>

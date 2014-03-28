@@ -46,6 +46,7 @@ public class HermanaCorte {
   private Date paidDate;
   private double paidAmount = 0.0d;
   private double purchasePrice = 0.0d;
+  private boolean settled=false;
   
   
   /**
@@ -169,6 +170,19 @@ public class HermanaCorte {
    */
   public void setPurchasePrice(double purchasePrice) {
     this.purchasePrice = purchasePrice;
+  }
+  
+  /**
+   * @return the settled
+   */
+  public boolean isSettled() {
+    return settled;
+  }
+  /**
+   * @param settled the settled to set
+   */
+  public void setSettled(boolean settled) {
+    this.settled = settled;
   }
   @Override
   public String toString() {

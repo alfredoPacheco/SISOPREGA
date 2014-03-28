@@ -106,7 +106,8 @@ CREATE TABLE ctrl_hermana_corte_exportador(
 	cut_seq     integer NOT NULL,
 	paid_date	DATE,
 	paid_amount	decimal(12,2),
-	purchase_price  decimal(10,2) NOT NULL DEFAULT 0.0
+	purchase_price  decimal(10,2) NOT NULL DEFAULT 0.0,
+	is_settled	boolean DEFAULT FALSE
 );
 
 GRANT ALL ON ctrl_hermana_corte_exportador TO sisoprega;
@@ -123,7 +124,8 @@ CREATE TABLE ctrl_hermana_corte(
 	cut_seq     integer NOT NULL,
 	paid_date	DATE,
 	paid_amount	decimal(12,2),
-	purchase_price  decimal(10,2) NOT NULL DEFAULT 0.0	
+	purchase_price  decimal(10,2) NOT NULL DEFAULT 0.0,
+	is_settled	boolean DEFAULT FALSE	
 );
 
 GRANT ALL ON ctrl_hermana_corte TO sisoprega;
@@ -162,7 +164,8 @@ CREATE TABLE ctrl_purchase_detail(
 	weight       decimal(12,4) not null,
 	purchase_price  decimal(10,2) NOT NULL DEFAULT 0.0,
 	paid_date	DATE,
-	paid_amount	decimal(12,2)
+	paid_amount	decimal(12,2),
+	is_settled	boolean DEFAULT FALSE
 );
 
 GRANT ALL ON ctrl_purchase_detail TO sisoprega;
@@ -215,7 +218,8 @@ CREATE TABLE ctrl_sale_detail(
 	inventory_id 		integer not null,
 	collected_date		DATE,
 	collected_amount	decimal(12,2),
-	folio_id		integer REFERENCES ctrl_folio(folio_id)
+	folio_id		integer REFERENCES ctrl_folio(folio_id),
+	is_settled		boolean DEFAULT FALSE
 	
 );
 

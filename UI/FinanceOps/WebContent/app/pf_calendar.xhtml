@@ -6,15 +6,18 @@
 	xmlns:pe="http://primefaces.org/ui/extensions">
 <ui:composition template="pf_template.xhtml">
 	<ui:define name="content">
-		
-		<h:form>
-			<pe:timeline value="#{timeLineBean.timeLineOperations}" height="250px" selectable="true" moveable="true" >
+		Timeline
+		<br />
+		<h:form id="formTimeline">
+			<pe:timeline id="timelineOperations" value="#{timeLineBean.timeLineOperations}" 
+		axisOnTop="true" zoomMin="1" height="250px" selectable="true" moveable="true" >
 				<p:ajax event="select" listener="#{timeLineBean.onSelect}"/>
 			</pe:timeline>
 		</h:form>
 		
 		
-		Calendar
+		<br />
+		<br />
 		<h:form id="formToSchedule">
 			<p:dataTable var="paymentToSchedule"
 				value="#{paymentsToScheduleBean.paymentsToSchedule}"
@@ -68,7 +71,7 @@
 					<p:commandButton id="btnSavePaymentSchedule"
 						action="#{paymentsToScheduleBean.update}" value="Save"
 						process="gridPaymentDate"
-						update=":formToSchedule:dataTablePayments"
+						update=":formToSchedule:dataTablePayments, :formTimeline"
 						oncomplete="PF('paymentScheduleDialog').hide()">
 
 					</p:commandButton>

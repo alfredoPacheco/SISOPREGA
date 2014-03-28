@@ -114,7 +114,14 @@ public class TimeLineBean implements Serializable {
     log.info("[" + listTimeLineOp.size() + "] records retrieved from TimeLine list.");
     model = new TimelineModel();
     for (TimeLine tl : listTimeLineOp) {
-      TimelineEvent tle = new TimelineEvent(tl.getOperation() + " " + tl.getWho(), tl.getWhenToPay());
+      //TimelineEvent tle = new TimelineEvent(tl.getOperation() + " " + tl.getWho(), tl.getWhenToPay());
+      TimelineEvent tle;
+      if (tl.isSettled()){
+        tle = new TimelineEvent("<div style='width:50px;height:50px;background-color:blue;'>" + tl.getOperation() +" " + tl.getWho() + "</div>", tl.getWhenToPay());  
+      }else{
+        tle = new TimelineEvent("<div style='width:50px;height:50px;'>" + tl.getOperation() +" " + tl.getWho() + "</div>", tl.getWhenToPay());
+      }
+      
       model.add(tle);
     }
     return model;

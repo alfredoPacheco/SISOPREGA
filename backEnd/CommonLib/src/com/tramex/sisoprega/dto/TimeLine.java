@@ -20,6 +20,7 @@ public class TimeLine {
   private double weight;
   private double amount;
   private Date whenToPay;
+  private boolean settled;
  
   /**
    * @return the id
@@ -140,6 +141,18 @@ public class TimeLine {
    */
   public void setWhenToPay(Date whenToPay) {
     this.whenToPay = whenToPay;
+  }
+  /**
+   * @return the settled
+   */
+  public boolean isSettled() {
+    return settled;
+  }
+  /**
+   * @param settled the settled to set
+   */
+  public void setSettled(boolean settled) {
+    this.settled = settled;
   }
   
 }

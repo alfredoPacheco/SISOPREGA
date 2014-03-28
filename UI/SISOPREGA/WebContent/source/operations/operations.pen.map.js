@@ -179,13 +179,13 @@ enyo
 		this.addRow();
 		this.createCells("2R", -7, 4, "45px", "45px");
 		this.splitRow();
-		this.addCustomCell("spacerone", "", "730px", "45px",
+		this.addCustomCell("spacerone", "", "735px", "45px",
 			"customBYCellDesc");
 
 		this.addRow();
 		this.createCells("2R", -8, 4, "45px", "45px");
 		this.splitRow();
-		this.addCustomCell("spacertwo", "", "730px", "45px");
+		this.addCustomCell("spacertwo", "", "735px", "45px");
 
 		this.$.rancherFilter.$.textField.applyStyle("border-width",
 			"7px");

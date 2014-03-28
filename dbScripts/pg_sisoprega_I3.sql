@@ -557,8 +557,6 @@ GRANT ALL ON vw_toschedule to sisoprega;
 
 
 
-
-
 CREATE OR REPLACE VIEW vw_timeline AS
 
 select ROW_NUMBER() over (order by OperationTime) as Id, * from (
@@ -572,7 +570,8 @@ SELECT
   ctrl_purchase_detail.heads as Heads,
   ctrl_purchase_detail.weight as Weight,
   ctrl_purchase_detail.purchase_price as Amount,
-  ctrl_purchase_detail.paid_date as WhenToPay
+  ctrl_purchase_detail.paid_date as WhenToPay,
+  ctrl_purchase_detail.is_settled
 FROM
   ctrl_purchase
   INNER JOIN ctrl_purchase_detail ON ctrl_purchase.purchase_id = ctrl_purchase_detail.purchase_id
@@ -595,7 +594,8 @@ SELECT distinct
   ctrl_hermana_corte_exportador.heads as Heads, 
   ctrl_hermana_corte_exportador.weight as Weight,
   ctrl_hermana_corte_exportador.purchase_price as Amount,
-  ctrl_hermana_corte_exportador.paid_date as WhenToPay
+  ctrl_hermana_corte_exportador.paid_date as WhenToPay,
+  ctrl_hermana_corte_exportador.is_settled
 FROM
   ctrl_hermana
   INNER JOIN ctrl_hermana_corte_exportador ON ctrl_hermana_corte_exportador.hermana_id = ctrl_hermana.hermana_id
@@ -619,7 +619,8 @@ SELECT
   ctrl_sale_detail.heads as Heads, 
   ctrl_sale_detail.weight as Weight,
   ctrl_sale_detail.sale_price as Price,
-  ctrl_sale_detail.collected_date as WhenToPay
+  ctrl_sale_detail.collected_date as WhenToPay,
+  ctrl_sale_detail.is_settled
 FROM 
   ctrl_sale
   INNER JOIN ctrl_sale_detail ON ctrl_sale_detail.sale_id  = ctrl_sale.sale_id
@@ -632,3 +633,4 @@ WHERE
 ) as timeLine
 ORDER BY OperationTime ASC;
 GRANT ALL ON vw_timeline to sisoprega;
+

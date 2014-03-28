@@ -45,7 +45,7 @@ public class HermanaCorteExportador {
   private long cutSeq;
   private Date paidDate;
   private double paidAmount = 0.0d;
-  
+  private boolean settled=false;
   /**
    * @return the hermanaCorteExportadorId
    */
@@ -170,6 +170,20 @@ public class HermanaCorteExportador {
    */
   public void setPaidAmount(double paidAmount) {
     this.paidAmount = paidAmount;
+  }
+
+  /**
+   * @return the settled
+   */
+  public boolean isSettled() {
+    return settled;
+  }
+
+  /**
+   * @param settled the settled to set
+   */
+  public void setSettled(boolean settled) {
+    this.settled = settled;
   }
 
   @Override
