@@ -1538,9 +1538,16 @@
 			<description>Retrieve a single shipment record by it's ID</description>
 			<query>SELECT iShipment FROM Shipment iShipment WHERE iShipment.shipmentId = :Id</query>
 		</named-query>
+	
 		<named-query name="ALL_SHIPMENTS">
 			<description>Retrieve all shipment records from database.</description>
-			<query>SELECT DISTINCT iShipment FROM Shipment iShipment LEFT JOIN iShipment.shipmentRelease iShipmentRelease WHERE iShipment.dateTimeProgrammed BETWEEN :fromTs AND :toTs OR iShipment.recordWhen BETWEEN :fromTs AND :toTs OR iShipmentRelease.dateTime BETWEEN :fromTs AND :toTs ORDER BY iShipment.dateTimeProgrammed DESC</query>
+			<query>SELECT DISTINCT iShipment FROM Shipment iShipment 
+			LEFT JOIN iShipment.shipmentRelease iShipmentRelease 
+			WHERE iShipment.dateTimeProgrammed BETWEEN :fromTs AND :toTs 
+			OR iShipment.recordWhen BETWEEN :fromTs AND :toTs 
+			OR iShipmentRelease.dateTime BETWEEN :fromTs AND :toTs 
+			OR iShipment.shipmentId NOT IN (SELECT sr.shipment.shipmentId FROM ShipmentRelease sr)
+			ORDER BY iShipment.dateTimeProgrammed DESC</query>
 		</named-query>
 		<attributes>
 			<id name="shipmentId">

@@ -9,13 +9,39 @@
 		Timeline
 		<br />
 		<h:form id="formTimeline">
-			<pe:timeline id="timelineOperations" value="#{timeLineBean.timeLineOperations}" 
-		axisOnTop="true" zoomMin="1" height="250px" selectable="true" moveable="true" >
-				<p:ajax event="select" listener="#{timeLineBean.onSelect}"/>
+			<pe:timeline id="timelineOperations" var="tlOperation" eventStyle="box"
+				value="#{timeLineBean.timeLineOperations}" axisOnTop="true"
+				height="250px" selectable="true" moveable="true">
+				<p:ajax event="select" update=":formDialogPayment:gridPayment"
+					listener="#{timeLineBean.onSelect}"
+					oncomplete="PF('paymentDialog').show()" process="formTimeline"  />
+
+				<h:panelGrid columns="1">
+					<h:outputText value="#{tlOperation.operation}" />
+					<h:outputText value="#{tlOperation.who}" />
+					<h:outputText value="Amount: #{tlOperation.amount}" />
+				</h:panelGrid>
 			</pe:timeline>
 		</h:form>
-		
-		
+
+		<p:dialog header="Payment" widgetVar="paymentDialog" resizable="false"
+			id="payDlg" modal="true" appendTo="@(body)">
+			<h:form id="formDialogPayment">
+				<h:panelGrid id="gridPayment" columns="2" cellpadding="4"
+					style="margin:0 auto;">
+					<h:outputText value="Amount:" />
+					<p:inputText id="txtAmount"
+						value="#{timeLineBean.selectedItem.amount}" required="true" />
+					<p:commandButton id="btnSavePayment" action="#{timeLineBean.savePayment}"
+						value="Save" update=":formTimeline" process="formDialogPayment"
+						oncomplete="PF('paymentDialog').hide()">
+					</p:commandButton>
+					<p:commandButton id="btnCancel" value="Cancel"
+						oncomplete="PF('paymentDialog').hide()"></p:commandButton>
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
+
 		<br />
 		<br />
 		<h:form id="formToSchedule">
@@ -70,7 +96,7 @@
 
 					<p:commandButton id="btnSavePaymentSchedule"
 						action="#{paymentsToScheduleBean.update}" value="Save"
-						process="gridPaymentDate"
+						process="@all"
 						update=":formToSchedule:dataTablePayments, :formTimeline"
 						oncomplete="PF('paymentScheduleDialog').hide()">
 

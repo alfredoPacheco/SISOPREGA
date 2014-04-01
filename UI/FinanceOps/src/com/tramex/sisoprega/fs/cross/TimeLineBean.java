@@ -68,7 +68,15 @@ public class TimeLineBean implements Serializable {
   }
 
   public void onSelect(TimelineSelectEvent e) {
+    log.severe("entro a on select");
     TimelineEvent timelineEvent = e.getTimelineEvent();
+    this.selectedItem = (TimeLine) timelineEvent.getData();
+  }
+
+  public void savePayment() {
+    log.severe("Entro a save payment");
+    log.severe(this.selectedItem.getWho());
+    return;
   }
 
   public void update() {
@@ -114,14 +122,19 @@ public class TimeLineBean implements Serializable {
     log.info("[" + listTimeLineOp.size() + "] records retrieved from TimeLine list.");
     model = new TimelineModel();
     for (TimeLine tl : listTimeLineOp) {
-      //TimelineEvent tle = new TimelineEvent(tl.getOperation() + " " + tl.getWho(), tl.getWhenToPay());
+      // TimelineEvent tle = new TimelineEvent(tl.getOperation() + " " +
+      // tl.getWho(), tl.getWhenToPay());
       TimelineEvent tle;
-      if (tl.isSettled()){
-        tle = new TimelineEvent("<div style='width:50px;height:50px;background-color:blue;'>" + tl.getOperation() +" " + tl.getWho() + "</div>", tl.getWhenToPay());  
-      }else{
-        tle = new TimelineEvent("<div style='width:50px;height:50px;'>" + tl.getOperation() +" " + tl.getWho() + "</div>", tl.getWhenToPay());
-      }
-      
+//      if (tl.isSettled()) {
+//        tle = new TimelineEvent("<div style='display:none' recordId=" + tl.getRecordId()
+//            + " ></div><div style='width:50px;height:50px;background-color:blue;'>" + tl.getOperation() + " " + tl.getWho()
+//            + "</div>", tl.getWhenToPay());
+//      } else {
+//        tle = new TimelineEvent("<div style='display:none' recordId=" + tl.getRecordId()
+//            + "></div><div style='width:50px;height:50px;'>" + tl.getOperation() + " " + tl.getWho() + "</div>",
+//            tl.getWhenToPay());
+//      }
+      tle = new TimelineEvent(tl, tl.getWhenToPay());
       model.add(tle);
     }
     return model;
