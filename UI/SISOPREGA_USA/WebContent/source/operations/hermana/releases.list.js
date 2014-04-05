@@ -119,7 +119,7 @@ enyo
 			  },
 			  {
 				kind : enyo.Button,
-				caption : "Cut Selection",
+				caption : "Sort Selection",
 				onclick : "setupCutSelection",
 				style : "background-color: #DABD8B;"
 			  },
@@ -235,7 +235,7 @@ enyo
 		  cacheMan
 			  .setMessage(
 				  "",
-				  "You have not selected any record for cut, please select one or more records from the list and try again.");
+				  "You have not selected any record for sort, please select one or more records from the list and try again.");
 		  return false;
 		}
 

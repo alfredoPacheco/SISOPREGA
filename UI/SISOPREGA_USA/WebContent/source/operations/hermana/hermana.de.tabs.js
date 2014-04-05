@@ -39,7 +39,7 @@ enyo
 				  kind : "TabButton",
 				  name : "btnCorte",
 				  tab : 1,
-				  content : "Cut",
+				  content : "Sort",
 				  onclick : "tabClicked",
 				  height : "30px",
 				  style : "-webkit-border-image: none;color: white;background-color: chocolate;border-style: solid;border-width: 1px 1px 0px 1px;border-color: #333;border-radius: 30px 10px 0px 0px;font-size:15px;padding: 5px 0px 0px 0px;"
@@ -49,7 +49,7 @@ enyo
 				  kind : "TabButton",
 				  name : "btnCorteExportador",
 				  tab : 2,
-				  content : "Exporter Cut",
+				  content : "Exporter Sort",
 				  onclick : "tabClicked",
 				  height : "30px",
 				  style : "-webkit-border-image: none;color: white;background-color: chocolate;border-style: solid;border-width: 1px 1px 0px 1px;border-color: #333;border-radius: 30px 10px 0px 0px;font-size:15px;padding: 5px 0px 0px 0px;"
@@ -381,7 +381,7 @@ enyo
 
 		if (!this.summary && inSender.tab == 3) {
 		  cacheMan.setMessage('',
-			  'There is no cut record selected yet.');
+			  'There is no sort record selected yet.');
 		  return false;
 		}
 
@@ -521,10 +521,10 @@ enyo
 		this.$.summaryTotal.setData(total_data);
 
 		var corteDelta = this.summary.trade_hc - this.summary.net_hc;
-		var detailDescription = "Cutting "
+		var detailDescription = "Sorting "
 			+ utils.formatNumberThousands(this.summary.trade_hc) + " "
 			+ this.cattleClassName + ", "
-			+ utils.formatNumberThousands(corteDelta) + " to cut.";
+			+ utils.formatNumberThousands(corteDelta) + " to sort.";
 
 		this.$.detailDescription.setContent(detailDescription);
 	  },
@@ -545,7 +545,7 @@ enyo
 		}
 		
 		if(utils.parseToNumber(this.summary.net_hc) + utils.parseToNumber(this.$.headCount.getValue()) > utils.parseToNumber(this.summary.trade_hc)){
-		  sError = "Error. You are trying to cut more heads than imported.";
+		  sError = "Error. You are trying to sort more heads than imported.";
 		}
 		
 		if(sError != ""){
@@ -579,10 +579,15 @@ enyo
 		this.summary.net_avg = this.summary.net_hc == 0 ? 0 : Math
 			.floor(this.summary.net_lbs / this.summary.net_hc * 100) / 100;
 
-		this.summary.delta = this.summary.net_lbs - this.summary.trade_lbs;
-		this.summary.delta_pct = Math
-			.floor((this.summary.delta / this.summary.trade_lbs) * 100);
-
+		this.summary.delta = (this.summary.net_lbs - this.summary.trade_lbs).toFixed(0);
+		//TODO
+		this.summary.delta_pct = ((this.summary.delta / this.summary.trade_lbs) * 100).toFixed(1);
+		if((this.summary.net_lbs - this.summary.trade_lbs) < 0){
+		  this.$.summaryTotal.setRowNames(["Shrink","Percentage"]);
+		}
+		else{
+		  this.$.summaryTotal.setRowNames(["Increase","Percentage"]);
+		}
 		this.updateTableContents();
 	  },
 	  clearCorteDataEntry : function() {
@@ -613,10 +618,15 @@ enyo
 		this.summary.net_kgs = 0.0;
 		this.summary.net_avg = 0.0;
 
-		this.summary.delta = this.summary.net_lbs - this.summary.trade_lbs;
-		this.summary.delta_pct = Math
-			.floor((this.summary.delta / this.summary.trade_lbs) * 100);
-
+		this.summary.delta = (this.summary.net_lbs - this.summary.trade_lbs).toFixed(0);
+		this.summary.delta_pct = ((this.summary.delta / this.summary.trade_lbs) * 100).toFixed(1);
+		if((this.summary.net_lbs - this.summary.trade_lbs) < 0){
+		  this.$.summaryTotal.setRowNames(["Shrink","Percentage"]);
+		}
+		else{
+		  this.$.summaryTotal.setRowNames(["Increase","Percentage"]);
+		}
+		  
 		this.updateTableContents();
 	  },
 	  chargeSelected : function() {
@@ -752,7 +762,7 @@ enyo
 		var selectedExpoRecord = this.$.listaCorteExpo.cortes[selectedIdx];
 		
 		if(selectedExpoRecord.qualityId == -1) {
-		  // New record classified, set the new quality to it's expo cut sequences
+		  // New record classified, set the new quality to it's expo sort sequences
 		  for(var i = 0; i<selectedExpoRecord.sequences.length; i++){
 			var expoCut = cacheCorte.getExpoBySeqNQuality(selectedExpoRecord.sequences[i], -1);
 			expoCut.qualityId = this.$.classAutoCompleteExpo.getIndex();
