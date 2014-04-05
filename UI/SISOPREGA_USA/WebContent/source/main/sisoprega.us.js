@@ -65,6 +65,10 @@ enyo.kind(
                                     onclick : "open_view"
                                   },
                                   {
+                                    caption : "Consignees",
+                                    onclick : "open_view"
+                                  },
+                                  {
                                     caption : "Freighters",
                                     onclick : "open_view"
                                   },
@@ -156,6 +160,12 @@ enyo.kind(
                     lazy : true
                   },
                   {
+                    kind : "forms.list",
+                    name : "consigneesList_kind",
+                    entity : crudConsignee,
+                    lazy : true
+                  },
+                  {
                     kind : "catalogs.carrier.list",
                     name : "driversList_kind",
                     lazy : true
@@ -224,6 +234,7 @@ enyo.kind(
     },
     goAhead : function() {
       crudSeller.get(this, "readCallBack");
+      crudConsignee.get(this, "readCallBack");
       crudCustomer.get(this, "readCallBack");
       crudCarrier.get(this, "readCallBack");
       crudCattle.get(this, "readCallBack");
@@ -233,7 +244,7 @@ enyo.kind(
     readCounter : 0,
     readCallBack : function() {
       this.readCounter++;
-      if (this.readCounter == 6) {
+      if (this.readCounter == 7) {
         this.readCounter = 0;
         
         this.$.btnGoBack.setShowing(!1);
@@ -293,6 +304,11 @@ enyo.kind(
           this.$.mainPane.validateView("qualityList");
           this.$.mainPane.selectViewByName("qualityList");
           this.$.qualityList.reset();
+          break;
+        case 'Consignees':
+          _objMainHeader.setContent('Consignees');
+          this.$.mainPane.selectViewByName("consigneesList_kind");
+          this.$.consigneesList_kind.reset();
           break;
         case 'Clients':
           // this.addGoBackAction("catCattle");

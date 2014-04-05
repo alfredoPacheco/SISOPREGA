@@ -57,6 +57,24 @@ CREATE TABLE cat_customer(
 GRANT ALL ON cat_customer TO sisoprega;
 GRANT ALL ON cat_customer_customer_id_seq TO sisoprega;
 
+
+DROP TABLE IF EXISTS cat_consignee CASCADE;
+CREATE TABLE cat_consignee(
+	consignee_id    SERIAL PRIMARY KEY,
+	consignee_name  varchar(80) UNIQUE NOT NULL,
+	address_one  varchar(250),
+	address_two  varchar(250),
+	city         varchar(80),
+	address_state varchar(80),
+	zip_code varchar(20),
+	phone varchar(20),
+	email varchar(150)
+);
+
+GRANT ALL ON cat_consignee TO sisoprega;
+GRANT ALL ON cat_consignee_consignee_id_seq TO sisoprega;
+
+
 DROP TABLE IF EXISTS cat_carrier CASCADE;
 CREATE TABLE cat_carrier(
 	carrier_id	SERIAL PRIMARY KEY,

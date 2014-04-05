@@ -1211,6 +1211,38 @@
 			</basic>
 		</attributes>
 	</entity>
+	<entity class="com.tramex.sisoprega.dto.Consignee">
+		<table name="cat_consignee" />
+		<named-query name="CONSIGNEE_BY_ID">
+			<description>Retrieve a single consignee record by its ID</description>
+			<query>SELECT iConsignee FROM Consignee iConsignee WHERE iConsignee.consigneeId = :Id</query>
+		</named-query>
+		<named-query name="ALL_CONSIGNEES">
+			<description>Retrieve all consignee records from database.</description>
+			<query>SELECT iConsignee FROM Consignee iConsignee</query>
+		</named-query>
+		<attributes>
+			<id name="consigneeId">
+				<column name="consignee_id" />
+				<generated-value strategy="IDENTITY" />
+			</id>
+			<basic name="consigneeName">
+				<column name="consignee_name" />
+			</basic>
+			<basic name="addressOne">
+				<column name="address_one" />
+			</basic>
+			<basic name="addressTwo">
+				<column name="address_two" />
+			</basic>
+			<basic name="addressState">
+				<column name="address_state" />
+			</basic>
+			<basic name="zipCode">
+				<column name="zip_code" />
+			</basic>
+		</attributes>
+	</entity>
 	<entity class="com.tramex.sisoprega.dto.Purchase">
 		<table name="ctrl_purchase" />
 		<named-query name="PURCHASE_BY_ID">

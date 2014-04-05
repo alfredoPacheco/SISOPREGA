@@ -35,6 +35,7 @@ enyo.depends(
 	"source/cruds/r.reports.us.js",
 	"source/cruds/crud.seller.js",
 	"source/cruds/crud.carrier.js",
+	"source/cruds/crud.consignee.js",
 	"source/cruds/crud.customer.js",
 	"source/cruds/crud.cattleQuality.js",
 	"source/cruds/crud.purchase.js",
@@ -46,6 +47,7 @@ enyo.depends(
 	"source/cruds/crud.expenseConcept.js",	
 
 	"../SISOPREGA/source/userAdmin/useradmin.user.form.js",
+	"source/catalogs/catalogs.consignee.form.js",
 	"source/catalogs/catalogs.customer.form.js",
 	"source/catalogs/catalogs.seller.form.js",
 	
