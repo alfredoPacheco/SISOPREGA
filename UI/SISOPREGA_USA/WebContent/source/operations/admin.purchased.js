@@ -177,14 +177,13 @@ enyo
 		  this.$.lblPurHeads.setContent(utils
 			  .formatNumberThousands(objData.heads));
 		  this.$.lblPurWeight.setContent(utils
-			  .formatNumberThousands(objData.weight));
+			  .formatNumberThousands(Number(objData.weight).toFixed(0)));
 		  if (objData.heads <= 0) {
 			this.$.lblPurAveWeight.setContent("-");
 		  } else {
 			this.$.lblPurAveWeight.setContent(utils
 				.formatNumberThousands((objData.weight / objData.heads).toFixed(1)));
 		  }
-
 		  return true;
 		}
 	  },
@@ -195,7 +194,7 @@ enyo
 		this.$.lblPurSumHeads.setContent("Heads<br />"
 			+ utils.formatNumberThousands(iFotHeads));
 		this.$.lblPurSumWeight.setContent("Weight<br />"
-			+ utils.formatNumberThousands(iFotWeight.toFixed(1)));
+			+ utils.formatNumberThousands(iFotWeight.toFixed(0)));
 		var avg = iFotWeight / iFotHeads;
 		if (iFotHeads > 0) {
 		  this.$.lblSumAveWeight.setContent("Average<br />"

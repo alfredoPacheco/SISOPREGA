@@ -62,7 +62,7 @@ enyo
 		  var strDetail = "<table cellspacing=0 style='border: 1px solid darkgray;border-radius: 10px;'>";
 		  for(var j=0;j<obj.PurchaseDetail.length;j++){
 			strDetail += "<tr><td style='width:150px;text-align:right;border-right: 1px solid darkgray;padding-right: 7px;'>" + crudCattleQuality.getByID(obj.PurchaseDetail[j].qualityId).qualityName + "</td>";
-			strDetail += "<td style='width:120px;text-align:center;'>" + obj.PurchaseDetail[j].heads + "/" + obj.PurchaseDetail[j].weight + "lb</td>";
+			strDetail += "<td style='width:120px;text-align:center;'>" + obj.PurchaseDetail[j].heads + "/" + Number(obj.PurchaseDetail[j].weight).toFixed(0) + " lb</td>";
 			strDetail += "</tr>";
 		  }
 		  strDetail += "</table>";

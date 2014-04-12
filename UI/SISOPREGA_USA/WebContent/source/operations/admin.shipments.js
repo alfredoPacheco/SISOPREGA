@@ -200,7 +200,7 @@ enyo
             this.$.lblShipProgramDate.setContent(objData.dateTimeProgrammed.toLocaleDateString() + " "
                 + objData.dateTimeProgrammed.toLocaleTimeString().substring(0, 5));
             this.$.lblShipHeads.setContent(utils.formatNumberThousands(objData.totalHeads));
-            this.$.lblShipWeight.setContent(utils.formatNumberThousands(objData.totalWeight));
+            this.$.lblShipWeight.setContent(utils.formatNumberThousands(Number(objData.totalWeight).toFixed(0)));
             this.$.lblShipAverage.setContent(utils.formatNumberThousands(objData.totalAvgWeight.toFixed(1)));
             this.$.lblShipClient.setContent(objData.customer);
             if (inIndex % 2 == 0) inSender.$.client.$.client.applyStyle("background-color", "#DFC699");
@@ -233,7 +233,7 @@ enyo
           }
           
           this.$.lblShipSumHeads.setContent("Heads<br />" + utils.formatNumberThousands(iHeads.toFixed(0)));
-          this.$.lblShipSumWeight.setContent("Weight<br />" + utils.formatNumberThousands(iWeight.toFixed(1)));
+          this.$.lblShipSumWeight.setContent("Weight<br />" + utils.formatNumberThousands(iWeight.toFixed(0)));
           var avg = null;
           if (avg = (iAve / this.arrData.length)) {
             this.$.lblShipSumAveWeight.setContent("Average<br />" + utils.formatNumberThousands(avg.toFixed(1)));

@@ -580,7 +580,7 @@ enyo
 			.floor(this.summary.net_lbs / this.summary.net_hc * 100) / 100;
 
 		this.summary.delta = (this.summary.net_lbs - this.summary.trade_lbs).toFixed(0);
-		//TODO
+		
 		this.summary.delta_pct = ((this.summary.delta / this.summary.trade_lbs) * 100).toFixed(1);
 		if((this.summary.net_lbs - this.summary.trade_lbs) < 0){
 		  this.$.summaryTotal.setRowNames(["Shrink","Percentage"]);

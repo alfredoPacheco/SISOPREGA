@@ -563,7 +563,7 @@ enyo
 		  summary.rejects_hc += utils.parseToNumber(releaseObj.rejects_heads);
 		  summary.rejects_kgs += utils.parseToNumber(releaseObj.rejects_weight);
 		}
-
+	
 		if (releaseObj != null) {
 		  this.selectedCattleId = releaseObj.cattleType;
 		  this.$.details.setCattleClass(releaseObj.cattleType,
@@ -588,6 +588,7 @@ enyo
 		this.$.details.$.listaCorteExpo.setCortes(cacheCorte.getExpo());
 
 		this.$.details.setReleased(releasesArray);
+		
 		this.$.details.setSummary(summary);
 		this.$.details.updateTableContents();
 

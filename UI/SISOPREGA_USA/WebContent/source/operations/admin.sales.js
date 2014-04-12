@@ -204,8 +204,8 @@ enyo
           if (objData = this.arrData[inIndex]) {
             this.$.lblSalesDate.setContent(utils.dateOut(objData.saleDate));
             this.$.lblSalesHeads.setContent(utils.formatNumberThousands(objData.totalHeads));
-            this.$.lblSalesWeight.setContent(utils.formatNumberThousands(objData.totalWeight));
-            this.$.lblSalesAverage.setContent(utils.formatNumberThousands(objData.totalAvgWeight.toFixed(1)));
+            this.$.lblSalesWeight.setContent(utils.formatNumberThousands(Number(objData.totalWeight).toFixed(0)));
+            this.$.lblSalesAverage.setContent(utils.formatNumberThousands(Number(objData.totalAvgWeight).toFixed(1)));
             this.$.lblSalesClient.setContent(objData.customer);
             this.$.chkSalesShip.iPos = inIndex;
             
@@ -215,7 +215,7 @@ enyo
               for ( var i = 0; i < objData.arrToShipDetailed.length; i++) {
                 if (objData.arrToShipDetailed[i].dateTimeProgrammed) {
                   totalHeadsProgrammed += utils.parseToNumber(objData.arrToShipDetailed[i].heads);
-                  strShipDescription += "(" + objData.arrToShipDetailed[i].heads + " / " + objData.arrToShipDetailed[i].weight + ") para "
+                  strShipDescription += "(" + objData.arrToShipDetailed[i].heads + " / " + Number(objData.arrToShipDetailed[i].weight).toFixed(0) + ") para "
                       + objData.arrToShipDetailed[i].dateTimeProgrammed.toLocaleDateString() + "<br />";
                 }
               }
@@ -252,7 +252,7 @@ enyo
             iAve += this.arrData[j].aveWeight;
           }
           this.$.lblSalesSumHeads.setContent("Heads<br />" + utils.formatNumberThousands(iHeads.toFixed(0)));
-          this.$.lblSalesSumWeight.setContent("Weight<br />" + utils.formatNumberThousands(iWeight.toFixed(1)));
+          this.$.lblSalesSumWeight.setContent("Weight<br />" + utils.formatNumberThousands(iWeight.toFixed(0)));
           var avg = null;
           if (avg = (iWeight / iHeads)) {
             this.$.lblSumAveWeight.setContent("Average<br />" + utils.formatNumberThousands(avg.toFixed(1)));

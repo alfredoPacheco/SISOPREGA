@@ -133,7 +133,7 @@ enyo.kind(
         var cattleName = crudCattle.getCattleTypeById(arrAdapterList[i].Reception[0].cattleType).cattypeName;
         
         obj.importantInfo = "" + arrAdapterList[i].entryNo + " - " + rancher.name;
-        obj.secundaryInfo = this.hermanaHeads(obj) + ' cabezas de ' + cattleName + ' : ' + this.hermanaWeight(obj) + ' lbs.';
+        obj.secundaryInfo = this.hermanaHeads(obj) + ' cabezas de ' + cattleName + ' : ' + Number(this.hermanaWeight(obj)).toFixed(0) + ' lbs.';
         result.push(obj);
       }
       return result;

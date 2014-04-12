@@ -154,11 +154,11 @@ enyo
 		  this.$.listCabezas.setContent(utils
 			  .formatNumberThousands(objCorte.heads));
 		  this.$.listPeso.setContent(utils
-			  .formatNumberThousands(objCorte.weight));
+			  .formatNumberThousands(Number(objCorte.weight).toFixed(0)));
 
 		  var avgWeight = Math.floor(objCorte.weight / objCorte.heads * 100) / 100;
 		  this.$.listPromedio
-			  .setContent(utils.formatNumberThousands(avgWeight));
+			  .setContent(utils.formatNumberThousands(Number(avgWeight).toFixed(1)));
 
 		  if (this.iSelected == inIndex) {
 			this.$.rowContainer.applyStyle("background-color", "wheat");
