@@ -728,9 +728,9 @@ enyo
 		  this.$.txtQuality.setValue(crudCattleQuality
 			  .getByID(objInventory.qualityId).qualityName);
 		  this.$.txtQuantity.setValue(objInventory.heads);
-		  this.$.txtWeight.setValue(objInventory.weight + " Lb");
+		  this.$.txtWeight.setValue(Number(objInventory.weight).toFixed(0) + " Lb");
 		  this.$.txtAverage.setValue((objInventory.weight / objInventory.heads)
-			  .toFixed(2)
+			  .toFixed(1)
 			  + " Lb");
 		  this.$.txtLastFeedDate.setValue(objFeed.dateTime.toLocaleString());
 		  this.$.txtLastFeed.setValue(objFeed.quantity + " Lb");
@@ -846,25 +846,31 @@ enyo
 		var objMovement = this.$.movePen_kind.getObj();
 
 		movingFrom.heads = utils.parseToNumber(movingFrom.heads) - utils.parseToNumber(objMovement.heads);
-
+		movingFrom.weight = utils.parseToNumber(movingFrom.weight) - utils.parseToNumber(objMovement.weight);
+		
 		if (isMovingToOccupied) {
 
 		  movingTo.heads = utils.parseToNumber(movingTo.heads) + utils.parseToNumber(objMovement.heads);
-		  movingTo.weight = utils.parseToNumber(movingTo.weight)
-			  + utils.parseToNumber(objMovement.weight);
-		  movingTo.availableToSell = utils.parseToNumber(movingTo.availableToSell)
-			  + utils.parseToNumber(objMovement.heads);
+		  movingTo.weight = utils.parseToNumber(movingTo.weight) + utils.parseToNumber(objMovement.weight);
+		  movingTo.availableToSell = utils.parseToNumber(movingTo.availableToSell) + utils.parseToNumber(objMovement.heads);
 
 		} else {
 		  var objNewInventory = enyo.clone(movingFrom);
 		  delete objNewInventory.inventoryId;
-		  delete objNewInventory.FeedUS;
+		  delete objNewInventory.feedUS;
+		  delete objNewInventory.shrinkage;
+		  delete objNewInventory.cycleCompleted;
 		  objNewInventory.heads = utils.parseToNumber(objMovement.heads);
 		  objNewInventory.weight = utils.parseToNumber(objMovement.weight);
 		  // objNewInventory.pen = movingTo;
 		  objNewInventory.penId = movingTo.penId;
 		  objNewInventory.availableToSell = objNewInventory.heads;
 		  objNewInventory.feed = 0;
+		  objNewInventory.availableToProgramShip = 0;
+		  objNewInventory.availableToShip = 0;
+		  objNewInventory.programmedToShip = 0;
+		  objNewInventory.shipped = 0;
+		  objNewInventory.sold = 0;
 		  movingTo = objNewInventory;
 		}
 

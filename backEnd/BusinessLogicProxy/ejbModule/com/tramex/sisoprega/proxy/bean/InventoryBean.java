@@ -84,8 +84,8 @@ public ReadResponse Update(CreateRequest request) {
         }
         
         entity.setAvailableToSell(inventory.getAvailableToSell() - want_to_move);        
-        entity.setWeight(inventory.getWeight()/inventory.getHeads()*entity.getHeads());
-        entity.setFeed(inventory.getFeed()/inventory.getHeads()*entity.getHeads());
+//        entity.setWeight(inventory.getWeight()/inventory.getHeads()*entity.getHeads());
+//        entity.setFeed(inventory.getFeed()/inventory.getHeads()*entity.getHeads());
         
         if(entity.getHeads() <= 0){
           entity.setCycleCompleted(new Date());          

@@ -206,7 +206,8 @@ enyo
 
 		var occupiedPens = crudInventory.getPensList();
 		for ( var i = 0; i < occupiedPens.length; i++) {
-		  var isPenOccupied = this.$.pen.getIndex() == utils.parseToNumber(occupiedPens[i].value);
+		  var isPenOccupied = this.$.pen.getIndex() == utils
+			  .parseToNumber(occupiedPens[i].value);
 		  var isSameQuality = occupiedPens[i].object.qualityId == this.$.cattleQuality
 			  .getIndex();
 		  if (isPenOccupied && !isSameQuality) {
@@ -365,8 +366,11 @@ enyo
 		this.$.cattleType.setDisabled(false);
 		this.$.cattleType.setIndex(1); // Default value: Novillos
 	  },
-	  on_input : function(inSender, inEvent) {	
-		this.$.txtAvgWeight.setValue(utils.formatNumberThousands(utils.parseToNumber(this.$.peso.getValue()) / utils.parseToNumber(this.$.cabezas.getValue())));
+	  on_input : function(inSender, inEvent) {
+
+		this.$.txtAvgWeight.setValue(utils.formatNumberThousands(utils
+			.parseToNumber(this.$.peso.getValue())
+			/ utils.parseToNumber(this.$.cabezas.getValue())));
 		return true;
 	  }
 

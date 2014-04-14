@@ -2,7 +2,7 @@ enyo.kind(
 {
   name : "controls.numberBox",
   kind : "Control",
-  //flex:null,
+  // flex:null,
   layoutKind : enyo.HFlexLayout,
   sColorWithOutIndex : "teal",
   sColorWithIndex : "black",
@@ -85,12 +85,17 @@ enyo.kind(
   },
   on_input : function(inSender, inEvent, keyPressed) {
 	var x = keyPressed.charCodeAt(keyPressed.length - 1);
-	switch (true) {
-	case (x == 8): // backspace
-	case (x >= 46 && x <= 57): // numbers
+	if (!isNaN(x)) {
+	  switch (true) {
+	  case (x == 8): // backspace
+	  case (x >= 46 && x <= 57): // numbers
+		this.doInput(inSender, inEvent, keyPressed);
+		return;
+	  }
+	}else{
 	  this.doInput(inSender, inEvent, keyPressed);
-	  return;
 	}
+
 	inSender.setValue(inSender.value.slice(0, -1));
 
   }
