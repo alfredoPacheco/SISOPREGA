@@ -181,8 +181,8 @@ enyo
 		var objData = null;
 		if (objData = this.arrData[inIndex]) {
 		  this.$.lblPurSeller.setContent(objData.sellerName);
-		  this.$.lblPurHeads.setContent(objData.heads);
-		  this.$.lblPurWeight.setContent(objData.weight);
+		  this.$.lblPurHeads.setContent(utils.formatNumberThousands(objData.heads));
+		  this.$.lblPurWeight.setContent(utils.formatNumberThousands(Number(objData.weight).toFixed(0)));
 		  this.$.lblPurAveWeight.setContent(objData.aveWeight);
 		  return true;
 		}
@@ -427,9 +427,8 @@ enyo
 			{
 			  sellerId : objData.sellerId,
 			  sellerName : objData.sellerName,
-			  heads : utils.formatNumberThousands(objData.heads),
-			  weight : utils.formatNumberThousands(Number(objData.weight)
-				  .toFixed(0))
+			  heads : objData.heads,
+			  weight : objData.weight
 			};
 			if (obj.heads <= 0) {
 			  obj.aveWeight = "-";
