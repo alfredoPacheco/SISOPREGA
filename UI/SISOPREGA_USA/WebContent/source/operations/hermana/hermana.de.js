@@ -105,7 +105,15 @@ enyo
 			  name : 'btnClear',
 			  onclick : "resetForm",
 			  icon : "images/clear.png"
-			} ]
+			} ,
+			{
+			  kind:"Spacer"
+			},
+			{
+			  onclick:"on_exit_hermana",
+			  icon : "../SISOPREGA_WEB_LIB/images/command-menu/Exit.png",
+			  style:"margin-top: -5px;"
+			}]
 		  },
 		  {
 			kind : enyo.Scroller,
@@ -172,7 +180,8 @@ enyo
 							  inputKind : "ToolInput",
 							  name : "consignee",
 							  width : "275px;",
-							  height : "35px;"
+							  height : "35px;",
+							  hint : ""
 							// bindTo : "consigneeId"
 							},
 							{
@@ -181,7 +190,7 @@ enyo
 							  onclick : "showConsigneeForm",
 							  height : "23px",
 							  width : "31px",
-							  style : "padding: 2px;margin-top: 3px;background-color: #DABD8B;",
+							  style : "padding: 2px;margin-top: 0px;background-color: #DABD8B;",
 							  bindTo : "",
 							  hint : ""
 							} ]
@@ -563,7 +572,7 @@ enyo
 		  summary.rejects_hc += utils.parseToNumber(releaseObj.rejects_heads);
 		  summary.rejects_kgs += utils.parseToNumber(releaseObj.rejects_weight);
 		}
-	
+
 		if (releaseObj != null) {
 		  this.selectedCattleId = releaseObj.cattleType;
 		  this.$.details.setCattleClass(releaseObj.cattleType,
@@ -588,9 +597,13 @@ enyo
 		this.$.details.$.listaCorteExpo.setCortes(cacheCorte.getExpo());
 
 		this.$.details.setReleased(releasesArray);
-		
+
 		this.$.details.setSummary(summary);
 		this.$.details.updateTableContents();
+		
+		this.$.details.clearCorteDataEntry(); //TODO
+		this.$.details.$.draUpdateCorte.setOpen(false);
+		this.$.details.$.draAddCorte.setOpen(true);
 
 	  },
 	  saveHermana : function() {
@@ -681,7 +694,7 @@ enyo
 
 		this.doSave();
 		cacheMan.hideScrim();
-		alert('Hermana record has been successfully saved on database.');
+		//alert('Hermana record has been successfully saved on database.');
 	  },
 	  chargesIndexString : function(chargesArray) {
 		var result = '';
@@ -700,31 +713,14 @@ enyo
 		case "rancher_id":
 		  this.showAvailReleases();
 		  break;
-		case "cattype_id":
-		  this.$.location_id.setFocus();
-		  break;
-		case "location_id":
-		  this.$.zone_id.setFocus();
-		  break;
-		case "zone_id":
-		  this.$.hc_aprox.forceFocus();
-		  break;
-		case "hc_aprox":
-		  this.$.weight.forceFocus();
-		  break;
-		case "weight":
-		  if (this.$.draAdd.open == true) {
-			this.addReception();
-		  } else if (this.$.draUpdate.open == true) {
-			this.updateReception();
-		  }
-		  break;
-
 		}
 	  },
 	  key_down : function(inSender, inEvent) {
 		if (inEvent.keyCode == 13) {
 		  this.emularTabulacionConEnter(inSender);
 		}
+	  },
+	  on_exit_hermana:function(){
+		this.parent.close();
 	  }
 	});

@@ -77,7 +77,8 @@ enyo
 		for ( var i = 0; i < this.cortesExpo.length; i++) {
 		  if (this.cortesExpo[i].qualityId == corteExpo.qualityId) {
 			groupResult.heads += utils.parseToNumber(this.cortesExpo[i].heads);
-			groupResult.weight += utils.parseToNumber(this.cortesExpo[i].weight);
+			groupResult.weight += utils
+				.parseToNumber(this.cortesExpo[i].weight);
 			groupResult.sequences.push(this.cortesExpo[i].cutSeq);
 		  }
 		}
@@ -139,8 +140,10 @@ enyo
 			for ( var j = 0; j < this.cortesExpo.length; j++) {
 			  if (this.cortesExpo[j].cutSeq == expoCut.cutSeq
 				  && this.cortesExpo[j].qualityId == expoCut.qualityId) {
-				expoCut.heads = utils.parseToNumber(expoCut.heads) + utils.parseToNumber(this.cortesExpo[j].heads);
-				expoCut.weight = utils.parseToNumber(expoCut.weight) + utils.parseToNumber(this.cortesExpo[j].weight);
+				expoCut.heads = utils.parseToNumber(expoCut.heads)
+					+ utils.parseToNumber(this.cortesExpo[j].heads);
+				expoCut.weight = utils.parseToNumber(expoCut.weight)
+					+ utils.parseToNumber(this.cortesExpo[j].weight);
 			  }
 			}
 			expoCut.heads -= utils.parseToNumber(this.cortesExpo[i].heads);
@@ -148,28 +151,28 @@ enyo
 			newArray.push(expoCut);
 		  }
 		}
-		
+
 		// Remove 0 heads records
-		for(var i=0;i<newArray.length;i++){
-		  if(newArray[i].heads == 0){
+		for ( var i = 0; i < newArray.length; i++) {
+		  if (newArray[i].heads == 0) {
 			newArray.splice(i, 1);
 			i--;
 		  }
 		}
-		
-		
+
 		this.cortesExpo = enyo.clone(newArray);
 	  },
 	  removeExpo : function(cutRemove) {
-		
+
 		// Restore the splitted record.
-		for(var i=0; i<cutRemove.sequences.length; i++){
-		  var corteExpo = this.getExpoBySeqNQuality(cutRemove.sequences[i], cutRemove.qualityId);
+		for ( var i = 0; i < cutRemove.sequences.length; i++) {
+		  var corteExpo = this.getExpoBySeqNQuality(cutRemove.sequences[i],
+			  cutRemove.qualityId);
 		  var qualityId = -1;
 		  var cattleClassName = "";
 		  // Find and set original qualityId
-		  for(var j=0;j<this.cortes.length;j++){
-			if(this.cortes[j].cutSeq == cutRemove.sequences[i]){
+		  for ( var j = 0; j < this.cortes.length; j++) {
+			if (this.cortes[j].cutSeq == cutRemove.sequences[i]) {
 			  qualityId = this.cortes[j].qualityId;
 			  cattleClassName = this.cortes[j].cattleClassName;
 			  break;
@@ -178,7 +181,7 @@ enyo
 		  corteExpo.qualityId = qualityId;
 		  corteExpo.cattleClassName = cattleClassName;
 		}
-		
+
 		this.simplifyCortesExpo();
 	  },
 	  clear : function() {
@@ -223,9 +226,11 @@ enyo
 			  // a record was found to summarize in
 			  this.cortesExpo[summarizeIn].pen_name += ", "
 				  + this.cortes[i].pen_name;
-			  this.cortesExpo[summarizeIn].heads = utils.parseToNumber(this.cortesExpo[summarizeIn].heads)
+			  this.cortesExpo[summarizeIn].heads = utils
+				  .parseToNumber(this.cortesExpo[summarizeIn].heads)
 				  + heads;
-			  this.cortesExpo[summarizeIn].weight = utils.parseToNumber(this.cortesExpo[summarizeIn].weight)
+			  this.cortesExpo[summarizeIn].weight = utils
+				  .parseToNumber(this.cortesExpo[summarizeIn].weight)
 				  + weight;
 			  if (!this.cortesExpo[summarizeIn].recordIds) {
 				this.cortesExpo[summarizeIn].recordIds = [];
@@ -250,6 +255,14 @@ enyo
 			} // if summarizeIn
 		  } // if summarized
 		} // for each corte
+	  },
+	  getCorteByCutSeq : function(iCutSeq) {
+		for ( var i = 0; i < this.cortes.length; i++) {
+		  if (this.cortes[i].cutSeq == iCutSeq) {
+			return this.cortes[i];
+		  }
+		}
+		return null;
 	  }
 	});
 var cacheCorte = new cache.corte();

@@ -85,7 +85,7 @@ enyo.kind(
 	name : "popup_hermana",
 	width : "1000px;",
 	height : "85%;",
-	dismissWithClick : true,
+	dismissWithClick : false,
 	layoutKind : "VFlexLayout",
 	style : "overflow: hidden;border-width: 8px;",
 	scrim : true,

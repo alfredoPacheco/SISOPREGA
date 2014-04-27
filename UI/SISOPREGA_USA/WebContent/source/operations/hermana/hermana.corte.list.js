@@ -6,7 +6,8 @@ enyo
 	  events :
 	  {
 		onRemoveCorte : "",
-		onCorteSelected : ""
+		onCorteSelected : "",
+		onPenSelect : ""
 	  },
 	  cortes : [],
 	  iSelected : -1,
@@ -92,12 +93,18 @@ enyo
 				},
 				{
 				  name : "listCorral",
-				  style : "width:150px;text-align:center;",
-				  content : ""
+				  showing : false
+				// style : "width:150px;text-align:center;",
+				// content : ""
+				},
+				{
+				  kind : "HFlexBox",
+				  name : "pensContainer",
+				  style : "width:225px;"
 				},
 				{
 				  name : "listCabezas",
-				  style : "width:150px;text-align:right;",
+				  style : "width:75px;text-align:right;",
 				  content : ""
 				},
 				{
@@ -112,31 +119,7 @@ enyo
 				} ]
 			  } ]
 			} ]
-		  },
-		  {
-			kind : "Drawer",
-			name : "draDel",
-			open : false,
-			components : [
-			{
-			  kind : "Toolbar",
-			  components : [
-			  {
-				kind : "enyo.IconButton",
-				style : "width:150px;",
-				label : "Remove",
-				onclick : "onEliminar"
-			  },
-			  {
-				kind : "enyo.IconButton",
-				style : "width:150px;",
-				label : "Cancel",
-				onclick : "onCancel"
-			  }, ]
-			}
-
-			]
-		  }, ],
+		  } ],
 	  setCortes : function(arrCorte) {
 		this.loadCortes(arrCorte);
 	  },
@@ -149,33 +132,68 @@ enyo
 	  setupCorteRow : function(inSender, inIndex) {
 		var objCorte = this.cortes[inIndex];
 		if (objCorte) {
+
+		  // this.$.pensContainer.destroyComponents();
+		  // this.$.pensContainer.render();
+		  if (objCorte.pen_name !== null) {
+			this.$.pensContainer.destroyControls();
+			var arrPens = objCorte.pen_name.split(",");
+			for ( var i = 0; i < arrPens.length; i++) {
+			  this.$.pensContainer.createComponent(
+			  // [
+			  // {
+			  // kind : enyo.Button,
+			  // onclick : "on_pen_click",
+			  // caption : arrPens[i],
+			  // style : "height:20px;background-color: transparent;margin:
+			  // 0px;padding: 0px;color: #292929;font-size: 16px;"
+			  // }, ],
+
+			  {
+				content : '<a href="javascript:penClick('
+					+ objCorte.sequences[i] + ');">' + arrPens[i]
+					+ '</a>&nbsp;',
+				allowHtml : true,
+			  // onclick : "on_pen_click",
+			  // onmousedown : "buttonDown",
+			  // onmouseup : "buttonUp",
+			  // onmouseout : "buttonUp",
+			  // onmouseover : "buttonDown",
+			  // className : "enyo-button",
+			  // style : "padding: 2px;margin-top:
+			  // 0px;background-color:#DABD8B;margin-left:1px;height: 20px;"
+			  },
+			  {
+				owner : this
+			  });
+			}
+		  }
 		  this.$.listCorral.setContent(objCorte.pen_name);
 		  this.$.listClase.setContent(objCorte.cattleClassName);
 		  this.$.listCabezas.setContent(utils
 			  .formatNumberThousands(objCorte.heads));
-		  this.$.listPeso.setContent(utils
-			  .formatNumberThousands(Number(objCorte.weight).toFixed(0)));
+		  this.$.listPeso.setContent(utils.formatNumberThousands(Number(
+			  objCorte.weight).toFixed(0)));
 
 		  var avgWeight = Math.floor(objCorte.weight / objCorte.heads * 100) / 100;
-		  this.$.listPromedio
-			  .setContent(utils.formatNumberThousands(Number(avgWeight).toFixed(1)));
+		  this.$.listPromedio.setContent(utils.formatNumberThousands(Number(
+			  avgWeight).toFixed(1)));
 
 		  if (this.iSelected == inIndex) {
 			this.$.rowContainer.applyStyle("background-color", "wheat");
 		  }
-
+		  // this.$.pensContainer.render();
 		  return true;
 		}
 		return false;
 	  },
 	  dropCorte : function(inSender, inIndex) {
 
-		if (this.isForExporter){
+		if (this.isForExporter) {
 		  cacheCorte.removeExpo(this.cortes[inIndex]);
 		  this.cortes = cacheCorte.getExpo();
 		  this.loadCortes(cacheCorte.getExpo());
-		} 
-		else {
+		} else {
 		  cacheCorte.remove(this.cortes[inIndex]);
 		  this.cortes = cacheCorte.get();
 		  this.parent.parent.$.listaCorteExpo.loadCortes(cacheCorte.getExpo());
@@ -185,9 +203,13 @@ enyo
 		this.doRemoveCorte();
 	  },
 	  selectCorte : function(inSender, inEvent) {
-		this.iSelected = inEvent.rowIndex;
-		this.loadCortes();
-		this.doCorteSelected();
+		if (this.isForExporter) {
+		  if (inEvent.rowIndex !== undefined) {
+			this.iSelected = inEvent.rowIndex;
+			this.loadCortes();
+			this.doCorteSelected();
+		  }
+		}
 	  },
 	  on_hold_item : function(inSender, inEvent) {
 		if (this.isForExporter) {
@@ -203,21 +225,23 @@ enyo
 		}
 	  },
 	  on_accept_split : function(inSender, objNew) {
-		
-		this.reduceSplittedHeads(inSender.objToSplit, utils.parseToNumber(objNew.heads), utils.parseToNumber(objNew.weight));
+
+		this.reduceSplittedHeads(inSender.objToSplit, utils
+			.parseToNumber(objNew.heads), utils.parseToNumber(objNew.weight));
 		objNew.qualityId = -1;
 		objNew.cattleClassName = "";
 		cacheCorte.cortesExpo.push(objNew);
 		cacheCorte.simplifyCortesExpo();
-		
+
 		this.loadCortes(cacheCorte.getExpo());
 		this.$.popup_split.close();
 	  },
-	  reduceSplittedHeads : function(cutGroup, headsToSplit, weightToSplit){
-		for(var i=0;i<cutGroup.sequences.length; i++){
-		  var expoCut = cacheCorte.getExpoBySeqNQuality(cutGroup.sequences[i], cutGroup.qualityId);
-		  if(expoCut != null) {
-			if(headsToSplit > expoCut.heads){
+	  reduceSplittedHeads : function(cutGroup, headsToSplit, weightToSplit) {
+		for ( var i = 0; i < cutGroup.sequences.length; i++) {
+		  var expoCut = cacheCorte.getExpoBySeqNQuality(cutGroup.sequences[i],
+			  cutGroup.qualityId);
+		  if (expoCut != null) {
+			if (headsToSplit > expoCut.heads) {
 			  headsToSplit -= expoCut.heads;
 			  weightToSplit -= expoCut.weight;
 			  expoCut.heads == 0;
@@ -235,4 +259,15 @@ enyo
 	  on_cancel_split : function() {
 		this.$.popup_split.close();
 	  },
+	  getObj : function() {
+		return this.cortes[this.iSelected];
+	  },
+	  on_pen_click : function(iCutSeq) {
+		this.doPenSelect(iCutSeq);
+	  }
 	});
+
+function penClick(iCutSeq) {
+  enyo.$.us_mainAdmin_screen_hermana_kind_details_listaCorte
+	  .on_pen_click(iCutSeq);
+}

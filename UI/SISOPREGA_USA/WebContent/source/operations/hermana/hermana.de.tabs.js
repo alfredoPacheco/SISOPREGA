@@ -9,6 +9,7 @@ enyo
 	  },
 	  summary : null,
 	  released : [],
+	  corteBeingEdited : null,
 	  cattleClassName : "",
 	  components : [
 		  {
@@ -118,45 +119,99 @@ enyo
 						style : "margin-left:10px;"
 					  },
 					  {
-						kind : "ToolInput",
+						kind : "controls.numberBox",
+						inputKind : "ToolInput",
+						height : "35px",
+						width : "200px",
 						name : "headCount",
+						hint : 'Heads',
 						style : "width:20%",
-						hint : "Heads",
-						height : "35px",
-						width : "200px",
-						style : "margin-left:10px;"
 					  },
 					  {
-						kind : "ToolInput",
+						kind : "controls.numberBox",
+						inputKind : "ToolInput",
+						height : "35px",
 						name : "weight",
-						style : "width:20%",
 						hint : "Weight",
-						height : "35px",
+						flex : 1,
+						style : "width:20%;margin-left:10px;",
 						width : "200px",
-						style : "margin-left:10px;"
 					  },
+
+					  // {
+					  // content : '<button type="button" style="border:
+					  // 0;background-color: transparent;margin: 0px;padding:
+					  // 0px;color: #292929;font-size: 16px;">Add</button>',
+					  // allowHtml : true,
+					  // onclick : "agregarCorte",
+					  // onmousedown : "buttonDown",
+					  // onmouseup : "buttonUp",
+					  // onmouseout : "buttonUp",
+					  // onmouseover : "buttonDown",
+					  // className : "enyo-button",
+					  // style : "padding: 2px;margin-top: 0px;background-color:
+					  // #DABD8B;margin-left:1px;height: 24px;"
+					  // },
 					  {
-                        content : '<button type="button" style="border: 0;background-color: transparent;margin: 0px;padding: 0px;color: #292929;font-size: 16px;">Add</button>',
-                        allowHtml : true,
-                        onclick : "agregarCorte",
-                        onmousedown : "buttonDown",
-                        onmouseup : "buttonUp",
-                        onmouseout : "buttonUp",
-                        onmouseover : "buttonDown",
-                        className : "enyo-button",
-                        style : "padding: 2px;margin-top: 0px;background-color: #DABD8B;margin-left:1px;height: 24px;"
-                      }
-//					  {
-//						kind : enyo.IconButton,
-//						icon : "../SISOPREGA_WEB_LIB/images/menu-icon-new.png",
-//						className : "enyo-button-affirmative",
-//						onclick : "agregarCorte",
-//						height : "22px",
-//						width : "23px",
-//						style : "padding: 2px;margin-top: 0px;margin-right:5px;margin-left:10px;"
-//					  } 
-					  
-					  ]
+						layoutKind : "HFlexLayout",
+						width : "140px;",
+						components : [
+							{
+							  kind : "Drawer",
+							  name : "draAddCorte",
+							  animate : false,
+							  components : [
+							  {
+								layoutKind : "HFlexLayout",
+								align : "center",
+								flex : 1,
+								components : [
+									{
+									  content : '<button type="button" style="border: 0;background-color: transparent;margin: 0px;padding: 0px;color: #292929;font-size: 16px;">Add</button>',
+									  allowHtml : true,
+									  onclick : "agregarCorte",
+									  onmousedown : "buttonDown",
+									  onmouseup : "buttonUp",
+									  onmouseout : "buttonUp",
+									  onmouseover : "buttonDown",
+									  className : "enyo-button",
+									  style : "padding: 2px;margin-top: 0px;background-color: #DABD8B;margin-left:1px;height: 24px;"
+									}, ]
+							  } ]
+							},
+							{
+							  kind : "Drawer",
+							  name : "draUpdateCorte",
+							  animate : false,
+							  open : false,
+							  components : [
+							  {
+								layoutKind : "HFlexLayout",
+								align : "center",
+								flex : 1,
+								components : [
+									{
+									  kind : "enyo.IconButton",
+									  name : "btnUpdateCorte",
+									  icon : "../SISOPREGA_WEB_LIB/images/btn_edit.png",
+									  // flex : 1,
+									  onclick : "update_corte",
+									  style : "margin-top: 0px;"
+									},
+									{
+									  kind : "Button",
+									  name : "btnCancelUpdateCorte",
+									  className : "enyo-button-negative",
+									  flex : 1,
+									  caption : "Cancel",
+									  onclick : "cancel_update_corte",
+									  style : "margin-top: 0px;"
+									} ]
+							  } ]
+							} ]
+					  }
+
+				  ]
 				},
 				{
 				  kind : "HFlexBox",
@@ -165,9 +220,11 @@ enyo
 				  height : "17px"
 				},
 				{
-				  kind : "hermana.corte.list",
+				  kind : "hermana.corte.list", // TODO
 				  name : "listaCorte",
 				  onRemoveCorte : "corteRemoved",
+				  onCorteSelected : "on_corte_selected",
+				  onPenSelect : "on_pen_select",
 				  flex : 1
 				} ]
 		  },
@@ -221,25 +278,44 @@ enyo
 						height : "35px",
 						disabled : true
 					  },
+
 					  {
-                        content : '<button type="button" style="border: 0;background-color: transparent;margin: 0px;padding: 0px;color: #292929;font-size: 16px;">Update</button>',
-                        allowHtml : true,
-                        onclick : "reClassify",
-                        onmousedown : "buttonDown",
-                        onmouseup : "buttonUp",
-                        onmouseout : "buttonUp",
-                        onmouseover : "buttonDown",
-                        className : "enyo-button",
-                        style : "padding: 2px;margin-top: 0px;background-color: #DABD8B;margin-left:1px;height: 23px;"
-                      },
-//					  {
-//						kind : enyo.IconButton,
-//						icon : "../SISOPREGA_WEB_LIB/images/menu-icon-new.png",
-//						className : "enyo-button-affirmative",
-//						onclick : "reClassify",
-//						style : "padding: 2px;margin-top: 0px;width: 23px;height: 22px;"
-//					  }
-                      ]
+						layoutKind : "HFlexLayout",
+						width : "140px;",
+						components : [
+						{
+						  kind : "Drawer",
+						  name : "draAddCorte",
+						  animate : false,
+						  components : [
+						  {
+							layoutKind : "HFlexLayout",
+							align : "center",
+							flex : 1,
+							components : [
+								{
+								  content : '<button type="button" style="border: 0;background-color: transparent;margin: 0px;padding: 0px;color: #292929;font-size: 16px;">Update</button>',
+								  allowHtml : true,
+								  onclick : "reClassify",
+								  onmousedown : "buttonDown",
+								  onmouseup : "buttonUp",
+								  onmouseout : "buttonUp",
+								  onmouseover : "buttonDown",
+								  className : "enyo-button",
+								  style : "padding: 2px;margin-top: 0px;background-color: #DABD8B;margin-left:1px;height: 23px;"
+								},
+							// {
+							// kind : "enyo.IconButton",
+							// name : "btnAdd",
+							// icon :
+							// "../SISOPREGA_WEB_LIB/images/menu-icon-new.png",
+							// onclick : "agregar_click",
+							// flex : 1
+							// }
+							]
+						  } ]
+						} ]
+					  } ]
 				},
 				{
 				  kind : "hermana.corte.list",
@@ -380,8 +456,7 @@ enyo
 	  tabClicked : function(inSender, inEvent) {
 
 		if (!this.summary && inSender.tab == 3) {
-		  cacheMan.setMessage('',
-			  'There is no sort record selected yet.');
+		  cacheMan.setMessage('', 'There is no sort record selected yet.');
 		  return false;
 		}
 
@@ -399,7 +474,7 @@ enyo
 		case 2:
 		  this.showCorteExportador();
 		  this.$.lblCorralExpo.applyStyle("visibility", "hidden");
-		  this.$.listaCorteExpo.$.control2.applyStyle("visibility","hidden");
+		  this.$.listaCorteExpo.$.control2.applyStyle("visibility", "hidden");
 		  break;
 		case 3:
 		  this.showGastos();
@@ -479,8 +554,10 @@ enyo
 		var mx_dataRow = [];
 		mx_dataRow.push(utils.formatNumberThousands(this.summary.hc));
 		mx_dataRow.push(utils.formatNumberThousands(this.summary.kg));
-		mx_dataRow.push(utils.formatNumberThousands(this.summary.lbs.toFixed(1)));
-		mx_dataRow.push(utils.formatNumberThousands(this.summary.avg.toFixed(1)));
+		mx_dataRow.push(utils
+			.formatNumberThousands(this.summary.lbs.toFixed(1)));
+		mx_dataRow.push(utils
+			.formatNumberThousands(this.summary.avg.toFixed(1)));
 		data.push(mx_dataRow);
 
 		var rejects_dataRow = [];
@@ -494,16 +571,22 @@ enyo
 
 		var trade_dataRow = [];
 		trade_dataRow.push(utils.formatNumberThousands(this.summary.trade_hc));
-		trade_dataRow.push(utils.formatNumberThousands(this.summary.trade_kgs.toFixed(1)));
-		trade_dataRow.push(utils.formatNumberThousands(this.summary.trade_lbs.toFixed(1)));
-		trade_dataRow.push(utils.formatNumberThousands(this.summary.trade_avg.toFixed(1)));
+		trade_dataRow.push(utils.formatNumberThousands(this.summary.trade_kgs
+			.toFixed(1)));
+		trade_dataRow.push(utils.formatNumberThousands(this.summary.trade_lbs
+			.toFixed(1)));
+		trade_dataRow.push(utils.formatNumberThousands(this.summary.trade_avg
+			.toFixed(1)));
 		data.push(trade_dataRow);
 
 		var net_dataRow = [];
 		net_dataRow.push(utils.formatNumberThousands(this.summary.net_hc));
-		net_dataRow.push(utils.formatNumberThousands(this.summary.net_kgs.toFixed(1)));
-		net_dataRow.push(utils.formatNumberThousands(this.summary.net_lbs.toFixed(1)));
-		net_dataRow.push(utils.formatNumberThousands(this.summary.net_avg.toFixed(1)));
+		net_dataRow.push(utils.formatNumberThousands(this.summary.net_kgs
+			.toFixed(1)));
+		net_dataRow.push(utils.formatNumberThousands(this.summary.net_lbs
+			.toFixed(1)));
+		net_dataRow.push(utils.formatNumberThousands(this.summary.net_avg
+			.toFixed(1)));
 		data.push(net_dataRow);
 
 		this.$.summary.setData(data);
@@ -532,8 +615,10 @@ enyo
 		var sError = "";
 		var occupiedPens = crudInventory.getPensList();
 		for ( var i = 0; i < occupiedPens.length; i++) {
-		  var isPenOccupied = this.$.penAutoComplete.getIndex() == utils.parseToNumber(occupiedPens[i].value);
-		  var isSameQuality = occupiedPens[i].object.qualityId == this.$.classAutoComplete.getIndex();
+		  var isPenOccupied = this.$.penAutoComplete.getIndex() == utils
+			  .parseToNumber(occupiedPens[i].value);
+		  var isSameQuality = occupiedPens[i].object.qualityId == this.$.classAutoComplete
+			  .getIndex();
 		  if (isPenOccupied && !isSameQuality) {
 			var cattleQuality = crudCattleQuality
 				.getByID(occupiedPens[i].object.qualityId);
@@ -543,16 +628,18 @@ enyo
 			break;
 		  }
 		}
-		
-		if(utils.parseToNumber(this.summary.net_hc) + utils.parseToNumber(this.$.headCount.getValue()) > utils.parseToNumber(this.summary.trade_hc)){
+
+		if (utils.parseToNumber(this.summary.net_hc)
+			+ utils.parseToNumber(this.$.headCount.getValue()) > utils
+			.parseToNumber(this.summary.trade_hc)) {
 		  sError = "Error. You are trying to sort more heads than imported.";
 		}
-		
-		if(sError != ""){
-		  cacheMan.setMessage("",sError);
+
+		if (sError != "") {
+		  cacheMan.setMessage("", sError);
 		  return;
 		}
-		
+
 		var cutRecord =
 		{
 		  barnyardId : this.$.penAutoComplete.getIndex(),
@@ -572,6 +659,7 @@ enyo
 		this.calculateSummaryFromCorte(cutRecord);
 		this.$.classAutoComplete.setFocus();
 	  },
+
 	  calculateSummaryFromCorte : function(cutRecord) {
 		this.summary.net_hc += utils.parseToNumber(cutRecord.heads);
 		this.summary.net_lbs += utils.parseToNumber(cutRecord.weight);
@@ -579,14 +667,15 @@ enyo
 		this.summary.net_avg = this.summary.net_hc == 0 ? 0 : Math
 			.floor(this.summary.net_lbs / this.summary.net_hc * 100) / 100;
 
-		this.summary.delta = (this.summary.net_lbs - this.summary.trade_lbs).toFixed(0);
-		
-		this.summary.delta_pct = ((this.summary.delta / this.summary.trade_lbs) * 100).toFixed(1);
-		if((this.summary.net_lbs - this.summary.trade_lbs) < 0){
-		  this.$.summaryTotal.setRowNames(["Shrink","Percentage"]);
-		}
-		else{
-		  this.$.summaryTotal.setRowNames(["Increase","Percentage"]);
+		this.summary.delta = (this.summary.net_lbs - this.summary.trade_lbs)
+			.toFixed(0);
+
+		this.summary.delta_pct = ((this.summary.delta / this.summary.trade_lbs) * 100)
+			.toFixed(1);
+		if ((this.summary.net_lbs - this.summary.trade_lbs) < 0) {
+		  this.$.summaryTotal.setRowNames([ "Shrink", "Percentage" ]);
+		} else {
+		  this.$.summaryTotal.setRowNames([ "Increase", "Percentage" ]);
 		}
 		this.updateTableContents();
 	  },
@@ -603,7 +692,7 @@ enyo
 		this.$.lblWeightExpo.setValue("");
 		this.$.classAutoCompleteExpo.clear();
 	  },
-	  corteRemoved : function() {
+	  corteRemoved : function() {// TODO
 		this.clearCorteSummary();
 		var cortes = cacheCorte.get();
 		for ( var i = 0; i < cortes.length; i++) {
@@ -612,21 +701,25 @@ enyo
 		this.$.listaCorte.loadCortes();
 		this.$.listaCorteExpo.loadCortes(cacheCorte.getExpo());
 	  },
+	  on_corte_selected : function(sender, e) {
+
+	  },
 	  clearCorteSummary : function() {
 		this.summary.net_hc = 0;
 		this.summary.net_lbs = 0.0;
 		this.summary.net_kgs = 0.0;
 		this.summary.net_avg = 0.0;
 
-		this.summary.delta = (this.summary.net_lbs - this.summary.trade_lbs).toFixed(0);
-		this.summary.delta_pct = ((this.summary.delta / this.summary.trade_lbs) * 100).toFixed(1);
-		if((this.summary.net_lbs - this.summary.trade_lbs) < 0){
-		  this.$.summaryTotal.setRowNames(["Shrink","Percentage"]);
+		this.summary.delta = (this.summary.net_lbs - this.summary.trade_lbs)
+			.toFixed(0);
+		this.summary.delta_pct = ((this.summary.delta / this.summary.trade_lbs) * 100)
+			.toFixed(1);
+		if ((this.summary.net_lbs - this.summary.trade_lbs) < 0) {
+		  this.$.summaryTotal.setRowNames([ "Shrink", "Percentage" ]);
+		} else {
+		  this.$.summaryTotal.setRowNames([ "Increase", "Percentage" ]);
 		}
-		else{
-		  this.$.summaryTotal.setRowNames(["Increase","Percentage"]);
-		}
-		  
+
 		this.updateTableContents();
 	  },
 	  chargeSelected : function() {
@@ -757,57 +850,158 @@ enyo
 		  return false;
 		}
 
-		// set the new class quality Id and name in the corteExportador cached record
+		// set the new class quality Id and name in the corteExportador cached
+		// record
 		var selectedIdx = this.$.listaCorteExpo.iSelected;
 		var selectedExpoRecord = this.$.listaCorteExpo.cortes[selectedIdx];
-		
-		if(selectedExpoRecord.qualityId == -1) {
-		  // New record classified, set the new quality to it's expo sort sequences
-		  for(var i = 0; i<selectedExpoRecord.sequences.length; i++){
-			var expoCut = cacheCorte.getExpoBySeqNQuality(selectedExpoRecord.sequences[i], -1);
+
+		if (selectedExpoRecord.qualityId == -1) {
+		  // New record classified, set the new quality to it's expo sort
+		  // sequences
+		  for ( var i = 0; i < selectedExpoRecord.sequences.length; i++) {
+			var expoCut = cacheCorte.getExpoBySeqNQuality(
+				selectedExpoRecord.sequences[i], -1);
 			expoCut.qualityId = this.$.classAutoCompleteExpo.getIndex();
 			expoCut.cattleClassName = this.$.classAutoCompleteExpo.getValue();
 		  }
 		} else {
 		  // Reclassify classified record.
-		  for(var i=0; i<selectedExpoRecord.sequences.length; i++){
-			var expoCut = cacheCorte.getExpoBySeqNQuality(selectedExpoRecord.sequences[i], selectedExpoRecord.qualityId);
+		  for ( var i = 0; i < selectedExpoRecord.sequences.length; i++) {
+			var expoCut = cacheCorte.getExpoBySeqNQuality(
+				selectedExpoRecord.sequences[i], selectedExpoRecord.qualityId);
 			expoCut.qualityId = this.$.classAutoCompleteExpo.getIndex();
 			expoCut.cattleClassName = this.$.classAutoCompleteExpo.getValue();
 		  }
 		}
-		
+
 		cacheCorte.simplifyCortesExpo();
 		this.$.listaCorteExpo.setCortes(cacheCorte.getExpo());
 		this.clearCorteExpoDataEntry();
 	  },
 	  clase_select : function(inSender) {
-		var filter = [];
-		var occupied = {};
-		var allPens = enyo.clone(crudPen.getListUsaPens());
-		var items = crudInventory.getPensList();
-		for ( var i = 0; i < items.length; i++) {
-		  occupied[items[i].value] = items[i];
-		  if (items[i].object.qualityId == this.$.classAutoComplete.getIndex()) {
-			filter.push(items[i]);
+		if (this.corteBeingEdited == null) {
+		  var filter = [];
+		  var occupied = {};
+		  var allPens = enyo.clone(crudPen.getListUsaPens());
+		  var items = crudInventory.getPensList();
+		  for ( var i = 0; i < items.length; i++) {
+			occupied[items[i].value] = items[i];
+			if (items[i].object.qualityId == this.$.classAutoComplete
+				.getIndex()) {
+			  filter.push(items[i]);
+			}
 		  }
+
+		  for ( var j = 0; j < allPens.length; j++) {
+			if (!occupied.hasOwnProperty(allPens[j].value)) {
+			  filter.push(allPens[j]);
+			}
+		  }
+
+		  this.$.penAutoComplete.setFilter(filter);
+		  this.$.penAutoComplete.clear();
+		  this.$.penAutoComplete.useFilter();
+		}
+	  },
+	  buttonDown : function(inSender, inEvent) {
+		if (inEvent.which) {
+		  inSender.setClassName("enyo-button enyo-button-hot enyo-button-down");
+		}
+	  },
+	  buttonUp : function(inSender, inEvent) {
+		inSender.setClassName("enyo-button");
+	  },
+	  on_pen_select : function(inSender, iCutSeq) {
+		this.corteBeingEdited = cacheCorte.getCorteByCutSeq(iCutSeq);
+		this.$.classAutoComplete.setIndex(this.corteBeingEdited.qualityId);
+		this.$.penAutoComplete.setIndex(this.corteBeingEdited.barnyardId);
+		this.$.headCount.setValue(this.corteBeingEdited.heads);
+		this.$.weight.setValue(this.corteBeingEdited.weight);
+
+		this.$.draUpdateCorte.setOpen(true);
+		this.$.draAddCorte.setOpen(false);
+
+		this.$.classAutoComplete.setFocus();
+	  },
+	  update_corte : function() { // TODO
+		var sError = "";
+
+		if (this.$.penAutoComplete.getIndex() < 0) {
+		  sError = "Error. Verify [Pen] field.";
 		}
 
-		for ( var j = 0; j < allPens.length; j++) {
-		  if (!occupied.hasOwnProperty(allPens[j].value)) {
-			filter.push(allPens[j]);
-		  }
+		if (this.$.classAutoComplete.getIndex() < 0) {
+		  sError = "Error. Verify [Class] field.";
 		}
 
-		this.$.penAutoComplete.setFilter(filter);
-		this.$.penAutoComplete.clear();
-		this.$.penAutoComplete.useFilter();
-	  },buttonDown : function(inSender, inEvent) {
-        if (inEvent.which) {
-          inSender.setClassName("enyo-button enyo-button-hot enyo-button-down");
-        }
-      },
-      buttonUp : function(inSender, inEvent) {
-        inSender.setClassName("enyo-button");
-      },
+		if (this.$.headCount.getValue().trim() == "") {
+		  sError = "Error. Verify [Heads] field.";
+		}
+
+		if (this.$.weight.getValue().trim() == "") {
+		  sError = "Error. Verify [Weight] field.";
+		}
+
+//		var occupiedPens = crudInventory.getPensList();
+//		for ( var i = 0; i < occupiedPens.length; i++) {
+//		  var isPenOccupied = this.$.penAutoComplete.getIndex() == utils
+//			  .parseToNumber(occupiedPens[i].value);
+//		  var isSameQuality = occupiedPens[i].object.qualityId == this.$.classAutoComplete
+//			  .getIndex();
+//		  if (isPenOccupied && !isSameQuality) {
+//			var cattleQuality = crudCattleQuality
+//				.getByID(occupiedPens[i].object.qualityId);
+//			sError = "Error. The Pen " + occupiedPens[i].caption
+//				+ " is already occupied by cattle class "
+//				+ cattleQuality.qualityName;
+//			break;
+//		  }
+//		}
+
+		if (sError != "") {
+		  cacheMan.setMessage("", sError);
+		  return;
+		}
+
+		this.summary.net_hc -= this.corteBeingEdited.heads; // TODO
+		this.summary.net_lbs -= this.corteBeingEdited.weight; // TODO
+
+		if (utils.parseToNumber(this.summary.net_hc)
+			+ utils.parseToNumber(this.$.headCount.getValue()) > utils
+			.parseToNumber(this.summary.trade_hc)) {
+		  sError = "Error. You are trying to sort more heads than imported.";
+		}
+
+		if (sError != "") {
+		  cacheMan.setMessage("", sError);
+		  return;
+		}
+
+		this.corteBeingEdited.barnyardId = this.$.penAutoComplete.getIndex();
+		this.corteBeingEdited.pen_name = this.$.penAutoComplete.getValue();
+		this.corteBeingEdited.qualityId = this.$.classAutoComplete.getIndex();
+		this.corteBeingEdited.cattleClassName = this.$.classAutoComplete
+			.getValue();
+		this.corteBeingEdited.heads = this.$.headCount.getValue();
+		this.corteBeingEdited.weight = this.$.weight.getValue();
+
+		this.$.listaCorte.setCortes(cacheCorte.get());
+		this.$.listaCorteExpo.setCortes(cacheCorte.getExpo());
+
+		this.clearCorteDataEntry();
+		this.calculateSummaryFromCorte(this.corteBeingEdited);
+		this.corteBeingEdited = null;
+
+		this.$.draUpdateCorte.setOpen(false);
+		this.$.draAddCorte.setOpen(true);
+
+		this.$.classAutoComplete.setFocus();
+	  },
+	  cancel_update_corte : function() {
+		this.corteBeingEdited = null;
+		this.clearCorteDataEntry();
+		this.$.draUpdateCorte.setOpen(false);
+		this.$.draAddCorte.setOpen(true);
+		this.$.classAutoComplete.setFocus();
+	  },
 	});
