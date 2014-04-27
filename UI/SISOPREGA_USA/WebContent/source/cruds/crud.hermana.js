@@ -48,7 +48,7 @@ enyo.kind(
         if(entityObj.HermanaCorte){
           for ( var i = 0; i < entityObj.HermanaCorte.length; i++) {
             var corte = entityObj.HermanaCorte[i];
-            corte.pen_name = crudPen.getByID(corte.barnyardId).barnyardCode;
+            corte.pen_name = crudPen.adapterToList(crudPen.getByID(corte.barnyardId)).caption;
             corte.cattleClassName = crudCattleQuality.getByID(corte.qualityId).qualityName;
           }  
         }
@@ -96,7 +96,7 @@ enyo.kind(
           if(entityObj.Reception[i].Inspection){
             var rejects_heads=0;
             var rejects_weight=0;
-            for(var j=0;j<entityObj.Reception[i].Inspection.lenght;j++){
+            for(var j=0;j<entityObj.Reception[i].Inspection.length;j++){
               if(entityObj.Reception[i].Inspection[j].InspectionDetails){
                 for(var k=0;k<entityObj.Reception[i].Inspection[j].InspectionDetails.length;k++){
                   rejects_heads += utils.parseToNumber(entityObj.Reception[i].Inspection[j].InspectionDetails[k].hc);
@@ -105,7 +105,7 @@ enyo.kind(
               }
             }
             entityObj.Reception[i].rejects_heads = rejects_heads;
-            entityObj.Reception[i].rejects_weight = rejects_weight;
+            entityObj.Reception[i].rejects_weight =entityObj.Reception[i].Inspection[0].weight; //TODO: Double check if there is only one Inspection
           }else{
             entityObj.Reception[i].rejects_heads = 0;
             entityObj.Reception[i].rejects_weight = 0;

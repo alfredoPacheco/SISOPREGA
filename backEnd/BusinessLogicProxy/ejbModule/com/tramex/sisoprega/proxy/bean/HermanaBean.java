@@ -253,11 +253,16 @@ public class HermanaBean extends BaseInventory implements Cruddable {
         log.warning("Tryal for removing more heads than available.");
         throw new DataModelException("No hay suficientes cabezas en el registro de inventario para completar esta operación");
       } else {
+        
         inventory.setWeight(inventory.getWeight() - deltaWeight);
         inventory.setHeads(inventory.getHeads() - delta);
         inventory.setAvailableToSell(inventory.getAvailableToSell() - delta);
-
-        dataModel.updateDataModel(inventory);
+        if(inventory.getHeads() > 0){
+          dataModel.updateDataModel(inventory);
+        }
+        else{
+          dataModel.deleteDataModel(inventory, getLoggedUser());
+        }
       }
     } else {
       log.warning("Tryal for removing more heads than available.");

@@ -601,7 +601,7 @@ enyo
 		this.$.details.setSummary(summary);
 		this.$.details.updateTableContents();
 		
-		this.$.details.clearCorteDataEntry(); //TODO
+		this.$.details.clearCorteDataEntry();
 		this.$.details.$.draUpdateCorte.setOpen(false);
 		this.$.details.$.draAddCorte.setOpen(true);
 
