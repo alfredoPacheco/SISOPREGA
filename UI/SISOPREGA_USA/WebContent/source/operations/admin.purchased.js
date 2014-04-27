@@ -21,30 +21,29 @@ enyo
 			layoutKind : enyo.HFlexLayout,
 			style : "padding:0px;color:white",
 			components : [
-				{
-				  kind : "VFlexBox",
-				  content : "Purchased",
-				  style : "font-size:15px;",
-				  flex : .1,
-				  onclick : "doSelect"
-				},
-				{
-				  kind : "Spacer",
-				  flex : .02
-				},
-				{
-				  kind : "Button",
-				  caption : "Purchase",
-				  width:"70px;",
-				  onclick : "doBuyCattle",
-				},
-				{
-				  kind : "Button",
-				  caption : "Hermana",
-				  width:"70px;",
-				  onclick : "doCaptureHermana",
-				}
-			]
+			{
+			  kind : "VFlexBox",
+			  content : "Purchased",
+			  style : "font-size:15px;",
+			  flex : .1,
+			  onclick : "doSelect"
+			},
+			{
+			  kind : "Spacer",
+			  flex : .02
+			},
+			{
+			  kind : "Button",
+			  caption : "Purchase",
+			  width : "70px;",
+			  onclick : "doBuyCattle",
+			},
+			{
+			  kind : "Button",
+			  caption : "Hermana",
+			  width : "70px;",
+			  onclick : "doCaptureHermana",
+			} ]
 		  },
 		  {// HEADER:
 			kind : "HFlexBox",
@@ -55,23 +54,31 @@ enyo
 			pack : "start",
 			components : [
 			{
-			  content : '',
-			  flex : 1
+			  content : 'Vendor',
+			  flex : 1,
+			  onclick : "on_sort",
+			  sortDirection : "DESC"
 			},
 			{
 			  content : 'Heads',
 			  flex : 1.5,
-			  style : "text-align: right;"
+			  style : "text-align: right;",
+			  onclick : "on_sort",
+			  sortDirection : "DESC"
 			},
 			{
 			  content : 'Weight',
 			  flex : 1.5,
-			  style : "text-align: right;"
+			  style : "text-align: right;",
+			  onclick : "on_sort",
+			  sortDirection : "DESC"
 			},
 			{
 			  content : 'Average',
 			  flex : 1.5,
-			  style : "text-align: right;"
+			  style : "text-align: right;",
+			  onclick : "on_sort",
+			  sortDirection : "DESC"
 			} ]
 		  },
 		  {
@@ -174,16 +181,9 @@ enyo
 		var objData = null;
 		if (objData = this.arrData[inIndex]) {
 		  this.$.lblPurSeller.setContent(objData.sellerName);
-		  this.$.lblPurHeads.setContent(utils
-			  .formatNumberThousands(objData.heads));
-		  this.$.lblPurWeight.setContent(utils
-			  .formatNumberThousands(Number(objData.weight).toFixed(0)));
-		  if (objData.heads <= 0) {
-			this.$.lblPurAveWeight.setContent("-");
-		  } else {
-			this.$.lblPurAveWeight.setContent(utils
-				.formatNumberThousands((objData.weight / objData.heads).toFixed(1)));
-		  }
+		  this.$.lblPurHeads.setContent(objData.heads);
+		  this.$.lblPurWeight.setContent(objData.weight);
+		  this.$.lblPurAveWeight.setContent(objData.aveWeight);
 		  return true;
 		}
 	  },
@@ -236,11 +236,11 @@ enyo
 		var imported = crudHermana.arrObj;
 		var purchases = purchased.concat(imported);
 		this.groupBySeller(purchases);
+		this.arrData = this.formatList(this.arrData);
 		this.$.listPurchased.render();
 		this.updateSummary();
 		this.doAferUpdatePurchase();
 		this.doLoadCompleted();
-
 	  },
 	  calculateInventory : function(useFirstListItem) {
 		// Add inventory record.
@@ -311,8 +311,10 @@ enyo
 		  }
 
 		  if (iSellerId == sellerId) {
-			heads += utils.parseToNumber(this.calculateTotalHeads(detailRecords));
-			weight += utils.parseToNumber(this.calculateTotalWeight(detailRecords));
+			heads += utils.parseToNumber(this
+				.calculateTotalHeads(detailRecords));
+			weight += utils.parseToNumber(this
+				.calculateTotalWeight(detailRecords));
 			sellerName = auxSellerName;
 		  }
 		}
@@ -352,5 +354,93 @@ enyo
 		  return totalWeight;
 		}
 		return 0;
+	  },
+	  on_sort : function(inSender) {
+		switch (inSender.content) {
+		case "Vendor":
+		  if (inSender.sortDirection == "ASC") {
+			inSender.sortDirection = "DESC";
+			this.arrData.sort(function(a, b) {
+			  return a.sellerName < b.sellerName;
+			});
+		  } else {
+			inSender.sortDirection = "ASC";
+			this.arrData.sort(function(a, b) {
+			  return a.sellerName > b.sellerName;
+			});
+		  }
+		  break;
+		case "Heads":
+		  if (inSender.sortDirection == "ASC") {
+			inSender.sortDirection = "DESC";
+			this.arrData.sort(function(a, b) {
+			  return utils.parseToNumber(a.heads) < utils
+				  .parseToNumber(b.heads);
+			});
+		  } else {
+			inSender.sortDirection = "ASC";
+			this.arrData.sort(function(a, b) {
+			  return utils.parseToNumber(a.heads) > utils
+				  .parseToNumber(b.heads);
+			});
+		  }
+		  break;
+		case "Weight":
+		  if (inSender.sortDirection == "ASC") {
+			inSender.sortDirection = "DESC";
+			this.arrData.sort(function(a, b) {
+			  return utils.parseToNumber(a.weight) < utils
+				  .parseToNumber(b.weight);
+			});
+		  } else {
+			inSender.sortDirection = "ASC";
+			this.arrData.sort(function(a, b) {
+			  return utils.parseToNumber(a.weight) > utils
+				  .parseToNumber(b.weight);
+			});
+		  }
+		  break;
+		case "Average":
+		  if (inSender.sortDirection == "ASC") {
+			inSender.sortDirection = "DESC";
+			this.arrData.sort(function(a, b) {
+			  return utils.parseToNumber(a.aveWeight) < utils
+				  .parseToNumber(b.aveWeight);
+			});
+		  } else {
+			inSender.sortDirection = "ASC";
+			this.arrData.sort(function(a, b) {
+			  return utils.parseToNumber(a.aveWeight) > utils
+				  .parseToNumber(b.aveWeight);
+			});
+		  }
+		  break;
+		}
+		this.$.listPurchased.render();
+	  },
+	  formatList : function(arrList) {
+		var result = [];
+		for ( var index = 0; index < arrList.length; index++) {
+		  var objData = null;
+		  if (objData = arrList[index]) {
+			var obj =
+			{
+			  sellerId : objData.sellerId,
+			  sellerName : objData.sellerName,
+			  heads : utils.formatNumberThousands(objData.heads),
+			  weight : utils.formatNumberThousands(Number(objData.weight)
+				  .toFixed(0))
+			};
+			if (obj.heads <= 0) {
+			  obj.aveWeight = "-";
+			} else {
+			  obj.aveWeight = utils
+				  .formatNumberThousands((objData.weight / objData.heads)
+					  .toFixed(1));
+			}
+			result.push(obj);
+		  }
+		}
+		return result;
 	  }
 	});
