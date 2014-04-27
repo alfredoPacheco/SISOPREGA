@@ -36,6 +36,23 @@ enyo
 		  entityObj.aveweight = utils.parseToNumber(entityObj.heads)
 			  / utils.parseToNumber(entityObj.weight);
 
+		  var cattle_name = crudCattle.getCattleTypeById(entityObj.cattypeId);
+		  if (cattle_name) {
+			cattle_name = cattle_name.cattypeName;
+		  } else {
+			cattle_name = "";
+		  }
+		  entityObj.cattle_name = cattle_name;
+		  
+		  var quality_name = crudCattleQuality.getByID(entityObj.qualityId);
+		  if (quality_name) {
+			quality_name = quality_name.qualityName;
+		  } else {
+			quality_name = "";
+		  }
+		  entityObj.quality_name = quality_name;
+		  
+		  
 		  if (arrAux = entityObj.Shrinkage) {
 			for ( var i = 0; i < arrAux.length; i++) {
 			  arrAux[i].dateTime = utils.dateIn(arrAux[i].dateTime);

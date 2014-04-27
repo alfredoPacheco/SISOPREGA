@@ -205,7 +205,7 @@ enyo.kind(
   },
   parseToNumber:function(strNumber){
 	var toStr = "" + strNumber;
-	return Number(toStr.replace(",",""));
+	return Number(toStr.replace(/\,/g,''));
   }
 });
 

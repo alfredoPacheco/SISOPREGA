@@ -18,7 +18,7 @@ enyo
 			name : "weightInput",
 			height : "35px",
 			hint : '',
-			width : "40px",
+			width : "100px",
 			style : "text-align:right;"
 		  },
 		  {

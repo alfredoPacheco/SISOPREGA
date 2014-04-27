@@ -43,31 +43,43 @@ enyo
 			components : [
 			{
 			  content : 'Type',
-			  flex : .8
+			  flex : .8,
+			  onclick : "on_sort",
+			  sortDirection : "DESC"
 			},
 			{
 			  content : 'Class',
-			  flex : .8
+			  flex : .8,
+			  onclick : "on_sort",
+			  sortDirection : "DESC"
 			},
 			{
 			  content : 'Heads',
 			  flex : .5,
-			  style : "text-align: right;"
+			  style : "text-align: right;",
+			  onclick : "on_sort",
+			  sortDirection : "DESC"
 			},
 			{
 			  content : 'Weight',
 			  flex : 1,
-			  style : "text-align: right;"
+			  style : "text-align: right;",
+			  onclick : "on_sort",
+			  sortDirection : "DESC"
 			},
 			{
 			  content : 'Average',
 			  flex : 1,
-			  style : "text-align: right;"
+			  style : "text-align: right;",
+			  onclick : "on_sort",
+			  sortDirection : "DESC"
 			},
 			{
 			  content : 'Feed',
 			  flex : 1,
-			  style : "text-align: right;"
+			  style : "text-align: right;",
+			  onclick : "on_sort",
+			  sortDirection : "DESC"
 			}, ]
 		  },
 		  {
@@ -84,61 +96,61 @@ enyo
 				style : "font-size: 12px;",
 				onclick : "doSelect",
 				components : [
-					{
-					  layoutKind : enyo.HFlexLayout,
-					  components : [
-					  {
-						name : "lblInvType",
-						flex : .8,
-						content : ""
-					  },
-					  {
-						name : "lblInvClass",
-						flex : .8,
-						content : "Steers"
-					  },
-					  {
-						name : "lblInvHeads",
-						flex : .5,
-						content : "",
-						style : "text-align: right;"
-					  },
-					  {
-						name : "lblInvWeight",
-						flex : 1,
-						content : "",
-						style : "text-align: right;"
-					  },
-					  {
-						name : "lblInvInvAverage",
-						flex : 1,
-						content : "",
-						style : "text-align: right;"
-					  },
-					  {
-						name : "lblInvFeed",
-						flex : 1,
-						content : "",
-						style : "text-align: right;"
-					  }, ]
-					},
-					{
-					  layoutKind : enyo.HFlexLayout,
-					  components : [
-						  {
-							name : "lblInvBarnyards",
-							style : "font-size: 11px;color:#008B8B;text-align:left;",
-							flex : 1,
-							content : ""
-						  },
-						  {
-							name : "lblInvDescBuyer",
-							allowHtml : true,
-							style : "font-size: 11px;color:#008B8B;text-align:right;",
-							flex : 1,
-							content : ""
-						  } ]
-					} ]
+				{
+				  layoutKind : enyo.HFlexLayout,
+				  components : [
+				  {
+					name : "lblInvType",
+					flex : .8,
+					content : ""
+				  },
+				  {
+					name : "lblInvClass",
+					flex : .8,
+					content : "Steers"
+				  },
+				  {
+					name : "lblInvHeads",
+					flex : .5,
+					content : "",
+					style : "text-align: right;"
+				  },
+				  {
+					name : "lblInvWeight",
+					flex : 1,
+					content : "",
+					style : "text-align: right;"
+				  },
+				  {
+					name : "lblInvInvAverage",
+					flex : 1,
+					content : "",
+					style : "text-align: right;"
+				  },
+				  {
+					name : "lblInvFeed",
+					flex : 1,
+					content : "",
+					style : "text-align: right;"
+				  }, ]
+				},
+				{
+				  layoutKind : enyo.HFlexLayout,
+				  components : [
+				  {
+					name : "lblInvBarnyards",
+					style : "font-size: 11px;color:#008B8B;text-align:left;",
+					flex : 1,
+					content : ""
+				  },
+				  {
+					name : "lblInvDescBuyer",
+					allowHtml : true,
+					style : "font-size: 11px;color:#008B8B;text-align:right;",
+					flex : 1,
+					content : ""
+				  } ]
+				} ]
 			  } ]
 			} ]
 		  },
@@ -266,62 +278,15 @@ enyo
 	  loadInventory : function(inSender, inIndex) {
 		var objData;
 		if (objData = this.arrData[inIndex]) {
-		  var len = objData.length;
-		  var strBarnyards = "";
-		  var totalHeads = 0;
-		  var totalWeight = 0;
-		  var totalFeed = 0;
 
-		  var cattypeId = 0;
-		  var qualityId = 0;
-		  var strSales = "";
-		  for ( var i = 0; i < len; i++) {
-			strBarnyards += "" + crudPen.adapterToList(objData[i].pen).caption + ", ";
-			totalHeads += utils.parseToNumber(objData[i].heads);
-			totalWeight += utils.parseToNumber(objData[i].weight);
-			totalFeed += utils.parseToNumber(objData[i].feed);
-			cattypeId = objData[i].cattypeId;
-			qualityId = objData[i].qualityId;
-
-			var salesByInventory = this
-				.getSalesByInventoryID(objData[i].inventoryId);
-			for ( var j = 0; j < salesByInventory.length; j++) {
-			  var sale = salesByInventory[j];
-			  strSales += "" + sale.saleDate.toLocaleDateString() + " "
-				  + sale.customer + " " + sale.heads + "/" + Number(sale.weight).toFixed(0)
-				  + "<br />";
-			}
-		  }
-		  this.$.lblInvDescBuyer.setContent(strSales);
-
-		  if (strBarnyards != "") {
-			strBarnyards = strBarnyards.slice(0, -2);
-		  }
-
-		  var cattle_name = crudCattle.getCattleTypeById(cattypeId);
-		  if (cattle_name) {
-			cattle_name = cattle_name.cattypeName;
-		  } else {
-			cattle_name = "";
-		  }
-
-		  var quality_name = crudCattleQuality.getByID(qualityId);
-		  if (quality_name) {
-			quality_name = quality_name.qualityName;
-		  } else {
-			quality_name = "";
-		  }
-
-		  this.$.lblInvType.setContent(cattle_name);
-		  this.$.lblInvClass.setContent(quality_name);
-		  this.$.lblInvHeads
-			  .setContent(utils.formatNumberThousands(totalHeads));
-		  this.$.lblInvWeight.setContent(utils
-			  .formatNumberThousands(Number(totalWeight).toFixed(0)));
-		  this.$.lblInvInvAverage.setContent(utils
-			  .formatNumberThousands((totalWeight / totalHeads).toFixed(1)));
-		  this.$.lblInvFeed.setContent(utils.formatNumberThousands(Number(totalFeed).toFixed(0)));
-		  this.$.lblInvBarnyards.setContent(strBarnyards);
+		  this.$.lblInvDescBuyer.setContent(objData.strSales);
+		  this.$.lblInvType.setContent(objData.cattle_name);
+		  this.$.lblInvClass.setContent(objData.quality_name);
+		  this.$.lblInvHeads.setContent(objData.totalHeads);
+		  this.$.lblInvWeight.setContent(objData.totalWeight);
+		  this.$.lblInvInvAverage.setContent(objData.totalAveWeight);
+		  this.$.lblInvFeed.setContent(objData.totalFeed);
+		  this.$.lblInvBarnyards.setContent(objData.strBarnyards);
 
 		  if (inIndex % 2 == 0)
 			inSender.$.client.$.client
@@ -336,7 +301,7 @@ enyo
 		var iSumWeight = crudInventory.getObjSummary().weight;
 		var iSumAve = iSumWeight / iHeads;
 		var iSumFeed = crudInventory.getObjSummary().feed;
-		var objSalesSummary =crudSale.getSummary(); 
+		var objSalesSummary = crudSale.getSummary();
 		var iSold = objSalesSummary.iHeads;
 		var iSoldWeight = objSalesSummary.iWeight;
 
@@ -352,7 +317,8 @@ enyo
 		this.$.lblPurSumInvHeads.setContent("Heads<br />"
 			+ utils.formatNumberThousands(iHeads - iSold));
 		this.$.lblPurSumInvWeight.setContent("Weight<br />"
-			+ utils.formatNumberThousands((iSumWeight - iSoldWeight).toFixed(0)));
+			+ utils
+				.formatNumberThousands((iSumWeight - iSoldWeight).toFixed(0)));
 		this.$.lblSumInvAveWight
 			.setContent("Average<br />"
 				+ utils
@@ -379,7 +345,7 @@ enyo
 			result.push(groupByType[obj]);
 		  }
 		}
-		this.arrData = result;
+		this.arrData = this.formatList(result);
 		this.$.listInventory.render();
 		this.updateSummary();
 	  },
@@ -409,7 +375,8 @@ enyo
 			var sale = this.todaySales[i];
 			for ( var j = 0; j < sale.SaleDetail.length; j++) {
 			  var detail = sale.SaleDetail[j];
-			  if (utils.parseToNumber(detail.inventoryId) == utils.parseToNumber(iInventoryID)) {
+			  if (utils.parseToNumber(detail.inventoryId) == utils
+				  .parseToNumber(iInventoryID)) {
 				var obj =
 				{
 				  customer : sale.customer,
@@ -424,4 +391,149 @@ enyo
 		}
 		return result;
 	  },
+	  on_sort : function(inSender) {
+		switch (inSender.content) {
+		case "Type":
+		  if (inSender.sortDirection == "ASC") {
+			inSender.sortDirection = "DESC";
+			this.arrData.sort(function(a, b) {
+			  return a.cattle_name < b.cattle_name;
+			});
+		  } else {
+			inSender.sortDirection = "ASC";
+			this.arrData.sort(function(a, b) {
+			  return a.cattle_name > b.cattle_name;
+			});
+		  }
+		  break;
+		case "Class":
+		  if (inSender.sortDirection == "ASC") {
+			inSender.sortDirection = "DESC";
+			this.arrData.sort(function(a, b) {
+			  return a.quality_name < b.quality_name;
+			});
+		  } else {
+			inSender.sortDirection = "ASC";
+			this.arrData.sort(function(a, b) {
+			  return a.quality_name > b.quality_name;
+			});
+		  }
+		  break;
+		case "Heads":
+		  if (inSender.sortDirection == "ASC") {
+			inSender.sortDirection = "DESC";
+			this.arrData.sort(function(a, b) {
+			  return utils.parseToNumber(a.totalHeads) < utils
+				  .parseToNumber(b.totalHeads);
+			});
+		  } else {
+			inSender.sortDirection = "ASC";
+			this.arrData.sort(function(a, b) {
+			  return utils.parseToNumber(a.totalHeads) > utils
+				  .parseToNumber(b.totalHeads);
+			});
+		  }
+		  break;
+		case "Weight":
+		  if (inSender.sortDirection == "ASC") {
+			inSender.sortDirection = "DESC";
+			this.arrData.sort(function(a, b) {
+			  return utils.parseToNumber(a.totalWeight) < utils
+				  .parseToNumber(b.totalWeight);
+			});
+		  } else {
+			inSender.sortDirection = "ASC";
+			this.arrData.sort(function(a, b) {
+			  return utils.parseToNumber(a.totalWeight) > utils
+				  .parseToNumber(b.totalWeight);
+			});
+		  }
+		  break;
+		case "Average":
+		  if (inSender.sortDirection == "ASC") {
+			inSender.sortDirection = "DESC";
+			this.arrData.sort(function(a, b) {
+			  return utils.parseToNumber(a.totalAveWeight) < utils
+				  .parseToNumber(b.totalAveWeight);
+			});
+		  } else {
+			inSender.sortDirection = "ASC";
+			this.arrData.sort(function(a, b) {
+			  return utils.parseToNumber(a.totalAveWeight) > utils
+				  .parseToNumber(b.totalAveWeight);
+			});
+		  }
+		  break;
+		case "Feed":
+		  if (inSender.sortDirection == "ASC") {
+			inSender.sortDirection = "DESC";
+			this.arrData.sort(function(a, b) {
+			  return utils.parseToNumber(a.totalFeed) < utils
+				  .parseToNumber(b.totalFeed);
+			});
+		  } else {
+			inSender.sortDirection = "ASC";
+			this.arrData.sort(function(a, b) {
+			  return utils.parseToNumber(a.totalFeed) > utils
+				  .parseToNumber(b.totalFeed);
+			});
+		  }
+		  break;
+		}
+		this.$.listInventory.render();
+	  },
+	  formatList : function(arrList) {
+		var result = [];
+		for ( var index = 0; index < arrList.length; index++) {
+		  var objData;
+		  if (objData = arrList[index]) {
+			var len = objData.length;
+			var strBarnyards = "";
+			var totalHeads = 0;
+			var totalWeight = 0;
+			var totalFeed = 0;
+
+			var strSales = "";
+			for ( var i = 0; i < len; i++) {
+			  strBarnyards += ""
+				  + crudPen.adapterToList(objData[i].pen).caption + ", ";
+			  totalHeads += utils.parseToNumber(objData[i].heads);
+			  totalWeight += utils.parseToNumber(objData[i].weight);
+			  totalFeed += utils.parseToNumber(objData[i].feed);
+
+			  var salesByInventory = this
+				  .getSalesByInventoryID(objData[i].inventoryId);
+			  for ( var j = 0; j < salesByInventory.length; j++) {
+				var sale = salesByInventory[j];
+				strSales += "" + sale.saleDate.toLocaleDateString() + " "
+					+ sale.customer + " " + sale.heads + "/"
+					+ Number(sale.weight).toFixed(0) + "<br />";
+			  }
+			}
+
+			if (strBarnyards != "") {
+			  strBarnyards = strBarnyards.slice(0, -2);
+			}
+
+			var obj =
+			{
+			  strSales : strSales,
+			  cattle_name : objData[0].cattle_name,
+			  quality_name : objData[0].quality_name,
+			  totalHeads : utils.formatNumberThousands(totalHeads),
+			  totalWeight : utils.formatNumberThousands(Number(totalWeight)
+				  .toFixed(0)),
+			  totalAveWeight : utils
+				  .formatNumberThousands((totalWeight / totalHeads).toFixed(1)),
+			  totalFeed : utils.formatNumberThousands(Number(totalFeed)
+				  .toFixed(0)),
+			  strBarnyards : strBarnyards
+			};
+			result.push(obj);
+
+		  }
+		}
+		return result;
+	  }
+
 	});
