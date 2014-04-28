@@ -42,23 +42,33 @@ enyo
 			components : [
 			{
 			  content : "Class",
-			  style : "width:150px;text-align:left;margin-left: 15px;"
+			  style : "width:150px;text-align:left;margin-left: 15px;",
+			  onclick : "on_sort",
+			  sortDirection : "DESC"
 			},
 			{
 			  content : "Pen",
-			  style : "width:150px;text-align:center;"
+			  style : "width:150px;text-align:center;",
+			  onclick : "on_sort",
+			  sortDirection : "DESC"
 			},
 			{
 			  content : "Heads",
-			  style : "width:150px;text-align:right;"
+			  style : "width:150px;text-align:right;",
+			  onclick : "on_sort",
+			  sortDirection : "DESC"
 			},
 			{
 			  content : "Weight",
-			  style : "width:150px;text-align:right;"
+			  style : "width:150px;text-align:right;",
+			  onclick : "on_sort",
+			  sortDirection : "DESC"
 			},
 			{
 			  content : "Average",
-			  style : "width:150px;text-align:right;"
+			  style : "width:150px;text-align:right;",
+			  onclick : "on_sort",
+			  sortDirection : "DESC"
 			} ]
 		  },
 		  {
@@ -264,6 +274,82 @@ enyo
 	  },
 	  on_pen_click : function(iCutSeq) {
 		this.doPenSelect(iCutSeq);
+	  },
+	  on_sort : function(inSender) {
+		switch (inSender.content) {
+		case "Class":
+		  if (inSender.sortDirection == "ASC") {
+			inSender.sortDirection = "DESC";
+			this.cortes.sort(function(a, b) {
+			  return a.cattleClassName < b.cattleClassName;
+			});
+		  } else {
+			inSender.sortDirection = "ASC";
+			this.cortes.sort(function(a, b) {
+			  return a.cattleClassName > b.cattleClassName;
+			});
+		  }
+		  break;
+		case "Pen":
+		  if (inSender.sortDirection == "ASC") {
+			inSender.sortDirection = "DESC";
+			this.cortes.sort(function(a, b) {
+			  return a.pen_name < b.pen_name;
+			});
+		  } else {
+			inSender.sortDirection = "ASC";
+			this.cortes.sort(function(a, b) {
+			  return a.pen_name > b.pen_name;
+			});
+		  }
+		  break;
+		case "Heads":
+		  if (inSender.sortDirection == "ASC") {
+			inSender.sortDirection = "DESC";
+			this.cortes.sort(function(a, b) {
+			  return utils.parseToNumber(a.heads) < utils
+				  .parseToNumber(b.heads);
+			});
+		  } else {
+			inSender.sortDirection = "ASC";
+			this.cortes.sort(function(a, b) {
+			  return utils.parseToNumber(a.heads) > utils
+				  .parseToNumber(b.heads);
+			});
+		  }
+		  break;
+		case "Weight":
+		  if (inSender.sortDirection == "ASC") {
+			inSender.sortDirection = "DESC";
+			this.cortes.sort(function(a, b) {
+			  return utils.parseToNumber(a.weight) < utils
+				  .parseToNumber(b.weight);
+			});
+		  } else {
+			inSender.sortDirection = "ASC";
+			this.cortes.sort(function(a, b) {
+			  return utils.parseToNumber(a.weight) > utils
+				  .parseToNumber(b.weight);
+			});
+		  }
+		  break;
+		case "Average":
+		  if (inSender.sortDirection == "ASC") {
+			inSender.sortDirection = "DESC";
+			this.cortes.sort(function(a, b) {
+			  return utils.parseToNumber((a.weight / a.heads)) < utils
+				  .parseToNumber((b.weight / b.heads));
+			});
+		  } else {
+			inSender.sortDirection = "ASC";
+			this.cortes.sort(function(a, b) {
+			  return utils.parseToNumber((a.weight / a.heads)) > utils
+				  .parseToNumber((b.weight / b.heads));
+			});
+		  }
+		  break;
+		}
+		this.$.corteList.render();
 	  }
 	});
 
