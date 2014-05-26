@@ -97,4 +97,37 @@ public abstract class BaseInventory extends BaseBean {
       dataModel.createDataModel(inventory);
     }
   }
+  
+  
+  
+  /**NEW STRUCTURE*****************************************************************************************************/
+  public void addToInventory(long penId, long transactionId, long sourceType, long sourceId, long cattleTypeId, long qualityId, long heads, double weight )
+      throws DataModelException {
+      Inventory inventory = new Inventory();
+      
+      inventory.setPenId(penId);
+      inventory.setTransactionId(transactionId);
+      inventory.setSourceType(sourceType);
+      inventory.setSourceId(sourceId);
+      inventory.setCattypeId(cattleTypeId);
+      inventory.setQualityId(qualityId);
+      inventory.setHeads(heads);
+      inventory.setWeight(weight);
+      inventory.setAvailableToSell(heads);
+
+      dataModel.createDataModel(inventory);
+  }
+  protected Inventory getInventoryRecord(long transactionId, long sourceType, long sourceId) throws DataModelException {
+    Map<String, Object> parameters = new HashMap<String, Object>();
+    parameters.put("transactionId", transactionId);
+    parameters.put("sourceType", sourceType);
+    parameters.put("sourceId", sourceId);
+    List<Inventory> inventoryRecord = dataModel.readDataModelList("INVENTORY_BY_TRANSACTION", parameters, Inventory.class);
+
+    if (inventoryRecord != null && !inventoryRecord.isEmpty()) {
+      return inventoryRecord.get(0);
+    } else {
+      return null;
+    }
+  }
 }

@@ -161,6 +161,7 @@ enyo
 	  },
 	  ready : function() {
 		this.inherited(arguments);
+		cacheMan.showScrim();
 		this.$.cabezas.$.textField.$.input.applyStyle("text-align", "right");
 		this.$.peso.$.textField.$.input.applyStyle("text-align", "right");
 		this.$.txtAvgWeight.$.input.applyStyle("text-align", "right");
@@ -197,12 +198,6 @@ enyo
 			|| this.$.peso.getValue() == "") {
 		  sError = "Error. Verify that all fields have a value.";
 		}
-		for ( var i = 0; i < this.arrDetail.length; i++) {
-		  if (this.arrDetail[i].penId == this.$.pen.getItemSelected().value) {
-			sError = "Error. The pen you are trying to add is already in the list.";
-			break;
-		  }
-		}
 
 		var occupiedPens = crudInventory.getPensList();
 		for ( var i = 0; i < occupiedPens.length; i++) {
@@ -213,9 +208,11 @@ enyo
 		  if (isPenOccupied && !isSameQuality) {
 			var cattleQuality = crudCattleQuality
 				.getByID(occupiedPens[i].object.qualityId);
-			sError = "Error. The Pen " + occupiedPens[i].caption
+			if (!confirm("The Pen " + occupiedPens[i].caption
 				+ " is already occupied by cattle class "
-				+ cattleQuality.qualityName;
+				+ cattleQuality.qualityName
+				+ "\nDo you really want to continue?"))
+			  return false;
 			break;
 		  }
 		}
@@ -263,6 +260,9 @@ enyo
 		this.$.addSellerDialog.close();
 	  },
 	  clase_select : function(inSender) {
+		if (this.iSelected > -1)
+		  return;
+
 		var filter = [];
 		var occupied = {};
 		var allPens = enyo.clone(crudPen.getListUsaPens());
@@ -317,13 +317,14 @@ enyo
 		  this.toggleAdd();
 		}
 
+		this.arrDetail = [];
 		if (entity) {
 		  var controls = this.$;
 		  for ( var i in controls) {
 			if (controls[i].hasOwnProperty("belongsTo")) {
-			  if (entity[controls[i].belongsTo])
-				this.setValueForControl(controls[i],
-					entity[controls[i].belongsTo][0][controls[i].bindTo]);
+//			  if (entity[controls[i].belongsTo])
+//				this.setValueForControl(controls[i],
+//					entity[controls[i].belongsTo][0][controls[i].bindTo]);
 			} else if (controls[i].hasOwnProperty("bindTo")) {
 			  this.setValueForControl(controls[i], entity[controls[i].bindTo]);
 			}
@@ -331,7 +332,6 @@ enyo
 		  this.updatingEntityId = entity[this.entityKind.entityIdName()];
 
 		  if (entity.PurchaseDetail) {
-			this.arrDetail = [];
 			for ( var i = 0; i < entity.PurchaseDetail.length; i++) {
 			  var obj =
 			  {
@@ -339,6 +339,12 @@ enyo
 				penId : entity.PurchaseDetail[i].penId,
 				qualityId : entity.PurchaseDetail[i].qualityId,
 				weight : entity.PurchaseDetail[i].weight,
+				avgWeight : entity.PurchaseDetail[i].avgWeight,
+				entityName : entity.PurchaseDetail[i].entityName,
+				paidAmount : entity.PurchaseDetail[i].paidAmount,
+				purchaseDetailId : entity.PurchaseDetail[i].purchaseDetailId,
+				purchasePrice : entity.PurchaseDetail[i].purchasePrice,
+				settled : entity.PurchaseDetail[i].settled,
 				fields :
 				{
 				  0 : crudCattleQuality
@@ -346,7 +352,8 @@ enyo
 				  1 : crudPen.adapterToList(crudPen
 					  .getByID(entity.PurchaseDetail[i].penId)).caption,
 				  2 : entity.PurchaseDetail[i].heads,
-				  3 : entity.PurchaseDetail[i].weight
+				  3 : entity.PurchaseDetail[i].weight,
+				  4 : entity.PurchaseDetail[i].avgWeight
 				}
 			  };
 			  this.arrDetail.push(obj);
@@ -373,5 +380,4 @@ enyo
 			/ utils.parseToNumber(this.$.cabezas.getValue())));
 		return true;
 	  }
-
 	});

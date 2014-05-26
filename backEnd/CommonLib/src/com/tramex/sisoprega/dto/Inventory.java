@@ -41,6 +41,9 @@ import java.util.Set;
  */
 public class Inventory {
   private long inventoryId;
+  private long transactionId; //Parent ID
+  private long sourceType; //1:Hermana, 2:Purchase, 3:Prorate
+  private long sourceId;
   private long cattypeId;
   private long qualityId;
   private long penId;
@@ -58,6 +61,42 @@ public class Inventory {
   
   private Set<Shrinkage> shrinkage;
   private Set<FeedUS> feedUS;
+  /**
+   * @return the transactionId
+   */
+  public long getTransactionId() {
+    return transactionId;
+  }
+  /**
+   * @param transactionId the transactionId to set
+   */
+  public void setTransactionId(long transactionId) {
+    this.transactionId = transactionId;
+  }
+  /**
+   * @return the sourceType
+   */
+  public long getSourceType() {
+    return sourceType;
+  }
+  /**
+   * @param sourceType the sourceType to set
+   */
+  public void setSourceType(long sourceType) {
+    this.sourceType = sourceType;
+  }
+  /**
+   * @return the sourceId
+   */
+  public long getSourceId() {
+    return sourceId;
+  }
+  /**
+   * @param sourceId the sourceId to set
+   */
+  public void setSourceId(long sourceId) {
+    this.sourceId = sourceId;
+  }
   /**
    * @return the inventoryId
    */

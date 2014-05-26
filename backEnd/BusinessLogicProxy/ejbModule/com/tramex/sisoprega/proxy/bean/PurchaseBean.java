@@ -23,11 +23,11 @@ import com.tramex.sisoprega.proxy.common.BaseInventory;
 @Stateless
 @RolesAllowed({ "sisoprega_admin", "mx_usr", "us_usr", "rancher", "agency" })
 public class PurchaseBean extends BaseInventory implements Cruddable {
-  
+
   @Override
   public ReadResponse Create(CreateRequest request) {
     ReadResponse response = new ReadResponse();
-    
+
     // Use purchase to create inventory
     try {
       GatewayRecord record = request.getParentRecord();
@@ -35,14 +35,18 @@ public class PurchaseBean extends BaseInventory implements Cruddable {
       Purchase entity = (Purchase) getEntityFromRecord(record, type);
       this.log.fine("Found entity from Record [" + entity + "]");
 
-      // Add purchase to inventory
-      for (PurchaseDetail detail : entity.getPurchaseDetail()) {
-        Inventory inventory = getInventoryRecord(detail.getPenId());
-
-        addToInventory(inventory, detail.getHeads(), detail.getWeight(), detail.getQualityId(), detail.getPenId(), entity.getCattleTypeId());
-      }
       // Create purchase
       response = super.Create(request);
+
+      GatewayRecord recordPersisted = response.getParentRecord().get(0);
+      Class<?> typePersisted = Class.forName(DTO_PACKAGE + recordPersisted.getEntity());
+      Purchase entityPersisted = (Purchase) getEntityFromRecord(recordPersisted, typePersisted);
+      // Add purchase to inventory
+      for (PurchaseDetail detail : entityPersisted.getPurchaseDetail()) {
+        addToInventory(detail.getPenId(), entityPersisted.getPurchaseId(), 2, detail.getPurchaseDetailId(),
+            entityPersisted.getCattleTypeId(), detail.getQualityId(), detail.getHeads(), detail.getWeight());
+      }
+
     } catch (Exception e) {
       this.log.severe("Exception found while creating inventory record: " + e.getMessage());
       this.log.throwing(this.getClass().getName(), "Create", e);
@@ -53,7 +57,7 @@ public class PurchaseBean extends BaseInventory implements Cruddable {
 
     return response;
   }
-  
+
   public ReadResponse Update(CreateRequest request) {
     this.log.entering(this.getClass().getCanonicalName(), "ReadResponse Create(CreateRequest)");
 
@@ -63,9 +67,6 @@ public class PurchaseBean extends BaseInventory implements Cruddable {
       Class<?> type = Class.forName(DTO_PACKAGE + record.getEntity());
       Purchase entity = (Purchase) getEntityFromRecord(record, type);
       this.log.fine("Found entity from Record [" + entity + "]");
-
-      
-      long cattleType = entity.getCattleTypeId();
 
       if (this.validateEntity(entity)) {
         this.log.fine("Valid entity found");
@@ -83,20 +84,30 @@ public class PurchaseBean extends BaseInventory implements Cruddable {
           response.setError(new GatewayError("VAL04", "Se ha omitido el id en la entidad [" + record.getEntity()
               + "] al intentar actualizar sus datos.", "Update"));
         } else {
-          updateInventory(entity, cattleType);
+          // Updating inventory previous records:
+          
+
+          log.severe("running updatePreviousInventory");
+          updatePreviousRecord(entity);
+
+          // Updating Purchase entity:
           dataModel.updateDataModel(entity);
 
           String queryName = record.getEntity().toUpperCase() + "_BY_ID";
-          log.fine("Retrieving updated object with Query: " + queryName);
+          log.severe("Retrieving updated object with Query: " + queryName);
 
           entity = (Purchase) dataModel.readSingleDataModel(queryName, "Id", idToUpdate, type);
-          log.fine("got updated record: [" + entity + "]");
+          log.severe("got updated record: [" + entity + "]");
+          log.severe("purchase detail updated: [" + entity.getPurchaseDetail() + "]");
+
+          addNonExistingInventory(entity);
 
           List<Object> updatedRecordList = new ArrayList<Object>();
           updatedRecordList.add(entity);
 
           response.setParentRecord(getRecordsFromList(updatedRecordList, type));
           response.setError(new GatewayError("0", "SUCCESS", "Update"));
+
         }
       } else {
         this.log.warning("Error de validación: " + error_description);
@@ -117,91 +128,84 @@ public class PurchaseBean extends BaseInventory implements Cruddable {
     this.log.exiting(this.getClass().getCanonicalName(), "ReadResponse Update(CreateRequest)");
     return response;
   }
-  
+
+  /*
+   * NEW*********************************************************************
+   * STRUCTURE***************************************************************
+   */
   /**
    * @param entity
-   * @param cattleType
    * @throws DataModelException
+   * @throws ClassNotFoundException
    */
-  private void updateInventory(Purchase entity, long cattleType) throws DataModelException {
-    Purchase previousRecord = dataModel.readSingleDataModel("PURCHASE_BY_ID", "Id", entity.getPurchaseId(), Purchase.class);
+  private void updatePreviousRecord(Purchase newEntity) throws DataModelException,
+      ClassNotFoundException {
 
+    Purchase previousRecord = dataModel.readSingleDataModel("PURCHASE_BY_ID", "Id", newEntity.getPurchaseId(), Purchase.class);
     // Evaluate each record from previous Purchase against new updated
     // Purchase
-    for (PurchaseDetail detail : previousRecord.getPurchaseDetail()) {
-      updateExistingDetail(entity, cattleType, detail);
-      removeUnincluded(entity, cattleType, detail);
-    }
-
-    // Add non existent new records to inventory
-    for (PurchaseDetail updated : entity.getPurchaseDetail()) {
-      addNonExistent(updated, cattleType, previousRecord);
+    for (PurchaseDetail previuosDetail : previousRecord.getPurchaseDetail()) {
+      updateExistingDetail(newEntity, previuosDetail);
+      removeUnincluded(newEntity, previuosDetail);
     }
 
   }
-  
+
   /**
    * @param entity
-   * @param cattleType
    * @param detail
    * @throws DataModelException
    */
-  private void updateExistingDetail(Purchase entity, long cattleType, PurchaseDetail detail) throws DataModelException {
-    for (PurchaseDetail updated : entity.getPurchaseDetail()) {
-      if (detail.getQualityId() == updated.getQualityId() && detail.getPenId() == updated.getPenId()) {
-        long delta = updated.getHeads() - detail.getHeads();
-        double deltaWeight = updated.getWeight() - detail.getWeight();
-        Inventory inventory = getInventoryRecord(detail.getPenId());
-        if (inventory != null) {
-          if (inventory.getAvailableToSell() + delta < 0) {
-            log.warning("Tryal for removing more heads than available.");
-            throw new DataModelException("No hay suficientes cabezas en el registro de inventario para completar esta operación");
+  private void updateExistingDetail(Purchase newEntity, PurchaseDetail previousDetail) throws DataModelException {
+    for (PurchaseDetail newDetail : newEntity.getPurchaseDetail()) {
+      if (previousDetail.getPurchaseDetailId() == newDetail.getPurchaseDetailId()) {
+        long delta = newDetail.getHeads() - previousDetail.getHeads();
+        double deltaWeight = newDetail.getWeight() - previousDetail.getWeight();
+        if (delta != 0) {
+          Inventory inventory = getInventoryRecord(newEntity.getPurchaseId(), 2, previousDetail.getPurchaseDetailId());
+          if (inventory != null) {
+            if (inventory.getAvailableToSell() + delta < 0) {
+              log.warning("Tryal for removing more heads than available.");
+              throw new DataModelException(
+                  "No hay suficientes cabezas en el registro de inventario para completar esta operación");
+            } else {
+              inventory.setHeads(inventory.getHeads() + delta);
+              inventory.setAvailableToSell(inventory.getAvailableToSell() + delta);
+              inventory.setWeight(inventory.getWeight() + deltaWeight);
+
+              dataModel.updateDataModel(inventory);
+            }
           } else {
-            inventory.setHeads(inventory.getHeads() + delta);
-            inventory.setAvailableToSell(inventory.getAvailableToSell() + delta);
-            inventory.setWeight(inventory.getWeight() + deltaWeight);
-
-            dataModel.updateDataModel(inventory);
-          }
-        } else {
-          if (delta > 0) {
             // Create inventory Record with difference
-            inventory = new Inventory();
-            inventory.setCattypeId(cattleType);
-            inventory.setHeads(delta);
-            inventory.setQualityId(detail.getQualityId());
-            inventory.setPenId(detail.getPenId());
-            inventory.setWeight(deltaWeight);
-            inventory.setAvailableToSell(delta);
-
-            dataModel.createDataModel(inventory);
+            addToInventory(newDetail.getPenId(), newEntity.getPurchaseId(), 2, newDetail.getPurchaseDetailId(),
+                newEntity.getCattleTypeId(), newDetail.getQualityId(), newDetail.getHeads(), newDetail.getWeight());
           }
         }
+        return;
       }
     }
   }
 
-  private void removeUnincluded(Purchase entity, long cattleType, PurchaseDetail detail) throws DataModelException {
-    for (PurchaseDetail updated : entity.getPurchaseDetail()) {
-      if (detail.getQualityId() == updated.getQualityId() && detail.getPenId() == updated.getPenId()) {
+  private void removeUnincluded(Purchase newEntity, PurchaseDetail previousDetail) throws DataModelException,
+      ClassNotFoundException {
+    for (PurchaseDetail updated : newEntity.getPurchaseDetail()) {
+      if (previousDetail.getPurchaseDetailId() == updated.getPurchaseDetailId()) {
         return;
       }
     }
 
     // Remove previous record heads from inventory
-    long delta = detail.getHeads();
-    double deltaWeight = detail.getWeight();
-    Inventory inventory = getInventoryRecord(detail.getPenId());
+    long delta = previousDetail.getHeads();
+    Inventory inventory = getInventoryRecord(newEntity.getPurchaseId(), 2, previousDetail.getPurchaseDetailId());
     if (inventory != null) {
       if (inventory.getAvailableToSell() - delta < 0) {
         log.warning("Attempt for removing more heads than available.");
         throw new DataModelException("No hay suficientes cabezas en el registro de inventario para completar esta operación");
       } else {
-        inventory.setWeight(inventory.getWeight() - deltaWeight);
-        inventory.setHeads(inventory.getHeads() - delta);
-        inventory.setAvailableToSell(inventory.getAvailableToSell() - delta);
-
-        dataModel.updateDataModel(inventory);
+        // Remove record from database
+        Class<?> type = Class.forName(DTO_PACKAGE + "Inventory");
+        dataModel.deleteDataModel(dataModel.readSingleDataModel("INVENTORY_BY_ID", "Id", inventory.getInventoryId(), type),
+            getLoggedUser());
       }
     } else {
       log.warning("Tryal for removing more heads than available.");
@@ -209,38 +213,15 @@ public class PurchaseBean extends BaseInventory implements Cruddable {
     }
 
   }
-  private void addNonExistent(PurchaseDetail updated, long cattleType, Purchase previousRecord) throws DataModelException {
-    for (PurchaseDetail previous : previousRecord.getPurchaseDetail()) {
-      if (updated.getQualityId() == previous.getQualityId() && updated.getPenId() == previous.getPenId()) {
-        return;
+
+  private void addNonExistingInventory(Purchase newEntity) throws DataModelException {
+    for (PurchaseDetail detail : newEntity.getPurchaseDetail()) {
+      Inventory inventory = getInventoryRecord(newEntity.getPurchaseId(), 2, detail.getPurchaseDetailId());
+      if (inventory == null) {
+        addToInventory(detail.getPenId(), newEntity.getPurchaseId(), 2, detail.getPurchaseDetailId(),
+            newEntity.getCattleTypeId(), detail.getQualityId(), detail.getHeads(), detail.getWeight());
       }
     }
-
-    // Add inventory Record with new detail
-    Inventory inventory = getInventoryRecord(updated.getPenId());
-    if (inventory != null) {
-      long updatedHeads = inventory.getHeads() + updated.getHeads();
-      double updatedWeight = inventory.getWeight() + updated.getWeight();
-      log.info("Updating existing inventory to [" + updatedHeads + "] heads and [" + updatedWeight + "] weight");
-      inventory.setWeight(inventory.getWeight() + updated.getWeight());
-      inventory.setHeads(updatedHeads);
-      inventory.setAvailableToSell(inventory.getAvailableToSell() + updated.getHeads());
-
-      dataModel.updateDataModel(inventory);
-    } else {
-      // Create inventory Record with difference
-      log.info("Creating new inventory with [" + updated.getHeads() + "] heads and [" + updated.getWeight() + "] weight");
-      inventory = new Inventory();
-      inventory.setCattypeId(cattleType);
-      inventory.setHeads(updated.getHeads());
-      inventory.setQualityId(updated.getQualityId());
-      inventory.setPenId(updated.getPenId());
-      inventory.setWeight(updated.getWeight());
-      inventory.setAvailableToSell(updated.getHeads());
-
-      dataModel.createDataModel(inventory);
-    }
-
   }
-  
+
 }

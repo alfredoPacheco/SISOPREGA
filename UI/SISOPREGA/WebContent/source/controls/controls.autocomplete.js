@@ -10,7 +10,7 @@ enyo
 	  sColorWithOutIndex : "teal",
 	  sColorWithIndex : "black",
 	  usingFilter : false,
-	  mouseStatus:0,
+	  mouseStatus : 0,
 	  published :
 	  {
 		hint : "",
@@ -139,10 +139,10 @@ enyo
 			style : "background-color:#DABD8B;margin: 0px 0px 0px -2px;",
 			kind : "IconButton",
 			icon : "../SISOPREGA_WEB_LIB/images/icon-arrows-down.png",
-			//onclick : "click_button",
+			// onclick : "click_button",
 			onmousehold : "hold_button",
-			onmouseup: "mouseUp_button",
-			onmousedown:"mouseDown_button",
+			onmouseup : "mouseUp_button",
+			onmousedown : "mouseDown_button",
 			name : "btnIcon"
 
 		  } ]
@@ -230,22 +230,22 @@ enyo
 		this.$.textField.forceFocus();
 		return true;
 	  },
-	  mouseDown_button:function(){
+	  mouseDown_button : function() {
 		this.mouseStatus = 1;
 		return true;
 	  },
-	  mouseUp_button:function(InSender, InEvent){
-		if(this.mouseStatus == 1){
+	  mouseUp_button : function(InSender, InEvent) {
+		if (this.mouseStatus == 1) {
 		  if (this.$.drop_down.isOpen)
-			  this.$.drop_down.close();
-			this.itemSelectedPopupAux = -1;
-			this.$.drop_down.setItems(this.filter);
-			if (this.$.drop_down.items.length > 0) {
-			  this.$.drop_down.openAroundControl(this.$.textField, "", "left");
-			  this.$.drop_down.scrollToSelected();
-			}
-			this.$.textField.forceFocus();
-			return false;  
+			this.$.drop_down.close();
+		  this.itemSelectedPopupAux = -1;
+		  this.$.drop_down.setItems(this.filter);
+		  if (this.$.drop_down.items.length > 0) {
+			this.$.drop_down.openAroundControl(this.$.textField, "", "left");
+			this.$.drop_down.scrollToSelected();
+		  }
+		  this.$.textField.forceFocus();
+		  return false;
 		}
 	  },
 	  key_down : function(inSender, inEvent) {
@@ -439,17 +439,9 @@ enyo
 		}
 	  },
 	  getItemSelected : function() {
-		if (!this.usingFilter || this.mouseStatus == 2) { //Not using filter, or using it but holding for all items.
-		  for ( var i = 0; i < this.allItems.length; i++) {
-			if (this.allItems[i].value == this.getIndex()) {
-			  return this.allItems[i];
-			}
-		  }
-		} else { //Using filter:
-		  for ( var i = 0; i < this.filter.length; i++) {
-			if (this.filter[i].value == this.getIndex()) {
-			  return this.filter[i];
-			}
+		for ( var i = 0; i < this.allItems.length; i++) {
+		  if (this.allItems[i].value == this.getIndex()) {
+			return this.allItems[i];
 		  }
 		}
 	  },

@@ -192,6 +192,9 @@ GRANT ALL ON ctrl_purchase_detail_record_id_seq TO sisoprega;
 DROP TABLE IF EXISTS ctrl_inventory CASCADE;
 CREATE TABLE ctrl_inventory(
 	inventory_id 			SERIAL PRIMARY KEY,
+	transaction_id			integer NOT NULL, -- Parent ID
+	source_type			integer NOT NULL,--  1: Hermana, 2: Purchase, 3: Prorate
+	source_id			integer NOT NULL,
 	cattype_id   			integer NOT NULL REFERENCES cat_cattle_type(cattype_id),
 	quality_id   			integer NOT NULL REFERENCES cat_cattle_quality(quality_id),
 	barnyard_id  			integer NOT NULL REFERENCES cat_barnyard(barnyard_id),
@@ -207,6 +210,7 @@ CREATE TABLE ctrl_inventory(
 	cycle_completed			DATE
 	
 );
+
 
 GRANT ALL ON ctrl_inventory TO sisoprega;
 GRANT ALL ON ctrl_inventory_inventory_id_seq TO sisoprega;

@@ -1322,6 +1322,10 @@
 			<description>Retrieve a single record of Inventory by its record id</description>
 			<query>SELECT iInventory FROM Inventory iInventory WHERE iInventory.inventoryId = :Id</query>
 		</named-query>
+		<named-query name="INVENTORY_BY_TRANSACTION">
+			<description>Retrieve a single record of Inventory by transactionId, sourceType, sourceId</description>
+			<query>SELECT iInventory FROM Inventory iInventory WHERE iInventory.transactionId = :transactionId AND iInventory.sourceType = :sourceType AND iInventory.sourceId = :sourceId</query>
+		</named-query>
 		<named-query name="ALL_INVENTORYS">
 			<query>SELECT iInventory FROM Inventory iInventory WHERE iInventory.cycleCompleted is null</query>
 		</named-query>
@@ -1330,6 +1334,15 @@
 				<column name="inventory_id" />
 				<generated-value strategy="IDENTITY" />
 			</id>
+			<basic name="transactionId">
+				<column name="transaction_id" />
+			</basic>
+			<basic name="sourceType">
+				<column name="source_type" />
+			</basic>
+			<basic name="sourceId">
+				<column name="source_id" />
+			</basic>
 			<basic name="cattypeId">
 				<column name="cattype_id" />
 			</basic>
