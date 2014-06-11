@@ -75,26 +75,24 @@ enyo
 			height : "23px",
 			width : "31px",
 			style : "padding: 2px;margin-top: 3px;background-color: #DABD8B;"
-		  },
-		  {
-			content : "Cattle:",
-			width : "80px;",
-			style : "text-align: right;margin-right:5px;"
-		  },
-		  {
-			kind : "controls.autocomplete",
-			inputKind : "ToolInput",
-			name : "cattleType",
-			width : "200px;",
-			height : "35px;",
-			bindTo : "cattleTypeId",
-			onSelectItem : "on_select_cattleType"
 		  } ]
 		} ],
 		{
 		  owner : this
 		});
 		this.$.detailFields.createComponents([
+		{
+		  kind : "controls.autocomplete",
+		  inputKind : "ToolInput",
+		  height : "35px",
+		  name : "cattleType",
+		  hint : "Type",
+		  width : "200px;",
+		  style : "margin-right: 15px;",
+		  bindTo : "cattleTypeId",
+		  belongsTo : "PurchaseDetail",
+		  onSelectItem : "on_select_cattleType"
+		},
 		{
 		  kind : "controls.autocomplete",
 		  inputKind : "ToolInput",
@@ -222,13 +220,7 @@ enyo
 		  return false;
 		}
 
-		this.$.cattleType.setDisabled(true);
-
 		return true;
-	  },
-	  onDeleteItem : function() {
-		if (this.arrDetail.length == 0)
-		  this.$.cattleType.setDisabled(false);
 	  },
 	  showSellerForm : function() {
 		if (this.$.sellerForm) {
@@ -322,9 +314,9 @@ enyo
 		  var controls = this.$;
 		  for ( var i in controls) {
 			if (controls[i].hasOwnProperty("belongsTo")) {
-//			  if (entity[controls[i].belongsTo])
-//				this.setValueForControl(controls[i],
-//					entity[controls[i].belongsTo][0][controls[i].bindTo]);
+			  // if (entity[controls[i].belongsTo])
+			  // this.setValueForControl(controls[i],
+			  // entity[controls[i].belongsTo][0][controls[i].bindTo]);
 			} else if (controls[i].hasOwnProperty("bindTo")) {
 			  this.setValueForControl(controls[i], entity[controls[i].bindTo]);
 			}
@@ -337,6 +329,7 @@ enyo
 			  {
 				heads : entity.PurchaseDetail[i].heads,
 				penId : entity.PurchaseDetail[i].penId,
+				cattleTypeId: entity.PurchaseDetail[i].cattleTypeId,
 				qualityId : entity.PurchaseDetail[i].qualityId,
 				weight : entity.PurchaseDetail[i].weight,
 				avgWeight : entity.PurchaseDetail[i].avgWeight,
@@ -347,13 +340,12 @@ enyo
 				settled : entity.PurchaseDetail[i].settled,
 				fields :
 				{
-				  0 : crudCattleQuality
-					  .getByID(entity.PurchaseDetail[i].qualityId).qualityName,
-				  1 : crudPen.adapterToList(crudPen
-					  .getByID(entity.PurchaseDetail[i].penId)).caption,
-				  2 : entity.PurchaseDetail[i].heads,
-				  3 : entity.PurchaseDetail[i].weight,
-				  4 : entity.PurchaseDetail[i].avgWeight
+				  0 : crudCattle.getCattleTypeById(entity.PurchaseDetail[i].cattleTypeId).cattypeName,
+				  1 : crudCattleQuality.getByID(entity.PurchaseDetail[i].qualityId).qualityName,
+				  2 : crudPen.adapterToList(crudPen.getByID(entity.PurchaseDetail[i].penId)).caption,
+				  3 : entity.PurchaseDetail[i].heads,
+				  4 : entity.PurchaseDetail[i].weight,
+				  5 : entity.PurchaseDetail[i].avgWeight
 				}
 			  };
 			  this.arrDetail.push(obj);
@@ -363,14 +355,12 @@ enyo
 				.getBoundaries().bottom, 0);
 		  }
 		}
-		this.$.cattleType.setDisabled(!(this.arrDetail.length == 0));
 	  },
 	  toggleUpdate : function() {
 		this.$.saveButton.setCaption("Update");
 	  },
 	  toggleAdd : function() {
 		this.$.saveButton.setCaption("Create");
-		this.$.cattleType.setDisabled(false);
 		this.$.cattleType.setIndex(1); // Default value: Novillos
 	  },
 	  on_input : function(inSender, inEvent) {

@@ -40,7 +40,6 @@ import java.util.Set;
 public class Sale {
   private long saleId;
   private long customerId;
-  private long cattleTypeId;
   private Date saleDate = new Date();
   private Set<SaleDetail> SaleDetail;
   
@@ -67,18 +66,6 @@ public class Sale {
    */
   public void setCustomerId(long customerId) {
     this.customerId = customerId;
-  }
-  /**
-   * @return the cattleTypeId
-   */
-  public long getCattleTypeId() {
-    return cattleTypeId;
-  }
-  /**
-   * @param cattleTypeId the cattleTypeId to set
-   */
-  public void setCattleTypeId(long cattleTypeId) {
-    this.cattleTypeId = cattleTypeId;
   }
   
   /**
@@ -120,7 +107,7 @@ public class Sale {
   
   @Override
   public String toString() {
-    return "saleId:" + saleId + ";customerId:" + customerId + ";cattleTypeId:" + cattleTypeId + ";";
+    return "saleId:" + saleId + ";customerId:" + customerId + ";";
   }
 
 }

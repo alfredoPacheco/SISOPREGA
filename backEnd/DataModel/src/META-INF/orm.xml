@@ -1261,9 +1261,6 @@
 			<basic name="sellerId">
 				<column name="seller_id" />
 			</basic>
-			<basic name="cattleTypeId">
-				<column name="cattype_id" />
-			</basic>
 			<basic name="purchaseDate">
 				<column name="purchase_date" />
 				<temporal>DATE</temporal>
@@ -1290,6 +1287,9 @@
 			</id>
 			<basic name="penId">
 				<column name="barnyard_id" />
+			</basic>
+			<basic name="cattleTypeId">
+				<column name="cattype_id" />
 			</basic>
 			<basic name="qualityId">
 				<column name="quality_id" />
@@ -1415,9 +1415,6 @@
 			<basic name="customerId">
 				<column name="customer_id" />
 			</basic>
-			<basic name="cattleTypeId">
-				<column name="cattype_id" />
-			</basic>
 			<basic name="saleDate">
 				<column name="sale_date" />
 				<temporal>DATE</temporal>
@@ -1444,6 +1441,9 @@
 			</id>
 			<basic name="penId">
 				<column name="barnyard_id" />
+			</basic>
+			<basic name="cattleTypeId">
+				<column name="cattype_id" />
 			</basic>
 			<basic name="qualityId">
 				<column name="quality_id" />

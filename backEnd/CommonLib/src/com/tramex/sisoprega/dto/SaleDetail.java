@@ -38,6 +38,7 @@ import java.util.Date;
 public class SaleDetail {
   private long saleDetailId;
   private long penId;
+  private long cattleTypeId;
   private long qualityId;
   private long heads;
   private double weight;
@@ -72,6 +73,18 @@ public class SaleDetail {
    */
   public void setPenId(long penId) {
     this.penId = penId;
+  }
+  /**
+   * @return the cattleTypeId
+   */
+  public long getCattleTypeId() {
+    return cattleTypeId;
+  }
+  /**
+   * @param cattleTypeId the cattleTypeId to set
+   */
+  public void setCattleTypeId(long cattleTypeId) {
+    this.cattleTypeId = cattleTypeId;
   }
   /**
    * @return the qualityId
@@ -198,7 +211,7 @@ public class SaleDetail {
   }
   @Override
   public String toString() {
-    return "recordId:" + saleDetailId + ";penId:" + penId + ";qualityId:" + qualityId + ";heads:" + heads + ";weight:" + weight + ";sale_seq:" + sale_seq + ";inventoryId:" + inventoryId + ";salePrice:" + salePrice + ";";
+    return "recordId:" + saleDetailId + ";penId:" + penId + ";cattleTypeId:" + cattleTypeId + ";qualityId:" + qualityId + ";heads:" + heads + ";weight:" + weight + ";sale_seq:" + sale_seq + ";inventoryId:" + inventoryId + ";salePrice:" + salePrice + ";";
   }
   
 }

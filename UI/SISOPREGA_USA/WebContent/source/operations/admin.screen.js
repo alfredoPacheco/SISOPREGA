@@ -6,11 +6,11 @@ enyo.kind(
   {
 	kind : enyo.Popup,
 	name : "popup_sales",
-	width : "85%;",
-	height : "85%;",
+	width : "95%;",
+	height : "95%;",
 	dismissWithClick : true,
 	layoutKind : "VFlexLayout",
-	style : "overflow: hidden;border-width: 8px;",
+	style : "overflow: hidden;border-width: 0px;",
 	scrim : true,
 	components : [
 	{
@@ -45,7 +45,7 @@ enyo.kind(
   {
 	kind : enyo.Popup,
 	name : "popup_purchases",
-	width : "85%;",
+	width : "80%;",
 	height : "85%;",
 	dismissWithClick : true,
 	layoutKind : "VFlexLayout",

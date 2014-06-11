@@ -19,14 +19,14 @@ enyo
 	  components : [
 		  {
 			kind : enyo.VFlexBox,
-			style : "padding:20px;",
+			style : "padding:20px 60px;",
 			pack : "center",
 			name : "masterFields"
 		  },
 		  {
 			kind : "HFlexBox",
 			className : "listFirst",
-			style : "padding-left:104px;",
+			style : "padding-left:50px;",
 			align : "center",
 			pack : "start",
 			components : [

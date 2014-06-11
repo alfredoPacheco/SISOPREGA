@@ -164,7 +164,6 @@ DROP TABLE IF EXISTS ctrl_purchase CASCADE;
 CREATE TABLE ctrl_purchase(
 	purchase_id    SERIAL PRIMARY KEY,
 	seller_id      integer NOT NULL REFERENCES cat_seller(seller_id),
-	cattype_id     integer NOT NULL REFERENCES cat_cattle_type(cattype_id),
 	purchase_date  DATE not null DEFAULT current_date,
 	operationDateTime timestamp without time zone NOT NULL DEFAULT now()
 );
@@ -177,6 +176,7 @@ CREATE TABLE ctrl_purchase_detail(
 	record_id    SERIAL PRIMARY KEY,
 	purchase_id  integer NOT NULL REFERENCES ctrl_purchase(purchase_id),
 	barnyard_id  integer NOT NULL REFERENCES cat_barnyard(barnyard_id),
+	cattype_id     integer NOT NULL REFERENCES cat_cattle_type(cattype_id),
 	quality_id   integer NOT NULL REFERENCES cat_cattle_quality(quality_id),
 	heads        integer not null,
 	weight       decimal(12,4) not null,
@@ -219,7 +219,6 @@ DROP TABLE IF EXISTS ctrl_sale CASCADE;
 CREATE TABLE ctrl_sale(
 	sale_id        	SERIAL PRIMARY KEY,
 	customer_id     integer NOT NULL REFERENCES cat_customer(customer_id),
-	cattype_id     	integer NOT NULL REFERENCES cat_cattle_type(cattype_id),
 	sale_date  	DATE not null DEFAULT current_date,
 	operationDateTime timestamp without time zone NOT NULL DEFAULT now()
 );
@@ -232,6 +231,7 @@ CREATE TABLE ctrl_sale_detail(
 	record_id    		SERIAL PRIMARY KEY,
 	sale_id      		integer NOT NULL REFERENCES ctrl_sale(sale_id),
 	barnyard_id  		integer NOT NULL REFERENCES cat_barnyard(barnyard_id),
+	cattype_id     	integer NOT NULL REFERENCES cat_cattle_type(cattype_id),
 	quality_id   		integer NOT NULL REFERENCES cat_cattle_quality(quality_id),
 	heads        		integer not null,
 	weight       		decimal(12,4) not null,
@@ -299,14 +299,14 @@ GRANT ALL ON ctrl_shipment_detail_shipment_detail_id_seq TO sisoprega;
 
 DROP TABLE IF EXISTS ctrl_shipment_release CASCADE;
 CREATE TABLE ctrl_shipment_release (
-	shipment_release_id	SERIAL PRIMARY KEY,
-	shipment_id	 	integer NOT NULL REFERENCES ctrl_shipment(shipment_id),
-	date_time    		timestamp without time zone NOT NULL DEFAULT now(),
-	carrier_id   		integer REFERENCES cat_carrier(carrier_id),
-	driver			VARCHAR(80),
-	plates			VARCHAR(20),
-	paid_date		DATE,
-	paid_amount		decimal(12,2)
+	shipment_release_id		SERIAL PRIMARY KEY,
+	shipment_id	 			integer NOT NULL REFERENCES ctrl_shipment(shipment_id),
+	date_time    			timestamp without time zone NOT NULL DEFAULT now(),
+	carrier_id   			integer REFERENCES cat_carrier(carrier_id),
+	driver					VARCHAR(80),
+	plates					VARCHAR(20),
+	paid_date				DATE,
+	paid_amount				decimal(12,2)
 	
 );
 

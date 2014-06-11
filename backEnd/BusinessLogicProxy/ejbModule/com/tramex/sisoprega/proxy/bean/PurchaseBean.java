@@ -44,7 +44,7 @@ public class PurchaseBean extends BaseInventory implements Cruddable {
       // Add purchase to inventory
       for (PurchaseDetail detail : entityPersisted.getPurchaseDetail()) {
         addToInventory(detail.getPenId(), entityPersisted.getPurchaseId(), 2, detail.getPurchaseDetailId(),
-            entityPersisted.getCattleTypeId(), detail.getQualityId(), detail.getHeads(), detail.getWeight());
+            detail.getCattleTypeId(), detail.getQualityId(), detail.getHeads(), detail.getWeight());
       }
 
     } catch (Exception e) {
@@ -178,7 +178,7 @@ public class PurchaseBean extends BaseInventory implements Cruddable {
           } else {
             // Create inventory Record with difference
             addToInventory(newDetail.getPenId(), newEntity.getPurchaseId(), 2, newDetail.getPurchaseDetailId(),
-                newEntity.getCattleTypeId(), newDetail.getQualityId(), newDetail.getHeads(), newDetail.getWeight());
+                newDetail.getCattleTypeId(), newDetail.getQualityId(), newDetail.getHeads(), newDetail.getWeight());
           }
         }
         return;
@@ -219,7 +219,7 @@ public class PurchaseBean extends BaseInventory implements Cruddable {
       Inventory inventory = getInventoryRecord(newEntity.getPurchaseId(), 2, detail.getPurchaseDetailId());
       if (inventory == null) {
         addToInventory(detail.getPenId(), newEntity.getPurchaseId(), 2, detail.getPurchaseDetailId(),
-            newEntity.getCattleTypeId(), detail.getQualityId(), detail.getHeads(), detail.getWeight());
+            detail.getCattleTypeId(), detail.getQualityId(), detail.getHeads(), detail.getWeight());
       }
     }
   }

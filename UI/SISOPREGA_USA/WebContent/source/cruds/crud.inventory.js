@@ -33,8 +33,7 @@ enyo
 
 		  entityObj.pen = crudPen.getByID(entityObj.penId);
 
-		  entityObj.aveweight = utils.parseToNumber(entityObj.heads)
-			  / utils.parseToNumber(entityObj.weight);
+		  entityObj.aveweight = utils.parseToNumber(entityObj.weight) /utils.parseToNumber(entityObj.heads);
 
 		  var cattle_name = crudCattle.getCattleTypeById(entityObj.cattypeId);
 		  if (cattle_name) {

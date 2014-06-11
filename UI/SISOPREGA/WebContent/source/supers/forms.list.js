@@ -24,8 +24,8 @@ enyo.kind({
 	if(this.entity){
 	    this.createComponent({
 		    kind : enyo.Popup,
-		    width : "80%",
-		    height : "80%",
+		    width : "90%",
+		    height : "90%",
 		    dismissWithClick : true,
 		    layoutKind : "VFlexLayout",
 		    modal : true,

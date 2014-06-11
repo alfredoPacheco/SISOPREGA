@@ -18,7 +18,11 @@ enyo
 	  {
 		caption : "Adjustment",
 		value : 3
-	  } ],
+	  },
+	  {
+		caption : "Origin",
+		value : 5
+	  }],
 	  arrMovingPen : [
 	  {
 		caption : "Move here",
@@ -101,7 +105,24 @@ enyo
 		  flex : 1
 		} ]
 	  },
-
+	  {
+		kind : enyo.Popup,
+		name : "popup_origin",
+		width : "600px",
+		height : "80%",
+		dismissWithClick : false,
+		layoutKind : "VFlexLayout",
+		style : "overflow : hiddin; border-with:0px;",
+		scrim : true,
+		onOpen : "on_open_origin",
+		components : [
+		{
+		  kind : "cattleOrigin",
+		  name : "origin_kind",
+		  onAccept : "acceptOrigin",
+		  flex : 1
+		} ]
+	  },
 	  {
 		kind : enyo.BasicScroller,
 		flex : 1,
@@ -829,6 +850,10 @@ enyo
 		  }
 
 		  break;
+		case 5: //Origin
+		  	this.$.popup_origin.openAtCenter();
+		  	this.$.origin_kind.refreshData(this.objSelected.name);
+		  break;
 		}
 	  },
 	  saveMoving : function() {
@@ -881,4 +906,7 @@ enyo
 		crudInventory.save(arrObjectsToSend, this, "updateView");
 		cacheMan.showScrim();
 	  },
+	  acceptOrigin: function(){
+		this.$.popup_origin.close();
+	  }
 	});

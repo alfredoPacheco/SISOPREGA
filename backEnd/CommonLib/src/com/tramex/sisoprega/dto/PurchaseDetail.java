@@ -46,6 +46,7 @@ public class PurchaseDetail {
   private Date paidDate;
   private double paidAmount = 0.0d;
   private boolean settled=false;
+  private long cattleTypeId;
   
   /**
    * @return the purchaseDetailId
@@ -170,9 +171,24 @@ public class PurchaseDetail {
   public void setSettled(boolean settled) {
     this.settled = settled;
   }
+  
+  /**
+   * @return the cattleTypeId
+   */
+  public long getCattleTypeId() {
+    return cattleTypeId;
+  }
+  /**
+   * @param cattleTypeId the cattleTypeId to set
+   */
+  public void setCattleTypeId(long cattleTypeId) {
+    this.cattleTypeId = cattleTypeId;
+  }
+  
+  
   @Override
   public String toString() {
-    return "recordId:" + purchaseDetailId + ";penId:" + penId + ";qualityId:" + qualityId + ";heads:" + heads + ";weight:" + weight + ";purchasePrice:" + purchasePrice + ";";
+    return "recordId:" + purchaseDetailId + ";penId:" + penId + ";cattleTypeId:" + cattleTypeId + ";qualityId:" + qualityId + ";heads:" + heads + ";weight:" + weight + ";purchasePrice:" + purchasePrice + ";";
   }
   
 }
