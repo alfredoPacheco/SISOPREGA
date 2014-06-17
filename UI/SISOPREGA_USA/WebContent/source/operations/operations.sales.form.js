@@ -81,7 +81,6 @@ enyo
 		  owner : this
 		});
 		this.$.detailFields.createComponents([
-
 		{
 		  kind : "controls.autocomplete",
 		  inputKind : "ToolInput",
@@ -140,7 +139,7 @@ enyo
 		  bindTo : "heads",
 		  belongsTo : "SaleDetail",
 		  textAlign : "right",
-		  onInput : "on_heads_input"
+		  onInput : "calculateAverageInput"
 		},
 		{
 		  kind : "controls.numberBox",
@@ -153,7 +152,7 @@ enyo
 		  bindTo : "weight",
 		  belongsTo : "SaleDetail",
 		  textAlign : "right",
-		  onInput : "on_weight_input"
+		  onInput : "calculateAverageInput"
 		},
 		{
 		  kind : "ToolInput",
@@ -193,7 +192,6 @@ enyo
 		}
 	  },
 	  loadAutocompletes : function() {
-
 		this.$.customer.setItems(crudCustomer.getList());
 		this.$.cattleType.setItems(crudInventory.getActiveCattlesList());
 		this.$.cattleType.setIndex(1); // Default value: Novillos
@@ -211,7 +209,6 @@ enyo
 			sError = "Error. Heads quantity is higher than available heads.";
 		  }
 		}
-
 		if (this.$.cattleQuality.getIndex() == -1
 			|| this.$.pen.getIndex() == -1 || this.$.cabezas.getValue() == ""
 			|| this.$.peso.getValue() == "") {
@@ -316,13 +313,27 @@ enyo
 		this.$.peso.setValue("");
 	  },
 	  pen_select : function(inSender) {
-		var itemSelected = inSender.getItemSelected();
-		if (itemSelected && itemSelected.object) {
+		var itemSelected = null;
+		if (this.$.cattleType.getIndex() == ''
+			|| this.$.cattleType.getIndex() < 0) {
+		  itemSelected = inSender.getItemSelected();
+		} else {
+		  for ( var i = 0; i < inSender.items.length; i++) {
+			if (inSender.items[i].object) {
+			  if (inSender.items[i].object.cattypeId == this.$.cattleType
+				  .getIndex()) {
+				if (inSender.items[i].value == inSender.index) {
+				  itemSelected = inSender.items[i];
+				}
+			  }
+			}
+		  }
+		}
+		if (itemSelected) {
 		  var qtyAvailable = itemSelected.object.availableToSell;
 		  this.$.qtyAvailable.setCaption("Available: " + qtyAvailable);
 
 		  // Not using setter for index because we don't want to raise event
-		  // after it
 		  // so we have to set value manually
 		  this.$.cattleQuality.index = itemSelected.object.qualityId;
 		  this.$.cattleQuality.setValue(this.$.cattleQuality
@@ -369,75 +380,75 @@ enyo
 		  return true;
 		}
 	  },
-//	  setEntity : function(entity, bUpdatingMode) {
-//		if (bUpdatingMode) {
-//		  this.toggleUpdate();
-//		  this.resetValues();
-//		} else {
-//		  this.toggleAdd();
-//		}
-//		this.arrDetail = [];
-//		if (entity) {
-//		  var controls = this.$;
-//		  for ( var i in controls) {
-//			if (controls[i].hasOwnProperty("belongsTo")) {
-//			  // if (entity[controls[i].belongsTo])
-//			  // this.setValueForControl(controls[i],
-//			  // entity[controls[i].belongsTo][0][controls[i].bindTo]);
-//			} else if (controls[i].hasOwnProperty("bindTo")) {
-//			  this.setValueForControl(controls[i], entity[controls[i].bindTo]);
-//			}
-//		  }
-//		  this.updatingEntityId = entity[this.entityKind.entityIdName()];
-//
-//		  if (entity.PurchaseDetail) {
-//			for ( var i = 0; i < entity.PurchaseDetail.length; i++) {
-//			  var obj =
-//			  {
-//				heads : entity.PurchaseDetail[i].heads,
-//				penId : entity.PurchaseDetail[i].penId,
-//				cattleTypeId : entity.PurchaseDetail[i].cattleTypeId,
-//				qualityId : entity.PurchaseDetail[i].qualityId,
-//				weight : entity.PurchaseDetail[i].weight,
-//				avgWeight : entity.PurchaseDetail[i].avgWeight,
-//				entityName : entity.PurchaseDetail[i].entityName,
-//				paidAmount : entity.PurchaseDetail[i].paidAmount,
-//				purchaseDetailId : entity.PurchaseDetail[i].purchaseDetailId,
-//				purchasePrice : entity.PurchaseDetail[i].purchasePrice,
-//				settled : entity.PurchaseDetail[i].settled,
-//				fields :
-//				{
-//				  0 : crudCattle
-//					  .getCattleTypeById(entity.PurchaseDetail[i].cattleTypeId).cattypeName,
-//				  1 : crudCattleQuality
-//					  .getByID(entity.PurchaseDetail[i].qualityId).qualityName,
-//				  2 : crudPen.adapterToList(crudPen
-//					  .getByID(entity.PurchaseDetail[i].penId)).caption,
-//				  3 : entity.PurchaseDetail[i].heads,
-//				  4 : entity.PurchaseDetail[i].weight,
-//				  5 : entity.PurchaseDetail[i].avgWeight
-//				}
-//			  };
-//			  this.arrDetail.push(obj);
-//			}
-//			this.updateList();
-//			this.$.detailScroller.scrollTo(this.$.detailScroller
-//				.getBoundaries().bottom, 0);
-//		  }
-//		}
-//	  },
-//	  toggleUpdate : function() {
-//		this.$.saveButton.setCaption("Update");
-//	  },
-//	  toggleAdd : function() {
-//		this.$.saveButton.setCaption("Create");
-//		this.$.cattleType.setIndex(1); // Default value: Novillos
-//	  },
-//	  on_input : function(inSender, inEvent) {
-//
-//		this.$.txtAvgWeight.setValue(utils.formatNumberThousands(utils
-//			.parseToNumber(this.$.peso.getValue())
-//			/ utils.parseToNumber(this.$.cabezas.getValue())));
-//		return true;
-//	  }
+	  // setEntity : function(entity, bUpdatingMode) {
+	  // if (bUpdatingMode) {
+	  // this.toggleUpdate();
+	  // this.resetValues();
+	  // } else {
+	  // this.toggleAdd();
+	  // }
+	  // this.arrDetail = [];
+	  // if (entity) {
+	  // var controls = this.$;
+	  // for ( var i in controls) {
+	  // if (controls[i].hasOwnProperty("belongsTo")) {
+	  // // if (entity[controls[i].belongsTo])
+	  // // this.setValueForControl(controls[i],
+	  // // entity[controls[i].belongsTo][0][controls[i].bindTo]);
+	  // } else if (controls[i].hasOwnProperty("bindTo")) {
+	  // this.setValueForControl(controls[i], entity[controls[i].bindTo]);
+	  // }
+	  // }
+	  // this.updatingEntityId = entity[this.entityKind.entityIdName()];
+	  //
+	  // if (entity.PurchaseDetail) {
+	  // for ( var i = 0; i < entity.PurchaseDetail.length; i++) {
+	  // var obj =
+	  // {
+	  // heads : entity.PurchaseDetail[i].heads,
+	  // penId : entity.PurchaseDetail[i].penId,
+	  // cattleTypeId : entity.PurchaseDetail[i].cattleTypeId,
+	  // qualityId : entity.PurchaseDetail[i].qualityId,
+	  // weight : entity.PurchaseDetail[i].weight,
+	  // avgWeight : entity.PurchaseDetail[i].avgWeight,
+	  // entityName : entity.PurchaseDetail[i].entityName,
+	  // paidAmount : entity.PurchaseDetail[i].paidAmount,
+	  // purchaseDetailId : entity.PurchaseDetail[i].purchaseDetailId,
+	  // purchasePrice : entity.PurchaseDetail[i].purchasePrice,
+	  // settled : entity.PurchaseDetail[i].settled,
+	  // fields :
+	  // {
+	  // 0 : crudCattle
+	  // .getCattleTypeById(entity.PurchaseDetail[i].cattleTypeId).cattypeName,
+	  // 1 : crudCattleQuality
+	  // .getByID(entity.PurchaseDetail[i].qualityId).qualityName,
+	  // 2 : crudPen.adapterToList(crudPen
+	  // .getByID(entity.PurchaseDetail[i].penId)).caption,
+	  // 3 : entity.PurchaseDetail[i].heads,
+	  // 4 : entity.PurchaseDetail[i].weight,
+	  // 5 : entity.PurchaseDetail[i].avgWeight
+	  // }
+	  // };
+	  // this.arrDetail.push(obj);
+	  // }
+	  // this.updateList();
+	  // this.$.detailScroller.scrollTo(this.$.detailScroller
+	  // .getBoundaries().bottom, 0);
+	  // }
+	  // }
+	  // },
+	  // toggleUpdate : function() {
+	  // this.$.saveButton.setCaption("Update");
+	  // },
+	  // toggleAdd : function() {
+	  // this.$.saveButton.setCaption("Create");
+	  // this.$.cattleType.setIndex(1); // Default value: Novillos
+	  // },
+	  calculateAverageInput : function(inSender, inEvent) {
+
+		this.$.txtAvgWeight.setValue(utils.formatNumberThousands(utils
+			.parseToNumber(this.$.peso.getValue())
+			/ utils.parseToNumber(this.$.cabezas.getValue())));
+		return true;
+	  }
 	});
