@@ -37,6 +37,7 @@ import java.util.Date;
  */
 public class HermanaCorteExportador {
   private long hermanaCorteExportadorId;
+  private long cattleTypeId;
   private long qualityId;
   private double purchasePrice = 0.0d;
   private Hermana hermana;
@@ -58,6 +59,20 @@ public class HermanaCorteExportador {
    */
   public void setHermanaCorteExportadorId(long hermanaCorteExportadorId) {
     this.hermanaCorteExportadorId = hermanaCorteExportadorId;
+  }
+
+  /**
+   * @return the cattleTypeId
+   */
+  public long getCattleTypeId() {
+    return cattleTypeId;
+  }
+
+  /**
+   * @param cattleTypeId the cattleTypeId to set
+   */
+  public void setCattleTypeId(long cattleTypeId) {
+    this.cattleTypeId = cattleTypeId;
   }
 
   /**

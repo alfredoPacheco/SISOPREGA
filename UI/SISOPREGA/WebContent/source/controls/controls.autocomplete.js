@@ -348,6 +348,10 @@ enyo
 		}
 	  },
 	  key_up : function(inSender, inEvent) {
+		if(this.allItems.length == 0){
+			this.doChangeValue();
+			return true;
+		}
 		var arrAux = [];
 		var value = "";
 		var x = inEvent.keyCode;

@@ -118,6 +118,7 @@ DROP TABLE IF EXISTS ctrl_hermana_corte_exportador CASCADE;
 CREATE TABLE ctrl_hermana_corte_exportador(
 	corte_expo      SERIAL PRIMARY KEY,
 	hermana_id  integer NOT NULL REFERENCES ctrl_hermana(hermana_id),
+	cattype_id     integer NOT NULL REFERENCES cat_cattle_type(cattype_id),
 	quality_id  integer NOT NULL REFERENCES cat_cattle_quality(quality_id),
 	heads       integer not null,
 	weight      decimal(12,4) not null,
@@ -136,6 +137,7 @@ CREATE TABLE ctrl_hermana_corte(
 	corte       SERIAL PRIMARY KEY,
 	hermana_id  integer NOT NULL REFERENCES ctrl_hermana(hermana_id),
 	barnyard_id integer NOT NULL REFERENCES cat_barnyard(barnyard_id),
+	cattype_id     integer NOT NULL REFERENCES cat_cattle_type(cattype_id),
 	quality_id  integer NOT NULL REFERENCES cat_cattle_quality(quality_id),
 	heads       integer not null,
 	weight      decimal(12,4) not null,
@@ -143,7 +145,7 @@ CREATE TABLE ctrl_hermana_corte(
 	paid_date	DATE,
 	paid_amount	decimal(12,2),
 	purchase_price  decimal(10,2) NOT NULL DEFAULT 0.0,
-	is_settled	boolean DEFAULT FALSE	
+	is_settled	boolean DEFAULT FALSE
 );
 
 GRANT ALL ON ctrl_hermana_corte TO sisoprega;

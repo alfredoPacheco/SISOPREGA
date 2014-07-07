@@ -1042,6 +1042,9 @@
 				<column name="corte_expo" />
 				<generated-value strategy="IDENTITY" />
 			</id>
+			<basic name="cattleTypeId">
+				<column name="cattype_id" />
+			</basic>
 			<basic name="qualityId">
 				<column name="quality_id" />
 			</basic>
@@ -1076,6 +1079,9 @@
 			</id>
 			<basic name="barnyardId">
 				<column name="barnyard_id" />
+			</basic>
+			<basic name="cattleTypeId">
+				<column name="cattype_id" />
 			</basic>
 			<basic name="qualityId">
 				<column name="quality_id" />

@@ -827,13 +827,13 @@ enyo
 		  if (objTo)
 			objTo = enyo.clone(objTo);
 
-		  if (objTo && objFrom) {
-			if (objFrom.qualityId != objTo.qualityId) {
-			  cacheMan.setMessage("",
-				  "Mixing cattle classes in one pen is not allowed.");
-			  break;
-			}
-		  }
+//		  if (objTo && objFrom) {
+//			if (objFrom.qualityId != objTo.qualityId) {
+//			  cacheMan.setMessage("",
+//				  "Mixing cattle classes in one pen is not allowed.");
+//			  break;
+//			}
+//		  }
 
 		  if (!objTo) {
 			objTo = crudPen.getByBarnyard(this.movingTo.name);

@@ -599,7 +599,7 @@ enyo
 		this.$.details.setReleased(releasesArray);
 
 		this.$.details.setSummary(summary);
-		this.$.details.updateTableContents();
+		//this.$.details.updateTableContents();
 		
 		this.$.details.clearCorteDataEntry();
 		this.$.details.$.draUpdateCorte.setOpen(false);
@@ -660,7 +660,8 @@ enyo
 		  heads : corte.heads,
 		  qualityId : corte.qualityId,
 		  weight : corte.weight,
-		  cutSeq : corte.cutSeq
+		  cutSeq : corte.cutSeq,
+		  cattleTypeId: 1
 		};
 		return output;
 	  },

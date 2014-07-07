@@ -38,6 +38,7 @@ import java.util.Date;
 public class HermanaCorte {
   private long hermanaCorteId;
   private long barnyardId;
+  private long cattleTypeId;
   private long qualityId;
   private long heads;
   private double weight;
@@ -72,6 +73,18 @@ public class HermanaCorte {
    */
   public void setBarnyardId(long barnyardId) {
     this.barnyardId = barnyardId;
+  }
+  /**
+   * @return the cattleTypeId
+   */
+  public long getCattleTypeId() {
+    return cattleTypeId;
+  }
+  /**
+   * @param cattleTypeId the cattleTypeId to set
+   */
+  public void setCattleTypeId(long cattleTypeId) {
+    this.cattleTypeId = cattleTypeId;
   }
   /**
    * @return the qualityId
