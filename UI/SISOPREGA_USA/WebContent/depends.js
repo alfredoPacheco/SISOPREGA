@@ -65,6 +65,7 @@ enyo.depends(
 	"../SISOPREGA/source/operations/operations.pen.map.js",
 
 	"source/operations/cattleOrigin.js",
+	"source/operations/cattleMovement.js",
 	"source/operations/admin.inventory.js",
 	"source/operations/admin.sales.js",
 	"source/operations/admin.shipments.js",

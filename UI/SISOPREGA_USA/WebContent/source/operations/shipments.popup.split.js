@@ -58,7 +58,7 @@ enyo
 		},
 		{
 		  kind : enyo.Button,
-		  caption : "Ok",
+		  caption : "OK",
 		  onclick : "accept_click",
 		  style : "background-color: #DABD8B;"
 		},

@@ -6,10 +6,6 @@ enyo
 	  style : "background-color:#DABD8B;font-size:15px;",
 	  align : "center",
 	  pack : "center",
-	  events :
-	  {
-		onAccept : ""
-	  },
 	  components : [
 
 	  {
@@ -32,27 +28,17 @@ enyo
 			style : "font-size:12px;width:100%;height:100%;"
 		  } ]
 		} ]
-	  },
-	  {
-		kind : enyo.HFlexBox,
-		align : "right",
-		height : "40px;",
-		style : "font-size:14px;margin:5px;",
-		components : [
-		{
-		  kind : enyo.Button,
-		  caption : "Ok",
-		  onclick : "accept_click",
-		  style : "background-color: #DABD8B;"
-		} ]
 	  } ],
 	  ready : function() {
 	  },
-	  accept_click : function() {
-		this.doAccept();
-	  },
 	  refreshData : function(inPen) {
-		var penId = crudInventory.getByPen(inPen).penId;
+		var penId = crudInventory.getByPen(inPen);
+		if (penId != null) {
+		  penId = penId.penId;
+		} else {
+		  this.$.lblContent.setContent("No Cattle in this Pen.");
+		  return;
+		}
 
 		var strTable = '<table aTable='
 			+ penId
@@ -74,12 +60,13 @@ enyo
 			  originType = 'Prorate';
 			  break;
 			}
-			strTable += '<tr><td style="text-align:center;">' + originType 
-				+ '</td><td style="text-align:center;">' + current.quality_name 
+			strTable += '<tr><td style="text-align:center;">' + originType
+				+ '</td><td style="text-align:center;">' + current.quality_name
 				+ '</td><td style="text-align:right;">' + current.heads
-				+ '</td><td style="text-align:right;">' + (Number(current.weight)).toFixed(2)
-				+ '</td><td style="text-align:right;">' + (Number(current.aveweight)).toFixed(2)
-				+ '</td></tr>';
+				+ '</td><td style="text-align:right;">'
+				+ (Number(current.weight)).toFixed(2)
+				+ '</td><td style="text-align:right;">'
+				+ (Number(current.aveweight)).toFixed(2) + '</td></tr>';
 		  }
 		}
 		strTable += '</tbody></table><br><br>';

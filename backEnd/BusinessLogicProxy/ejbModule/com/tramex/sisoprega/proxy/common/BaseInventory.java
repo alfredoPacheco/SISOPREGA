@@ -101,13 +101,14 @@ public abstract class BaseInventory extends BaseBean {
   
   
   /**NEW STRUCTURE*****************************************************************************************************/
-  public void addToInventory(long penId, long transactionId, long sourceType, long sourceId, long cattleTypeId, long qualityId, long heads, double weight )
+  public void addToInventory(long sourceProvider, long penId, long transactionId, Inventory.SOURCE_TYPE sourceType, long sourceId, long cattleTypeId, long qualityId, long heads, double weight )
       throws DataModelException {
       Inventory inventory = new Inventory();
       
+      inventory.setSourceProvider(sourceProvider);
       inventory.setPenId(penId);
       inventory.setTransactionId(transactionId);
-      inventory.setSourceType(sourceType);
+      inventory.setSourceType(sourceType.getValue());
       inventory.setSourceId(sourceId);
       inventory.setCattypeId(cattleTypeId);
       inventory.setQualityId(qualityId);

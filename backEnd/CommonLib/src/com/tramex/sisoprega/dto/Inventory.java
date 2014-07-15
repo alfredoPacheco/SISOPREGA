@@ -42,7 +42,7 @@ import java.util.Set;
 public class Inventory {
   private long inventoryId;
   private long transactionId; //Parent ID
-  private long sourceType; //1:Hermana, 2:Purchase, 3:Prorate
+  private int sourceType; //1:Hermana, 2:Purchase, 3:Prorate
   private long sourceId;
   private long cattypeId;
   private long qualityId;
@@ -57,10 +57,21 @@ public class Inventory {
   private long availableToShip;
   private long shipped;
   private Date cycleCompleted = null;
+  private long sourceProvider;
   
   
   private Set<Shrinkage> shrinkage;
   private Set<FeedUS> feedUS;
+  
+  public enum SOURCE_TYPE {
+    HERMANA(1),
+    PURCHASE(2),
+    RESORT(3);
+    private int value;
+    SOURCE_TYPE(int value) { this.value = value; }
+    public int getValue() { return value; }
+  }
+  
   /**
    * @return the transactionId
    */
@@ -76,13 +87,13 @@ public class Inventory {
   /**
    * @return the sourceType
    */
-  public long getSourceType() {
+  public int getSourceType() {
     return sourceType;
   }
   /**
    * @param sourceType the sourceType to set
    */
-  public void setSourceType(long sourceType) {
+  public void setSourceType(int sourceType) {
     this.sourceType = sourceType;
   }
   /**
@@ -312,5 +323,18 @@ public class Inventory {
   public void setCycleCompleted(Date cycleCompleted) {
     this.cycleCompleted = cycleCompleted;
   }
+  /**
+   * @return the sourceProvider
+   */
+  public long getSourceProvider() {
+    return sourceProvider;
+  }
+  /**
+   * @param sourceProvider the sourceProvider to set
+   */
+  public void setSourceProvider(long sourceProvider) {
+    this.sourceProvider = sourceProvider;
+  }
+  
   
 }

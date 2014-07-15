@@ -1343,6 +1343,9 @@
 			<basic name="transactionId">
 				<column name="transaction_id" />
 			</basic>
+			<basic name="sourceProvider">
+				<column name="source_provider" />
+			</basic>
 			<basic name="sourceType">
 				<column name="source_type" />
 			</basic>

@@ -2,9 +2,10 @@ enyo
 	.kind(
 	{
 	  name : "pen.map",
-	  events : {
-		onBeforeUpdate:"",
-		onAfterUpdate:""
+	  events :
+	  {
+		onBeforeUpdate : "",
+		onAfterUpdate : ""
 	  },
 	  arrOptions : [
 	  {
@@ -22,7 +23,7 @@ enyo
 	  {
 		caption : "Origin",
 		value : 5
-	  }],
+	  } ],
 	  arrMovingPen : [
 	  {
 		caption : "Move here",
@@ -47,9 +48,6 @@ enyo
 	  className : "mapBG",
 	  sColorToolbarFont : "#FFFF00",
 	  arrSelectedMoveTo : {},
-	  create : function() {
-		this.inherited(arguments);
-	  },
 	  components : [
 	  {
 		kind : enyo.Popup,
@@ -112,14 +110,47 @@ enyo
 		height : "80%",
 		dismissWithClick : false,
 		layoutKind : "VFlexLayout",
-		style : "overflow : hiddin; border-with:0px;",
+		style : "overflow : hiddin; border-with:0px;background-color:#DABD8B",
 		scrim : true,
 		onOpen : "on_open_origin",
 		components : [
 		{
 		  kind : "cattleOrigin",
 		  name : "origin_kind",
-		  onAccept : "acceptOrigin",
+		  flex : 1
+		},
+		{
+		  kind : enyo.HFlexBox,
+		  pack : "end",
+		  height : "40px;",
+		  width : "100%",
+		  style : "font-size:14px;margin:5px;padding-right:20px;",
+		  components : [
+		  {
+			kind : enyo.Button,
+			caption : "OK",
+			onclick : "acceptOrigin",
+			style : "background-color: #DABD8B;",
+			width : "100px;"
+		  } ]
+		} ]
+	  },
+	  {
+		kind : enyo.Popup,
+		name : "popup_movement",
+		width : "1200px",
+		height : "80%",
+		dismissWithClick : true,
+		layoutKind : "VFlexLayout",
+		style : "overflow : hiddin; border-with:0px;",
+		scrim : true,
+		onOpen : "on_open_origin",
+		components : [
+		{
+		  kind : "cattleMovement",
+		  name : "cattleMovement_kind",
+		  onAccept : "acceptMovement",
+		  onCancel : "cancelMovement",
 		  flex : 1
 		} ]
 	  },
@@ -134,7 +165,6 @@ enyo
 		  items : []
 		},
 		{
-
 		  name : "cells",
 		  kind : "VFlexBox",
 		  align : "center",
@@ -253,7 +283,7 @@ enyo
 			pack : "center",
 			components : [
 			{
-			  content : "Last feed:",
+			  content : "Last Feed:",
 			  name : "lblLastFeed",
 			  width : "110px",
 			  style : "text-align: left;margin-left: 4px;"
@@ -312,12 +342,8 @@ enyo
 		  name : "btnCancelMoving",
 		  caption : "Cancel",
 		  showing : false
-
 		} ],
-
-	  }
-
-	  ],
+	  } ],
 	  initializeCells : function() {
 		this.last = this.$.cells;
 		// this.addRow(true);
@@ -477,10 +503,19 @@ enyo
 	  highLightMoveToPen : function(pen) {
 		for (prop in this.arrSelectedMoveTo) {
 		  if (this.arrSelectedMoveTo.hasOwnProperty(prop)) {
-			this.arrSelectedMoveTo[prop].applyStyle("background-color",
-				this.sColorFree);
+			if (crudInventory.isPenActiveInInventory(prop)) {
+				this.arrSelectedMoveTo[prop].occupied = 1;
+				this.arrSelectedMoveTo[prop].applyStyle("background-color",
+					this.sColorOccupied);
+
+			  } else {
+				this.arrSelectedMoveTo[prop].occupied = 0;
+				this.arrSelectedMoveTo[prop].applyStyle("background-color",
+					this.sColorFree);
+			  }
 		  }
 		}
+
 		this.arrSelectedMoveTo = {};
 		this.arrSelectedMoveTo[pen.name] = pen;
 		pen.applyStyle("background-color", "yellow");
@@ -510,6 +545,7 @@ enyo
 		  if (this.movingPen) {
 			this.movingTo = inSender;
 			if (this.movingFrom.name != this.movingTo.name) {
+			  this.highLightMoveToPen(inSender);
 			  this.$.options.setItems(this.arrMovingPen);
 			  this.$.options.render();
 			  this.$.options.openAtEvent(inEvent);
@@ -541,6 +577,7 @@ enyo
 		  if (this.movingPen) {
 			this.movingTo = inSender;
 			if (this.movingFrom.name != this.movingTo.name) {
+			  this.highLightMoveToPen(inSender);
 			  this.$.options.setItems(this.arrMovingPen);
 			  this.$.options.render();
 			  this.$.options.openAtEvent(inEvent);
@@ -551,6 +588,7 @@ enyo
 		  if (this.movingPen) {
 			this.movingTo = inSender;
 			if (this.movingFrom.name != this.movingTo.name) {
+			  this.highLightMoveToPen(inSender);
 			  this.$.options.setItems(this.arrMovingPen);
 			  this.$.options.render();
 			  this.$.options.openAtEvent(inEvent);
@@ -587,6 +625,7 @@ enyo
 		this.$.popup_movePen.close();
 		this.showInputs();
 		this.setDesc(this.movingFrom.name);
+		this.refreshMap();
 	  },
 	  cancelFeed : function() {
 		this.$.popup_alimentoUS.close();
@@ -670,7 +709,7 @@ enyo
 		this.updateView();
 	  },
 	  updateView : function() {
-		this.doBeforeUpdate();		
+		this.doBeforeUpdate();
 		crudInventory.get(this, "readCallBack");
 		cacheMan.showScrim();
 	  },
@@ -731,6 +770,7 @@ enyo
 		}
 		// _objMainHeader.applyStyle("font-size", "15px");
 		this.arrSelectedOccupied = {};
+		this.arrSelectedMoveTo = {};
 		this.clearDesc();
 	  },
 	  setDesc : function(sBY) {
@@ -749,7 +789,8 @@ enyo
 		  this.$.txtQuality.setValue(crudCattleQuality
 			  .getByID(objInventory.qualityId).qualityName);
 		  this.$.txtQuantity.setValue(objInventory.heads);
-		  this.$.txtWeight.setValue(Number(objInventory.weight).toFixed(0) + " Lb");
+		  this.$.txtWeight.setValue(Number(objInventory.weight).toFixed(0)
+			  + " Lb");
 		  this.$.txtAverage.setValue((objInventory.weight / objInventory.heads)
 			  .toFixed(1)
 			  + " Lb");
@@ -827,13 +868,13 @@ enyo
 		  if (objTo)
 			objTo = enyo.clone(objTo);
 
-//		  if (objTo && objFrom) {
-//			if (objFrom.qualityId != objTo.qualityId) {
-//			  cacheMan.setMessage("",
-//				  "Mixing cattle classes in one pen is not allowed.");
-//			  break;
-//			}
-//		  }
+		  // if (objTo && objFrom) {
+		  // if (objFrom.qualityId != objTo.qualityId) {
+		  // cacheMan.setMessage("",
+		  // "Mixing cattle classes in one pen is not allowed.");
+		  // break;
+		  // }
+		  // }
 
 		  if (!objTo) {
 			objTo = crudPen.getByBarnyard(this.movingTo.name);
@@ -842,17 +883,21 @@ enyo
 		  if (objFrom) {
 			// var byName = this.movingTo.name;
 			// objFrom.barnyard = byName;
-			this.$.popup_movePen.validateComponents();
-			this.$.movePen_kind.setObj(objFrom, objTo);
-			this.$.popup_movePen.openAtCenter();
+			// this.$.popup_movePen.validateComponents();
+			// this.$.movePen_kind.setObj(objFrom, objTo);
+			// this.$.popup_movePen.openAtCenter();
+			this.$.popup_movement.validateComponents();
+			this.$.cattleMovement_kind.refreshData(this.movingFrom.name,
+				this.movingTo.name);
+			this.$.popup_movement.openAtCenter();
 		  } else {
 			cacheMan.setMessage("", "actionSelected Error");
 		  }
 
 		  break;
-		case 5: //Origin
-		  	this.$.popup_origin.openAtCenter();
-		  	this.$.origin_kind.refreshData(this.objSelected.name);
+		case 5: // Origin
+		  this.$.popup_origin.openAtCenter();
+		  this.$.origin_kind.refreshData(this.objSelected.name);
 		  break;
 		}
 	  },
@@ -870,14 +915,20 @@ enyo
 
 		var objMovement = this.$.movePen_kind.getObj();
 
-		movingFrom.heads = utils.parseToNumber(movingFrom.heads) - utils.parseToNumber(objMovement.heads);
-		movingFrom.weight = utils.parseToNumber(movingFrom.weight) - utils.parseToNumber(objMovement.weight);
-		
+		movingFrom.heads = utils.parseToNumber(movingFrom.heads)
+			- utils.parseToNumber(objMovement.heads);
+		movingFrom.weight = utils.parseToNumber(movingFrom.weight)
+			- utils.parseToNumber(objMovement.weight);
+
 		if (isMovingToOccupied) {
 
-		  movingTo.heads = utils.parseToNumber(movingTo.heads) + utils.parseToNumber(objMovement.heads);
-		  movingTo.weight = utils.parseToNumber(movingTo.weight) + utils.parseToNumber(objMovement.weight);
-		  movingTo.availableToSell = utils.parseToNumber(movingTo.availableToSell) + utils.parseToNumber(objMovement.heads);
+		  movingTo.heads = utils.parseToNumber(movingTo.heads)
+			  + utils.parseToNumber(objMovement.heads);
+		  movingTo.weight = utils.parseToNumber(movingTo.weight)
+			  + utils.parseToNumber(objMovement.weight);
+		  movingTo.availableToSell = utils
+			  .parseToNumber(movingTo.availableToSell)
+			  + utils.parseToNumber(objMovement.heads);
 
 		} else {
 		  var objNewInventory = enyo.clone(movingFrom);
@@ -906,7 +957,15 @@ enyo
 		crudInventory.save(arrObjectsToSend, this, "updateView");
 		cacheMan.showScrim();
 	  },
-	  acceptOrigin: function(){
+	  acceptOrigin : function() {
 		this.$.popup_origin.close();
+	  },
+	  acceptMovement : function() {
+		this.$.popup_movement.close();
+		this.updateView();
+	  },
+	  cancelMovement : function() {
+		this.$.popup_movement.close();
+		this.cancelMoving();
 	  }
 	});

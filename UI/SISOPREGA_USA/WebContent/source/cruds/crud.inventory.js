@@ -68,6 +68,16 @@ enyo
 			  arrAux[i].feedUSId = utils.parseToNumber(arrAux[i].feedUSId);
 			}
 		  }
+		  
+		  switch(entityObj.sourceType){
+		  case '1': //HERMANA
+			entityObj.sourceProviderName = crudRancher.getByID(entityObj.sourceProvider).name;
+		  case '2': //PURCHASE
+			entityObj.sourceProviderName = crudSeller.getByID(entityObj.sourceProvider).sellerName;
+		  case '3': //RESORT
+			//entityObj.sourceProviderName = crudRancher.getByID(entityObj.sourceProviderName).name;
+		  }
+		  
 		  return entityObj;
 		}
 		return null;

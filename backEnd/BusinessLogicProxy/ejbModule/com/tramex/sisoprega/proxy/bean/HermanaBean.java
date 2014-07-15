@@ -48,7 +48,7 @@ public class HermanaBean extends BaseInventory implements Cruddable {
       Hermana entityPersisted = (Hermana) getEntityFromRecord(recordPersisted, typePersisted);
       // Add corte to inventory
       for (HermanaCorte detail : entityPersisted.getHermanaCorte()) {
-        addToInventory(detail.getBarnyardId(), entityPersisted.getHermanaId(), 2, detail.getHermanaCorteId(),
+        addToInventory(entityPersisted.getRancherId(), detail.getBarnyardId(), entityPersisted.getHermanaId(), Inventory.SOURCE_TYPE.HERMANA, detail.getHermanaCorteId(),
             detail.getCattleTypeId(), detail.getQualityId(), detail.getHeads(), detail.getWeight());
       }
       
@@ -231,7 +231,7 @@ public class HermanaBean extends BaseInventory implements Cruddable {
             }
           } else {
             // Create inventory Record with difference
-            addToInventory(newDetail.getBarnyardId(), newEntity.getHermanaId(), 2, newDetail.getHermanaCorteId(),
+            addToInventory(newEntity.getRancherId(), newDetail.getBarnyardId(), newEntity.getHermanaId(), Inventory.SOURCE_TYPE.HERMANA, newDetail.getHermanaCorteId(),
                 newDetail.getCattleTypeId(), newDetail.getQualityId(), newDetail.getHeads(), newDetail.getWeight());
           }
         }
@@ -271,7 +271,7 @@ public class HermanaBean extends BaseInventory implements Cruddable {
     for (HermanaCorte detail : newEntity.getHermanaCorte()) {
       Inventory inventory = getInventoryRecord(newEntity.getHermanaId(), 2, detail.getHermanaCorteId());
       if (inventory == null) {
-        addToInventory(detail.getBarnyardId(), newEntity.getHermanaId(), 2, detail.getHermanaCorteId(),
+        addToInventory(newEntity.getRancherId(), detail.getBarnyardId(), newEntity.getHermanaId(), Inventory.SOURCE_TYPE.HERMANA, detail.getHermanaCorteId(),
             detail.getCattleTypeId(), detail.getQualityId(), detail.getHeads(), detail.getWeight());
       }
     }
