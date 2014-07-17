@@ -36,14 +36,14 @@ enyo
 		if (penId != null) {
 		  penId = penId.penId;
 		} else {
-		  this.$.lblContent.setContent("No Cattle in this Pen.");
+		  this.$.lblContent.setContent("" + crudPen.adapterToList(crudPen.getByID(crudPen.getByBarnyard(inPen).penId)).caption + "<br><br>No Cattle in this Pen.");
 		  return;
 		}
 
 		var strTable = '<table aTable='
 			+ penId
 			+ ' class="display"><thead>'
-			+ '<tr><th>Origin Type</th><th>Quality</th><th>Heads</th><th>Weight</th><th>Average</th></tr></thead>'
+			+ '<tr><th>Origin Type</th><th>Source Name</th><th>Quality</th><th>Heads</th><th>Weight</th><th>Average</th></tr></thead>'
 			+ '<tbody>';
 		for ( var i = 0; i < crudInventory.arrObj.length; i++) {
 		  var current = crudInventory.arrObj[i];
@@ -61,6 +61,8 @@ enyo
 			  break;
 			}
 			strTable += '<tr><td style="text-align:center;">' + originType
+				+ '</td><td style="text-align:center;">'
+				+ current.sourceProviderName
 				+ '</td><td style="text-align:center;">' + current.quality_name
 				+ '</td><td style="text-align:right;">' + current.heads
 				+ '</td><td style="text-align:right;">'

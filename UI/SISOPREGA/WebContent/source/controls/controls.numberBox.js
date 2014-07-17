@@ -88,11 +88,11 @@ enyo.kind(
 	if (!isNaN(x)) {
 	  switch (true) {
 	  case (x == 8): // backspace
-	  case (x >= 46 && x <= 57): // numbers
+	  case ((x >= 46 && x <= 57) || (x >= 96 && x <= 105)): // numbers
 		this.doInput(inSender, inEvent, keyPressed);
 		return;
 	  }
-	}else{
+	} else {
 	  this.doInput(inSender, inEvent, keyPressed);
 	}
 

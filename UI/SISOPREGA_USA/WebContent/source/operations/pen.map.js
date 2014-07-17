@@ -140,7 +140,7 @@ enyo
 		name : "popup_movement",
 		width : "1200px",
 		height : "80%",
-		dismissWithClick : true,
+		dismissWithClick : false,
 		layoutKind : "VFlexLayout",
 		style : "overflow : hiddin; border-with:0px;",
 		scrim : true,
@@ -205,12 +205,8 @@ enyo
 			  height : "30px",
 			  disabled : true,
 			  style : "text-align:center"
-
-			},
-
-			]
+			}, ]
 		  },
-
 		  {
 			kind : "VFlexBox",
 			flex : 1,
@@ -504,15 +500,15 @@ enyo
 		for (prop in this.arrSelectedMoveTo) {
 		  if (this.arrSelectedMoveTo.hasOwnProperty(prop)) {
 			if (crudInventory.isPenActiveInInventory(prop)) {
-				this.arrSelectedMoveTo[prop].occupied = 1;
-				this.arrSelectedMoveTo[prop].applyStyle("background-color",
-					this.sColorOccupied);
+			  this.arrSelectedMoveTo[prop].occupied = 1;
+			  this.arrSelectedMoveTo[prop].applyStyle("background-color",
+				  this.sColorOccupied);
 
-			  } else {
-				this.arrSelectedMoveTo[prop].occupied = 0;
-				this.arrSelectedMoveTo[prop].applyStyle("background-color",
-					this.sColorFree);
-			  }
+			} else {
+			  this.arrSelectedMoveTo[prop].occupied = 0;
+			  this.arrSelectedMoveTo[prop].applyStyle("background-color",
+				  this.sColorFree);
+			}
 		  }
 		}
 
