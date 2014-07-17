@@ -397,12 +397,16 @@ enyo
 		  if (inSender.sortDirection == "ASC") {
 			inSender.sortDirection = "DESC";
 			this.arrData.sort(function(a, b) {
-			  return a.cattle_name < b.cattle_name;
+			  var x = a.cattle_name;
+			  var y = b.cattle_name;
+			  return ((x < y) ? 1 : ((x > y) ? -1 : 0));
 			});
 		  } else {
 			inSender.sortDirection = "ASC";
 			this.arrData.sort(function(a, b) {
-			  return a.cattle_name > b.cattle_name;
+			  var x = a.cattle_name;
+			  var y = b.cattle_name;
+			  return ((x < y) ? -1 : ((x > y) ? 1 : 0));
 			});
 		  }
 		  break;
@@ -410,12 +414,16 @@ enyo
 		  if (inSender.sortDirection == "ASC") {
 			inSender.sortDirection = "DESC";
 			this.arrData.sort(function(a, b) {
-			  return a.quality_name < b.quality_name;
+			  var x = a.quality_name;
+			  var y = b.quality_name;
+			  return ((x < y) ? 1 : ((x > y) ? -1 : 0));
 			});
 		  } else {
 			inSender.sortDirection = "ASC";
 			this.arrData.sort(function(a, b) {
-			  return a.quality_name > b.quality_name;
+			  var x = a.quality_name;
+			  var y = b.quality_name;
+			  return ((x < y) ? -1 : ((x > y) ? 1 : 0));
 			});
 		  }
 		  break;
@@ -423,13 +431,13 @@ enyo
 		  if (inSender.sortDirection == "ASC") {
 			inSender.sortDirection = "DESC";
 			this.arrData.sort(function(a, b) {
-			  return utils.parseToNumber(a.totalHeads) < utils
-				  .parseToNumber(b.totalHeads);
+			  return utils.parseToNumber(b.totalHeads) - utils
+				  .parseToNumber(a.totalHeads);
 			});
 		  } else {
 			inSender.sortDirection = "ASC";
 			this.arrData.sort(function(a, b) {
-			  return utils.parseToNumber(a.totalHeads) > utils
+			  return utils.parseToNumber(a.totalHeads) - utils
 				  .parseToNumber(b.totalHeads);
 			});
 		  }
@@ -438,13 +446,13 @@ enyo
 		  if (inSender.sortDirection == "ASC") {
 			inSender.sortDirection = "DESC";
 			this.arrData.sort(function(a, b) {
-			  return utils.parseToNumber(a.totalWeight) < utils
-				  .parseToNumber(b.totalWeight);
+			  return utils.parseToNumber(b.totalWeight) - utils
+				  .parseToNumber(a.totalWeight);
 			});
 		  } else {
 			inSender.sortDirection = "ASC";
 			this.arrData.sort(function(a, b) {
-			  return utils.parseToNumber(a.totalWeight) > utils
+			  return utils.parseToNumber(a.totalWeight) - utils
 				  .parseToNumber(b.totalWeight);
 			});
 		  }
@@ -453,13 +461,13 @@ enyo
 		  if (inSender.sortDirection == "ASC") {
 			inSender.sortDirection = "DESC";
 			this.arrData.sort(function(a, b) {
-			  return utils.parseToNumber(a.totalAveWeight) < utils
-				  .parseToNumber(b.totalAveWeight);
+			  return utils.parseToNumber(b.totalAveWeight) - utils
+				  .parseToNumber(a.totalAveWeight);
 			});
 		  } else {
 			inSender.sortDirection = "ASC";
 			this.arrData.sort(function(a, b) {
-			  return utils.parseToNumber(a.totalAveWeight) > utils
+			  return utils.parseToNumber(a.totalAveWeight) - utils
 				  .parseToNumber(b.totalAveWeight);
 			});
 		  }
@@ -468,13 +476,13 @@ enyo
 		  if (inSender.sortDirection == "ASC") {
 			inSender.sortDirection = "DESC";
 			this.arrData.sort(function(a, b) {
-			  return utils.parseToNumber(a.totalFeed) < utils
-				  .parseToNumber(b.totalFeed);
+			  return utils.parseToNumber(b.totalFeed) - utils
+				  .parseToNumber(a.totalFeed);
 			});
 		  } else {
 			inSender.sortDirection = "ASC";
 			this.arrData.sort(function(a, b) {
-			  return utils.parseToNumber(a.totalFeed) > utils
+			  return utils.parseToNumber(a.totalFeed) - utils
 				  .parseToNumber(b.totalFeed);
 			});
 		  }
