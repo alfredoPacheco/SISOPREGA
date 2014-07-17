@@ -91,7 +91,8 @@ enyo
 		  style : "margin-right: 15px;",
 		  bindTo : "cattleTypeId",
 		  belongsTo : "PurchaseDetail",
-		  onSelectItem : "on_select_cattleType"
+		  onSelectItem : "on_select_cattleType",
+		  sortType:"Text"
 		},
 		{
 		  kind : "controls.autocomplete",
@@ -103,7 +104,8 @@ enyo
 		  style : "margin-right: 15px;",
 		  bindTo : "qualityId",
 		  belongsTo : "PurchaseDetail",
-		  onSelectItem : "clase_select"
+		  onSelectItem : "clase_select",
+		  sortType:"Text"
 		},
 		{
 		  kind : "controls.autocomplete",
@@ -114,7 +116,8 @@ enyo
 		  width : "150px;",
 		  style : "margin-right: 15px;",
 		  bindTo : "penId",
-		  belongsTo : "PurchaseDetail"
+		  belongsTo : "PurchaseDetail",
+		  sortType:"Text"
 		},
 		{
 		  kind : "controls.numberBox",
@@ -127,7 +130,8 @@ enyo
 		  bindTo : "heads",
 		  belongsTo : "PurchaseDetail",
 		  textAlign : "right",
-		  onInput : "on_input"
+		  onInput : "on_input",
+		  sortType:"Number"
 		},
 		{
 		  kind : "controls.numberBox",
@@ -140,7 +144,8 @@ enyo
 		  bindTo : "weight",
 		  belongsTo : "PurchaseDetail",
 		  textAlign : "right",
-		  onInput : "on_input"
+		  onInput : "on_input",
+		  sortType:"Number"
 		},
 		{
 		  kind : "ToolInput",
@@ -151,7 +156,8 @@ enyo
 		  style : "margin-right: 15px;",
 		  textAlign : "right",
 		  bindTo : "avgWeight",
-		  belongsTo : "PurchaseDetail"
+		  belongsTo : "PurchaseDetail",
+		  sortType:"Number"
 		} ],
 		{
 		  owner : this

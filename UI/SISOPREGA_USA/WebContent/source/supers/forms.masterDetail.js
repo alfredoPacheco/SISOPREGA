@@ -198,6 +198,10 @@ enyo
 			  {
 				content : dataFields[i].hint,
 				style : sStyle,
+				onclick : "on_sort",
+				sortDirection : "DESC",
+				sortType : dataFields[i].sortType,
+				sortColumn : i
 			  },
 			  {
 				owner : this
@@ -414,5 +418,42 @@ enyo
 	  toggleUpdateDetail : function() {
 		this.$.drawUpdateDetail.setOpen(true);
 		this.$.drawAddDetail.setOpen(false);
-	  }
+	  },
+	  on_sort : function(inSender) {
+		switch (inSender.sortType) {
+		case "Text":
+		  if (inSender.sortDirection == "ASC") {
+			inSender.sortDirection = "DESC";
+			this.arrDetail.sort(function(a, b) {
+			  var x = a.fields[inSender.sortColumn];
+			  var y = b.fields[inSender.sortColumn];
+			  return ((x < y) ? 1 : ((x > y) ? -1 : 0));
+			});
+		  } else {
+			inSender.sortDirection = "ASC";
+			this.arrDetail.sort(function(a, b) {
+			  var x = a.fields[inSender.sortColumn];
+			  var y = b.fields[inSender.sortColumn];
+			  return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+			});
+		  }
+		  break;
+		case "Number":
+		  if (inSender.sortDirection == "ASC") {
+			inSender.sortDirection = "DESC";
+			this.arrDetail.sort(function(a, b) {
+			  return utils.parseToNumber(b.fields[inSender.sortColumn])
+				  - utils.parseToNumber(a.fields[inSender.sortColumn]);
+			});
+		  } else {
+			inSender.sortDirection = "ASC";
+			this.arrDetail.sort(function(a, b) {
+			  return utils.parseToNumber(a.fields[inSender.sortColumn])
+				  - utils.parseToNumber(b.fields[inSender.sortColumn]);
+			});
+		  }
+		  break;
+		}
+		this.$.list.render();
+	  },
 	});
