@@ -293,12 +293,12 @@ enyo
 		  if (inSender.sortDirection == "ASC") {
 			inSender.sortDirection = "DESC";
 			this.arrData.sort(function(a, b) {
-			  return new Date(a.dateTimeProgrammed) < new Date(b.dateTimeProgrammed);
+			  return new Date(b.dateTimeProgrammed) - new Date(a.dateTimeProgrammed);
 			});
 		  } else {
 			inSender.sortDirection = "ASC";
 			this.arrData.sort(function(a, b) {
-			  return new Date(a.dateTimeProgrammed) > new Date(b.dateTimeProgrammed);
+			  return new Date(a.dateTimeProgrammed) - new Date(b.dateTimeProgrammed);
 			});
 		  }
 		  break;
@@ -306,13 +306,13 @@ enyo
 		  if (inSender.sortDirection == "ASC") {
 			inSender.sortDirection = "DESC";
 			this.arrData.sort(function(a, b) {
-			  return utils.parseToNumber(a.totalHeads) < utils
-				  .parseToNumber(b.totalHeads);
+			  return utils.parseToNumber(b.totalHeads) - utils
+				  .parseToNumber(a.totalHeads);
 			});
 		  } else {
 			inSender.sortDirection = "ASC";
 			this.arrData.sort(function(a, b) {
-			  return utils.parseToNumber(a.totalHeads) > utils
+			  return utils.parseToNumber(a.totalHeads) - utils
 				  .parseToNumber(b.totalHeads);
 			});
 		  }
@@ -321,13 +321,13 @@ enyo
 		  if (inSender.sortDirection == "ASC") {
 			inSender.sortDirection = "DESC";
 			this.arrData.sort(function(a, b) {
-			  return utils.parseToNumber(a.totalWeight) < utils
-				  .parseToNumber(b.totalWeight);
+			  return utils.parseToNumber(b.totalWeight) - utils
+				  .parseToNumber(a.totalWeight);
 			});
 		  } else {
 			inSender.sortDirection = "ASC";
 			this.arrData.sort(function(a, b) {
-			  return utils.parseToNumber(a.totalWeight) > utils
+			  return utils.parseToNumber(a.totalWeight) - utils
 				  .parseToNumber(b.totalWeight);
 			});
 		  }
@@ -336,13 +336,13 @@ enyo
 		  if (inSender.sortDirection == "ASC") {
 			inSender.sortDirection = "DESC";
 			this.arrData.sort(function(a, b) {
-			  return utils.parseToNumber(a.totalAvgWeight) < utils
-				  .parseToNumber(b.totalAvgWeight);
+			  return utils.parseToNumber(b.totalAvgWeight) - utils
+				  .parseToNumber(a.totalAvgWeight);
 			});
 		  } else {
 			inSender.sortDirection = "ASC";
 			this.arrData.sort(function(a, b) {
-			  return utils.parseToNumber(a.totalAvgWeight) > utils
+			  return utils.parseToNumber(a.totalAvgWeight) - utils
 				  .parseToNumber(b.totalAvgWeight);
 			});
 		  }

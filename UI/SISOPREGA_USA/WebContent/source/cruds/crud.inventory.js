@@ -71,11 +71,16 @@ enyo
 		  
 		  switch(entityObj.sourceType){
 		  case '1': //HERMANA
-			entityObj.sourceProviderName = crudRancher.getByID(entityObj.sourceProvider).name;
+			var rancher = crudRancher.getByID(entityObj.sourceProvider);
+			if(rancher==null) rancher = crudEnterpriseRancher.getByID(entityObj.sourceProvider);
+			entityObj.sourceProviderName = rancher.name;
+			break;
 		  case '2': //PURCHASE
 			entityObj.sourceProviderName = crudSeller.getByID(entityObj.sourceProvider).sellerName;
+			break;
 		  case '3': //RESORT
 			//entityObj.sourceProviderName = crudRancher.getByID(entityObj.sourceProviderName).name;
+			break;
 		  }
 		  
 		  return entityObj;

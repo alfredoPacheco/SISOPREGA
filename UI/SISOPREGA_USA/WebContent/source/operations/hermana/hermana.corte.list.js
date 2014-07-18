@@ -281,12 +281,16 @@ enyo
 		  if (inSender.sortDirection == "ASC") {
 			inSender.sortDirection = "DESC";
 			this.cortes.sort(function(a, b) {
-			  return a.cattleClassName < b.cattleClassName;
+			  var x = a.cattleClassName;
+			  var y = b.cattleClassName;
+			  return ((x < y) ? 1 : ((x > y) ? -1 : 0));
 			});
 		  } else {
 			inSender.sortDirection = "ASC";
 			this.cortes.sort(function(a, b) {
-			  return a.cattleClassName > b.cattleClassName;
+			  var x = a.cattleClassName;
+			  var y = b.cattleClassName;
+			  return ((x < y) ? -1 : ((x > y) ? 1 : 0));
 			});
 		  }
 		  break;
@@ -294,12 +298,16 @@ enyo
 		  if (inSender.sortDirection == "ASC") {
 			inSender.sortDirection = "DESC";
 			this.cortes.sort(function(a, b) {
-			  return a.pen_name < b.pen_name;
+			  var x = a.pen_name;
+			  var y = b.pen_name;
+			  return ((x < y) ? 1 : ((x > y) ? -1 : 0));
 			});
 		  } else {
 			inSender.sortDirection = "ASC";
 			this.cortes.sort(function(a, b) {
-			  return a.pen_name > b.pen_name;
+			  var x = a.pen_name;
+			  var y = b.pen_name;
+			  return ((x < y) ? -1 : ((x > y) ? 1 : 0));
 			});
 		  }
 		  break;
@@ -307,13 +315,13 @@ enyo
 		  if (inSender.sortDirection == "ASC") {
 			inSender.sortDirection = "DESC";
 			this.cortes.sort(function(a, b) {
-			  return utils.parseToNumber(a.heads) < utils
-				  .parseToNumber(b.heads);
+			  return utils.parseToNumber(b.heads) - utils
+				  .parseToNumber(a.heads);
 			});
 		  } else {
 			inSender.sortDirection = "ASC";
 			this.cortes.sort(function(a, b) {
-			  return utils.parseToNumber(a.heads) > utils
+			  return utils.parseToNumber(a.heads) - utils
 				  .parseToNumber(b.heads);
 			});
 		  }
@@ -322,13 +330,13 @@ enyo
 		  if (inSender.sortDirection == "ASC") {
 			inSender.sortDirection = "DESC";
 			this.cortes.sort(function(a, b) {
-			  return utils.parseToNumber(a.weight) < utils
-				  .parseToNumber(b.weight);
+			  return utils.parseToNumber(b.weight) - utils
+				  .parseToNumber(a.weight);
 			});
 		  } else {
 			inSender.sortDirection = "ASC";
 			this.cortes.sort(function(a, b) {
-			  return utils.parseToNumber(a.weight) > utils
+			  return utils.parseToNumber(a.weight) - utils
 				  .parseToNumber(b.weight);
 			});
 		  }
@@ -337,13 +345,13 @@ enyo
 		  if (inSender.sortDirection == "ASC") {
 			inSender.sortDirection = "DESC";
 			this.cortes.sort(function(a, b) {
-			  return utils.parseToNumber((a.weight / a.heads)) < utils
-				  .parseToNumber((b.weight / b.heads));
+			  return utils.parseToNumber((b.weight / b.heads)) - utils
+				  .parseToNumber((a.weight / a.heads));
 			});
 		  } else {
 			inSender.sortDirection = "ASC";
 			this.cortes.sort(function(a, b) {
-			  return utils.parseToNumber((a.weight / a.heads)) > utils
+			  return utils.parseToNumber((a.weight / a.heads)) - utils
 				  .parseToNumber((b.weight / b.heads));
 			});
 		  }
