@@ -62,6 +62,7 @@ public class Inventory {
   
   private Set<Shrinkage> shrinkage;
   private Set<FeedUS> feedUS;
+  private Set<InventorySort> inventorySort;
   
   public enum SOURCE_TYPE {
     HERMANA(1),
@@ -334,6 +335,18 @@ public class Inventory {
    */
   public void setSourceProvider(long sourceProvider) {
     this.sourceProvider = sourceProvider;
+  }
+  /**
+   * @return the inventorySort
+   */
+  public Set<InventorySort> getInventorySort() {
+    return inventorySort;
+  }
+  /**
+   * @param inventorySort the inventorySort to set
+   */
+  public void setInventorySort(Set<InventorySort> inventorySort) {
+    this.inventorySort = inventorySort;
   }
   
   

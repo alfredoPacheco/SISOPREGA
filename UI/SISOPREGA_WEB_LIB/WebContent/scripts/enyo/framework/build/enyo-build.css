@@ -346,12 +346,12 @@ html,body,input,button {
 	background: url(palm/themes/Onyx/images/checkbox.png) -1px -1px;
 }
 
-@media ( -webkit-min-device-pixel-ratio :1.5) {
-	.enyo-checkbox {
-		background-image: url(palm/themes/Onyx/images-1.5/checkbox.png);
-		background-size: 32px 128px;
-	}
-}
+/* @media ( -webkit-min-device-pixel-ratio :1.5) { */
+/* 	.enyo-checkbox { */
+/* 		background-image: url(palm/themes/Onyx/images-1.5/checkbox.png); */
+/* 		background-size: 32px 128px; */
+/* 	} */
+/* } */
 
 .enyo-checkbox-checked {
 	background-position: -1px -33px;
@@ -1309,11 +1309,11 @@ html,body,input,button {
 	-webkit-box-flex: 1000;
 }
 
-@media ( -webkit-min-device-pixel-ratio :1.5) {
-	.enyo-divider,.enyo-divider-left-cap {
-		background-image: url(palm/themes/Onyx/images-1.5/divider.png);
-	}
-}
+/* @media ( -webkit-min-device-pixel-ratio :1.5) { */
+/* 	.enyo-divider,.enyo-divider-left-cap { */
+/* 		background-image: url(palm/themes/Onyx/images-1.5/divider.png); */
+/* 	} */
+/* } */
 
 .enyo-divider-icon {
 	margin: 0 6px;

@@ -1406,6 +1406,28 @@
 			</one-to-many>
 		</attributes>
 	</entity>
+	<entity class="com.tramex.sisoprega.dto.InventorySort">
+		<table name="ctrl_inventory_sort" />
+		<named-query name="INVENTORYSORT_BY_ID">
+			<description>Retrieve a single record of InventorySort by its record id</description>
+			<query>SELECT iInventorySort FROM InventorySort iInventorySort WHERE iInventorySort.inventorySortId = :Id</query>
+		</named-query>
+		<attributes>
+			<id name="inventorySortId">
+				<column name="inventory_sort_id" />
+				<generated-value strategy="IDENTITY" />
+			</id>
+			<basic name="sortClassification">
+			</basic>
+			<basic name="sortSequence">
+				<column name="sort_sequence" />
+			</basic>
+			<many-to-one name="inventory" fetch="LAZY" optional="false">
+				<join-column name="inventory_id" referenced-column-name="inventory_id"
+					nullable="false" />
+			</many-to-one>
+		</attributes>
+	</entity>
 	<entity class="com.tramex.sisoprega.dto.Sale">
 		<table name="ctrl_sale" />
 		<named-query name="SALE_BY_ID">

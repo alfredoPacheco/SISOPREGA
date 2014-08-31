@@ -24,26 +24,6 @@ enyo.kind(
   },
   {
 	kind : enyo.Popup,
-	name : "popup_map",
-	width : "85%;",
-	height : "85%;",
-	dismissWithClick : true,
-	layoutKind : "VFlexLayout",
-	style : "overflow: hidden;border-width: 8px;",
-	scrim : true,
-	onClose : "on_popup_map_close",
-	onOpen : "on_popup_map_open",
-	components : [
-	{
-	  kind : "pen.map",
-	  name : "map_kind",
-	  flex : 1,
-	  onBeforeUpdate : "on_before_update_pen",
-	  onAfterUpdate : "on_after_update_pen"
-	} ]
-  },
-  {
-	kind : enyo.Popup,
 	name : "popup_purchases",
 	width : "80%;",
 	height : "85%;",
@@ -148,7 +128,6 @@ enyo.kind(
 		flex : 1,
 		arrData : [],
 		onSale : "showSale",
-		onSelect : "inventory_select",
 		onLoadCompleted : "columnsLoadCompleted"
 	  } ]
 	},
@@ -217,7 +196,7 @@ enyo.kind(
 	  this.$.popup_shipments.openAtCenter();
 	  this.$.shipments_kind.updateList();
 	} else {
-	  cacheMan.setMessage("", "No selected records.");
+	  cacheMan.setMessage("", "No records selected.");
 	}
   },
   showSelectShipment : function(arrShipment) {
@@ -276,7 +255,7 @@ enyo.kind(
 	this.$.purchase_list.$.formPopUp.validateComponents();
   },
   inventory_select : function(inSender, inEvent) {
-	this.$.popup_map.openAtCenter();
+	
   },
   on_update_sales_view : function(sender, updateShipments) {
 	if (updateShipments) {
@@ -301,12 +280,6 @@ enyo.kind(
   cancel_release : function() {
 	this.$.popup_driver.close();
   },
-  on_popup_map_close : function() {
-	this.$.inventory.updateView();
-  },
-  on_popup_map_open : function() {
-	this.$.map_kind.updateView();
-  },
   deleteShipProgrammed : function(inSender, shipment) {
 	crudShipment.remove(shipment, this, "afterDeleteShip");
   },
@@ -315,10 +288,5 @@ enyo.kind(
 	this.$.sales.updateView();
 	this.$.inventory.updateView();
   },
-  on_before_update_pen:function(){
-	this.$.popup_map.setDismissWithClick(false);
-  },
-  on_after_update_pen:function(){
-	this.$.popup_map.setDismissWithClick(true);
-  }
+  
 });

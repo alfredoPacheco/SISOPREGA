@@ -75,6 +75,8 @@ enyo
 		  {
 			kind : "Scroller",
 			flex : 1,
+			autoHorizontal: false, 
+			horizontal: false,
 			components : [
 			{
 			  kind : enyo.VirtualRepeater,

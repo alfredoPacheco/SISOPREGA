@@ -452,9 +452,9 @@ enyo
 	  // },
 	  calculateAverageInput : function(inSender, inEvent) {
 
-		this.$.txtAvgWeight.setValue(utils.formatNumberThousands(utils
+		this.$.txtAvgWeight.setValue((utils
 			.parseToNumber(this.$.peso.getValue())
-			/ utils.parseToNumber(this.$.cabezas.getValue())));
+			/ utils.parseToNumber(this.$.cabezas.getValue())).toFixed(1));
 		return true;
 	  }
 	});

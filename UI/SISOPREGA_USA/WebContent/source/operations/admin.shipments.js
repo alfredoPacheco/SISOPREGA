@@ -68,6 +68,8 @@ enyo
 			kind : "Scroller",
 			flex : 1,
 			name : "scroller",
+			autoHorizontal: false, 
+			horizontal: false,
 			components : [
 			{
 			  kind : enyo.VirtualRepeater,

@@ -1,11 +1,12 @@
   var sBrowserName = "";
   var sBrowserVersion = "";
-  jQuery.each(jQuery.browser, function(sIndex, sValue) {
-    if(sIndex=="version") sBrowserVersion = sValue;
-    else if(sValue==true) sBrowserName = sIndex;
-  });
+//  jQuery.each(jQuery.browser, function(sIndex, sValue) {
+//    if(sIndex=="version") sBrowserVersion = sValue;
+//    else if(sValue==true) sBrowserName = sIndex;
+//  });
   
   function validateBrowserEnyoOne(){
+	return;
 	  var bValidBrowser=true;
 	  var sRedirect=null;
 	  var sMsgBox="Esta usando un explorador de internet incompatible, sera redirigido a una pagina para actualizar";

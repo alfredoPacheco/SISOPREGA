@@ -206,7 +206,14 @@ enyo.kind(
   parseToNumber:function(strNumber){
 	var toStr = "" + strNumber;
 	return Number(toStr.replace(/\,/g,''));
-  }
+  },
+  removeDuplicates:function(arr){
+    var uniqueElements = [];
+    jQuery.each(arr, function (i, el) {
+        if (jQuery.inArray(jQuery.trim(el), uniqueElements) === -1) uniqueElements.push(jQuery.trim(el));
+    });
+    return uniqueElements;
+}
 });
 
 var utils = new global.utils();

@@ -92,7 +92,7 @@ enyo
 		  bindTo : "cattleTypeId",
 		  belongsTo : "PurchaseDetail",
 		  onSelectItem : "on_select_cattleType",
-		  sortType:"Text"
+		  sortType : "Text"
 		},
 		{
 		  kind : "controls.autocomplete",
@@ -105,7 +105,7 @@ enyo
 		  bindTo : "qualityId",
 		  belongsTo : "PurchaseDetail",
 		  onSelectItem : "clase_select",
-		  sortType:"Text"
+		  sortType : "Text"
 		},
 		{
 		  kind : "controls.autocomplete",
@@ -117,7 +117,7 @@ enyo
 		  style : "margin-right: 15px;",
 		  bindTo : "penId",
 		  belongsTo : "PurchaseDetail",
-		  sortType:"Text"
+		  sortType : "Text"
 		},
 		{
 		  kind : "controls.numberBox",
@@ -131,7 +131,7 @@ enyo
 		  belongsTo : "PurchaseDetail",
 		  textAlign : "right",
 		  onInput : "on_input",
-		  sortType:"Number"
+		  sortType : "Number"
 		},
 		{
 		  kind : "controls.numberBox",
@@ -145,7 +145,7 @@ enyo
 		  belongsTo : "PurchaseDetail",
 		  textAlign : "right",
 		  onInput : "on_input",
-		  sortType:"Number"
+		  sortType : "Number"
 		},
 		{
 		  kind : "ToolInput",
@@ -157,7 +157,7 @@ enyo
 		  textAlign : "right",
 		  bindTo : "avgWeight",
 		  belongsTo : "PurchaseDetail",
-		  sortType:"Number"
+		  sortType : "Number"
 		} ],
 		{
 		  owner : this
@@ -335,7 +335,7 @@ enyo
 			  {
 				heads : entity.PurchaseDetail[i].heads,
 				penId : entity.PurchaseDetail[i].penId,
-				cattleTypeId: entity.PurchaseDetail[i].cattleTypeId,
+				cattleTypeId : entity.PurchaseDetail[i].cattleTypeId,
 				qualityId : entity.PurchaseDetail[i].qualityId,
 				weight : entity.PurchaseDetail[i].weight,
 				avgWeight : entity.PurchaseDetail[i].avgWeight,
@@ -346,9 +346,12 @@ enyo
 				settled : entity.PurchaseDetail[i].settled,
 				fields :
 				{
-				  0 : crudCattle.getCattleTypeById(entity.PurchaseDetail[i].cattleTypeId).cattypeName,
-				  1 : crudCattleQuality.getByID(entity.PurchaseDetail[i].qualityId).qualityName,
-				  2 : crudPen.adapterToList(crudPen.getByID(entity.PurchaseDetail[i].penId)).caption,
+				  0 : crudCattle
+					  .getCattleTypeById(entity.PurchaseDetail[i].cattleTypeId).cattypeName,
+				  1 : crudCattleQuality
+					  .getByID(entity.PurchaseDetail[i].qualityId).qualityName,
+				  2 : crudPen.adapterToList(crudPen
+					  .getByID(entity.PurchaseDetail[i].penId)).caption,
 				  3 : entity.PurchaseDetail[i].heads,
 				  4 : entity.PurchaseDetail[i].weight,
 				  5 : entity.PurchaseDetail[i].avgWeight
@@ -370,10 +373,9 @@ enyo
 		this.$.cattleType.setIndex(1); // Default value: Novillos
 	  },
 	  on_input : function(inSender, inEvent) {
-
-		this.$.txtAvgWeight.setValue(utils.formatNumberThousands(utils
-			.parseToNumber(this.$.peso.getValue())
-			/ utils.parseToNumber(this.$.cabezas.getValue())));
+		this.$.txtAvgWeight.setValue((utils.parseToNumber(this.$.peso
+			.getValue()) / utils.parseToNumber(this.$.cabezas.getValue()))
+			.toFixed(1));
 		return true;
 	  }
 	});
