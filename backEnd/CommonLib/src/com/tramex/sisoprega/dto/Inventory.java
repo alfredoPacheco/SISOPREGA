@@ -349,5 +349,13 @@ public class Inventory {
     this.inventorySort = inventorySort;
   }
   
-  
+  public void addInventorySort(InventorySort objInventorySort){
+    if(inventorySort == null)
+      inventorySort = new HashSet<InventorySort>();
+    
+    inventorySort.add(objInventorySort);
+    
+    if(objInventorySort.getInventory() != this)
+      objInventorySort.setInventory(this);
+  }
 }

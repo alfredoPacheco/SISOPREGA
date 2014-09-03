@@ -220,14 +220,12 @@ GRANT ALL ON ctrl_inventory_inventory_id_seq TO sisoprega;
 DROP TABLE IF EXISTS ctrl_inventory_sort CASCADE;
 CREATE TABLE ctrl_inventory_sort(
 	inventory_sort_id 		SERIAL PRIMARY KEY,
-	inventory_id   			integer NOT NULL REFERENCES ctrl_inventory_sort(inventory_id)
-	sort_classification 	VARCHAR(15) DEFAULT '',
+	inventory_id   			integer NOT NULL REFERENCES ctrl_inventory(inventory_id),
+	sort_classification 		VARCHAR(50) DEFAULT '',
 	sort_sequence			integer NOT NULL DEFAULT 0
 );
-
-
 GRANT ALL ON ctrl_inventory_sort TO sisoprega;
-GRANT ALL ON ctrl_inventory_inventory_sort_id_seq TO sisoprega;
+GRANT ALL ON ctrl_inventory_sort_inventory_sort_id_seq TO sisoprega;
 
 DROP TABLE IF EXISTS ctrl_sale CASCADE;
 CREATE TABLE ctrl_sale(

@@ -47,9 +47,15 @@ public ReadResponse Update(CreateRequest request) {
   this.log.entering(this.getClass().getCanonicalName(), "ReadResponse Create(CreateRequest)");
 
   ReadResponse response = new ReadResponse();
+  
   try {
     GatewayRecord record = request.getParentRecord();
+    if(Boolean.parseBoolean(record.getFieldValue("sorting"))){
+      return super.Update(request);
+    }
+    
     Class<?> type = Class.forName(DTO_PACKAGE + record.getEntity());
+    
     Inventory entity = (Inventory) getEntityFromRecord(record, type);
     this.log.fine("Found entity from Record [" + entity + "]");
 
@@ -69,6 +75,8 @@ public ReadResponse Update(CreateRequest request) {
         response.setError(new GatewayError("VAL04", "Se ha omitido el id en la entidad [" + record.getEntity()
             + "] al intentar actualizar sus datos.", "Update"));
       } else {
+        
+        
         
         Inventory inventory = getInventoryRecordById(entity.getInventoryId());
         if(inventory == null){

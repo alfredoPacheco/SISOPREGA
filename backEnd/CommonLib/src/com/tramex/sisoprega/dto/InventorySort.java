@@ -34,41 +34,12 @@ package com.tramex.sisoprega.dto;
  * 
  */
 public class InventorySort {
-  private long inventoryId;
   private long inventorySortId;
   private String sortClassification = "";
   private int sortSequence;
   private Inventory inventory;
 
-  /**
-   * @return the inventoryId
-   */
-  public long getInventoryId() {
-    return inventoryId;
-  }
 
-  /**
-   * @param inventoryId
-   *          the inventoryId to set
-   */
-  public void setInventoryId(long inventoryId) {
-    this.inventoryId = inventoryId;
-  }
-
-  /**
-   * @return the inventorySortId
-   */
-  public long getInventorySortId() {
-    return inventorySortId;
-  }
-
-  /**
-   * @param inventorySortId
-   *          the inventorySortId to set
-   */
-  public void setInventorySortId(long inventorySortId) {
-    this.inventorySortId = inventorySortId;
-  }
 
   /**
    * @return the sortClassification
@@ -112,6 +83,20 @@ public class InventorySort {
    */
   public void setInventory(Inventory inventory) {
     this.inventory = inventory;
+  }
+
+  /**
+   * @return the inventorySortId
+   */
+  public long getInventorySortId() {
+    return inventorySortId;
+  }
+
+  /**
+   * @param inventorySortId the inventorySortId to set
+   */
+  public void setInventorySortId(long inventorySortId) {
+    this.inventorySortId = inventorySortId;
   }
 
 }

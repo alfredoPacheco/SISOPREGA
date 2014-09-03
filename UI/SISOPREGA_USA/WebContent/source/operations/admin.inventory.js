@@ -6,7 +6,9 @@ enyo
 	  className : "enyo-bg",
 	  arrData : null,
 	  todaySales : [],
-	  groupMode : 'Ungroup',
+	  groupMode : null,
+	  currentSort : null,
+	  currentSortDirection : null,
 	  events :
 	  {
 		onSale : "",
@@ -27,6 +29,7 @@ enyo
 				  flex : .05
 				},
 				{
+				  name : "cboGroupMode",
 				  kind : "ListSelector",
 				  style : "color:white",
 				  contentPack : "end",
@@ -60,44 +63,116 @@ enyo
 				  pack : "start",
 				  components : [
 				  {
-					content : 'Type',
+					kind : "HFlexBox",
 					flex : .8,
-					onclick : "on_sort",
-					sortDirection : "DESC"
+					align : "center",
+					pack : "start",
+					components : [
+					{
+					  content : 'Type',
+					  onclick : "on_sort",
+					  sortDirection : "DESC"
+					},
+					{
+					  kind : "Image",
+					  height : "15px",
+					  name : "TypeSortImage",
+					  src : ""
+					} ]
 				  },
 				  {
-					content : 'Class',
+					kind : "HFlexBox",
 					flex : .8,
-					onclick : "on_sort",
-					sortDirection : "DESC"
+					align : "center",
+					pack : "start",
+					components : [
+					{
+					  content : 'Class',
+					  onclick : "on_sort",
+					  sortDirection : "DESC"
+					},
+					{
+					  kind : "Image",
+					  height : "15px",
+					  name : "ClassSortImage",
+					  src : ""
+					} ]
 				  },
 				  {
-					content : 'Heads',
+					kind : "HFlexBox",
 					flex : .5,
-					style : "text-align: right;",
-					onclick : "on_sort",
-					sortDirection : "DESC"
+					align : "center",
+					pack : "end",
+					components : [
+					{
+					  content : 'Heads',
+					  onclick : "on_sort",
+					  sortDirection : "DESC",
+					  style : "text-align:right;"
+					},
+					{
+					  kind : "Image",
+					  height : "15px",
+					  name : "HeadsSortImage",
+					  src : ""
+					} ]
 				  },
 				  {
-					content : 'Weight',
+					kind : "HFlexBox",
 					flex : 1,
-					style : "text-align: right;",
-					onclick : "on_sort",
-					sortDirection : "DESC"
+					align : "center",
+					pack : "end",
+					components : [
+					{
+					  content : 'Weight',
+					  onclick : "on_sort",
+					  sortDirection : "DESC",
+					  style : "text-align:right;"
+					},
+					{
+					  kind : "Image",
+					  height : "15px",
+					  name : "WeightSortImage",
+					  src : ""
+					} ]
 				  },
 				  {
-					content : 'Average',
+					kind : "HFlexBox",
 					flex : 1,
-					style : "text-align: right;",
-					onclick : "on_sort",
-					sortDirection : "DESC"
+					align : "center",
+					pack : "end",
+					components : [
+					{
+					  content : 'Average',
+					  onclick : "on_sort",
+					  sortDirection : "DESC",
+					  style : "text-align:right;"
+					},
+					{
+					  kind : "Image",
+					  height : "15px",
+					  name : "AverageSortImage",
+					  src : ""
+					} ]
 				  },
 				  {
-					content : 'Feed',
+					kind : "HFlexBox",
 					flex : 1,
-					style : "text-align: right;",
-					onclick : "on_sort",
-					sortDirection : "DESC"
+					align : "center",
+					pack : "end",
+					components : [
+					{
+					  content : 'Feed',
+					  onclick : "on_sort",
+					  sortDirection : "DESC",
+					  style : "text-align:right;"
+					},
+					{
+					  kind : "Image",
+					  height : "15px",
+					  name : "FeedSortImage",
+					  src : ""
+					} ]
 				  }, ]
 				},
 				{
@@ -109,22 +184,45 @@ enyo
 				  pack : "start",
 				  components : [
 				  {
-					content : 'Pen',
-					flex : .8,
-					onclick : "on_sort",
-					sortDirection : "DESC"
+					kind : "HFlexBox",
+					align : "center",
+					pack : "start",
+					components : [
+					{
+					  content : 'Pen',
+					  onclick : "on_sort",
+					  sortDirection : "DESC"
+					},
+					{
+					  kind : "Image",
+					  height : "15px",
+					  name : "PenSortImage",
+					  src : ""
+					} ]
 				  },
 				  {
-					kind : "CheckBox",
-					name : "chkManualSort",
-					checked : false,
-					onclick : "chkManualSort_click"
-				  },
-				  {
-					kind : "VFlexBox",
-					content : "Manual Sort",
-					onclick : "on_sort",
-					sortDirection : "DESC"
+					kind : "HFlexBox",
+					flex : 1,
+					align : "center",
+					pack : "end",
+					components : [
+					{
+					  kind : "CheckBox",
+					  name : "chkManualSort",
+					  checked : false,
+					  onclick : "chkManualSort_click"
+					},
+					{
+					  content : "Manual Sort",
+					  onclick : "on_sort",
+					  sortDirection : "DESC"
+					},
+					{
+					  kind : "Image",
+					  height : "15px",
+					  name : "ManualSortImage",
+					  src : ""
+					} ]
 
 				  }, ]
 				}, ]
@@ -329,7 +427,8 @@ enyo
 			} ]
 		  }, ],
 	  loadInventory : function(inSender, inIndex) {
-		if(this.groupMode=="Ungroup") this.$.lblDivider.hide();
+		if (this.groupMode == "Ungroup")
+		  this.$.lblDivider.hide();
 		var objData;
 		if (objData = this.arrData[inIndex]) {
 		  this.$.lblDivider.setCaption(objData.division);
@@ -404,12 +503,26 @@ enyo
 		  break;
 		}
 
-		this.$.listInventory.render();
-		this.updateSummary();
-		this.$.scrollerInventory.scrollTo(0);
+		this.sortList(this.currentSort);
 	  },
 	  ready : function() {
-		this.updateView();
+		this.currentSort = utils.getCookie("InventoryColumnSort");
+		if (this.currentSort == null) {
+		  this.currentSort = "Manual Sort";
+		  utils.setCookie("InventoryColumnSort", "Manual Sort", 365);
+		}
+		this.groupMode = utils.getCookie("InventoryGroupMode");
+		if (this.groupMode == null) {
+		  this.groupMode = "Ungroup";
+		  utils.setCookie("InventoryGroupMode", "Ungroup", 365);
+		}
+		this.$.cboGroupMode.setValue(this.groupMode);
+		this.currentSortDirection = utils.getCookie("InventorySortDirection");
+		if (this.currentSortDirection == null) {
+		  this.currentSortDirection = "ASC";
+		  utils.setCookie("InventorySortDirection", "ASC", 365);
+		}
+		// this.updateView();
 	  },
 	  updateView : function() {
 		crudInventory.get(this, "readCallBack");
@@ -426,6 +539,19 @@ enyo
 	  loadAutocompletes : function() {
 		this.todaySales = crudSale.getTodaySales();
 		this.setListContent(crudInventory.arrObj);
+
+		this.refreshList();
+	  },
+	  refreshList : function() {
+		var isSortabled = this.$.chkManualSort.getChecked();
+		if (isSortabled)
+		  this.removeListSortable();
+
+		this.$.listInventory.render();
+		this.updateSummary();
+		this.$.scrollerInventory.scrollTo(0);
+		if (isSortabled)
+		  this.makeListSortable();
 	  },
 	  getSalesByInventoryID : function(iInventoryID) {
 		var result = [];
@@ -451,34 +577,55 @@ enyo
 		return result;
 	  },
 	  on_sort : function(inSender) {
-		switch (inSender.content) {
+		if (this.currentSortDirection == "ASC") {
+		  this.currentSortDirection = "DESC";
+		} else {
+		  this.currentSortDirection = "ASC";
+		}
+		this.sortList(inSender.content);
+		this.refreshList();
+	  },
+	  clearSortImage:function(){
+		this.$.TypeSortImage.setSrc("");
+		this.$.ClassSortImage.setSrc("");
+		this.$.HeadsSortImage.setSrc("");
+		this.$.WeightSortImage.setSrc("");
+		this.$.AverageSortImage.setSrc("");
+		this.$.FeedSortImage.setSrc("");
+		this.$.PenSortImage.setSrc("");
+		this.$.ManualSortImage.setSrc("");
+	  },
+	  sortList : function(sSortBy) {
+		this.clearSortImage();
+		switch (sSortBy) {
 		case "Manual Sort":
-		  if (inSender.sortDirection == "ASC") {
-			inSender.sortDirection = "DESC";
+		  if (this.currentSortDirection == "DESC") {
+			this.$.ManualSortImage.setSrc("../SISOPREGA_WEB_LIB/images/up.png");
 			this.arrData.sort(function(a, b) {
-			  var x = a.strBarnyards;
-			  var y = b.strBarnyards;
+			  var x = a.inventorySort.sortSequence;
+			  var y = b.inventorySort.sortSequence;
 			  return ((x < y) ? 1 : ((x > y) ? -1 : 0));
 			});
 		  } else {
-			inSender.sortDirection = "ASC";
+			this.$.ManualSortImage
+				.setSrc("../SISOPREGA_WEB_LIB/images/down.png");
 			this.arrData.sort(function(a, b) {
-			  var x = a.strBarnyards;
-			  var y = b.strBarnyards;
+			  var x = a.inventorySort.sortSequence;
+			  var y = b.inventorySort.sortSequence;
 			  return ((x < y) ? -1 : ((x > y) ? 1 : 0));
 			});
 		  }
 		  break;
 		case "Pen":
-		  if (inSender.sortDirection == "ASC") {
-			inSender.sortDirection = "DESC";
+		  if (this.currentSortDirection == "DESC") {
+			this.$.PenSortImage.setSrc("../SISOPREGA_WEB_LIB/images/up.png");
 			this.arrData.sort(function(a, b) {
 			  var x = a.strBarnyards;
 			  var y = b.strBarnyards;
 			  return ((x < y) ? 1 : ((x > y) ? -1 : 0));
 			});
 		  } else {
-			inSender.sortDirection = "ASC";
+			this.$.PenSortImage.setSrc("../SISOPREGA_WEB_LIB/images/down.png");
 			this.arrData.sort(function(a, b) {
 			  var x = a.strBarnyards;
 			  var y = b.strBarnyards;
@@ -487,15 +634,15 @@ enyo
 		  }
 		  break;
 		case "Type":
-		  if (inSender.sortDirection == "ASC") {
-			inSender.sortDirection = "DESC";
+		  if (this.currentSortDirection == "DESC") {
+			this.$.TypeSortImage.setSrc("../SISOPREGA_WEB_LIB/images/up.png");
 			this.arrData.sort(function(a, b) {
 			  var x = a.cattle_name;
 			  var y = b.cattle_name;
 			  return ((x < y) ? 1 : ((x > y) ? -1 : 0));
 			});
 		  } else {
-			inSender.sortDirection = "ASC";
+			this.$.TypeSortImage.setSrc("../SISOPREGA_WEB_LIB/images/down.png");
 			this.arrData.sort(function(a, b) {
 			  var x = a.cattle_name;
 			  var y = b.cattle_name;
@@ -504,15 +651,16 @@ enyo
 		  }
 		  break;
 		case "Class":
-		  if (inSender.sortDirection == "ASC") {
-			inSender.sortDirection = "DESC";
+		  if (this.currentSortDirection == "DESC") {
+			this.$.ClassSortImage.setSrc("../SISOPREGA_WEB_LIB/images/up.png");
 			this.arrData.sort(function(a, b) {
 			  var x = a.quality_name;
 			  var y = b.quality_name;
 			  return ((x < y) ? 1 : ((x > y) ? -1 : 0));
 			});
 		  } else {
-			inSender.sortDirection = "ASC";
+			this.$.ClassSortImage
+				.setSrc("../SISOPREGA_WEB_LIB/images/down.png");
 			this.arrData.sort(function(a, b) {
 			  var x = a.quality_name;
 			  var y = b.quality_name;
@@ -521,14 +669,15 @@ enyo
 		  }
 		  break;
 		case "Heads":
-		  if (inSender.sortDirection == "ASC") {
-			inSender.sortDirection = "DESC";
+		  if (this.currentSortDirection == "DESC") {
+			this.$.HeadsSortImage.setSrc("../SISOPREGA_WEB_LIB/images/up.png");
 			this.arrData.sort(function(a, b) {
 			  return utils.parseToNumber(b.totalHeads)
 				  - utils.parseToNumber(a.totalHeads);
 			});
 		  } else {
-			inSender.sortDirection = "ASC";
+			this.$.HeadsSortImage
+				.setSrc("../SISOPREGA_WEB_LIB/images/down.png");
 			this.arrData.sort(function(a, b) {
 			  return utils.parseToNumber(a.totalHeads)
 				  - utils.parseToNumber(b.totalHeads);
@@ -536,14 +685,15 @@ enyo
 		  }
 		  break;
 		case "Weight":
-		  if (inSender.sortDirection == "ASC") {
-			inSender.sortDirection = "DESC";
+		  if (this.currentSortDirection == "DESC") {
+			this.$.WeightSortImage.setSrc("../SISOPREGA_WEB_LIB/images/up.png");
 			this.arrData.sort(function(a, b) {
 			  return utils.parseToNumber(b.totalWeight)
 				  - utils.parseToNumber(a.totalWeight);
 			});
 		  } else {
-			inSender.sortDirection = "ASC";
+			this.$.WeightSortImage
+				.setSrc("../SISOPREGA_WEB_LIB/images/down.png");
 			this.arrData.sort(function(a, b) {
 			  return utils.parseToNumber(a.totalWeight)
 				  - utils.parseToNumber(b.totalWeight);
@@ -551,14 +701,16 @@ enyo
 		  }
 		  break;
 		case "Average":
-		  if (inSender.sortDirection == "ASC") {
-			inSender.sortDirection = "DESC";
+		  if (this.currentSortDirection == "DESC") {
+			this.$.AverageSortImage
+				.setSrc("../SISOPREGA_WEB_LIB/images/up.png");
 			this.arrData.sort(function(a, b) {
 			  return utils.parseToNumber(b.totalAveWeight)
 				  - utils.parseToNumber(a.totalAveWeight);
 			});
 		  } else {
-			inSender.sortDirection = "ASC";
+			this.$.AverageSortImage
+				.setSrc("../SISOPREGA_WEB_LIB/images/down.png");
 			this.arrData.sort(function(a, b) {
 			  return utils.parseToNumber(a.totalAveWeight)
 				  - utils.parseToNumber(b.totalAveWeight);
@@ -566,14 +718,14 @@ enyo
 		  }
 		  break;
 		case "Feed":
-		  if (inSender.sortDirection == "ASC") {
-			inSender.sortDirection = "DESC";
+		  if (this.currentSortDirection == "DESC") {
+			this.$.FeedSortImage.setSrc("../SISOPREGA_WEB_LIB/images/up.png");
 			this.arrData.sort(function(a, b) {
 			  return utils.parseToNumber(b.totalFeed)
 				  - utils.parseToNumber(a.totalFeed);
 			});
 		  } else {
-			inSender.sortDirection = "ASC";
+			this.$.FeedSortImage.setSrc("../SISOPREGA_WEB_LIB/images/down.png");
 			this.arrData.sort(function(a, b) {
 			  return utils.parseToNumber(a.totalFeed)
 				  - utils.parseToNumber(b.totalFeed);
@@ -581,7 +733,10 @@ enyo
 		  }
 		  break;
 		}
-		this.$.listInventory.render();
+		this.currentSort = sSortBy;
+		utils.setCookie("InventoryColumnSort", sSortBy, 365);
+		utils.setCookie("InventorySortDirection", this.currentSortDirection,
+			365);
 	  },
 	  groupByTypeAndQuality : function(arrList) {
 		var resultGroup = [];
@@ -615,6 +770,9 @@ enyo
 
 			var strSales = "";
 			for ( var i = 0; i < len; i++) {
+			  crudInventory.getInventorySortByClassification(objData[i],
+				  this.groupMode);
+
 			  strBarnyards += ""
 				  + crudPen.adapterToList(objData[i].pen).caption + ", ";
 			  totalHeads += utils.parseToNumber(objData[i].heads);
@@ -650,7 +808,11 @@ enyo
 			  totalFeed : utils.formatNumberThousands(Number(totalFeed)
 				  .toFixed(0)),
 			  strBarnyards : utils.removeDuplicates(strBarnyards.split(","))
-				  .join(",")
+				  .join(","),
+			  inventorySort : crudInventory.getInventorySortByClassification(
+				  objData[0], this.groupMode),
+			  qualityId : objData[0].qualityId,
+			  cattypeId : objData[0].cattypeId
 			};
 			result.push(obj);
 
@@ -693,6 +855,8 @@ enyo
 			var strQualities = "";
 
 			for ( var i = 0; i < len; i++) {
+			  crudInventory.getInventorySortByClassification(objData[i],
+				  this.groupMode);
 			  strBarnyards += ""
 				  + crudPen.adapterToList(objData[i].pen).caption + ", ";
 			  strQualities += objData[i].quality_name + ", ";
@@ -733,7 +897,10 @@ enyo
 			  totalFeed : utils.formatNumberThousands(Number(totalFeed)
 				  .toFixed(0)),
 			  strBarnyards : utils.removeDuplicates(strBarnyards.split(","))
-				  .join(", ")
+				  .join(", "),
+			  inventorySort : crudInventory.getInventorySortByClassification(
+				  objData[0], this.groupMode),
+			  cattypeId : objData[0].cattypeId
 			};
 			result.push(obj);
 
@@ -776,6 +943,8 @@ enyo
 			var strTypes = "";
 
 			for ( var i = 0; i < len; i++) {
+			  crudInventory.getInventorySortByClassification(objData[i],
+				  this.groupMode);
 			  strBarnyards += ""
 				  + crudPen.adapterToList(objData[i].pen).caption + ", ";
 			  strTypes += objData[i].cattle_name + ", ";
@@ -816,7 +985,10 @@ enyo
 			  totalFeed : utils.formatNumberThousands(Number(totalFeed)
 				  .toFixed(0)),
 			  strBarnyards : utils.removeDuplicates(strBarnyards.split(","))
-				  .join(", ")
+				  .join(", "),
+			  inventorySort : crudInventory.getInventorySortByClassification(
+				  objData[0], this.groupMode),
+			  qualityId : objData[0].qualityId
 			};
 			result.push(obj);
 
@@ -859,6 +1031,8 @@ enyo
 			var strQualities = "";
 
 			for ( var i = 0; i < len; i++) {
+			  crudInventory.getInventorySortByClassification(objData[i],
+				  this.groupMode);
 			  strTypes += objData[i].cattle_name + ", ";
 			  strQualities += objData[i].quality_name + ", ";
 			  totalHeads += utils.parseToNumber(objData[i].heads);
@@ -898,7 +1072,10 @@ enyo
 				  .formatNumberThousands((totalWeight / totalHeads).toFixed(1)),
 			  totalFeed : utils.formatNumberThousands(Number(totalFeed)
 				  .toFixed(0)),
-			  strBarnyards : crudPen.adapterToList(objData[0].pen).caption
+			  strBarnyards : crudPen.adapterToList(objData[0].pen).caption,
+			  inventorySort : crudInventory.getInventorySortByClassification(
+				  objData[0], this.groupMode),
+			  penId : objData[0].penId
 			};
 			result.push(obj);
 
@@ -939,6 +1116,7 @@ enyo
 
 			var obj =
 			{
+			  inventoryId : objData.inventoryId,
 			  division : '',
 			  strSales : strSales,
 			  cattle_name : strTypes,
@@ -950,7 +1128,9 @@ enyo
 				  .formatNumberThousands((totalWeight / totalHeads).toFixed(1)),
 			  totalFeed : utils.formatNumberThousands(Number(totalFeed)
 				  .toFixed(0)),
-			  strBarnyards : crudPen.adapterToList(objData.pen).caption
+			  strBarnyards : crudPen.adapterToList(objData.pen).caption,
+			  inventorySort : crudInventory.getInventorySortByClassification(
+				  objData, this.groupMode)
 			};
 			result.push(obj);
 		  }
@@ -959,25 +1139,108 @@ enyo
 	  },
 	  chkManualSort_click : function(inSender, inEvent) {
 		if (inSender.checked) {
-		  this.$.scrollerInventory.scrollTo(0);
-		  this.$.scrollerInventory.setVertical(false);
-		  jQuery(jQuery("#" + this.$.listInventory.getId()).children()[0]).css(
-			  'height', '100%').css('overflow-y', 'auto').sortable(
-		  {
-			scroll : true,
-			scrollSensitivity : 50
-		  });
-		  // jQuery("#" + this.$.scrollerInventory.getId()).spotlight();
+		  this.makeListSortable();
 		} else {
-		  jQuery(jQuery("#" + this.$.listInventory.getId()).children()[0]).css(
-			  'height', '').css('overflow-y', '').sortable("destroy");
-		  this.$.scrollerInventory.setVertical(true);
-		  this.$.listInventory.render();
-		}
+		  this.currentSort = "Manual Sort";
+		  this.currentSortDirection = "ASC";
+		  utils.setCookie("InventoryColumnSort", "Manual Sort", 365);
+		  utils.setCookie("InventorySortDirection", "ASC", 365);
 
+		  this.persistInventorySort();
+		  this.removeListSortable();
+		  this.setListContent(crudInventory.arrObj);
+		  this.refreshList();
+		}
+	  },
+	  makeListSortable : function() {
+		this.$.scrollerInventory.setVertical(false);
+		var self = this;
+		jQuery(jQuery("#" + this.$.listInventory.getId()).children()[0]).css(
+			'height', '100%').css('overflow-y', 'auto').sortable(
+			{
+			  scroll : true,
+			  scrollSensitivity : 50,
+			  stop : function(event, ui) {
+				self.clearSortImage();
+				self.$.ManualSortImage
+					.setSrc("../SISOPREGA_WEB_LIB/images/down.png");
+				self.currentSort = "Manual Sort";
+				self.currentSortDirection = "ASC";
+				utils.setCookie("InventoryColumnSort", "Manual Sort", 365);
+				utils.setCookie("InventorySortDirection", "ASC", 365);
+			  }
+			});
+	  },
+	  removeListSortable : function() {
+		jQuery(jQuery("#" + this.$.listInventory.getId()).children()[0]).css(
+			'height', '').css('overflow-y', '').sortable("destroy");
+		this.$.scrollerInventory.setVertical(true);
 	  },
 	  groupInventory : function(inSender, inValue, inOldValue) {
 		this.groupMode = inValue;
+		utils.setCookie("InventoryGroupMode", inValue, 365);
 		this.setListContent(crudInventory.arrObj);
+		this.refreshList();
+	  },
+	  getFieldByGroupMode : function() {
+		var sField = '';
+		switch (this.groupMode) {
+		case 'Ungroup':
+		  sField = "inventoryId";
+		  break;
+		case 'By Type, Quality':
+		  sField = "typeAndQuality";
+		  break;
+		case 'By Type':
+		  sField = "cattypeId";
+		  break;
+		case 'By Quality':
+		  sField = "qualityId";
+		  break;
+		case "By Pen":
+		  sField = "penId";
+		  break;
+		}
+		return sField;
+	  },
+	  persistInventorySort : function() {
+		var self = this;
+		var sField = this.getFieldByGroupMode();
+		jQuery(jQuery("#" + this.$.listInventory.getId()).children()[0])
+			.children().each(
+				function(index, b) {
+				  for ( var i = 0; i < crudInventory.arrObj.length; i++) {
+					var current = crudInventory.arrObj[i];
+					if (sField != 'typeAndQuality') {
+					  if (current[sField] == self.arrData[jQuery(b).attr(
+						  "rowindex")][sField]) {
+						var oInventorySort = crudInventory
+							.getInventorySortByClassification(current,
+								self.groupMode);
+						oInventorySort.sortSequence = index;
+					  }
+					} else {
+					  if (current.qualityId == self.arrData[jQuery(b).attr(
+						  "rowindex")].qualityId) {
+						if (current.cattypeId == self.arrData[jQuery(b).attr(
+							"rowindex")].cattypeId) {
+						  var oInventorySort = crudInventory
+							  .getInventorySortByClassification(current,
+								  self.groupMode);
+						  oInventorySort.sortSequence = index;
+						}
+					  }
+					}
+				  }
+				});
+		for(var i=0;i<crudInventory.arrObj.length;i++){
+		  crudInventory.arrObj[i].sorting = true;
+		}
+		crudInventory.save(crudInventory.arrObj,this,"afterPersistSort");
+	  },
+	  afterPersistSort:function(){
+		for(var i=0;i<crudInventory.arrObj.length;i++){
+		  delete crudInventory.arrObj[i].sorting;
+		}
 	  }
 	});

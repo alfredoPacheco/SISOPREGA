@@ -1404,20 +1404,23 @@
 					<cascade-all />
 				</cascade>
 			</one-to-many>
+			<one-to-many name="inventorySort" fetch="EAGER" mapped-by="inventory"
+				target-entity="com.tramex.sisoprega.dto.InventorySort" orphan-removal="true">
+				<cascade>
+					<cascade-all />
+				</cascade>
+			</one-to-many>
 		</attributes>
 	</entity>
 	<entity class="com.tramex.sisoprega.dto.InventorySort">
 		<table name="ctrl_inventory_sort" />
-		<named-query name="INVENTORYSORT_BY_ID">
-			<description>Retrieve a single record of InventorySort by its record id</description>
-			<query>SELECT iInventorySort FROM InventorySort iInventorySort WHERE iInventorySort.inventorySortId = :Id</query>
-		</named-query>
 		<attributes>
 			<id name="inventorySortId">
 				<column name="inventory_sort_id" />
 				<generated-value strategy="IDENTITY" />
 			</id>
 			<basic name="sortClassification">
+				<column name="sort_classification"/>
 			</basic>
 			<basic name="sortSequence">
 				<column name="sort_sequence" />

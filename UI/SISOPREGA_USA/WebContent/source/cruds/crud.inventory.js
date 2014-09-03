@@ -33,7 +33,8 @@ enyo
 
 		  entityObj.pen = crudPen.getByID(entityObj.penId);
 
-		  entityObj.aveweight = utils.parseToNumber(entityObj.weight) /utils.parseToNumber(entityObj.heads);
+		  entityObj.aveweight = utils.parseToNumber(entityObj.weight)
+			  / utils.parseToNumber(entityObj.heads);
 
 		  var cattle_name = crudCattle.getCattleTypeById(entityObj.cattypeId);
 		  if (cattle_name) {
@@ -42,7 +43,7 @@ enyo
 			cattle_name = "";
 		  }
 		  entityObj.cattle_name = cattle_name;
-		  
+
 		  var quality_name = crudCattleQuality.getByID(entityObj.qualityId);
 		  if (quality_name) {
 			quality_name = quality_name.qualityName;
@@ -50,14 +51,14 @@ enyo
 			quality_name = "";
 		  }
 		  entityObj.quality_name = quality_name;
-		  
-		  
+
 		  if (arrAux = entityObj.Shrinkage) {
 			for ( var i = 0; i < arrAux.length; i++) {
 			  arrAux[i].dateTime = utils.dateIn(arrAux[i].dateTime);
 			  arrAux[i].heads = utils.parseToNumber(arrAux[i].heads);
 			  arrAux[i].weight = utils.parseToNumber(arrAux[i].weight);
-			  arrAux[i].shrinkageId = utils.parseToNumber(arrAux[i].shrinkageId);
+			  arrAux[i].shrinkageId = utils
+				  .parseToNumber(arrAux[i].shrinkageId);
 			}
 		  }
 
@@ -68,21 +69,24 @@ enyo
 			  arrAux[i].feedUSId = utils.parseToNumber(arrAux[i].feedUSId);
 			}
 		  }
-		  
-		  switch(entityObj.sourceType){
-		  case '1': //HERMANA
+
+		  switch (entityObj.sourceType) {
+		  case '1': // HERMANA
 			var rancher = crudRancher.getByID(entityObj.sourceProvider);
-			if(rancher==null) rancher = crudEnterpriseRancher.getByID(entityObj.sourceProvider);
+			if (rancher == null)
+			  rancher = crudEnterpriseRancher.getByID(entityObj.sourceProvider);
 			entityObj.sourceProviderName = rancher.name;
 			break;
-		  case '2': //PURCHASE
-			entityObj.sourceProviderName = crudSeller.getByID(entityObj.sourceProvider).sellerName;
+		  case '2': // PURCHASE
+			entityObj.sourceProviderName = crudSeller
+				.getByID(entityObj.sourceProvider).sellerName;
 			break;
-		  case '3': //RESORT
-			//entityObj.sourceProviderName = crudRancher.getByID(entityObj.sourceProviderName).name;
+		  case '3': // RESORT
+			// entityObj.sourceProviderName =
+			// crudRancher.getByID(entityObj.sourceProviderName).name;
 			break;
 		  }
-		  
+
 		  return entityObj;
 		}
 		return null;
@@ -114,10 +118,10 @@ enyo
 		arrInventory = enyo.clone(this.arrObj);
 		for ( var i = 0; i < arrInventory.length; i++) {
 		  var obj = crudPen.adapterToList(arrInventory[i].pen);
-//		  {
-//			caption : arrInventory[i].pen.barnyardCode,
-//			value : arrInventory[i].pen.penId
-//		  };
+		  // {
+		  // caption : arrInventory[i].pen.barnyardCode,
+		  // value : arrInventory[i].pen.penId
+		  // };
 		  obj.object = arrInventory[i];
 		  arrActivePens.push(obj);
 		}
@@ -163,7 +167,8 @@ enyo
 		for ( var i = 0; i < arrInventory.length; i++) {
 		  var bAlreadyPushed = false;
 		  for ( var j = 0; j < arrActiveQualities.length; j++) {
-			if (utils.parseToNumber(arrActiveQualities[j].value) == utils.parseToNumber(arrInventory[i].qualityId)) {
+			if (utils.parseToNumber(arrActiveQualities[j].value) == utils
+				.parseToNumber(arrInventory[i].qualityId)) {
 			  bAlreadyPushed = true;
 			}
 		  }
@@ -172,7 +177,7 @@ enyo
 			{
 			  caption : crudCattleQuality.getByID(arrInventory[i].qualityId).qualityName,
 			  value : arrInventory[i].qualityId,
-			  cattleTypeId: arrInventory[i].cattypeId
+			  cattleTypeId : arrInventory[i].cattypeId
 			};
 			obj.object = arrInventory[i];
 			arrActiveQualities.push(obj);
@@ -187,7 +192,8 @@ enyo
 		for ( var i = 0; i < arrInventory.length; i++) {
 		  var bAlreadyPushed = false;
 		  for ( var j = 0; j < arrActiveCattles.length; j++) {
-			if (utils.parseToNumber(arrActiveCattles[j].value) == utils.parseToNumber(arrInventory[i].cattypeId)) {
+			if (utils.parseToNumber(arrActiveCattles[j].value) == utils
+				.parseToNumber(arrInventory[i].cattypeId)) {
 			  bAlreadyPushed = true;
 			}
 		  }
@@ -201,7 +207,24 @@ enyo
 		  }
 		}
 		return arrActiveCattles;
+	  },
+	  getInventorySortByClassification : function(oInventory, sClassification) {
+		if (!('InventorySort' in oInventory)) {
+		  oInventory.InventorySort = [];
+		} else {
+		  for ( var i = 0; i < oInventory.InventorySort.length; i++) {
+			if (oInventory.InventorySort[i].sortClassification == sClassification) {
+			  return oInventory.InventorySort[i];
+			}
+		  }
+		}
+		var oInventorySort =
+		{
+		  sortClassification : sClassification,
+		  sortSequence : -1
+		};
+		oInventory.InventorySort.push(oInventorySort);
+		return oInventorySort;
 	  }
-
 	});
 var crudInventory = new crud.inventory();
